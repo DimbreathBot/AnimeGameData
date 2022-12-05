@@ -2,23 +2,26 @@
     "common": {
         "effectAttachShape": {
             "$type": "ConfigEffectAttachSkinnedMesh",
-            "FGKBBEGGKCB": "EffectMesh"
+            "mesh": "EffectMesh"
         },
         "mass": 20.0,
-        "secondHeight": 0.800000011920929,
+        "height": 0.800000011920929,
         "affectedByWorld": true,
         "checkInSurface": true,
-        "canTriggerElementReactionText": false
+        "canTriggerElementReactionText": false,
+        "clearAnimatorOnSetLightDeactive": true,
+        "clearAIOnSetLightDeactive": true,
+        "HBFKLOGLFJM": true
     },
     "model": {
         "bornEffect": "",
         "attachEffect": "",
-        "canBakeMesh": false
+        "EMLCHDMHDBM": false
     },
     "combat": {
         "property": {
             "endureType": "Monster_Minion",
-            "w": 30.0,
+            "weight": 30.0,
             "isInvincible": true
         },
         "beHit": {
@@ -31,7 +34,7 @@
             "lockType": "Default"
         },
         "die": {
-            "HGGPMFGGBNC": 0.009999999776482582,
+            "dieEndTime": 0.009999999776482582,
             "dieForceDisappearTime": 10.0,
             "dieDisappearEffect": "Eff_Animal_Common_Die"
         }
@@ -39,46 +42,47 @@
     "stateLayers": {
         "defaultLayer": {
             "$type": "ConfigNormalStateLayer",
-            "JLAFELOFEGB": "",
+            "layerIndexName": "",
             "stateIDs": {
                 "Born": {
                     "$type": "ConfigMonsterStateIDInfo",
-                    "PINCPDEEFJI": {
+                    "animatorStates": {
                         "Born": []
                     },
-                    "KJALBKOJAJE": [
+                    "resetAnimatorTriggerOnExit": [
                         "DoSkill"
                     ]
                 },
                 "NormalIdle": {
                     "$type": "ConfigMonsterStateIDInfo",
-                    "PINCPDEEFJI": {
+                    "animatorStates": {
                         "Standby": []
                     },
-                    "JFJAOFFPPFP": true,
-                    "KJALBKOJAJE": [
+                    "canSyncMove": true,
+                    "resetAnimatorTriggerOnExit": [
                         "DoSkill"
                     ]
                 },
                 "NormalMove": {
                     "$type": "ConfigMonsterStateIDInfo",
-                    "PINCPDEEFJI": {
+                    "animatorStates": {
                         "Walk": [
                             "Animal_Fishable_Maritime_Walk"
                         ],
                         "Run": [
                             "Animal_Fishable_Maritime_Run"
-                        ]
+                        ],
+                        "PoseAdjust": []
                     },
-                    "JFJAOFFPPFP": true,
-                    "KJALBKOJAJE": [
+                    "canSyncMove": true,
+                    "resetAnimatorTriggerOnExit": [
                         "DoSkill"
                     ],
-                    "HNDGEBFOBMD": true
+                    "canSteer": true
                 },
                 "Turn": {
                     "$type": "ConfigMonsterStateIDInfo",
-                    "PINCPDEEFJI": {
+                    "animatorStates": {
                         "Turn_Walk": [
                             "Animal_Fishable_Maritime_Walk"
                         ],
@@ -86,27 +90,27 @@
                             "Animal_Fishable_Maritime_Turn_Run"
                         ]
                     },
-                    "JFJAOFFPPFP": true,
-                    "KJALBKOJAJE": [
+                    "canSyncMove": true,
+                    "resetAnimatorTriggerOnExit": [
                         "DoSkill"
                     ],
-                    "HNDGEBFOBMD": true
+                    "canSteer": true
                 },
                 "BeHit": {
                     "$type": "ConfigMonsterStateIDInfo",
-                    "PINCPDEEFJI": {
+                    "animatorStates": {
                         "Hit_L": []
                     },
-                    "OBACGMAOFBH": [
+                    "resetAnimatorTriggerOnEnter": [
                         "BeHit"
                     ],
-                    "KJALBKOJAJE": [
+                    "resetAnimatorTriggerOnExit": [
                         "DoSkill"
                     ]
                 },
                 "Die": {
                     "$type": "ConfigMonsterStateIDInfo",
-                    "PINCPDEEFJI": {
+                    "animatorStates": {
                         "Die": [
                             "Animal_Fish_Die"
                         ]
@@ -116,21 +120,42 @@
         }
     },
     "initialPoses": {
-        "Default": {}
+        "Default": {},
+        "InFishTank": {
+            "initialPoseID": 201,
+            "initialPoseParams": {
+                "boolParams": {
+                    "InFishTank": "true"
+                }
+            }
+        }
     },
     "aibeta": {
         "enable": true,
         "friendliness": 1,
+        "decisionArchetype": "Animal_Homeworld",
         "moveSetting": {
             "moveCategory": "Water",
             "useNavMesh": false,
-            "navMeshAgentName": "Undead01"
+            "navMeshAgentName": "Undead01",
+            "length": 0.75
         },
         "sensing": {
             "settings": {
                 "DefaultSetting": {
                     "enableVision": false,
-                    "sourcelessHitAttractionRange": 6.5
+                    "feelRange": 6.5
+                },
+                "InFishTank": {
+                    "enableVision": false,
+                    "hearAttractionRange": 7.5,
+                    "feelRange": 0.0
+                }
+            },
+            "templates": {
+                "DefaultTemplate": {
+                    "DefaultPoses": "DefaultSetting",
+                    "201": "InFishTank"
                 }
             }
         },
@@ -140,7 +165,7 @@
             ]
         },
         "threat": {
-            "billboardShowUIBarDis": 10.0,
+            "clearThreatTargetDistance": 10.0,
             "clearThreatByTargetOutOfZone": true,
             "clearThreatTimerByDistance": 0.800000011920929,
             "clearThreatTimerByTargetOutOfZone": 1.0,
@@ -158,16 +183,42 @@
             "lodStrategy": "MinorAnimal",
             "moveCullingLevel": 3
         },
-        "returnToBornTactic": {
-            "enable": true
-        },
+        "returnToBornTactic": {},
         "wanderTactic": {
             "enable": true,
+            "threatLevelLimit": [
+                0,
+                1,
+                2
+            ],
             "defaultSetting": {
-                "probeNumberMax": 0.5,
+                "turnSpeedOverride": 0.5,
                 "distanceFromBorn": 20.0,
                 "distanceFromCurrentMin": 3.200000047683716,
-                "terrainOffsetMin": 6.400000095367432
+                "distanceFromCurrentMax": 6.400000095367432
+            },
+            "specification": {
+                "201": {
+                    "turnSpeedOverride": 0.4000000059604645,
+                    "cdMax": 8.5,
+                    "cdMin": 4.0,
+                    "distanceFromBorn": 5.0,
+                    "distanceFromCurrentMin": 0.36000001430511475,
+                    "distanceFromCurrentMax": 2.0
+                }
+            }
+        },
+        "followServerRouteTactic": {
+            "enable": true,
+            "condition": {
+                "pose": [
+                    201
+                ]
+            },
+            "defaultSetting": {
+                "IHNHJAHELKL": -55.0,
+                "GFGDIHHCBJO": 55.0,
+                "turnSpeedOverride": 0.4000000059604645
             }
         },
         "fleeTactic": {
@@ -176,23 +227,37 @@
                 "HIT"
             ],
             "defaultSetting": {
-                "probeNumberMax": 2.0,
-                "targetBackSpace": 1.0,
-                "extractionAngleMax": 200.0,
+                "turnSpeedOverride": 2.0,
+                "cd": 1.0,
+                "triggerDistance": 1.0,
                 "fleeAngle": 360.0,
                 "fleeNumberMin": 4,
                 "fleeNumberMax": 5,
                 "fleeDistanceMin": 0.5,
                 "fleeDistanceMax": 2.0,
                 "restrictedByDefendArea": true
+            },
+            "specification": {
+                "201": {
+                    "turnSpeedOverride": 1.399999976158142,
+                    "cd": 0.4000000059604645,
+                    "triggerDistance": 200.0,
+                    "fleeAngle": 360.0,
+                    "fleeNumberMin": 7,
+                    "fleeNumberMax": 8,
+                    "fleeDistanceMin": 0.15000000596046448,
+                    "fleeDistanceMax": 0.20999999344348907,
+                    "restrictedByDefendArea": true,
+                    "APCFANFPOGG": 3.5
+                }
             }
         }
     },
     "move": {
         "$type": "ConfigAnimatorMove",
-        "MNPHLGNHLCF": false,
-        "AOGDBDGDBPL": true,
-        "LJGHPINBFHG": 0.75
+        "moveOnGround": false,
+        "moveOnWater": true,
+        "moveOnWaterDepth": 0.75
     },
     "animal": {
         "hasAbility": false,

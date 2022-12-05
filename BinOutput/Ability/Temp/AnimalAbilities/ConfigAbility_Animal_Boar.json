@@ -2,17 +2,634 @@
     {
         "Default": {
             "$type": "ConfigAbility",
+            "abilityName": "Animal_Boar_Hunt_SmallBoar_Mark",
+            "modifiers": {
+                "Animal_Boar_Hunt_SmallBoar_Mark": {
+                    "modifierName": "",
+                    "bonusCriticalHurt": 100.0,
+                    "onAdded": [
+                        {
+                            "$type": "SetGlobalValue",
+                            "ratio": 1.0,
+                            "key": "_IS_SMALL_BOAR",
+                            "maxValue": 0.0,
+                            "minValue": 0.0
+                        }
+                    ]
+                },
+                "Invincible": {
+                    "modifierName": "",
+                    "bonusCriticalHurt": 100.0,
+                    "state": "LockHP"
+                }
+            },
+            "onAdded": [
+                {
+                    "$type": "ApplyModifier",
+                    "modifierName": "Animal_Boar_Hunt_SmallBoar_Mark"
+                },
+                {
+                    "$type": "ApplyModifier",
+                    "modifierName": "Invincible"
+                }
+            ]
+        }
+    },
+    {
+        "Default": {
+            "$type": "ConfigAbility",
+            "abilityName": "Animal_Hunt_AlertHideBillboard",
+            "abilityMixins": [
+                {
+                    "$type": "AttachToAIAlertnessMixin",
+                    "alertness": [
+                        0,
+                        1
+                    ],
+                    "modifierName": "Animal_Hunt_AlertHideBillboard"
+                }
+            ],
+            "modifiers": {
+                "Animal_Hunt_AlertHideBillboard": {
+                    "modifierName": "",
+                    "bonusCriticalHurt": 100.0,
+                    "onAdded": [
+                        {
+                            "$type": "HideUIBillBoard",
+                            "canBeHandledOnRecover": true
+                        }
+                    ],
+                    "onRemoved": [
+                        {
+                            "$type": "ApplyModifier",
+                            "modifierName": "Animal_Hunt_AlertHideBillboard_ShowSure"
+                        }
+                    ]
+                },
+                "Animal_Hunt_AlertHideBillboard_ShowSure": {
+                    "modifierName": "",
+                    "KPGONJCLMDC": 0.5,
+                    "bonusCriticalHurt": 100.0,
+                    "onAdded": [
+                        {
+                            "$type": "HideUIBillBoard",
+                            "canBeHandledOnRecover": true,
+                            "predicates": [
+                                {
+                                    "$type": "ByTargetGlobalValue",
+                                    "key": "SGV_STAGE",
+                                    "ratio": 1.0
+                                }
+                            ],
+                            "hide": true
+                        }
+                    ]
+                }
+            }
+        }
+    },
+    {
+        "Default": {
+            "$type": "ConfigAbility",
+            "abilityName": "Animal_Boar_02_Hunt_BeCaptured",
+            "abilityMixins": [
+                {
+                    "$type": "AttachModifierToSelfGlobalValueMixin",
+                    "globalValueKey": "_BOAR_HUNT_BECAPTURED",
+                    "defaultGlobalValueOnCreate": 0.0,
+                    "valueSteps": [
+                        -0.5,
+                        0.5,
+                        1.5
+                    ],
+                    "modifierNameSteps": [
+                        "Boar_Hunt_BeCaptured_None",
+                        "Boar_Hunt_BeCaptured"
+                    ]
+                },
+                {
+                    "$type": "AttachModifierToSelfGlobalValueMixin",
+                    "globalValueKey": "_BOAR_HUNT_BECAPTURED_FROM_TRAP",
+                    "defaultGlobalValueOnCreate": 0.0,
+                    "valueSteps": [
+                        -0.5,
+                        0.5,
+                        1.5
+                    ],
+                    "modifierNameSteps": [
+                        "Boar_Hunt_PowerTrap_None",
+                        "Boar_Hunt_PowerTrap_BeCaptured"
+                    ]
+                }
+            ],
+            "modifiers": {
+                "Animal_Hunt_BeCaptured_Check": {
+                    "modifierName": "",
+                    "bonusCriticalHurt": 100.0,
+                    "onBeingHit": [
+                        {
+                            "$type": "Predicated",
+                            "targetPredicates": [
+                                {
+                                    "$type": "ByAttackTags",
+                                    "attackTags": [
+                                        "_BOAR_HUNT_ATTACK"
+                                    ]
+                                }
+                            ],
+                            "successActions": [
+                                {
+                                    "$type": "ServerLuaCall",
+                                    "luaCallType": "FromGroup",
+                                    "funcName": "SLC_BeCaptured",
+                                    "FMBBFLMNPOF": 0.0,
+                                    "GBPNAGAPMHB": 0.0,
+                                    "ALBFHLGOPBE": 0.0
+                                },
+                                {
+                                    "$type": "KillSelf"
+                                }
+                            ]
+                        }
+                    ]
+                },
+                "Animal_Hunt_MarkValue": {
+                    "modifierName": "",
+                    "bonusCriticalHurt": 100.0,
+                    "onAdded": [
+                        {
+                            "$type": "SetGlobalValue",
+                            "ratio": 1.0,
+                            "key": "_ANIMAL_HUNT_MARKVALUE",
+                            "maxValue": 0.0,
+                            "minValue": 0.0
+                        },
+                        {
+                            "$type": "SetGlobalValue",
+                            "ratio": 1.0,
+                            "key": "_Is_Hunt_Animal_Activity3.1",
+                            "maxValue": 0.0,
+                            "minValue": 0.0
+                        },
+                        {
+                            "$type": "ResetAIThreatBroadcastRange",
+                            "range": 1.0
+                        }
+                    ]
+                },
+                "Boar_Hunt_BeCaptured_None": {
+                    "modifierName": "",
+                    "bonusCriticalHurt": 100.0
+                },
+                "Boar_Hunt_BeCaptured": {
+                    "modifierName": "",
+                    "bonusCriticalHurt": 100.0,
+                    "onAdded": [
+                        {
+                            "$type": "FireEffect",
+                            "healLimitedByCasterMaxHPRatio": "Eff_Hit_None_Slash_Small",
+                            "born": {
+                                "$type": "ConfigBornBySelf"
+                            },
+                            "COOMHFHLGFG": -1.0
+                        },
+                        {
+                            "$type": "ServerLuaCall",
+                            "luaCallType": "FromGroup",
+                            "funcName": "SLC_BeCaptured",
+                            "FMBBFLMNPOF": 0.0,
+                            "GBPNAGAPMHB": 0.0,
+                            "ALBFHLGOPBE": 0.0
+                        },
+                        {
+                            "$type": "Predicated",
+                            "targetPredicates": [
+                                {
+                                    "$type": "ByTargetGlobalValue",
+                                    "key": "_BE_SUMMONED",
+                                    "ratio": 0.0,
+                                    "compareType": "NoneOrEqual"
+                                }
+                            ],
+                            "successActions": [
+                                {
+                                    "$type": "LoseHP",
+                                    "LJBKFPPNELO": 0.20000000298023224
+                                },
+                                {
+                                    "$type": "ApplyModifier",
+                                    "modifierName": "_CD_TIMER"
+                                }
+                            ],
+                            "failActions": [
+                                {
+                                    "$type": "KillSelf"
+                                }
+                            ]
+                        }
+                    ]
+                },
+                "Boar_Hunt_PowerTrap_None": {
+                    "modifierName": "",
+                    "bonusCriticalHurt": 100.0
+                },
+                "Boar_Hunt_PowerTrap_BeCaptured": {
+                    "modifierName": "",
+                    "bonusCriticalHurt": 100.0,
+                    "onAdded": [
+                        {
+                            "$type": "FireEffect",
+                            "healLimitedByCasterMaxHPRatio": "Eff_Hit_None_Slash_Small",
+                            "born": {
+                                "$type": "ConfigBornBySelf"
+                            },
+                            "COOMHFHLGFG": -1.0
+                        },
+                        {
+                            "$type": "ServerLuaCall",
+                            "luaCallType": "FromGroup",
+                            "funcName": "SLC_BeCaptured",
+                            "FMBBFLMNPOF": 0.0,
+                            "GBPNAGAPMHB": 0.0,
+                            "ALBFHLGOPBE": 0.0
+                        },
+                        {
+                            "$type": "Predicated",
+                            "targetPredicates": [
+                                {
+                                    "$type": "ByTargetGlobalValue",
+                                    "key": "_BE_SUMMONED",
+                                    "ratio": 0.0,
+                                    "compareType": "NoneOrEqual"
+                                }
+                            ],
+                            "successActions": [
+                                {
+                                    "$type": "LoseHP",
+                                    "LJBKFPPNELO": 0.699999988079071
+                                },
+                                {
+                                    "$type": "ApplyModifier",
+                                    "modifierName": "Reset_PowerTrap_GV"
+                                }
+                            ],
+                            "failActions": [
+                                {
+                                    "$type": "KillSelf"
+                                }
+                            ]
+                        }
+                    ]
+                },
+                "CD_TIMER": {
+                    "stacking": "Unique",
+                    "modifierName": "",
+                    "KPGONJCLMDC": 0.10000000149011612,
+                    "bonusCriticalHurt": 100.0,
+                    "onRemoved": [
+                        {
+                            "$type": "SetGlobalValue",
+                            "ratio": 0.0,
+                            "key": "_BOAR_HUNT_BECAPTURED",
+                            "maxValue": 0.0,
+                            "minValue": 0.0
+                        }
+                    ]
+                },
+                "Reset_PowerTrap_GV": {
+                    "modifierName": "",
+                    "KPGONJCLMDC": 0.30000001192092896,
+                    "bonusCriticalHurt": 100.0,
+                    "onRemoved": [
+                        {
+                            "$type": "SetGlobalValue",
+                            "ratio": 0.0,
+                            "key": "_BOAR_HUNT_BECAPTURED_FROM_TRAP",
+                            "maxValue": 0.0,
+                            "minValue": 0.0
+                        }
+                    ]
+                }
+            },
+            "onAdded": [
+                {
+                    "$type": "ApplyModifier",
+                    "modifierName": "Animal_Hunt_MarkValue"
+                },
+                {
+                    "$type": "ApplyModifier",
+                    "modifierName": "Animal_Hunt_BeCaptured_Check"
+                }
+            ]
+        }
+    },
+    {
+        "Default": {
+            "$type": "ConfigAbility",
+            "abilityName": "Animal_Boar_Hunt_BeCaptured_Disappear",
+            "abilityMixins": [
+                {
+                    "$type": "AttachModifierToSelfGlobalValueMixin",
+                    "globalValueKey": "_BOAR_HUNT_BECAPTURED",
+                    "defaultGlobalValueOnCreate": 0.0,
+                    "valueSteps": [
+                        -0.5,
+                        0.5,
+                        1.5
+                    ],
+                    "modifierNameSteps": [
+                        "Boar_Hunt_BeCaptured_None",
+                        "Boar_Hunt_BeCaptured"
+                    ]
+                },
+                {
+                    "$type": "AttachToAIAlertnessMixin",
+                    "alertness": [
+                        2
+                    ],
+                    "modifierName": "Animal_Boar_Check_IntoBattle"
+                },
+                {
+                    "$type": "AttachModifierToSelfGlobalValueMixin",
+                    "globalValueKey": "_BOAR_HUNT_BECAPTURED_FROM_TRAP",
+                    "defaultGlobalValueOnCreate": 0.0,
+                    "valueSteps": [
+                        -0.5,
+                        0.5,
+                        1.5
+                    ],
+                    "modifierNameSteps": [
+                        "Boar_Hunt_PowerTrap_None",
+                        "Boar_Hunt_PowerTrap_Captured"
+                    ]
+                },
+                {
+                    "$type": "DiePatternSwitchMixin",
+                    "dieDisappearEffect": "Eff_Animal_Common_DropPoint_Die",
+                    "PMOLHCELBNI": true,
+                    "IALABNBMHGM": true,
+                    "PAFPOPIDKBB": true,
+                    "FALBHGMJGHK": true,
+                    "FKMBJLKIGAC": true,
+                    "GFODHFKCPEM": true,
+                    "KJCMFKBFBKG": true,
+                    "HIBDCJJJAFO": true,
+                    "EMJBJEFPMLN": true
+                }
+            ],
+            "modifiers": {
+                "Animal_Boar_Check_IntoBattle": {
+                    "modifierName": "",
+                    "bonusCriticalHurt": 100.0,
+                    "onAdded": [
+                        {
+                            "$type": "ApplyModifier",
+                            "modifierName": "UNIQUE_Check_IntoBattle_Timer"
+                        }
+                    ]
+                },
+                "UNIQUE_Check_IntoBattle_Timer": {
+                    "stacking": "Unique",
+                    "modifierName": "",
+                    "isUnique": true,
+                    "KPGONJCLMDC": 0.5,
+                    "bonusCriticalHurt": 100.0,
+                    "onRemoved": [
+                        {
+                            "$type": "SetGlobalValue",
+                            "ratio": 1.0,
+                            "key": "_IN_TO_BATTLE",
+                            "maxValue": 0.0,
+                            "minValue": 0.0
+                        }
+                    ]
+                },
+                "Animal_Hunt_BeCaptured_Check": {
+                    "modifierName": "",
+                    "bonusCriticalHurt": 100.0,
+                    "onBeingHit": [
+                        {
+                            "$type": "SetGlobalValue",
+                            "ratio": 1.0,
+                            "key": "_BE_HITED",
+                            "maxValue": 0.0,
+                            "minValue": 0.0
+                        },
+                        {
+                            "$type": "Predicated",
+                            "targetPredicates": [
+                                {
+                                    "$type": "ByAny",
+                                    "predicates": [
+                                        {
+                                            "$type": "ByTargetGlobalValue",
+                                            "key": "_IS_SMALL_BOAR",
+                                            "ratio": 1.0
+                                        },
+                                        {
+                                            "$type": "ByAttackTags",
+                                            "attackTags": [
+                                                "_BOAR_HUNT_ATTACK"
+                                            ]
+                                        }
+                                    ]
+                                }
+                            ],
+                            "successActions": [
+                                {
+                                    "$type": "Predicated",
+                                    "targetPredicates": [
+                                        {
+                                            "$type": "ByTargetGlobalValue",
+                                            "key": "_IN_TO_BATTLE",
+                                            "ratio": 0.0,
+                                            "compareType": "NoneOrEqual"
+                                        }
+                                    ],
+                                    "successActions": [
+                                        {
+                                            "$type": "ServerLuaCall",
+                                            "luaCallType": "FromGroup",
+                                            "funcName": "SLC_HuntAnimal_Sneak",
+                                            "FMBBFLMNPOF": 0.0,
+                                            "GBPNAGAPMHB": 0.0,
+                                            "ALBFHLGOPBE": 0.0
+                                        }
+                                    ],
+                                    "failActions": [
+                                        {
+                                            "$type": "ServerLuaCall",
+                                            "luaCallType": "FromGroup",
+                                            "funcName": "SLC_BeCaptured",
+                                            "FMBBFLMNPOF": 0.0,
+                                            "GBPNAGAPMHB": 0.0,
+                                            "ALBFHLGOPBE": 0.0
+                                        }
+                                    ]
+                                },
+                                {
+                                    "$type": "KillSelf"
+                                }
+                            ]
+                        }
+                    ]
+                },
+                "Animal_Hunt_MarkValue": {
+                    "modifierName": "",
+                    "bonusCriticalHurt": 100.0,
+                    "onAdded": [
+                        {
+                            "$type": "SetGlobalValue",
+                            "ratio": 1.0,
+                            "key": "_ANIMAL_HUNT_MARKVALUE",
+                            "maxValue": 0.0,
+                            "minValue": 0.0
+                        },
+                        {
+                            "$type": "SetGlobalValue",
+                            "ratio": 1.0,
+                            "key": "_Is_Hunt_Animal_Activity3.1",
+                            "maxValue": 0.0,
+                            "minValue": 0.0
+                        },
+                        {
+                            "$type": "ResetAIThreatBroadcastRange",
+                            "range": 1.0
+                        }
+                    ]
+                },
+                "Boar_Hunt_BeCaptured_None": {
+                    "modifierName": "",
+                    "bonusCriticalHurt": 100.0
+                },
+                "Boar_Hunt_BeCaptured": {
+                    "modifierName": "",
+                    "bonusCriticalHurt": 100.0,
+                    "onAdded": [
+                        {
+                            "$type": "Predicated",
+                            "targetPredicates": [
+                                {
+                                    "$type": "ByTargetGlobalValue",
+                                    "key": "_IN_TO_BATTLE",
+                                    "ratio": 0.0,
+                                    "compareType": "NoneOrEqual"
+                                }
+                            ],
+                            "successActions": [
+                                {
+                                    "$type": "ServerLuaCall",
+                                    "predicates": [
+                                        {
+                                            "$type": "ByTargetGlobalValue",
+                                            "key": "_BE_HITED",
+                                            "ratio": 0.0,
+                                            "compareType": "NoneOrEqual"
+                                        }
+                                    ],
+                                    "luaCallType": "FromGroup",
+                                    "funcName": "SLC_HuntAnimal_Sneak",
+                                    "FMBBFLMNPOF": 0.0,
+                                    "GBPNAGAPMHB": 0.0,
+                                    "ALBFHLGOPBE": 0.0
+                                }
+                            ],
+                            "failActions": [
+                                {
+                                    "$type": "ServerLuaCall",
+                                    "luaCallType": "FromGroup",
+                                    "funcName": "SLC_BeCaptured",
+                                    "FMBBFLMNPOF": 0.0,
+                                    "GBPNAGAPMHB": 0.0,
+                                    "ALBFHLGOPBE": 0.0
+                                }
+                            ]
+                        },
+                        {
+                            "$type": "FireEffect",
+                            "healLimitedByCasterMaxHPRatio": "Eff_Hit_None_Slash_Small",
+                            "born": {
+                                "$type": "ConfigBornBySelf"
+                            },
+                            "COOMHFHLGFG": -1.0
+                        },
+                        {
+                            "$type": "KillSelf"
+                        }
+                    ]
+                },
+                "Boar_Hunt_PowerTrap_None": {
+                    "modifierName": "",
+                    "bonusCriticalHurt": 100.0
+                },
+                "Boar_Hunt_PowerTrap_Captured": {
+                    "modifierName": "",
+                    "bonusCriticalHurt": 100.0,
+                    "onAdded": [
+                        {
+                            "$type": "ServerLuaCall",
+                            "luaCallType": "FromGroup",
+                            "funcName": "SLC_BeCaptured",
+                            "FMBBFLMNPOF": 0.0,
+                            "GBPNAGAPMHB": 0.0,
+                            "ALBFHLGOPBE": 0.0
+                        },
+                        {
+                            "$type": "FireEffect",
+                            "healLimitedByCasterMaxHPRatio": "Eff_Hit_None_Slash_Small",
+                            "born": {
+                                "$type": "ConfigBornBySelf"
+                            },
+                            "COOMHFHLGFG": -1.0
+                        },
+                        {
+                            "$type": "KillSelf"
+                        }
+                    ]
+                }
+            },
+            "onAdded": [
+                {
+                    "$type": "ApplyModifier",
+                    "modifierName": "Animal_Hunt_MarkValue"
+                },
+                {
+                    "$type": "ApplyModifier",
+                    "modifierName": "Animal_Hunt_BeCaptured_Check"
+                },
+                {
+                    "$type": "SetGlobalValue",
+                    "ratio": 0.0,
+                    "key": "_HAS_ALREADY_FOUND_PLAYER",
+                    "maxValue": 0.0,
+                    "minValue": 0.0
+                }
+            ],
+            "onAbilityStart": [
+                {
+                    "$type": "SetGlobalValue",
+                    "ratio": 1.0,
+                    "key": "_BOAR_HUNT_BECAPTURED",
+                    "maxValue": 0.0,
+                    "minValue": 0.0
+                }
+            ]
+        }
+    },
+    {
+        "Default": {
+            "$type": "ConfigAbility",
             "abilityName": "Animal_Boar_AIStateInitial",
-            "CHBMMFLIIGH": [
+            "abilityMixins": [
                 {
                     "$type": "DoActionByAnimatorStateIDMixin",
                     "stateIDs": [
                         "Standby"
                     ],
-                    "KELPBOLPMNI": [
+                    "enterActions": [
                         {
                             "$type": "ReTriggerAISkillInitialCD",
-                            "FJNGOGJOBEE": [
+                            "skillIDs": [
                                 101,
                                 102
                             ]
@@ -26,16 +643,16 @@
         "Default": {
             "$type": "ConfigAbility",
             "abilityName": "Animal_Boar_Small_AIStateInitial",
-            "CHBMMFLIIGH": [
+            "abilityMixins": [
                 {
                     "$type": "DoActionByPoseIDMixin",
                     "poseIDs": [
                         1
                     ],
-                    "KELPBOLPMNI": [
+                    "enterActions": [
                         {
                             "$type": "ReTriggerAISkillInitialCD",
-                            "FJNGOGJOBEE": [
+                            "skillIDs": [
                                 101,
                                 102,
                                 201
@@ -48,10 +665,10 @@
                     "poseIDs": [
                         2
                     ],
-                    "KELPBOLPMNI": [
+                    "enterActions": [
                         {
                             "$type": "ReTriggerAISkillInitialCD",
-                            "FJNGOGJOBEE": [
+                            "skillIDs": [
                                 202
                             ]
                         }
@@ -64,56 +681,56 @@
         "Default": {
             "$type": "ConfigAbility",
             "abilityName": "Animal_Boar_SetPose",
-            "CHBMMFLIIGH": [
+            "abilityMixins": [
                 {
                     "$type": "AttachToPoseIDMixin",
                     "poseIDs": [
                         101
                     ],
-                    "GAIGOBCNNEE": "SetFleePoseTimer"
+                    "modifierName": "SetFleePoseTimer"
                 }
             ],
-            "HNEIEGHMLKH": {
+            "modifiers": {
                 "SetFleePoseTimer": {
-                    "GAIGOBCNNEE": "",
-                    "elementDurability": 100.0,
-                    "IKKMDDLDLIN": 6.0,
-                    "PBDDACFFPOE": [
+                    "modifierName": "",
+                    "bonusCriticalHurt": 100.0,
+                    "thinkInterval": 6.0,
+                    "onThinkInterval": [
                         {
                             "$type": "SetPoseInt",
                             "intID": "FleeState",
-                            "weight": 1
+                            "value": 1
                         }
                     ]
                 }
             },
-            "HKBHLMNEMKM": [
+            "onAbilityStart": [
                 {
                     "$type": "SetPoseInt",
                     "intID": "FleeState"
                 },
                 {
                     "$type": "Predicated",
-                    "NPHOOPNDCAC": "SelfAttackTarget",
-                    "ELDBAFHCOBL": [
+                    "target": "SelfAttackTarget",
+                    "targetPredicates": [
                         {
                             "$type": "ByTargetPositionToSelfPosition",
-                            "GMFCOCAJBDM": "LesserOrEqual",
-                            "value": 9.0
+                            "logic": "LesserOrEqual",
+                            "ratio": 9.0
                         }
                     ],
-                    "NCNDEAPMKCP": [
+                    "successActions": [
                         {
                             "$type": "SetPoseInt",
                             "intID": "FleeState",
-                            "weight": 2
+                            "value": 2
                         }
                     ],
-                    "BMIOBLGLPIM": [
+                    "failActions": [
                         {
                             "$type": "SetPoseInt",
                             "intID": "FleeState",
-                            "weight": 1
+                            "value": 1
                         }
                     ]
                 }
@@ -124,40 +741,39 @@
         "Default": {
             "$type": "ConfigAbility",
             "abilityName": "Animal_Boar_RushAtk",
-            "CHBMMFLIIGH": [
+            "abilityMixins": [
                 {
                     "$type": "AttachToStateIDMixin",
                     "stateIDs": [
-                        "RushAtk"
+                        "RushAtk",
+                        "RushAtk_Hunt"
                     ],
-                    "GAIGOBCNNEE": "Animal_Boar_RushAtk_DamageCount"
-                },
-                {
-                    "$type": "SteerAttackMixin",
-                    "EHNAPMMMNFI": [
-                        "RushAtk"
-                    ],
-                    "IMHBEGIKDKB": 3.0,
-                    "HENDIIJFPCI": 35.0,
-                    "NCAENFOANAG": "",
-                    "BBHBLAIEHAJ": 1.5
+                    "modifierName": "Animal_Boar_RushAtk_DamageCount"
                 },
                 {
                     "$type": "DoActionByStateIDMixin",
                     "stateIDs": [
                         "RushAtk"
                     ],
-                    "MCFCEOACJEB": [
+                    "exitActions": [
                         {
                             "$type": "SetPoseInt",
+                            "predicates": [
+                                {
+                                    "$type": "ByTargetGlobalValue",
+                                    "key": "_Is_Hunt_Animal_Activity3.1",
+                                    "ratio": 0.0,
+                                    "compareType": "NoneOrEqual"
+                                }
+                            ],
                             "intID": "FleeState",
-                            "weight": 1
+                            "value": 1
                         }
                     ]
                 },
                 {
                     "$type": "AttackHittingSceneMixin",
-                    "HOAPIHIBOCB": [
+                    "onHittingScene": [
                         {
                             "$type": "SetAnimatorTrigger",
                             "triggerID": "CrashTrigger"
@@ -165,15 +781,31 @@
                     ]
                 }
             ],
-            "HNEIEGHMLKH": {
+            "modifiers": {
+                "Animal_Boar_RushSteer": {
+                    "modifierName": "",
+                    "bonusCriticalHurt": 100.0,
+                    "modifierMixins": [
+                        {
+                            "$type": "SteerAttackMixin",
+                            "steerStateIDs": [
+                                "RushAtk"
+                            ],
+                            "endNormalizedTime": 3.0,
+                            "angularSpeed": 35.0,
+                            "attackTrigger": "",
+                            "attackDistance": 1.5
+                        }
+                    ]
+                },
                 "Animal_Boar_RushAtk_DamageCount": {
-                    "GAIGOBCNNEE": "",
-                    "elementDurability": 100.0,
-                    "AIJPLNMHBEN": [
+                    "modifierName": "",
+                    "bonusCriticalHurt": 100.0,
+                    "onAttackLanded": [
                         {
                             "$type": "Predicated",
-                            "NPHOOPNDCAC": "Target",
-                            "ELDBAFHCOBL": [
+                            "target": "Target",
+                            "targetPredicates": [
                                 {
                                     "$type": "ByEntityTypes",
                                     "entityTypes": [
@@ -181,19 +813,19 @@
                                     ]
                                 }
                             ],
-                            "NCNDEAPMKCP": [
+                            "successActions": [
                                 {
                                     "$type": "DamageByAttackValue",
-                                    "NPHOOPNDCAC": "Target",
+                                    "target": "Target",
                                     "predicates": [
                                         {
                                             "$type": "ByTargetGlobalValue",
-                                            "HJJEAOMEOFI": "_BOAR_RUSH_HIT",
-                                            "value": 0.0,
-                                            "ONPJJFKDCED": "NoneOrEqual"
+                                            "key": "_BOAR_RUSH_HIT",
+                                            "ratio": 0.0,
+                                            "compareType": "NoneOrEqual"
                                         }
                                     ],
-                                    "NGDMCBABOJA": {
+                                    "born": {
                                         "$type": "ConfigBornByHitPoint"
                                     },
                                     "attackInfo": {
@@ -201,9 +833,9 @@
                                         "attenuationTag": "",
                                         "attenuationGroup": "default",
                                         "attackProperty": {
-                                            "bonusCriticalHurt": 1.0,
-                                            "damagePercentageRatio": 0.0,
-                                            "elementDurability": 100.0,
+                                            "MDJIHDGGPHA": 1.0,
+                                            "NEFPGMGNGAK": 0.0,
+                                            "bonusCriticalHurt": 100.0,
                                             "strikeType": "Blunt",
                                             "attackType": "Melee"
                                         },
@@ -215,58 +847,72 @@
                                 },
                                 {
                                     "$type": "ApplyModifier",
-                                    "NPHOOPNDCAC": "Target",
-                                    "GAIGOBCNNEE": "UNIQUE_Animal_Boar_RushAtk_Num"
+                                    "target": "Target",
+                                    "modifierName": "UNIQUE_Animal_Boar_RushAtk_Num"
                                 }
                             ]
                         }
                     ]
                 },
                 "UNIQUE_Animal_Boar_RushAtk_Num": {
-                    "FGJPBKGPNJJ": "RefreshUniqueDurability",
-                    "GAIGOBCNNEE": "",
-                    "IEOFBCGJGEK": true,
-                    "GMIMMDOGGIO": 1.5,
-                    "elementDurability": 100.0,
-                    "KCICDEJLIJD": [
+                    "stacking": "RefreshUniqueDurability",
+                    "modifierName": "",
+                    "isUnique": true,
+                    "KPGONJCLMDC": 1.5,
+                    "bonusCriticalHurt": 100.0,
+                    "onAdded": [
                         {
                             "$type": "SetGlobalValue",
-                            "value": 1.0,
-                            "HJJEAOMEOFI": "_BOAR_RUSH_HIT",
-                            "JDHHMBHOOEC": 0.0,
-                            "KHAHOELDONA": 0.0
+                            "ratio": 1.0,
+                            "key": "_BOAR_RUSH_HIT",
+                            "maxValue": 0.0,
+                            "minValue": 0.0
                         }
                     ],
-                    "ILBIENDPCBG": [
+                    "onRemoved": [
                         {
                             "$type": "SetGlobalValue",
-                            "value": 0.0,
-                            "HJJEAOMEOFI": "_BOAR_RUSH_HIT",
-                            "JDHHMBHOOEC": 0.0,
-                            "KHAHOELDONA": 0.0
+                            "ratio": 0.0,
+                            "key": "_BOAR_RUSH_HIT",
+                            "maxValue": 0.0,
+                            "minValue": 0.0
                         }
                     ]
                 }
             },
-            "HKBHLMNEMKM": [
+            "onAdded": [
+                {
+                    "$type": "ApplyModifier",
+                    "predicates": [
+                        {
+                            "$type": "ByTargetGlobalValue",
+                            "key": "_Is_Hunt_Animal_Activity3.1",
+                            "ratio": 0.0,
+                            "compareType": "NoneOrEqual"
+                        }
+                    ],
+                    "modifierName": "Animal_Boar_RushSteer"
+                }
+            ],
+            "onAbilityStart": [
                 {
                     "$type": "TriggerAttackEvent",
-                    "DMCJDGELKBC": {
+                    "attackEvent": {
                         "attackPattern": {
                             "$type": "ConfigAttackBox",
-                            "lifeTime": "TriggerNoRepeat",
-                            "NGDMCBABOJA": {
+                            "triggerType": "TriggerNoRepeat",
+                            "born": {
                                 "$type": "ConfigBornBySelf",
                                 "offset": {
-                                    "AEAAJCIDPED": 0.0,
-                                    "KAAPLGBEDPM": 0.5,
-                                    "PHDCJAHHIOG": 0.0
+                                    "NMLENGBJMAA": 0.0,
+                                    "OKBPMDLDKLI": 0.5,
+                                    "OGKDKNLKIDE": 0.0
                                 }
                             },
                             "size": {
-                                "AEAAJCIDPED": 1.5,
-                                "KAAPLGBEDPM": 1.5,
-                                "PHDCJAHHIOG": 2.0
+                                "NMLENGBJMAA": 1.5,
+                                "OKBPMDLDKLI": 1.5,
+                                "OGKDKNLKIDE": 2.0
                             }
                         },
                         "attackInfo": {
@@ -274,9 +920,10 @@
                             "attenuationTag": "",
                             "attenuationGroup": "default",
                             "attackProperty": {
-                                "bonusCriticalHurt": 0.0,
-                                "damagePercentageRatio": 0.0,
-                                "elementDurability": 100.0,
+                                "MDJIHDGGPHA": 0.0,
+                                "NEFPGMGNGAK": 0.0,
+                                "bonusCriticalHurt": 100.0,
+                                "strikeType": "Blunt",
                                 "enBreak": 1000.0
                             },
                             "hitPattern": {
@@ -286,7 +933,7 @@
                             }
                         }
                     },
-                    "OJIFKEOCJGB": "Enemy"
+                    "targetType": "Enemy"
                 }
             ]
         }
@@ -295,26 +942,26 @@
         "Default": {
             "$type": "ConfigAbility",
             "abilityName": "Boar_RushAtk_Attack",
-            "HKBHLMNEMKM": [
+            "onAbilityStart": [
                 {
                     "$type": "TriggerAttackEvent",
-                    "DMCJDGELKBC": {
+                    "attackEvent": {
                         "attackPattern": {
                             "$type": "ConfigAttackSphere",
-                            "lifeTime": "TriggerNoRepeat",
-                            "NGDMCBABOJA": {
+                            "triggerType": "TriggerNoRepeat",
+                            "born": {
                                 "$type": "ConfigBornByCollisionPoint"
                             },
-                            "ICGFCBOFFDI": 0.75
+                            "PHALDBNIMGI": 0.75
                         },
                         "attackInfo": {
                             "attackTag": "",
                             "attenuationTag": "",
                             "attenuationGroup": "default",
                             "attackProperty": {
-                                "bonusCriticalHurt": 1.0,
-                                "damagePercentageRatio": 0.0,
-                                "elementDurability": 100.0,
+                                "MDJIHDGGPHA": 1.0,
+                                "NEFPGMGNGAK": 0.0,
+                                "bonusCriticalHurt": 100.0,
                                 "strikeType": "Blunt",
                                 "enBreak": 1000.0,
                                 "attackType": "Melee"
@@ -326,7 +973,7 @@
                             }
                         }
                     },
-                    "OJIFKEOCJGB": "Enemy"
+                    "targetType": "Enemy"
                 }
             ]
         }
@@ -335,19 +982,19 @@
         "Default": {
             "$type": "ConfigAbility",
             "abilityName": "Animal_Boar_Disappear",
-            "CHBMMFLIIGH": [
+            "abilityMixins": [
                 {
                     "$type": "DoActionByPoseIDMixin",
                     "poseIDs": [
                         202,
                         2
                     ],
-                    "KELPBOLPMNI": [
+                    "enterActions": [
                         {
                             "$type": "SetRandomOverrideMapValue",
-                            "MOCGLDDNLKO": 7.5,
-                            "DMNANPGJBJH": 5.0,
-                            "OGAHELLALBB": "RandomTimer"
+                            "valueRangeMax": 7.5,
+                            "valueRangeMin": 5.0,
+                            "overrideMapKey": "RandomTimer"
                         }
                     ]
                 },
@@ -357,45 +1004,45 @@
                         202,
                         2
                     ],
-                    "GAIGOBCNNEE": "Flee"
+                    "modifierName": "Flee"
                 }
             ],
-            "EDDGGPMFDGK": {
+            "abilitySpecials": {
                 "RandomTimer": 5.0
             },
-            "HNEIEGHMLKH": {
+            "modifiers": {
                 "Flee": {
-                    "GAIGOBCNNEE": "",
-                    "GMIMMDOGGIO": "RandomTimer",
-                    "elementDurability": 100.0,
-                    "ILBIENDPCBG": [
+                    "modifierName": "",
+                    "KPGONJCLMDC": "RandomTimer",
+                    "bonusCriticalHurt": 100.0,
+                    "onRemoved": [
                         {
                             "$type": "ApplyModifier",
-                            "GAIGOBCNNEE": "DisappearTimer"
+                            "modifierName": "DisappearTimer"
                         }
                     ]
                 },
                 "DisappearTimer": {
-                    "GAIGOBCNNEE": "",
-                    "GMIMMDOGGIO": 2.0,
-                    "elementDurability": 100.0,
-                    "KCICDEJLIJD": [
+                    "modifierName": "",
+                    "KPGONJCLMDC": 2.0,
+                    "bonusCriticalHurt": 100.0,
+                    "onAdded": [
                         {
                             "$type": "StartDither",
                             "duration": 3.0
                         }
                     ],
-                    "ILBIENDPCBG": [
+                    "onRemoved": [
                         {
                             "$type": "SetAnimatorBool",
-                            "HHFIHBEAPAP": "Disappear",
-                            "value": true
+                            "boolID": "Disappear",
+                            "ratio": true
                         },
                         {
                             "$type": "KillSelf",
-                            "BEKKIHBPHGD": true,
-                            "EOIGEKNINFE": true,
-                            "PGGBJIDIINM": "Disappear"
+                            "banDrop": true,
+                            "banExp": true,
+                            "killSelfType": "Disappear"
                         }
                     ]
                 }
@@ -406,18 +1053,18 @@
         "Default": {
             "$type": "ConfigAbility",
             "abilityName": "Animal_Boar_Small_Disappear",
-            "CHBMMFLIIGH": [
+            "abilityMixins": [
                 {
                     "$type": "DoActionByPoseIDMixin",
                     "poseIDs": [
                         202
                     ],
-                    "KELPBOLPMNI": [
+                    "enterActions": [
                         {
                             "$type": "SetRandomOverrideMapValue",
-                            "MOCGLDDNLKO": 7.5,
-                            "DMNANPGJBJH": 5.0,
-                            "OGAHELLALBB": "RandomTimer"
+                            "valueRangeMax": 7.5,
+                            "valueRangeMin": 5.0,
+                            "overrideMapKey": "RandomTimer"
                         }
                     ]
                 },
@@ -426,45 +1073,45 @@
                     "poseIDs": [
                         202
                     ],
-                    "GAIGOBCNNEE": "Flee"
+                    "modifierName": "Flee"
                 }
             ],
-            "EDDGGPMFDGK": {
+            "abilitySpecials": {
                 "RandomTimer": 5.0
             },
-            "HNEIEGHMLKH": {
+            "modifiers": {
                 "Flee": {
-                    "GAIGOBCNNEE": "",
-                    "GMIMMDOGGIO": "RandomTimer",
-                    "elementDurability": 100.0,
-                    "ILBIENDPCBG": [
+                    "modifierName": "",
+                    "KPGONJCLMDC": "RandomTimer",
+                    "bonusCriticalHurt": 100.0,
+                    "onRemoved": [
                         {
                             "$type": "ApplyModifier",
-                            "GAIGOBCNNEE": "DisappearTimer"
+                            "modifierName": "DisappearTimer"
                         }
                     ]
                 },
                 "DisappearTimer": {
-                    "GAIGOBCNNEE": "",
-                    "GMIMMDOGGIO": 2.0,
-                    "elementDurability": 100.0,
-                    "KCICDEJLIJD": [
+                    "modifierName": "",
+                    "KPGONJCLMDC": 2.0,
+                    "bonusCriticalHurt": 100.0,
+                    "onAdded": [
                         {
                             "$type": "StartDither",
                             "duration": 3.0
                         }
                     ],
-                    "ILBIENDPCBG": [
+                    "onRemoved": [
                         {
                             "$type": "SetAnimatorBool",
-                            "HHFIHBEAPAP": "Disappear",
-                            "value": true
+                            "boolID": "Disappear",
+                            "ratio": true
                         },
                         {
                             "$type": "KillSelf",
-                            "BEKKIHBPHGD": true,
-                            "EOIGEKNINFE": true,
-                            "PGGBJIDIINM": "Disappear"
+                            "banDrop": true,
+                            "banExp": true,
+                            "killSelfType": "Disappear"
                         }
                     ]
                 }
@@ -475,25 +1122,25 @@
         "Default": {
             "$type": "ConfigAbility",
             "abilityName": "Animal_Boar_Flee",
-            "CHBMMFLIIGH": [
+            "abilityMixins": [
                 {
                     "$type": "AttachToPoseIDMixin",
                     "poseIDs": [
                         202,
                         2
                     ],
-                    "GAIGOBCNNEE": "Animal_Boar_04_Flee"
+                    "modifierName": "Animal_Boar_04_Flee"
                 }
             ],
-            "HNEIEGHMLKH": {
+            "modifiers": {
                 "Animal_Boar_04_Flee": {
-                    "GAIGOBCNNEE": "",
-                    "elementDurability": 100.0,
-                    "KCICDEJLIJD": [
+                    "modifierName": "",
+                    "bonusCriticalHurt": 100.0,
+                    "onAdded": [
                         {
                             "$type": "SetPoseInt",
                             "intID": "FleeState",
-                            "weight": 1
+                            "value": 1
                         }
                     ]
                 }
@@ -504,11 +1151,11 @@
         "Default": {
             "$type": "ConfigAbility",
             "abilityName": "Animal_Boar_Small_ToRun",
-            "HKBHLMNEMKM": [
+            "onAbilityStart": [
                 {
                     "$type": "SetPoseBool",
-                    "HHFIHBEAPAP": "RunState",
-                    "value": true
+                    "boolID": "RunState",
+                    "ratio": true
                 }
             ]
         }
@@ -517,10 +1164,202 @@
         "Default": {
             "$type": "ConfigAbility",
             "abilityName": "Animal_Boar_Small_ToWander",
-            "HKBHLMNEMKM": [
+            "onAbilityStart": [
                 {
                     "$type": "SetPoseBool",
-                    "HHFIHBEAPAP": "RunState"
+                    "boolID": "RunState"
+                }
+            ]
+        }
+    },
+    {
+        "Default": {
+            "$type": "ConfigAbility",
+            "abilityName": "Animal_Boar_Hunt_RushAtk",
+            "abilityMixins": [
+                {
+                    "$type": "AttachToStateIDMixin",
+                    "stateIDs": [
+                        "RushAtk_Trace"
+                    ],
+                    "modifierName": "Animal_Boar_RushAtk_DamageCount"
+                },
+                {
+                    "$type": "AttackHittingSceneMixin",
+                    "onHittingScene": [
+                        {
+                            "$type": "SetAnimatorTrigger",
+                            "triggerID": "CrashTrigger"
+                        }
+                    ]
+                }
+            ],
+            "modifiers": {
+                "Animal_Boar_RushAtk_DamageCount": {
+                    "modifierName": "",
+                    "bonusCriticalHurt": 100.0,
+                    "onAttackLanded": [
+                        {
+                            "$type": "Predicated",
+                            "target": "Target",
+                            "targetPredicates": [
+                                {
+                                    "$type": "ByEntityTypes",
+                                    "entityTypes": [
+                                        "Avatar"
+                                    ]
+                                }
+                            ],
+                            "successActions": [
+                                {
+                                    "$type": "DamageByAttackValue",
+                                    "target": "Target",
+                                    "predicates": [
+                                        {
+                                            "$type": "ByTargetGlobalValue",
+                                            "key": "_BOAR_RUSH_HIT",
+                                            "ratio": 0.0,
+                                            "compareType": "NoneOrEqual"
+                                        }
+                                    ],
+                                    "born": {
+                                        "$type": "ConfigBornByHitPoint"
+                                    },
+                                    "attackInfo": {
+                                        "attackTag": "",
+                                        "attenuationTag": "",
+                                        "attenuationGroup": "default",
+                                        "attackProperty": {
+                                            "MDJIHDGGPHA": 1.0,
+                                            "NEFPGMGNGAK": 0.0,
+                                            "bonusCriticalHurt": 100.0,
+                                            "strikeType": "Blunt",
+                                            "attackType": "Melee"
+                                        },
+                                        "hitPattern": {
+                                            "onHitEffectName": "",
+                                            "hitImpulseType": "LV0"
+                                        }
+                                    }
+                                },
+                                {
+                                    "$type": "ApplyModifier",
+                                    "target": "Target",
+                                    "modifierName": "UNIQUE_Animal_BoarHuntActivity_RushAtk_Num"
+                                }
+                            ]
+                        }
+                    ]
+                },
+                "UNIQUE_Animal_BoarHuntActivity_RushAtk_Num": {
+                    "stacking": "RefreshUniqueDurability",
+                    "modifierName": "",
+                    "isUnique": true,
+                    "KPGONJCLMDC": 1.5,
+                    "bonusCriticalHurt": 100.0,
+                    "onAdded": [
+                        {
+                            "$type": "SetGlobalValue",
+                            "ratio": 1.0,
+                            "key": "_BOAR_RUSH_HIT",
+                            "maxValue": 0.0,
+                            "minValue": 0.0
+                        }
+                    ],
+                    "onRemoved": [
+                        {
+                            "$type": "SetGlobalValue",
+                            "ratio": 0.0,
+                            "key": "_BOAR_RUSH_HIT",
+                            "maxValue": 0.0,
+                            "minValue": 0.0
+                        }
+                    ]
+                }
+            },
+            "onAbilityStart": [
+                {
+                    "$type": "TriggerAttackEvent",
+                    "attackEvent": {
+                        "attackPattern": {
+                            "$type": "ConfigAttackBox",
+                            "triggerType": "TriggerNoRepeat",
+                            "born": {
+                                "$type": "ConfigBornBySelf",
+                                "offset": {
+                                    "NMLENGBJMAA": 0.0,
+                                    "OKBPMDLDKLI": 0.5,
+                                    "OGKDKNLKIDE": 0.0
+                                }
+                            },
+                            "size": {
+                                "NMLENGBJMAA": 1.5,
+                                "OKBPMDLDKLI": 1.5,
+                                "OGKDKNLKIDE": 2.0
+                            }
+                        },
+                        "attackInfo": {
+                            "attackTag": "",
+                            "attenuationTag": "",
+                            "attenuationGroup": "default",
+                            "attackProperty": {
+                                "MDJIHDGGPHA": 0.0,
+                                "NEFPGMGNGAK": 0.0,
+                                "bonusCriticalHurt": 100.0,
+                                "strikeType": "Blunt",
+                                "enBreak": 1000.0
+                            },
+                            "hitPattern": {
+                                "onHitEffectName": "default",
+                                "hitImpulseType": "LV5",
+                                "canBeDefenceHalt": true
+                            }
+                        }
+                    },
+                    "targetType": "Enemy"
+                }
+            ]
+        }
+    },
+    {
+        "Default": {
+            "$type": "ConfigAbility",
+            "abilityName": "Animal_Boar_Hunt_Steer",
+            "abilityMixins": [
+                {
+                    "$type": "SteerAttackMixin",
+                    "steerStateIDs": [
+                        "RushAtk_BS"
+                    ],
+                    "endNormalizedTime": 0.5299999713897705,
+                    "angularSpeed": 250.0,
+                    "attackTrigger": ""
+                },
+                {
+                    "$type": "SteerAttackTraceMixin",
+                    "steerStateIDs": [
+                        "RushAtk_Trace"
+                    ],
+                    "endNormalizedTime": 3.0,
+                    "angularSpeed": 100.0,
+                    "attackTrigger": ""
+                },
+                {
+                    "$type": "SteerAttackMixin",
+                    "steerStateIDs": [
+                        "MeleeAttackTurn"
+                    ],
+                    "angularSpeed": 300.0,
+                    "attackTrigger": ""
+                },
+                {
+                    "$type": "SteerAttackMixin",
+                    "steerStateIDs": [
+                        "Summon"
+                    ],
+                    "endNormalizedTime": 0.09000000357627869,
+                    "angularSpeed": 300.0,
+                    "attackTrigger": ""
                 }
             ]
         }
@@ -529,41 +1368,41 @@
         "Default": {
             "$type": "ConfigAbility",
             "abilityName": "Animal_Boar_03_Steer",
-            "CHBMMFLIIGH": [
+            "abilityMixins": [
                 {
                     "$type": "SteerAttackMixin",
-                    "EHNAPMMMNFI": [
+                    "steerStateIDs": [
                         "RushAtk_BS"
                     ],
-                    "IMHBEGIKDKB": 0.20000000298023224,
-                    "HENDIIJFPCI": 720.0,
-                    "NCAENFOANAG": ""
+                    "endNormalizedTime": 0.20000000298023224,
+                    "angularSpeed": 720.0,
+                    "attackTrigger": ""
                 },
                 {
                     "$type": "SteerAttackMixin",
-                    "EHNAPMMMNFI": [
+                    "steerStateIDs": [
                         "RushAtk_BS"
                     ],
-                    "EOOBFBGMGLD": 0.800000011920929,
-                    "HENDIIJFPCI": 720.0,
-                    "NCAENFOANAG": ""
+                    "startNormalizedTime": 0.800000011920929,
+                    "angularSpeed": 720.0,
+                    "attackTrigger": ""
                 },
                 {
                     "$type": "SteerAttackMixin",
-                    "EHNAPMMMNFI": [
+                    "steerStateIDs": [
                         "MeleeAttackTurn"
                     ],
-                    "HENDIIJFPCI": 300.0,
-                    "NCAENFOANAG": ""
+                    "angularSpeed": 300.0,
+                    "attackTrigger": ""
                 },
                 {
                     "$type": "SteerAttackMixin",
-                    "EHNAPMMMNFI": [
+                    "steerStateIDs": [
                         "Summon"
                     ],
-                    "IMHBEGIKDKB": 0.09000000357627869,
-                    "HENDIIJFPCI": 300.0,
-                    "NCAENFOANAG": ""
+                    "endNormalizedTime": 0.09000000357627869,
+                    "angularSpeed": 300.0,
+                    "attackTrigger": ""
                 }
             ]
         }
@@ -572,75 +1411,75 @@
         "Default": {
             "$type": "ConfigAbility",
             "abilityName": "Animal_Boar_03_RushTimeBeSafe",
-            "CHBMMFLIIGH": [
+            "abilityMixins": [
                 {
                     "$type": "AttachModifierToSelfGlobalValueMixin",
-                    "BPCFCANOMNH": "_ANIMAL_BOAR_03_RUSHSTATE",
-                    "FEGIOIGELHB": 0.0,
-                    "CMEDACODLEA": [
+                    "globalValueKey": "_ANIMAL_BOAR_03_RUSHSTATE",
+                    "defaultGlobalValueOnCreate": 0.0,
+                    "valueSteps": [
                         -1.0,
                         0.5,
                         1.5
                     ],
-                    "MIEPCOONDEM": [
+                    "modifierNameSteps": [
                         "NotInRush",
                         "InRushState"
                     ]
                 }
             ],
-            "HNEIEGHMLKH": {
+            "modifiers": {
                 "Animal_Boar_03_RushSafeTimer": {
-                    "GAIGOBCNNEE": "",
-                    "GMIMMDOGGIO": 3.5,
-                    "elementDurability": 100.0,
-                    "ILBIENDPCBG": [
+                    "modifierName": "",
+                    "KPGONJCLMDC": 3.5,
+                    "bonusCriticalHurt": 100.0,
+                    "onRemoved": [
                         {
                             "$type": "SetAnimatorTrigger",
                             "triggerID": "ReachTarget"
                         },
                         {
                             "$type": "AddGlobalValue",
-                            "value": -2.0,
-                            "HJJEAOMEOFI": "_ANIMAL_BOAR_03_RUSHSTATE",
-                            "EODOIECEPEF": true,
-                            "JDHHMBHOOEC": 1.0,
-                            "KHAHOELDONA": 0.0
+                            "ratio": -2.0,
+                            "key": "_ANIMAL_BOAR_03_RUSHSTATE",
+                            "useLimitRange": true,
+                            "maxValue": 1.0,
+                            "minValue": 0.0
                         }
                     ]
                 },
                 "NotInRush": {
-                    "GAIGOBCNNEE": "",
-                    "elementDurability": 100.0
+                    "modifierName": "",
+                    "bonusCriticalHurt": 100.0
                 },
                 "InRushState": {
-                    "GAIGOBCNNEE": "",
-                    "elementDurability": 100.0,
-                    "KCICDEJLIJD": [
+                    "modifierName": "",
+                    "bonusCriticalHurt": 100.0,
+                    "onAdded": [
                         {
                             "$type": "ApplyModifier",
-                            "GAIGOBCNNEE": "Animal_Boar_03_RushSafeTimer"
+                            "modifierName": "Animal_Boar_03_RushSafeTimer"
                         }
                     ]
                 }
             },
-            "KCICDEJLIJD": [
+            "onAdded": [
                 {
                     "$type": "AddGlobalValue",
-                    "value": -2.0,
-                    "HJJEAOMEOFI": "_ANIMAL_BOAR_03_RUSHSTATE",
-                    "EODOIECEPEF": true,
-                    "JDHHMBHOOEC": 1.0,
-                    "KHAHOELDONA": 0.0
+                    "ratio": -2.0,
+                    "key": "_ANIMAL_BOAR_03_RUSHSTATE",
+                    "useLimitRange": true,
+                    "maxValue": 1.0,
+                    "minValue": 0.0
                 }
             ],
-            "HKBHLMNEMKM": [
+            "onAbilityStart": [
                 {
                     "$type": "AddGlobalValue",
-                    "value": 1.0,
-                    "HJJEAOMEOFI": "_ANIMAL_BOAR_03_RUSHSTATE",
-                    "EODOIECEPEF": true,
-                    "JDHHMBHOOEC": 1.0,
-                    "KHAHOELDONA": 0.0
+                    "ratio": 1.0,
+                    "key": "_ANIMAL_BOAR_03_RUSHSTATE",
+                    "useLimitRange": true,
+                    "maxValue": 1.0,
+                    "minValue": 0.0
                 }
             ]
         }
@@ -649,77 +1488,99 @@
         "Default": {
             "$type": "ConfigAbility",
             "abilityName": "Animal_Boar_03_RushTimer",
-            "CHBMMFLIIGH": [
+            "abilityMixins": [
                 {
                     "$type": "AttachToNormalizedTimeMixin",
-                    "EFAJCDMGOHL": "Crash_Loop",
-                    "GAIGOBCNNEE": "Animal_Boar_03_StunEffect"
+                    "stateID": "Crash_Loop",
+                    "modifierName": "Animal_Boar_03_StunEffect"
                 },
                 {
                     "$type": "AttachToNormalizedTimeMixin",
-                    "EFAJCDMGOHL": "Crash_BS",
-                    "GAIGOBCNNEE": "Animal_Boar_03_StunEffect"
+                    "stateID": "Crash_BS",
+                    "modifierName": "Animal_Boar_03_StunEffect"
                 },
                 {
                     "$type": "AttachToNormalizedTimeMixin",
-                    "EFAJCDMGOHL": "RushAtk1",
-                    "GAIGOBCNNEE": "Animal_Boar_03_RushTimesNumPlus"
+                    "stateID": "RushAtk1",
+                    "modifierName": "Animal_Boar_03_RushTimesNumPlus"
                 },
                 {
                     "$type": "AttachToNormalizedTimeMixin",
-                    "EFAJCDMGOHL": "Crash_BS",
-                    "GAIGOBCNNEE": "Animal_Boar_03_ResetRushTimese"
+                    "stateID": "Crash_BS",
+                    "modifierName": "Animal_Boar_03_ResetRushTimese"
                 },
                 {
                     "$type": "AttachToNormalizedTimeMixin",
-                    "EFAJCDMGOHL": "Standby",
-                    "GAIGOBCNNEE": "Animal_Boar_03_ResetRushTimese"
+                    "stateID": "Standby",
+                    "modifierName": "Animal_Boar_03_ResetRushTimese"
+                },
+                {
+                    "$type": "AttachToNormalizedTimeMixin",
+                    "stateID": "Hunt_CrashLoop",
+                    "modifierName": "Animal_Boar_03_StunEffect"
+                },
+                {
+                    "$type": "AttachToNormalizedTimeMixin",
+                    "stateID": "Trap_CrashLoop",
+                    "modifierName": "Animal_Boar_03_StunEffect"
                 }
             ],
-            "EDDGGPMFDGK": {
+            "abilitySpecials": {
                 "RushTimesPlus": 0.0,
                 "RushDistance": 0.0
             },
-            "HNEIEGHMLKH": {
-                "Animal_Boar_03_StunEffect": {
-                    "GAIGOBCNNEE": "",
-                    "elementDurability": 100.0,
-                    "KCICDEJLIJD": [
+            "modifiers": {
+                "Animal_Boar_Hunt_StunEffect": {
+                    "modifierName": "",
+                    "bonusCriticalHurt": 100.0,
+                    "onAdded": [
                         {
                             "$type": "AttachEffect",
-                            "JBHFPDMBFHN": "Eff_Monster_Mimik_Ice_Down_02"
+                            "healLimitedByCasterMaxHPRatio": "Eff_Monster_Mimik_Ice_Down_02",
+                            "COOMHFHLGFG": -1.0
+                        }
+                    ]
+                },
+                "Animal_Boar_03_StunEffect": {
+                    "modifierName": "",
+                    "bonusCriticalHurt": 100.0,
+                    "onAdded": [
+                        {
+                            "$type": "AttachEffect",
+                            "healLimitedByCasterMaxHPRatio": "Eff_Monster_Mimik_Ice_Down_02",
+                            "COOMHFHLGFG": -1.0
                         }
                     ]
                 },
                 "Animal_Boar_03_RushTimer": {
-                    "GAIGOBCNNEE": "",
-                    "GMIMMDOGGIO": 0.699999988079071,
-                    "elementDurability": 100.0,
-                    "KCICDEJLIJD": [
+                    "modifierName": "",
+                    "KPGONJCLMDC": 0.699999988079071,
+                    "bonusCriticalHurt": 100.0,
+                    "onAdded": [
                         {
                             "$type": "Predicated",
-                            "NPHOOPNDCAC": "SelfAttackTarget",
-                            "ELDBAFHCOBL": [
+                            "target": "SelfAttackTarget",
+                            "targetPredicates": [
                                 {
                                     "$type": "ByTargetPositionToSelfPosition",
-                                    "GMFCOCAJBDM": "LesserOrEqual",
-                                    "value": 10.0
+                                    "logic": "LesserOrEqual",
+                                    "ratio": 10.0
                                 }
                             ],
-                            "NCNDEAPMKCP": [
+                            "successActions": [
                                 {
                                     "$type": "FixedMonsterRushMove",
-                                    "FJCBIPKOKMF": {
+                                    "toPos": {
                                         "$type": "ConfigBornBySelf",
                                         "offset": {
-                                            "AEAAJCIDPED": 0.0,
-                                            "KAAPLGBEDPM": 0.0,
-                                            "PHDCJAHHIOG": 15.0
+                                            "NMLENGBJMAA": 0.0,
+                                            "OKBPMDLDKLI": 0.0,
+                                            "OGKDKNLKIDE": 15.0
                                         }
                                     },
-                                    "FPIJACIKJKL": 0.699999988079071,
-                                    "GLALMCMAFJF": 15.0,
-                                    "MPOEADACOHO": [
+                                    "timeRange": 0.699999988079071,
+                                    "maxRange": 15.0,
+                                    "animatorStateIDs": [
                                         "RushAtk1_BS",
                                         "RushAtk2_BS",
                                         "RushAtk3_BS",
@@ -727,36 +1588,36 @@
                                         "RushAtk2",
                                         "RushAtk3"
                                     ],
-                                    "AGIKEIFOMLO": ""
+                                    "overrideMoveCollider": ""
                                 }
                             ],
-                            "BMIOBLGLPIM": [
+                            "failActions": [
                                 {
                                     "$type": "SetGlobalValueByTargetDistance",
-                                    "NPHOOPNDCAC": "SelfAttackTarget",
-                                    "HJJEAOMEOFI": "_ANIMAL_BOAR_03_RUSHDISTANCE"
+                                    "target": "SelfAttackTarget",
+                                    "key": "_ANIMAL_BOAR_03_RUSHDISTANCE"
                                 },
                                 {
                                     "$type": "SetGlobalValueToOverrideMap",
-                                    "BPCFCANOMNH": "_ANIMAL_BOAR_03_RUSHDISTANCE",
-                                    "OGAHELLALBB": "RushDistance"
+                                    "globalValueKey": "_ANIMAL_BOAR_03_RUSHDISTANCE",
+                                    "overrideMapKey": "RushDistance"
                                 },
                                 {
                                     "$type": "FixedMonsterRushMove",
-                                    "FJCBIPKOKMF": {
+                                    "toPos": {
                                         "$type": "ConfigBornBySelf",
                                         "offset": {
-                                            "AEAAJCIDPED": 0.0,
-                                            "KAAPLGBEDPM": 0.0,
-                                            "PHDCJAHHIOG": [
+                                            "NMLENGBJMAA": 0.0,
+                                            "OKBPMDLDKLI": 0.0,
+                                            "OGKDKNLKIDE": [
                                                 "RushDistance",
                                                 4.0,
-                                                "Add"
+                                                "ADD"
                                             ]
                                         }
                                     },
-                                    "FPIJACIKJKL": 0.699999988079071,
-                                    "MPOEADACOHO": [
+                                    "timeRange": 0.699999988079071,
+                                    "animatorStateIDs": [
                                         "RushAtk1_BS",
                                         "RushAtk2_BS",
                                         "RushAtk3_BS",
@@ -764,16 +1625,17 @@
                                         "RushAtk2",
                                         "RushAtk3"
                                     ],
-                                    "AGIKEIFOMLO": ""
+                                    "overrideMoveCollider": ""
                                 }
                             ]
                         },
                         {
                             "$type": "AttachEffect",
-                            "JBHFPDMBFHN": "Eff_Animal_Boar_03_RushAtkDust"
+                            "healLimitedByCasterMaxHPRatio": "Eff_Animal_Boar_03_RushAtkDust",
+                            "COOMHFHLGFG": -1.0
                         }
                     ],
-                    "ILBIENDPCBG": [
+                    "onRemoved": [
                         {
                             "$type": "SetAnimatorTrigger",
                             "triggerID": "ReachTarget"
@@ -781,94 +1643,94 @@
                     ]
                 },
                 "Animal_Boar_03_RushTimesNumPlus": {
-                    "GAIGOBCNNEE": "",
-                    "elementDurability": 100.0,
-                    "KCICDEJLIJD": [
+                    "modifierName": "",
+                    "bonusCriticalHurt": 100.0,
+                    "onAdded": [
                         {
                             "$type": "SetGlobalValue",
-                            "value": 0.0,
-                            "HJJEAOMEOFI": "_BOAR_03_RUSHTIMESPlUS",
-                            "EODOIECEPEF": true,
-                            "FACHGOPKJKE": true,
-                            "JDHHMBHOOEC": 2.0,
-                            "KHAHOELDONA": 1.0
+                            "ratio": 0.0,
+                            "key": "_BOAR_03_RUSHTIMESPlUS",
+                            "useLimitRange": true,
+                            "randomInRange": true,
+                            "maxValue": 2.0,
+                            "minValue": 1.0
                         },
                         {
                             "$type": "SetGlobalValueToOverrideMap",
-                            "BPCFCANOMNH": "_BOAR_03_RUSHTIMESPlUS",
-                            "OGAHELLALBB": "RushTimesPlus"
+                            "globalValueKey": "_BOAR_03_RUSHTIMESPlUS",
+                            "overrideMapKey": "RushTimesPlus"
                         },
                         {
                             "$type": "AddGlobalValue",
-                            "value": "RushTimesPlus",
-                            "HJJEAOMEOFI": "_BOAR_03_RUSHTIMES",
-                            "EODOIECEPEF": true,
-                            "JDHHMBHOOEC": 4.0,
-                            "KHAHOELDONA": 0.0
+                            "ratio": "RushTimesPlus",
+                            "key": "_BOAR_03_RUSHTIMES",
+                            "useLimitRange": true,
+                            "maxValue": 4.0,
+                            "minValue": 0.0
                         },
                         {
                             "$type": "SetAnimatorBool",
                             "predicates": [
                                 {
                                     "$type": "ByTargetGlobalValue",
-                                    "HJJEAOMEOFI": "_BOAR_03_RUSHTIMES",
-                                    "value": 4.0
+                                    "key": "_BOAR_03_RUSHTIMES",
+                                    "ratio": 4.0
                                 }
                             ],
-                            "HHFIHBEAPAP": "RushOver",
-                            "value": true
+                            "boolID": "RushOver",
+                            "ratio": true
                         }
                     ]
                 },
                 "Animal_Boar_03_ResetRushTimese": {
-                    "GAIGOBCNNEE": "",
-                    "elementDurability": 100.0,
-                    "KCICDEJLIJD": [
+                    "modifierName": "",
+                    "bonusCriticalHurt": 100.0,
+                    "onAdded": [
                         {
                             "$type": "AddGlobalValue",
-                            "value": -5.0,
-                            "HJJEAOMEOFI": "_BOAR_03_RUSHTIMES",
-                            "EODOIECEPEF": true,
-                            "JDHHMBHOOEC": 4.0,
-                            "KHAHOELDONA": 0.0
+                            "ratio": -5.0,
+                            "key": "_BOAR_03_RUSHTIMES",
+                            "useLimitRange": true,
+                            "maxValue": 4.0,
+                            "minValue": 0.0
                         },
                         {
                             "$type": "SetAnimatorBool",
-                            "HHFIHBEAPAP": "RushOver"
+                            "boolID": "RushOver"
                         }
                     ]
                 }
             },
-            "KCICDEJLIJD": [
+            "onAdded": [
                 {
                     "$type": "AddGlobalValue",
-                    "value": 0.0,
-                    "HJJEAOMEOFI": "_BOAR_03_RUSHTIMESPlUS",
-                    "EODOIECEPEF": true,
-                    "JDHHMBHOOEC": 2.0,
-                    "KHAHOELDONA": 0.0
+                    "ratio": 0.0,
+                    "key": "_BOAR_03_RUSHTIMESPlUS",
+                    "useLimitRange": true,
+                    "maxValue": 2.0,
+                    "minValue": 0.0
                 },
                 {
                     "$type": "AddGlobalValue",
-                    "value": 0.0,
-                    "HJJEAOMEOFI": "_BOAR_03_RUSHTIMES",
-                    "EODOIECEPEF": true,
-                    "JDHHMBHOOEC": 4.0,
-                    "KHAHOELDONA": 0.0
+                    "ratio": 0.0,
+                    "key": "_BOAR_03_RUSHTIMES",
+                    "useLimitRange": true,
+                    "maxValue": 4.0,
+                    "minValue": 0.0
                 },
                 {
                     "$type": "AddGlobalValue",
-                    "value": -2.0,
-                    "HJJEAOMEOFI": "_MONSTER_ANIMAL_BOAR_03_RUSHHITSCENE",
-                    "EODOIECEPEF": true,
-                    "JDHHMBHOOEC": 1.0,
-                    "KHAHOELDONA": 0.0
+                    "ratio": -2.0,
+                    "key": "_MONSTER_ANIMAL_BOAR_03_RUSHHITSCENE",
+                    "useLimitRange": true,
+                    "maxValue": 1.0,
+                    "minValue": 0.0
                 }
             ],
-            "HKBHLMNEMKM": [
+            "onAbilityStart": [
                 {
                     "$type": "ApplyModifier",
-                    "GAIGOBCNNEE": "Animal_Boar_03_RushTimer"
+                    "modifierName": "Animal_Boar_03_RushTimer"
                 }
             ]
         }
@@ -877,18 +1739,18 @@
         "Default": {
             "$type": "ConfigAbility",
             "abilityName": "Animal_Boar_03_RushAtkBulletDamage",
-            "HKBHLMNEMKM": [
+            "onAbilityStart": [
                 {
                     "$type": "DamageByAttackValue",
-                    "NPHOOPNDCAC": "Target",
+                    "target": "Target",
                     "attackInfo": {
                         "attackTag": "",
                         "attenuationTag": "",
                         "attenuationGroup": "default",
                         "attackProperty": {
-                            "bonusCriticalHurt": 1.0,
-                            "damagePercentageRatio": 0.0,
-                            "elementDurability": 100.0,
+                            "MDJIHDGGPHA": 1.0,
+                            "NEFPGMGNGAK": 0.0,
+                            "bonusCriticalHurt": 100.0,
                             "strikeType": "Blunt",
                             "enBreak": 1000.0
                         },
@@ -906,36 +1768,36 @@
         "Default": {
             "$type": "ConfigAbility",
             "abilityName": "Animal_Boar_03_RushAttackDamage",
-            "CHBMMFLIIGH": [
+            "abilityMixins": [
                 {
                     "$type": "AttachToStateIDMixin",
                     "stateIDs": [
                         "RushAtk_Loop"
                     ],
-                    "GAIGOBCNNEE": "Animal_Boar_03_RushAttackDamage"
+                    "modifierName": "Animal_Boar_03_RushAttackDamage"
                 }
             ],
-            "HNEIEGHMLKH": {
+            "modifiers": {
                 "Animal_Boar_03_RushAttackDamage": {
-                    "GAIGOBCNNEE": "",
-                    "elementDurability": 100.0,
-                    "KCICDEJLIJD": [
+                    "modifierName": "",
+                    "bonusCriticalHurt": 100.0,
+                    "onAdded": [
                         {
                             "$type": "TriggerBullet",
-                            "NGAAOMEHOGE": 42802005,
-                            "NGDMCBABOJA": {
+                            "bulletID": 42802005,
+                            "born": {
                                 "$type": "ConfigBornBySelf"
                             },
-                            "NJEOPILMKCN": true,
-                            "ENJEPFDLDDF": "Self"
+                            "lifeByOwnerIsAlive": true,
+                            "trackTarget": "Self"
                         }
                     ],
-                    "ILBIENDPCBG": [
+                    "onRemoved": [
                         {
                             "$type": "KillGadget",
-                            "LBGGIBBMCMF": {
-                                "AKMLOIFOBPO": "Reversed",
-                                "APIAFGPIIHE": 42802005
+                            "gadgetInfo": {
+                                "sortType": "Reversed",
+                                "configID": 42802005
                             }
                         }
                     ]
@@ -947,45 +1809,38 @@
         "Default": {
             "$type": "ConfigAbility",
             "abilityName": "Animal_Boar_03_DestroyGadget",
-            "CHBMMFLIIGH": [
+            "abilityMixins": [
                 {
                     "$type": "AttachToStateIDMixin",
                     "stateIDs": [
                         "RushAtk_Loop"
                     ],
-                    "GAIGOBCNNEE": "Animal_Boar_03_DestroyGadget"
+                    "modifierName": "Animal_Boar_03_DestroyGadget"
                 },
                 {
                     "$type": "AttachModifierToSelfGlobalValueMixin",
-                    "BPCFCANOMNH": "_ANIMAL_BOAR_03_CRASH_TIMES",
-                    "FEGIOIGELHB": 0.0,
-                    "CMEDACODLEA": [
+                    "globalValueKey": "_ANIMAL_BOAR_03_CRASH_TIMES",
+                    "defaultGlobalValueOnCreate": 0.0,
+                    "valueSteps": [
                         -1.0,
                         2.5,
                         11.0
                     ],
-                    "MIEPCOONDEM": [
+                    "modifierNameSteps": [
                         "Angry_Empty",
                         "Animal_Boar_03_Angry"
                     ]
                 },
                 {
-                    "$type": "AttachToStateIDMixin",
-                    "stateIDs": [
-                        "Crash"
-                    ],
-                    "GAIGOBCNNEE": "Animal_Boar_03_Crash"
-                },
-                {
                     "$type": "AttachModifierToSelfGlobalValueMixin",
-                    "BPCFCANOMNH": "_MONSTER_ANIMAL_BOAR_03_RUSHHITSCENE",
-                    "FEGIOIGELHB": 0.0,
-                    "CMEDACODLEA": [
+                    "globalValueKey": "_MONSTER_ANIMAL_BOAR_03_RUSHHITSCENE",
+                    "defaultGlobalValueOnCreate": 0.0,
+                    "valueSteps": [
                         -0.5,
                         0.5,
                         1.5
                     ],
-                    "MIEPCOONDEM": [
+                    "modifierNameSteps": [
                         "NotRushHitScene",
                         "RushHitScene"
                     ]
@@ -996,14 +1851,14 @@
                         "RushAtk_BS",
                         "RushAtk_AS"
                     ],
-                    "GAIGOBCNNEE": "Animal_Boar_03_ResetRushValue"
+                    "modifierName": "Animal_Boar_03_ResetRushValue"
                 },
                 {
                     "$type": "AttachToStateIDMixin",
                     "stateIDs": [
                         "AngryState"
                     ],
-                    "GAIGOBCNNEE": "Animal_Boar_03_ForceAngry"
+                    "modifierName": "Animal_Boar_03_ForceAngry"
                 },
                 {
                     "$type": "AttachToPoseIDMixin",
@@ -1011,41 +1866,48 @@
                         1,
                         2
                     ],
-                    "GAIGOBCNNEE": "AnimaL_Boar_03_ExitBattle"
+                    "modifierName": "AnimaL_Boar_03_ExitBattle"
                 }
             ],
-            "HNEIEGHMLKH": {
+            "modifiers": {
                 "Angry_Empty": {
-                    "GAIGOBCNNEE": "",
-                    "elementDurability": 100.0,
-                    "KCICDEJLIJD": [
+                    "modifierName": "",
+                    "bonusCriticalHurt": 100.0,
+                    "onAdded": [
                         {
                             "$type": "SetPoseBool",
-                            "HHFIHBEAPAP": "Angry"
+                            "boolID": "Angry"
                         },
                         {
                             "$type": "SetAnimatorBool",
-                            "HHFIHBEAPAP": "Angry"
+                            "boolID": "Angry"
+                        },
+                        {
+                            "$type": "SetGlobalValue",
+                            "ratio": 0.0,
+                            "key": "_IN_ANGRY",
+                            "maxValue": 0.0,
+                            "minValue": 0.0
                         }
                     ]
                 },
                 "Animal_Boar_03_Angry": {
-                    "GAIGOBCNNEE": "",
-                    "GMIMMDOGGIO": 60.0,
-                    "elementDurability": 100.0,
-                    "FFOHEEFOELN": {
+                    "modifierName": "",
+                    "KPGONJCLMDC": 60.0,
+                    "bonusCriticalHurt": 100.0,
+                    "properties": {
                         "Actor_AttackRatio": 0.30000001192092896
                     },
-                    "KCICDEJLIJD": [
+                    "onAdded": [
                         {
                             "$type": "SetPoseBool",
-                            "HHFIHBEAPAP": "Angry",
-                            "value": true
+                            "boolID": "Angry",
+                            "ratio": true
                         },
                         {
                             "$type": "SetAnimatorBool",
-                            "HHFIHBEAPAP": "Angry",
-                            "value": true
+                            "boolID": "Angry",
+                            "ratio": true
                         },
                         {
                             "$type": "SetAnimatorTrigger",
@@ -1053,72 +1915,75 @@
                         },
                         {
                             "$type": "FireEffect",
-                            "JBHFPDMBFHN": "Eff_Animal_Boar_03_Angry",
-                            "NGDMCBABOJA": {
+                            "healLimitedByCasterMaxHPRatio": "Eff_Animal_Boar_03_Angry",
+                            "born": {
                                 "$type": "ConfigBornBySelf"
-                            }
+                            },
+                            "COOMHFHLGFG": -1.0
                         },
                         {
                             "$type": "AttachEffect",
-                            "JBHFPDMBFHN": "Eff_Animal_Boar_03_Angry_NoseAir"
+                            "healLimitedByCasterMaxHPRatio": "Eff_Animal_Boar_03_Angry_NoseAir",
+                            "COOMHFHLGFG": -1.0
                         },
                         {
                             "$type": "SetGlobalValue",
-                            "value": 1.0,
-                            "HJJEAOMEOFI": "_WATCHER_82072_",
-                            "JDHHMBHOOEC": 0.0,
-                            "KHAHOELDONA": 0.0
+                            "ratio": 1.0,
+                            "key": "_WATCHER_82072_",
+                            "maxValue": 0.0,
+                            "minValue": 0.0
                         },
                         {
                             "$type": "AttachEffect",
-                            "JBHFPDMBFHN": "Eff_Animal_Boar_03_Angry_EyeTrail"
+                            "healLimitedByCasterMaxHPRatio": "Eff_Animal_Boar_03_Angry_EyeTrail",
+                            "COOMHFHLGFG": -1.0
                         }
                     ],
-                    "ILBIENDPCBG": [
+                    "onRemoved": [
                         {
                             "$type": "SetPoseBool",
-                            "HHFIHBEAPAP": "Angry"
+                            "boolID": "Angry"
                         },
                         {
                             "$type": "SetAnimatorBool",
-                            "HHFIHBEAPAP": "Angry"
+                            "boolID": "Angry"
                         },
                         {
                             "$type": "AddGlobalValue",
-                            "value": -10.0,
-                            "HJJEAOMEOFI": "_ANIMAL_BOAR_03_CRASH_TIMES",
-                            "EODOIECEPEF": true,
-                            "JDHHMBHOOEC": 10.0,
-                            "KHAHOELDONA": 0.0
+                            "ratio": -10.0,
+                            "key": "_ANIMAL_BOAR_03_CRASH_TIMES",
+                            "useLimitRange": true,
+                            "maxValue": 10.0,
+                            "minValue": 0.0
                         }
                     ]
                 },
                 "Animal_Boar_03_DestroyGadget": {
-                    "GAIGOBCNNEE": "",
-                    "elementDurability": 100.0,
-                    "FNJKJKACMCH": [
+                    "modifierName": "",
+                    "bonusCriticalHurt": 100.0,
+                    "modifierMixins": [
                         {
                             "$type": "AttackHittingSceneMixin",
-                            "HOAPIHIBOCB": [
+                            "onHittingScene": [
                                 {
                                     "$type": "AddGlobalValue",
-                                    "value": 1.0,
-                                    "HJJEAOMEOFI": "_MONSTER_ANIMAL_BOAR_03_RUSHHITSCENE",
-                                    "EODOIECEPEF": true,
-                                    "JDHHMBHOOEC": 1.0,
-                                    "KHAHOELDONA": 0.0
+                                    "ratio": 1.0,
+                                    "key": "_MONSTER_ANIMAL_BOAR_03_RUSHHITSCENE",
+                                    "useLimitRange": true,
+                                    "maxValue": 1.0,
+                                    "minValue": 0.0
                                 },
                                 {
                                     "$type": "Predicated",
-                                    "ELDBAFHCOBL": [
+                                    "targetPredicates": [
                                         {
                                             "$type": "ByTargetGlobalValue",
-                                            "HJJEAOMEOFI": "_ANIMAL_BOAR_03_CRASH_TIMES",
-                                            "value": 2.0,
-                                            "ONPJJFKDCED": "LessAndEqual"
+                                            "key": "_ANIMAL_BOAR_03_CRASH_TIMES",
+                                            "ratio": 2.0,
+                                            "compareType": "LessAndEqual"
                                         }
                                     ],
-                                    "NCNDEAPMKCP": [
+                                    "successActions": [
                                         {
                                             "$type": "SetAnimatorTrigger",
                                             "triggerID": "CrashTrigger"
@@ -1126,71 +1991,72 @@
                                     ]
                                 }
                             ],
-                            "MIMLCECCJAL": [
+                            "animEventIDs": [
                                 "RushAtk_HitScene"
                             ]
                         }
                     ]
                 },
                 "Animal_Boar_03_Crash": {
-                    "GAIGOBCNNEE": "",
-                    "elementDurability": 100.0,
-                    "KCICDEJLIJD": [
+                    "modifierName": "",
+                    "bonusCriticalHurt": 100.0,
+                    "onAdded": [
                         {
                             "$type": "AddGlobalValue",
                             "predicates": [
                                 {
                                     "$type": "ByAnimatorBool",
-                                    "MOCGJNIDDAI": "Angry"
+                                    "parameter": "Angry"
                                 }
                             ],
-                            "value": 1.0,
-                            "HJJEAOMEOFI": "_ANIMAL_BOAR_03_CRASH_TIMES",
-                            "EODOIECEPEF": true,
-                            "JDHHMBHOOEC": 10.0,
-                            "KHAHOELDONA": 0.0
+                            "ratio": 1.0,
+                            "key": "_ANIMAL_BOAR_03_CRASH_TIMES",
+                            "useLimitRange": true,
+                            "maxValue": 10.0,
+                            "minValue": 0.0
                         },
                         {
                             "$type": "FireEffect",
-                            "JBHFPDMBFHN": "Eff_Animal_Boar_03_RushStun_Explode",
-                            "NGDMCBABOJA": {
+                            "healLimitedByCasterMaxHPRatio": "Eff_Animal_Boar_03_RushStun_Explode",
+                            "born": {
                                 "$type": "ConfigBornBySelf",
                                 "offset": {
-                                    "AEAAJCIDPED": 0.0,
-                                    "KAAPLGBEDPM": 1.0,
-                                    "PHDCJAHHIOG": 1.0
+                                    "NMLENGBJMAA": 0.0,
+                                    "OKBPMDLDKLI": 1.0,
+                                    "OGKDKNLKIDE": 1.0
                                 }
-                            }
+                            },
+                            "COOMHFHLGFG": -1.0
                         }
                     ]
                 },
                 "NotRushHitScene": {
-                    "GAIGOBCNNEE": "",
-                    "elementDurability": 100.0
+                    "modifierName": "",
+                    "bonusCriticalHurt": 100.0
                 },
                 "RushHitScene": {
-                    "GAIGOBCNNEE": "",
-                    "elementDurability": 100.0,
-                    "KCICDEJLIJD": [
+                    "modifierName": "",
+                    "bonusCriticalHurt": 100.0,
+                    "onAdded": [
                         {
                             "$type": "TriggerAttackEvent",
-                            "DMCJDGELKBC": {
+                            "attackEvent": {
                                 "attackPattern": {
                                     "$type": "ConfigAttackBox",
-                                    "lifeTime": "TriggerNoRepeat",
-                                    "MLOEFNBPCCH": "OnlyHitScene",
-                                    "NGDMCBABOJA": {
+                                    "triggerType": "TriggerNoRepeat",
+                                    "checkHitLayerType": "OnlyHitScene",
+                                    "born": {
                                         "$type": "ConfigBornBySelf",
                                         "offset": {
-                                            "AEAAJCIDPED": 0.0,
-                                            "KAAPLGBEDPM": 0.0,
-                                            "PHDCJAHHIOG": 5.0
+                                            "NMLENGBJMAA": 0.0,
+                                            "OKBPMDLDKLI": 0.0,
+                                            "OGKDKNLKIDE": 5.0
                                         }
                                     },
                                     "size": {
-                                        "AEAAJCIDPED": 4.0,
-                                        "KAAPLGBEDPM": 4.0,
-                                        "PHDCJAHHIOG": 7.0
+                                        "NMLENGBJMAA": 4.0,
+                                        "OKBPMDLDKLI": 4.0,
+                                        "OGKDKNLKIDE": 7.0
                                     }
                                 },
                                 "attackInfo": {
@@ -1198,9 +2064,9 @@
                                     "attenuationTag": "",
                                     "attenuationGroup": "default",
                                     "attackProperty": {
-                                        "bonusCriticalHurt": 0.0,
-                                        "damagePercentageRatio": 0.0,
-                                        "elementDurability": 100.0,
+                                        "MDJIHDGGPHA": 0.0,
+                                        "NEFPGMGNGAK": 0.0,
+                                        "bonusCriticalHurt": 100.0,
                                         "strikeType": "Blunt",
                                         "enBreak": 5000.0
                                     },
@@ -1210,77 +2076,77 @@
                                     }
                                 }
                             },
-                            "OJIFKEOCJGB": "All"
+                            "targetType": "All"
                         }
                     ]
                 },
                 "Animal_Boar_03_ResetRushValue": {
-                    "GAIGOBCNNEE": "",
-                    "elementDurability": 100.0,
-                    "KCICDEJLIJD": [
+                    "modifierName": "",
+                    "bonusCriticalHurt": 100.0,
+                    "onAdded": [
                         {
                             "$type": "AddGlobalValue",
-                            "value": -2.0,
-                            "HJJEAOMEOFI": "_MONSTER_ANIMAL_BOAR_03_RUSHHITSCENE",
-                            "EODOIECEPEF": true,
-                            "JDHHMBHOOEC": 1.0,
-                            "KHAHOELDONA": 0.0
+                            "ratio": -2.0,
+                            "key": "_MONSTER_ANIMAL_BOAR_03_RUSHHITSCENE",
+                            "useLimitRange": true,
+                            "maxValue": 1.0,
+                            "minValue": 0.0
                         }
                     ]
                 },
                 "Animal_Boar_03_ForceAngry": {
-                    "GAIGOBCNNEE": "",
-                    "elementDurability": 100.0,
-                    "KCICDEJLIJD": [
+                    "modifierName": "",
+                    "bonusCriticalHurt": 100.0,
+                    "onAdded": [
                         {
                             "$type": "AddGlobalValue",
-                            "value": 10.0,
-                            "HJJEAOMEOFI": "_ANIMAL_BOAR_03_CRASH_TIMES",
-                            "EODOIECEPEF": true,
-                            "JDHHMBHOOEC": 10.0,
-                            "KHAHOELDONA": 0.0
+                            "ratio": 10.0,
+                            "key": "_ANIMAL_BOAR_03_CRASH_TIMES",
+                            "useLimitRange": true,
+                            "maxValue": 10.0,
+                            "minValue": 0.0
                         }
                     ]
                 },
                 "AnimaL_Boar_03_ExitBattle": {
-                    "GAIGOBCNNEE": "",
-                    "elementDurability": 100.0,
-                    "KCICDEJLIJD": [
+                    "modifierName": "",
+                    "bonusCriticalHurt": 100.0,
+                    "onAdded": [
                         {
                             "$type": "SetAnimatorBool",
-                            "HHFIHBEAPAP": "Angry"
+                            "boolID": "Angry"
                         },
                         {
                             "$type": "AddGlobalValue",
-                            "value": -10.0,
-                            "HJJEAOMEOFI": "_ANIMAL_BOAR_03_CRASH_TIMES",
-                            "EODOIECEPEF": true,
-                            "JDHHMBHOOEC": 10.0,
-                            "KHAHOELDONA": 0.0
+                            "ratio": -10.0,
+                            "key": "_ANIMAL_BOAR_03_CRASH_TIMES",
+                            "useLimitRange": true,
+                            "maxValue": 10.0,
+                            "minValue": 0.0
                         },
                         {
                             "$type": "SetGlobalValue",
-                            "value": 0.0,
-                            "HJJEAOMEOFI": "_WATCHER_82072_",
-                            "JDHHMBHOOEC": 0.0,
-                            "KHAHOELDONA": 0.0
+                            "ratio": 0.0,
+                            "key": "_WATCHER_82072_",
+                            "maxValue": 0.0,
+                            "minValue": 0.0
                         }
                     ]
                 }
             },
-            "OGFFGLGEOGF": [
+            "onKill": [
                 {
                     "$type": "DoWatcherSystemAction",
                     "predicates": [
                         {
                             "$type": "ByTargetGlobalValue",
-                            "NPHOOPNDCAC": "Self",
-                            "HJJEAOMEOFI": "_WATCHER_82072_",
-                            "value": 1.0
+                            "target": "Self",
+                            "key": "_WATCHER_82072_",
+                            "ratio": 1.0
                         }
                     ],
-                    "GPGMPHIIAMD": 81043,
-                    "LNGKALMLMGN": true
+                    "watcherId": 81043,
+                    "inThreatListOnly": true
                 }
             ]
         }
@@ -1289,16 +2155,16 @@
         "Default": {
             "$type": "ConfigAbility",
             "abilityName": "Animal_Boar_03_ThrowSnowBigBall",
-            "HKBHLMNEMKM": [
+            "onAbilityStart": [
                 {
                     "$type": "TriggerBullet",
-                    "NGAAOMEHOGE": 42802002,
-                    "NGDMCBABOJA": {
+                    "bulletID": 42802002,
+                    "born": {
                         "$type": "ConfigBornByTarget",
                         "offset": {
-                            "AEAAJCIDPED": 0.0,
-                            "KAAPLGBEDPM": 0.20000000298023224,
-                            "PHDCJAHHIOG": 2.299999952316284
+                            "NMLENGBJMAA": 0.0,
+                            "OKBPMDLDKLI": 0.20000000298023224,
+                            "OGKDKNLKIDE": 2.299999952316284
                         }
                     }
                 }
@@ -1309,251 +2175,263 @@
         "Default": {
             "$type": "ConfigAbility",
             "abilityName": "Animal_Boar_03_SummonBrotherThrow",
-            "HNEIEGHMLKH": {
+            "modifiers": {
                 "Animal_Boar_03_SummonBrotherThrow": {
-                    "GAIGOBCNNEE": "",
-                    "GMIMMDOGGIO": 1.5800000429153442,
-                    "elementDurability": 100.0,
-                    "ILBIENDPCBG": [
+                    "modifierName": "",
+                    "KPGONJCLMDC": 1.5800000429153442,
+                    "bonusCriticalHurt": 100.0,
+                    "onRemoved": [
                         {
                             "$type": "TriggerBullet",
-                            "NGAAOMEHOGE": 42802003,
-                            "NGDMCBABOJA": {
+                            "bulletID": 42802003,
+                            "born": {
                                 "$type": "ConfigBornByTarget",
                                 "offset": {
-                                    "AEAAJCIDPED": -2.799999952316284,
-                                    "KAAPLGBEDPM": 0.10000000149011612,
-                                    "PHDCJAHHIOG": 2.200000047683716
+                                    "NMLENGBJMAA": -2.799999952316284,
+                                    "OKBPMDLDKLI": 0.10000000149011612,
+                                    "OGKDKNLKIDE": 2.200000047683716
                                 },
-                                "JBPCKOKLHEB": true
+                                "onGround": true
                             }
                         },
                         {
                             "$type": "TriggerBullet",
-                            "NGAAOMEHOGE": 42802003,
-                            "NGDMCBABOJA": {
+                            "bulletID": 42802003,
+                            "born": {
                                 "$type": "ConfigBornByTarget",
                                 "offset": {
-                                    "AEAAJCIDPED": 2.799999952316284,
-                                    "KAAPLGBEDPM": 0.10000000149011612,
-                                    "PHDCJAHHIOG": 2.200000047683716
+                                    "NMLENGBJMAA": 2.799999952316284,
+                                    "OKBPMDLDKLI": 0.10000000149011612,
+                                    "OGKDKNLKIDE": 2.200000047683716
                                 },
-                                "JBPCKOKLHEB": true
+                                "onGround": true
                             }
                         },
                         {
                             "$type": "TriggerBullet",
-                            "NGAAOMEHOGE": 42802003,
-                            "NGDMCBABOJA": {
+                            "bulletID": 42802003,
+                            "born": {
                                 "$type": "ConfigBornByTarget",
                                 "offset": {
-                                    "AEAAJCIDPED": -5.0,
-                                    "KAAPLGBEDPM": 0.10000000149011612,
-                                    "PHDCJAHHIOG": 6.0
+                                    "NMLENGBJMAA": -5.0,
+                                    "OKBPMDLDKLI": 0.10000000149011612,
+                                    "OGKDKNLKIDE": 6.0
                                 },
-                                "JBPCKOKLHEB": true
+                                "onGround": true
                             }
                         },
                         {
                             "$type": "TriggerBullet",
-                            "NGAAOMEHOGE": 42802003,
-                            "NGDMCBABOJA": {
+                            "bulletID": 42802003,
+                            "born": {
                                 "$type": "ConfigBornByTarget",
                                 "offset": {
-                                    "AEAAJCIDPED": 5.0,
-                                    "KAAPLGBEDPM": 0.10000000149011612,
-                                    "PHDCJAHHIOG": 6.0
+                                    "NMLENGBJMAA": 5.0,
+                                    "OKBPMDLDKLI": 0.10000000149011612,
+                                    "OGKDKNLKIDE": 6.0
                                 },
-                                "JBPCKOKLHEB": true
+                                "onGround": true
                             }
                         }
                     ]
                 },
                 "Animal_Boar_03_SummonBrotherEffect": {
-                    "GAIGOBCNNEE": "",
-                    "GMIMMDOGGIO": 0.10000000149011612,
-                    "elementDurability": 100.0,
-                    "KCICDEJLIJD": [
+                    "modifierName": "",
+                    "KPGONJCLMDC": 0.10000000149011612,
+                    "bonusCriticalHurt": 100.0,
+                    "onAdded": [
                         {
                             "$type": "FireEffect",
-                            "JBHFPDMBFHN": "Eff_Animal_Boar_03_SummonBrotherBS",
-                            "NGDMCBABOJA": {
+                            "healLimitedByCasterMaxHPRatio": "Eff_Animal_Boar_03_SummonBrotherBS",
+                            "born": {
                                 "$type": "ConfigBornByTarget",
                                 "offset": {
-                                    "AEAAJCIDPED": -2.799999952316284,
-                                    "KAAPLGBEDPM": 0.10000000149011612,
-                                    "PHDCJAHHIOG": 2.200000047683716
+                                    "NMLENGBJMAA": -2.799999952316284,
+                                    "OKBPMDLDKLI": 0.10000000149011612,
+                                    "OGKDKNLKIDE": 2.200000047683716
                                 },
-                                "JBPCKOKLHEB": true
-                            }
+                                "onGround": true
+                            },
+                            "COOMHFHLGFG": -1.0
                         },
                         {
                             "$type": "FireEffect",
-                            "JBHFPDMBFHN": "Eff_Animal_Boar_03_SummonBrotherBS",
-                            "NGDMCBABOJA": {
+                            "healLimitedByCasterMaxHPRatio": "Eff_Animal_Boar_03_SummonBrotherBS",
+                            "born": {
                                 "$type": "ConfigBornByTarget",
                                 "offset": {
-                                    "AEAAJCIDPED": 2.799999952316284,
-                                    "KAAPLGBEDPM": 0.10000000149011612,
-                                    "PHDCJAHHIOG": 2.200000047683716
+                                    "NMLENGBJMAA": 2.799999952316284,
+                                    "OKBPMDLDKLI": 0.10000000149011612,
+                                    "OGKDKNLKIDE": 2.200000047683716
                                 },
-                                "JBPCKOKLHEB": true
-                            }
+                                "onGround": true
+                            },
+                            "COOMHFHLGFG": -1.0
                         },
                         {
                             "$type": "FireEffect",
-                            "JBHFPDMBFHN": "Eff_Animal_Boar_03_SummonBrotherBS",
-                            "NGDMCBABOJA": {
+                            "healLimitedByCasterMaxHPRatio": "Eff_Animal_Boar_03_SummonBrotherBS",
+                            "born": {
                                 "$type": "ConfigBornByTarget",
                                 "offset": {
-                                    "AEAAJCIDPED": -5.0,
-                                    "KAAPLGBEDPM": 0.10000000149011612,
-                                    "PHDCJAHHIOG": 6.0
+                                    "NMLENGBJMAA": -5.0,
+                                    "OKBPMDLDKLI": 0.10000000149011612,
+                                    "OGKDKNLKIDE": 6.0
                                 },
-                                "JBPCKOKLHEB": true
-                            }
+                                "onGround": true
+                            },
+                            "COOMHFHLGFG": -1.0
                         },
                         {
                             "$type": "FireEffect",
-                            "JBHFPDMBFHN": "Eff_Animal_Boar_03_SummonBrotherBS",
-                            "NGDMCBABOJA": {
+                            "healLimitedByCasterMaxHPRatio": "Eff_Animal_Boar_03_SummonBrotherBS",
+                            "born": {
                                 "$type": "ConfigBornByTarget",
                                 "offset": {
-                                    "AEAAJCIDPED": 5.0,
-                                    "KAAPLGBEDPM": 0.10000000149011612,
-                                    "PHDCJAHHIOG": 6.0
+                                    "NMLENGBJMAA": 5.0,
+                                    "OKBPMDLDKLI": 0.10000000149011612,
+                                    "OGKDKNLKIDE": 6.0
                                 },
-                                "JBPCKOKLHEB": true
-                            }
+                                "onGround": true
+                            },
+                            "COOMHFHLGFG": -1.0
                         }
                     ],
-                    "ILBIENDPCBG": [
+                    "onRemoved": [
                         {
                             "$type": "FireEffect",
-                            "JBHFPDMBFHN": "Eff_Animal_Boar_03_SummonBrother",
-                            "NGDMCBABOJA": {
+                            "healLimitedByCasterMaxHPRatio": "Eff_Animal_Boar_03_SummonBrother",
+                            "born": {
                                 "$type": "ConfigBornByTarget",
                                 "offset": {
-                                    "AEAAJCIDPED": -2.799999952316284,
-                                    "KAAPLGBEDPM": 0.10000000149011612,
-                                    "PHDCJAHHIOG": 2.200000047683716
+                                    "NMLENGBJMAA": -2.799999952316284,
+                                    "OKBPMDLDKLI": 0.10000000149011612,
+                                    "OGKDKNLKIDE": 2.200000047683716
                                 },
-                                "JBPCKOKLHEB": true
-                            }
+                                "onGround": true
+                            },
+                            "COOMHFHLGFG": -1.0
                         },
                         {
                             "$type": "FireEffect",
-                            "JBHFPDMBFHN": "Eff_Animal_Boar_03_SummonBrother",
-                            "NGDMCBABOJA": {
+                            "healLimitedByCasterMaxHPRatio": "Eff_Animal_Boar_03_SummonBrother",
+                            "born": {
                                 "$type": "ConfigBornByTarget",
                                 "offset": {
-                                    "AEAAJCIDPED": 2.799999952316284,
-                                    "KAAPLGBEDPM": 0.10000000149011612,
-                                    "PHDCJAHHIOG": 2.200000047683716
+                                    "NMLENGBJMAA": 2.799999952316284,
+                                    "OKBPMDLDKLI": 0.10000000149011612,
+                                    "OGKDKNLKIDE": 2.200000047683716
                                 },
-                                "JBPCKOKLHEB": true
-                            }
+                                "onGround": true
+                            },
+                            "COOMHFHLGFG": -1.0
                         },
                         {
                             "$type": "FireEffect",
-                            "JBHFPDMBFHN": "Eff_Animal_Boar_03_SummonBrother",
-                            "NGDMCBABOJA": {
+                            "healLimitedByCasterMaxHPRatio": "Eff_Animal_Boar_03_SummonBrother",
+                            "born": {
                                 "$type": "ConfigBornByTarget",
                                 "offset": {
-                                    "AEAAJCIDPED": -5.0,
-                                    "KAAPLGBEDPM": 0.10000000149011612,
-                                    "PHDCJAHHIOG": 6.0
+                                    "NMLENGBJMAA": -5.0,
+                                    "OKBPMDLDKLI": 0.10000000149011612,
+                                    "OGKDKNLKIDE": 6.0
                                 },
-                                "JBPCKOKLHEB": true
-                            }
+                                "onGround": true
+                            },
+                            "COOMHFHLGFG": -1.0
                         },
                         {
                             "$type": "FireEffect",
-                            "JBHFPDMBFHN": "Eff_Animal_Boar_03_SummonBrother",
-                            "NGDMCBABOJA": {
+                            "healLimitedByCasterMaxHPRatio": "Eff_Animal_Boar_03_SummonBrother",
+                            "born": {
                                 "$type": "ConfigBornByTarget",
                                 "offset": {
-                                    "AEAAJCIDPED": 5.0,
-                                    "KAAPLGBEDPM": 0.10000000149011612,
-                                    "PHDCJAHHIOG": 6.0
+                                    "NMLENGBJMAA": 5.0,
+                                    "OKBPMDLDKLI": 0.10000000149011612,
+                                    "OGKDKNLKIDE": 6.0
                                 },
-                                "JBPCKOKLHEB": true
-                            }
+                                "onGround": true
+                            },
+                            "COOMHFHLGFG": -1.0
                         },
                         {
                             "$type": "ApplyModifier",
-                            "GAIGOBCNNEE": "Animal_Boar_03_SummonEffectDisappear"
+                            "modifierName": "Animal_Boar_03_SummonEffectDisappear"
                         }
                     ]
                 },
                 "Animal_Boar_03_SummonEffectDisappear": {
-                    "GAIGOBCNNEE": "",
-                    "GMIMMDOGGIO": 2.5999999046325684,
-                    "elementDurability": 100.0,
-                    "ILBIENDPCBG": [
+                    "modifierName": "",
+                    "KPGONJCLMDC": 2.5999999046325684,
+                    "bonusCriticalHurt": 100.0,
+                    "onRemoved": [
                         {
                             "$type": "FireEffect",
-                            "JBHFPDMBFHN": "Eff_Animal_Boar_03_SummonBrotherAS",
-                            "NGDMCBABOJA": {
+                            "healLimitedByCasterMaxHPRatio": "Eff_Animal_Boar_03_SummonBrotherAS",
+                            "born": {
                                 "$type": "ConfigBornByTarget",
                                 "offset": {
-                                    "AEAAJCIDPED": -2.799999952316284,
-                                    "KAAPLGBEDPM": 0.10000000149011612,
-                                    "PHDCJAHHIOG": 2.200000047683716
+                                    "NMLENGBJMAA": -2.799999952316284,
+                                    "OKBPMDLDKLI": 0.10000000149011612,
+                                    "OGKDKNLKIDE": 2.200000047683716
                                 },
-                                "JBPCKOKLHEB": true
-                            }
+                                "onGround": true
+                            },
+                            "COOMHFHLGFG": -1.0
                         },
                         {
                             "$type": "FireEffect",
-                            "JBHFPDMBFHN": "Eff_Animal_Boar_03_SummonBrotherAS",
-                            "NGDMCBABOJA": {
+                            "healLimitedByCasterMaxHPRatio": "Eff_Animal_Boar_03_SummonBrotherAS",
+                            "born": {
                                 "$type": "ConfigBornByTarget",
                                 "offset": {
-                                    "AEAAJCIDPED": 2.799999952316284,
-                                    "KAAPLGBEDPM": 0.10000000149011612,
-                                    "PHDCJAHHIOG": 2.200000047683716
+                                    "NMLENGBJMAA": 2.799999952316284,
+                                    "OKBPMDLDKLI": 0.10000000149011612,
+                                    "OGKDKNLKIDE": 2.200000047683716
                                 },
-                                "JBPCKOKLHEB": true
-                            }
+                                "onGround": true
+                            },
+                            "COOMHFHLGFG": -1.0
                         },
                         {
                             "$type": "FireEffect",
-                            "JBHFPDMBFHN": "Eff_Animal_Boar_03_SummonBrotherAS",
-                            "NGDMCBABOJA": {
+                            "healLimitedByCasterMaxHPRatio": "Eff_Animal_Boar_03_SummonBrotherAS",
+                            "born": {
                                 "$type": "ConfigBornByTarget",
                                 "offset": {
-                                    "AEAAJCIDPED": -5.0,
-                                    "KAAPLGBEDPM": 0.10000000149011612,
-                                    "PHDCJAHHIOG": 6.0
+                                    "NMLENGBJMAA": -5.0,
+                                    "OKBPMDLDKLI": 0.10000000149011612,
+                                    "OGKDKNLKIDE": 6.0
                                 },
-                                "JBPCKOKLHEB": true
-                            }
+                                "onGround": true
+                            },
+                            "COOMHFHLGFG": -1.0
                         },
                         {
                             "$type": "FireEffect",
-                            "JBHFPDMBFHN": "Eff_Animal_Boar_03_SummonBrotherAS",
-                            "NGDMCBABOJA": {
+                            "healLimitedByCasterMaxHPRatio": "Eff_Animal_Boar_03_SummonBrotherAS",
+                            "born": {
                                 "$type": "ConfigBornByTarget",
                                 "offset": {
-                                    "AEAAJCIDPED": 5.0,
-                                    "KAAPLGBEDPM": 0.10000000149011612,
-                                    "PHDCJAHHIOG": 6.0
+                                    "NMLENGBJMAA": 5.0,
+                                    "OKBPMDLDKLI": 0.10000000149011612,
+                                    "OGKDKNLKIDE": 6.0
                                 },
-                                "JBPCKOKLHEB": true
-                            }
+                                "onGround": true
+                            },
+                            "COOMHFHLGFG": -1.0
                         }
                     ]
                 }
             },
-            "HKBHLMNEMKM": [
+            "onAbilityStart": [
                 {
                     "$type": "ApplyModifier",
-                    "GAIGOBCNNEE": "Animal_Boar_03_SummonBrotherThrow"
+                    "modifierName": "Animal_Boar_03_SummonBrotherThrow"
                 },
                 {
                     "$type": "ApplyModifier",
-                    "GAIGOBCNNEE": "Animal_Boar_03_SummonBrotherEffect"
+                    "modifierName": "Animal_Boar_03_SummonBrotherEffect"
                 }
             ]
         }
@@ -1562,65 +2440,67 @@
         "Default": {
             "$type": "ConfigAbility",
             "abilityName": "Animal_Boar_03_BigSnowBallExplode",
-            "HNEIEGHMLKH": {
+            "modifiers": {
                 "Animal_Boar_03_ThrowBigSnowBall_Trail": {
-                    "GAIGOBCNNEE": "",
-                    "elementDurability": 100.0,
-                    "KCICDEJLIJD": [
+                    "modifierName": "",
+                    "bonusCriticalHurt": 100.0,
+                    "onAdded": [
                         {
                             "$type": "AttachEffect",
-                            "JBHFPDMBFHN": "Eff_Animal_Boar_03_BigSnowBall"
+                            "healLimitedByCasterMaxHPRatio": "Eff_Animal_Boar_03_BigSnowBall",
+                            "COOMHFHLGFG": -1.0
                         },
                         {
                             "$type": "AttachEffect",
-                            "JBHFPDMBFHN": "Eff_Animal_Boar_03_BigSnowBall_Trail"
+                            "healLimitedByCasterMaxHPRatio": "Eff_Animal_Boar_03_BigSnowBall_Trail",
+                            "COOMHFHLGFG": -1.0
                         }
                     ]
                 },
                 "Animal_Boar_03_ThrowBigSnowBall_OpenColliderDelay": {
-                    "GAIGOBCNNEE": "",
-                    "GMIMMDOGGIO": 0.20000000298023224,
-                    "elementDurability": 100.0,
-                    "ILBIENDPCBG": [
+                    "modifierName": "",
+                    "KPGONJCLMDC": 0.20000000298023224,
+                    "bonusCriticalHurt": 100.0,
+                    "onRemoved": [
                         {
                             "$type": "EnableBulletCollisionPluginTrigger",
-                            "PAHBCOACBAI": true
+                            "setEnable": true
                         }
                     ]
                 },
                 "Animal_Boar_03_SnowBigBallCameraEffect": {
-                    "GAIGOBCNNEE": "",
-                    "GMIMMDOGGIO": 5.0,
-                    "elementDurability": 100.0,
-                    "KCICDEJLIJD": [
+                    "modifierName": "",
+                    "KPGONJCLMDC": 5.0,
+                    "bonusCriticalHurt": 100.0,
+                    "onAdded": [
                         {
                             "$type": "DungeonFogEffects",
-                            "POKMJEIDNJF": true,
+                            "muteRemoteAction": true,
                             "enable": true,
-                            "CCMDJPGKKBM": "Eff_Animal_Boar_03_ThrowSnowBall_ScreenEffect",
-                            "IHNBFFJNAKI": ""
+                            "cameraFogEffectName": "Eff_Animal_Boar_03_ThrowSnowBall_ScreenEffect",
+                            "playerFogEffectName": ""
                         }
                     ],
-                    "ILBIENDPCBG": [
+                    "onRemoved": [
                         {
                             "$type": "DungeonFogEffects",
-                            "CCMDJPGKKBM": "",
-                            "IHNBFFJNAKI": ""
+                            "cameraFogEffectName": "",
+                            "playerFogEffectName": ""
                         }
                     ]
                 },
                 "Animal_Boar_03_BigSnowBallCheckAttack": {
-                    "GAIGOBCNNEE": "",
-                    "GMIMMDOGGIO": 5.0,
-                    "elementDurability": 100.0,
-                    "AIJPLNMHBEN": [
+                    "modifierName": "",
+                    "KPGONJCLMDC": 5.0,
+                    "bonusCriticalHurt": 100.0,
+                    "onAttackLanded": [
                         {
                             "$type": "Predicated",
-                            "NPHOOPNDCAC": "Target",
-                            "ELDBAFHCOBL": [
+                            "target": "Target",
+                            "targetPredicates": [
                                 {
                                     "$type": "ByAttackTags",
-                                    "NMJGDKCDFOJ": [
+                                    "attackTags": [
                                         "SnowBallAttack"
                                     ]
                                 },
@@ -1631,56 +2511,56 @@
                                     ]
                                 }
                             ],
-                            "NCNDEAPMKCP": [
+                            "successActions": [
                                 {
                                     "$type": "ApplyModifier",
-                                    "NPHOOPNDCAC": "Target",
-                                    "GAIGOBCNNEE": "Animal_Boar_03_SnowBigBallCameraEffect"
+                                    "target": "Target",
+                                    "modifierName": "Animal_Boar_03_SnowBigBallCameraEffect"
                                 }
                             ]
                         }
                     ]
                 }
             },
-            "KCICDEJLIJD": [
+            "onAdded": [
                 {
                     "$type": "AttachModifier",
-                    "GAIGOBCNNEE": "Animal_Boar_03_ThrowBigSnowBall_Trail"
+                    "modifierName": "Animal_Boar_03_ThrowBigSnowBall_Trail"
                 },
                 {
                     "$type": "AttachModifier",
-                    "GAIGOBCNNEE": "Animal_Boar_03_ThrowBigSnowBall_OpenColliderDelay"
+                    "modifierName": "Animal_Boar_03_ThrowBigSnowBall_OpenColliderDelay"
                 },
                 {
                     "$type": "ApplyModifier",
-                    "GAIGOBCNNEE": "Animal_Boar_03_BigSnowBallCheckAttack"
+                    "modifierName": "Animal_Boar_03_BigSnowBallCheckAttack"
                 }
             ],
-            "HKBHLMNEMKM": [
+            "onAbilityStart": [
                 {
                     "$type": "RemoveModifier",
-                    "GAIGOBCNNEE": "Animal_Boar_03_ThrowBigSnowBall_Trail"
+                    "modifierName": "Animal_Boar_03_ThrowBigSnowBall_Trail"
                 },
                 {
                     "$type": "TriggerAttackEvent",
-                    "DMCJDGELKBC": {
+                    "attackEvent": {
                         "attackPattern": {
                             "$type": "ConfigAttackSphere",
-                            "lifeTime": "TriggerNoRepeat",
-                            "NGDMCBABOJA": {
+                            "triggerType": "TriggerNoRepeat",
+                            "born": {
                                 "$type": "ConfigBornByCollisionPoint"
                             },
-                            "ICGFCBOFFDI": 2.0
+                            "PHALDBNIMGI": 2.0
                         },
                         "attackInfo": {
                             "attackTag": "SnowBallAttack",
                             "attenuationTag": "SnowBall_Damage",
                             "attenuationGroup": "Skirmisher_Fat_SprayGun_Ice",
                             "attackProperty": {
-                                "bonusCriticalHurt": 1.0,
-                                "damagePercentageRatio": 0.0,
+                                "MDJIHDGGPHA": 1.0,
+                                "NEFPGMGNGAK": 0.0,
                                 "elementType": "Ice",
-                                "elementDurability": 50.0,
+                                "bonusCriticalHurt": 50.0,
                                 "strikeType": "Blunt",
                                 "enBreak": 50.0
                             },
@@ -1692,15 +2572,16 @@
                             }
                         }
                     },
-                    "OJIFKEOCJGB": "Enemy"
+                    "targetType": "Enemy"
                 },
                 {
                     "$type": "FireEffect",
-                    "JBHFPDMBFHN": "Eff_Animal_Boar_03_BigSnowBall_Explode",
-                    "NGDMCBABOJA": {
+                    "healLimitedByCasterMaxHPRatio": "Eff_Animal_Boar_03_BigSnowBall_Explode",
+                    "born": {
                         "$type": "ConfigBornByCollisionPoint",
-                        "ANAGBFPADIE": true
-                    }
+                        "alongGround": true
+                    },
+                    "COOMHFHLGFG": -1.0
                 }
             ]
         }
@@ -1709,68 +2590,70 @@
         "Default": {
             "$type": "ConfigAbility",
             "abilityName": "Animal_Boar_03_SmallSnowBallExplode",
-            "HNEIEGHMLKH": {
+            "modifiers": {
                 "Animal_Boar_03_ThrowSmallSnowBall_Trail": {
-                    "GAIGOBCNNEE": "",
-                    "elementDurability": 100.0,
-                    "KCICDEJLIJD": [
+                    "modifierName": "",
+                    "bonusCriticalHurt": 100.0,
+                    "onAdded": [
                         {
                             "$type": "AttachEffect",
-                            "JBHFPDMBFHN": "Eff_Animal_Boar_03_SmallSnowBall"
+                            "healLimitedByCasterMaxHPRatio": "Eff_Animal_Boar_03_SmallSnowBall",
+                            "COOMHFHLGFG": -1.0
                         },
                         {
                             "$type": "AttachEffect",
-                            "JBHFPDMBFHN": "Eff_Animal_Boar_03_SmallSnowBall_Trail"
+                            "healLimitedByCasterMaxHPRatio": "Eff_Animal_Boar_03_SmallSnowBall_Trail",
+                            "COOMHFHLGFG": -1.0
                         }
                     ]
                 },
                 "Animal_Boar_03_ThrowSmallSnowBall_OpenColliderDelay": {
-                    "GAIGOBCNNEE": "",
-                    "GMIMMDOGGIO": 0.20000000298023224,
-                    "elementDurability": 100.0,
-                    "ILBIENDPCBG": [
+                    "modifierName": "",
+                    "KPGONJCLMDC": 0.20000000298023224,
+                    "bonusCriticalHurt": 100.0,
+                    "onRemoved": [
                         {
                             "$type": "EnableBulletCollisionPluginTrigger",
-                            "PAHBCOACBAI": true
+                            "setEnable": true
                         }
                     ]
                 }
             },
-            "KCICDEJLIJD": [
+            "onAdded": [
                 {
                     "$type": "AttachModifier",
-                    "GAIGOBCNNEE": "Animal_Boar_03_ThrowSmallSnowBall_Trail"
+                    "modifierName": "Animal_Boar_03_ThrowSmallSnowBall_Trail"
                 },
                 {
                     "$type": "AttachModifier",
-                    "GAIGOBCNNEE": "Animal_Boar_03_ThrowSmallSnowBall_OpenColliderDelay"
+                    "modifierName": "Animal_Boar_03_ThrowSmallSnowBall_OpenColliderDelay"
                 }
             ],
-            "HKBHLMNEMKM": [
+            "onAbilityStart": [
                 {
                     "$type": "RemoveModifier",
-                    "GAIGOBCNNEE": "Animal_Boar_03_ThrowSmallSnowBall_Trail"
+                    "modifierName": "Animal_Boar_03_ThrowSmallSnowBall_Trail"
                 },
                 {
                     "$type": "TriggerAttackEvent",
-                    "DMCJDGELKBC": {
+                    "attackEvent": {
                         "attackPattern": {
                             "$type": "ConfigAttackSphere",
-                            "lifeTime": "TriggerNoRepeat",
-                            "NGDMCBABOJA": {
+                            "triggerType": "TriggerNoRepeat",
+                            "born": {
                                 "$type": "ConfigBornByCollisionPoint"
                             },
-                            "ICGFCBOFFDI": 1.0
+                            "PHALDBNIMGI": 1.0
                         },
                         "attackInfo": {
                             "attackTag": "SnowBallAttack",
                             "attenuationTag": "SnowBall_Damage",
                             "attenuationGroup": "Skirmisher_Fat_SprayGun_Ice",
                             "attackProperty": {
-                                "bonusCriticalHurt": 1.0,
-                                "damagePercentageRatio": 0.0,
+                                "MDJIHDGGPHA": 1.0,
+                                "NEFPGMGNGAK": 0.0,
                                 "elementType": "Ice",
-                                "elementDurability": 50.0,
+                                "bonusCriticalHurt": 50.0,
                                 "strikeType": "Blunt",
                                 "enBreak": 50.0
                             },
@@ -1782,15 +2665,16 @@
                             }
                         }
                     },
-                    "OJIFKEOCJGB": "Enemy"
+                    "targetType": "Enemy"
                 },
                 {
                     "$type": "FireEffect",
-                    "JBHFPDMBFHN": "Eff_Animal_Boar_03_SmallSnowBall_Explode",
-                    "NGDMCBABOJA": {
+                    "healLimitedByCasterMaxHPRatio": "Eff_Animal_Boar_03_SmallSnowBall_Explode",
+                    "born": {
                         "$type": "ConfigBornByCollisionPoint",
-                        "ANAGBFPADIE": true
-                    }
+                        "alongGround": true
+                    },
+                    "COOMHFHLGFG": -1.0
                 }
             ]
         }
@@ -1799,73 +2683,86 @@
         "Default": {
             "$type": "ConfigAbility",
             "abilityName": "Animal_Boar_03_CreateSnowDrop",
-            "HNEIEGHMLKH": {
+            "modifiers": {
                 "Animal_Boar_03_CreateSnowDrop": {
-                    "GAIGOBCNNEE": "",
-                    "GMIMMDOGGIO": 5.0,
-                    "elementDurability": 100.0,
-                    "IKKMDDLDLIN": 1.0,
-                    "PBDDACFFPOE": [
+                    "modifierName": "",
+                    "KPGONJCLMDC": 5.0,
+                    "bonusCriticalHurt": 100.0,
+                    "thinkInterval": 1.0,
+                    "onThinkInterval": [
                         {
-                            "$type": "CreateGadget",
-                            "NPHOOPNDCAC": "SelfAttackTarget",
-                            "NGDMCBABOJA": {
-                                "$type": "ConfigBornByPredicatePoint",
-                                "JBPCKOKLHEB": true,
-                                "BIOOFAHEGLA": 0.5
-                            },
-                            "CABLIPAKCGB": 42802004,
-                            "DOLAJLACEDF": 4001
-                        },
-                        {
-                            "$type": "CreateGadget",
-                            "NGDMCBABOJA": {
-                                "$type": "ConfigBornBySelf",
-                                "HAGMNJAHNLG": {
-                                    "$type": "BornRandomFromCenter",
-                                    "LJCNOPEIJEF": 5.0,
-                                    "MFBOELKCPDP": 15.0
+                            "$type": "Predicated",
+                            "targetPredicates": [
+                                {
+                                    "$type": "ByTargetGlobalValue",
+                                    "key": "_BOAR_HUNT_IN_WEAK",
+                                    "ratio": 0.0,
+                                    "compareType": "NoneOrEqual"
+                                }
+                            ],
+                            "successActions": [
+                                {
+                                    "$type": "CreateGadget",
+                                    "target": "SelfAttackTarget",
+                                    "born": {
+                                        "$type": "ConfigBornByPredicatePoint",
+                                        "onGround": true,
+                                        "timeForPredictive": 0.5
+                                    },
+                                    "gadgetID": 42802004,
+                                    "campID": 4001
                                 },
-                                "JBPCKOKLHEB": true
-                            },
-                            "CABLIPAKCGB": 42802004,
-                            "DOLAJLACEDF": 4001
-                        },
-                        {
-                            "$type": "CreateGadget",
-                            "NGDMCBABOJA": {
-                                "$type": "ConfigBornBySelf",
-                                "HAGMNJAHNLG": {
-                                    "$type": "BornRandomFromCenter",
-                                    "LJCNOPEIJEF": 5.0,
-                                    "MFBOELKCPDP": 15.0
+                                {
+                                    "$type": "CreateGadget",
+                                    "born": {
+                                        "$type": "ConfigBornBySelf",
+                                        "bornRandom": {
+                                            "$type": "BornRandomFromCenter",
+                                            "maxRandomRange": 5.0,
+                                            "minRandomRange": 15.0
+                                        },
+                                        "onGround": true
+                                    },
+                                    "gadgetID": 42802004,
+                                    "campID": 4001
                                 },
-                                "JBPCKOKLHEB": true
-                            },
-                            "CABLIPAKCGB": 42802004,
-                            "DOLAJLACEDF": 4001
-                        },
-                        {
-                            "$type": "CreateGadget",
-                            "NGDMCBABOJA": {
-                                "$type": "ConfigBornBySelf",
-                                "HAGMNJAHNLG": {
-                                    "$type": "BornRandomFromCenter",
-                                    "LJCNOPEIJEF": 5.0,
-                                    "MFBOELKCPDP": 15.0
+                                {
+                                    "$type": "CreateGadget",
+                                    "born": {
+                                        "$type": "ConfigBornBySelf",
+                                        "bornRandom": {
+                                            "$type": "BornRandomFromCenter",
+                                            "maxRandomRange": 5.0,
+                                            "minRandomRange": 15.0
+                                        },
+                                        "onGround": true
+                                    },
+                                    "gadgetID": 42802004,
+                                    "campID": 4001
                                 },
-                                "JBPCKOKLHEB": true
-                            },
-                            "CABLIPAKCGB": 42802004,
-                            "DOLAJLACEDF": 4001
+                                {
+                                    "$type": "CreateGadget",
+                                    "born": {
+                                        "$type": "ConfigBornBySelf",
+                                        "bornRandom": {
+                                            "$type": "BornRandomFromCenter",
+                                            "maxRandomRange": 5.0,
+                                            "minRandomRange": 15.0
+                                        },
+                                        "onGround": true
+                                    },
+                                    "gadgetID": 42802004,
+                                    "campID": 4001
+                                }
+                            ]
                         }
                     ]
                 }
             },
-            "HKBHLMNEMKM": [
+            "onAbilityStart": [
                 {
                     "$type": "ApplyModifier",
-                    "GAIGOBCNNEE": "Animal_Boar_03_CreateSnowDrop"
+                    "modifierName": "Animal_Boar_03_CreateSnowDrop"
                 }
             ]
         }
@@ -1874,43 +2771,44 @@
         "Default": {
             "$type": "ConfigAbility",
             "abilityName": "Animal_Boar_03_SnowDropAttack",
-            "HNEIEGHMLKH": {
+            "modifiers": {
                 "Animal_Boar_03_SnowDropAttackDelay": {
-                    "GAIGOBCNNEE": "",
-                    "GMIMMDOGGIO": 2.0,
-                    "elementDurability": 100.0,
-                    "KCICDEJLIJD": [
+                    "modifierName": "",
+                    "KPGONJCLMDC": 2.0,
+                    "bonusCriticalHurt": 100.0,
+                    "onAdded": [
                         {
                             "$type": "FireEffect",
-                            "JBHFPDMBFHN": "Eff_Animal_Boar_03_ShowDrop_Warning"
+                            "healLimitedByCasterMaxHPRatio": "Eff_Animal_Boar_03_ShowDrop_Warning",
+                            "COOMHFHLGFG": -1.0
                         },
                         {
                             "$type": "ApplyModifier",
-                            "GAIGOBCNNEE": "Animal_Boar_03_SnowDropEffect"
+                            "modifierName": "Animal_Boar_03_SnowDropEffect"
                         }
                     ],
-                    "ILBIENDPCBG": [
+                    "onRemoved": [
                         {
                             "$type": "TriggerAttackEvent",
-                            "DMCJDGELKBC": {
+                            "attackEvent": {
                                 "attackPattern": {
                                     "$type": "ConfigAttackCircle",
-                                    "lifeTime": "TriggerNoRepeat",
-                                    "NGDMCBABOJA": {
+                                    "triggerType": "TriggerNoRepeat",
+                                    "born": {
                                         "$type": "ConfigBornBySelf"
                                     },
-                                    "secondHeight": 3.0,
-                                    "ICGFCBOFFDI": 3.0
+                                    "height": 3.0,
+                                    "PHALDBNIMGI": 3.0
                                 },
                                 "attackInfo": {
                                     "attackTag": "",
                                     "attenuationTag": "",
                                     "attenuationGroup": "default",
                                     "attackProperty": {
-                                        "bonusCriticalHurt": 1.0,
-                                        "damagePercentageRatio": 0.0,
+                                        "MDJIHDGGPHA": 1.0,
+                                        "NEFPGMGNGAK": 0.0,
                                         "elementType": "Ice",
-                                        "elementDurability": 50.0,
+                                        "bonusCriticalHurt": 50.0,
                                         "strikeType": "Blunt",
                                         "enBreak": 101.0
                                     },
@@ -1920,26 +2818,27 @@
                                     }
                                 }
                             },
-                            "OJIFKEOCJGB": "Enemy"
+                            "targetType": "Enemy"
                         }
                     ]
                 },
                 "Animal_Boar_03_SnowDropEffect": {
-                    "GAIGOBCNNEE": "",
-                    "GMIMMDOGGIO": 1.5,
-                    "elementDurability": 100.0,
-                    "ILBIENDPCBG": [
+                    "modifierName": "",
+                    "KPGONJCLMDC": 1.5,
+                    "bonusCriticalHurt": 100.0,
+                    "onRemoved": [
                         {
                             "$type": "FireEffect",
-                            "JBHFPDMBFHN": "Eff_Animal_Boar_03_ShowDrop"
+                            "healLimitedByCasterMaxHPRatio": "Eff_Animal_Boar_03_ShowDrop",
+                            "COOMHFHLGFG": -1.0
                         }
                     ]
                 }
             },
-            "KCICDEJLIJD": [
+            "onAdded": [
                 {
                     "$type": "ApplyModifier",
-                    "GAIGOBCNNEE": "Animal_Boar_03_SnowDropAttackDelay"
+                    "modifierName": "Animal_Boar_03_SnowDropAttackDelay"
                 }
             ]
         }
@@ -1948,107 +2847,109 @@
         "Default": {
             "$type": "ConfigAbility",
             "abilityName": "Animal_Boar_04_Frozen",
-            "HNEIEGHMLKH": {
+            "modifiers": {
                 "UNIQUE_Animal_Boar_04_FrozenModifier": {
-                    "GAIGOBCNNEE": "",
-                    "IEOFBCGJGEK": true,
+                    "modifierName": "",
+                    "isUnique": true,
                     "elementType": "Ice",
-                    "elementDurability": 25.0,
-                    "FNJKJKACMCH": [
+                    "bonusCriticalHurt": 25.0,
+                    "modifierMixins": [
                         {
                             "$type": "ModifyElementDecrateMixin",
                             "group": "Animal_Boar_03_OnlyFireUseful"
                         }
                     ],
                     "state": "ElementFreeze",
-                    "ILBIENDPCBG": [
+                    "onRemoved": [
                         {
                             "$type": "ApplyModifier",
-                            "GAIGOBCNNEE": "Animal_Boar_04_RemoveFrozenDelay"
+                            "modifierName": "Animal_Boar_04_RemoveFrozenDelay"
                         },
                         {
                             "$type": "SendEffectTrigger",
-                            "MOCGJNIDDAI": "Melt",
-                            "JBHFPDMBFHN": "Eff_Animal_Boar_04_Frozen"
+                            "parameter": "Melt",
+                            "attachPoint": "",
+                            "healLimitedByCasterMaxHPRatio": "Eff_Animal_Boar_04_Frozen"
                         }
                     ]
                 },
                 "Animal_Boar_04_Invincible": {
-                    "GAIGOBCNNEE": "",
-                    "elementDurability": 100.0,
-                    "FFOHEEFOELN": {
+                    "modifierName": "",
+                    "bonusCriticalHurt": 100.0,
+                    "properties": {
                         "Entity_MassRatio": 100.0,
                         "Entity_WeightRatio": 100.0,
                         "Actor_EndureDelta": 0.0
                     },
                     "state": "LockHP",
-                    "KCICDEJLIJD": [
+                    "onAdded": [
                         {
                             "$type": "AttachEffect",
-                            "JBHFPDMBFHN": "Eff_Animal_Boar_04_Frozen",
-                            "NGDMCBABOJA": {
+                            "healLimitedByCasterMaxHPRatio": "Eff_Animal_Boar_04_Frozen",
+                            "born": {
                                 "$type": "ConfigBornBySelf"
-                            }
+                            },
+                            "COOMHFHLGFG": -1.0
                         },
                         {
                             "$type": "EnableHitBoxByName",
-                            "EACGOCFODIC": [
+                            "hitBoxNames": [
                                 "HitBox"
                             ]
                         },
                         {
                             "$type": "EnableHitBoxByName",
-                            "EACGOCFODIC": [
+                            "hitBoxNames": [
                                 "HitBoxFrozen"
                             ],
-                            "PAHBCOACBAI": true
+                            "setEnable": true
                         }
                     ],
-                    "ILBIENDPCBG": [
+                    "onRemoved": [
                         {
                             "$type": "SetPoseBool",
-                            "HHFIHBEAPAP": "Frozen"
+                            "boolID": "Frozen"
                         },
                         {
                             "$type": "EnableHitBoxByName",
-                            "EACGOCFODIC": [
+                            "hitBoxNames": [
                                 "HitBox"
                             ],
-                            "PAHBCOACBAI": true
+                            "setEnable": true
                         },
                         {
                             "$type": "EnableHitBoxByName",
-                            "EACGOCFODIC": [
+                            "hitBoxNames": [
                                 "HitBoxFrozen"
                             ]
                         }
                     ]
                 },
                 "Animal_Boar_04_RemoveFrozenDelay": {
-                    "GAIGOBCNNEE": "",
-                    "GMIMMDOGGIO": 2.0,
-                    "elementDurability": 100.0,
-                    "ILBIENDPCBG": [
+                    "modifierName": "",
+                    "KPGONJCLMDC": 2.0,
+                    "bonusCriticalHurt": 100.0,
+                    "onRemoved": [
                         {
                             "$type": "RemoveModifier",
-                            "GAIGOBCNNEE": "Animal_Boar_04_Invincible"
+                            "modifierName": "Animal_Boar_04_Invincible"
                         }
                     ]
                 }
             },
-            "KCICDEJLIJD": [
+            "onAdded": [
                 {
                     "$type": "SetPoseBool",
-                    "HHFIHBEAPAP": "Frozen",
-                    "value": true
+                    "boolID": "Frozen",
+                    "ratio": true
                 },
                 {
                     "$type": "AttachModifier",
-                    "GAIGOBCNNEE": "UNIQUE_Animal_Boar_04_FrozenModifier"
+                    "modifierName": "UNIQUE_Animal_Boar_04_FrozenModifier"
                 },
                 {
                     "$type": "AttachModifier",
-                    "GAIGOBCNNEE": "Animal_Boar_04_Invincible"
+                    "modifierName": "Animal_Boar_04_Invincible"
                 }
             ]
         }
@@ -2057,7 +2958,7 @@
         "Default": {
             "$type": "ConfigAbility",
             "abilityName": "Animal_Boar_03_JumpAttack",
-            "HKBHLMNEMKM": [
+            "onAbilityStart": [
                 {
                     "$type": "ActCameraShake",
                     "cameraShake": {
@@ -2066,35 +2967,35 @@
                         "shakeDistance": 40.0,
                         "extension": {}
                     },
-                    "NGDMCBABOJA": {
+                    "born": {
                         "$type": "ConfigBornBySelf"
                     }
                 },
                 {
                     "$type": "TriggerAttackEvent",
-                    "DMCJDGELKBC": {
+                    "attackEvent": {
                         "attackPattern": {
                             "$type": "ConfigAttackCircle",
-                            "lifeTime": "TriggerNoRepeat",
-                            "NGDMCBABOJA": {
+                            "triggerType": "TriggerNoRepeat",
+                            "born": {
                                 "$type": "ConfigBornBySelf",
                                 "offset": {
-                                    "AEAAJCIDPED": 0.0,
-                                    "KAAPLGBEDPM": 0.0,
-                                    "PHDCJAHHIOG": 0.0
+                                    "NMLENGBJMAA": 0.0,
+                                    "OKBPMDLDKLI": 0.0,
+                                    "OGKDKNLKIDE": 0.0
                                 }
                             },
-                            "secondHeight": 4.0,
-                            "ICGFCBOFFDI": 3.0
+                            "height": 4.0,
+                            "PHALDBNIMGI": 3.0
                         },
                         "attackInfo": {
                             "attackTag": "",
                             "attenuationTag": "",
                             "attenuationGroup": "default",
                             "attackProperty": {
-                                "bonusCriticalHurt": 1.0,
-                                "damagePercentageRatio": 0.0,
-                                "elementDurability": 100.0,
+                                "MDJIHDGGPHA": 1.0,
+                                "NEFPGMGNGAK": 0.0,
+                                "bonusCriticalHurt": 100.0,
                                 "strikeType": "Blunt",
                                 "enBreak": 101.0,
                                 "attackType": "Melee"
@@ -2107,7 +3008,7 @@
                             }
                         }
                     },
-                    "OJIFKEOCJGB": "Enemy"
+                    "targetType": "Enemy"
                 }
             ]
         }
@@ -2116,49 +3017,49 @@
         "Default": {
             "$type": "ConfigAbility",
             "abilityName": "Animal_Boar_04_SpecialRushAtk",
-            "CHBMMFLIIGH": [
+            "abilityMixins": [
                 {
                     "$type": "SteerAttackMixin",
-                    "EHNAPMMMNFI": [
+                    "steerStateIDs": [
                         "SpecialRushAtk"
                     ],
-                    "IMHBEGIKDKB": 3.0,
-                    "HENDIIJFPCI": 36.0,
-                    "NCAENFOANAG": "",
-                    "BBHBLAIEHAJ": 1.5
+                    "endNormalizedTime": 3.0,
+                    "angularSpeed": 36.0,
+                    "attackTrigger": "",
+                    "attackDistance": 1.5
                 },
                 {
                     "$type": "DoActionByAnimatorStateIDMixin",
                     "stateIDs": [
                         "SpecialRushAtk"
                     ],
-                    "KELPBOLPMNI": [
+                    "enterActions": [
                         {
                             "$type": "TriggerBullet",
-                            "NGAAOMEHOGE": 42802005,
-                            "NGDMCBABOJA": {
+                            "bulletID": 42802005,
+                            "born": {
                                 "$type": "ConfigBornByTarget"
                             },
-                            "ENJEPFDLDDF": "Self"
+                            "trackTarget": "Self"
                         },
                         {
                             "$type": "TurnDirection",
-                            "IFDAEDLACJO": "OnlyTarget"
+                            "turnMode": "OnlyTarget"
                         }
                     ],
-                    "MCFCEOACJEB": [
+                    "exitActions": [
                         {
                             "$type": "KillGadget",
-                            "LBGGIBBMCMF": {
-                                "AKMLOIFOBPO": "Reversed",
-                                "APIAFGPIIHE": 42802005
+                            "gadgetInfo": {
+                                "sortType": "Reversed",
+                                "configID": 42802005
                             }
                         }
                     ]
                 },
                 {
                     "$type": "AttackHittingSceneMixin",
-                    "HOAPIHIBOCB": [
+                    "onHittingScene": [
                         {
                             "$type": "SetAnimatorTrigger",
                             "triggerID": "CrashTrigger"
@@ -2166,32 +3067,826 @@
                     ]
                 }
             ],
-            "HNEIEGHMLKH": {
+            "modifiers": {
                 "Animal_Boar_04_SpecialRushAtk_SetPose": {
-                    "GAIGOBCNNEE": "",
-                    "elementDurability": 100.0,
-                    "KCICDEJLIJD": [
+                    "modifierName": "",
+                    "bonusCriticalHurt": 100.0,
+                    "onAdded": [
                         {
                             "$type": "SetPoseBool",
-                            "HHFIHBEAPAP": "FrozenSpecial",
-                            "value": true
+                            "boolID": "FrozenSpecial",
+                            "ratio": true
                         }
                     ]
                 }
             },
-            "KCICDEJLIJD": [
+            "onAdded": [
                 {
                     "$type": "ApplyModifier",
                     "predicates": [
                         {
                             "$type": "ByTargetGlobalValue",
-                            "HJJEAOMEOFI": "_MONSTERAFFIX_ANIMAL_BOAR_FROZEN_SPECIAL",
-                            "value": 1.0
+                            "key": "_MONSTERAFFIX_ANIMAL_BOAR_FROZEN_SPECIAL",
+                            "ratio": 1.0
                         }
                     ],
-                    "GAIGOBCNNEE": "Animal_Boar_04_SpecialRushAtk_SetPose"
+                    "modifierName": "Animal_Boar_04_SpecialRushAtk_SetPose"
                 }
             ]
+        }
+    },
+    {
+        "Default": {
+            "$type": "ConfigAbility",
+            "abilityName": "Animal_Boar_03_TrueSummon",
+            "modifiers": {
+                "Animal_Boar_03_SetSummonValueDelay": {
+                    "modifierName": "",
+                    "KPGONJCLMDC": 0.5,
+                    "bonusCriticalHurt": 100.0,
+                    "onRemoved": [
+                        {
+                            "$type": "ApplyModifier",
+                            "otherTargets": {
+                                "$type": "SelectTargetsByChildren",
+                                "configID": 28020312
+                            },
+                            "modifierName": "Animal_Boar_03_SetSummonValue"
+                        }
+                    ]
+                },
+                "Animal_Boar_03_SetSummonValue": {
+                    "modifierName": "",
+                    "bonusCriticalHurt": 100.0,
+                    "onAdded": [
+                        {
+                            "$type": "SetGlobalValue",
+                            "ratio": 1.0,
+                            "key": "_BE_SUMMONED",
+                            "maxValue": 0.0,
+                            "minValue": 0.0
+                        }
+                    ]
+                }
+            },
+            "onAbilityStart": [
+                {
+                    "$type": "FireEffect",
+                    "healLimitedByCasterMaxHPRatio": "Eff_Animal_Boar_03_SummonBrotherBS",
+                    "born": {
+                        "$type": "ConfigBornBySelf",
+                        "offset": {
+                            "NMLENGBJMAA": -5.0,
+                            "OKBPMDLDKLI": 0.0,
+                            "OGKDKNLKIDE": 0.0
+                        }
+                    },
+                    "COOMHFHLGFG": -1.0
+                },
+                {
+                    "$type": "FireEffect",
+                    "healLimitedByCasterMaxHPRatio": "Eff_Animal_Boar_03_SummonBrotherBS",
+                    "born": {
+                        "$type": "ConfigBornBySelf",
+                        "offset": {
+                            "NMLENGBJMAA": 5.0,
+                            "OKBPMDLDKLI": 0.0,
+                            "OGKDKNLKIDE": 0.0
+                        }
+                    },
+                    "COOMHFHLGFG": -1.0
+                },
+                {
+                    "$type": "Summon",
+                    "monsterID": 28020312,
+                    "born": {
+                        "$type": "ConfigBornBySelf",
+                        "offset": {
+                            "NMLENGBJMAA": -5.0,
+                            "OKBPMDLDKLI": 0.0,
+                            "OGKDKNLKIDE": 0.0
+                        }
+                    },
+                    "summonTag": 28020312,
+                    "aliveByOwner": true,
+                    "sightGroupWithOwner": true
+                },
+                {
+                    "$type": "Summon",
+                    "monsterID": 28020312,
+                    "born": {
+                        "$type": "ConfigBornBySelf",
+                        "offset": {
+                            "NMLENGBJMAA": 5.0,
+                            "OKBPMDLDKLI": 0.0,
+                            "OGKDKNLKIDE": 0.0
+                        }
+                    },
+                    "summonTag": 28020312,
+                    "aliveByOwner": true,
+                    "sightGroupWithOwner": true
+                },
+                {
+                    "$type": "ApplyModifier",
+                    "modifierName": "Animal_Boar_03_SetSummonValueDelay"
+                }
+            ]
+        }
+    },
+    {
+        "Default": {
+            "$type": "ConfigAbility",
+            "abilityName": "Animal_Boar_03_Hunt_SetPose",
+            "abilityMixins": [
+                {
+                    "$type": "AttachModifierToHPPercentMixin",
+                    "valueSteps": [
+                        0.75,
+                        0.5
+                    ],
+                    "modifierNameSteps": [
+                        "Animal_Boar_03_Hunt_State1",
+                        "Animal_Boar_03_Hunt_State2",
+                        "Animal_Boar_03_Hunt_State3"
+                    ]
+                }
+            ],
+            "modifiers": {
+                "Animal_Boar_03_Hunt_HitCheck": {
+                    "modifierName": "",
+                    "bonusCriticalHurt": 100.0,
+                    "onBeingHit": [
+                        {
+                            "$type": "Predicated",
+                            "targetPredicates": [
+                                {
+                                    "$type": "ByAttackTags",
+                                    "attackTags": [
+                                        "_BOAR_HUNT_ATTACK"
+                                    ]
+                                },
+                                {
+                                    "$type": "ByAnimatorBool",
+                                    "parameter": "Angry"
+                                }
+                            ],
+                            "successActions": [
+                                {
+                                    "$type": "SetAnimatorTrigger",
+                                    "triggerID": "BeCaptured"
+                                }
+                            ]
+                        }
+                    ]
+                },
+                "Animal_Boar_03_Hunt_InitialInvincible": {
+                    "modifierName": "",
+                    "bonusCriticalHurt": 100.0,
+                    "onAdded": [
+                        {
+                            "$type": "SetPoseBool",
+                            "boolID": "Hunt",
+                            "ratio": true
+                        },
+                        {
+                            "$type": "SetAnimatorBool",
+                            "boolID": "Hunt",
+                            "ratio": true
+                        },
+                        {
+                            "$type": "SetGlobalValue",
+                            "ratio": 1.0,
+                            "key": "_Is_Hunt_Animal_Activity3.1",
+                            "maxValue": 0.0,
+                            "minValue": 0.0
+                        },
+                        {
+                            "$type": "SetGlobalValue",
+                            "ratio": 1.0,
+                            "key": "_HUNT_BOSS",
+                            "maxValue": 0.0,
+                            "minValue": 0.0
+                        }
+                    ]
+                },
+                "Animal_Boar_03_Hunt_State1": {
+                    "modifierName": "",
+                    "bonusCriticalHurt": 100.0,
+                    "onAdded": [
+                        {
+                            "$type": "SetPoseBool",
+                            "boolID": "AngryStateTwo"
+                        }
+                    ]
+                },
+                "Animal_Boar_03_Hunt_State2": {
+                    "modifierName": "",
+                    "bonusCriticalHurt": 100.0,
+                    "onAdded": [
+                        {
+                            "$type": "SetPoseBool",
+                            "boolID": "AngryStateTwo",
+                            "ratio": true
+                        }
+                    ]
+                },
+                "Animal_Boar_03_Hunt_State3": {
+                    "modifierName": "",
+                    "bonusCriticalHurt": 100.0,
+                    "thinkInterval": 1.0,
+                    "onAdded": [
+                        {
+                            "$type": "SetPoseBool",
+                            "boolID": "AngryStateTwo",
+                            "ratio": true
+                        }
+                    ],
+                    "onThinkInterval": [
+                        {
+                            "$type": "UseSkillEliteSet",
+                            "skillEliteSetID": 3
+                        }
+                    ]
+                }
+            },
+            "onAdded": [
+                {
+                    "$type": "ApplyModifier",
+                    "modifierName": "Animal_Boar_03_Hunt_InitialInvincible"
+                },
+                {
+                    "$type": "ApplyModifier",
+                    "modifierName": "Animal_Boar_03_Hunt_HitCheck"
+                }
+            ],
+            "onAbilityStart": [
+                {
+                    "$type": "SetAnimatorTrigger",
+                    "triggerID": "BeCaptured"
+                }
+            ]
+        }
+    },
+    {
+        "Default": {
+            "$type": "ConfigAbility",
+            "abilityName": "Animal_Boar_03_Hunt_SpecialStun",
+            "abilityMixins": [
+                {
+                    "$type": "AttachToStateIDMixin",
+                    "stateIDs": [
+                        "RushAtk_Loop"
+                    ],
+                    "modifierName": "Animal_Boar_03_DestroyGadget"
+                },
+                {
+                    "$type": "AttachModifierToSelfGlobalValueMixin",
+                    "globalValueKey": "_ANIMAL_BOAR_03_JIA_TUOZHAN",
+                    "defaultGlobalValueOnCreate": 0.0,
+                    "valueSteps": [
+                        -0.5,
+                        0.5,
+                        1.5
+                    ],
+                    "modifierNameSteps": [
+                        "Puzzle_Empty",
+                        "Puzzle"
+                    ]
+                },
+                {
+                    "$type": "AttachToStateIDMixin",
+                    "stateIDs": [
+                        "Crash"
+                    ],
+                    "modifierName": "Animal_Boar_03_Crash"
+                },
+                {
+                    "$type": "AttachToStateIDMixin",
+                    "stateIDs": [
+                        "RushAtk_BS",
+                        "RushAtk_AS"
+                    ],
+                    "modifierName": "Animal_Boar_03_ResetRushValue"
+                },
+                {
+                    "$type": "AttachToStateIDMixin",
+                    "stateIDs": [
+                        "AngryState",
+                        "Alert"
+                    ],
+                    "modifierName": "Animal_Boar_03_ForceAngry"
+                },
+                {
+                    "$type": "AttachToPoseIDMixin",
+                    "poseIDs": [
+                        1,
+                        2
+                    ],
+                    "modifierName": "AnimaL_Boar_03_ExitBattle"
+                },
+                {
+                    "$type": "AttachModifierToSelfGlobalValueMixin",
+                    "globalValueKey": "_BOAR_HUNT_BECAPTURED_FROM_TRAP",
+                    "defaultGlobalValueOnCreate": 0.0,
+                    "valueSteps": [
+                        -0.5,
+                        0.5,
+                        1.5
+                    ],
+                    "modifierNameSteps": [
+                        "Boar_Hunt_PowerTrap_None",
+                        "Boar_Hunt_PowerTrap_Captured"
+                    ]
+                },
+                {
+                    "$type": "AttachToStateIDMixin",
+                    "stateIDs": [
+                        "Trap_CrashLoop",
+                        "Crash"
+                    ],
+                    "modifierName": "Monster_Boar_Hunt_StunLuacall"
+                }
+            ],
+            "modifiers": {
+                "Monster_Boar_Hunt_StunLuacall": {
+                    "modifierName": "",
+                    "bonusCriticalHurt": 100.0,
+                    "onAdded": [
+                        {
+                            "$type": "ServerLuaCall",
+                            "luaCallType": "FromGroup",
+                            "funcName": "SLC_GoWeak",
+                            "FMBBFLMNPOF": 0.0,
+                            "GBPNAGAPMHB": 0.0,
+                            "ALBFHLGOPBE": 0.0
+                        }
+                    ]
+                },
+                "Boar_Hunt_PowerTrap_None": {
+                    "modifierName": "",
+                    "bonusCriticalHurt": 100.0
+                },
+                "Boar_Hunt_PowerTrap_Captured": {
+                    "modifierName": "",
+                    "bonusCriticalHurt": 100.0,
+                    "onAdded": [
+                        {
+                            "$type": "FireEffect",
+                            "healLimitedByCasterMaxHPRatio": "Eff_Hit_None_Slash_Small",
+                            "born": {
+                                "$type": "ConfigBornBySelf"
+                            },
+                            "COOMHFHLGFG": -1.0
+                        },
+                        {
+                            "$type": "ApplyModifier",
+                            "modifierName": "Boar_03_Hunt_GoWeak"
+                        },
+                        {
+                            "$type": "SetAnimatorTrigger",
+                            "predicates": [
+                                {
+                                    "$type": "ByTargetGlobalValue",
+                                    "key": "_IN_RUSH",
+                                    "ratio": 0.0,
+                                    "compareType": "NoneOrEqual"
+                                }
+                            ],
+                            "triggerID": "Traped"
+                        },
+                        {
+                            "$type": "ApplyModifier",
+                            "modifierName": "Reset_Trap_Value"
+                        }
+                    ]
+                },
+                "Reset_Trap_Value": {
+                    "modifierName": "",
+                    "KPGONJCLMDC": 0.30000001192092896,
+                    "bonusCriticalHurt": 100.0,
+                    "onRemoved": [
+                        {
+                            "$type": "SetGlobalValue",
+                            "ratio": 0.0,
+                            "key": "_BOAR_HUNT_BECAPTURED_FROM_TRAP",
+                            "maxValue": 0.0,
+                            "minValue": 0.0
+                        }
+                    ]
+                },
+                "Animal_Boar_03_Hunt_PuzzleDuring": {
+                    "modifierName": "",
+                    "KPGONJCLMDC": 7.0,
+                    "bonusCriticalHurt": 100.0,
+                    "onAdded": [
+                        {
+                            "$type": "SetGlobalValue",
+                            "ratio": 1.0,
+                            "key": "_ANIMAL_BOAR_03_GO_WEAK",
+                            "maxValue": 0.0,
+                            "minValue": 0.0
+                        },
+                        {
+                            "$type": "ApplyModifier",
+                            "modifierName": "Boar_03_Hunt_GoWeak"
+                        },
+                        {
+                            "$type": "FireEffect",
+                            "healLimitedByCasterMaxHPRatio": "Eff_Animal_Boar_Hunt_Puzzle",
+                            "born": {
+                                "$type": "ConfigBornBySelf"
+                            },
+                            "COOMHFHLGFG": -1.0
+                        }
+                    ],
+                    "onBeingHit": [
+                        {
+                            "$type": "RemoveModifier",
+                            "modifierName": "Boar_03_Hunt_GoWeak"
+                        },
+                        {
+                            "$type": "RemoveModifier",
+                            "modifierName": "Animal_Boar_03_Hunt_PuzzleDuring"
+                        }
+                    ]
+                },
+                "Puzzle_Empty": {
+                    "modifierName": "",
+                    "bonusCriticalHurt": 100.0
+                },
+                "Puzzle": {
+                    "modifierName": "",
+                    "bonusCriticalHurt": 100.0,
+                    "onAdded": [
+                        {
+                            "$type": "ApplyModifier",
+                            "modifierName": "Animal_Boar_03_Hunt_PuzzleDuring"
+                        },
+                        {
+                            "$type": "SetAnimatorTrigger",
+                            "triggerID": "GoPuzzle"
+                        }
+                    ]
+                },
+                "Boar_03_Hunt_WeakEmpty": {
+                    "modifierName": "",
+                    "bonusCriticalHurt": 100.0
+                },
+                "Boar_03_Hunt_Weak": {
+                    "modifierName": "",
+                    "bonusCriticalHurt": 100.0,
+                    "onAdded": [
+                        {
+                            "$type": "ApplyModifier",
+                            "modifierName": "Boar_03_Hunt_GoWeak"
+                        }
+                    ]
+                },
+                "Boar_03_Hunt_GoWeak": {
+                    "modifierName": "",
+                    "KPGONJCLMDC": 5.0,
+                    "bonusCriticalHurt": 100.0,
+                    "onAdded": [
+                        {
+                            "$type": "SetPoseBool",
+                            "boolID": "Angry"
+                        },
+                        {
+                            "$type": "SetAnimatorBool",
+                            "boolID": "Angry"
+                        },
+                        {
+                            "$type": "SetPoseBool",
+                            "boolID": "Weak",
+                            "ratio": true
+                        },
+                        {
+                            "$type": "SetAnimatorTrigger",
+                            "triggerID": "CrashTrigger"
+                        },
+                        {
+                            "$type": "SetGlobalValue",
+                            "ratio": 0.0,
+                            "key": "_IN_ANGRY",
+                            "maxValue": 0.0,
+                            "minValue": 0.0
+                        },
+                        {
+                            "$type": "UseSkillEliteSet",
+                            "skillEliteSetID": 2
+                        },
+                        {
+                            "$type": "SetGlobalValue",
+                            "ratio": 1.0,
+                            "key": "_BOAR_HUNT_IN_WEAK",
+                            "maxValue": 0.0,
+                            "minValue": 0.0
+                        }
+                    ],
+                    "onRemoved": [
+                        {
+                            "$type": "SetGlobalValue",
+                            "ratio": 0.0,
+                            "key": "_ANIMAL_BOAR_03_GO_WEAK",
+                            "maxValue": 0.0,
+                            "minValue": 0.0
+                        },
+                        {
+                            "$type": "SetGlobalValue",
+                            "ratio": 0.0,
+                            "key": "_ANIMAL_BOAR_03_JIA_TUOZHAN",
+                            "maxValue": 0.0,
+                            "minValue": 0.0
+                        },
+                        {
+                            "$type": "UseSkillEliteSet",
+                            "skillEliteSetID": 1
+                        },
+                        {
+                            "$type": "SetGlobalValue",
+                            "ratio": 0.0,
+                            "key": "_BOAR_HUNT_IN_WEAK",
+                            "maxValue": 0.0,
+                            "minValue": 0.0
+                        }
+                    ]
+                },
+                "Animal_Boar_03_DestroyGadget": {
+                    "modifierName": "",
+                    "bonusCriticalHurt": 100.0,
+                    "modifierMixins": [
+                        {
+                            "$type": "AttachModifierToSelfGlobalValueMixin",
+                            "globalValueKey": "_ANIMAL_BOAR_03_GO_WEAK",
+                            "defaultGlobalValueOnCreate": 0.0,
+                            "valueSteps": [
+                                -0.5,
+                                0.5,
+                                1.5
+                            ],
+                            "modifierNameSteps": [
+                                "Boar_03_Hunt_WeakEmpty",
+                                "Boar_03_Hunt_Weak"
+                            ]
+                        }
+                    ],
+                    "onAdded": [
+                        {
+                            "$type": "SetGlobalValue",
+                            "ratio": 0.0,
+                            "key": "_ANIMAL_BOAR_03_GO_WEAK",
+                            "maxValue": 0.0,
+                            "minValue": 0.0
+                        },
+                        {
+                            "$type": "SetGlobalValue",
+                            "ratio": 1.0,
+                            "key": "_IN_RUSH",
+                            "maxValue": 0.0,
+                            "minValue": 0.0
+                        }
+                    ],
+                    "onRemoved": [
+                        {
+                            "$type": "SetGlobalValue",
+                            "ratio": 0.0,
+                            "key": "_IN_RUSH",
+                            "maxValue": 0.0,
+                            "minValue": 0.0
+                        }
+                    ]
+                },
+                "Animal_Boar_03_Crash": {
+                    "modifierName": "",
+                    "bonusCriticalHurt": 100.0,
+                    "onAdded": [
+                        {
+                            "$type": "AddGlobalValue",
+                            "predicates": [
+                                {
+                                    "$type": "ByAnimatorBool",
+                                    "parameter": "Angry"
+                                }
+                            ],
+                            "ratio": -10.0,
+                            "key": "_ANIMAL_BOAR_03_CRASH_TIMES",
+                            "useLimitRange": true,
+                            "maxValue": 10.0,
+                            "minValue": 0.0
+                        },
+                        {
+                            "$type": "FireEffect",
+                            "healLimitedByCasterMaxHPRatio": "Eff_Animal_Boar_03_RushStun_Explode",
+                            "born": {
+                                "$type": "ConfigBornBySelf",
+                                "offset": {
+                                    "NMLENGBJMAA": 0.0,
+                                    "OKBPMDLDKLI": 1.0,
+                                    "OGKDKNLKIDE": 1.0
+                                }
+                            },
+                            "COOMHFHLGFG": -1.0
+                        }
+                    ]
+                },
+                "Animal_Boar_03_ResetRushValue": {
+                    "modifierName": "",
+                    "bonusCriticalHurt": 100.0,
+                    "onAdded": [
+                        {
+                            "$type": "SetGlobalValue",
+                            "ratio": 0.0,
+                            "key": "_ANIMAL_BOAR_03_GO_WEAK",
+                            "maxValue": 0.0,
+                            "minValue": 0.0
+                        }
+                    ]
+                },
+                "Animal_Boar_03_ForceAngry": {
+                    "modifierName": "",
+                    "bonusCriticalHurt": 100.0,
+                    "onAdded": [
+                        {
+                            "$type": "SetPoseBool",
+                            "boolID": "Angry",
+                            "ratio": true
+                        },
+                        {
+                            "$type": "SetAnimatorBool",
+                            "boolID": "Angry",
+                            "ratio": true
+                        },
+                        {
+                            "$type": "SetPoseBool",
+                            "boolID": "Weak"
+                        },
+                        {
+                            "$type": "FireEffect",
+                            "healLimitedByCasterMaxHPRatio": "Eff_Animal_Boar_03_Angry",
+                            "born": {
+                                "$type": "ConfigBornBySelf"
+                            },
+                            "COOMHFHLGFG": -1.0
+                        },
+                        {
+                            "$type": "AttachEffect",
+                            "healLimitedByCasterMaxHPRatio": "Eff_Animal_Boar_03_Angry_NoseAir",
+                            "COOMHFHLGFG": -1.0
+                        },
+                        {
+                            "$type": "AttachEffect",
+                            "healLimitedByCasterMaxHPRatio": "Eff_Animal_Boar_03_Angry_EyeTrail",
+                            "COOMHFHLGFG": -1.0
+                        },
+                        {
+                            "$type": "SetGlobalValue",
+                            "ratio": 1.0,
+                            "key": "_IN_ANGRY",
+                            "maxValue": 0.0,
+                            "minValue": 0.0
+                        }
+                    ]
+                },
+                "AnimaL_Boar_03_ExitBattle": {
+                    "modifierName": "",
+                    "bonusCriticalHurt": 100.0,
+                    "onAdded": [
+                        {
+                            "$type": "SetAnimatorBool",
+                            "boolID": "Angry"
+                        }
+                    ]
+                }
+            },
+            "onAbilityStart": [
+                {
+                    "$type": "SetGlobalValue",
+                    "ratio": 1.0,
+                    "key": "_ANIMAL_BOAR_03_GO_WEAK",
+                    "maxValue": 0.0,
+                    "minValue": 0.0
+                }
+            ]
+        }
+    },
+    {
+        "Default": {
+            "$type": "ConfigAbility",
+            "abilityName": "Test_Avatar_ChouHenGrow",
+            "modifiers": {
+                "Test_Avatar_ChouHenGrow": {
+                    "modifierName": "",
+                    "KPGONJCLMDC": 30.0,
+                    "bonusCriticalHurt": 100.0,
+                    "modifierMixins": [
+                        {
+                            "$type": "TemperatureGrowRateMixin",
+                            "GDFAGIDPELP": "_ANIMAL_HUNT_MARKVALUE",
+                            "HNFCFFLPBBK": 0.10000000149011612
+                        }
+                    ]
+                }
+            },
+            "onAdded": [
+                {
+                    "$type": "ApplyModifier",
+                    "modifierName": "Test_Avatar_ChouHenGrow"
+                }
+            ],
+            "onAbilityStart": [
+                {
+                    "$type": "ApplyModifier",
+                    "modifierName": "Test_Avatar_ChouHenGrow"
+                },
+                {
+                    "$type": "AddAISpecialAlertTemperature",
+                    "OFHOIPMGNBI": 30.0
+                }
+            ]
+        }
+    },
+    {
+        "Default": {
+            "$type": "ConfigAbility",
+            "abilityName": "Animal_Hunt_Sneak_Attract_Effect",
+            "abilityMixins": [
+                {
+                    "$type": "AttachToStateIDMixin",
+                    "stateIDs": [
+                        "Attract"
+                    ],
+                    "modifierName": "Animal_Hunt_Sneak_Attract_Effect"
+                },
+                {
+                    "$type": "AttachToStateIDMixin",
+                    "stateIDs": [
+                        "Search"
+                    ],
+                    "modifierName": "Animal_Hunt_Sneak_Search_Effect"
+                }
+            ],
+            "modifiers": {
+                "Animal_Hunt_Sneak_Attract_Effect": {
+                    "modifierName": "",
+                    "bonusCriticalHurt": 100.0,
+                    "onAdded": [
+                        {
+                            "$type": "Predicated",
+                            "targetPredicates": [
+                                {
+                                    "$type": "ByTargetGlobalValue",
+                                    "key": "_HUNT_BOSS",
+                                    "ratio": 1.0
+                                }
+                            ],
+                            "successActions": [
+                                {
+                                    "$type": "FireEffect",
+                                    "healLimitedByCasterMaxHPRatio": "Eff_Animal_Hunt_Attract",
+                                    "COOMHFHLGFG": -1.0
+                                }
+                            ],
+                            "failActions": [
+                                {
+                                    "$type": "FireEffect",
+                                    "healLimitedByCasterMaxHPRatio": "Eff_Animal_Hunt_Attract_Small",
+                                    "COOMHFHLGFG": -1.0
+                                }
+                            ]
+                        }
+                    ]
+                },
+                "Animal_Hunt_Sneak_Search_Effect": {
+                    "modifierName": "",
+                    "bonusCriticalHurt": 100.0,
+                    "onAdded": [
+                        {
+                            "$type": "Predicated",
+                            "targetPredicates": [
+                                {
+                                    "$type": "ByTargetGlobalValue",
+                                    "key": "_HUNT_BOSS",
+                                    "ratio": 1.0
+                                }
+                            ],
+                            "successActions": [
+                                {
+                                    "$type": "FireEffect",
+                                    "healLimitedByCasterMaxHPRatio": "Eff_Animal_Hunt_Confuse",
+                                    "COOMHFHLGFG": -1.0
+                                }
+                            ],
+                            "failActions": [
+                                {
+                                    "$type": "FireEffect",
+                                    "healLimitedByCasterMaxHPRatio": "Eff_Animal_Hunt_Confuse_Small",
+                                    "COOMHFHLGFG": -1.0
+                                }
+                            ]
+                        }
+                    ]
+                }
+            }
         }
     }
 ]
