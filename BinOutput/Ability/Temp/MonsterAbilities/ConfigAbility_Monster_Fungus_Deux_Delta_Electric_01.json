@@ -1,0 +1,339 @@
+[
+    {
+        "Default": {
+            "$type": "ConfigAbility",
+            "abilityName": "Monster_Fungus_Deux_Delta_Electric_Steer",
+            "abilityMixins": [
+                {
+                    "$type": "SteerAttackMixin",
+                    "steerStateIDs": [
+                        "Shoot_BS"
+                    ],
+                    "angularSpeed": 720.0,
+                    "attackTrigger": ""
+                }
+            ]
+        }
+    },
+    {
+        "Default": {
+            "$type": "ConfigAbility",
+            "abilityName": "Monster_Fungus_Deux_Delta_Electric_ShootNormal",
+            "abilityMixins": [
+                {
+                    "$type": "AttachToAnimatorStateIDMixin",
+                    "stateIDs": [
+                        "ShootNormal_BS",
+                        "ShootNormal_Loop",
+                        "ShootOverdose_BS",
+                        "ShootOverdose_Loop"
+                    ],
+                    "modifierName": "ShootNormalBSEffect"
+                },
+                {
+                    "$type": "AttachToAnimatorStateIDMixin",
+                    "stateIDs": [
+                        "ShootDecay_BS",
+                        "ShootDecay_Loop"
+                    ],
+                    "modifierName": "ShootDecayedBSEffect"
+                }
+            ],
+            "modifiers": {
+                "ShootNormalBSEffect": {
+                    "modifierName": "",
+                    "bonusCriticalHurt": 100.0,
+                    "onAdded": [
+                        {
+                            "$type": "AttachEffect",
+                            "healLimitedByCasterMaxHPRatio": "Eff_Monster_Fungus_Deux_Delta_Electric_ShootNormal_Loop",
+                            "MEMHGJDEPJA": -1.0
+                        }
+                    ]
+                },
+                "ShootDecayedBSEffect": {
+                    "modifierName": "",
+                    "bonusCriticalHurt": 100.0,
+                    "onAdded": [
+                        {
+                            "$type": "AttachEffect",
+                            "healLimitedByCasterMaxHPRatio": "Eff_Monster_Fungus_Deux_Delta_Electric_ShootDecay_Loop",
+                            "MEMHGJDEPJA": -1.0
+                        }
+                    ]
+                }
+            },
+            "onAbilityStart": [
+                {
+                    "$type": "TriggerBullet",
+                    "bulletID": 42609009,
+                    "born": {
+                        "$type": "ConfigBornByAttachPoint",
+                        "attachPointName": "BulletSource"
+                    }
+                }
+            ]
+        }
+    },
+    {
+        "Default": {
+            "$type": "ConfigAbility",
+            "abilityName": "Monster_Fungus_Deux_Delta_Electric_ShootOverdose",
+            "onAbilityStart": [
+                {
+                    "$type": "TriggerBullet",
+                    "bulletID": 42609009,
+                    "born": {
+                        "$type": "ConfigBornByAttachPoint",
+                        "attachPointName": "BulletSource"
+                    }
+                }
+            ]
+        }
+    },
+    {
+        "Default": {
+            "$type": "ConfigAbility",
+            "abilityName": "Monster_Fungus_Deux_Delta_Electric_ShootDecayed",
+            "onAbilityStart": [
+                {
+                    "$type": "TriggerBullet",
+                    "bulletID": 42609010,
+                    "born": {
+                        "$type": "ConfigBornByAttachPoint",
+                        "direction": {
+                            "$type": "ConfigDirectionByAttackTarget"
+                        },
+                        "attachPointName": "BulletSource"
+                    }
+                }
+            ]
+        }
+    },
+    {
+        "Default": {
+            "$type": "ConfigAbility",
+            "abilityName": "Monster_Fungus_Deux_Delta_Electric_HitThrowDropToGround",
+            "onAbilityStart": [
+                {
+                    "$type": "Predicated",
+                    "targetPredicates": [
+                        {
+                            "$type": "BySceneSurfaceType",
+                            "filters": [
+                                "Water"
+                            ]
+                        }
+                    ],
+                    "successActions": [
+                        {
+                            "$type": "FireEffect",
+                            "healLimitedByCasterMaxHPRatio": "Eff_Monster_Fungus_HitThrowToGround_Water",
+                            "MEMHGJDEPJA": -1.0,
+                            "effectTempleteID": true
+                        }
+                    ]
+                }
+            ]
+        }
+    },
+    {
+        "Default": {
+            "$type": "ConfigAbility",
+            "abilityName": "Fungus_Deux_Delta_Electric_BulletNormal_Loop",
+            "modifiers": {
+                "UNIQUE_BulletNormal_Loop": {
+                    "modifierName": "",
+                    "isUnique": true,
+                    "bonusCriticalHurt": 100.0,
+                    "onAdded": [
+                        {
+                            "$type": "AttachEffect",
+                            "healLimitedByCasterMaxHPRatio": "Eff_Monster_Fungus_Deux_Delta_Electric_Shoot_BulletNormal",
+                            "MEMHGJDEPJA": -1.0
+                        },
+                        {
+                            "$type": "AttachEffect",
+                            "healLimitedByCasterMaxHPRatio": "Eff_Monster_Fungus_Deux_Delta_Electric_Shoot_BulletNormal_Trail",
+                            "MEMHGJDEPJA": -1.0
+                        }
+                    ],
+                    "onRemoved": [
+                        {
+                            "$type": "KillSelf"
+                        }
+                    ],
+                    "onBeingHit": [
+                        {
+                            "$type": "TriggerAbility",
+                            "predicates": [
+                                {
+                                    "$type": "ByHitImpulse",
+                                    "hitImpulse": 0.0
+                                }
+                            ],
+                            "abilityName": "Fungus_Deux_Delta_Electric_BulletNormal_Explode"
+                        }
+                    ]
+                }
+            },
+            "onAdded": [
+                {
+                    "$type": "AttachModifier",
+                    "modifierName": "UNIQUE_BulletNormal_Loop"
+                }
+            ]
+        }
+    },
+    {
+        "Default": {
+            "$type": "ConfigAbility",
+            "abilityName": "Fungus_Deux_Delta_Electric_BulletNormal_Explode",
+            "onAbilityStart": [
+                {
+                    "$type": "RemoveUniqueModifier",
+                    "modifierName": "UNIQUE_BulletNormal_Loop"
+                },
+                {
+                    "$type": "FireEffect",
+                    "healLimitedByCasterMaxHPRatio": "Eff_Monster_Fungus_Deux_Delta_Electric_Shoot_HitNormal",
+                    "born": {
+                        "$type": "ConfigBornByAttachPoint",
+                        "attachPointName": "RootNode"
+                    },
+                    "MEMHGJDEPJA": -1.0
+                },
+                {
+                    "$type": "TriggerAttackEvent",
+                    "attackEvent": {
+                        "attackPattern": {
+                            "$type": "ConfigAttackSphere",
+                            "triggerType": "TriggerNoRepeat",
+                            "born": {
+                                "$type": "ConfigBornBySelf",
+                                "offset": {
+                                    "AMODPKJAIGF": 0.0,
+                                    "DBJCBJPOOAP": 0.0,
+                                    "JDFJGADACKC": 0.0
+                                }
+                            },
+                            "ILKJCNJJPEL": 1.5
+                        },
+                        "attackInfo": {
+                            "attackTag": "",
+                            "attenuationTag": "",
+                            "attenuationGroup": "default",
+                            "attackProperty": {
+                                "EHFOGJFHDPE": 0.6000000238418579,
+                                "GDADKLDBGIM": 0.0,
+                                "elementType": "Electric",
+                                "bonusCriticalHurt": 25.0,
+                                "strikeType": "Default",
+                                "enBreak": 20.0,
+                                "attackType": "Range"
+                            },
+                            "hitPattern": {
+                                "onHitEffectName": "",
+                                "hitImpulseType": "LV1",
+                                "hitHaltTimeScale": 0.05000000074505806
+                            },
+                            "canBeModifiedBy": "OriginOwner"
+                        }
+                    },
+                    "targetType": "Enemy"
+                }
+            ]
+        }
+    },
+    {
+        "Default": {
+            "$type": "ConfigAbility",
+            "abilityName": "Fungus_Deux_Delta_Electric_BulletDecayed_Loop",
+            "modifiers": {
+                "UNIQUE_BulletDecayed_Loop": {
+                    "modifierName": "",
+                    "isUnique": true,
+                    "bonusCriticalHurt": 100.0,
+                    "onAdded": [
+                        {
+                            "$type": "AttachEffect",
+                            "healLimitedByCasterMaxHPRatio": "Eff_Monster_Fungus_Deux_Delta_Electric_Shoot_BulletDecayed",
+                            "MEMHGJDEPJA": -1.0
+                        },
+                        {
+                            "$type": "AttachEffect",
+                            "healLimitedByCasterMaxHPRatio": "Eff_Monster_Fungus_Deux_Delta_Electric_Shoot_BulletDecayed_Trail",
+                            "MEMHGJDEPJA": -1.0
+                        }
+                    ]
+                }
+            },
+            "onAdded": [
+                {
+                    "$type": "AttachModifier",
+                    "modifierName": "UNIQUE_BulletDecayed_Loop"
+                }
+            ]
+        }
+    },
+    {
+        "Default": {
+            "$type": "ConfigAbility",
+            "abilityName": "Fungus_Deux_Delta_Electric_BulletDecayed_Explode",
+            "onAbilityStart": [
+                {
+                    "$type": "RemoveUniqueModifier",
+                    "modifierName": "UNIQUE_BulletDecayed_Loop"
+                },
+                {
+                    "$type": "FireEffect",
+                    "healLimitedByCasterMaxHPRatio": "Eff_Monster_Fungus_Deux_Delta_Electric_Shoot_HitDecayed",
+                    "born": {
+                        "$type": "ConfigBornByAttachPoint",
+                        "attachPointName": "RootNode"
+                    },
+                    "MEMHGJDEPJA": -1.0
+                },
+                {
+                    "$type": "TriggerAttackEvent",
+                    "attackEvent": {
+                        "attackPattern": {
+                            "$type": "ConfigAttackSphere",
+                            "triggerType": "TriggerNoRepeat",
+                            "born": {
+                                "$type": "ConfigBornBySelf",
+                                "offset": {
+                                    "AMODPKJAIGF": 0.0,
+                                    "DBJCBJPOOAP": 0.0,
+                                    "JDFJGADACKC": 0.0
+                                }
+                            },
+                            "ILKJCNJJPEL": 1.5
+                        },
+                        "attackInfo": {
+                            "attackTag": "",
+                            "attenuationTag": "",
+                            "attenuationGroup": "default",
+                            "attackProperty": {
+                                "EHFOGJFHDPE": 1.0,
+                                "GDADKLDBGIM": 0.0,
+                                "elementType": "Electric",
+                                "bonusCriticalHurt": 25.0,
+                                "strikeType": "Default",
+                                "enBreak": 100.0,
+                                "attackType": "Range"
+                            },
+                            "hitPattern": {
+                                "onHitEffectName": "",
+                                "hitImpulseType": "LV3",
+                                "hitHaltTimeScale": 0.05000000074505806
+                            },
+                            "canBeModifiedBy": "OriginOwner"
+                        }
+                    },
+                    "targetType": "Enemy"
+                }
+            ]
+        }
+    }
+]

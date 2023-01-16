@@ -1,0 +1,294 @@
+[
+    {
+        "Default": {
+            "$type": "ConfigAbility",
+            "abilityName": "ActivityAbility_WindField_Challenge_RockJump_FallingDamageUp",
+            "abilityMixins": [
+                {
+                    "$type": "LocalAvatarsMixin",
+                    "modifierName": "UNIQUE_WindField_Challenge_RockJump_FallingDamageUp_Handler"
+                }
+            ],
+            "abilitySpecials": {
+                "FallingAttackDamageUpRatio": 0.5
+            },
+            "modifiers": {
+                "UNIQUE_WindField_Challenge_RockJump_FallingDamageUp_Handler": {
+                    "stacking": "Unique",
+                    "modifierName": "",
+                    "isUnique": true,
+                    "bonusCriticalHurt": 100.0,
+                    "modifierMixins": [
+                        {
+                            "$type": "AttachModifierToGlobalValueMixin",
+                            "globalValueTarget": "Team",
+                            "globalValueKey": "SGV_WindField_Buff_2",
+                            "valueSteps": [
+                                0.5,
+                                1.5
+                            ],
+                            "modifierNameSteps": [
+                                "UNIQUE_WindField_Challenge_RockJump_FallingDamageUp"
+                            ]
+                        }
+                    ]
+                },
+                "UNIQUE_WindField_Challenge_RockJump_FallingDamageUp": {
+                    "stacking": "Unique",
+                    "modifierName": "",
+                    "isUnique": true,
+                    "bonusCriticalHurt": 100.0,
+                    "modifierMixins": [
+                        {
+                            "$type": "ModifyDamageMixin",
+                            "attackTags": [
+                                "FallingAttack"
+                            ],
+                            "GDADKLDBGIM": "FallingAttackDamageUpRatio"
+                        }
+                    ],
+                    "onAdded": [
+                        {
+                            "$type": "EnableRocketJump",
+                            "RotationDampTime": true,
+                            "canBeHandledOnRecover": true,
+                            "type": "DungeonJump",
+                            "enable": true,
+                            "extention": {
+                                "xzMultiplier": 2.0,
+                                "yMultiplier": 3.0
+                            }
+                        }
+                    ],
+                    "onRemoved": [
+                        {
+                            "$type": "EnableRocketJump",
+                            "RotationDampTime": true,
+                            "type": "DungeonJump"
+                        }
+                    ],
+                    "onAvatarIn": [
+                        {
+                            "$type": "EnableRocketJump",
+                            "RotationDampTime": true,
+                            "canBeHandledOnRecover": true,
+                            "type": "DungeonJump",
+                            "enable": true,
+                            "extention": {
+                                "xzMultiplier": 2.0,
+                                "yMultiplier": 3.0
+                            }
+                        }
+                    ]
+                }
+            },
+            "isDynamicAbility": true
+        }
+    },
+    {
+        "Default": {
+            "$type": "ConfigAbility",
+            "abilityName": "ActivityAbility_WindField_Challenge_WindZone",
+            "abilityMixins": [
+                {
+                    "$type": "LocalAvatarsMixin",
+                    "modifierName": "UNIQUE_WindField_Challenge_WindZone_Handler"
+                }
+            ],
+            "abilitySpecials": {
+                "WindZone_CD": 4.0
+            },
+            "modifiers": {
+                "UNIQUE_WindField_Challenge_WindZone_Handler": {
+                    "stacking": "Unique",
+                    "modifierName": "",
+                    "isUnique": true,
+                    "bonusCriticalHurt": 100.0,
+                    "modifierMixins": [
+                        {
+                            "$type": "AttachModifierToGlobalValueMixin",
+                            "globalValueTarget": "Team",
+                            "globalValueKey": "SGV_WindField_Buff_1",
+                            "valueSteps": [
+                                0.5,
+                                1.5
+                            ],
+                            "modifierNameSteps": [
+                                "UNIQUE_WindField_Challenge_WindZone_Decision_AttackLand"
+                            ]
+                        }
+                    ]
+                },
+                "UNIQUE_WindField_Challenge_WindZone_Decision_AttackLand": {
+                    "stacking": "Unique",
+                    "modifierName": "",
+                    "isUnique": true,
+                    "bonusCriticalHurt": 100.0,
+                    "onAttackLanded": [
+                        {
+                            "$type": "Predicated",
+                            "target": "Other",
+                            "predicates": [
+                                {
+                                    "$type": "ByEntityTypes",
+                                    "entityTypes": [
+                                        "Monster"
+                                    ]
+                                },
+                                {
+                                    "$type": "ByAttackTags",
+                                    "attackTags": [
+                                        "NormalAttack_01",
+                                        "NormalAttack_02",
+                                        "NormalAttack_03",
+                                        "NormalAttack_04",
+                                        "NormalAttack_05",
+                                        "NormalAttack_06",
+                                        "ExtraAttack",
+                                        "ExtraAttack1",
+                                        "ExtraAttack2",
+                                        "ExtraAttack3",
+                                        "ExtraAttack_Charge",
+                                        "FallingAttack"
+                                    ]
+                                },
+                                {
+                                    "$type": "ByTargetGlobalValue",
+                                    "target": "Team",
+                                    "key": "Wind_CDState",
+                                    "ratio": 0.0,
+                                    "compareType": "NoneOrEqual"
+                                }
+                            ],
+                            "successActions": [
+                                {
+                                    "$type": "CreateGadget",
+                                    "target": "Other",
+                                    "born": {
+                                        "$type": "ConfigBornByTarget",
+                                        "offset": {
+                                            "AMODPKJAIGF": 0.0,
+                                            "DBJCBJPOOAP": 0.0,
+                                            "JDFJGADACKC": 0.0
+                                        },
+                                        "onGround": true,
+                                        "alongGround": true
+                                    },
+                                    "gadgetID": 44000454,
+                                    "campID": 1001
+                                },
+                                {
+                                    "$type": "ApplyModifier",
+                                    "target": "Team",
+                                    "modifierName": "UNIQUE_WindField_Challenge_WindZone_Action_CD"
+                                }
+                            ]
+                        }
+                    ]
+                },
+                "UNIQUE_WindField_Challenge_WindZone_Action_CD": {
+                    "stacking": "Unique",
+                    "modifierName": "",
+                    "isUnique": true,
+                    "DCEFILPANJI": "WindZone_CD",
+                    "bonusCriticalHurt": 100.0,
+                    "onAdded": [
+                        {
+                            "$type": "SetGlobalValue",
+                            "target": "Team",
+                            "ratio": -1.0,
+                            "key": "Wind_CDState",
+                            "maxValue": 0.0,
+                            "minValue": 0.0
+                        }
+                    ],
+                    "onRemoved": [
+                        {
+                            "$type": "SetGlobalValue",
+                            "target": "Team",
+                            "ratio": 0.0,
+                            "key": "Wind_CDState",
+                            "maxValue": 0.0,
+                            "minValue": 0.0
+                        }
+                    ]
+                }
+            },
+            "isDynamicAbility": true
+        }
+    },
+    {
+        "Default": {
+            "$type": "ConfigAbility",
+            "abilityName": "Activity_WindFiled_Challenge_WindZone_Gadget",
+            "abilitySpecials": {
+                "Duration": 4.0
+            },
+            "modifiers": {
+                "Life_Timer": {
+                    "modifierName": "",
+                    "DCEFILPANJI": "Duration",
+                    "bonusCriticalHurt": 100.0,
+                    "onRemoved": [
+                        {
+                            "$type": "KillSelf"
+                        }
+                    ]
+                },
+                "WindFiled_Challenge_WindZone": {
+                    "modifierName": "",
+                    "bonusCriticalHurt": 100.0,
+                    "modifierMixins": [
+                        {
+                            "$type": "WindZoneMixin",
+                            "shapeName": "CircleR12",
+                            "born": {
+                                "$type": "ConfigBornBySelf",
+                                "offset": {
+                                    "AMODPKJAIGF": 0.0,
+                                    "DBJCBJPOOAP": 0.5,
+                                    "JDFJGADACKC": 0.0
+                                }
+                            },
+                            "GLCINNLCMDJ": 5.0,
+                            "innerRadius": 0.0,
+                            "radius": 1.0,
+                            "targetType": "All",
+                            "predicates": [
+                                {
+                                    "$type": "ByEntityTypes",
+                                    "entityTypes": [
+                                        "Monster"
+                                    ]
+                                },
+                                {
+                                    "$type": "ByTargetWeight",
+                                    "logic": "Lesser",
+                                    "weight": 150.0
+                                }
+                            ],
+                            "modifierName": ""
+                        }
+                    ],
+                    "onAdded": [
+                        {
+                            "$type": "AttachEffect",
+                            "healLimitedByCasterMaxHPRatio": "Eff_Activity_Roguelike_Gadget_Wind_Absorbe",
+                            "MEMHGJDEPJA": -1.0
+                        }
+                    ]
+                }
+            },
+            "onAdded": [
+                {
+                    "$type": "AttachModifier",
+                    "modifierName": "Life_Timer"
+                },
+                {
+                    "$type": "AttachModifier",
+                    "modifierName": "WindFiled_Challenge_WindZone"
+                }
+            ]
+        }
+    }
+]

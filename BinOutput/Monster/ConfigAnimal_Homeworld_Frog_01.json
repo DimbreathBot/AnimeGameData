@@ -1,0 +1,236 @@
+{
+    "common": {
+        "effectAttachShape": {
+            "$type": "ConfigEffectAttachSkinnedMesh",
+            "mesh": "EffectMesh"
+        },
+        "mass": 20.0,
+        "viewSize": 0.5,
+        "affectedByWorld": true,
+        "checkInSurface": true,
+        "scale": 1.2000000476837158,
+        "canTriggerElementReactionText": false
+    },
+    "model": {
+        "bornEffect": "",
+        "attachEffect": "",
+        "AIIEHEGCLIM": false
+    },
+    "combat": {
+        "property": {
+            "endureType": "Monster_Minion",
+            "weight": 30.0,
+            "isInvincible": true
+        },
+        "beHit": {
+            "hitBloodEffect": "",
+            "muteAllHitText": true
+        },
+        "combatLock": {
+            "lockShape": "CircleLockEnemy",
+            "lockType": "Animal_Lv2"
+        },
+        "die": {
+            "dieEndTime": 0.009999999776482582,
+            "dieForceDisappearTime": 10.0,
+            "dieDisappearEffect": "Eff_Animal_Common_Die"
+        }
+    },
+    "stateLayers": {
+        "defaultLayer": {
+            "$type": "ConfigNormalStateLayer",
+            "layerIndexName": "",
+            "stateIDs": {
+                "Born": {
+                    "$type": "ConfigMonsterStateIDInfo",
+                    "animatorStates": {
+                        "Born": [
+                            "Audio_Frog_Standby"
+                        ]
+                    },
+                    "resetAnimatorTriggerOnExit": [
+                        "DoSkill"
+                    ]
+                },
+                "NormalIdle": {
+                    "$type": "ConfigMonsterStateIDInfo",
+                    "animatorStates": {
+                        "Standby": [
+                            "Audio_Frog_Standby"
+                        ]
+                    },
+                    "canDoSkill": true,
+                    "canSyncMove": true,
+                    "resetAnimatorTriggerOnExit": [
+                        "DoSkill"
+                    ]
+                },
+                "NormalMove": {
+                    "$type": "ConfigMonsterStateIDInfo",
+                    "animatorStates": {
+                        "Walk": [
+                            "Audio_Frog_Walk"
+                        ],
+                        "Run": [
+                            "Audio_Frog_Run"
+                        ],
+                        "Run_AS": [
+                            "Audio_Frog_Run"
+                        ]
+                    },
+                    "canDoSkill": true,
+                    "canSyncMove": true,
+                    "resetAnimatorTriggerOnExit": [
+                        "DoSkill"
+                    ],
+                    "canSteer": true
+                },
+                "BeHit": {
+                    "$type": "ConfigMonsterStateIDInfo",
+                    "animatorStates": {
+                        "Hit_L": [
+                            "Audio_Frog_Standby"
+                        ]
+                    },
+                    "resetAnimatorTriggerOnEnter": [
+                        "BeHit"
+                    ],
+                    "resetAnimatorTriggerOnExit": [
+                        "DoSkill"
+                    ]
+                },
+                "Disappear": {
+                    "$type": "ConfigMonsterStateIDInfo",
+                    "animatorStates": {
+                        "Disappear": [
+                            "Animal_Frog_Disappear",
+                            "Audio_Frog_Run"
+                        ]
+                    }
+                },
+                "Die": {
+                    "$type": "ConfigMonsterStateIDInfo",
+                    "animatorStates": {
+                        "Die": [
+                            "Animal_Frog_Die",
+                            "Audio_Frog_Standby"
+                        ]
+                    }
+                }
+            }
+        }
+    },
+    "initialPoses": {
+        "Default": {}
+    },
+    "aibeta": {
+        "enable": true,
+        "friendliness": 1,
+        "decisionArchetype": "Animal_Homeworld",
+        "sensing": {
+            "settings": {
+                "DefaultSetting": {
+                    "enableVision": false,
+                    "feelRange": 7.5
+                }
+            }
+        },
+        "neurons": {
+            "DefaultSetting": [
+                "HIT"
+            ]
+        },
+        "threat": {
+            "viewThreatGrow": 75.0,
+            "feelThreatGrow": 1000.0,
+            "threatBroadcastRange": 5.0
+        },
+        "defendArea": {
+            "defendRange": 100.0
+        },
+        "ui": {
+            "hasDirectionIndicator": false
+        },
+        "returnToBornTactic": {
+            "enable": true
+        },
+        "wanderTactic": {
+            "enable": true,
+            "threatLevelLimit": [
+                0,
+                1,
+                2
+            ],
+            "defaultSetting": {
+                "cdMax": 20.0,
+                "cdMin": 10.0,
+                "distanceFromBorn": 10.0,
+                "distanceFromCurrentMin": 1.5,
+                "distanceFromCurrentMax": 3.0
+            }
+        },
+        "fleeTactic": {
+            "enable": true,
+            "condition": {
+                "pose": [
+                    101
+                ]
+            },
+            "nerveTrigger": [
+                "HIT"
+            ],
+            "defaultSetting": {
+                "turnSpeedOverride": 1.0,
+                "cd": 0.0,
+                "triggerDistance": 200.0,
+                "fleeAngle": 90.0,
+                "fleeNumberMin": 2,
+                "fleeNumberMax": 3,
+                "fleeDistanceMin": 8.0,
+                "fleeDistanceMax": 11.0,
+                "killSelfTime": 3.0
+            }
+        },
+        "mixin": {
+            "setControllerParameterOnBeHitByEntityType": [
+                {
+                    "poseIDs": [
+                        1,
+                        102
+                    ],
+                    "settings": [
+                        {
+                            "entityTypes": [
+                                "Avatar",
+                                "Monster",
+                                "Gadget",
+                                "Bullet"
+                            ],
+                            "onSuccess": {
+                                "setPoseBool": [
+                                    {
+                                        "boolID": "FleeState",
+                                        "ratio": true
+                                    }
+                                ]
+                            },
+                            "onFail": {
+                                "setPoseBool": [
+                                    {
+                                        "boolID": "FleeState",
+                                        "ratio": true
+                                    }
+                                ]
+                            }
+                        }
+                    ]
+                }
+            ]
+        }
+    },
+    "animal": {
+        "hasAbility": false,
+        "tickAbilityElement": false,
+        "hasCharacterRenderering": false
+    }
+}

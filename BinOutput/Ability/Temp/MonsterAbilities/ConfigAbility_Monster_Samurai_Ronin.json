@@ -1,0 +1,3480 @@
+[
+    {
+        "Default": {
+            "$type": "ConfigAbility",
+            "abilityName": "Monster_Samurai_Hatamoto_BladeMasterTwo_PowerCombo",
+            "abilityMixins": [
+                {
+                    "$type": "AttachToStateIDMixin",
+                    "stateIDs": [
+                        "PowerAtk1"
+                    ],
+                    "modifierName": "Monster_Samurai_Hatamoto_BladeMasterTwo_PowerCombo_ResetTimes"
+                },
+                {
+                    "$type": "AttachToStateIDMixin",
+                    "stateIDs": [
+                        "PowerAtk1_Combo"
+                    ],
+                    "modifierName": "Monster_Samurai_Hatamoto_BladeMasterTwo_PowerCombo_AddTimes"
+                },
+                {
+                    "$type": "AttachToStateIDMixin",
+                    "stateIDs": [
+                        "PowerAtk2"
+                    ],
+                    "modifierName": "Monster_Samurai_Hatamoto_BladeMasterTwo_PowerCombo_CheckTimes"
+                }
+            ],
+            "modifiers": {
+                "Monster_Samurai_Hatamoto_BladeMasterTwo_PowerCombo_ResetTimes": {
+                    "modifierName": "",
+                    "bonusCriticalHurt": 100.0,
+                    "onAdded": [
+                        {
+                            "$type": "SetGlobalValue",
+                            "ratio": 0.0,
+                            "key": "_POWERATK_TIMES",
+                            "maxValue": 0.0,
+                            "minValue": 0.0
+                        },
+                        {
+                            "$type": "SetAnimatorBool",
+                            "boolID": "PowerAttackComboOver"
+                        }
+                    ]
+                },
+                "Monster_Samurai_Hatamoto_BladeMasterTwo_PowerCombo_AddTimes": {
+                    "modifierName": "",
+                    "bonusCriticalHurt": 100.0,
+                    "onAdded": [
+                        {
+                            "$type": "AddGlobalValue",
+                            "ratio": 1.0,
+                            "key": "_POWERATK_TIMES",
+                            "maxValue": 0.0,
+                            "minValue": 0.0
+                        }
+                    ]
+                },
+                "Monster_Samurai_Hatamoto_BladeMasterTwo_PowerCombo_CheckTimes": {
+                    "modifierName": "",
+                    "bonusCriticalHurt": 100.0,
+                    "onAdded": [
+                        {
+                            "$type": "Predicated",
+                            "targetPredicates": [
+                                {
+                                    "$type": "ByTargetGlobalValue",
+                                    "key": "_BLADEMASTER_LEVEL",
+                                    "ratio": 2.0,
+                                    "compareType": "LessAndEqual"
+                                }
+                            ],
+                            "successActions": [
+                                {
+                                    "$type": "SetAnimatorBool",
+                                    "boolID": "PowerAttackComboOver",
+                                    "ratio": true
+                                }
+                            ],
+                            "failActions": [
+                                {
+                                    "$type": "Predicated",
+                                    "targetPredicates": [
+                                        {
+                                            "$type": "ByTargetGlobalValue",
+                                            "key": "_POWERATK_TIMES",
+                                            "ratio": 3.0,
+                                            "compareType": "MoreThanAndEqual"
+                                        }
+                                    ],
+                                    "successActions": [
+                                        {
+                                            "$type": "SetAnimatorBool",
+                                            "boolID": "PowerAttackComboOver",
+                                            "ratio": true
+                                        }
+                                    ]
+                                }
+                            ]
+                        }
+                    ]
+                }
+            }
+        }
+    },
+    {
+        "Default": {
+            "$type": "ConfigAbility",
+            "abilityName": "Monster_Samurai_Hatamoto_DefendBreak",
+            "abilityMixins": [
+                {
+                    "$type": "AttachToStateIDMixin",
+                    "stateIDs": [
+                        "DefendBS"
+                    ],
+                    "modifierName": "Monster_BladeMaster_Reset_HitTimesAction"
+                },
+                {
+                    "$type": "AttachModifierToSelfGlobalValueMixin",
+                    "globalValueKey": "_PARRY_HIT",
+                    "defaultGlobalValueOnCreate": 0.0,
+                    "valueSteps": [
+                        -0.5,
+                        0.5,
+                        1.5
+                    ],
+                    "modifierNameSteps": [
+                        "Monster_Parry_None",
+                        "Monster_Parry_Success"
+                    ]
+                },
+                {
+                    "$type": "AttachModifierToSelfGlobalValueMixin",
+                    "globalValueKey": "_PARRY_SUCCUSS_TIMES",
+                    "defaultGlobalValueOnCreate": 0.0,
+                    "valueSteps": [
+                        -0.5,
+                        0.5,
+                        [
+                            "WeakTime",
+                            0.5,
+                            "ADD"
+                        ]
+                    ],
+                    "modifierNameSteps": [
+                        "Monster_Hatamoto_WeakEmpty",
+                        "Monster_Hatamoto_Weak"
+                    ]
+                },
+                {
+                    "$type": "AttachToStateIDMixin",
+                    "stateIDs": [
+                        "Breaked"
+                    ],
+                    "modifierName": "Monster_Samurai_Hatamoto_BladeMaster2_Break"
+                }
+            ],
+            "abilitySpecials": {
+                "WeakTime": 1.0
+            },
+            "modifiers": {
+                "Monster_Samurai_Hatamoto_BladeMaster2_Break": {
+                    "modifierName": "",
+                    "bonusCriticalHurt": 100.0,
+                    "onAdded": [
+                        {
+                            "$type": "FireEffect",
+                            "healLimitedByCasterMaxHPRatio": "Eff_Mosnter_GeneralSkill_BreakeDefendShield",
+                            "MEMHGJDEPJA": -1.0
+                        }
+                    ]
+                },
+                "Monster_Hatamoto_WeakEmpty": {
+                    "modifierName": "",
+                    "bonusCriticalHurt": 100.0
+                },
+                "Monster_Hatamoto_Weak": {
+                    "modifierName": "",
+                    "bonusCriticalHurt": 100.0,
+                    "onAdded": [
+                        {
+                            "$type": "SetAnimatorTrigger",
+                            "triggerID": "BeBreaked"
+                        }
+                    ]
+                },
+                "Monster_Parry_None": {
+                    "modifierName": "",
+                    "bonusCriticalHurt": 100.0
+                },
+                "Monster_Parry_Success": {
+                    "modifierName": "",
+                    "bonusCriticalHurt": 100.0,
+                    "onAdded": [
+                        {
+                            "$type": "AddGlobalValue",
+                            "ratio": 1.0,
+                            "key": "_PARRY_SUCCUSS_TIMES",
+                            "useLimitRange": true,
+                            "maxValue": 4.0,
+                            "minValue": 0.0
+                        },
+                        {
+                            "$type": "SetGlobalValue",
+                            "ratio": 0.0,
+                            "key": "_PARRY_HIT",
+                            "maxValue": 0.0,
+                            "minValue": 0.0
+                        }
+                    ]
+                },
+                "Monster_BladeMaster_BlockBreak_Check": {
+                    "modifierName": "",
+                    "bonusCriticalHurt": 100.0,
+                    "onBeingHit": [
+                        {
+                            "$type": "Predicated",
+                            "targetPredicates": [
+                                {
+                                    "$type": "ByAttackTags",
+                                    "attackTags": [
+                                        "Avatar_Blocking"
+                                    ]
+                                }
+                            ],
+                            "successActions": [
+                                {
+                                    "$type": "SetAnimatorTrigger",
+                                    "triggerID": "BlockBreak"
+                                },
+                                {
+                                    "$type": "ApplyModifier",
+                                    "modifierName": "Monster_Samurai_EnBreakDuring"
+                                }
+                            ]
+                        }
+                    ]
+                },
+                "Monster_BladeMaster_InitialLevel": {
+                    "modifierName": "",
+                    "bonusCriticalHurt": 100.0,
+                    "onAdded": [
+                        {
+                            "$type": "SetOverrideMapValue",
+                            "canBeHandledOnRecover": true,
+                            "predicates": [
+                                {
+                                    "$type": "ByTargetGlobalValue",
+                                    "key": "_BLADEMASTER_LEVEL",
+                                    "ratio": 3.0
+                                }
+                            ],
+                            "ratio": 4.0,
+                            "overrideMapKey": "WeakTime"
+                        },
+                        {
+                            "$type": "SetAISkillGCD",
+                            "canBeHandledOnRecover": true,
+                            "predicates": [
+                                {
+                                    "$type": "ByTargetGlobalValue",
+                                    "key": "_BLADEMASTER_LEVEL",
+                                    "ratio": 2.0,
+                                    "compareType": "MoreThanAndEqual"
+                                }
+                            ],
+                            "value": 1.0
+                        },
+                        {
+                            "$type": "UseSkillEliteSet",
+                            "predicates": [
+                                {
+                                    "$type": "ByTargetGlobalValue",
+                                    "key": "_BLADEMASTER_LEVEL",
+                                    "ratio": 1.0
+                                }
+                            ],
+                            "skillEliteSetID": 1
+                        },
+                        {
+                            "$type": "UseSkillEliteSet",
+                            "predicates": [
+                                {
+                                    "$type": "ByTargetGlobalValue",
+                                    "key": "_BLADEMASTER_LEVEL",
+                                    "ratio": 2.0,
+                                    "compareType": "MoreThanAndEqual"
+                                }
+                            ],
+                            "skillEliteSetID": 2
+                        }
+                    ]
+                },
+                "Monster_Samurai_AtkDefend_EnbreakMax": {
+                    "modifierName": "",
+                    "bonusCriticalHurt": 100.0,
+                    "properties": {
+                        "Actor_EndureDelta": 9.999999747378752e-05
+                    }
+                },
+                "Monster_Samurai_EnBreakDuring": {
+                    "modifierName": "",
+                    "DCEFILPANJI": "WeakTime",
+                    "bonusCriticalHurt": 100.0,
+                    "onAdded": [
+                        {
+                            "$type": "SetGlobalValue",
+                            "ratio": 0.0,
+                            "key": "_CAN_CAL_HITNUM",
+                            "maxValue": 0.0,
+                            "minValue": 0.0
+                        }
+                    ],
+                    "onRemoved": [
+                        {
+                            "$type": "SetGlobalValue",
+                            "ratio": 1.0,
+                            "key": "_CAN_CAL_HITNUM",
+                            "maxValue": 0.0,
+                            "minValue": 0.0
+                        }
+                    ]
+                },
+                "Monster_BladeMaster_Reset_HitTimes_Delay": {
+                    "modifierName": "",
+                    "DCEFILPANJI": 0.30000001192092896,
+                    "bonusCriticalHurt": 100.0,
+                    "onRemoved": [
+                        {
+                            "$type": "SetGlobalValue",
+                            "ratio": 0.0,
+                            "key": "_BE_HIT_TIMES",
+                            "maxValue": 0.0,
+                            "minValue": 0.0
+                        }
+                    ]
+                },
+                "Monster_BladeMaster_Reset_HitTimesAction": {
+                    "modifierName": "",
+                    "bonusCriticalHurt": 100.0,
+                    "onAdded": [
+                        {
+                            "$type": "SetGlobalValue",
+                            "ratio": 0.0,
+                            "key": "_BE_HIT_TIMES",
+                            "maxValue": 0.0,
+                            "minValue": 0.0
+                        }
+                    ]
+                }
+            },
+            "onAdded": [
+                {
+                    "$type": "ApplyModifier",
+                    "modifierName": "Monster_Samurai_AtkDefend_EnbreakMax"
+                },
+                {
+                    "$type": "ApplyModifier",
+                    "modifierName": "Monster_BladeMaster_InitialLevel"
+                },
+                {
+                    "$type": "ApplyModifier",
+                    "modifierName": "Monster_BladeMaster_BlockBreak_Check"
+                }
+            ]
+        }
+    },
+    {
+        "Default": {
+            "$type": "ConfigAbility",
+            "abilityName": "Monster_Samurai_Hatamoto_CrazyState",
+            "abilityMixins": [
+                {
+                    "$type": "AttachToPoseIDMixin",
+                    "poseIDs": [
+                        103
+                    ],
+                    "modifierName": "Monster_Samurai_Hatamoto_CrazyFirst"
+                }
+            ],
+            "modifiers": {
+                "Monster_Samurai_Hatamoto_CrazyFirst": {
+                    "modifierName": "",
+                    "bonusCriticalHurt": 100.0,
+                    "modifierMixins": [
+                        {
+                            "$type": "AttachModifierToHPPercentMixinV2",
+                            "valueSteps": [
+                                0.7099999785423279
+                            ],
+                            "modifierNameSteps": [
+                                "CrazyEmpty",
+                                "GoCrazyAtk"
+                            ]
+                        }
+                    ],
+                    "properties": {
+                        "Actor_HpThresholdRatio": 0.699999988079071
+                    },
+                    "state": "Limbo"
+                },
+                "CrazyEmpty": {
+                    "modifierName": "",
+                    "bonusCriticalHurt": 100.0
+                },
+                "GoCrazyAtk": {
+                    "modifierName": "",
+                    "bonusCriticalHurt": 100.0,
+                    "onAdded": [
+                        {
+                            "$type": "SetAnimatorTrigger",
+                            "triggerID": "GoCrazyAtk"
+                        },
+                        {
+                            "$type": "ApplyModifier",
+                            "modifierName": "Monster_Samurai_Crazy_LuacallDely"
+                        }
+                    ]
+                },
+                "Monster_Samurai_Crazy_LuacallDely": {
+                    "modifierName": "",
+                    "DCEFILPANJI": 5.0,
+                    "bonusCriticalHurt": 100.0,
+                    "onRemoved": [
+                        {
+                            "$type": "ServerLuaCall",
+                            "luaCallType": "FromGroup",
+                            "funcName": "SLC_KazuhaDream_MonsterWeak",
+                            "CIBOAMHBGPK": 0.0,
+                            "KOFAICAGHOC": 0.0,
+                            "BIFENCJLAFA": 0.0
+                        }
+                    ]
+                }
+            }
+        }
+    },
+    {
+        "Default": {
+            "$type": "ConfigAbility",
+            "abilityName": "Monster_Samurai_Hatamoto_CrazyAtk_WindZone",
+            "modifiers": {
+                "Monster_Samurai_Hatamoto_CrazyAtk_WindZone": {
+                    "modifierName": "",
+                    "DCEFILPANJI": 1.5,
+                    "bonusCriticalHurt": 100.0,
+                    "modifierMixins": [
+                        {
+                            "$type": "WindZoneMixin",
+                            "shapeName": "CircleR5H2",
+                            "born": {
+                                "$type": "ConfigBornBySelf",
+                                "offset": {
+                                    "AMODPKJAIGF": 0.0,
+                                    "DBJCBJPOOAP": 0.0,
+                                    "JDFJGADACKC": 1.0
+                                }
+                            },
+                            "GLCINNLCMDJ": 3.0,
+                            "innerRadius": 0.5,
+                            "radius": 0.5,
+                            "targetType": "Enemy",
+                            "modifierName": ""
+                        }
+                    ]
+                }
+            },
+            "onAbilityStart": [
+                {
+                    "$type": "ApplyModifier",
+                    "modifierName": "Monster_Samurai_Hatamoto_CrazyAtk_WindZone"
+                }
+            ]
+        }
+    },
+    {
+        "Default": {
+            "$type": "ConfigAbility",
+            "abilityName": "Monster_Samurai_Hatamoto_Crazy_WeaponEffect",
+            "modifiers": {
+                "Monster_Samurai_Hatamoto_Crazy_WeaponEffect": {
+                    "modifierName": "",
+                    "bonusCriticalHurt": 100.0,
+                    "onAdded": [
+                        {
+                            "$type": "AttachEffect",
+                            "healLimitedByCasterMaxHPRatio": "Eff_Monster_Samurai_Ronin_CrazyBladeEff",
+                            "MEMHGJDEPJA": -1.0
+                        }
+                    ]
+                }
+            },
+            "onAdded": [
+                {
+                    "$type": "ApplyModifier",
+                    "modifierName": "Monster_Samurai_Hatamoto_Crazy_WeaponEffect"
+                }
+            ],
+            "onKill": [
+                {
+                    "$type": "RemoveModifier",
+                    "modifierName": "Monster_Samurai_Hatamoto_Crazy_WeaponEffect"
+                }
+            ]
+        }
+    },
+    {
+        "Default": {
+            "$type": "ConfigAbility",
+            "abilityName": "Monster_Samurai_Hatamoto_CrazyAtk_CreateField",
+            "onAbilityStart": [
+                {
+                    "$type": "CreateGadget",
+                    "born": {
+                        "$type": "ConfigBornBySelf",
+                        "offset": {
+                            "AMODPKJAIGF": 0.0,
+                            "DBJCBJPOOAP": 0.0,
+                            "JDFJGADACKC": 2.0
+                        }
+                    },
+                    "gadgetID": 42508005
+                }
+            ]
+        }
+    },
+    {
+        "Default": {
+            "$type": "ConfigAbility",
+            "abilityName": "Monster_Samurai_Hatamoto_CrazyAtk_Field",
+            "modifiers": {
+                "Monster_Samurai_Hatamoto_CrazyAtk_Field": {
+                    "modifierName": "",
+                    "DCEFILPANJI": 4.0,
+                    "bonusCriticalHurt": 100.0,
+                    "thinkInterval": 1.0,
+                    "onAdded": [
+                        {
+                            "$type": "FireEffect",
+                            "healLimitedByCasterMaxHPRatio": "Eff_Monster_Samurai_Ronin_CrazyBlade_Attack",
+                            "born": {
+                                "$type": "ConfigBornBySelf"
+                            },
+                            "MEMHGJDEPJA": -1.0
+                        },
+                        {
+                            "$type": "TriggerAttackEvent",
+                            "attackEvent": {
+                                "attackPattern": {
+                                    "$type": "ConfigAttackCircle",
+                                    "triggerType": "TriggerNoRepeat",
+                                    "born": {
+                                        "$type": "ConfigBornBySelf",
+                                        "offset": {
+                                            "AMODPKJAIGF": 0.0,
+                                            "DBJCBJPOOAP": -1.0,
+                                            "JDFJGADACKC": 0.0
+                                        }
+                                    },
+                                    "height": 5.0,
+                                    "ILKJCNJJPEL": 5.0
+                                },
+                                "attackInfo": {
+                                    "attackTag": "",
+                                    "attenuationTag": "",
+                                    "attenuationGroup": "default",
+                                    "attackProperty": {
+                                        "EHFOGJFHDPE": 0.375,
+                                        "GDADKLDBGIM": 0.0,
+                                        "elementType": "Electric",
+                                        "bonusCriticalHurt": 50.0,
+                                        "strikeType": "Slash"
+                                    },
+                                    "hitPattern": {
+                                        "onHitEffectName": "default",
+                                        "hitImpulseType": "LV3"
+                                    },
+                                    "canBeModifiedBy": "OriginOwner"
+                                }
+                            },
+                            "targetType": "Enemy"
+                        }
+                    ],
+                    "onThinkInterval": [
+                        {
+                            "$type": "FireEffect",
+                            "healLimitedByCasterMaxHPRatio": "Eff_Monster_Samurai_Ronin_CrazyBlade_FieldAttack",
+                            "born": {
+                                "$type": "ConfigBornBySelf"
+                            },
+                            "MEMHGJDEPJA": -1.0
+                        },
+                        {
+                            "$type": "TriggerAttackEvent",
+                            "attackEvent": {
+                                "attackPattern": {
+                                    "$type": "ConfigAttackCircle",
+                                    "triggerType": "TriggerNoRepeat",
+                                    "born": {
+                                        "$type": "ConfigBornBySelf",
+                                        "offset": {
+                                            "AMODPKJAIGF": 0.0,
+                                            "DBJCBJPOOAP": -1.0,
+                                            "JDFJGADACKC": 0.0
+                                        }
+                                    },
+                                    "height": 5.0,
+                                    "ILKJCNJJPEL": 5.0
+                                },
+                                "attackInfo": {
+                                    "attackTag": "",
+                                    "attenuationTag": "",
+                                    "attenuationGroup": "default",
+                                    "attackProperty": {
+                                        "EHFOGJFHDPE": 0.375,
+                                        "GDADKLDBGIM": 0.0,
+                                        "elementType": "Electric",
+                                        "bonusCriticalHurt": 50.0,
+                                        "strikeType": "Slash"
+                                    },
+                                    "hitPattern": {
+                                        "onHitEffectName": "default",
+                                        "hitImpulseType": "LV3"
+                                    },
+                                    "canBeModifiedBy": "OriginOwner"
+                                }
+                            },
+                            "targetType": "Enemy"
+                        }
+                    ]
+                }
+            },
+            "onAdded": [
+                {
+                    "$type": "ApplyModifier",
+                    "modifierName": "Monster_Samurai_Hatamoto_CrazyAtk_Field"
+                }
+            ],
+            "onKill": [
+                {
+                    "$type": "RemoveModifier",
+                    "modifierName": "Monster_Samurai_Hatamoto_CrazyAtk_Field"
+                }
+            ]
+        }
+    },
+    {
+        "Default": {
+            "$type": "ConfigAbility",
+            "abilityName": "Monster_Samurai_Ronin_BladeMaster_WeaponSpecialDie",
+            "onKill": [
+                {
+                    "$type": "TriggerHideWeapon",
+                    "partNames": [
+                        "equip01"
+                    ],
+                    "OMGHJLPGMNJ": true
+                }
+            ]
+        }
+    },
+    {
+        "Default": {
+            "$type": "ConfigAbility",
+            "abilityName": "Monster_Samurai_Hatamoto_EnterFireDefendAtk",
+            "abilityMixins": [
+                {
+                    "$type": "AttachModifierToSelfGlobalValueMixin",
+                    "globalValueKey": "_BE_HIT_TIMES",
+                    "defaultGlobalValueOnCreate": 0.0,
+                    "valueSteps": [
+                        -0.5,
+                        [
+                            "maxHitTimes",
+                            0.5,
+                            "SUB"
+                        ],
+                        [
+                            "maxHitTimes",
+                            0.5,
+                            "ADD"
+                        ]
+                    ],
+                    "modifierNameSteps": [
+                        "Monster_Samurai_Hatamoto_HitActionEmpty",
+                        "Monster_Samurai_Hatamoto_GoBreakAtk"
+                    ]
+                }
+            ],
+            "abilitySpecials": {
+                "maxHitTimes": 5.0
+            },
+            "modifiers": {
+                "Monster_Samurai_Hatamoto_HitActionEmpty": {
+                    "modifierName": "",
+                    "bonusCriticalHurt": 100.0
+                },
+                "Monster_Samurai_Hatamoto_GoBreakAtk": {
+                    "modifierName": "",
+                    "bonusCriticalHurt": 100.0,
+                    "onAdded": [
+                        {
+                            "$type": "SetAnimatorTrigger",
+                            "triggerID": "GoBlockAtk"
+                        }
+                    ]
+                },
+                "Monster_Samurai_Hatamoto_EnterFireDefendAtk_Check": {
+                    "modifierName": "",
+                    "bonusCriticalHurt": 100.0,
+                    "onAdded": [
+                        {
+                            "$type": "SetGlobalValue",
+                            "ratio": 1.0,
+                            "key": "_CAN_CAL_HITNUM",
+                            "maxValue": 0.0,
+                            "minValue": 0.0
+                        }
+                    ],
+                    "onBeingHit": [
+                        {
+                            "$type": "Predicated",
+                            "target": "Target",
+                            "targetPredicates": [
+                                {
+                                    "$type": "ByEntityTypes",
+                                    "entityTypes": [
+                                        "Avatar"
+                                    ]
+                                }
+                            ],
+                            "successActions": [
+                                {
+                                    "$type": "Predicated",
+                                    "targetPredicates": [
+                                        {
+                                            "$type": "ByTargetGlobalValue",
+                                            "key": "_CAN_CAL_HITNUM",
+                                            "ratio": 1.0
+                                        }
+                                    ],
+                                    "successActions": [
+                                        {
+                                            "$type": "AddGlobalValue",
+                                            "ratio": 1.0,
+                                            "key": "_BE_HIT_TIMES",
+                                            "useLimitRange": true,
+                                            "maxValue": "maxHitTimes",
+                                            "minValue": 0.0
+                                        },
+                                        {
+                                            "$type": "AddChargeBarValue",
+                                            "ratio": 1.0,
+                                            "maxValue": 0.0,
+                                            "minValue": 0.0
+                                        }
+                                    ]
+                                }
+                            ]
+                        }
+                    ]
+                }
+            },
+            "onAdded": [
+                {
+                    "$type": "ApplyModifier",
+                    "modifierName": "Monster_Samurai_Hatamoto_EnterFireDefendAtk_Check"
+                }
+            ]
+        }
+    },
+    {
+        "Default": {
+            "$type": "ConfigAbility",
+            "abilityName": "Monster_Samurai_Hatamoto_Provoke_Shield",
+            "abilitySpecials": {
+                "defendTime": 10.0,
+                "subHurt": 0.4000000059604645
+            },
+            "modifiers": {
+                "Monster_Samurai_Hatamoto_Avatar_Provoked": {
+                    "modifierName": "",
+                    "DCEFILPANJI": 0.30000001192092896,
+                    "bonusCriticalHurt": 100.0,
+                    "onAdded": [
+                        {
+                            "$type": "FireEffect",
+                            "healLimitedByCasterMaxHPRatio": "Eff_Monster_GeneralSkill_ProvokeBuff",
+                            "MEMHGJDEPJA": -1.0
+                        }
+                    ]
+                },
+                "Monster_Samurai_Hatamoto_Provoke_Initial": {
+                    "modifierName": "",
+                    "bonusCriticalHurt": 100.0,
+                    "onAdded": [
+                        {
+                            "$type": "SetOverrideMapValue",
+                            "canBeHandledOnRecover": true,
+                            "predicates": [
+                                {
+                                    "$type": "ByTargetGlobalValue",
+                                    "key": "_BLADEMASTER_LEVEL",
+                                    "ratio": 2.0,
+                                    "compareType": "MoreThanAndEqual"
+                                }
+                            ],
+                            "ratio": 1.0,
+                            "overrideMapKey": "WeakTime"
+                        },
+                        {
+                            "$type": "SetOverrideMapValue",
+                            "canBeHandledOnRecover": true,
+                            "predicates": [
+                                {
+                                    "$type": "ByTargetGlobalValue",
+                                    "key": "_BLADEMASTER_LEVEL",
+                                    "ratio": 1.0
+                                }
+                            ],
+                            "ratio": 5.0,
+                            "overrideMapKey": "defendTime"
+                        },
+                        {
+                            "$type": "SetOverrideMapValue",
+                            "canBeHandledOnRecover": true,
+                            "predicates": [
+                                {
+                                    "$type": "ByTargetGlobalValue",
+                                    "key": "_BLADEMASTER_LEVEL",
+                                    "ratio": 2.0,
+                                    "compareType": "MoreThanAndEqual"
+                                }
+                            ],
+                            "ratio": 10.0,
+                            "overrideMapKey": "defendTime"
+                        },
+                        {
+                            "$type": "SetOverrideMapValue",
+                            "canBeHandledOnRecover": true,
+                            "predicates": [
+                                {
+                                    "$type": "ByTargetGlobalValue",
+                                    "key": "_BLADEMASTER_LEVEL",
+                                    "ratio": 2.0
+                                }
+                            ],
+                            "ratio": 0.6000000238418579,
+                            "overrideMapKey": "subHurt"
+                        },
+                        {
+                            "$type": "SetOverrideMapValue",
+                            "canBeHandledOnRecover": true,
+                            "predicates": [
+                                {
+                                    "$type": "ByTargetGlobalValue",
+                                    "key": "_BLADEMASTER_LEVEL",
+                                    "ratio": 3.0
+                                }
+                            ],
+                            "ratio": 0.800000011920929,
+                            "overrideMapKey": "subHurt"
+                        }
+                    ]
+                },
+                "UNIQUE_Monster_Samurai_Hatamoto_Provoke_Shield": {
+                    "modifierName": "",
+                    "isUnique": true,
+                    "DCEFILPANJI": "defendTime",
+                    "bonusCriticalHurt": 100.0,
+                    "properties": {
+                        "Actor_PhysicalSubHurtDelta": "subHurt"
+                    },
+                    "onAdded": [
+                        {
+                            "$type": "AttachEffect",
+                            "healLimitedByCasterMaxHPRatio": "Eff_Monster_GeneralSkill_ShieldDefendBuff",
+                            "MEMHGJDEPJA": -1.0
+                        },
+                        {
+                            "$type": "SetAnimatorTrigger",
+                            "triggerID": "GoShield"
+                        },
+                        {
+                            "$type": "SetAnimatorBool",
+                            "boolID": "InShield",
+                            "ratio": true
+                        }
+                    ],
+                    "onRemoved": [
+                        {
+                            "$type": "FireEffect",
+                            "predicates": [
+                                {
+                                    "$type": "ByTargetGlobalValue",
+                                    "key": "_BECAUSE_DEFEND_BREAK",
+                                    "ratio": 1.0
+                                }
+                            ],
+                            "healLimitedByCasterMaxHPRatio": "Eff_Mosnter_GeneralSkill_BreakeDefendShield",
+                            "MEMHGJDEPJA": -1.0
+                        },
+                        {
+                            "$type": "SetGlobalValue",
+                            "ratio": 0.0,
+                            "key": "_BECAUSE_DEFEND_BREAK",
+                            "maxValue": 0.0,
+                            "minValue": 0.0
+                        },
+                        {
+                            "$type": "SetAnimatorBool",
+                            "boolID": "InShield"
+                        }
+                    ]
+                }
+            },
+            "onAdded": [
+                {
+                    "$type": "ApplyModifier",
+                    "modifierName": "Monster_Samurai_Hatamoto_Provoke_Initial"
+                }
+            ],
+            "onAbilityStart": [
+                {
+                    "$type": "ApplyModifier",
+                    "target": "AllPlayerAvatars",
+                    "modifierName": "Monster_Samurai_Hatamoto_Avatar_Provoked"
+                },
+                {
+                    "$type": "ApplyModifier",
+                    "modifierName": "UNIQUE_Monster_Samurai_Hatamoto_Provoke_Shield"
+                }
+            ]
+        }
+    },
+    {
+        "Default": {
+            "$type": "ConfigAbility",
+            "abilityName": "Monster_Samurai_Hatamoto_PowerAtkDefend",
+            "abilityMixins": [
+                {
+                    "$type": "AttachToStateIDMixin",
+                    "stateIDs": [
+                        "PowerAtk1_Attack"
+                    ],
+                    "modifierName": "Monster_Samurai_CanBeBlocked"
+                },
+                {
+                    "$type": "AttachToStateIDMixin",
+                    "stateIDs": [
+                        "DefendBS"
+                    ],
+                    "modifierName": "Monster_BladeMaster_Reset_HitTimesAction"
+                },
+                {
+                    "$type": "AttachModifierToSelfGlobalValueMixin",
+                    "globalValueKey": "_PARRY_HIT",
+                    "defaultGlobalValueOnCreate": 0.0,
+                    "valueSteps": [
+                        -0.5,
+                        0.5,
+                        1.5
+                    ],
+                    "modifierNameSteps": [
+                        "Monster_Parry_None",
+                        "Monster_Parry_Success"
+                    ]
+                }
+            ],
+            "abilitySpecials": {
+                "WeakTime": 2.0
+            },
+            "modifiers": {
+                "Monster_Parry_None": {
+                    "modifierName": "",
+                    "bonusCriticalHurt": 100.0
+                },
+                "Monster_Parry_Success": {
+                    "modifierName": "",
+                    "bonusCriticalHurt": 100.0,
+                    "onAdded": [
+                        {
+                            "$type": "SetGlobalValue",
+                            "ratio": 1.0,
+                            "key": "_NORMAL_PARRY_LOG",
+                            "maxValue": 0.0,
+                            "minValue": 0.0
+                        },
+                        {
+                            "$type": "ServerMonsterLog",
+                            "paramList": [
+                                1
+                            ]
+                        }
+                    ]
+                },
+                "Monster_BladeMaster_LogEmpty": {
+                    "modifierName": "",
+                    "bonusCriticalHurt": 100.0
+                },
+                "Monster_BladeMaster_Log": {
+                    "modifierName": "",
+                    "bonusCriticalHurt": 100.0,
+                    "onAdded": [
+                        {
+                            "$type": "ServerMonsterLog",
+                            "predicates": [
+                                {
+                                    "$type": "ByTargetGlobalValue",
+                                    "key": "_NORMAL_PARRY_LOG",
+                                    "ratio": 0.0,
+                                    "compareType": "NoneOrEqual"
+                                },
+                                {
+                                    "$type": "ByTargetGlobalValue",
+                                    "key": "_SP_PARRY_LOG",
+                                    "ratio": 0.0,
+                                    "compareType": "NoneOrEqual"
+                                }
+                            ],
+                            "paramList": [
+                                0,
+                                0
+                            ]
+                        },
+                        {
+                            "$type": "ServerMonsterLog",
+                            "predicates": [
+                                {
+                                    "$type": "ByTargetGlobalValue",
+                                    "key": "_NORMAL_PARRY_LOG",
+                                    "ratio": 1.0
+                                },
+                                {
+                                    "$type": "ByTargetGlobalValue",
+                                    "key": "_SP_PARRY_LOG",
+                                    "ratio": 0.0,
+                                    "compareType": "NoneOrEqual"
+                                }
+                            ],
+                            "paramList": [
+                                1,
+                                0
+                            ]
+                        },
+                        {
+                            "$type": "ServerMonsterLog",
+                            "predicates": [
+                                {
+                                    "$type": "ByTargetGlobalValue",
+                                    "key": "_NORMAL_PARRY_LOG",
+                                    "ratio": 0.0,
+                                    "compareType": "NoneOrEqual"
+                                },
+                                {
+                                    "$type": "ByTargetGlobalValue",
+                                    "key": "_SP_PARRY_LOG",
+                                    "ratio": 1.0
+                                }
+                            ],
+                            "paramList": [
+                                0,
+                                1
+                            ]
+                        },
+                        {
+                            "$type": "ServerMonsterLog",
+                            "predicates": [
+                                {
+                                    "$type": "ByTargetGlobalValue",
+                                    "key": "_NORMAL_PARRY_LOG",
+                                    "ratio": 1.0
+                                },
+                                {
+                                    "$type": "ByTargetGlobalValue",
+                                    "key": "_SP_PARRY_LOG",
+                                    "ratio": 1.0
+                                }
+                            ],
+                            "paramList": [
+                                1,
+                                1
+                            ]
+                        }
+                    ]
+                },
+                "Monster_BladeMaster_BlockBreak_Check": {
+                    "modifierName": "",
+                    "bonusCriticalHurt": 100.0,
+                    "onBeingHit": [
+                        {
+                            "$type": "Predicated",
+                            "targetPredicates": [
+                                {
+                                    "$type": "ByTargetGlobalValue",
+                                    "key": "_ATTACK_CAN_BEBLOCKED",
+                                    "ratio": 1.0
+                                },
+                                {
+                                    "$type": "ByAttackTags",
+                                    "attackTags": [
+                                        "Avatar_Blocking"
+                                    ]
+                                }
+                            ],
+                            "successActions": [
+                                {
+                                    "$type": "SetAnimatorTrigger",
+                                    "triggerID": "BlockBreak"
+                                },
+                                {
+                                    "$type": "SetGlobalValue",
+                                    "ratio": 1.0,
+                                    "key": "_BECAUSE_DEFEND_BREAK",
+                                    "maxValue": 0.0,
+                                    "minValue": 0.0
+                                },
+                                {
+                                    "$type": "RemoveUniqueModifier",
+                                    "modifierName": "UNIQUE_Monster_Samurai_Hatamoto_Provoke_Shield"
+                                },
+                                {
+                                    "$type": "ApplyModifier",
+                                    "modifierName": "Monster_Samurai_EnBreakDuring"
+                                },
+                                {
+                                    "$type": "SetGlobalValue",
+                                    "ratio": 0.0,
+                                    "key": "_BE_HIT_TIMES",
+                                    "maxValue": 0.0,
+                                    "minValue": 0.0
+                                },
+                                {
+                                    "$type": "SetGlobalValue",
+                                    "ratio": 1.0,
+                                    "key": "_SP_PARRY_LOG",
+                                    "maxValue": 0.0,
+                                    "minValue": 0.0
+                                },
+                                {
+                                    "$type": "ServerMonsterLog",
+                                    "paramList": [
+                                        2
+                                    ]
+                                }
+                            ]
+                        }
+                    ]
+                },
+                "Monster_BladeMaster_InitialLevel": {
+                    "modifierName": "",
+                    "bonusCriticalHurt": 100.0,
+                    "onAdded": [
+                        {
+                            "$type": "SetOverrideMapValue",
+                            "canBeHandledOnRecover": true,
+                            "predicates": [
+                                {
+                                    "$type": "ByTargetGlobalValue",
+                                    "key": "_BLADEMASTER_LEVEL",
+                                    "ratio": 3.0
+                                }
+                            ],
+                            "ratio": 2.0,
+                            "overrideMapKey": "WeakTime"
+                        },
+                        {
+                            "$type": "SetAISkillGCD",
+                            "predicates": [
+                                {
+                                    "$type": "ByTargetGlobalValue",
+                                    "key": "_BLADEMASTER_LEVEL",
+                                    "ratio": 2.0,
+                                    "compareType": "MoreThanAndEqual"
+                                }
+                            ],
+                            "value": 1.0
+                        },
+                        {
+                            "$type": "UseSkillEliteSet",
+                            "predicates": [
+                                {
+                                    "$type": "ByTargetGlobalValue",
+                                    "key": "_BLADEMASTER_LEVEL",
+                                    "ratio": 1.0
+                                }
+                            ],
+                            "skillEliteSetID": 1
+                        },
+                        {
+                            "$type": "UseSkillEliteSet",
+                            "predicates": [
+                                {
+                                    "$type": "ByTargetGlobalValue",
+                                    "key": "_BLADEMASTER_LEVEL",
+                                    "ratio": 2.0
+                                }
+                            ],
+                            "skillEliteSetID": 2
+                        },
+                        {
+                            "$type": "UseSkillEliteSet",
+                            "predicates": [
+                                {
+                                    "$type": "ByTargetGlobalValue",
+                                    "key": "_BLADEMASTER_LEVEL",
+                                    "ratio": 3.0
+                                }
+                            ],
+                            "skillEliteSetID": 3
+                        }
+                    ]
+                },
+                "Monster_Samurai_AtkDefend_EnbreakMax": {
+                    "modifierName": "",
+                    "bonusCriticalHurt": 100.0,
+                    "properties": {
+                        "Actor_EndureDelta": 9.999999747378752e-05
+                    }
+                },
+                "Monster_Samurai_EnBreakDuring": {
+                    "modifierName": "",
+                    "DCEFILPANJI": "WeakTime",
+                    "bonusCriticalHurt": 100.0,
+                    "onAdded": [
+                        {
+                            "$type": "SetGlobalValue",
+                            "ratio": 0.0,
+                            "key": "_CAN_CAL_HITNUM",
+                            "maxValue": 0.0,
+                            "minValue": 0.0
+                        }
+                    ],
+                    "onRemoved": [
+                        {
+                            "$type": "SetGlobalValue",
+                            "ratio": 1.0,
+                            "key": "_CAN_CAL_HITNUM",
+                            "maxValue": 0.0,
+                            "minValue": 0.0
+                        }
+                    ]
+                },
+                "Monster_Samurai_CanBeBlocked": {
+                    "modifierName": "",
+                    "bonusCriticalHurt": 100.0,
+                    "onAdded": [
+                        {
+                            "$type": "SetGlobalValue",
+                            "ratio": 1.0,
+                            "key": "_ATTACK_CAN_BEBLOCKED",
+                            "maxValue": 0.0,
+                            "minValue": 0.0
+                        }
+                    ],
+                    "onRemoved": [
+                        {
+                            "$type": "SetGlobalValue",
+                            "ratio": 0.0,
+                            "key": "_ATTACK_CAN_BEBLOCKED",
+                            "maxValue": 0.0,
+                            "minValue": 0.0
+                        },
+                        {
+                            "$type": "SetGlobalValue",
+                            "ratio": 0.0,
+                            "key": "_BE_HIT_TIMES",
+                            "maxValue": 0.0,
+                            "minValue": 0.0
+                        }
+                    ]
+                },
+                "Monster_BladeMaster_Reset_HitTimes_Delay": {
+                    "modifierName": "",
+                    "DCEFILPANJI": 0.30000001192092896,
+                    "bonusCriticalHurt": 100.0,
+                    "onRemoved": [
+                        {
+                            "$type": "SetGlobalValue",
+                            "ratio": 0.0,
+                            "key": "_BE_HIT_TIMES",
+                            "maxValue": 0.0,
+                            "minValue": 0.0
+                        }
+                    ]
+                },
+                "Monster_BladeMaster_Reset_HitTimesAction": {
+                    "modifierName": "",
+                    "bonusCriticalHurt": 100.0,
+                    "onAdded": [
+                        {
+                            "$type": "SetGlobalValue",
+                            "ratio": 0.0,
+                            "key": "_BE_HIT_TIMES",
+                            "maxValue": 0.0,
+                            "minValue": 0.0
+                        }
+                    ]
+                }
+            },
+            "onAdded": [
+                {
+                    "$type": "ApplyModifier",
+                    "modifierName": "Monster_Samurai_AtkDefend_EnbreakMax"
+                },
+                {
+                    "$type": "ApplyModifier",
+                    "modifierName": "Monster_BladeMaster_InitialLevel"
+                },
+                {
+                    "$type": "ApplyModifier",
+                    "modifierName": "Monster_BladeMaster_BlockBreak_Check"
+                }
+            ]
+        }
+    },
+    {
+        "Default": {
+            "$type": "ConfigAbility",
+            "abilityName": "Monster_Samurai_Ronin_RushAtkDefend",
+            "abilityMixins": [
+                {
+                    "$type": "AttachToStateIDMixin",
+                    "stateIDs": [
+                        "RushAtk_Attack"
+                    ],
+                    "modifierName": "Monster_Samurai_Ronin_CanBeBlocked"
+                },
+                {
+                    "$type": "AttachModifierToSelfGlobalValueMixin",
+                    "globalValueKey": "_PARRY_HIT",
+                    "defaultGlobalValueOnCreate": 0.0,
+                    "valueSteps": [
+                        -0.5,
+                        0.5,
+                        1.5
+                    ],
+                    "modifierNameSteps": [
+                        "Monster_Parry_None",
+                        "Monster_Parry_Success"
+                    ]
+                }
+            ],
+            "abilitySpecials": {
+                "WeakTime": 1.0
+            },
+            "modifiers": {
+                "Monster_Ronin_BladeMaster_Limbo": {
+                    "modifierName": "",
+                    "bonusCriticalHurt": 100.0,
+                    "properties": {
+                        "Actor_HpThresholdRatio": 0.0010000000474974513
+                    },
+                    "state": "Limbo"
+                },
+                "Monster_Parry_None": {
+                    "modifierName": "",
+                    "bonusCriticalHurt": 100.0
+                },
+                "Monster_Parry_Success": {
+                    "modifierName": "",
+                    "bonusCriticalHurt": 100.0,
+                    "onAdded": [
+                        {
+                            "$type": "SetGlobalValue",
+                            "ratio": 1.0,
+                            "key": "_NORMAL_PARRY_LOG",
+                            "maxValue": 0.0,
+                            "minValue": 0.0
+                        },
+                        {
+                            "$type": "ServerMonsterLog",
+                            "paramList": [
+                                1
+                            ]
+                        }
+                    ]
+                },
+                "Monster_BladeMaster_LogEmpty": {
+                    "modifierName": "",
+                    "bonusCriticalHurt": 100.0
+                },
+                "Monster_BladeMaster_Log": {
+                    "modifierName": "",
+                    "bonusCriticalHurt": 100.0,
+                    "onAdded": [
+                        {
+                            "$type": "ServerMonsterLog",
+                            "predicates": [
+                                {
+                                    "$type": "ByTargetGlobalValue",
+                                    "key": "_NORMAL_PARRY_LOG",
+                                    "ratio": 0.0,
+                                    "compareType": "NoneOrEqual"
+                                },
+                                {
+                                    "$type": "ByTargetGlobalValue",
+                                    "key": "_SP_PARRY_LOG",
+                                    "ratio": 0.0,
+                                    "compareType": "NoneOrEqual"
+                                }
+                            ],
+                            "paramList": [
+                                0,
+                                0
+                            ]
+                        },
+                        {
+                            "$type": "ServerMonsterLog",
+                            "predicates": [
+                                {
+                                    "$type": "ByTargetGlobalValue",
+                                    "key": "_NORMAL_PARRY_LOG",
+                                    "ratio": 1.0
+                                },
+                                {
+                                    "$type": "ByTargetGlobalValue",
+                                    "key": "_SP_PARRY_LOG",
+                                    "ratio": 0.0,
+                                    "compareType": "NoneOrEqual"
+                                }
+                            ],
+                            "paramList": [
+                                1,
+                                0
+                            ]
+                        },
+                        {
+                            "$type": "ServerMonsterLog",
+                            "predicates": [
+                                {
+                                    "$type": "ByTargetGlobalValue",
+                                    "key": "_NORMAL_PARRY_LOG",
+                                    "ratio": 0.0,
+                                    "compareType": "NoneOrEqual"
+                                },
+                                {
+                                    "$type": "ByTargetGlobalValue",
+                                    "key": "_SP_PARRY_LOG",
+                                    "ratio": 1.0
+                                }
+                            ],
+                            "paramList": [
+                                0,
+                                1
+                            ]
+                        },
+                        {
+                            "$type": "ServerMonsterLog",
+                            "predicates": [
+                                {
+                                    "$type": "ByTargetGlobalValue",
+                                    "key": "_NORMAL_PARRY_LOG",
+                                    "ratio": 1.0
+                                },
+                                {
+                                    "$type": "ByTargetGlobalValue",
+                                    "key": "_SP_PARRY_LOG",
+                                    "ratio": 1.0
+                                }
+                            ],
+                            "paramList": [
+                                1,
+                                1
+                            ]
+                        },
+                        {
+                            "$type": "KillSelf"
+                        }
+                    ]
+                },
+                "Monster_BladeMaster_BlockBreak_Check": {
+                    "modifierName": "",
+                    "bonusCriticalHurt": 100.0,
+                    "onBeingHit": [
+                        {
+                            "$type": "Predicated",
+                            "targetPredicates": [
+                                {
+                                    "$type": "ByTargetGlobalValue",
+                                    "key": "_ATTACK_CAN_BEBLOCKED",
+                                    "ratio": 1.0
+                                },
+                                {
+                                    "$type": "ByAttackTags",
+                                    "attackTags": [
+                                        "Avatar_Blocking"
+                                    ]
+                                }
+                            ],
+                            "successActions": [
+                                {
+                                    "$type": "SetAnimatorTrigger",
+                                    "triggerID": "BlockBreak"
+                                },
+                                {
+                                    "$type": "ApplyModifier",
+                                    "modifierName": "Monster_Samurai_Ronin_EnBreakDuring"
+                                },
+                                {
+                                    "$type": "SetGlobalValue",
+                                    "ratio": 1.0,
+                                    "key": "_SP_PARRY_LOG",
+                                    "maxValue": 0.0,
+                                    "minValue": 0.0
+                                },
+                                {
+                                    "$type": "ServerMonsterLog",
+                                    "paramList": [
+                                        2
+                                    ]
+                                }
+                            ]
+                        }
+                    ]
+                },
+                "Monster_BladeMaster_InitialLevel": {
+                    "modifierName": "",
+                    "bonusCriticalHurt": 100.0,
+                    "onAdded": [
+                        {
+                            "$type": "SetOverrideMapValue",
+                            "canBeHandledOnRecover": true,
+                            "predicates": [
+                                {
+                                    "$type": "ByTargetGlobalValue",
+                                    "key": "_BLADEMASTER_LEVEL",
+                                    "ratio": 3.0
+                                }
+                            ],
+                            "ratio": 1.0,
+                            "overrideMapKey": "WeakTime"
+                        },
+                        {
+                            "$type": "SetAISkillGCD",
+                            "predicates": [
+                                {
+                                    "$type": "ByTargetGlobalValue",
+                                    "key": "_BLADEMASTER_LEVEL",
+                                    "ratio": 2.0,
+                                    "compareType": "MoreThanAndEqual"
+                                }
+                            ],
+                            "value": 0.5
+                        },
+                        {
+                            "$type": "UseSkillEliteSet",
+                            "predicates": [
+                                {
+                                    "$type": "ByTargetGlobalValue",
+                                    "key": "_BLADEMASTER_LEVEL",
+                                    "ratio": 2.0
+                                }
+                            ],
+                            "skillEliteSetID": 1
+                        },
+                        {
+                            "$type": "UseSkillEliteSet",
+                            "predicates": [
+                                {
+                                    "$type": "ByTargetGlobalValue",
+                                    "key": "_BLADEMASTER_LEVEL",
+                                    "ratio": 3.0
+                                }
+                            ],
+                            "skillEliteSetID": 2
+                        }
+                    ]
+                },
+                "Monster_Samurai_Ronin_BlockBreak_EnbreakMax": {
+                    "modifierName": "",
+                    "bonusCriticalHurt": 100.0,
+                    "properties": {
+                        "Actor_EndureDelta": 0.0010000000474974513
+                    }
+                },
+                "Monster_Samurai_Ronin_EnBreakDuring": {
+                    "modifierName": "",
+                    "DCEFILPANJI": "WeakTime",
+                    "bonusCriticalHurt": 100.0,
+                    "thinkInterval": 0.5,
+                    "properties": {
+                        "Actor_WeightDelta": -21.0,
+                        "Actor_EndureDelta": 100.0
+                    },
+                    "onAdded": [
+                        {
+                            "$type": "RemoveModifier",
+                            "modifierName": "Monster_Samurai_Ronin_BlockBreak_EnbreakMax"
+                        },
+                        {
+                            "$type": "DamageByAttackValue",
+                            "attacker": "Self",
+                            "born": {
+                                "$type": "ConfigBornBySelf"
+                            },
+                            "attackInfo": {
+                                "attackTag": "",
+                                "attenuationTag": "",
+                                "attenuationGroup": "default",
+                                "attackProperty": {
+                                    "EHFOGJFHDPE": 0.0,
+                                    "GDADKLDBGIM": 0.0,
+                                    "bonusCriticalHurt": 100.0,
+                                    "strikeType": "Blunt",
+                                    "enBreak": 5000.0
+                                },
+                                "hitPattern": {
+                                    "onHitEffectName": "",
+                                    "hitImpulseType": "LV0"
+                                }
+                            }
+                        }
+                    ],
+                    "onRemoved": [
+                        {
+                            "$type": "ApplyModifier",
+                            "modifierName": "Monster_Samurai_Ronin_BlockBreak_EnbreakMax"
+                        }
+                    ],
+                    "onThinkInterval": [
+                        {
+                            "$type": "DamageByAttackValue",
+                            "attacker": "Self",
+                            "born": {
+                                "$type": "ConfigBornBySelf"
+                            },
+                            "attackInfo": {
+                                "attackTag": "",
+                                "attenuationTag": "",
+                                "attenuationGroup": "default",
+                                "attackProperty": {
+                                    "EHFOGJFHDPE": 0.0,
+                                    "GDADKLDBGIM": 0.0,
+                                    "bonusCriticalHurt": 100.0,
+                                    "strikeType": "Blunt",
+                                    "enBreak": 5000.0
+                                },
+                                "hitPattern": {
+                                    "onHitEffectName": "",
+                                    "hitImpulseType": "LV0"
+                                }
+                            }
+                        }
+                    ]
+                },
+                "Monster_Samurai_Ronin_CanBeBlocked": {
+                    "modifierName": "",
+                    "bonusCriticalHurt": 100.0,
+                    "onAdded": [
+                        {
+                            "$type": "SetGlobalValue",
+                            "ratio": 1.0,
+                            "key": "_ATTACK_CAN_BEBLOCKED",
+                            "maxValue": 0.0,
+                            "minValue": 0.0
+                        }
+                    ],
+                    "onRemoved": [
+                        {
+                            "$type": "SetGlobalValue",
+                            "ratio": 0.0,
+                            "key": "_ATTACK_CAN_BEBLOCKED",
+                            "maxValue": 0.0,
+                            "minValue": 0.0
+                        }
+                    ]
+                }
+            },
+            "onAdded": [
+                {
+                    "$type": "ApplyModifier",
+                    "modifierName": "Monster_Samurai_Ronin_BlockBreak_EnbreakMax"
+                },
+                {
+                    "$type": "ApplyModifier",
+                    "modifierName": "Monster_BladeMaster_InitialLevel"
+                },
+                {
+                    "$type": "ApplyModifier",
+                    "modifierName": "Monster_BladeMaster_BlockBreak_Check"
+                }
+            ]
+        }
+    },
+    {
+        "Default": {
+            "$type": "ConfigAbility",
+            "abilityName": "Monster_Samurai_Ronin_RushAttack_SP",
+            "abilityMixins": [
+                {
+                    "$type": "AttachToNormalizedTimeMixin",
+                    "stateID": "RushAtk_Attack",
+                    "modifierName": "Monster_Samurai_Ronin_01_RushAttack_BladeMaster",
+                    "normalizeStart": 0.07000000029802322,
+                    "normalizeEnd": 0.23999999463558197
+                },
+                {
+                    "$type": "AttachToStateIDMixin",
+                    "stateIDs": [
+                        "RushAtk_Attack"
+                    ],
+                    "modifierName": "Monster_Samurai_Ronin_BladeMaster_DamageCheck"
+                }
+            ],
+            "modifiers": {
+                "Monster_Samurai_Ronin_BladeMaster_DamageCheck": {
+                    "modifierName": "",
+                    "bonusCriticalHurt": 100.0,
+                    "onHittingOther": [
+                        {
+                            "$type": "Predicated",
+                            "target": "Target",
+                            "targetPredicates": [
+                                {
+                                    "$type": "ByEntityTypes",
+                                    "entityTypes": [
+                                        "Avatar"
+                                    ]
+                                }
+                            ],
+                            "successActions": [
+                                {
+                                    "$type": "ApplyModifier",
+                                    "target": "Target",
+                                    "modifierName": "Monster_Samurai_Ronin_BladeMaster_RushAtk_HitTimer"
+                                }
+                            ]
+                        }
+                    ]
+                },
+                "Monster_Samurai_Ronin_BladeMaster_RushAtk_HitTimer": {
+                    "stacking": "Unique",
+                    "modifierName": "",
+                    "DCEFILPANJI": 2.0,
+                    "bonusCriticalHurt": 100.0,
+                    "onAdded": [
+                        {
+                            "$type": "DamageByAttackValue",
+                            "predicates": [
+                                {
+                                    "$type": "ByTargetGlobalValue",
+                                    "key": "_BE_HITED_BY_RONIN",
+                                    "ratio": 0.0,
+                                    "compareType": "NoneOrEqual"
+                                }
+                            ],
+                            "born": {
+                                "$type": "ConfigBornBySelf",
+                                "offset": {
+                                    "AMODPKJAIGF": 0.0,
+                                    "DBJCBJPOOAP": 1.0,
+                                    "JDFJGADACKC": 0.0
+                                }
+                            },
+                            "attackInfo": {
+                                "attackTag": "Monster_BladeMaster_BeBlockAttack",
+                                "attenuationTag": "",
+                                "attenuationGroup": "default",
+                                "attackProperty": {
+                                    "EHFOGJFHDPE": 1.5,
+                                    "GDADKLDBGIM": 0.0,
+                                    "bonusCriticalHurt": 100.0,
+                                    "strikeType": "Slash",
+                                    "enBreak": 100.0,
+                                    "attackType": "Melee"
+                                },
+                                "hitPattern": {
+                                    "onHitEffectName": "default",
+                                    "hitImpulseType": "LV4",
+                                    "canBeDefenceHalt": true
+                                }
+                            }
+                        },
+                        {
+                            "$type": "SetGlobalValue",
+                            "ratio": 1.0,
+                            "key": "_BE_HITED_BY_RONIN",
+                            "maxValue": 0.0,
+                            "minValue": 0.0
+                        }
+                    ],
+                    "onRemoved": [
+                        {
+                            "$type": "SetGlobalValue",
+                            "ratio": 0.0,
+                            "key": "_BE_HITED_BY_RONIN",
+                            "maxValue": 0.0,
+                            "minValue": 0.0
+                        }
+                    ]
+                },
+                "Monster_Samurai_Ronin_01_RushAttack_BladeMaster": {
+                    "modifierName": "",
+                    "bonusCriticalHurt": 100.0,
+                    "modifierMixins": [
+                        {
+                            "$type": "AttachActionToModifierMixin",
+                            "onAdded": [
+                                {
+                                    "$type": "EnablePushColliderName",
+                                    "pushColliderNames": [
+                                        "PushCollider"
+                                    ]
+                                },
+                                {
+                                    "$type": "EnablePushColliderName",
+                                    "pushColliderNames": [
+                                        "PushCollider_Rush"
+                                    ],
+                                    "setEnable": true
+                                }
+                            ],
+                            "onRemoved": [
+                                {
+                                    "$type": "EnablePushColliderName",
+                                    "pushColliderNames": [
+                                        "PushCollider"
+                                    ],
+                                    "setEnable": true
+                                },
+                                {
+                                    "$type": "EnablePushColliderName",
+                                    "pushColliderNames": [
+                                        "PushCollider_Rush"
+                                    ]
+                                }
+                            ]
+                        }
+                    ],
+                    "onAdded": [
+                        {
+                            "$type": "AttachEffect",
+                            "healLimitedByCasterMaxHPRatio": "Eff_Monster_Samurai_Ronin_RushAttack_Trail",
+                            "MEMHGJDEPJA": -1.0
+                        },
+                        {
+                            "$type": "FixedMonsterRushMove",
+                            "toPos": {
+                                "$type": "ConfigBornBySelf",
+                                "offset": {
+                                    "AMODPKJAIGF": 0.0,
+                                    "DBJCBJPOOAP": 0.0,
+                                    "JDFJGADACKC": 5.0
+                                }
+                            },
+                            "timeRange": 0.25,
+                            "maxRange": 10.0,
+                            "animatorStateIDs": [
+                                "RushAtk_Attack"
+                            ],
+                            "overrideMoveCollider": ""
+                        }
+                    ]
+                }
+            }
+        }
+    },
+    {
+        "Default": {
+            "$type": "ConfigAbility",
+            "abilityName": "Monster_Samurai_EnsureVisible",
+            "modifiers": {
+                "Monster_Samurai_EnsureVisible": {
+                    "modifierName": "",
+                    "bonusCriticalHurt": 100.0,
+                    "AAICMPHNIIJ": [
+                        {
+                            "$type": "TriggerSetVisible",
+                            "visible": true
+                        },
+                        {
+                            "$type": "HideUIBillBoard"
+                        },
+                        {
+                            "$type": "EnablePushColliderName",
+                            "pushColliderNames": [
+                                "PushCollider"
+                            ],
+                            "setEnable": true
+                        }
+                    ],
+                    "onChangeAuthority": [
+                        {
+                            "$type": "TriggerSetVisible",
+                            "visible": true
+                        },
+                        {
+                            "$type": "HideUIBillBoard"
+                        },
+                        {
+                            "$type": "EnablePushColliderName",
+                            "pushColliderNames": [
+                                "PushCollider"
+                            ],
+                            "setEnable": true
+                        }
+                    ]
+                }
+            },
+            "onAdded": [
+                {
+                    "$type": "ApplyModifier",
+                    "modifierName": "Monster_Samurai_EnsureVisible"
+                }
+            ]
+        }
+    },
+    {
+        "Default": {
+            "$type": "ConfigAbility",
+            "abilityName": "Monster_Samurai_Ronin_01_Steer",
+            "abilityMixins": [
+                {
+                    "$type": "SteerAttackMixin",
+                    "steerStateIDs": [
+                        "RushAtk"
+                    ],
+                    "endNormalizedTime": 0.20000000298023224,
+                    "angularSpeed": 360.0,
+                    "attackTrigger": ""
+                },
+                {
+                    "$type": "SteerAttackMixin",
+                    "steerStateIDs": [
+                        "RushAtk_BS"
+                    ],
+                    "endNormalizedTime": 0.3100000023841858,
+                    "angularSpeed": 360.0,
+                    "attackTrigger": ""
+                },
+                {
+                    "$type": "SteerAttackMixin",
+                    "steerStateIDs": [
+                        "RushAtk_Attack"
+                    ],
+                    "endNormalizedTime": 0.05000000074505806,
+                    "angularSpeed": 500.0,
+                    "attackTrigger": ""
+                },
+                {
+                    "$type": "SteerAttackMixin",
+                    "steerStateIDs": [
+                        "RushAtk"
+                    ],
+                    "startNormalizedTime": 0.46000000834465027,
+                    "endNormalizedTime": 0.47999998927116394,
+                    "angularSpeed": 360.0,
+                    "attackTrigger": ""
+                },
+                {
+                    "$type": "SteerAttackMixin",
+                    "steerStateIDs": [
+                        "MeleeAtk1"
+                    ],
+                    "startNormalizedTime": 0.18000000715255737,
+                    "endNormalizedTime": 0.23000000417232513,
+                    "angularSpeed": 360.0,
+                    "attackTrigger": ""
+                },
+                {
+                    "$type": "SteerAttackMixin",
+                    "steerStateIDs": [
+                        "MeleeAtk2"
+                    ],
+                    "startNormalizedTime": 0.15000000596046448,
+                    "endNormalizedTime": 0.23999999463558197,
+                    "angularSpeed": 360.0,
+                    "attackTrigger": ""
+                },
+                {
+                    "$type": "SteerAttackMixin",
+                    "steerStateIDs": [
+                        "Provoke"
+                    ],
+                    "endNormalizedTime": 0.15000000596046448,
+                    "angularSpeed": 500.0,
+                    "attackTrigger": ""
+                },
+                {
+                    "$type": "SteerAttackTraceMixin",
+                    "steerStateIDs": [
+                        "Turn"
+                    ],
+                    "angularSpeed": 200.0,
+                    "attackTrigger": ""
+                },
+                {
+                    "$type": "SteerAttackMixin",
+                    "steerStateIDs": [
+                        "ChargeAttack"
+                    ],
+                    "startNormalizedTime": 0.029999999329447746,
+                    "endNormalizedTime": 0.11999999731779099,
+                    "angularSpeed": 360.0,
+                    "attackTrigger": ""
+                },
+                {
+                    "$type": "SteerAttackMixin",
+                    "steerStateIDs": [
+                        "PowerAtk1_Combo"
+                    ],
+                    "startNormalizedTime": 0.029999999329447746,
+                    "endNormalizedTime": 0.30000001192092896,
+                    "angularSpeed": 360.0,
+                    "attackTrigger": ""
+                },
+                {
+                    "$type": "SteerAttackMixin",
+                    "steerStateIDs": [
+                        "PowerAtk1"
+                    ],
+                    "startNormalizedTime": 0.029999999329447746,
+                    "endNormalizedTime": 0.11999999731779099,
+                    "angularSpeed": 360.0,
+                    "attackTrigger": ""
+                },
+                {
+                    "$type": "SteerAttackMixin",
+                    "steerStateIDs": [
+                        "PowerAtk1_BS"
+                    ],
+                    "startNormalizedTime": 0.029999999329447746,
+                    "endNormalizedTime": 0.5,
+                    "angularSpeed": 250.0,
+                    "attackTrigger": ""
+                },
+                {
+                    "$type": "SteerAttackMixin",
+                    "steerStateIDs": [
+                        "PowerAtk2"
+                    ],
+                    "endNormalizedTime": 0.30000001192092896,
+                    "angularSpeed": 360.0,
+                    "attackTrigger": ""
+                },
+                {
+                    "$type": "SteerAttackMixin",
+                    "steerStateIDs": [
+                        "BurstAttack",
+                        "BurstAttack_Voice"
+                    ],
+                    "startNormalizedTime": 0.12999999523162842,
+                    "endNormalizedTime": 0.3499999940395355,
+                    "angularSpeed": 360.0,
+                    "attackTrigger": ""
+                },
+                {
+                    "$type": "SteerAttackMixin",
+                    "steerStateIDs": [
+                        "DefendBS"
+                    ],
+                    "endNormalizedTime": 0.6000000238418579,
+                    "angularSpeed": 360.0,
+                    "attackTrigger": ""
+                },
+                {
+                    "$type": "SteerAttackMixin",
+                    "steerStateIDs": [
+                        "Shoot"
+                    ],
+                    "startNormalizedTime": 0.10999999940395355,
+                    "endNormalizedTime": 0.20999999344348907,
+                    "angularSpeed": 360.0,
+                    "attackTrigger": ""
+                },
+                {
+                    "$type": "SteerAttackMixin",
+                    "steerStateIDs": [
+                        "Dodge",
+                        "DodgeAttack"
+                    ],
+                    "endNormalizedTime": 0.05000000074505806,
+                    "angularSpeed": 720.0,
+                    "attackTrigger": ""
+                },
+                {
+                    "$type": "SteerAttackTraceMixin",
+                    "steerStateIDs": [
+                        "CrazyAtk_JumpAtk"
+                    ],
+                    "startNormalizedTime": 0.4000000059604645,
+                    "endNormalizedTime": 0.41999998688697815,
+                    "angularSpeed": 500.0,
+                    "attackTrigger": ""
+                },
+                {
+                    "$type": "SteerAttackMixin",
+                    "steerStateIDs": [
+                        "CrazyAtk_JumpAtk_ASAtk"
+                    ],
+                    "startNormalizedTime": 0.029999999329447746,
+                    "endNormalizedTime": 0.11999999731779099,
+                    "angularSpeed": 360.0,
+                    "attackTrigger": ""
+                },
+                {
+                    "$type": "SteerAttackMixin",
+                    "steerStateIDs": [
+                        "CrazyAtk",
+                        "CrazyAtk_Voice"
+                    ],
+                    "endNormalizedTime": 0.20000000298023224,
+                    "angularSpeed": 360.0,
+                    "attackTrigger": ""
+                },
+                {
+                    "$type": "SteerAttackMixin",
+                    "steerStateIDs": [
+                        "CrazyAtk",
+                        "CrazyAtk_Voice"
+                    ],
+                    "startNormalizedTime": 0.46000000834465027,
+                    "endNormalizedTime": 0.47999998927116394,
+                    "angularSpeed": 360.0,
+                    "attackTrigger": ""
+                },
+                {
+                    "$type": "SteerAttackMixin",
+                    "steerStateIDs": [
+                        "MeleeAttack1_Crazy"
+                    ],
+                    "startNormalizedTime": 0.12999999523162842,
+                    "endNormalizedTime": 0.1899999976158142,
+                    "angularSpeed": 360.0,
+                    "attackTrigger": ""
+                },
+                {
+                    "$type": "SteerAttackMixin",
+                    "steerStateIDs": [
+                        "MeleeAttack2_Crazy"
+                    ],
+                    "startNormalizedTime": 0.14000000059604645,
+                    "endNormalizedTime": 0.20999999344348907,
+                    "angularSpeed": 360.0,
+                    "attackTrigger": ""
+                },
+                {
+                    "$type": "SteerAttackMixin",
+                    "steerStateIDs": [
+                        "MeleeAttack2_2_Crazy"
+                    ],
+                    "endNormalizedTime": 0.15000000596046448,
+                    "angularSpeed": 360.0,
+                    "attackTrigger": ""
+                }
+            ]
+        }
+    },
+    {
+        "Default": {
+            "$type": "ConfigAbility",
+            "abilityName": "Monster_Samurai_Ronin_Alert",
+            "abilityMixins": [
+                {
+                    "$type": "AttachToPoseIDMixin",
+                    "poseIDs": [
+                        0,
+                        1
+                    ],
+                    "modifierName": "Monster_Samurai_Ronin_WeaponBeforeBattle"
+                },
+                {
+                    "$type": "AttachToPoseIDMixin",
+                    "poseIDs": [
+                        1001,
+                        1003,
+                        1004,
+                        1005
+                    ],
+                    "modifierName": "Monster_Samurai_Ronin_WeaponHide"
+                },
+                {
+                    "$type": "AttachToStateIDMixin",
+                    "stateIDs": [
+                        "BeHit",
+                        "BeHitThrow",
+                        "Die",
+                        "Struggle",
+                        "NormalIdle"
+                    ],
+                    "modifierName": "Monster_Samurai_Ronin_WeaponShow",
+                    "predicates": [
+                        {
+                            "$type": "ByAnimatorFloat",
+                            "logic": "Equal",
+                            "ratio": 101.0,
+                            "parameter": "PoseID"
+                        }
+                    ]
+                },
+                {
+                    "$type": "AttachToStateIDMixin",
+                    "stateIDs": [
+                        "Dodge",
+                        "RushAtk"
+                    ],
+                    "modifierName": "Monster_Samurai_Ronin_WeaponShow"
+                },
+                {
+                    "$type": "AttachToNormalizedTimeMixin",
+                    "stateID": "Alert",
+                    "modifierName": "Monster_Samurai_Ronin_AlertWeapon",
+                    "normalizeEnd": 0.18000000715255737
+                },
+                {
+                    "$type": "AttachToPoseIDMixin",
+                    "poseIDs": [
+                        1006
+                    ],
+                    "modifierName": "Monster_Samurai_Ronin_Practice_WeaponShow"
+                },
+                {
+                    "$type": "AttachToAIAlertnessMixin",
+                    "alertness": [
+                        0,
+                        1
+                    ],
+                    "modifierName": "Monster_Samurai_Ronin_AlertPoseChange"
+                },
+                {
+                    "$type": "AttachToStateIDMixin",
+                    "stateIDs": [
+                        "SitDrink"
+                    ],
+                    "modifierName": "Monster_Samurai_Ronin_DrinkEffect"
+                }
+            ],
+            "modifiers": {
+                "Monster_Samurai_Ronin_DrinkEffect": {
+                    "modifierName": "",
+                    "bonusCriticalHurt": 100.0,
+                    "onAdded": [
+                        {
+                            "$type": "AttachEffect",
+                            "healLimitedByCasterMaxHPRatio": "Eff_Monster_Samurai_Ronin_Drink",
+                            "MEMHGJDEPJA": -1.0
+                        }
+                    ]
+                },
+                "Monster_Samurai_Ronin_WeaponBeforeBattle": {
+                    "modifierName": "",
+                    "bonusCriticalHurt": 100.0,
+                    "onAdded": [
+                        {
+                            "$type": "SetWeaponAttachPointRealName",
+                            "canBeHandledOnRecover": true,
+                            "partName": "equip01",
+                            "realName": "WeaponW"
+                        }
+                    ],
+                    "AAICMPHNIIJ": [
+                        {
+                            "$type": "SetWeaponAttachPointRealName",
+                            "partName": "equip01",
+                            "realName": "WeaponW"
+                        }
+                    ],
+                    "onChangeAuthority": [
+                        {
+                            "$type": "SetWeaponAttachPointRealName",
+                            "partName": "equip01",
+                            "realName": "WeaponW"
+                        }
+                    ]
+                },
+                "Monster_Samurai_Ronin_AlertWeapon": {
+                    "modifierName": "",
+                    "bonusCriticalHurt": 100.0,
+                    "onAdded": [
+                        {
+                            "$type": "SetWeaponAttachPointRealName",
+                            "partName": "equip01",
+                            "realName": "WeaponW"
+                        }
+                    ],
+                    "onRemoved": [
+                        {
+                            "$type": "SetWeaponAttachPointRealName",
+                            "partName": "equip01",
+                            "realName": "WeaponR"
+                        }
+                    ]
+                },
+                "Monster_Samurai_Ronin_WeaponShow": {
+                    "modifierName": "",
+                    "bonusCriticalHurt": 100.0,
+                    "thinkInterval": 0.20000000298023224,
+                    "onAdded": [
+                        {
+                            "$type": "SetWeaponAttachPointRealName",
+                            "partName": "equip01",
+                            "realName": "WeaponR"
+                        }
+                    ],
+                    "onThinkInterval": [
+                        {
+                            "$type": "SetWeaponAttachPointRealName",
+                            "partName": "equip01",
+                            "realName": "WeaponR"
+                        }
+                    ]
+                },
+                "Monster_Samurai_Ronin_WeaponHide": {
+                    "modifierName": "",
+                    "bonusCriticalHurt": 100.0,
+                    "onAdded": [
+                        {
+                            "$type": "TriggerHideWeapon",
+                            "canBeHandledOnRecover": true,
+                            "partNames": [
+                                "equip01"
+                            ],
+                            "OMGHJLPGMNJ": true
+                        }
+                    ],
+                    "onRemoved": [
+                        {
+                            "$type": "TriggerHideWeapon",
+                            "visible": true,
+                            "partNames": [
+                                "equip01"
+                            ],
+                            "OMGHJLPGMNJ": true
+                        }
+                    ],
+                    "AAICMPHNIIJ": [
+                        {
+                            "$type": "TriggerHideWeapon",
+                            "partNames": [
+                                "equip01"
+                            ],
+                            "OMGHJLPGMNJ": true
+                        }
+                    ],
+                    "onChangeAuthority": [
+                        {
+                            "$type": "TriggerHideWeapon",
+                            "partNames": [
+                                "equip01"
+                            ],
+                            "OMGHJLPGMNJ": true
+                        }
+                    ]
+                },
+                "Monster_Samurai_Ronin_Practice_WeaponShow": {
+                    "stacking": "MultipleRefresh",
+                    "stackingOption": {
+                        "abilitySpecialName": "",
+                        "maxModifierNumForMultipleType": 1.0
+                    },
+                    "modifierName": "",
+                    "bonusCriticalHurt": 100.0,
+                    "onAdded": [
+                        {
+                            "$type": "SetWeaponAttachPointRealName",
+                            "canBeHandledOnRecover": true,
+                            "partName": "equip01",
+                            "realName": "WeaponR"
+                        }
+                    ],
+                    "onRemoved": [
+                        {
+                            "$type": "SetWeaponAttachPointRealName",
+                            "partName": "equip01",
+                            "realName": "WeaponW"
+                        }
+                    ]
+                },
+                "Monster_Samurai_Ronin_AlertPoseChange": {
+                    "modifierName": "",
+                    "bonusCriticalHurt": 100.0,
+                    "onRemoved": [
+                        {
+                            "$type": "SetPoseBool",
+                            "boolID": "Lie"
+                        },
+                        {
+                            "$type": "SetPoseBool",
+                            "boolID": "Sit"
+                        },
+                        {
+                            "$type": "SetPoseBool",
+                            "boolID": "SitDrink"
+                        },
+                        {
+                            "$type": "SetPoseBool",
+                            "boolID": "SitSleep"
+                        },
+                        {
+                            "$type": "SetPoseBool",
+                            "boolID": "Practice"
+                        }
+                    ]
+                }
+            }
+        }
+    },
+    {
+        "Default": {
+            "$type": "ConfigAbility",
+            "abilityName": "Monster_Samurai_Ronin_01_RushAttack",
+            "abilityMixins": [
+                {
+                    "$type": "AttachToNormalizedTimeMixin",
+                    "stateID": "RushAtk",
+                    "modifierName": "Monster_Samurai_Ronin_01_RushAttack_Move",
+                    "normalizeStart": 0.49000000953674316,
+                    "normalizeEnd": 0.550000011920929
+                },
+                {
+                    "$type": "AttachToNormalizedTimeMixin",
+                    "stateID": "DodgeAttack",
+                    "modifierName": "Monster_Samurai_Ronin_01_RushAttack_Move",
+                    "normalizeStart": 0.49000000953674316,
+                    "normalizeEnd": 0.550000011920929
+                }
+            ],
+            "modifiers": {
+                "Monster_Samurai_Ronin_01_RushAttack_Move": {
+                    "modifierName": "",
+                    "bonusCriticalHurt": 100.0,
+                    "onAdded": [
+                        {
+                            "$type": "EnablePushColliderName",
+                            "pushColliderNames": [
+                                "PushCollider"
+                            ]
+                        },
+                        {
+                            "$type": "AttachEffect",
+                            "healLimitedByCasterMaxHPRatio": "Eff_Monster_Samurai_Ronin_RushAttack_Trail",
+                            "MEMHGJDEPJA": -1.0
+                        },
+                        {
+                            "$type": "FixedMonsterRushMove",
+                            "toPos": {
+                                "$type": "ConfigBornBySelf",
+                                "offset": {
+                                    "AMODPKJAIGF": 0.0,
+                                    "DBJCBJPOOAP": 0.0,
+                                    "JDFJGADACKC": 10.0
+                                }
+                            },
+                            "timeRange": 0.15000000596046448,
+                            "maxRange": 10.0,
+                            "animatorStateIDs": [
+                                "RushAtk",
+                                "DodgeAttack"
+                            ],
+                            "overrideMoveCollider": "",
+                            "KNOAMILLIDH": true
+                        },
+                        {
+                            "$type": "TriggerBullet",
+                            "bulletID": 42508004,
+                            "trackTarget": "Self",
+                            "MALEKPEEJIE": true
+                        }
+                    ],
+                    "onRemoved": [
+                        {
+                            "$type": "EnablePushColliderName",
+                            "pushColliderNames": [
+                                "PushCollider"
+                            ],
+                            "setEnable": true
+                        },
+                        {
+                            "$type": "KillGadget",
+                            "gadgetInfo": {
+                                "sortType": "Reversed",
+                                "configID": 42508004
+                            }
+                        }
+                    ]
+                }
+            }
+        }
+    },
+    {
+        "Default": {
+            "$type": "ConfigAbility",
+            "abilityName": "Monster_Samurai_Hatamoto_BurstAttack",
+            "abilityMixins": [
+                {
+                    "$type": "AttachToNormalizedTimeMixin",
+                    "stateID": "BurstAttack",
+                    "modifierName": "Monster_Samurai_Hatamoto_BurstAttack_Move",
+                    "normalizeStart": 0.4099999964237213,
+                    "normalizeEnd": 0.5
+                },
+                {
+                    "$type": "AttachToNormalizedTimeMixin",
+                    "stateID": "Combo_BurstAttack",
+                    "modifierName": "Monster_Samurai_Hatamoto_BurstAttack_Move",
+                    "normalizeStart": 0.4099999964237213,
+                    "normalizeEnd": 0.5
+                },
+                {
+                    "$type": "AttachToNormalizedTimeMixin",
+                    "stateID": "BurstAttack_Voice",
+                    "modifierName": "Monster_Samurai_Hatamoto_BurstAttack_Move",
+                    "normalizeStart": 0.4099999964237213,
+                    "normalizeEnd": 0.5
+                }
+            ],
+            "modifiers": {
+                "Monster_Samurai_Hatamoto_BurstAttack_Move": {
+                    "modifierName": "",
+                    "bonusCriticalHurt": 100.0,
+                    "onAdded": [
+                        {
+                            "$type": "EnablePushColliderName",
+                            "pushColliderNames": [
+                                "PushCollider"
+                            ]
+                        },
+                        {
+                            "$type": "AttachEffect",
+                            "healLimitedByCasterMaxHPRatio": "Eff_Monster_Samurai_Ronin_BurstStrike_Trail",
+                            "MEMHGJDEPJA": -1.0
+                        },
+                        {
+                            "$type": "FixedMonsterRushMove",
+                            "toPos": {
+                                "$type": "ConfigBornBySelf",
+                                "offset": {
+                                    "AMODPKJAIGF": 0.0,
+                                    "DBJCBJPOOAP": 0.0,
+                                    "JDFJGADACKC": 15.0
+                                }
+                            },
+                            "timeRange": 0.1899999976158142,
+                            "maxRange": 15.0,
+                            "animatorStateIDs": [
+                                "BurstAttack",
+                                "Combo_BurstAttack",
+                                "BurstAttack_Voice"
+                            ],
+                            "overrideMoveCollider": "",
+                            "KNOAMILLIDH": true
+                        },
+                        {
+                            "$type": "IgnoreMoveColToRockCol",
+                            "FDBPMODDDBM": true
+                        }
+                    ],
+                    "onRemoved": [
+                        {
+                            "$type": "EnablePushColliderName",
+                            "pushColliderNames": [
+                                "PushCollider"
+                            ],
+                            "setEnable": true
+                        },
+                        {
+                            "$type": "IgnoreMoveColToRockCol"
+                        }
+                    ]
+                },
+                "Monster_Hatamoto_RushAtk_Timer": {
+                    "modifierName": "",
+                    "DCEFILPANJI": 0.5,
+                    "bonusCriticalHurt": 100.0,
+                    "onAdded": [
+                        {
+                            "$type": "SetGlobalValue",
+                            "ratio": 1.0,
+                            "key": "_HATAMOTO_RUSHATK_HITED",
+                            "maxValue": 0.0,
+                            "minValue": 0.0
+                        }
+                    ],
+                    "onRemoved": [
+                        {
+                            "$type": "SetGlobalValue",
+                            "RotationDampTime": true,
+                            "ratio": 0.0,
+                            "key": "_HATAMOTO_RUSHATK_HITED",
+                            "maxValue": 0.0,
+                            "minValue": 0.0
+                        }
+                    ]
+                }
+            }
+        }
+    },
+    {
+        "Default": {
+            "$type": "ConfigAbility",
+            "abilityName": "Monster_Samurai_Ronin_ForceDodge",
+            "modifiers": {
+                "Monster_Samurai_Ronin_ForceDodge_Handler": {
+                    "modifierName": "",
+                    "bonusCriticalHurt": 100.0,
+                    "onAdded": [
+                        {
+                            "$type": "SetAnimatorTrigger",
+                            "predicates": [
+                                {
+                                    "$type": "ByTargetGlobalValue",
+                                    "key": "_SAMURAI_RONIN_ENABLE_DODGE",
+                                    "ratio": 1.0
+                                }
+                            ],
+                            "triggerID": "ForceDodge"
+                        },
+                        {
+                            "$type": "ApplyModifier",
+                            "modifierName": "Monster_Samurai_Ronin_ForceDodge_Timer"
+                        }
+                    ]
+                },
+                "Monster_Samurai_Ronin_ForceDodge_Timer": {
+                    "modifierName": "",
+                    "DCEFILPANJI": 10.0,
+                    "bonusCriticalHurt": 100.0,
+                    "onAdded": [
+                        {
+                            "$type": "AddGlobalValue",
+                            "ratio": -2.0,
+                            "key": "_SAMURAI_RONIN_ENABLE_DODGE",
+                            "useLimitRange": true,
+                            "maxValue": 1.0,
+                            "minValue": 0.0
+                        }
+                    ],
+                    "onRemoved": [
+                        {
+                            "$type": "AddGlobalValue",
+                            "ratio": 1.0,
+                            "key": "_SAMURAI_RONIN_ENABLE_DODGE",
+                            "useLimitRange": true,
+                            "maxValue": 1.0,
+                            "minValue": 0.0
+                        }
+                    ]
+                }
+            },
+            "onAdded": [
+                {
+                    "$type": "AddGlobalValue",
+                    "ratio": 1.0,
+                    "key": "_SAMURAI_RONIN_ENABLE_DODGE",
+                    "useLimitRange": true,
+                    "maxValue": 1.0,
+                    "minValue": 0.0
+                }
+            ]
+        }
+    },
+    {
+        "Default": {
+            "$type": "ConfigAbility",
+            "abilityName": "Monster_Samurai_Ronin_Shoot",
+            "abilityMixins": [
+                {
+                    "$type": "AttachToStateIDMixin",
+                    "stateIDs": [
+                        "Shoot"
+                    ],
+                    "modifierName": "Monster_Samurai_Ronin_Shoot_BeControlled"
+                }
+            ],
+            "modifiers": {
+                "Monster_Samurai_Ronin_Shoot_BeControlled": {
+                    "modifierName": "",
+                    "bonusCriticalHurt": 100.0,
+                    "modifierMixins": [
+                        {
+                            "$type": "AttachToAbilityStateMixin",
+                            "abilityStates": [
+                                "ElementFreeze",
+                                "ElementPetrifaction"
+                            ],
+                            "modifierName": "Monster_Samurai_Ronin_Shoot_OutTrigger"
+                        }
+                    ]
+                },
+                "Monster_Samurai_Ronin_Shoot_OutTrigger": {
+                    "modifierName": "",
+                    "bonusCriticalHurt": 100.0,
+                    "onAdded": [
+                        {
+                            "$type": "SetAnimatorTrigger",
+                            "triggerID": "OutOfShoot"
+                        }
+                    ]
+                }
+            },
+            "onAbilityStart": [
+                {
+                    "$type": "TriggerBullet",
+                    "bulletID": 42508001,
+                    "born": {
+                        "$type": "ConfigBornByAttachPoint",
+                        "direction": {
+                            "$type": "ConfigDirectionByAttackTarget",
+                            "maxAngleType": "Vertical",
+                            "maxAngle": 45.0
+                        },
+                        "attachPointName": "WeaponL"
+                    }
+                }
+            ]
+        }
+    },
+    {
+        "Default": {
+            "$type": "ConfigAbility",
+            "abilityName": "Monster_Samurai_Ronin_ShootDamage",
+            "modifiers": {
+                "Monster_Samurai_Ronin_ShootBullet": {
+                    "modifierName": "",
+                    "bonusCriticalHurt": 100.0,
+                    "onAdded": [
+                        {
+                            "$type": "AttachEffect",
+                            "healLimitedByCasterMaxHPRatio": "Eff_Monster_Samurai_Ronin_Shoot_Bullet",
+                            "MEMHGJDEPJA": -1.0
+                        }
+                    ]
+                }
+            },
+            "onAdded": [
+                {
+                    "$type": "ApplyModifier",
+                    "modifierName": "Monster_Samurai_Ronin_ShootBullet"
+                }
+            ],
+            "onAbilityStart": [
+                {
+                    "$type": "RemoveModifier",
+                    "modifierName": "Monster_Samurai_Ronin_ShootBullet"
+                },
+                {
+                    "$type": "TriggerAttackEvent",
+                    "attackEvent": {
+                        "attackPattern": {
+                            "$type": "ConfigAttackSphere",
+                            "triggerType": "TriggerNoRepeat",
+                            "checkHitLayerType": "Both",
+                            "born": {
+                                "$type": "ConfigBornByCollisionPoint"
+                            },
+                            "ILKJCNJJPEL": 0.75
+                        },
+                        "attackInfo": {
+                            "attackTag": "",
+                            "attenuationTag": "",
+                            "attenuationGroup": "default",
+                            "attackProperty": {
+                                "EHFOGJFHDPE": 0.6875,
+                                "GDADKLDBGIM": 0.0,
+                                "elementType": "Electric",
+                                "bonusCriticalHurt": 50.0,
+                                "strikeType": "Spear",
+                                "enBreak": 50.0
+                            },
+                            "hitPattern": {
+                                "onHitEffectName": "default",
+                                "hitImpulseType": "LV2"
+                            },
+                            "canBeModifiedBy": "OriginOwner"
+                        }
+                    },
+                    "targetType": "Enemy"
+                }
+            ]
+        }
+    },
+    {
+        "Default": {
+            "$type": "ConfigAbility",
+            "abilityName": "Monster_Samurai_Ronin_EquipHide",
+            "onAbilityStart": [
+                {
+                    "$type": "TriggerSetVisible"
+                }
+            ]
+        }
+    },
+    {
+        "Default": {
+            "$type": "ConfigAbility",
+            "abilityName": "Monster_Samurai_Ronin_PowderAttack",
+            "modifiers": {
+                "Monster_Samurai_Ronin_PowderAttack": {
+                    "modifierName": "",
+                    "DCEFILPANJI": 0.30000001192092896,
+                    "bonusCriticalHurt": 100.0,
+                    "onAdded": [
+                        {
+                            "$type": "FireEffect",
+                            "healLimitedByCasterMaxHPRatio": "Eff_Monster_Samurai_Ronin_PowderAttack",
+                            "MEMHGJDEPJA": -1.0
+                        },
+                        {
+                            "$type": "TriggerAttackEvent",
+                            "attackEvent": {
+                                "attackPattern": {
+                                    "$type": "ConfigAttackBox",
+                                    "triggerType": "TriggerNoRepeat",
+                                    "born": {
+                                        "$type": "ConfigBornBySelf",
+                                        "offset": {
+                                            "AMODPKJAIGF": 0.0,
+                                            "DBJCBJPOOAP": 0.0,
+                                            "JDFJGADACKC": 3.0
+                                        }
+                                    },
+                                    "size": {
+                                        "AMODPKJAIGF": 3.5,
+                                        "DBJCBJPOOAP": 2.0,
+                                        "JDFJGADACKC": 2.5
+                                    }
+                                },
+                                "attackInfo": {
+                                    "attackTag": "",
+                                    "attenuationTag": "",
+                                    "attenuationGroup": "default",
+                                    "attackProperty": {
+                                        "EHFOGJFHDPE": 0.375,
+                                        "GDADKLDBGIM": 0.0,
+                                        "bonusCriticalHurt": 100.0,
+                                        "strikeType": "Blunt",
+                                        "enBreak": 101.0
+                                    },
+                                    "hitPattern": {
+                                        "onHitEffectName": "default",
+                                        "hitImpulseType": "LV4"
+                                    },
+                                    "canBeModifiedBy": "OriginOwner"
+                                }
+                            },
+                            "targetType": "Enemy"
+                        }
+                    ],
+                    "onRemoved": [
+                        {
+                            "$type": "TriggerAttackEvent",
+                            "attackEvent": {
+                                "attackPattern": {
+                                    "$type": "ConfigAttackBox",
+                                    "triggerType": "TriggerNoRepeat",
+                                    "born": {
+                                        "$type": "ConfigBornBySelf",
+                                        "offset": {
+                                            "AMODPKJAIGF": 0.0,
+                                            "DBJCBJPOOAP": 0.0,
+                                            "JDFJGADACKC": 1.5
+                                        }
+                                    },
+                                    "size": {
+                                        "AMODPKJAIGF": 3.5,
+                                        "DBJCBJPOOAP": 2.0,
+                                        "JDFJGADACKC": 2.5
+                                    }
+                                },
+                                "attackInfo": {
+                                    "attackTag": "",
+                                    "attenuationTag": "",
+                                    "attenuationGroup": "default",
+                                    "attackProperty": {
+                                        "EHFOGJFHDPE": 0.375,
+                                        "GDADKLDBGIM": 0.0,
+                                        "bonusCriticalHurt": 100.0,
+                                        "strikeType": "Blunt",
+                                        "enBreak": 101.0
+                                    },
+                                    "hitPattern": {
+                                        "onHitEffectName": "default",
+                                        "hitImpulseType": "LV4"
+                                    },
+                                    "canBeModifiedBy": "OriginOwner"
+                                }
+                            },
+                            "targetType": "Enemy"
+                        }
+                    ]
+                }
+            },
+            "onAbilityStart": [
+                {
+                    "$type": "CreateGadget",
+                    "born": {
+                        "$type": "ConfigBornBySelf"
+                    },
+                    "gadgetID": 42508003
+                }
+            ]
+        }
+    },
+    {
+        "Default": {
+            "$type": "ConfigAbility",
+            "abilityName": "Monster_Samurai_Ronin_PowderAttackObj",
+            "modifiers": {
+                "Monster_Samurai_Ronin_PowderAttackDelay": {
+                    "modifierName": "",
+                    "DCEFILPANJI": 0.4169999957084656,
+                    "bonusCriticalHurt": 100.0,
+                    "onRemoved": [
+                        {
+                            "$type": "FireEffect",
+                            "healLimitedByCasterMaxHPRatio": "Eff_Monster_Samurai_Ronin_PowderAttack",
+                            "MEMHGJDEPJA": -1.0
+                        },
+                        {
+                            "$type": "ApplyModifier",
+                            "modifierName": "Monster_Samurai_Ronin_PowderAttack"
+                        }
+                    ]
+                },
+                "Monster_Samurai_Ronin_PowderAttack": {
+                    "modifierName": "",
+                    "DCEFILPANJI": 0.4000000059604645,
+                    "bonusCriticalHurt": 100.0,
+                    "thinkInterval": 0.20000000298023224,
+                    "onThinkInterval": [
+                        {
+                            "$type": "TriggerAttackEvent",
+                            "attackEvent": {
+                                "attackPattern": {
+                                    "$type": "ConfigAttackBox",
+                                    "triggerType": "TriggerNoRepeat",
+                                    "born": {
+                                        "$type": "ConfigBornBySelf",
+                                        "offset": {
+                                            "AMODPKJAIGF": 0.0,
+                                            "DBJCBJPOOAP": 1.0,
+                                            "JDFJGADACKC": 0.0
+                                        }
+                                    },
+                                    "size": {
+                                        "AMODPKJAIGF": 3.5,
+                                        "DBJCBJPOOAP": 2.0,
+                                        "JDFJGADACKC": 2.5
+                                    }
+                                },
+                                "attackInfo": {
+                                    "attackTag": "",
+                                    "attenuationTag": "",
+                                    "attenuationGroup": "default",
+                                    "attackProperty": {
+                                        "EHFOGJFHDPE": 0.375,
+                                        "GDADKLDBGIM": 0.0,
+                                        "elementType": "Fire",
+                                        "bonusCriticalHurt": 50.0,
+                                        "strikeType": "Blunt",
+                                        "enBreak": 101.0
+                                    },
+                                    "hitPattern": {
+                                        "onHitEffectName": "default",
+                                        "hitImpulseType": "LV4"
+                                    }
+                                }
+                            },
+                            "targetType": "Enemy"
+                        }
+                    ]
+                }
+            },
+            "onAdded": [
+                {
+                    "$type": "ApplyModifier",
+                    "modifierName": "Monster_Samurai_Ronin_PowderAttackDelay"
+                }
+            ]
+        }
+    },
+    {
+        "Default": {
+            "$type": "ConfigAbility",
+            "abilityName": "Monster_Samurai_Ronin_OutOfBattle",
+            "abilityMixins": [
+                {
+                    "$type": "AttachToPoseIDMixin",
+                    "poseIDs": [
+                        901
+                    ],
+                    "modifierName": "Monster_Samurai_Ronin_OutOfBattle_Trigger"
+                },
+                {
+                    "$type": "AttachToStateIDMixin",
+                    "stateIDs": [
+                        "OutOfBattle"
+                    ],
+                    "modifierName": "Monster_Samurai_Ronin_OutOfBattle_HideWeaponForSure"
+                },
+                {
+                    "$type": "AttachToNormalizedTimeMixin",
+                    "stateID": "OutOfBattle",
+                    "modifierName": "Monster_Samurai_Ronin_OutOfBattle_HideWeapon",
+                    "normalizeStart": 0.5419999957084656
+                }
+            ],
+            "modifiers": {
+                "Samurai_Ronin_HideHitBox_Empty": {
+                    "modifierName": "",
+                    "bonusCriticalHurt": 100.0
+                },
+                "Samurai_Ronin_HideHitBox": {
+                    "modifierName": "",
+                    "bonusCriticalHurt": 100.0,
+                    "state": "DenyLockOn",
+                    "onAdded": [
+                        {
+                            "$type": "EnableHitBoxByName",
+                            "hitBoxNames": [
+                                "HitBox",
+                                "HeadBox"
+                            ]
+                        },
+                        {
+                            "$type": "KillSelf"
+                        }
+                    ]
+                },
+                "Monster_Samurai_Ronin_OutOfBattle_Trigger": {
+                    "modifierName": "",
+                    "bonusCriticalHurt": 100.0,
+                    "onAdded": [
+                        {
+                            "$type": "SetAnimatorTrigger",
+                            "triggerID": "OutOfBattle"
+                        }
+                    ]
+                },
+                "Monster_Samurai_Ronin_OutOfBattle_HideWeaponForSure": {
+                    "modifierName": "",
+                    "bonusCriticalHurt": 100.0,
+                    "onRemoved": [
+                        {
+                            "$type": "SetWeaponAttachPointRealName",
+                            "partName": "equip01",
+                            "realName": "WeaponW"
+                        }
+                    ]
+                },
+                "Monster_Samurai_Ronin_OutOfBattle_HideWeapon": {
+                    "modifierName": "",
+                    "bonusCriticalHurt": 100.0,
+                    "onAdded": [
+                        {
+                            "$type": "SetWeaponAttachPointRealName",
+                            "partName": "equip01",
+                            "realName": "WeaponW"
+                        }
+                    ]
+                }
+            }
+        }
+    },
+    {
+        "Default": {
+            "$type": "ConfigAbility",
+            "abilityName": "Monster_Samurai_Hatamoto_Block",
+            "abilityMixins": [
+                {
+                    "$type": "AttachToStateIDMixin",
+                    "stateIDs": [
+                        "DefendBS",
+                        "DefendLoop",
+                        "DefendHit"
+                    ],
+                    "modifierName": "Monster_Samurai_Hatamoto_Block_Duration"
+                }
+            ],
+            "modifiers": {
+                "Monster_Samurai_Hatamoto_Block_Duration": {
+                    "modifierName": "",
+                    "bonusCriticalHurt": 100.0,
+                    "modifierMixins": [
+                        {
+                            "$type": "MonsterDefendMixin",
+                            "stateIDs": [
+                                "DefendLoop",
+                                "DefendHit"
+                            ],
+                            "defendTriggerID": "DefendHit",
+                            "defendAngle": 90.0,
+                            "defendProbability": 1.0,
+                            "defendProbabilityDelta": 0.0,
+                            "EMAPJEBEBEI": 0.0,
+                            "LFDFLJIPDPG": 0,
+                            "onDefendSucceded": [
+                                {
+                                    "$type": "SetGlobalValue",
+                                    "ratio": 1.0,
+                                    "key": "_SAMURAI_HATAMOTO_BLOCK_SUCCESS",
+                                    "maxValue": 0.0,
+                                    "minValue": 0.0
+                                },
+                                {
+                                    "$type": "Predicated",
+                                    "targetPredicates": [
+                                        {
+                                            "$type": "ByTargetGlobalValue",
+                                            "key": "_BLADEMASTER_LEVEL",
+                                            "ratio": 0.0,
+                                            "compareType": "NoneOrEqual"
+                                        }
+                                    ],
+                                    "successActions": [
+                                        {
+                                            "$type": "FireEffect",
+                                            "otherTargets": {
+                                                "$type": "SelectTargetsByEquipParts",
+                                                "equipPartNames": [
+                                                    "equip01"
+                                                ]
+                                            },
+                                            "healLimitedByCasterMaxHPRatio": "Eff_Monster_Samurai_Ronin_BlockHit",
+                                            "born": {
+                                                "$type": "ConfigBornByAttachPoint",
+                                                "attachPointName": "BlockPoint"
+                                            },
+                                            "MEMHGJDEPJA": -1.0
+                                        }
+                                    ],
+                                    "failActions": [
+                                        {
+                                            "$type": "FireEffect",
+                                            "otherTargets": {
+                                                "$type": "SelectTargetsByEquipParts",
+                                                "equipPartNames": [
+                                                    "equip01"
+                                                ]
+                                            },
+                                            "healLimitedByCasterMaxHPRatio": "Eff_Monster_Samurai_Ronin_BlockHit_BladeMaster",
+                                            "born": {
+                                                "$type": "ConfigBornByAttachPoint",
+                                                "attachPointName": "BlockPoint"
+                                            },
+                                            "MEMHGJDEPJA": -1.0
+                                        }
+                                    ]
+                                },
+                                {
+                                    "$type": "AddGlobalValue",
+                                    "predicates": [
+                                        {
+                                            "$type": "ByTargetGlobalValue",
+                                            "key": "_BLADEMASTER_LEVEL",
+                                            "ratio": 1.0,
+                                            "compareType": "MoreThanAndEqual"
+                                        }
+                                    ],
+                                    "ratio": 5.0,
+                                    "key": "_BE_HIT_TIMES",
+                                    "useLimitRange": true,
+                                    "maxValue": 5.0,
+                                    "minValue": 0.0
+                                }
+                            ]
+                        },
+                        {
+                            "$type": "VelocityForceMixin",
+                            "excludeForces": [
+                                "RetreatAirType"
+                            ]
+                        }
+                    ],
+                    "properties": {
+                        "Actor_EndureDelta": 0.5
+                    },
+                    "onAdded": [
+                        {
+                            "$type": "SetPoseBool",
+                            "boolID": "InBlock",
+                            "ratio": true
+                        }
+                    ],
+                    "onRemoved": [
+                        {
+                            "$type": "SetPoseBool",
+                            "boolID": "InBlock"
+                        }
+                    ],
+                    "onBeingHit": [
+                        {
+                            "$type": "Predicated",
+                            "target": "Target",
+                            "targetPredicates": [
+                                {
+                                    "$type": "ByEntityTypes",
+                                    "entityTypes": [
+                                        "Avatar"
+                                    ]
+                                }
+                            ],
+                            "successActions": [
+                                {
+                                    "$type": "Predicated",
+                                    "target": "Target",
+                                    "targetPredicates": [
+                                        {
+                                            "$type": "ByTargetGlobalValue",
+                                            "key": "_SAMURAI_HATAMOTO_BLOCK_SUCCESS",
+                                            "ratio": 0.0,
+                                            "forceByCaster": true,
+                                            "compareType": "NoneOrEqual"
+                                        },
+                                        {
+                                            "$type": "BySelfForwardAndTargetPosition",
+                                            "logic": "Lesser",
+                                            "ratio": 90.0
+                                        }
+                                    ],
+                                    "successActions": [
+                                        {
+                                            "$type": "SetAnimatorTrigger",
+                                            "predicates": [
+                                                {
+                                                    "$type": "ByHitImpulse",
+                                                    "hitImpulse": 0.0
+                                                },
+                                                {
+                                                    "$type": "ByTargetGlobalValue",
+                                                    "key": "_BLADEMASTER_LEVEL",
+                                                    "ratio": 0.0,
+                                                    "compareType": "NoneOrEqual"
+                                                }
+                                            ],
+                                            "triggerID": "DefendBreak"
+                                        }
+                                    ]
+                                }
+                            ],
+                            "failActions": [
+                                {
+                                    "$type": "Predicated",
+                                    "target": "TargetOriginOwner",
+                                    "targetPredicates": [
+                                        {
+                                            "$type": "ByTargetGlobalValue",
+                                            "key": "_SAMURAI_HATAMOTO_BLOCK_SUCCESS",
+                                            "ratio": 0.0,
+                                            "forceByCaster": true,
+                                            "compareType": "NoneOrEqual"
+                                        },
+                                        {
+                                            "$type": "BySelfForwardAndTargetPosition",
+                                            "logic": "Lesser",
+                                            "ratio": 90.0
+                                        }
+                                    ],
+                                    "successActions": [
+                                        {
+                                            "$type": "SetAnimatorTrigger",
+                                            "predicates": [
+                                                {
+                                                    "$type": "ByHitImpulse",
+                                                    "hitImpulse": 0.0
+                                                }
+                                            ],
+                                            "triggerID": "DefendBreak"
+                                        }
+                                    ]
+                                }
+                            ]
+                        },
+                        {
+                            "$type": "SetGlobalValue",
+                            "ratio": 0.0,
+                            "key": "_SAMURAI_HATAMOTO_BLOCK_SUCCESS",
+                            "maxValue": 0.0,
+                            "minValue": 0.0
+                        }
+                    ]
+                }
+            }
+        }
+    },
+    {
+        "Default": {
+            "$type": "ConfigAbility",
+            "abilityName": "Monster_Samurai_Rushatk_Damage",
+            "onAbilityStart": [
+                {
+                    "$type": "Predicated",
+                    "target": "Target",
+                    "targetPredicates": [
+                        {
+                            "$type": "ByEntityTypes",
+                            "entityTypes": [
+                                "Avatar"
+                            ]
+                        }
+                    ],
+                    "successActions": [
+                        {
+                            "$type": "DamageByAttackValue",
+                            "target": "Target",
+                            "attackInfo": {
+                                "attackTag": "Monster_BladeMaster_BeBlockAttack",
+                                "attenuationTag": "",
+                                "attenuationGroup": "default",
+                                "attackProperty": {
+                                    "EHFOGJFHDPE": 1.5,
+                                    "GDADKLDBGIM": 0.0,
+                                    "bonusCriticalHurt": 100.0,
+                                    "strikeType": "Slash",
+                                    "enBreak": 100.0,
+                                    "attackType": "Melee"
+                                },
+                                "hitPattern": {
+                                    "onHitEffectName": "default",
+                                    "hitImpulseType": "LV4"
+                                },
+                                "canBeModifiedBy": "OriginOwner"
+                            }
+                        }
+                    ]
+                }
+            ]
+        }
+    },
+    {
+        "Default": {
+            "$type": "ConfigAbility",
+            "abilityName": "Samurai_Destroy_Rock",
+            "onAbilityStart": [
+                {
+                    "$type": "Predicated",
+                    "target": "Target",
+                    "targetPredicates": [
+                        {
+                            "$type": "ByEntityTypes",
+                            "entityTypes": [
+                                "Avatar"
+                            ]
+                        }
+                    ],
+                    "failActions": [
+                        {
+                            "$type": "TriggerAttackEvent",
+                            "attackEvent": {
+                                "attackPattern": {
+                                    "$type": "ConfigAttackSphere",
+                                    "triggerType": "TriggerNoRepeat",
+                                    "born": {
+                                        "$type": "ConfigBornByCollisionPoint"
+                                    },
+                                    "ILKJCNJJPEL": 2.0
+                                },
+                                "attackInfo": {
+                                    "attackTag": "",
+                                    "attenuationTag": "",
+                                    "attenuationGroup": "default",
+                                    "attackProperty": {
+                                        "EHFOGJFHDPE": 0.0,
+                                        "GDADKLDBGIM": 0.0,
+                                        "bonusCriticalHurt": 100.0,
+                                        "strikeType": "Blunt",
+                                        "enBreak": 5000.0
+                                    },
+                                    "hitPattern": {
+                                        "onHitEffectName": "",
+                                        "hitImpulseType": "LV0"
+                                    }
+                                }
+                            },
+                            "targetType": "Enemy"
+                        }
+                    ]
+                }
+            ]
+        }
+    },
+    {
+        "Default": {
+            "$type": "ConfigAbility",
+            "abilityName": "Monster_Samurai_Ronin_SevenBlade_Affix",
+            "modifiers": {
+                "Monster_Samurai_Ronin_SevenBlade_Affix1": {
+                    "modifierName": "",
+                    "bonusCriticalHurt": 100.0,
+                    "onAdded": [
+                        {
+                            "$type": "SetAISkillGCD",
+                            "value": 1.0
+                        }
+                    ]
+                },
+                "Monster_Samurai_Ronin_SevenBlade_Affix2": {
+                    "modifierName": "",
+                    "bonusCriticalHurt": 100.0,
+                    "properties": {
+                        "Actor_MaxHPRatio": 0.25,
+                        "Actor_EndureDelta": 0.10000000149011612
+                    },
+                    "onAdded": [
+                        {
+                            "$type": "SetAISkillGCD",
+                            "value": 1.0
+                        }
+                    ]
+                },
+                "Monster_Samurai_Ronin_SevenBlade_Affix3": {
+                    "modifierName": "",
+                    "bonusCriticalHurt": 100.0,
+                    "properties": {
+                        "Actor_MaxHPRatio": 0.5,
+                        "Actor_EndureDelta": 0.10000000149011612
+                    },
+                    "onAdded": [
+                        {
+                            "$type": "SetAISkillGCD",
+                            "value": 1.0
+                        }
+                    ]
+                },
+                "Monster_Samurai_Ronin_SevenBlade_Affix6": {
+                    "modifierName": "",
+                    "bonusCriticalHurt": 100.0,
+                    "properties": {
+                        "Actor_MaxHPRatio": 1.5,
+                        "Actor_EndureDelta": 0.009999999776482582
+                    },
+                    "onAdded": [
+                        {
+                            "$type": "SetAISkillGCD",
+                            "value": 0.5
+                        }
+                    ]
+                }
+            },
+            "onAdded": [
+                {
+                    "$type": "ApplyModifier",
+                    "predicates": [
+                        {
+                            "$type": "ByTargetGlobalValue",
+                            "key": "_MONSTERAFFIX_SAMURAI_SEVENBLADE_STATE",
+                            "ratio": 1.0
+                        }
+                    ],
+                    "modifierName": "Monster_Samurai_Ronin_SevenBlade_Affix1"
+                },
+                {
+                    "$type": "ApplyModifier",
+                    "predicates": [
+                        {
+                            "$type": "ByTargetGlobalValue",
+                            "key": "_MONSTERAFFIX_SAMURAI_SEVENBLADE_STATE",
+                            "ratio": 2.0
+                        }
+                    ],
+                    "modifierName": "Monster_Samurai_Ronin_SevenBlade_Affix2"
+                },
+                {
+                    "$type": "ApplyModifier",
+                    "predicates": [
+                        {
+                            "$type": "ByTargetGlobalValue",
+                            "key": "_MONSTERAFFIX_SAMURAI_SEVENBLADE_STATE",
+                            "ratio": 3.0
+                        }
+                    ],
+                    "modifierName": "Monster_Samurai_Ronin_SevenBlade_Affix3"
+                },
+                {
+                    "$type": "ApplyModifier",
+                    "predicates": [
+                        {
+                            "$type": "ByTargetGlobalValue",
+                            "key": "_MONSTERAFFIX_SAMURAI_SEVENBLADE_STATE",
+                            "ratio": 6.0
+                        }
+                    ],
+                    "modifierName": "Monster_Samurai_Ronin_SevenBlade_Affix6"
+                }
+            ]
+        }
+    }
+]

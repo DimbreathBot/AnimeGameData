@@ -1,0 +1,1144 @@
+[
+    {
+        "Default": {
+            "$type": "ConfigAbility",
+            "abilityName": "Monster_Apparatus_Enigma_Born",
+            "abilityMixins": [
+                {
+                    "$type": "AttachToAbilityStateMixin",
+                    "abilityStates": [
+                        "ElementFrozen",
+                        "ElementPetrifaction"
+                    ],
+                    "modifierName": "Monster_Apparatus_Enigma_Render_Set"
+                }
+            ],
+            "modifiers": {
+                "Monster_Apparatus_Enigma_Render_Set": {
+                    "modifierName": "",
+                    "bonusCriticalHurt": 100.0,
+                    "onAdded": [
+                        {
+                            "$type": "TriggerSetRenderersEnable",
+                            "renderNames": [
+                                "DroneShield",
+                                "FloraShield",
+                                "InsectaShield",
+                                "NettlerShield"
+                            ]
+                        }
+                    ],
+                    "onRemoved": [
+                        {
+                            "$type": "TriggerSetRenderersEnable",
+                            "renderNames": [
+                                "DroneShield",
+                                "FloraShield",
+                                "InsectaShield",
+                                "NettlerShield"
+                            ],
+                            "setEnable": true
+                        }
+                    ]
+                }
+            },
+            "onAdded": [
+                {
+                    "$type": "AddGlobalValue",
+                    "ratio": -1.0,
+                    "key": "_MONSTER_Apparatus_Enigma_Protected",
+                    "useLimitRange": true,
+                    "maxValue": 1.0,
+                    "minValue": 0.0
+                },
+                {
+                    "$type": "TriggerAbility",
+                    "predicates": [
+                        {
+                            "$type": "ByAnimatorFloat",
+                            "logic": "Equal",
+                            "ratio": 100.0,
+                            "parameter": "PoseID"
+                        }
+                    ],
+                    "abilityName": "Monster_Apparatus_Enigma_Weakness"
+                }
+            ],
+            "onKill": [
+                {
+                    "$type": "TriggerSetRenderersEnable",
+                    "renderNames": [
+                        "DroneShield",
+                        "FloraShield",
+                        "InsectaShield",
+                        "NettlerShield"
+                    ]
+                }
+            ]
+        }
+    },
+    {
+        "Default": {
+            "$type": "ConfigAbility",
+            "abilityName": "Monster_Apparatus_Enigma_PowerOff",
+            "abilityMixins": [
+                {
+                    "$type": "AttachToStateIDMixin",
+                    "stateIDs": [
+                        "Born"
+                    ],
+                    "modifierName": "UNIQUE_Enigma_PowerOff",
+                    "predicates": [
+                        {
+                            "$type": "ByAnimatorFloat",
+                            "logic": "Equal",
+                            "ratio": 101.0,
+                            "parameter": "PoseID"
+                        }
+                    ],
+                    "isCheckOnAttach": true
+                },
+                {
+                    "$type": "AttachToStateIDMixin",
+                    "stateIDs": [
+                        "NormalIdle_PowerOff",
+                        "PowerOff_WakeUp"
+                    ],
+                    "modifierName": "UNIQUE_Enigma_PowerOff",
+                    "isCheckOnAttach": true
+                }
+            ],
+            "modifiers": {
+                "UNIQUE_Enigma_PowerOff": {
+                    "modifierName": "",
+                    "isUnique": true,
+                    "bonusCriticalHurt": 100.0,
+                    "properties": {
+                        "Entity_MassRatio": 1000.0,
+                        "Entity_WeightRatio": 5.0,
+                        "Actor_EndureDelta": 0.0
+                    },
+                    "onAdded": [
+                        {
+                            "$type": "AttachModifier",
+                            "modifierName": "PowerOff_Invincible"
+                        },
+                        {
+                            "$type": "AttachModifier",
+                            "modifierName": "PowerOff_IsGhostToAllied"
+                        },
+                        {
+                            "$type": "AttachModifier",
+                            "modifierName": "PowerOff_IsGhostToEnemy"
+                        },
+                        {
+                            "$type": "AttachModifier",
+                            "modifierName": "PowerOff_MuteTaunt"
+                        },
+                        {
+                            "$type": "AttachModifier",
+                            "modifierName": "PowerOff_DenyLockOn"
+                        },
+                        {
+                            "$type": "HideUIBillBoard",
+                            "hide": true
+                        },
+                        {
+                            "$type": "SetPoseBool",
+                            "boolID": "PowerOff",
+                            "ratio": true
+                        }
+                    ],
+                    "onRemoved": [
+                        {
+                            "$type": "HideUIBillBoard",
+                            "predicates": [
+                                {
+                                    "$type": "ByAny",
+                                    "predicates": [
+                                        {
+                                            "$type": "ByTargetGlobalValue",
+                                            "key": "_Enigma_BossFight_Enhanced",
+                                            "ratio": 1.0
+                                        },
+                                        {
+                                            "$type": "ByTargetGlobalValue",
+                                            "key": "_Enigma_BossFight",
+                                            "ratio": 0.0,
+                                            "compareType": "NoneOrEqual"
+                                        }
+                                    ]
+                                }
+                            ]
+                        },
+                        {
+                            "$type": "SetPoseBool",
+                            "boolID": "PowerOff"
+                        }
+                    ]
+                },
+                "PowerOff_Invincible": {
+                    "modifierName": "",
+                    "bonusCriticalHurt": 100.0,
+                    "state": "Invincible"
+                },
+                "PowerOff_IsGhostToAllied": {
+                    "modifierName": "",
+                    "bonusCriticalHurt": 100.0,
+                    "state": "IsGhostToAllied"
+                },
+                "PowerOff_IsGhostToEnemy": {
+                    "modifierName": "",
+                    "bonusCriticalHurt": 100.0,
+                    "state": "IsGhostToEnemy"
+                },
+                "PowerOff_MuteTaunt": {
+                    "modifierName": "",
+                    "bonusCriticalHurt": 100.0,
+                    "state": "MuteTaunt"
+                },
+                "PowerOff_DenyLockOn": {
+                    "modifierName": "",
+                    "bonusCriticalHurt": 100.0,
+                    "state": "DenyLockOn"
+                }
+            },
+            "onAdded": [
+                {
+                    "$type": "EnablePushColliderName",
+                    "predicates": [
+                        {
+                            "$type": "ByTargetGlobalValue",
+                            "key": "_Enigma_BossFight",
+                            "ratio": 0.0,
+                            "compareType": "NoneOrEqual"
+                        }
+                    ],
+                    "pushColliderNames": [
+                        "PushCollider_Occluder"
+                    ]
+                }
+            ]
+        }
+    },
+    {
+        "Default": {
+            "$type": "ConfigAbility",
+            "abilityName": "Monster_Apparatus_Enigma_PowerOff_Remove",
+            "abilityMixins": [
+                {
+                    "$type": "AttachToStateIDMixin",
+                    "stateIDs": [
+                        "PowerOff_WakeUp"
+                    ],
+                    "modifierName": "PowerOff_WakeUp"
+                }
+            ],
+            "modifiers": {
+                "PowerOff_WakeUp": {
+                    "modifierName": "",
+                    "bonusCriticalHurt": 100.0,
+                    "onAdded": [
+                        {
+                            "$type": "SetPoseInt",
+                            "intID": "EnergyState",
+                            "value": 1
+                        }
+                    ],
+                    "onRemoved": [
+                        {
+                            "$type": "TriggerAbility",
+                            "abilityName": "Monster_Apparatus_Enigma_Weakness"
+                        }
+                    ]
+                }
+            }
+        }
+    },
+    {
+        "Default": {
+            "$type": "ConfigAbility",
+            "abilityName": "Monster_Apparatus_Enigma_Weakness",
+            "abilityMixins": [
+                {
+                    "$type": "AttachToStateIDMixin",
+                    "stateIDs": [
+                        "Break"
+                    ],
+                    "modifierName": "UNIQUE_Apparatus_Enigma_BreakState"
+                }
+            ],
+            "abilitySpecials": {
+                "WeaknessDurability": 100.0
+            },
+            "modifiers": {
+                "UNIQUE_Apparatus_Enigma_Weakness": {
+                    "modifierName": "",
+                    "isUnique": true,
+                    "bonusCriticalHurt": "WeaknessDurability",
+                    "onAdded": [
+                        {
+                            "$type": "SetPoseInt",
+                            "intID": "EnergyState",
+                            "value": 1
+                        },
+                        {
+                            "$type": "SetAnimatorInt",
+                            "predicates": [
+                                {
+                                    "$type": "ByTargetGlobalValue",
+                                    "key": "_FAKEDIE_Triggered",
+                                    "ratio": 0.0,
+                                    "compareType": "NoneOrEqual"
+                                }
+                            ],
+                            "intID": "PowerStage",
+                            "ratio": 1.0
+                        },
+                        {
+                            "$type": "AddGlobalValue",
+                            "ratio": -1.0,
+                            "key": "_MONSTER_AutoMatron_WeakTag",
+                            "useLimitRange": true,
+                            "maxValue": 1.0,
+                            "minValue": 0.0
+                        }
+                    ],
+                    "onRemoved": [
+                        {
+                            "$type": "SetAnimatorTrigger",
+                            "triggerID": "WeakStartTrigger"
+                        },
+                        {
+                            "$type": "SetPoseInt",
+                            "intID": "EnergyState"
+                        },
+                        {
+                            "$type": "SetAnimatorInt",
+                            "intID": "PowerStage",
+                            "ratio": 0.0
+                        },
+                        {
+                            "$type": "TriggerAbility",
+                            "abilityName": "Monster_Apparatus_Enigma_Weak"
+                        },
+                        {
+                            "$type": "AddGlobalValue",
+                            "ratio": 1.0,
+                            "key": "_MONSTER_AutoMatron_WeakTag",
+                            "useLimitRange": true,
+                            "maxValue": 1.0,
+                            "minValue": 0.0
+                        }
+                    ],
+                    "onBeingHit": [
+                        {
+                            "$type": "ApplyModifier",
+                            "target": "Target",
+                            "predicates": [
+                                {
+                                    "$type": "ByEntityTypes",
+                                    "entityTypes": [
+                                        "Avatar"
+                                    ]
+                                },
+                                {
+                                    "$type": "ByTargetGlobalValue",
+                                    "target": "Self",
+                                    "key": "_Enigma_BossFight_Enhanced",
+                                    "ratio": 1.0,
+                                    "forceByCaster": true
+                                },
+                                {
+                                    "$type": "ByTargetGlobalValue",
+                                    "target": "Self",
+                                    "key": "_ACTIVITY_BlitzRush_Tag",
+                                    "ratio": 1.0,
+                                    "forceByCaster": true
+                                },
+                                {
+                                    "$type": "ByHitBoxName",
+                                    "target": "Self",
+                                    "hitBoxNames": [
+                                        "CoreBox"
+                                    ]
+                                }
+                            ],
+                            "modifierName": "Activity_BlitzRush_Enhanced_WeakTrigger"
+                        },
+                        {
+                            "$type": "ApplyModifier",
+                            "target": "TargetOriginOwner",
+                            "predicates": [
+                                {
+                                    "$type": "ByEntityTypes",
+                                    "entityTypes": [
+                                        "Avatar"
+                                    ]
+                                },
+                                {
+                                    "$type": "ByTargetGlobalValue",
+                                    "target": "Self",
+                                    "key": "_Enigma_BossFight_Enhanced",
+                                    "ratio": 1.0,
+                                    "forceByCaster": true
+                                },
+                                {
+                                    "$type": "ByTargetGlobalValue",
+                                    "target": "Self",
+                                    "key": "_ACTIVITY_BlitzRush_Tag",
+                                    "ratio": 1.0,
+                                    "forceByCaster": true
+                                },
+                                {
+                                    "$type": "ByHitBoxName",
+                                    "target": "Self",
+                                    "hitBoxNames": [
+                                        "CoreBox"
+                                    ]
+                                }
+                            ],
+                            "modifierName": "Activity_BlitzRush_Enhanced_WeakTrigger"
+                        },
+                        {
+                            "$type": "Predicated",
+                            "targetPredicates": [
+                                {
+                                    "$type": "ByHitBoxName",
+                                    "hitBoxNames": [
+                                        "CoreBox"
+                                    ]
+                                }
+                            ],
+                            "successActions": [
+                                {
+                                    "$type": "SetAnimatorTrigger",
+                                    "triggerID": "BreakTrigger"
+                                },
+                                {
+                                    "$type": "FireEffect",
+                                    "healLimitedByCasterMaxHPRatio": "Eff_Monster_Monster_Apparatus_Enigma_Weakness_BeHit",
+                                    "born": {
+                                        "$type": "ConfigBornByAttachPoint",
+                                        "attachPointName": "CorePoint"
+                                    },
+                                    "MEMHGJDEPJA": -1.0
+                                },
+                                {
+                                    "$type": "RemoveUniqueModifier",
+                                    "modifierName": "UNIQUE_Monster_Apparatus_Enigma_BionicInsecta_ShieldState"
+                                },
+                                {
+                                    "$type": "AddElementDurability",
+                                    "ratio": -50.0,
+                                    "modifierName": "UNIQUE_Apparatus_Enigma_Weakness",
+                                    "useLimitRange": true,
+                                    "maxValue": 9999.0,
+                                    "minValue": 0.0
+                                }
+                            ]
+                        }
+                    ]
+                },
+                "UNIQUE_Apparatus_Enigma_BreakState": {
+                    "modifierName": "",
+                    "isUnique": true,
+                    "bonusCriticalHurt": 100.0,
+                    "onBeingHit": [
+                        {
+                            "$type": "Predicated",
+                            "targetPredicates": [
+                                {
+                                    "$type": "ByHitBoxName",
+                                    "hitBoxNames": [
+                                        "CoreBox"
+                                    ]
+                                },
+                                {
+                                    "$type": "ByHitEnBreak",
+                                    "logic": "GreaterOrEqual",
+                                    "enBreak": 80.0
+                                }
+                            ],
+                            "successActions": [
+                                {
+                                    "$type": "FireEffect",
+                                    "predicates": [
+                                        {
+                                            "$type": "ByHitBoxName",
+                                            "hitBoxNames": [
+                                                "CoreBox"
+                                            ]
+                                        }
+                                    ],
+                                    "healLimitedByCasterMaxHPRatio": "Eff_Monster_Monster_Apparatus_Enigma_BionicDrone_Weakness_BeHit",
+                                    "born": {
+                                        "$type": "ConfigBornByAttachPoint",
+                                        "attachPointName": "AimingPoint"
+                                    },
+                                    "MEMHGJDEPJA": -1.0
+                                },
+                                {
+                                    "$type": "AddElementDurability",
+                                    "ratio": -100.0,
+                                    "modifierName": "UNIQUE_Apparatus_Enigma_Weakness",
+                                    "useLimitRange": true,
+                                    "maxValue": 9999.0,
+                                    "minValue": 0.0
+                                }
+                            ]
+                        }
+                    ]
+                },
+                "Activity_BlitzRush_Enhanced_WeakTrigger": {
+                    "stacking": "Unique",
+                    "modifierName": "",
+                    "DCEFILPANJI": 0.5,
+                    "bonusCriticalHurt": 100.0,
+                    "onAdded": [
+                        {
+                            "$type": "ServerLuaCall",
+                            "luaCallType": "SpecificGroup",
+                            "CallParamList": [
+                                246001001
+                            ],
+                            "funcName": "SLC_Activity_BlitzRush_WeakTrigger",
+                            "CIBOAMHBGPK": 0.0,
+                            "KOFAICAGHOC": 0.0,
+                            "BIFENCJLAFA": 0.0
+                        },
+                        {
+                            "$type": "DebugLog",
+                            "content": "SLC_Activity_BlitzRush_WeakTrigger!!!!!!!"
+                        }
+                    ]
+                }
+            },
+            "onAbilityStart": [
+                {
+                    "$type": "ApplyModifier",
+                    "modifierName": "UNIQUE_Apparatus_Enigma_Weakness"
+                }
+            ]
+        }
+    },
+    {
+        "Default": {
+            "$type": "ConfigAbility",
+            "abilityName": "Monster_Apparatus_Enigma_Weakness_Remove",
+            "onAbilityStart": [
+                {
+                    "$type": "RemoveUniqueModifier",
+                    "modifierName": "UNIQUE_Apparatus_Enigma_Weakness"
+                }
+            ]
+        }
+    },
+    {
+        "Default": {
+            "$type": "ConfigAbility",
+            "abilityName": "Monster_Apparatus_Enigma_Break_Remove",
+            "abilitySpecials": {
+                "BreakProtectTime": 7.5,
+                "BreakProtectTimeDelta": 1.5
+            },
+            "modifiers": {
+                "BreakProtect": {
+                    "modifierName": "",
+                    "DCEFILPANJI": "BreakProtectTime",
+                    "bonusCriticalHurt": 100.0,
+                    "onAdded": [
+                        {
+                            "$type": "AddGlobalValue",
+                            "ratio": 1.0,
+                            "key": "_MONSTER_Apparatus_Enigma_Protected",
+                            "useLimitRange": true,
+                            "maxValue": 1.0,
+                            "minValue": 0.0
+                        },
+                        {
+                            "$type": "ApplyModifier",
+                            "modifierName": "BreakProtectEffect"
+                        }
+                    ],
+                    "onRemoved": [
+                        {
+                            "$type": "AddGlobalValue",
+                            "ratio": -1.0,
+                            "key": "_MONSTER_Apparatus_Enigma_Protected",
+                            "useLimitRange": true,
+                            "maxValue": 1.0,
+                            "minValue": 0.0
+                        },
+                        {
+                            "$type": "SendEffectTrigger",
+                            "parameter": "EffectTrigger",
+                            "attachPoint": "",
+                            "healLimitedByCasterMaxHPRatio": "Eff_Monster_Monster_Apparatus_Enigma_BionicDrone_Shield_Eye"
+                        },
+                        {
+                            "$type": "SendEffectTrigger",
+                            "parameter": "EffectTrigger",
+                            "attachPoint": "",
+                            "healLimitedByCasterMaxHPRatio": "Eff_Monster_Monster_Apparatus_Enigma_BionicDrone_Shield_Back"
+                        }
+                    ]
+                },
+                "BreakProtectEffect": {
+                    "modifierName": "",
+                    "DCEFILPANJI": [
+                        "BreakProtectTime",
+                        "BreakProtectTimeDelta",
+                        "ADD"
+                    ],
+                    "bonusCriticalHurt": 100.0,
+                    "onAdded": [
+                        {
+                            "$type": "AttachEffect",
+                            "healLimitedByCasterMaxHPRatio": "Eff_Monster_Monster_Apparatus_Enigma_BionicDrone_Shield_Eye",
+                            "MEMHGJDEPJA": -1.0
+                        },
+                        {
+                            "$type": "AttachEffect",
+                            "healLimitedByCasterMaxHPRatio": "Eff_Monster_Monster_Apparatus_Enigma_BionicDrone_Shield_Back",
+                            "MEMHGJDEPJA": -1.0
+                        }
+                    ]
+                }
+            },
+            "onAbilityStart": [
+                {
+                    "$type": "RemoveUniqueModifier",
+                    "modifierName": "UNIQUE_Apparatus_Enigma_BreakState"
+                },
+                {
+                    "$type": "ApplyModifier",
+                    "modifierName": "BreakProtect"
+                }
+            ]
+        }
+    },
+    {
+        "Default": {
+            "$type": "ConfigAbility",
+            "abilityName": "Monster_Apparatus_Enigma_Weak",
+            "abilitySpecials": {
+                "WeakTime_ExtraRatio": 0.0
+            },
+            "modifiers": {
+                "UNIQUE_WeakTimer": {
+                    "modifierName": "",
+                    "isUnique": true,
+                    "DCEFILPANJI": [
+                        15.0,
+                        "WeakTime_ExtraRatio",
+                        "MUL",
+                        15.0,
+                        "ADD"
+                    ],
+                    "bonusCriticalHurt": 100.0,
+                    "modifierMixins": [
+                        {
+                            "$type": "RigidBodyFreezeMixin"
+                        }
+                    ],
+                    "onAdded": [
+                        {
+                            "$type": "SetPoseBool",
+                            "boolID": "WeakLocked",
+                            "ratio": true
+                        }
+                    ],
+                    "onRemoved": [
+                        {
+                            "$type": "SetPoseBool",
+                            "boolID": "WeakLocked"
+                        }
+                    ]
+                }
+            },
+            "onAbilityStart": [
+                {
+                    "$type": "SetGlobalValueToOverrideMap",
+                    "globalValueKey": "_MONSTER_WeakTime_ExtraRatio",
+                    "overrideMapKey": "WeakTime_ExtraRatio"
+                },
+                {
+                    "$type": "ApplyModifier",
+                    "modifierName": "UNIQUE_WeakTimer"
+                }
+            ]
+        }
+    },
+    {
+        "Default": {
+            "$type": "ConfigAbility",
+            "abilityName": "Monster_Apparatus_Enigma_Weak_Effect",
+            "abilityMixins": [
+                {
+                    "$type": "AttachToPoseIDMixin",
+                    "poseIDs": [
+                        202,
+                        203
+                    ],
+                    "modifierName": "WeakEffect"
+                }
+            ],
+            "modifiers": {
+                "WeakEffect": {
+                    "modifierName": "",
+                    "bonusCriticalHurt": 100.0,
+                    "onAdded": [
+                        {
+                            "$type": "AttachEffect",
+                            "predicates": [
+                                {
+                                    "$type": "ByTargetGlobalValue",
+                                    "key": "_GLOBALVALUE_EnigmaType",
+                                    "ratio": 1.0
+                                }
+                            ],
+                            "healLimitedByCasterMaxHPRatio": "Eff_Monster_Apparatus_Enigma_BionicDrone_WeakLoop",
+                            "MEMHGJDEPJA": -1.0
+                        },
+                        {
+                            "$type": "AttachEffect",
+                            "predicates": [
+                                {
+                                    "$type": "ByTargetGlobalValue",
+                                    "key": "_GLOBALVALUE_EnigmaType",
+                                    "ratio": 2.0
+                                }
+                            ],
+                            "healLimitedByCasterMaxHPRatio": "Eff_Monster_Apparatus_Enigma_BionicFlora_WeakLoop",
+                            "MEMHGJDEPJA": -1.0
+                        },
+                        {
+                            "$type": "AttachEffect",
+                            "predicates": [
+                                {
+                                    "$type": "ByTargetGlobalValue",
+                                    "key": "_GLOBALVALUE_EnigmaType",
+                                    "ratio": 3.0
+                                }
+                            ],
+                            "healLimitedByCasterMaxHPRatio": "Eff_Monster_Apparatus_Enigma_BionicInsecta_WeakLoop",
+                            "MEMHGJDEPJA": -1.0
+                        },
+                        {
+                            "$type": "AttachEffect",
+                            "predicates": [
+                                {
+                                    "$type": "ByTargetGlobalValue",
+                                    "key": "_GLOBALVALUE_EnigmaType",
+                                    "ratio": 4.0
+                                }
+                            ],
+                            "healLimitedByCasterMaxHPRatio": "Eff_Monster_Apparatus_Enigma_BionicNettler_WeakLoop",
+                            "MEMHGJDEPJA": -1.0
+                        }
+                    ]
+                }
+            }
+        }
+    },
+    {
+        "Default": {
+            "$type": "ConfigAbility",
+            "abilityName": "Monster_Apparatus_Enigma_Weak_End",
+            "abilityMixins": [
+                {
+                    "$type": "AttachToNormalizedTimeMixin",
+                    "stateID": "Weak_End",
+                    "modifierName": "EyeEffect_WeakEnd",
+                    "normalizeStart": 0.800000011920929
+                },
+                {
+                    "$type": "AttachToStateIDMixin",
+                    "stateIDs": [
+                        "Weak_EndAS"
+                    ],
+                    "modifierName": "Weak_EndAS"
+                }
+            ],
+            "abilitySpecials": {
+                "WeakProtectTime": 15.0,
+                "WeakProtectTimeDelta": 1.5
+            },
+            "modifiers": {
+                "EyeEffect_WeakEnd": {
+                    "modifierName": "",
+                    "bonusCriticalHurt": 100.0,
+                    "onAdded": [
+                        {
+                            "$type": "TriggerAbility",
+                            "abilityName": "Monster_Apparatus_Enigma_Weakness"
+                        }
+                    ]
+                },
+                "Weak_EndAS": {
+                    "modifierName": "",
+                    "bonusCriticalHurt": 100.0,
+                    "onAdded": [
+                        {
+                            "$type": "TriggerAbility",
+                            "abilityName": "Monster_Apparatus_Enigma_Weakness"
+                        },
+                        {
+                            "$type": "ApplyModifier",
+                            "modifierName": "WeakProtect"
+                        }
+                    ]
+                },
+                "WeakProtect": {
+                    "modifierName": "",
+                    "DCEFILPANJI": "WeakProtectTime",
+                    "bonusCriticalHurt": 100.0,
+                    "onAdded": [
+                        {
+                            "$type": "AddGlobalValue",
+                            "ratio": 1.0,
+                            "key": "_MONSTER_Apparatus_Enigma_Protected",
+                            "useLimitRange": true,
+                            "maxValue": 1.0,
+                            "minValue": 0.0
+                        },
+                        {
+                            "$type": "ApplyModifier",
+                            "modifierName": "WeakProtectEffect"
+                        }
+                    ],
+                    "onRemoved": [
+                        {
+                            "$type": "AddGlobalValue",
+                            "ratio": -1.0,
+                            "key": "_MONSTER_Apparatus_Enigma_Protected",
+                            "useLimitRange": true,
+                            "maxValue": 1.0,
+                            "minValue": 0.0
+                        },
+                        {
+                            "$type": "SendEffectTrigger",
+                            "parameter": "EffectTrigger",
+                            "attachPoint": "",
+                            "healLimitedByCasterMaxHPRatio": "Eff_Monster_Monster_Apparatus_Enigma_BionicDrone_Shield_Eye"
+                        },
+                        {
+                            "$type": "SendEffectTrigger",
+                            "parameter": "EffectTrigger",
+                            "attachPoint": "",
+                            "healLimitedByCasterMaxHPRatio": "Eff_Monster_Monster_Apparatus_Enigma_BionicDrone_Shield_Back"
+                        }
+                    ]
+                },
+                "WeakProtectEffect": {
+                    "modifierName": "",
+                    "DCEFILPANJI": [
+                        "WeakProtectTime",
+                        "WeakProtectTimeDelta",
+                        "ADD"
+                    ],
+                    "bonusCriticalHurt": 100.0,
+                    "onAdded": [
+                        {
+                            "$type": "AttachEffect",
+                            "healLimitedByCasterMaxHPRatio": "Eff_Monster_Monster_Apparatus_Enigma_BionicDrone_Shield_Eye",
+                            "MEMHGJDEPJA": -1.0
+                        },
+                        {
+                            "$type": "AttachEffect",
+                            "healLimitedByCasterMaxHPRatio": "Eff_Monster_Monster_Apparatus_Enigma_BionicDrone_Shield_Back",
+                            "MEMHGJDEPJA": -1.0
+                        }
+                    ]
+                }
+            }
+        }
+    },
+    {
+        "Default": {
+            "$type": "ConfigAbility",
+            "abilityName": "Monster_Apparatus_Enigma_ReturnToBorn",
+            "abilityMixins": [
+                {
+                    "$type": "AttachToPoseIDMixin",
+                    "poseIDs": [
+                        902,
+                        903
+                    ],
+                    "modifierName": "ReturnToBorn_State"
+                },
+                {
+                    "$type": "AttachToPoseIDMixin",
+                    "poseIDs": [
+                        902
+                    ],
+                    "modifierName": "ReturnToBorn_Disappear"
+                },
+                {
+                    "$type": "AttachToPoseIDMixin",
+                    "poseIDs": [
+                        903
+                    ],
+                    "modifierName": "ReturnToBorn_Appear"
+                }
+            ],
+            "modifiers": {
+                "ReturnToBorn_Disappear": {
+                    "modifierName": "",
+                    "bonusCriticalHurt": 100.0,
+                    "onAdded": [
+                        {
+                            "$type": "StartDither",
+                            "duration": 2.0
+                        }
+                    ]
+                },
+                "ReturnToBorn_Appear": {
+                    "modifierName": "",
+                    "bonusCriticalHurt": 100.0,
+                    "onAdded": [
+                        {
+                            "$type": "StartDither",
+                            "duration": 0.20000000298023224,
+                            "reverse": true
+                        }
+                    ]
+                },
+                "ReturnToBorn_State": {
+                    "modifierName": "",
+                    "bonusCriticalHurt": 100.0,
+                    "onAdded": [
+                        {
+                            "$type": "RemoveUniqueModifier",
+                            "modifierName": "UNIQUE_Apparatus_Enigma_Weakness"
+                        },
+                        {
+                            "$type": "ResetAnimatorTrigger",
+                            "triggerID": "WeakStartTrigger"
+                        },
+                        {
+                            "$type": "AttachModifier",
+                            "modifierName": "ReturnToBorn_Invincible"
+                        },
+                        {
+                            "$type": "AttachModifier",
+                            "modifierName": "ReturnToBorn_DenyLockOn"
+                        }
+                    ],
+                    "onRemoved": [
+                        {
+                            "$type": "RemoveUniqueModifier",
+                            "modifierName": "UNIQUE_WeakTimer"
+                        },
+                        {
+                            "$type": "TriggerAbility",
+                            "abilityName": "Monster_Apparatus_Enigma_Weakness"
+                        }
+                    ]
+                },
+                "ReturnToBorn_Invincible": {
+                    "modifierName": "",
+                    "bonusCriticalHurt": 100.0,
+                    "state": "Invincible"
+                },
+                "ReturnToBorn_DenyLockOn": {
+                    "modifierName": "",
+                    "bonusCriticalHurt": 100.0,
+                    "state": "DenyLockOn"
+                }
+            }
+        }
+    },
+    {
+        "Default": {
+            "$type": "ConfigAbility",
+            "abilityName": "Monster_Apparatus_Enigma_NeedSupport",
+            "abilityMixins": [
+                {
+                    "$type": "AttachToNormalizedTimeMixin",
+                    "stateID": "ChargeAtk",
+                    "modifierName": "UNIQUE_Monster_Apparatus_Enigma_NeedSupport",
+                    "normalizeEnd": 0.6499999761581421
+                },
+                {
+                    "$type": "AttachToAnimatorStateIDMixin",
+                    "stateIDs": [
+                        "ScorchingSandsLoop"
+                    ],
+                    "modifierName": "UNIQUE_Monster_Apparatus_Enigma_NeedSupport"
+                },
+                {
+                    "$type": "AttachToAnimatorStateIDMixin",
+                    "stateIDs": [
+                        "ChargeAtkLoop"
+                    ],
+                    "modifierName": "UNIQUE_Monster_Apparatus_Enigma_NeedSupport"
+                }
+            ],
+            "modifiers": {
+                "UNIQUE_Monster_Apparatus_Enigma_NeedSupport": {
+                    "stacking": "Unique",
+                    "modifierName": "",
+                    "isUnique": true,
+                    "bonusCriticalHurt": 100.0,
+                    "onAdded": [
+                        {
+                            "$type": "AttachModifier",
+                            "otherTargets": {
+                                "$type": "SelectTargetsByShape",
+                                "topLimit": 1,
+                                "sortType": "Nearest",
+                                "shapeName": "CircleR30",
+                                "campTargetType": "SelfCamp",
+                                "sizeRatio": 1.0
+                            },
+                            "predicates": [
+                                {
+                                    "$type": "ByTargetGlobalValue",
+                                    "key": "_GLOBALVALUE_EnigmaType",
+                                    "ratio": 1.0,
+                                    "compareType": "MoreThanAndEqual"
+                                }
+                            ],
+                            "modifierName": "UNIQUE_Monster_Apparatus_Enigma_Supporter"
+                        },
+                        {
+                            "$type": "CreateGadget",
+                            "target": "SelfAttackTarget",
+                            "lifeByOwnerIsAlive": true,
+                            "born": {
+                                "$type": "ConfigBornByTargetLinearPoint",
+                                "onGround": true,
+                                "linearOffset": -5.0,
+                                "linearMin": 5.0,
+                                "linearMax": 15.0
+                            },
+                            "gadgetID": 42401015,
+                            "campID": 4001,
+                            "campTargetType": "Alliance"
+                        }
+                    ],
+                    "onRemoved": [
+                        {
+                            "$type": "KillGadget",
+                            "gadgetInfo": {
+                                "sortType": "Reversed",
+                                "configID": 42401015
+                            }
+                        }
+                    ]
+                },
+                "UNIQUE_Monster_Apparatus_Enigma_Supporter": {
+                    "stacking": "Unique",
+                    "modifierName": "",
+                    "isUnique": true,
+                    "bonusCriticalHurt": 100.0,
+                    "onAdded": [
+                        {
+                            "$type": "AddGlobalValue",
+                            "ratio": 1.0,
+                            "key": "_ENIGMA_Supporter_Tag_",
+                            "useLimitRange": true,
+                            "maxValue": 1.0,
+                            "minValue": 0.0
+                        }
+                    ],
+                    "onRemoved": [
+                        {
+                            "$type": "AddGlobalValue",
+                            "ratio": -1.0,
+                            "key": "_ENIGMA_Supporter_Tag_",
+                            "useLimitRange": true,
+                            "maxValue": 1.0,
+                            "minValue": 0.0
+                        }
+                    ]
+                }
+            }
+        }
+    },
+    {
+        "Default": {
+            "$type": "ConfigAbility",
+            "abilityName": "Monster_Apparatus_Enigma_SupportPosition",
+            "modifiers": {
+                "Monster_Apparatus_Enigma_SupportPosition": {
+                    "modifierName": "",
+                    "bonusCriticalHurt": 100.0,
+                    "onAdded": [
+                        {
+                            "$type": "SetGlobalValue",
+                            "ratio": 1.0,
+                            "key": "_MONSTER_Apparatus_Enigma_SupportPosition",
+                            "maxValue": 0.0,
+                            "minValue": 0.0
+                        }
+                    ]
+                }
+            },
+            "onAdded": [
+                {
+                    "$type": "AttachModifier",
+                    "modifierName": "Monster_Apparatus_Enigma_SupportPosition"
+                }
+            ]
+        }
+    },
+    {
+        "Default": {
+            "$type": "ConfigAbility",
+            "abilityName": "Monster_Apparatus_Enigma_Machinery",
+            "abilityMixins": [
+                {
+                    "$type": "AttachModifierToGlobalValueMixin",
+                    "globalValueTarget": "Owner",
+                    "globalValueKey": "_Apparatus_Enigma_AttackDown_ForMachinery_",
+                    "valueSteps": [
+                        -0.5,
+                        0.5,
+                        1.5
+                    ],
+                    "modifierNameSteps": [
+                        "Blank",
+                        "Apparatus_Enigma_Machinery_AttackDown"
+                    ]
+                },
+                {
+                    "$type": "AttachModifierToGlobalValueMixin",
+                    "globalValueTarget": "Owner",
+                    "globalValueKey": "_Apparatus_Enigma_HPDown_ForMachinery_",
+                    "valueSteps": [
+                        -0.5,
+                        0.5,
+                        1.5
+                    ],
+                    "modifierNameSteps": [
+                        "Blank",
+                        "Apparatus_Enigma_Machinery_HPDown"
+                    ]
+                }
+            ],
+            "abilitySpecials": {
+                "AttackRatio": 0.0,
+                "HPRatio": 0.0
+            },
+            "modifiers": {
+                "Apparatus_Enigma_Machinery_AttackDown": {
+                    "modifierName": "",
+                    "bonusCriticalHurt": 100.0,
+                    "properties": {
+                        "Actor_AttackRatio": "AttackRatio"
+                    }
+                },
+                "Apparatus_Enigma_Machinery_HPDown": {
+                    "modifierName": "",
+                    "bonusCriticalHurt": 100.0,
+                    "properties": {
+                        "Actor_MaxHPRatio": "HPRatio"
+                    }
+                }
+            }
+        }
+    }
+]

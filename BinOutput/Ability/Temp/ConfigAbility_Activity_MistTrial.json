@@ -1,0 +1,3933 @@
+[
+    {
+        "Default": {
+            "$type": "ConfigAbility",
+            "abilityName": "ActivityAbility_SuperTrial_FallingBuff",
+            "abilitySpecials": {
+                "Value_AttackRate": 0.05999999865889549,
+                "Value_BuffCount": 0.0,
+                "Value_OnceCount": 10.0,
+                "Value_MaxCount": 10.0,
+                "Value_Time": 30.0,
+                "Temp_Count": 0.0
+            },
+            "modifiers": {
+                "UNIQUE_ActivityAbility_SuperTrial_FallingBuff_AvatarHandle": {
+                    "stacking": "Unique",
+                    "modifierName": "",
+                    "isUnique": true,
+                    "bonusCriticalHurt": 100.0,
+                    "onAttackLanded": [
+                        {
+                            "$type": "Predicated",
+                            "target": "Other",
+                            "targetPredicates": [
+                                {
+                                    "$type": "ByEntityTypes",
+                                    "entityTypes": [
+                                        "Monster"
+                                    ]
+                                },
+                                {
+                                    "$type": "ByAttackTags",
+                                    "attackTags": [
+                                        "FallingAttack"
+                                    ]
+                                }
+                            ],
+                            "successActions": [
+                                {
+                                    "$type": "AddGlobalValue",
+                                    "target": "Caster",
+                                    "RotationDampTime": true,
+                                    "ratio": 1.0,
+                                    "key": "_Ability_SuperTrial_FallingBuff_AttackCount",
+                                    "useLimitRange": true,
+                                    "maxValue": "Value_OnceCount",
+                                    "minValue": 0.0
+                                },
+                                {
+                                    "$type": "ApplyModifier",
+                                    "target": "Caster",
+                                    "RotationDampTime": true,
+                                    "modifierName": "CheckCount"
+                                }
+                            ]
+                        }
+                    ]
+                },
+                "CheckCount": {
+                    "modifierName": "",
+                    "DCEFILPANJI": 0.10000000149011612,
+                    "bonusCriticalHurt": 100.0,
+                    "onRemoved": [
+                        {
+                            "$type": "SetGlobalValueToOverrideMap",
+                            "globalValueKey": "_Ability_SuperTrial_FallingBuff_AttackCount",
+                            "overrideMapKey": "Temp_Count"
+                        },
+                        {
+                            "$type": "Repeated",
+                            "repeatTimes": "Temp_Count",
+                            "actions": [
+                                {
+                                    "$type": "AddGlobalValue",
+                                    "target": "CurTeamAvatars",
+                                    "RotationDampTime": true,
+                                    "ratio": 1.0,
+                                    "key": "_Ability_SuperTrial_FallingBuff_BuffCount",
+                                    "useLimitRange": true,
+                                    "maxValue": "Value_MaxCount",
+                                    "minValue": 0.0
+                                }
+                            ]
+                        },
+                        {
+                            "$type": "SetGlobalValueToOverrideMap",
+                            "target": "Caster",
+                            "RotationDampTime": true,
+                            "globalValueKey": "_Ability_SuperTrial_FallingBuff_BuffCount",
+                            "overrideMapKey": "Value_BuffCount"
+                        },
+                        {
+                            "$type": "RemoveUniqueModifier",
+                            "target": "CurTeamAvatars",
+                            "RotationDampTime": true,
+                            "modifierName": "UNIQUE_ActivityAbility_SuperTrial_FallingBuff_AvatarBuff"
+                        },
+                        {
+                            "$type": "ApplyModifier",
+                            "target": "CurTeamAvatars",
+                            "RotationDampTime": true,
+                            "modifierName": "UNIQUE_ActivityAbility_SuperTrial_FallingBuff_AvatarBuff"
+                        },
+                        {
+                            "$type": "ApplyModifier",
+                            "target": "CurTeamAvatars",
+                            "RotationDampTime": true,
+                            "modifierName": "UNIQUE_ActivityAbility_SuperTrial_FallingBuff_AvatarBuff_AvatarTimer"
+                        },
+                        {
+                            "$type": "ClearGlobalValue",
+                            "target": "CurTeamAvatars",
+                            "RotationDampTime": true,
+                            "key": "_Ability_SuperTrial_FallingBuff_AttackCount"
+                        }
+                    ]
+                },
+                "UNIQUE_ActivityAbility_SuperTrial_FallingBuff_AvatarBuff": {
+                    "modifierName": "",
+                    "isUnique": true,
+                    "DCEFILPANJI": "Value_Time",
+                    "bonusCriticalHurt": 100.0,
+                    "properties": {
+                        "Actor_AttackRatio": [
+                            "Value_AttackRate",
+                            "Value_BuffCount",
+                            "MUL"
+                        ]
+                    },
+                    "state": "AttackUp",
+                    "onAdded": [
+                        {
+                            "$type": "ApplyModifier",
+                            "modifierName": "ShowBuffEffect"
+                        }
+                    ]
+                },
+                "ShowBuffEffect": {
+                    "modifierName": "",
+                    "DCEFILPANJI": 1.5,
+                    "bonusCriticalHurt": 100.0,
+                    "onAdded": [
+                        {
+                            "$type": "FireEffect",
+                            "healLimitedByCasterMaxHPRatio": "Eff_Activity_SuperTrial_Buff",
+                            "MEMHGJDEPJA": -1.0
+                        }
+                    ]
+                },
+                "UNIQUE_ActivityAbility_SuperTrial_FallingBuff_AvatarBuff_AvatarTimer": {
+                    "modifierName": "",
+                    "isUnique": true,
+                    "DCEFILPANJI": "Value_Time",
+                    "bonusCriticalHurt": 100.0,
+                    "onRemoved": [
+                        {
+                            "$type": "ClearGlobalValue",
+                            "RotationDampTime": true,
+                            "key": "_Ability_SuperTrial_FallingBuff_BuffCount"
+                        }
+                    ]
+                }
+            },
+            "onAdded": [
+                {
+                    "$type": "AttachModifier",
+                    "RotationDampTime": true,
+                    "modifierName": "UNIQUE_ActivityAbility_SuperTrial_FallingBuff_AvatarHandle"
+                }
+            ],
+            "onRemoved": [
+                {
+                    "$type": "ClearGlobalValue",
+                    "RotationDampTime": true,
+                    "key": "_Ability_SuperTrial_FallingBuff_BuffCount"
+                }
+            ],
+            "isDynamicAbility": true
+        }
+    },
+    {
+        "Default": {
+            "$type": "ConfigAbility",
+            "abilityName": "ActivityAbility_SuperTrial_FallingAreaAttack",
+            "abilityMixins": [
+                {
+                    "$type": "CurLocalAvatarMixin",
+                    "modifierName": "UNIQUE_ActivityAbility_SuperTrial_FallingAreaAttack_Avatar"
+                }
+            ],
+            "abilitySpecials": {
+                "Value_AreaAttackCD": 1.0,
+                "Value_DamageRate": 1.2000000476837158,
+                "Value_DamageSystemValue": 0.0
+            },
+            "modifiers": {
+                "UNIQUE_ActivityAbility_SuperTrial_FallingAreaAttack_Avatar": {
+                    "stacking": "Unique",
+                    "modifierName": "",
+                    "isUnique": true,
+                    "bonusCriticalHurt": 100.0,
+                    "modifierMixins": [
+                        {
+                            "$type": "ModifyDamageMixin",
+                            "attackTags": [
+                                "FallingAttack"
+                            ],
+                            "GDADKLDBGIM": "Value_DamageRate"
+                        }
+                    ]
+                }
+            },
+            "isDynamicAbility": true
+        }
+    },
+    {
+        "Default": {
+            "$type": "ConfigAbility",
+            "abilityName": "ActivityAbility_SuperTrial_ShieldDamageUp",
+            "abilityMixins": [
+                {
+                    "$type": "AttachModifierToSelfGlobalValueNoInitMixin",
+                    "globalValueKey": "_Ability_SuperTrial_ShieldDamageUp_Check",
+                    "valueSteps": [
+                        -0.5,
+                        0.5,
+                        1.5
+                    ],
+                    "modifierNameSteps": [
+                        "UNIQUE_ActivityAbility_SuperTrial_ShieldDamageUp_NoBuff",
+                        "UNIQUE_ActivityAbility_SuperTrial_ShieldDamageUp_HasBuff"
+                    ]
+                }
+            ],
+            "abilitySpecials": {
+                "Value_AttackRate": 0.5
+            },
+            "modifiers": {
+                "UNIQUE_ActivityAbility_SuperTrial_ShieldDamageUp_Handler": {
+                    "modifierName": "",
+                    "isUnique": true,
+                    "bonusCriticalHurt": 100.0,
+                    "thinkInterval": 1.0,
+                    "onThinkInterval": [
+                        {
+                            "$type": "Predicated",
+                            "RotationDampTime": true,
+                            "targetPredicates": [
+                                {
+                                    "$type": "ByHasShield",
+                                    "type": "All"
+                                }
+                            ],
+                            "successActions": [
+                                {
+                                    "$type": "AddGlobalValue",
+                                    "RotationDampTime": true,
+                                    "ratio": 0.0,
+                                    "key": "_Ability_SuperTrial_ShieldDamageUp_Check",
+                                    "useLimitRange": true,
+                                    "maxValue": 1.0,
+                                    "minValue": 1.0
+                                }
+                            ],
+                            "failActions": [
+                                {
+                                    "$type": "AddGlobalValue",
+                                    "RotationDampTime": true,
+                                    "ratio": 0.0,
+                                    "key": "_Ability_SuperTrial_ShieldDamageUp_Check",
+                                    "useLimitRange": true,
+                                    "maxValue": 0.0,
+                                    "minValue": 0.0
+                                }
+                            ]
+                        }
+                    ]
+                },
+                "UNIQUE_ActivityAbility_SuperTrial_ShieldDamageUp_NoBuff": {
+                    "modifierName": "",
+                    "isUnique": true,
+                    "bonusCriticalHurt": 100.0
+                },
+                "UNIQUE_ActivityAbility_SuperTrial_ShieldDamageUp_HasBuff": {
+                    "modifierName": "",
+                    "isUnique": true,
+                    "bonusCriticalHurt": 100.0,
+                    "modifierMixins": [
+                        {
+                            "$type": "ModifyDamageMixin",
+                            "ignoreEventInfo": true,
+                            "GDADKLDBGIM": "Value_AttackRate"
+                        }
+                    ],
+                    "state": "AttackUp",
+                    "onAdded": [
+                        {
+                            "$type": "ApplyModifier",
+                            "modifierName": "ShowBuffEffect"
+                        }
+                    ],
+                    "isLimitedProperties": true
+                },
+                "ShowBuffEffect": {
+                    "modifierName": "",
+                    "DCEFILPANJI": 1.5,
+                    "bonusCriticalHurt": 100.0,
+                    "onAdded": [
+                        {
+                            "$type": "FireEffect",
+                            "healLimitedByCasterMaxHPRatio": "Eff_Activity_SuperTrial_Buff",
+                            "MEMHGJDEPJA": -1.0
+                        }
+                    ]
+                }
+            },
+            "onAdded": [
+                {
+                    "$type": "AttachModifier",
+                    "RotationDampTime": true,
+                    "modifierName": "UNIQUE_ActivityAbility_SuperTrial_ShieldDamageUp_Handler"
+                }
+            ],
+            "isDynamicAbility": true
+        }
+    },
+    {
+        "Default": {
+            "$type": "ConfigAbility",
+            "abilityName": "ActivityAbility_SuperTrial_GainShieldAreaAttack",
+            "abilityMixins": [
+                {
+                    "$type": "DoActionByGainCrystalSeedMixin",
+                    "elementTypes": [
+                        "Fire",
+                        "Water",
+                        "Electric",
+                        "Ice"
+                    ],
+                    "actions": [
+                        {
+                            "$type": "ApplyModifier",
+                            "predicates": [
+                                {
+                                    "$type": "ByTargetGlobalValue",
+                                    "target": "Team",
+                                    "key": "_ActivityAbility_SuperTrial_GainShieldAttack_CD",
+                                    "ratio": 0.0,
+                                    "compareType": "NoneOrEqual"
+                                }
+                            ],
+                            "modifierName": "TriggerGainShieldAreaAttack"
+                        }
+                    ]
+                }
+            ],
+            "abilitySpecials": {
+                "Value_AreaAttackCD": 1.0,
+                "Value_DamageRate": 4.0,
+                "Value_DamageSystemValue": 0.0
+            },
+            "modifiers": {
+                "TriggerGainShieldAreaAttack": {
+                    "stacking": "Unique",
+                    "modifierName": "",
+                    "DCEFILPANJI": 0.10000000149011612,
+                    "bonusCriticalHurt": 100.0,
+                    "onAdded": [
+                        {
+                            "$type": "ApplyModifier",
+                            "target": "Team",
+                            "modifierName": "UNIQUE_ActivityAbility_SuperTrial_GainShieldAttack_TeamCD"
+                        },
+                        {
+                            "$type": "FireEffect",
+                            "healLimitedByCasterMaxHPRatio": "Eff_Stages_GainWave_01",
+                            "MEMHGJDEPJA": -1.0
+                        },
+                        {
+                            "$type": "TriggerAttackEvent",
+                            "target": "Applier",
+                            "attackEvent": {
+                                "attackPattern": {
+                                    "$type": "ConfigAttackSphere",
+                                    "triggerType": "TriggerNoRepeat",
+                                    "born": {
+                                        "$type": "ConfigBornBySelf",
+                                        "offset": {
+                                            "AMODPKJAIGF": 0.0,
+                                            "DBJCBJPOOAP": 0.0,
+                                            "JDFJGADACKC": 0.0
+                                        },
+                                        "onGround": true
+                                    },
+                                    "ILKJCNJJPEL": 4.0
+                                },
+                                "attackInfo": {
+                                    "attackTag": "",
+                                    "attenuationTag": "",
+                                    "attenuationGroup": "default",
+                                    "attackProperty": {
+                                        "GDADKLDBGIM": 0.0,
+                                        "bonusCriticalHurt": 0.0,
+                                        "ignoreAttackerProperty": true,
+                                        "enBreak": 0.0,
+                                        "damageExtra": [
+                                            "Value_DamageRate",
+                                            "Value_DamageSystemValue",
+                                            "MUL"
+                                        ]
+                                    },
+                                    "hitPattern": {
+                                        "onHitEffectName": "",
+                                        "hitImpulseType": "LV1"
+                                    }
+                                }
+                            },
+                            "targetType": "Enemy"
+                        }
+                    ]
+                },
+                "UNIQUE_ActivityAbility_SuperTrial_GainShieldAttack_TeamCD": {
+                    "stacking": "Unique",
+                    "modifierName": "",
+                    "isUnique": true,
+                    "DCEFILPANJI": "Value_AreaAttackCD",
+                    "bonusCriticalHurt": 100.0,
+                    "onAdded": [
+                        {
+                            "$type": "SetGlobalValue",
+                            "ratio": 1.0,
+                            "key": "_ActivityAbility_SuperTrial_GainShieldAttack_CD",
+                            "maxValue": 0.0,
+                            "minValue": 0.0
+                        }
+                    ],
+                    "onRemoved": [
+                        {
+                            "$type": "ClearGlobalValue",
+                            "key": "_ActivityAbility_SuperTrial_GainShieldAttack_CD"
+                        }
+                    ]
+                }
+            },
+            "onAdded": [
+                {
+                    "$type": "SetSystemValueToOverrideMap",
+                    "key": "Value_DamageSystemValue",
+                    "type": "ElementLevelCo"
+                }
+            ],
+            "isDynamicAbility": true
+        }
+    },
+    {
+        "Default": {
+            "$type": "ConfigAbility",
+            "abilityName": "ActivityAbility_SuperTrial_HealingDamageUp",
+            "abilityMixins": [
+                {
+                    "$type": "AttachModifierToPredicateMixin",
+                    "onEvent": "HP",
+                    "predicates": [
+                        {
+                            "$type": "ByTargetHPRatio",
+                            "logic": "GreaterOrEqual",
+                            "HPRatio": "Value_HpRate"
+                        }
+                    ],
+                    "modifierName": "UNIQUE_ActivityAbility_SuperTrial_HealingDamageUp_Buff"
+                }
+            ],
+            "abilitySpecials": {
+                "Value_HpRate": 0.8999999761581421,
+                "Value_AttackRate": 0.5
+            },
+            "modifiers": {
+                "UNIQUE_ActivityAbility_SuperTrial_HealingDamageUp_Buff": {
+                    "modifierName": "",
+                    "isUnique": true,
+                    "bonusCriticalHurt": 100.0,
+                    "modifierMixins": [
+                        {
+                            "$type": "ModifyDamageMixin",
+                            "ignoreEventInfo": true,
+                            "GDADKLDBGIM": "Value_AttackRate"
+                        }
+                    ],
+                    "state": "AttackUp",
+                    "onAdded": [
+                        {
+                            "$type": "ApplyModifier",
+                            "modifierName": "ShowBuffEffect"
+                        }
+                    ],
+                    "isLimitedProperties": true
+                },
+                "ShowBuffEffect": {
+                    "modifierName": "",
+                    "DCEFILPANJI": 1.5,
+                    "bonusCriticalHurt": 100.0,
+                    "onAdded": [
+                        {
+                            "$type": "FireEffect",
+                            "healLimitedByCasterMaxHPRatio": "Eff_Activity_SuperTrial_Buff",
+                            "MEMHGJDEPJA": -1.0
+                        }
+                    ]
+                }
+            },
+            "isDynamicAbility": true
+        }
+    },
+    {
+        "Default": {
+            "$type": "ConfigAbility",
+            "abilityName": "ActivityAbility_SuperTrial_HealingReviveElemEnergy",
+            "abilityMixins": [
+                {
+                    "$type": "DoActionByEventMixin",
+                    "type": "Current",
+                    "onEvent": "HPUp",
+                    "actions": [
+                        {
+                            "$type": "ReviveElemEnergy",
+                            "target": "CurTeamAvatars",
+                            "RotationDampTime": true,
+                            "predicates": [
+                                {
+                                    "$type": "ByTargetGlobalValue",
+                                    "target": "Team",
+                                    "key": "_ActivityAbility_SuperTrial_HealingReviveElemEnergy_CD",
+                                    "ratio": 0.0,
+                                    "compareType": "NoneOrEqual"
+                                }
+                            ],
+                            "ratio": "Value_ReviveElemEnergy"
+                        },
+                        {
+                            "$type": "ApplyModifier",
+                            "target": "Team",
+                            "modifierName": "UNIQUE_ActivityAbility_SuperTrial_HealingReviveElemEnergy_TeamCD"
+                        }
+                    ],
+                    "FBMCBPEGCHI": ""
+                }
+            ],
+            "abilitySpecials": {
+                "Value_ReviveElemEnergy": 3.0,
+                "Value_CD": 1.5
+            },
+            "modifiers": {
+                "UNIQUE_ActivityAbility_SuperTrial_HealingReviveElemEnergy_TeamCD": {
+                    "stacking": "Unique",
+                    "modifierName": "",
+                    "isUnique": true,
+                    "DCEFILPANJI": "Value_CD",
+                    "bonusCriticalHurt": 100.0,
+                    "onAdded": [
+                        {
+                            "$type": "SetGlobalValue",
+                            "ratio": 1.0,
+                            "key": "_ActivityAbility_SuperTrial_HealingReviveElemEnergy_CD",
+                            "maxValue": 0.0,
+                            "minValue": 0.0
+                        }
+                    ],
+                    "onRemoved": [
+                        {
+                            "$type": "ClearGlobalValue",
+                            "key": "_ActivityAbility_SuperTrial_HealingReviveElemEnergy_CD"
+                        }
+                    ]
+                }
+            },
+            "isDynamicAbility": true
+        }
+    },
+    {
+        "Default": {
+            "$type": "ConfigAbility",
+            "abilityName": "ActivityAbility_SuperTrial_ElementMasteryUp",
+            "abilitySpecials": {
+                "Value_Delta": 300.0
+            },
+            "modifiers": {
+                "UNIQUE_ActivityAbility_SuperTrial_ElementMasteryUp": {
+                    "stacking": "Unique",
+                    "modifierName": "",
+                    "isUnique": true,
+                    "bonusCriticalHurt": 100.0,
+                    "properties": {
+                        "Actor_ElemMasteryDelta": "Value_Delta"
+                    },
+                    "isLimitedProperties": true
+                }
+            },
+            "onAdded": [
+                {
+                    "$type": "AttachModifier",
+                    "RotationDampTime": true,
+                    "modifierName": "UNIQUE_ActivityAbility_SuperTrial_ElementMasteryUp"
+                }
+            ],
+            "isDynamicAbility": true
+        }
+    },
+    {
+        "Default": {
+            "$type": "ConfigAbility",
+            "abilityName": "ActivityAbility_SuperTrial_ElementReactionAttack",
+            "abilityMixins": [
+                {
+                    "$type": "DoActionByElementReactionMixin",
+                    "entityTypes": [
+                        "Monster"
+                    ],
+                    "reactionTypes": [
+                        "Explode",
+                        "Stream",
+                        "Burning",
+                        "Melt",
+                        "Freeze",
+                        "Shock",
+                        "Superconductor",
+                        "SwirlFire",
+                        "SwirlWater",
+                        "SwirlElectric",
+                        "SwirlIce",
+                        "CrystallizeWater",
+                        "CrystallizeElectric",
+                        "CrystallizeIce",
+                        "CrystallizeFire"
+                    ],
+                    "actions": [
+                        {
+                            "$type": "ApplyModifier",
+                            "target": "Other",
+                            "predicates": [
+                                {
+                                    "$type": "ByTargetGlobalValue",
+                                    "target": "Team",
+                                    "key": "_ActivityAbility_SuperTrial_ElementReactionAttack_CD",
+                                    "ratio": 0.0,
+                                    "compareType": "NoneOrEqual"
+                                }
+                            ],
+                            "modifierName": "TriggerElementReactionAttack"
+                        },
+                        {
+                            "$type": "ApplyModifier",
+                            "target": "Team",
+                            "modifierName": "UNIQUE_ActivityAbility_SuperTrial_ElementReactionAttack_TeamCD"
+                        }
+                    ]
+                }
+            ],
+            "abilitySpecials": {
+                "Value_DamageRate": 4.0,
+                "Value_DamageSystemValue": 0.0,
+                "Value_AreaAttackCD": 1.0
+            },
+            "modifiers": {
+                "TriggerElementReactionAttack": {
+                    "modifierName": "",
+                    "DCEFILPANJI": 0.10000000149011612,
+                    "bonusCriticalHurt": 100.0,
+                    "onAdded": [
+                        {
+                            "$type": "FireEffect",
+                            "healLimitedByCasterMaxHPRatio": "Eff_Stages_GainWave_01",
+                            "MEMHGJDEPJA": -1.0
+                        },
+                        {
+                            "$type": "TriggerAttackEvent",
+                            "target": "Applier",
+                            "attackEvent": {
+                                "attackPattern": {
+                                    "$type": "ConfigAttackSphere",
+                                    "triggerType": "TriggerNoRepeat",
+                                    "born": {
+                                        "$type": "ConfigBornBySelf",
+                                        "offset": {
+                                            "AMODPKJAIGF": 0.0,
+                                            "DBJCBJPOOAP": 0.0,
+                                            "JDFJGADACKC": 0.0
+                                        },
+                                        "onGround": true
+                                    },
+                                    "ILKJCNJJPEL": 4.0
+                                },
+                                "attackInfo": {
+                                    "attackTag": "",
+                                    "attenuationTag": "",
+                                    "attenuationGroup": "default",
+                                    "attackProperty": {
+                                        "GDADKLDBGIM": 0.0,
+                                        "bonusCriticalHurt": 0.0,
+                                        "ignoreAttackerProperty": true,
+                                        "enBreak": 0.0,
+                                        "damageExtra": [
+                                            "Value_DamageRate",
+                                            "Value_DamageSystemValue",
+                                            "MUL"
+                                        ]
+                                    },
+                                    "hitPattern": {
+                                        "onHitEffectName": "",
+                                        "hitImpulseType": "LV1"
+                                    }
+                                }
+                            },
+                            "targetType": "Enemy"
+                        }
+                    ]
+                },
+                "UNIQUE_ActivityAbility_SuperTrial_ElementReactionAttack_TeamCD": {
+                    "stacking": "Unique",
+                    "modifierName": "",
+                    "isUnique": true,
+                    "DCEFILPANJI": "Value_AreaAttackCD",
+                    "bonusCriticalHurt": 100.0,
+                    "onAdded": [
+                        {
+                            "$type": "SetGlobalValue",
+                            "ratio": 1.0,
+                            "key": "_ActivityAbility_SuperTrial_ElementReactionAttack_CD",
+                            "maxValue": 0.0,
+                            "minValue": 0.0
+                        }
+                    ],
+                    "onRemoved": [
+                        {
+                            "$type": "ClearGlobalValue",
+                            "key": "_ActivityAbility_SuperTrial_ElementReactionAttack_CD"
+                        }
+                    ]
+                }
+            },
+            "onAdded": [
+                {
+                    "$type": "SetSystemValueToOverrideMap",
+                    "RotationDampTime": true,
+                    "key": "Value_DamageSystemValue",
+                    "type": "ElementLevelCo"
+                }
+            ],
+            "isDynamicAbility": true
+        }
+    },
+    {
+        "Default": {
+            "$type": "ConfigAbility",
+            "abilityName": "ActivityAbility_SuperTrial_MeleeDamageUp",
+            "abilitySpecials": {
+                "Value_AttackRate": 0.75
+            },
+            "modifiers": {
+                "UNIQUE_ActivityAbility_SuperTrial_MeleeDamageUp_Buff": {
+                    "modifierName": "",
+                    "isUnique": true,
+                    "bonusCriticalHurt": 100.0,
+                    "modifierMixins": [
+                        {
+                            "$type": "ModifyDamageMixin",
+                            "attackTags": [
+                                "NormalAttack_01",
+                                "NormalAttack_02",
+                                "NormalAttack_03",
+                                "NormalAttack_04",
+                                "NormalAttack_05",
+                                "NormalAttack_06",
+                                "ExtraAttack",
+                                "FallingAttack"
+                            ],
+                            "ignoreEventInfo": true,
+                            "GDADKLDBGIM": "Value_AttackRate"
+                        }
+                    ],
+                    "state": "AttackUp",
+                    "isLimitedProperties": true
+                }
+            },
+            "onAdded": [
+                {
+                    "$type": "AttachModifier",
+                    "predicates": [
+                        {
+                            "$type": "ByAvatarWeaponType",
+                            "weaponTypes": [
+                                "WEAPON_CLAYMORE",
+                                "WEAPON_POLE",
+                                "WEAPON_SWORD_ONE_HAND"
+                            ]
+                        }
+                    ],
+                    "modifierName": "UNIQUE_ActivityAbility_SuperTrial_MeleeDamageUp_Buff"
+                }
+            ],
+            "isDynamicAbility": true
+        }
+    },
+    {
+        "Default": {
+            "$type": "ConfigAbility",
+            "abilityName": "ActivityAbility_SuperTrial_MeleeAreaAttack",
+            "abilitySpecials": {
+                "Value_AreaAttackCD": 2.0,
+                "Value_DamageRate": 4.0,
+                "Value_DamageSystemValue": 0.0
+            },
+            "modifiers": {
+                "UNIQUE_ActivityAbility_SuperTrial_MeleeAreaAttack_Avatar": {
+                    "stacking": "Unique",
+                    "modifierName": "",
+                    "isUnique": true,
+                    "bonusCriticalHurt": 100.0,
+                    "onAttackLanded": [
+                        {
+                            "$type": "Predicated",
+                            "target": "Other",
+                            "targetPredicates": [
+                                {
+                                    "$type": "ByEntityTypes",
+                                    "entityTypes": [
+                                        "Monster"
+                                    ]
+                                },
+                                {
+                                    "$type": "ByAttackTags",
+                                    "attackTags": [
+                                        "NormalAttack_01",
+                                        "NormalAttack_02",
+                                        "NormalAttack_03",
+                                        "NormalAttack_04",
+                                        "NormalAttack_05",
+                                        "NormalAttack_06",
+                                        "ExtraAttack"
+                                    ]
+                                },
+                                {
+                                    "$type": "ByTargetGlobalValue",
+                                    "target": "Team",
+                                    "key": "_ActivityAbility_SuperTrial_MeleeAreaAttack_CD",
+                                    "ratio": 0.0,
+                                    "compareType": "NoneOrEqual"
+                                }
+                            ],
+                            "successActions": [
+                                {
+                                    "$type": "ApplyModifier",
+                                    "target": "CurLocalAvatar",
+                                    "modifierName": "TriggerMeleeAreaAttack"
+                                }
+                            ]
+                        }
+                    ]
+                },
+                "TriggerMeleeAreaAttack": {
+                    "stacking": "Unique",
+                    "modifierName": "",
+                    "DCEFILPANJI": 0.10000000149011612,
+                    "bonusCriticalHurt": 100.0,
+                    "onAdded": [
+                        {
+                            "$type": "ApplyModifier",
+                            "target": "Team",
+                            "modifierName": "UNIQUE_ActivityAbility_SuperTrial_MeleeAreaAttack_TeamCD"
+                        },
+                        {
+                            "$type": "FireEffect",
+                            "healLimitedByCasterMaxHPRatio": "Eff_Stages_GainWave_01",
+                            "MEMHGJDEPJA": -1.0
+                        },
+                        {
+                            "$type": "TriggerAttackEvent",
+                            "target": "Applier",
+                            "attackEvent": {
+                                "attackPattern": {
+                                    "$type": "ConfigAttackSphere",
+                                    "triggerType": "TriggerNoRepeat",
+                                    "born": {
+                                        "$type": "ConfigBornBySelf",
+                                        "offset": {
+                                            "AMODPKJAIGF": 0.0,
+                                            "DBJCBJPOOAP": 0.0,
+                                            "JDFJGADACKC": 0.0
+                                        },
+                                        "onGround": true
+                                    },
+                                    "ILKJCNJJPEL": 4.0
+                                },
+                                "attackInfo": {
+                                    "attackTag": "",
+                                    "attenuationTag": "",
+                                    "attenuationGroup": "default",
+                                    "attackProperty": {
+                                        "GDADKLDBGIM": 0.0,
+                                        "bonusCriticalHurt": 0.0,
+                                        "ignoreAttackerProperty": true,
+                                        "enBreak": 0.0,
+                                        "damageExtra": [
+                                            "Value_DamageRate",
+                                            "Value_DamageSystemValue",
+                                            "MUL"
+                                        ]
+                                    },
+                                    "hitPattern": {
+                                        "onHitEffectName": "",
+                                        "hitImpulseType": "LV1"
+                                    }
+                                }
+                            },
+                            "targetType": "Enemy"
+                        }
+                    ]
+                },
+                "UNIQUE_ActivityAbility_SuperTrial_MeleeAreaAttack_TeamCD": {
+                    "stacking": "Unique",
+                    "modifierName": "",
+                    "isUnique": true,
+                    "DCEFILPANJI": "Value_AreaAttackCD",
+                    "bonusCriticalHurt": 100.0,
+                    "onAdded": [
+                        {
+                            "$type": "SetGlobalValue",
+                            "ratio": 1.0,
+                            "key": "_ActivityAbility_SuperTrial_MeleeAreaAttack_CD",
+                            "maxValue": 0.0,
+                            "minValue": 0.0
+                        }
+                    ],
+                    "onRemoved": [
+                        {
+                            "$type": "ClearGlobalValue",
+                            "key": "_ActivityAbility_SuperTrial_MeleeAreaAttack_CD"
+                        }
+                    ]
+                }
+            },
+            "onAdded": [
+                {
+                    "$type": "AttachModifier",
+                    "predicates": [
+                        {
+                            "$type": "ByAvatarWeaponType",
+                            "weaponTypes": [
+                                "WEAPON_CLAYMORE",
+                                "WEAPON_POLE",
+                                "WEAPON_SWORD_ONE_HAND"
+                            ]
+                        }
+                    ],
+                    "modifierName": "UNIQUE_ActivityAbility_SuperTrial_MeleeAreaAttack_Avatar"
+                },
+                {
+                    "$type": "SetSystemValueToOverrideMap",
+                    "RotationDampTime": true,
+                    "key": "Value_DamageSystemValue",
+                    "type": "ElementLevelCo"
+                }
+            ],
+            "isDynamicAbility": true
+        }
+    },
+    {
+        "Default": {
+            "$type": "ConfigAbility",
+            "abilityName": "ActivityAbility_SuperTrial_RangeNoEnemyAttackUp",
+            "abilitySpecials": {
+                "Value_AttackRate": 0.75
+            },
+            "modifiers": {
+                "UNIQUE_ActivityAbility_SuperTrial_RangeNoEnemyAttackUp_Team": {
+                    "modifierName": "",
+                    "isUnique": true,
+                    "bonusCriticalHurt": 100.0,
+                    "thinkInterval": 1.0,
+                    "onThinkInterval": [
+                        {
+                            "$type": "SetGlobalValue",
+                            "ratio": 0.0,
+                            "key": "_ActivityAbility_SuperTrial_RangeNoEnemyAttackUp_HasEnemy",
+                            "maxValue": 0.0,
+                            "minValue": 0.0
+                        },
+                        {
+                            "$type": "Predicated",
+                            "otherTargets": {
+                                "$type": "SelectTargetsByShape",
+                                "sortType": "Nearest",
+                                "shapeName": "CircleR5",
+                                "campTargetType": "Enemy",
+                                "campBasedOn": "CurLocalAvatar",
+                                "sizeRatio": 1.0
+                            },
+                            "targetPredicates": [
+                                {
+                                    "$type": "ByEntityTypes",
+                                    "entityTypes": [
+                                        "Monster"
+                                    ]
+                                }
+                            ],
+                            "successActions": [
+                                {
+                                    "$type": "SetGlobalValue",
+                                    "ratio": 1.0,
+                                    "key": "_ActivityAbility_SuperTrial_RangeNoEnemyAttackUp_HasEnemy",
+                                    "maxValue": 0.0,
+                                    "minValue": 0.0
+                                }
+                            ]
+                        },
+                        {
+                            "$type": "Predicated",
+                            "targetPredicates": [
+                                {
+                                    "$type": "ByTargetGlobalValue",
+                                    "key": "_ActivityAbility_SuperTrial_RangeNoEnemyAttackUp_HasEnemy",
+                                    "ratio": 0.0,
+                                    "forceByCaster": true,
+                                    "compareType": "NoneOrEqual"
+                                }
+                            ],
+                            "successActions": [
+                                {
+                                    "$type": "AttachModifier",
+                                    "target": "CurTeamAvatars",
+                                    "RotationDampTime": true,
+                                    "modifierName": "UNIQUE_ActivityAbility_SuperTrial_RangeNoEnemyAttackUp_AvatarBuff"
+                                }
+                            ],
+                            "failActions": [
+                                {
+                                    "$type": "RemoveUniqueModifier",
+                                    "target": "CurTeamAvatars",
+                                    "RotationDampTime": true,
+                                    "modifierName": "UNIQUE_ActivityAbility_SuperTrial_RangeNoEnemyAttackUp_AvatarBuff"
+                                }
+                            ]
+                        }
+                    ]
+                },
+                "UNIQUE_ActivityAbility_SuperTrial_RangeNoEnemyAttackUp_AvatarBuff": {
+                    "modifierName": "",
+                    "isUnique": true,
+                    "bonusCriticalHurt": 100.0,
+                    "modifierMixins": [
+                        {
+                            "$type": "ModifyDamageMixin",
+                            "ignoreEventInfo": true,
+                            "GDADKLDBGIM": "Value_AttackRate"
+                        }
+                    ],
+                    "state": "AttackUp",
+                    "onAdded": [
+                        {
+                            "$type": "ApplyModifier",
+                            "modifierName": "ShowBuffEffect"
+                        }
+                    ],
+                    "isLimitedProperties": true
+                },
+                "ShowBuffEffect": {
+                    "modifierName": "",
+                    "DCEFILPANJI": 1.5,
+                    "bonusCriticalHurt": 100.0,
+                    "onAdded": [
+                        {
+                            "$type": "FireEffect",
+                            "healLimitedByCasterMaxHPRatio": "Eff_Activity_SuperTrial_Buff",
+                            "MEMHGJDEPJA": -1.0
+                        }
+                    ]
+                }
+            },
+            "onAdded": [
+                {
+                    "$type": "AttachModifier",
+                    "modifierName": "UNIQUE_ActivityAbility_SuperTrial_RangeNoEnemyAttackUp_Team"
+                }
+            ],
+            "isDynamicAbility": true
+        }
+    },
+    {
+        "Default": {
+            "$type": "ConfigAbility",
+            "abilityName": "ActivityAbility_SuperTrial_RangeNoEnemyStaminaReduction",
+            "abilitySpecials": {
+                "Value_SpeedRate": 0.20000000298023224,
+                "Value_CostStaminaRatio": -0.5
+            },
+            "modifiers": {
+                "UNIQUE_ActivityAbility_SuperTrial_RangeNoEnemyStaminaReduction_Team": {
+                    "modifierName": "",
+                    "isUnique": true,
+                    "bonusCriticalHurt": 100.0,
+                    "thinkInterval": 1.0,
+                    "onThinkInterval": [
+                        {
+                            "$type": "SetGlobalValue",
+                            "ratio": 0.0,
+                            "key": "_ActivityAbility_SuperTrial_RangeNoEnemyStaminaReduction_HasEnemy",
+                            "maxValue": 0.0,
+                            "minValue": 0.0
+                        },
+                        {
+                            "$type": "Predicated",
+                            "otherTargets": {
+                                "$type": "SelectTargetsByShape",
+                                "sortType": "Nearest",
+                                "shapeName": "CircleR5",
+                                "campTargetType": "Enemy",
+                                "campBasedOn": "CurLocalAvatar",
+                                "sizeRatio": 1.0
+                            },
+                            "targetPredicates": [
+                                {
+                                    "$type": "ByEntityTypes",
+                                    "entityTypes": [
+                                        "Monster"
+                                    ]
+                                }
+                            ],
+                            "successActions": [
+                                {
+                                    "$type": "SetGlobalValue",
+                                    "ratio": 1.0,
+                                    "key": "_ActivityAbility_SuperTrial_RangeNoEnemyStaminaReduction_HasEnemy",
+                                    "maxValue": 0.0,
+                                    "minValue": 0.0
+                                }
+                            ]
+                        },
+                        {
+                            "$type": "Predicated",
+                            "targetPredicates": [
+                                {
+                                    "$type": "ByTargetGlobalValue",
+                                    "key": "_ActivityAbility_SuperTrial_RangeNoEnemyStaminaReduction_HasEnemy",
+                                    "ratio": 0.0,
+                                    "forceByCaster": true,
+                                    "compareType": "NoneOrEqual"
+                                }
+                            ],
+                            "successActions": [
+                                {
+                                    "$type": "AttachModifier",
+                                    "target": "CurTeamAvatars",
+                                    "RotationDampTime": true,
+                                    "modifierName": "UNIQUE_ActivityAbility_SuperTrial_RangeNoEnemyStaminaReduction_AvatarBuff_01"
+                                }
+                            ],
+                            "failActions": [
+                                {
+                                    "$type": "RemoveUniqueModifier",
+                                    "target": "CurTeamAvatars",
+                                    "RotationDampTime": true,
+                                    "modifierName": "UNIQUE_ActivityAbility_SuperTrial_RangeNoEnemyStaminaReduction_AvatarBuff_01"
+                                }
+                            ]
+                        }
+                    ]
+                },
+                "UNIQUE_ActivityAbility_SuperTrial_RangeNoEnemyStaminaReduction_AvatarBuff_01": {
+                    "modifierName": "",
+                    "isUnique": true,
+                    "bonusCriticalHurt": 100.0,
+                    "modifierMixins": [
+                        {
+                            "$type": "AttachToStateIDMixin",
+                            "stateIDs": [
+                                "SprintBS",
+                                "Sprint",
+                                "LiquidStrike_BS",
+                                "LiquidStrike_BS1",
+                                "LiquidStrike_Move",
+                                "LiquidStrike_Stand"
+                            ],
+                            "modifierName": "UNIQUE_ActivityAbility_SuperTrial_RangeNoEnemyStaminaReduction_AvatarBuff_02"
+                        }
+                    ],
+                    "properties": {
+                        "Animator_MoveSpeedRatio": "Value_SpeedRate"
+                    },
+                    "state": "SpeedUp",
+                    "isLimitedProperties": true
+                },
+                "UNIQUE_ActivityAbility_SuperTrial_RangeNoEnemyStaminaReduction_AvatarBuff_02": {
+                    "modifierName": "",
+                    "isUnique": true,
+                    "bonusCriticalHurt": 100.0,
+                    "properties": {
+                        "Actor_CostStaminaRatio": "Value_CostStaminaRatio"
+                    },
+                    "isLimitedProperties": true
+                }
+            },
+            "onAdded": [
+                {
+                    "$type": "AttachModifier",
+                    "modifierName": "UNIQUE_ActivityAbility_SuperTrial_RangeNoEnemyStaminaReduction_Team"
+                }
+            ],
+            "isDynamicAbility": true
+        }
+    },
+    {
+        "Default": {
+            "$type": "ConfigAbility",
+            "abilityName": "ActivityAbility_SuperTrial_RandomRoomRevive",
+            "abilitySpecials": {
+                "Value_Hp": 1.0
+            },
+            "modifiers": {
+                "UNIQUE_ActivityAbility_SuperTrial_RandomRoomRoomRevive": {
+                    "modifierName": "",
+                    "isUnique": true,
+                    "DCEFILPANJI": 1.0,
+                    "bonusCriticalHurt": 100.0,
+                    "onAdded": [
+                        {
+                            "$type": "ReviveDeadAvatar",
+                            "target": "AllPlayerAvatars",
+                            "amountByCasterMaxHPRatio": "Value_Hp",
+                            "cdDelta": 1.0
+                        },
+                        {
+                            "$type": "HealHP",
+                            "target": "CurTeamAvatars",
+                            "KBFADJMJOBK": "Value_Hp"
+                        },
+                        {
+                            "$type": "DebugLog",
+                            "content": "OnAdded:ActivityAbility_SuperTrial_RandomRoomRevive!!!!!!!!!!!"
+                        }
+                    ]
+                }
+            },
+            "onAdded": [
+                {
+                    "$type": "ApplyModifier",
+                    "RotationDampTime": true,
+                    "modifierName": "UNIQUE_ActivityAbility_SuperTrial_RandomRoomRoomRevive"
+                }
+            ],
+            "isDynamicAbility": true
+        }
+    },
+    {
+        "Default": {
+            "$type": "ConfigAbility",
+            "abilityName": "ActivityAbility_SuperTrial_RandomRoomAttackUp",
+            "abilitySpecials": {
+                "Value_AttackRate": 0.5
+            },
+            "modifiers": {
+                "ActivityAbility_SuperTrial_RandomRoomAttackUp": {
+                    "stacking": "Multiple",
+                    "modifierName": "",
+                    "bonusCriticalHurt": 100.0,
+                    "properties": {
+                        "Actor_AttackRatio": "Value_AttackRate"
+                    },
+                    "state": "AttackUp",
+                    "isLimitedProperties": true
+                }
+            },
+            "onAdded": [
+                {
+                    "$type": "ApplyModifier",
+                    "target": "Caster",
+                    "RotationDampTime": true,
+                    "modifierName": "ActivityAbility_SuperTrial_RandomRoomAttackUp"
+                }
+            ],
+            "isDynamicAbility": true
+        }
+    },
+    {
+        "Default": {
+            "$type": "ConfigAbility",
+            "abilityName": "ActivityAbility_SuperTrial_RandomRoomSpeedUp",
+            "abilitySpecials": {
+                "Value_SpeedRate": 0.20000000298023224
+            },
+            "modifiers": {
+                "ActivityAbility_SuperTrial_RandomRoomSpeedUp": {
+                    "stacking": "Multiple",
+                    "modifierName": "",
+                    "bonusCriticalHurt": 100.0,
+                    "properties": {
+                        "Animator_MoveSpeedRatio": "Value_SpeedRate"
+                    },
+                    "state": "SpeedUp",
+                    "isLimitedProperties": true
+                }
+            },
+            "onAdded": [
+                {
+                    "$type": "ApplyModifier",
+                    "target": "Caster",
+                    "RotationDampTime": true,
+                    "modifierName": "ActivityAbility_SuperTrial_RandomRoomSpeedUp"
+                }
+            ],
+            "isDynamicAbility": true
+        }
+    },
+    {
+        "Default": {
+            "$type": "ConfigAbility",
+            "abilityName": "ActivityAbility_SuperTrial_RandomRoomRevive_Copy",
+            "abilitySpecials": {
+                "Value_Hp": 1.0
+            },
+            "modifiers": {
+                "UNIQUE_ActivityAbility_SuperTrial_RandomRoomRoomRevive": {
+                    "modifierName": "",
+                    "isUnique": true,
+                    "DCEFILPANJI": 1.0,
+                    "bonusCriticalHurt": 100.0,
+                    "onAdded": [
+                        {
+                            "$type": "ReviveDeadAvatar",
+                            "amountByCasterMaxHPRatio": "Value_Hp",
+                            "cdDelta": 1.0
+                        },
+                        {
+                            "$type": "HealHP",
+                            "target": "CurTeamAvatars",
+                            "KBFADJMJOBK": "Value_Hp"
+                        },
+                        {
+                            "$type": "DebugLog",
+                            "content": "OnAdded:ActivityAbility_SuperTrial_RandomRoomRevive!!!!!!!!!!!"
+                        }
+                    ]
+                }
+            },
+            "onAdded": [
+                {
+                    "$type": "ApplyModifier",
+                    "RotationDampTime": true,
+                    "modifierName": "UNIQUE_ActivityAbility_SuperTrial_RandomRoomRoomRevive"
+                }
+            ],
+            "isDynamicAbility": true
+        }
+    },
+    {
+        "Default": {
+            "$type": "ConfigAbility",
+            "abilityName": "ActivityAbility_SuperTrial_RandomRoomAttackUp_Copy",
+            "abilitySpecials": {
+                "Value_AttackRate": 0.5
+            },
+            "modifiers": {
+                "ActivityAbility_SuperTrial_RandomRoomAttackUp": {
+                    "stacking": "Multiple",
+                    "modifierName": "",
+                    "bonusCriticalHurt": 100.0,
+                    "properties": {
+                        "Actor_AttackRatio": "Value_AttackRate"
+                    },
+                    "state": "AttackUp",
+                    "isLimitedProperties": true
+                }
+            },
+            "onAdded": [
+                {
+                    "$type": "ApplyModifier",
+                    "target": "Caster",
+                    "RotationDampTime": true,
+                    "modifierName": "ActivityAbility_SuperTrial_RandomRoomAttackUp"
+                }
+            ],
+            "isDynamicAbility": true
+        }
+    },
+    {
+        "Default": {
+            "$type": "ConfigAbility",
+            "abilityName": "ActivityAbility_SuperTrial_RandomRoomSpeedUp_Copy",
+            "abilitySpecials": {
+                "Value_SpeedRate": 0.20000000298023224
+            },
+            "modifiers": {
+                "ActivityAbility_SuperTrial_RandomRoomSpeedUp": {
+                    "stacking": "Multiple",
+                    "modifierName": "",
+                    "bonusCriticalHurt": 100.0,
+                    "properties": {
+                        "Animator_MoveSpeedRatio": "Value_SpeedRate"
+                    },
+                    "state": "SpeedUp",
+                    "isLimitedProperties": true
+                }
+            },
+            "onAdded": [
+                {
+                    "$type": "ApplyModifier",
+                    "target": "Caster",
+                    "RotationDampTime": true,
+                    "modifierName": "ActivityAbility_SuperTrial_RandomRoomSpeedUp"
+                }
+            ],
+            "isDynamicAbility": true
+        }
+    },
+    {
+        "Default": {
+            "$type": "ConfigAbility",
+            "abilityName": "ActivityAbility_MistTrial_Level_1",
+            "abilityMixins": [
+                {
+                    "$type": "ServerUpdateGlobalValueMixin",
+                    "key": "SGV_ABILITY_Mist_Level",
+                    "useLimitRange": true,
+                    "maxValue": 4.0,
+                    "minValue": 1.0
+                },
+                {
+                    "$type": "AttachModifierToSelfGlobalValueNoInitMixin",
+                    "globalValueKey": "SGV_ABILITY_Mist_Level",
+                    "valueSteps": [
+                        0.5,
+                        1.5,
+                        2.5,
+                        3.5,
+                        4.5
+                    ],
+                    "modifierNameSteps": [
+                        "Blank",
+                        "Blank",
+                        "Blank",
+                        "Blank"
+                    ],
+                    "actionQueues": [
+                        [
+                            {
+                                "$type": "SetOverrideMapValue",
+                                "ratio": "Damage_Ratio_Lv1",
+                                "overrideMapKey": "Override_Ratio"
+                            }
+                        ],
+                        [
+                            {
+                                "$type": "SetOverrideMapValue",
+                                "ratio": "Damage_Ratio_Lv2",
+                                "overrideMapKey": "Override_Ratio"
+                            }
+                        ],
+                        [
+                            {
+                                "$type": "SetOverrideMapValue",
+                                "ratio": "Damage_Ratio_Lv3",
+                                "overrideMapKey": "Override_Ratio"
+                            }
+                        ],
+                        [
+                            {
+                                "$type": "SetOverrideMapValue",
+                                "ratio": "Damage_Ratio_Lv4",
+                                "overrideMapKey": "Override_Ratio"
+                            }
+                        ]
+                    ]
+                }
+            ],
+            "abilitySpecials": {
+                "Override_Ratio": 0.0,
+                "Damage_Ratio_Lv1": 0.0,
+                "Damage_Ratio_Lv2": 0.0,
+                "Damage_Ratio_Lv3": 0.0,
+                "Damage_Ratio_Lv4": 0.0
+            },
+            "modifiers": {
+                "Blank": {
+                    "modifierName": "",
+                    "bonusCriticalHurt": 100.0
+                },
+                "MistTrial_Level1_Handler_OnTeam": {
+                    "modifierName": "",
+                    "bonusCriticalHurt": 100.0,
+                    "thinkInterval": 2.0,
+                    "onAdded": [
+                        {
+                            "$type": "AttachModifier",
+                            "target": "CurTeamAvatars",
+                            "modifierName": "MistTrial_Level1_Handler_OnAvatar"
+                        }
+                    ],
+                    "onThinkInterval": [
+                        {
+                            "$type": "AttachModifier",
+                            "target": "CurTeamAvatars",
+                            "modifierName": "MistTrial_Level1_Handler_OnAvatar"
+                        }
+                    ]
+                },
+                "MistTrial_Level1_Handler_OnAvatar": {
+                    "modifierName": "",
+                    "bonusCriticalHurt": 100.0,
+                    "modifierMixins": [
+                        {
+                            "$type": "ModifyDamageMixin",
+                            "ignoreEventInfo": true,
+                            "GDADKLDBGIM": "Override_Ratio",
+                            "predicates": [
+                                {
+                                    "$type": "ByHasAbilityState",
+                                    "abilityState": "ElementFrozen"
+                                }
+                            ]
+                        }
+                    ]
+                }
+            },
+            "onAdded": [
+                {
+                    "$type": "AttachModifier",
+                    "modifierName": "MistTrial_Level1_Handler_OnTeam"
+                }
+            ],
+            "isDynamicAbility": true
+        }
+    },
+    {
+        "Default": {
+            "$type": "ConfigAbility",
+            "abilityName": "ActivityAbility_MistTrial_Level_2",
+            "abilityMixins": [
+                {
+                    "$type": "ServerUpdateGlobalValueMixin",
+                    "key": "SGV_ABILITY_Mist_Level",
+                    "useLimitRange": true,
+                    "maxValue": 4.0,
+                    "minValue": 1.0
+                },
+                {
+                    "$type": "AttachModifierToSelfGlobalValueNoInitMixin",
+                    "globalValueKey": "SGV_ABILITY_Mist_Level",
+                    "valueSteps": [
+                        0.5,
+                        1.5,
+                        2.5,
+                        3.5,
+                        4.5
+                    ],
+                    "modifierNameSteps": [
+                        "Blank",
+                        "Blank",
+                        "Blank",
+                        "Blank"
+                    ],
+                    "actionQueues": [
+                        [
+                            {
+                                "$type": "SetOverrideMapValue",
+                                "ratio": "Damage_Ratio_Lv1",
+                                "overrideMapKey": "Override_Ratio"
+                            },
+                            {
+                                "$type": "RemoveModifier",
+                                "target": "CurTeamAvatars",
+                                "RotationDampTime": true,
+                                "modifierName": "MistTrial_Level2_ShockDamageUp"
+                            },
+                            {
+                                "$type": "AttachModifier",
+                                "target": "CurTeamAvatars",
+                                "RotationDampTime": true,
+                                "modifierName": "MistTrial_Level2_ShockDamageUp"
+                            }
+                        ],
+                        [
+                            {
+                                "$type": "SetOverrideMapValue",
+                                "ratio": "Damage_Ratio_Lv2",
+                                "overrideMapKey": "Override_Ratio"
+                            },
+                            {
+                                "$type": "RemoveModifier",
+                                "target": "CurTeamAvatars",
+                                "RotationDampTime": true,
+                                "modifierName": "MistTrial_Level2_ShockDamageUp"
+                            },
+                            {
+                                "$type": "AttachModifier",
+                                "target": "CurTeamAvatars",
+                                "RotationDampTime": true,
+                                "modifierName": "MistTrial_Level2_ShockDamageUp"
+                            }
+                        ],
+                        [
+                            {
+                                "$type": "SetOverrideMapValue",
+                                "ratio": "Damage_Ratio_Lv3",
+                                "overrideMapKey": "Override_Ratio"
+                            },
+                            {
+                                "$type": "RemoveModifier",
+                                "target": "CurTeamAvatars",
+                                "RotationDampTime": true,
+                                "modifierName": "MistTrial_Level2_ShockDamageUp"
+                            },
+                            {
+                                "$type": "AttachModifier",
+                                "target": "CurTeamAvatars",
+                                "RotationDampTime": true,
+                                "modifierName": "MistTrial_Level2_ShockDamageUp"
+                            }
+                        ],
+                        [
+                            {
+                                "$type": "SetOverrideMapValue",
+                                "ratio": "Damage_Ratio_Lv4",
+                                "overrideMapKey": "Override_Ratio"
+                            },
+                            {
+                                "$type": "RemoveModifier",
+                                "target": "CurTeamAvatars",
+                                "RotationDampTime": true,
+                                "modifierName": "MistTrial_Level2_ShockDamageUp"
+                            },
+                            {
+                                "$type": "AttachModifier",
+                                "target": "CurTeamAvatars",
+                                "RotationDampTime": true,
+                                "modifierName": "MistTrial_Level2_ShockDamageUp"
+                            }
+                        ]
+                    ]
+                }
+            ],
+            "abilitySpecials": {
+                "Override_Ratio": 0.0,
+                "Damage_Ratio_Lv1": 0.0,
+                "Damage_Ratio_Lv2": 0.0,
+                "Damage_Ratio_Lv3": 0.0,
+                "Damage_Ratio_Lv4": 0.0,
+                "CD_Interval": 0.0,
+                "CD_Minus": 0.0,
+                "Energy": 0.0
+            },
+            "modifiers": {
+                "Blank": {
+                    "modifierName": "",
+                    "bonusCriticalHurt": 100.0
+                },
+                "MistTrial_Level2_CdMinus_Handler_OnTeam": {
+                    "modifierName": "",
+                    "bonusCriticalHurt": 100.0,
+                    "thinkInterval": 2.0,
+                    "onAdded": [
+                        {
+                            "$type": "AttachModifier",
+                            "target": "CurTeamAvatars",
+                            "modifierName": "MistTrial_Level2_CdMinus_Handler_OnAvatar"
+                        }
+                    ],
+                    "onThinkInterval": [
+                        {
+                            "$type": "AttachModifier",
+                            "target": "CurTeamAvatars",
+                            "modifierName": "MistTrial_Level2_CdMinus_Handler_OnAvatar"
+                        }
+                    ]
+                },
+                "MistTrial_Level2_CdMinus_Handler_OnAvatar": {
+                    "modifierName": "",
+                    "bonusCriticalHurt": 100.0,
+                    "modifierMixins": [
+                        {
+                            "$type": "DoActionByElementReactionMixin",
+                            "entityTypes": [
+                                "Monster"
+                            ],
+                            "reactionTypes": [
+                                "Shock"
+                            ],
+                            "actions": [
+                                {
+                                    "$type": "AttachModifier",
+                                    "target": "Team",
+                                    "modifierName": "UNIQUE_MistTrial_CdMinus_OnTeam"
+                                }
+                            ]
+                        }
+                    ]
+                },
+                "UNIQUE_MistTrial_CdMinus_OnTeam": {
+                    "stacking": "Unique",
+                    "modifierName": "",
+                    "isUnique": true,
+                    "DCEFILPANJI": "CD_Interval",
+                    "bonusCriticalHurt": 100.0,
+                    "onAdded": [
+                        {
+                            "$type": "ReviveElemEnergy",
+                            "target": "CurTeamAvatars",
+                            "RotationDampTime": true,
+                            "ratio": "Energy"
+                        },
+                        {
+                            "$type": "ModifyAvatarSkillCD",
+                            "target": "CurTeamAvatars",
+                            "RotationDampTime": true,
+                            "skillSlot": [
+                                5
+                            ],
+                            "IBADDLKBOGC": [
+                                0.0,
+                                1.0,
+                                "CD_Minus",
+                                "MUL",
+                                "SUB"
+                            ]
+                        }
+                    ]
+                },
+                "MistTrial_Level2_ShockDamageUp": {
+                    "modifierName": "",
+                    "bonusCriticalHurt": 100.0,
+                    "properties": {
+                        "Actor_ElemReactElectricDelta": "Override_Ratio"
+                    },
+                    "isLimitedProperties": true
+                }
+            },
+            "onAdded": [
+                {
+                    "$type": "AttachModifier",
+                    "modifierName": "MistTrial_Level2_CdMinus_Handler_OnTeam"
+                }
+            ],
+            "isDynamicAbility": true
+        }
+    },
+    {
+        "Default": {
+            "$type": "ConfigAbility",
+            "abilityName": "ActivityAbility_MistTrial_Level_3",
+            "abilityMixins": [
+                {
+                    "$type": "ServerUpdateGlobalValueMixin",
+                    "key": "SGV_ABILITY_Mist_Level",
+                    "useLimitRange": true,
+                    "maxValue": 4.0,
+                    "minValue": 1.0
+                },
+                {
+                    "$type": "AttachModifierToSelfGlobalValueNoInitMixin",
+                    "globalValueKey": "SGV_ABILITY_Mist_Level",
+                    "valueSteps": [
+                        0.5,
+                        1.5,
+                        2.5,
+                        3.5,
+                        4.5
+                    ],
+                    "modifierNameSteps": [
+                        "Blank",
+                        "Blank",
+                        "Blank",
+                        "Blank"
+                    ],
+                    "actionQueues": [
+                        [
+                            {
+                                "$type": "SetOverrideMapValue",
+                                "ratio": "Damage_Ratio_Lv1",
+                                "overrideMapKey": "Override_Ratio"
+                            }
+                        ],
+                        [
+                            {
+                                "$type": "SetOverrideMapValue",
+                                "ratio": "Damage_Ratio_Lv2",
+                                "overrideMapKey": "Override_Ratio"
+                            }
+                        ],
+                        [
+                            {
+                                "$type": "SetOverrideMapValue",
+                                "ratio": "Damage_Ratio_Lv3",
+                                "overrideMapKey": "Override_Ratio"
+                            }
+                        ],
+                        [
+                            {
+                                "$type": "SetOverrideMapValue",
+                                "ratio": "Damage_Ratio_Lv4",
+                                "overrideMapKey": "Override_Ratio"
+                            }
+                        ]
+                    ]
+                }
+            ],
+            "abilitySpecials": {
+                "System_Damage": 0.0,
+                "Override_Ratio": 0.0,
+                "Damage_Ratio_Lv1": 0.0,
+                "Damage_Ratio_Lv2": 0.0,
+                "Damage_Ratio_Lv3": 0.0,
+                "Damage_Ratio_Lv4": 0.0,
+                "CD_Interval": 0.0
+            },
+            "modifiers": {
+                "Blank": {
+                    "modifierName": "",
+                    "bonusCriticalHurt": 100.0
+                },
+                "MistTrial_Level3_Melt_Handler_OnTeam": {
+                    "modifierName": "",
+                    "bonusCriticalHurt": 100.0,
+                    "thinkInterval": 2.0,
+                    "onAdded": [
+                        {
+                            "$type": "AttachModifier",
+                            "target": "CurTeamAvatars",
+                            "modifierName": "MistTrial_Level3_Melt_Handler_OnAvatar"
+                        }
+                    ],
+                    "onThinkInterval": [
+                        {
+                            "$type": "AttachModifier",
+                            "target": "CurTeamAvatars",
+                            "modifierName": "MistTrial_Level3_Melt_Handler_OnAvatar"
+                        }
+                    ]
+                },
+                "MistTrial_Level3_Melt_Handler_OnAvatar": {
+                    "modifierName": "",
+                    "bonusCriticalHurt": 100.0,
+                    "modifierMixins": [
+                        {
+                            "$type": "DoActionByElementReactionMixin",
+                            "entityTypes": [
+                                "Monster"
+                            ],
+                            "reactionTypes": [
+                                "Melt",
+                                "Stream"
+                            ],
+                            "actions": [
+                                {
+                                    "$type": "AttachModifier",
+                                    "target": "Team",
+                                    "RotationDampTime": true,
+                                    "modifierName": "UNIQUE_MistTrial_Melt_OnTeam"
+                                }
+                            ]
+                        }
+                    ]
+                },
+                "UNIQUE_MistTrial_Melt_OnTeam": {
+                    "stacking": "Unique",
+                    "modifierName": "",
+                    "isUnique": true,
+                    "DCEFILPANJI": "CD_Interval",
+                    "bonusCriticalHurt": 100.0,
+                    "onAdded": [
+                        {
+                            "$type": "FireEffect",
+                            "healLimitedByCasterMaxHPRatio": "Eff_EnergyDisk_ElementalBurst_Wave_R40",
+                            "MEMHGJDEPJA": -1.0
+                        },
+                        {
+                            "$type": "TriggerAttackEvent",
+                            "target": "CurLocalAvatar",
+                            "attackEvent": {
+                                "attackPattern": {
+                                    "$type": "ConfigAttackSphere",
+                                    "triggerType": "TriggerNoRepeat",
+                                    "born": {
+                                        "$type": "ConfigBornBySelf"
+                                    },
+                                    "ILKJCNJJPEL": 5.0
+                                },
+                                "attackInfo": {
+                                    "attackTag": "",
+                                    "attenuationTag": "",
+                                    "attenuationGroup": "default",
+                                    "attackProperty": {
+                                        "GDADKLDBGIM": 0.0,
+                                        "bonusCriticalHurt": 0.0,
+                                        "ignoreAttackerProperty": true,
+                                        "enBreak": 0.0,
+                                        "damageExtra": [
+                                            "System_Damage",
+                                            "Override_Ratio",
+                                            "MUL"
+                                        ],
+                                        "trueDamage": true,
+                                        "bonusCritical": true
+                                    },
+                                    "hitPattern": {
+                                        "onHitEffectName": "",
+                                        "hitImpulseType": "LV1"
+                                    }
+                                }
+                            },
+                            "targetType": "Enemy"
+                        }
+                    ]
+                }
+            },
+            "onAdded": [
+                {
+                    "$type": "SetSystemValueToOverrideMap",
+                    "key": "System_Damage",
+                    "type": "ElementLevelCo"
+                },
+                {
+                    "$type": "AttachModifier",
+                    "modifierName": "MistTrial_Level3_Melt_Handler_OnTeam"
+                }
+            ],
+            "isDynamicAbility": true
+        }
+    },
+    {
+        "Default": {
+            "$type": "ConfigAbility",
+            "abilityName": "ActivityAbility_MistTrial_Level_4",
+            "abilityMixins": [
+                {
+                    "$type": "ServerUpdateGlobalValueMixin",
+                    "key": "SGV_ABILITY_Mist_Level",
+                    "useLimitRange": true,
+                    "maxValue": 4.0,
+                    "minValue": 1.0
+                },
+                {
+                    "$type": "AttachModifierToSelfGlobalValueNoInitMixin",
+                    "globalValueKey": "SGV_ABILITY_Mist_Level",
+                    "valueSteps": [
+                        0.5,
+                        1.5,
+                        2.5,
+                        3.5,
+                        4.5
+                    ],
+                    "modifierNameSteps": [
+                        "Blank",
+                        "Blank",
+                        "Blank",
+                        "Blank"
+                    ],
+                    "actionQueues": [
+                        [
+                            {
+                                "$type": "SetOverrideMapValue",
+                                "ratio": "Damage_Ratio_Lv1",
+                                "overrideMapKey": "Override_Ratio"
+                            }
+                        ],
+                        [
+                            {
+                                "$type": "SetOverrideMapValue",
+                                "ratio": "Damage_Ratio_Lv2",
+                                "overrideMapKey": "Override_Ratio"
+                            }
+                        ],
+                        [
+                            {
+                                "$type": "SetOverrideMapValue",
+                                "ratio": "Damage_Ratio_Lv3",
+                                "overrideMapKey": "Override_Ratio"
+                            }
+                        ],
+                        [
+                            {
+                                "$type": "SetOverrideMapValue",
+                                "ratio": "Damage_Ratio_Lv4",
+                                "overrideMapKey": "Override_Ratio"
+                            }
+                        ]
+                    ]
+                }
+            ],
+            "abilitySpecials": {
+                "Override_Ratio": 0.0,
+                "Damage_Ratio_Lv1": 0.0,
+                "Damage_Ratio_Lv2": 0.0,
+                "Damage_Ratio_Lv3": 0.0,
+                "Damage_Ratio_Lv4": 0.0,
+                "Duration": 0.0
+            },
+            "modifiers": {
+                "Blank": {
+                    "modifierName": "",
+                    "bonusCriticalHurt": 100.0
+                },
+                "MistTrial_Level4_Reaction_Handler_OnTeam": {
+                    "modifierName": "",
+                    "bonusCriticalHurt": 100.0,
+                    "thinkInterval": 2.0,
+                    "onAdded": [
+                        {
+                            "$type": "AttachModifier",
+                            "target": "CurTeamAvatars",
+                            "modifierName": "MistTrial_Level4_Reaction_Handler_OnAvatar"
+                        }
+                    ],
+                    "onThinkInterval": [
+                        {
+                            "$type": "AttachModifier",
+                            "target": "CurTeamAvatars",
+                            "modifierName": "MistTrial_Level4_Reaction_Handler_OnAvatar"
+                        }
+                    ]
+                },
+                "MistTrial_Level4_Reaction_Handler_OnAvatar": {
+                    "modifierName": "",
+                    "bonusCriticalHurt": 100.0,
+                    "modifierMixins": [
+                        {
+                            "$type": "DoActionByElementReactionMixin",
+                            "entityTypes": [
+                                "Monster"
+                            ],
+                            "reactionTypes": [
+                                "Explode"
+                            ],
+                            "actions": [
+                                {
+                                    "$type": "RemoveUniqueModifier",
+                                    "target": "CurTeamAvatars",
+                                    "RotationDampTime": true,
+                                    "modifierName": "UNIQUE_MistTrial_Buff_Explode"
+                                },
+                                {
+                                    "$type": "AttachModifier",
+                                    "target": "CurTeamAvatars",
+                                    "RotationDampTime": true,
+                                    "modifierName": "UNIQUE_MistTrial_Buff_Explode"
+                                }
+                            ]
+                        },
+                        {
+                            "$type": "DoActionByElementReactionMixin",
+                            "entityTypes": [
+                                "Monster"
+                            ],
+                            "reactionTypes": [
+                                "Superconductor"
+                            ],
+                            "actions": [
+                                {
+                                    "$type": "RemoveUniqueModifier",
+                                    "target": "CurTeamAvatars",
+                                    "RotationDampTime": true,
+                                    "modifierName": "UNIQUE_MistTrial_Buff_Superconductor"
+                                },
+                                {
+                                    "$type": "AttachModifier",
+                                    "target": "CurTeamAvatars",
+                                    "RotationDampTime": true,
+                                    "modifierName": "UNIQUE_MistTrial_Buff_Superconductor"
+                                }
+                            ]
+                        },
+                        {
+                            "$type": "DoActionByElementReactionMixin",
+                            "entityTypes": [
+                                "Monster"
+                            ],
+                            "reactionTypes": [
+                                "SwirlFire",
+                                "SwirlWater",
+                                "SwirlElectric",
+                                "SwirlIce"
+                            ],
+                            "actions": [
+                                {
+                                    "$type": "RemoveUniqueModifier",
+                                    "target": "CurTeamAvatars",
+                                    "RotationDampTime": true,
+                                    "modifierName": "UNIQUE_MistTrial_Buff_Swirl"
+                                },
+                                {
+                                    "$type": "AttachModifier",
+                                    "target": "CurTeamAvatars",
+                                    "RotationDampTime": true,
+                                    "modifierName": "UNIQUE_MistTrial_Buff_Swirl"
+                                }
+                            ]
+                        },
+                        {
+                            "$type": "DoActionByElementReactionMixin",
+                            "entityTypes": [
+                                "Monster"
+                            ],
+                            "reactionTypes": [
+                                "CrystallizeFire",
+                                "CrystallizeWater",
+                                "CrystallizeElectric",
+                                "CrystallizeIce"
+                            ],
+                            "actions": [
+                                {
+                                    "$type": "RemoveUniqueModifier",
+                                    "target": "CurTeamAvatars",
+                                    "RotationDampTime": true,
+                                    "modifierName": "UNIQUE_MistTrial_Buff_Crystal"
+                                },
+                                {
+                                    "$type": "AttachModifier",
+                                    "target": "CurTeamAvatars",
+                                    "RotationDampTime": true,
+                                    "modifierName": "UNIQUE_MistTrial_Buff_Crystal"
+                                }
+                            ]
+                        }
+                    ]
+                },
+                "UNIQUE_MistTrial_Buff_Explode": {
+                    "modifierName": "",
+                    "isUnique": true,
+                    "DCEFILPANJI": "Duration",
+                    "bonusCriticalHurt": 100.0,
+                    "properties": {
+                        "Actor_AddHurtDelta": "Override_Ratio"
+                    },
+                    "isLimitedProperties": true
+                },
+                "UNIQUE_MistTrial_Buff_Superconductor": {
+                    "modifierName": "",
+                    "isUnique": true,
+                    "DCEFILPANJI": "Duration",
+                    "bonusCriticalHurt": 100.0,
+                    "properties": {
+                        "Actor_AddHurtDelta": "Override_Ratio"
+                    },
+                    "isLimitedProperties": true
+                },
+                "UNIQUE_MistTrial_Buff_Swirl": {
+                    "modifierName": "",
+                    "isUnique": true,
+                    "DCEFILPANJI": "Duration",
+                    "bonusCriticalHurt": 100.0,
+                    "properties": {
+                        "Actor_AddHurtDelta": "Override_Ratio"
+                    },
+                    "isLimitedProperties": true
+                },
+                "UNIQUE_MistTrial_Buff_Crystal": {
+                    "modifierName": "",
+                    "isUnique": true,
+                    "DCEFILPANJI": "Duration",
+                    "bonusCriticalHurt": 100.0,
+                    "properties": {
+                        "Actor_AddHurtDelta": "Override_Ratio"
+                    },
+                    "isLimitedProperties": true
+                }
+            },
+            "onAdded": [
+                {
+                    "$type": "AttachModifier",
+                    "modifierName": "MistTrial_Level4_Reaction_Handler_OnTeam"
+                }
+            ],
+            "isDynamicAbility": true
+        }
+    },
+    {
+        "Default": {
+            "$type": "ConfigAbility",
+            "abilityName": "ActivityAbility_MistTrial_Level_5",
+            "abilityMixins": [
+                {
+                    "$type": "ServerUpdateGlobalValueMixin",
+                    "key": "SGV_ABILITY_Mist_Level",
+                    "useLimitRange": true,
+                    "maxValue": 4.0,
+                    "minValue": 1.0
+                },
+                {
+                    "$type": "AttachModifierToSelfGlobalValueNoInitMixin",
+                    "globalValueKey": "SGV_ABILITY_Mist_Level",
+                    "valueSteps": [
+                        0.5,
+                        1.5,
+                        2.5,
+                        3.5,
+                        4.5
+                    ],
+                    "modifierNameSteps": [
+                        "Blank",
+                        "Blank",
+                        "Blank",
+                        "Blank"
+                    ],
+                    "actionQueues": [
+                        [
+                            {
+                                "$type": "SetOverrideMapValue",
+                                "ratio": "Damage_Ratio_Lv1",
+                                "overrideMapKey": "Override_Ratio"
+                            }
+                        ],
+                        [
+                            {
+                                "$type": "SetOverrideMapValue",
+                                "ratio": "Damage_Ratio_Lv2",
+                                "overrideMapKey": "Override_Ratio"
+                            }
+                        ],
+                        [
+                            {
+                                "$type": "SetOverrideMapValue",
+                                "ratio": "Damage_Ratio_Lv3",
+                                "overrideMapKey": "Override_Ratio"
+                            }
+                        ],
+                        [
+                            {
+                                "$type": "SetOverrideMapValue",
+                                "ratio": "Damage_Ratio_Lv4",
+                                "overrideMapKey": "Override_Ratio"
+                            }
+                        ]
+                    ]
+                },
+                {
+                    "$type": "AttachModifierToSelfGlobalValueNoInitMixin",
+                    "globalValueKey": "_ABILITY_MistTrial_BurstLevel",
+                    "valueSteps": [
+                        -0.5,
+                        9.5,
+                        10.5
+                    ],
+                    "modifierNameSteps": [
+                        "Blank",
+                        "MistTrial_Level5_FullBurst_OnTeam"
+                    ]
+                }
+            ],
+            "abilitySpecials": {
+                "Override_Ratio": 0.0,
+                "Burst_Level": 0.0,
+                "Damage_Ratio_Lv1": 0.0,
+                "Damage_Ratio_Lv2": 0.0,
+                "Damage_Ratio_Lv3": 0.0,
+                "Damage_Ratio_Lv4": 0.0,
+                "AttackSpeed_Ratio": 0.0,
+                "MoveSpeed_Ratio": 0.0
+            },
+            "modifiers": {
+                "Blank": {
+                    "modifierName": "",
+                    "bonusCriticalHurt": 100.0
+                },
+                "MistTrial_Level5_Charge_Handler_OnTeam": {
+                    "modifierName": "",
+                    "bonusCriticalHurt": 100.0,
+                    "thinkInterval": 2.0,
+                    "onAdded": [
+                        {
+                            "$type": "AttachModifier",
+                            "target": "CurTeamAvatars",
+                            "modifierName": "MistTrial_Level5_Charge_Handler_OnAvatar"
+                        },
+                        {
+                            "$type": "AttachModifier",
+                            "target": "CurTeamAvatars",
+                            "modifierName": "UNIQUE_MistTrial_BurstDamageUp_OnAvatar"
+                        }
+                    ],
+                    "onThinkInterval": [
+                        {
+                            "$type": "AttachModifier",
+                            "target": "CurTeamAvatars",
+                            "modifierName": "MistTrial_Level5_Charge_Handler_OnAvatar"
+                        },
+                        {
+                            "$type": "AttachModifier",
+                            "target": "CurTeamAvatars",
+                            "modifierName": "UNIQUE_MistTrial_BurstDamageUp_OnAvatar"
+                        }
+                    ]
+                },
+                "MistTrial_Level5_Charge_Handler_OnAvatar": {
+                    "modifierName": "",
+                    "bonusCriticalHurt": 100.0,
+                    "modifierMixins": [
+                        {
+                            "$type": "OnAvatarUseSkillMixin",
+                            "onTriggerUltimateSkill": [
+                                {
+                                    "$type": "AddGlobalValue",
+                                    "target": "Team",
+                                    "ratio": 1.0,
+                                    "key": "_ABILITY_MistTrial_BurstLevel",
+                                    "useLimitRange": true,
+                                    "maxValue": 10.0,
+                                    "minValue": 0.0
+                                },
+                                {
+                                    "$type": "SetGlobalValueToOverrideMap",
+                                    "target": "Team",
+                                    "globalValueKey": "_ABILITY_MistTrial_BurstLevel",
+                                    "overrideMapKey": "Burst_Level"
+                                }
+                            ],
+                            "IBLOPLCLHLN": 0.20000000298023224
+                        }
+                    ]
+                },
+                "UNIQUE_MistTrial_BurstDamageUp_OnAvatar": {
+                    "stacking": "Unique",
+                    "modifierName": "",
+                    "isUnique": true,
+                    "bonusCriticalHurt": 100.0,
+                    "modifierMixins": [
+                        {
+                            "$type": "ModifyDamageMixin",
+                            "attackTags": [
+                                "Elemental_Burst"
+                            ],
+                            "GDADKLDBGIM": [
+                                "Override_Ratio",
+                                "Burst_Level",
+                                "MUL"
+                            ]
+                        }
+                    ]
+                },
+                "MistTrial_Level5_FullBurst_OnTeam": {
+                    "modifierName": "",
+                    "bonusCriticalHurt": 100.0,
+                    "thinkInterval": 2.0,
+                    "onAdded": [
+                        {
+                            "$type": "AttachModifier",
+                            "target": "CurTeamAvatars",
+                            "modifierName": "MistTrial_Level5_FullBurst_OnAvatar"
+                        }
+                    ],
+                    "onThinkInterval": [
+                        {
+                            "$type": "AttachModifier",
+                            "target": "CurTeamAvatars",
+                            "modifierName": "MistTrial_Level5_FullBurst_OnAvatar"
+                        }
+                    ]
+                },
+                "MistTrial_Level5_FullBurst_OnAvatar": {
+                    "modifierName": "",
+                    "bonusCriticalHurt": 100.0,
+                    "properties": {
+                        "Animator_AttackSpeedRatio": "AttackSpeed_Ratio",
+                        "Animator_MoveSpeedRatio": "MoveSpeed_Ratio"
+                    },
+                    "isLimitedProperties": true
+                }
+            },
+            "onAdded": [
+                {
+                    "$type": "SetGlobalValue",
+                    "ratio": 0.0,
+                    "key": "_ABILITY_MistTrial_BurstLevel",
+                    "maxValue": 0.0,
+                    "minValue": 0.0
+                },
+                {
+                    "$type": "AttachModifier",
+                    "modifierName": "MistTrial_Level5_Charge_Handler_OnTeam"
+                }
+            ],
+            "isDynamicAbility": true
+        }
+    },
+    {
+        "Default": {
+            "$type": "ConfigAbility",
+            "abilityName": "ActivityAbility_MistTrial_Level_6",
+            "abilityMixins": [
+                {
+                    "$type": "ServerUpdateGlobalValueMixin",
+                    "key": "SGV_ABILITY_Mist_Level",
+                    "useLimitRange": true,
+                    "maxValue": 4.0,
+                    "minValue": 1.0
+                },
+                {
+                    "$type": "AttachModifierToSelfGlobalValueNoInitMixin",
+                    "globalValueKey": "SGV_ABILITY_Mist_Level",
+                    "valueSteps": [
+                        0.5,
+                        1.5,
+                        2.5,
+                        3.5,
+                        4.5
+                    ],
+                    "modifierNameSteps": [
+                        "Blank",
+                        "Blank",
+                        "Blank",
+                        "Blank"
+                    ],
+                    "actionQueues": [
+                        [
+                            {
+                                "$type": "SetOverrideMapValue",
+                                "ratio": "Damage_Ratio_Lv1",
+                                "overrideMapKey": "Override_Ratio"
+                            }
+                        ],
+                        [
+                            {
+                                "$type": "SetOverrideMapValue",
+                                "ratio": "Damage_Ratio_Lv2",
+                                "overrideMapKey": "Override_Ratio"
+                            }
+                        ],
+                        [
+                            {
+                                "$type": "SetOverrideMapValue",
+                                "ratio": "Damage_Ratio_Lv3",
+                                "overrideMapKey": "Override_Ratio"
+                            }
+                        ],
+                        [
+                            {
+                                "$type": "SetOverrideMapValue",
+                                "ratio": "Damage_Ratio_Lv4",
+                                "overrideMapKey": "Override_Ratio"
+                            }
+                        ]
+                    ]
+                }
+            ],
+            "abilitySpecials": {
+                "Override_Ratio": 0.0,
+                "Damage_Ratio_Lv1": 0.0,
+                "Damage_Ratio_Lv2": 0.0,
+                "Damage_Ratio_Lv3": 0.0,
+                "Damage_Ratio_Lv4": 0.0,
+                "Duration": 0.0
+            },
+            "modifiers": {
+                "Blank": {
+                    "modifierName": "",
+                    "bonusCriticalHurt": 100.0
+                },
+                "MistTrial_SwirlAttackUp_Handler_OnTeam": {
+                    "modifierName": "",
+                    "bonusCriticalHurt": 100.0,
+                    "thinkInterval": 2.0,
+                    "onAdded": [
+                        {
+                            "$type": "AttachModifier",
+                            "target": "CurTeamAvatars",
+                            "modifierName": "MistTrial_SwirlAttackUp_Handler_OnAvatar"
+                        }
+                    ],
+                    "onThinkInterval": [
+                        {
+                            "$type": "AttachModifier",
+                            "target": "CurTeamAvatars",
+                            "modifierName": "MistTrial_SwirlAttackUp_Handler_OnAvatar"
+                        }
+                    ]
+                },
+                "MistTrial_SwirlAttackUp_Handler_OnAvatar": {
+                    "modifierName": "",
+                    "bonusCriticalHurt": 100.0,
+                    "modifierMixins": [
+                        {
+                            "$type": "DoActionByElementReactionMixin",
+                            "entityTypes": [
+                                "Monster"
+                            ],
+                            "reactionTypes": [
+                                "SwirlFire",
+                                "SwirlWater",
+                                "SwirlElectric",
+                                "SwirlIce"
+                            ],
+                            "actions": [
+                                {
+                                    "$type": "RemoveUniqueModifier",
+                                    "target": "CurTeamAvatars",
+                                    "RotationDampTime": true,
+                                    "modifierName": "UNIQUE_MistTrial_Swirl_AttackUp"
+                                },
+                                {
+                                    "$type": "AttachModifier",
+                                    "target": "CurTeamAvatars",
+                                    "RotationDampTime": true,
+                                    "modifierName": "UNIQUE_MistTrial_Swirl_AttackUp"
+                                }
+                            ]
+                        }
+                    ]
+                },
+                "UNIQUE_MistTrial_Swirl_AttackUp": {
+                    "stacking": "Unique",
+                    "modifierName": "",
+                    "isUnique": true,
+                    "DCEFILPANJI": "Duration",
+                    "bonusCriticalHurt": 100.0,
+                    "properties": {
+                        "Actor_AttackRatio": "Override_Ratio"
+                    },
+                    "isLimitedProperties": true
+                }
+            },
+            "onAdded": [
+                {
+                    "$type": "AttachModifier",
+                    "modifierName": "MistTrial_SwirlAttackUp_Handler_OnTeam"
+                }
+            ],
+            "isDynamicAbility": true
+        }
+    },
+    {
+        "Default": {
+            "$type": "ConfigAbility",
+            "abilityName": "MonsterAffix_Property_HpUp_01_ForMistTrial",
+            "abilitySpecials": {
+                "HPUpRatio": 0.0
+            },
+            "modifiers": {
+                "UNIQUE_MonsterAffix_Property_HpUp_01_ForMistTrial": {
+                    "stacking": "Unique",
+                    "modifierName": "",
+                    "isUnique": true,
+                    "bonusCriticalHurt": 100.0,
+                    "properties": {
+                        "Actor_MaxHPRatio": "HPUpRatio"
+                    }
+                }
+            },
+            "onAdded": [
+                {
+                    "$type": "AttachModifier",
+                    "modifierName": "UNIQUE_MonsterAffix_Property_HpUp_01_ForMistTrial"
+                }
+            ],
+            "isDynamicAbility": true
+        }
+    },
+    {
+        "Default": {
+            "$type": "ConfigAbility",
+            "abilityName": "MonsterAffix_Property_HpUp_02_ForMistTrial",
+            "abilitySpecials": {
+                "HPUpRatio": 0.0
+            },
+            "modifiers": {
+                "UNIQUE_MonsterAffix_Property_HpUp_02_ForMistTrial": {
+                    "stacking": "Unique",
+                    "modifierName": "",
+                    "isUnique": true,
+                    "bonusCriticalHurt": 100.0,
+                    "properties": {
+                        "Actor_MaxHPRatio": "HPUpRatio"
+                    }
+                }
+            },
+            "onAdded": [
+                {
+                    "$type": "AttachModifier",
+                    "modifierName": "UNIQUE_MonsterAffix_Property_HpUp_02_ForMistTrial"
+                }
+            ],
+            "isDynamicAbility": true
+        }
+    },
+    {
+        "Default": {
+            "$type": "ConfigAbility",
+            "abilityName": "ActivityAbility_MistTrialV3_Level_1",
+            "abilityMixins": [
+                {
+                    "$type": "ServerUpdateGlobalValueMixin",
+                    "key": "SGV_ABILITY_Mist_Level",
+                    "useLimitRange": true,
+                    "maxValue": 4.0,
+                    "minValue": 1.0
+                },
+                {
+                    "$type": "AttachModifierToSelfGlobalValueNoInitMixin",
+                    "globalValueKey": "SGV_ABILITY_Mist_Level",
+                    "valueSteps": [
+                        0.5,
+                        1.5,
+                        2.5,
+                        3.5,
+                        4.5
+                    ],
+                    "modifierNameSteps": [
+                        "Blank",
+                        "Blank",
+                        "Blank",
+                        "Blank"
+                    ],
+                    "actionQueues": [
+                        [
+                            {
+                                "$type": "SetOverrideMapValue",
+                                "ratio": "Wind_Ratio_Lv1",
+                                "overrideMapKey": "Override_Ratio"
+                            }
+                        ],
+                        [
+                            {
+                                "$type": "SetOverrideMapValue",
+                                "ratio": "Wind_Ratio_Lv2",
+                                "overrideMapKey": "Override_Ratio"
+                            }
+                        ],
+                        [
+                            {
+                                "$type": "SetOverrideMapValue",
+                                "ratio": "Wind_Ratio_Lv3",
+                                "overrideMapKey": "Override_Ratio"
+                            }
+                        ],
+                        [
+                            {
+                                "$type": "SetOverrideMapValue",
+                                "ratio": "Wind_Ratio_Lv4",
+                                "overrideMapKey": "Override_Ratio"
+                            }
+                        ]
+                    ]
+                }
+            ],
+            "abilitySpecials": {
+                "Override_Ratio": 0.0,
+                "Buff_Duration": 10.0,
+                "Wind_Ratio_Lv1": 0.5,
+                "Wind_Ratio_Lv2": 0.75,
+                "Wind_Ratio_Lv3": 1.0,
+                "Wind_Ratio_Lv4": 1.25
+            },
+            "modifiers": {
+                "Blank": {
+                    "modifierName": "",
+                    "bonusCriticalHurt": 100.0
+                },
+                "MistTrial_Level1_Handler_OnTeam": {
+                    "modifierName": "",
+                    "bonusCriticalHurt": 100.0,
+                    "thinkInterval": 2.0,
+                    "onAdded": [
+                        {
+                            "$type": "AttachModifier",
+                            "target": "CurTeamAvatars",
+                            "modifierName": "MistTrial_Level1_Handler_OnAvatar"
+                        }
+                    ],
+                    "onThinkInterval": [
+                        {
+                            "$type": "AttachModifier",
+                            "target": "CurTeamAvatars",
+                            "modifierName": "MistTrial_Level1_Handler_OnAvatar"
+                        }
+                    ]
+                },
+                "MistTrial_Level1_Handler_OnAvatar": {
+                    "modifierName": "",
+                    "bonusCriticalHurt": 100.0,
+                    "modifierMixins": [
+                        {
+                            "$type": "DoActionByElementReactionMixin",
+                            "entityTypes": [
+                                "Monster"
+                            ],
+                            "reactionTypes": [
+                                "SwirlFire",
+                                "SwirlWater",
+                                "SwirlElectric",
+                                "SwirlIce"
+                            ],
+                            "actions": [
+                                {
+                                    "$type": "RemoveUniqueModifier",
+                                    "target": "AllPlayerAvatars",
+                                    "predicates": [
+                                        {
+                                            "$type": "ByTargetPositionToSelfPosition",
+                                            "logic": "LesserOrEqual",
+                                            "ratio": 40.0
+                                        }
+                                    ],
+                                    "modifierName": "UNIQUE_MistTrial_Level1_Buff_WindDamage"
+                                },
+                                {
+                                    "$type": "ApplyModifier",
+                                    "target": "AllPlayerAvatars",
+                                    "predicates": [
+                                        {
+                                            "$type": "ByTargetPositionToSelfPosition",
+                                            "logic": "LesserOrEqual",
+                                            "ratio": 40.0
+                                        }
+                                    ],
+                                    "modifierName": "UNIQUE_MistTrial_Level1_Buff_WindDamage"
+                                }
+                            ]
+                        }
+                    ]
+                },
+                "UNIQUE_MistTrial_Level1_Buff_WindDamage": {
+                    "stacking": "Unique",
+                    "modifierName": "",
+                    "isUnique": true,
+                    "DCEFILPANJI": "Buff_Duration",
+                    "bonusCriticalHurt": 100.0,
+                    "properties": {
+                        "Actor_WindAddHurtDelta": "Override_Ratio"
+                    },
+                    "state": "AttackUp",
+                    "isLimitedProperties": true
+                }
+            },
+            "onAdded": [
+                {
+                    "$type": "AttachModifier",
+                    "modifierName": "MistTrial_Level1_Handler_OnTeam"
+                }
+            ],
+            "isDynamicAbility": true
+        }
+    },
+    {
+        "Default": {
+            "$type": "ConfigAbility",
+            "abilityName": "ActivityAbility_MistTrialV3_Level_2",
+            "abilityMixins": [
+                {
+                    "$type": "ServerUpdateGlobalValueMixin",
+                    "key": "SGV_ABILITY_Mist_Level",
+                    "useLimitRange": true,
+                    "maxValue": 4.0,
+                    "minValue": 1.0
+                },
+                {
+                    "$type": "AttachModifierToSelfGlobalValueNoInitMixin",
+                    "globalValueKey": "SGV_ABILITY_Mist_Level",
+                    "valueSteps": [
+                        0.5,
+                        1.5,
+                        2.5,
+                        3.5,
+                        4.5
+                    ],
+                    "modifierNameSteps": [
+                        "Blank",
+                        "Blank",
+                        "Blank",
+                        "Blank"
+                    ],
+                    "actionQueues": [
+                        [
+                            {
+                                "$type": "SetOverrideMapValue",
+                                "ratio": "Crit_Ratio_Lv1",
+                                "overrideMapKey": "Override_Ratio_Crit"
+                            },
+                            {
+                                "$type": "SetOverrideMapValue",
+                                "ratio": "Hurt_Ratio_Lv1",
+                                "overrideMapKey": "Override_Ratio_Hurt"
+                            }
+                        ],
+                        [
+                            {
+                                "$type": "SetOverrideMapValue",
+                                "ratio": "Crit_Ratio_Lv2",
+                                "overrideMapKey": "Override_Ratio_Crit"
+                            },
+                            {
+                                "$type": "SetOverrideMapValue",
+                                "ratio": "Hurt_Ratio_Lv2",
+                                "overrideMapKey": "Override_Ratio_Hurt"
+                            }
+                        ],
+                        [
+                            {
+                                "$type": "SetOverrideMapValue",
+                                "ratio": "Crit_Ratio_Lv3",
+                                "overrideMapKey": "Override_Ratio_Crit"
+                            },
+                            {
+                                "$type": "SetOverrideMapValue",
+                                "ratio": "Hurt_Ratio_Lv3",
+                                "overrideMapKey": "Override_Ratio_Hurt"
+                            }
+                        ],
+                        [
+                            {
+                                "$type": "SetOverrideMapValue",
+                                "ratio": "Crit_Ratio_Lv4",
+                                "overrideMapKey": "Override_Ratio_Crit"
+                            },
+                            {
+                                "$type": "SetOverrideMapValue",
+                                "ratio": "Hurt_Ratio_Lv4",
+                                "overrideMapKey": "Override_Ratio_Hurt"
+                            }
+                        ]
+                    ]
+                }
+            ],
+            "abilitySpecials": {
+                "Override_Ratio_Crit": 0.0,
+                "Override_Ratio_Hurt": 0.0,
+                "Crit_Ratio_Lv1": 0.10000000149011612,
+                "Crit_Ratio_Lv2": 0.15000000596046448,
+                "Crit_Ratio_Lv3": 0.20000000298023224,
+                "Crit_Ratio_Lv4": 0.25,
+                "Hurt_Ratio_Lv1": 0.20000000298023224,
+                "Hurt_Ratio_Lv2": 0.30000001192092896,
+                "Hurt_Ratio_Lv3": 0.4000000059604645,
+                "Hurt_Ratio_Lv4": 0.5
+            },
+            "modifiers": {
+                "Blank": {
+                    "modifierName": "",
+                    "bonusCriticalHurt": 100.0
+                },
+                "MistTrial_Level2_Handler_OnTeam": {
+                    "modifierName": "",
+                    "bonusCriticalHurt": 100.0,
+                    "thinkInterval": 2.0,
+                    "onAdded": [
+                        {
+                            "$type": "AttachModifier",
+                            "target": "CurTeamAvatars",
+                            "modifierName": "MistTrial_Level2_Handler_OnAvatar"
+                        }
+                    ],
+                    "onThinkInterval": [
+                        {
+                            "$type": "AttachModifier",
+                            "target": "CurTeamAvatars",
+                            "modifierName": "MistTrial_Level2_Handler_OnAvatar"
+                        }
+                    ]
+                },
+                "MistTrial_Level2_Handler_OnAvatar": {
+                    "modifierName": "",
+                    "bonusCriticalHurt": 100.0,
+                    "modifierMixins": [
+                        {
+                            "$type": "ModifyDamageMixin",
+                            "ignoreEventInfo": true,
+                            "GDADKLDBGIM": 0.0,
+                            "IOCKOEDDKLH": "Override_Ratio_Crit",
+                            "GLAAKMBGHJL": "Override_Ratio_Hurt",
+                            "predicates": [
+                                {
+                                    "$type": "ByHasAbilityState",
+                                    "abilityState": "ElementOverdose"
+                                }
+                            ]
+                        }
+                    ]
+                }
+            },
+            "onAdded": [
+                {
+                    "$type": "AttachModifier",
+                    "modifierName": "MistTrial_Level2_Handler_OnTeam"
+                }
+            ],
+            "isDynamicAbility": true
+        }
+    },
+    {
+        "Default": {
+            "$type": "ConfigAbility",
+            "abilityName": "ActivityAbility_MistTrialV3_Level_3",
+            "abilityMixins": [
+                {
+                    "$type": "ServerUpdateGlobalValueMixin",
+                    "key": "SGV_ABILITY_Mist_Level",
+                    "useLimitRange": true,
+                    "maxValue": 4.0,
+                    "minValue": 1.0
+                },
+                {
+                    "$type": "AttachModifierToSelfGlobalValueNoInitMixin",
+                    "globalValueKey": "SGV_ABILITY_Mist_Level",
+                    "valueSteps": [
+                        0.5,
+                        1.5,
+                        2.5,
+                        3.5,
+                        4.5
+                    ],
+                    "modifierNameSteps": [
+                        "Blank",
+                        "Blank",
+                        "Blank",
+                        "Blank"
+                    ],
+                    "actionQueues": [
+                        [
+                            {
+                                "$type": "SetOverrideMapValue",
+                                "ratio": "MasteryUp_Lv1",
+                                "overrideMapKey": "Override_Ratio"
+                            },
+                            {
+                                "$type": "SetOverrideMapValue",
+                                "ratio": "Hp_Ratio_Lv1",
+                                "overrideMapKey": "Override_Ratio_Hp"
+                            }
+                        ],
+                        [
+                            {
+                                "$type": "SetOverrideMapValue",
+                                "ratio": "MasteryUp_Lv2",
+                                "overrideMapKey": "Override_Ratio"
+                            },
+                            {
+                                "$type": "SetOverrideMapValue",
+                                "ratio": "Hp_Ratio_Lv2",
+                                "overrideMapKey": "Override_Ratio_Hp"
+                            }
+                        ],
+                        [
+                            {
+                                "$type": "SetOverrideMapValue",
+                                "ratio": "MasteryUp_Lv3",
+                                "overrideMapKey": "Override_Ratio"
+                            },
+                            {
+                                "$type": "SetOverrideMapValue",
+                                "ratio": "Hp_Ratio_Lv3",
+                                "overrideMapKey": "Override_Ratio_Hp"
+                            }
+                        ],
+                        [
+                            {
+                                "$type": "SetOverrideMapValue",
+                                "ratio": "MasteryUp_Lv4",
+                                "overrideMapKey": "Override_Ratio"
+                            },
+                            {
+                                "$type": "SetOverrideMapValue",
+                                "ratio": "Hp_Ratio_Lv4",
+                                "overrideMapKey": "Override_Ratio_Hp"
+                            }
+                        ]
+                    ]
+                },
+                {
+                    "$type": "AttachModifierToSelfGlobalValueNoInitMixin",
+                    "globalValueKey": "_ABILITY_MistTrialV3_HitLevel",
+                    "valueSteps": [
+                        -0.5,
+                        3.5,
+                        4.5
+                    ],
+                    "modifierNameSteps": [
+                        "Blank",
+                        "MistTrial_Level5_FullHit_OnTeam"
+                    ]
+                }
+            ],
+            "abilitySpecials": {
+                "Override_Ratio": 0.0,
+                "Override_Ratio_Hp": 0.0,
+                "Hit_Level": 0.0,
+                "MasteryUp_Lv1": 30.0,
+                "MasteryUp_Lv2": 45.0,
+                "MasteryUp_Lv3": 60.0,
+                "MasteryUp_Lv4": 75.0,
+                "Hit_Interval": 0.20000000298023224,
+                "Hp_Ratio_Lv1": 0.20000000298023224,
+                "Hp_Ratio_Lv2": 0.30000001192092896,
+                "Hp_Ratio_Lv3": 0.4000000059604645,
+                "Hp_Ratio_Lv4": 0.5
+            },
+            "modifiers": {
+                "Blank": {
+                    "modifierName": "",
+                    "bonusCriticalHurt": 100.0
+                },
+                "MistTrial_Level3_Handler_OnTeam": {
+                    "modifierName": "",
+                    "bonusCriticalHurt": 100.0,
+                    "thinkInterval": 2.0,
+                    "onAdded": [
+                        {
+                            "$type": "AttachModifier",
+                            "target": "AllPlayerAvatars",
+                            "modifierName": "MistTrial_Level3_Handler_OnAvatar"
+                        },
+                        {
+                            "$type": "AttachModifier",
+                            "target": "AllPlayerAvatars",
+                            "modifierName": "UNIQUE_MistTrial_Level3_Buff"
+                        }
+                    ],
+                    "onThinkInterval": [
+                        {
+                            "$type": "AttachModifier",
+                            "target": "AllPlayerAvatars",
+                            "modifierName": "MistTrial_Level3_Handler_OnAvatar"
+                        },
+                        {
+                            "$type": "RemoveUniqueModifier",
+                            "target": "AllPlayerAvatars",
+                            "modifierName": "UNIQUE_MistTrial_Level3_Buff"
+                        },
+                        {
+                            "$type": "AttachModifier",
+                            "target": "AllPlayerAvatars",
+                            "modifierName": "UNIQUE_MistTrial_Level3_Buff"
+                        }
+                    ]
+                },
+                "MistTrial_Level3_Handler_OnAvatar": {
+                    "modifierName": "",
+                    "bonusCriticalHurt": 100.0,
+                    "onBeingHit": [
+                        {
+                            "$type": "ApplyModifier",
+                            "target": "Team",
+                            "predicates": [
+                                {
+                                    "$type": "ByHitDamage",
+                                    "target": "Self",
+                                    "damage": 0.0
+                                }
+                            ],
+                            "modifierName": "UNIQUE_MistTrial_Level3_AddHitNum_OnTeam"
+                        }
+                    ]
+                },
+                "UNIQUE_MistTrial_Level3_AddHitNum_OnTeam": {
+                    "stacking": "Multiple",
+                    "modifierName": "",
+                    "isUnique": true,
+                    "DCEFILPANJI": "Hit_Interval",
+                    "bonusCriticalHurt": 100.0,
+                    "onAdded": [
+                        {
+                            "$type": "AddGlobalValue",
+                            "ratio": 1.0,
+                            "key": "_ABILITY_MistTrialV3_HitLevel",
+                            "useLimitRange": true,
+                            "maxValue": 4.0,
+                            "minValue": 0.0
+                        },
+                        {
+                            "$type": "SetGlobalValueToOverrideMap",
+                            "globalValueKey": "_ABILITY_MistTrialV3_HitLevel",
+                            "overrideMapKey": "Hit_Level"
+                        },
+                        {
+                            "$type": "RemoveUniqueModifier",
+                            "target": "AllPlayerAvatars",
+                            "modifierName": "UNIQUE_MistTrial_Level3_Buff"
+                        },
+                        {
+                            "$type": "ApplyModifier",
+                            "target": "AllPlayerAvatars",
+                            "modifierName": "UNIQUE_MistTrial_Level3_Buff"
+                        }
+                    ]
+                },
+                "UNIQUE_MistTrial_Level3_Buff": {
+                    "stacking": "Unique",
+                    "modifierName": "",
+                    "isUnique": true,
+                    "bonusCriticalHurt": 100.0,
+                    "properties": {
+                        "Actor_ElemMasteryDelta": [
+                            "Override_Ratio",
+                            "Hit_Level",
+                            "MUL"
+                        ]
+                    },
+                    "isLimitedProperties": true
+                },
+                "MistTrial_Level5_FullHit_OnTeam": {
+                    "modifierName": "",
+                    "bonusCriticalHurt": 100.0,
+                    "thinkInterval": 2.0,
+                    "onAdded": [
+                        {
+                            "$type": "AttachModifier",
+                            "target": "AllPlayerAvatars",
+                            "modifierName": "MistTrial_Level5_FullHit_OnAvatar"
+                        }
+                    ],
+                    "onThinkInterval": [
+                        {
+                            "$type": "RemoveModifier",
+                            "target": "AllPlayerAvatars",
+                            "modifierName": "MistTrial_Level5_FullHit_OnAvatar"
+                        },
+                        {
+                            "$type": "AttachModifier",
+                            "target": "AllPlayerAvatars",
+                            "modifierName": "MistTrial_Level5_FullHit_OnAvatar"
+                        }
+                    ]
+                },
+                "MistTrial_Level5_FullHit_OnAvatar": {
+                    "modifierName": "",
+                    "bonusCriticalHurt": 100.0,
+                    "properties": {
+                        "Actor_MaxHPRatio": "Override_Ratio_Hp"
+                    },
+                    "isLimitedProperties": true
+                }
+            },
+            "onAdded": [
+                {
+                    "$type": "SetGlobalValue",
+                    "ratio": 0.0,
+                    "key": "_ABILITY_MistTrialV3_HitLevel",
+                    "maxValue": 0.0,
+                    "minValue": 0.0
+                },
+                {
+                    "$type": "AttachModifier",
+                    "modifierName": "MistTrial_Level3_Handler_OnTeam"
+                }
+            ],
+            "isDynamicAbility": true
+        }
+    },
+    {
+        "Default": {
+            "$type": "ConfigAbility",
+            "abilityName": "ActivityAbility_MistTrialV3_Level_4",
+            "abilityMixins": [
+                {
+                    "$type": "ServerUpdateGlobalValueMixin",
+                    "key": "SGV_ABILITY_Mist_Level",
+                    "useLimitRange": true,
+                    "maxValue": 4.0,
+                    "minValue": 1.0
+                },
+                {
+                    "$type": "AttachModifierToSelfGlobalValueNoInitMixin",
+                    "globalValueKey": "SGV_ABILITY_Mist_Level",
+                    "valueSteps": [
+                        0.5,
+                        1.5,
+                        2.5,
+                        3.5,
+                        4.5
+                    ],
+                    "modifierNameSteps": [
+                        "Blank",
+                        "Blank",
+                        "Blank",
+                        "Blank"
+                    ],
+                    "actionQueues": [
+                        [
+                            {
+                                "$type": "SetOverrideMapValue",
+                                "ratio": "Damage_Ratio_Lv1",
+                                "overrideMapKey": "Override_Ratio"
+                            }
+                        ],
+                        [
+                            {
+                                "$type": "SetOverrideMapValue",
+                                "ratio": "Damage_Ratio_Lv2",
+                                "overrideMapKey": "Override_Ratio"
+                            }
+                        ],
+                        [
+                            {
+                                "$type": "SetOverrideMapValue",
+                                "ratio": "Damage_Ratio_Lv3",
+                                "overrideMapKey": "Override_Ratio"
+                            }
+                        ],
+                        [
+                            {
+                                "$type": "SetOverrideMapValue",
+                                "ratio": "Damage_Ratio_Lv4",
+                                "overrideMapKey": "Override_Ratio"
+                            }
+                        ]
+                    ]
+                }
+            ],
+            "abilitySpecials": {
+                "System_Damage": 0.0,
+                "Override_Ratio": 0.0,
+                "Damage_Ratio_Lv1": 10.0,
+                "Damage_Ratio_Lv2": 15.0,
+                "Damage_Ratio_Lv3": 20.0,
+                "Damage_Ratio_Lv4": 25.0,
+                "CD_Interval": 4.0
+            },
+            "modifiers": {
+                "Blank": {
+                    "modifierName": "",
+                    "bonusCriticalHurt": 100.0
+                },
+                "MistTrial_Level4_Handler_OnTeam": {
+                    "modifierName": "",
+                    "bonusCriticalHurt": 100.0,
+                    "thinkInterval": 2.0,
+                    "onAdded": [
+                        {
+                            "$type": "AttachModifier",
+                            "target": "CurTeamAvatars",
+                            "modifierName": "MistTrial_Level4_Handler_OnAvatar"
+                        }
+                    ],
+                    "onThinkInterval": [
+                        {
+                            "$type": "AttachModifier",
+                            "target": "CurTeamAvatars",
+                            "modifierName": "MistTrial_Level4_Handler_OnAvatar"
+                        }
+                    ]
+                },
+                "MistTrial_Level4_Handler_OnAvatar": {
+                    "modifierName": "",
+                    "bonusCriticalHurt": 100.0,
+                    "modifierMixins": [
+                        {
+                            "$type": "DoActionByElementReactionMixin",
+                            "entityTypes": [
+                                "Monster"
+                            ],
+                            "reactionTypes": [
+                                "Stream"
+                            ],
+                            "actions": [
+                                {
+                                    "$type": "AttachModifier",
+                                    "target": "Team",
+                                    "modifierName": "UNIQUE_MistTrial_Stream_OnTeam"
+                                }
+                            ]
+                        }
+                    ]
+                },
+                "UNIQUE_MistTrial_Stream_OnTeam": {
+                    "stacking": "Unique",
+                    "modifierName": "",
+                    "isUnique": true,
+                    "DCEFILPANJI": "CD_Interval",
+                    "bonusCriticalHurt": 100.0,
+                    "onAdded": [
+                        {
+                            "$type": "FireEffect",
+                            "healLimitedByCasterMaxHPRatio": "Eff_EnergyDisk_ElementalBurst_Wave_R40",
+                            "MEMHGJDEPJA": -1.0
+                        },
+                        {
+                            "$type": "TriggerAttackEvent",
+                            "target": "CurLocalAvatar",
+                            "attackEvent": {
+                                "attackPattern": {
+                                    "$type": "ConfigAttackSphere",
+                                    "triggerType": "TriggerNoRepeat",
+                                    "born": {
+                                        "$type": "ConfigBornBySelf",
+                                        "useRotation": true
+                                    },
+                                    "ILKJCNJJPEL": 5.0
+                                },
+                                "attackInfo": {
+                                    "attackTag": "",
+                                    "attenuationTag": "",
+                                    "attenuationGroup": "default",
+                                    "attackProperty": {
+                                        "GDADKLDBGIM": 0.0,
+                                        "bonusCriticalHurt": 0.0,
+                                        "ignoreAttackerProperty": true,
+                                        "enBreak": 0.0,
+                                        "damageExtra": [
+                                            "System_Damage",
+                                            "Override_Ratio",
+                                            "MUL"
+                                        ],
+                                        "trueDamage": true,
+                                        "bonusCritical": true
+                                    },
+                                    "hitPattern": {
+                                        "onHitEffectName": "",
+                                        "hitImpulseType": "LV1"
+                                    }
+                                }
+                            },
+                            "targetType": "Enemy"
+                        }
+                    ]
+                }
+            },
+            "onAdded": [
+                {
+                    "$type": "SetSystemValueToOverrideMap",
+                    "key": "System_Damage",
+                    "type": "ElementLevelCo"
+                },
+                {
+                    "$type": "AttachModifier",
+                    "modifierName": "MistTrial_Level4_Handler_OnTeam"
+                }
+            ],
+            "isDynamicAbility": true
+        }
+    },
+    {
+        "Default": {
+            "$type": "ConfigAbility",
+            "abilityName": "ActivityAbility_MistTrialV3_Level_5",
+            "abilityMixins": [
+                {
+                    "$type": "ServerUpdateGlobalValueMixin",
+                    "key": "SGV_ABILITY_Mist_Level",
+                    "useLimitRange": true,
+                    "maxValue": 4.0,
+                    "minValue": 1.0
+                },
+                {
+                    "$type": "AttachModifierToSelfGlobalValueNoInitMixin",
+                    "globalValueKey": "SGV_ABILITY_Mist_Level",
+                    "valueSteps": [
+                        0.5,
+                        1.5,
+                        2.5,
+                        3.5,
+                        4.5
+                    ],
+                    "modifierNameSteps": [
+                        "Blank",
+                        "Blank",
+                        "Blank",
+                        "Blank"
+                    ],
+                    "actionQueues": [
+                        [
+                            {
+                                "$type": "SetOverrideMapValue",
+                                "ratio": "MasteryUp_Lv1",
+                                "overrideMapKey": "Override_Delta"
+                            }
+                        ],
+                        [
+                            {
+                                "$type": "SetOverrideMapValue",
+                                "ratio": "MasteryUp_Lv2",
+                                "overrideMapKey": "Override_Delta"
+                            }
+                        ],
+                        [
+                            {
+                                "$type": "SetOverrideMapValue",
+                                "ratio": "MasteryUp_Lv3",
+                                "overrideMapKey": "Override_Delta"
+                            }
+                        ],
+                        [
+                            {
+                                "$type": "SetOverrideMapValue",
+                                "ratio": "MasteryUp_Lv4",
+                                "overrideMapKey": "Override_Delta"
+                            }
+                        ]
+                    ]
+                }
+            ],
+            "abilitySpecials": {
+                "Override_Delta": 0.0,
+                "Buff_Duration": 10.0,
+                "MasteryUp_Lv1": 50.0,
+                "MasteryUp_Lv2": 75.0,
+                "MasteryUp_Lv3": 100.0,
+                "MasteryUp_Lv4": 125.0
+            },
+            "modifiers": {
+                "Blank": {
+                    "modifierName": "",
+                    "bonusCriticalHurt": 100.0
+                },
+                "MistTrial_Level5_Handler_OnTeam": {
+                    "modifierName": "",
+                    "bonusCriticalHurt": 100.0,
+                    "thinkInterval": 2.0,
+                    "onAdded": [
+                        {
+                            "$type": "AttachModifier",
+                            "target": "CurTeamAvatars",
+                            "modifierName": "MistTrial_Level5_Handler_OnAvatar"
+                        }
+                    ],
+                    "onThinkInterval": [
+                        {
+                            "$type": "AttachModifier",
+                            "target": "CurTeamAvatars",
+                            "modifierName": "MistTrial_Level5_Handler_OnAvatar"
+                        }
+                    ]
+                },
+                "MistTrial_Level5_Handler_OnAvatar": {
+                    "modifierName": "",
+                    "bonusCriticalHurt": 100.0,
+                    "modifierMixins": [
+                        {
+                            "$type": "DoActionByElementReactionMixin",
+                            "entityTypes": [
+                                "Monster"
+                            ],
+                            "reactionTypes": [
+                                "Overdose",
+                                "OverdoseElectric",
+                                "OverdoseGrass",
+                                "Overgrow",
+                                "OvergrowMushroomFire",
+                                "OvergrowMushroomElectric"
+                            ],
+                            "actions": [
+                                {
+                                    "$type": "ApplyModifier",
+                                    "target": "AllPlayerAvatars",
+                                    "modifierName": "MistTrial_Level5_Buff_MasteryUp"
+                                }
+                            ]
+                        }
+                    ]
+                },
+                "MistTrial_Level5_Buff_MasteryUp": {
+                    "stacking": "MultipleRefreshNoRemove",
+                    "stackingOption": {
+                        "abilitySpecialName": "",
+                        "maxModifierNumForMultipleType": 4.0
+                    },
+                    "modifierName": "",
+                    "DCEFILPANJI": "Buff_Duration",
+                    "bonusCriticalHurt": 100.0,
+                    "properties": {
+                        "Actor_ElemMasteryDelta": "Override_Delta"
+                    },
+                    "isLimitedProperties": true
+                }
+            },
+            "onAdded": [
+                {
+                    "$type": "AttachModifier",
+                    "modifierName": "MistTrial_Level5_Handler_OnTeam"
+                }
+            ],
+            "isDynamicAbility": true
+        }
+    },
+    {
+        "Default": {
+            "$type": "ConfigAbility",
+            "abilityName": "ActivityAbility_MistTrialV3_Level_6",
+            "abilityMixins": [
+                {
+                    "$type": "ServerUpdateGlobalValueMixin",
+                    "key": "SGV_ABILITY_Mist_Level",
+                    "useLimitRange": true,
+                    "maxValue": 4.0,
+                    "minValue": 1.0
+                },
+                {
+                    "$type": "AttachModifierToSelfGlobalValueNoInitMixin",
+                    "globalValueKey": "SGV_ABILITY_Mist_Level",
+                    "valueSteps": [
+                        0.5,
+                        1.5,
+                        2.5,
+                        3.5,
+                        4.5
+                    ],
+                    "modifierNameSteps": [
+                        "Blank",
+                        "Blank",
+                        "Blank",
+                        "Blank"
+                    ],
+                    "actionQueues": [
+                        [
+                            {
+                                "$type": "SetOverrideMapValue",
+                                "ratio": "Damage_Ratio_Lv1",
+                                "overrideMapKey": "Override_Ratio"
+                            }
+                        ],
+                        [
+                            {
+                                "$type": "SetOverrideMapValue",
+                                "ratio": "Damage_Ratio_Lv2",
+                                "overrideMapKey": "Override_Ratio"
+                            }
+                        ],
+                        [
+                            {
+                                "$type": "SetOverrideMapValue",
+                                "ratio": "Damage_Ratio_Lv3",
+                                "overrideMapKey": "Override_Ratio"
+                            }
+                        ],
+                        [
+                            {
+                                "$type": "SetOverrideMapValue",
+                                "ratio": "Damage_Ratio_Lv4",
+                                "overrideMapKey": "Override_Ratio"
+                            }
+                        ]
+                    ]
+                }
+            ],
+            "abilitySpecials": {
+                "System_Damage": 0.0,
+                "Override_Ratio": 0.0,
+                "Damage_Ratio_Lv1": 10.0,
+                "Damage_Ratio_Lv2": 15.0,
+                "Damage_Ratio_Lv3": 20.0,
+                "Damage_Ratio_Lv4": 25.0,
+                "CD_Interval": 4.0
+            },
+            "modifiers": {
+                "Blank": {
+                    "modifierName": "",
+                    "bonusCriticalHurt": 100.0
+                },
+                "MistTrial_Level6_Handler_OnTeam": {
+                    "modifierName": "",
+                    "bonusCriticalHurt": 100.0,
+                    "thinkInterval": 2.0,
+                    "onAdded": [
+                        {
+                            "$type": "AttachModifier",
+                            "target": "CurTeamAvatars",
+                            "modifierName": "MistTrial_Level6_Handler_OnAvatar"
+                        }
+                    ],
+                    "onThinkInterval": [
+                        {
+                            "$type": "AttachModifier",
+                            "target": "CurTeamAvatars",
+                            "modifierName": "MistTrial_Level6_Handler_OnAvatar"
+                        }
+                    ]
+                },
+                "MistTrial_Level6_Handler_OnAvatar": {
+                    "modifierName": "",
+                    "bonusCriticalHurt": 100.0,
+                    "onAttackLanded": [
+                        {
+                            "$type": "Predicated",
+                            "target": "Other",
+                            "targetPredicates": [
+                                {
+                                    "$type": "ByEntityTypes",
+                                    "entityTypes": [
+                                        "Monster"
+                                    ]
+                                },
+                                {
+                                    "$type": "ByAttackTags",
+                                    "attackTags": [
+                                        "ExtraAttack"
+                                    ]
+                                }
+                            ],
+                            "successActions": [
+                                {
+                                    "$type": "AttachModifier",
+                                    "target": "Team",
+                                    "modifierName": "UNIQUE_MistTrial_ExtraAttack_OnTeam"
+                                }
+                            ]
+                        }
+                    ]
+                },
+                "UNIQUE_MistTrial_ExtraAttack_OnTeam": {
+                    "stacking": "Unique",
+                    "modifierName": "",
+                    "isUnique": true,
+                    "DCEFILPANJI": "CD_Interval",
+                    "bonusCriticalHurt": 100.0,
+                    "onAdded": [
+                        {
+                            "$type": "Randomed",
+                            "chance": 0.25,
+                            "successActions": [
+                                {
+                                    "$type": "FireEffect",
+                                    "target": "Applier",
+                                    "healLimitedByCasterMaxHPRatio": "Eff_Avatar_ShockWave_Fire",
+                                    "MEMHGJDEPJA": -1.0
+                                },
+                                {
+                                    "$type": "TriggerAttackEvent",
+                                    "target": "Applier",
+                                    "attackEvent": {
+                                        "attackPattern": {
+                                            "$type": "ConfigAttackSphere",
+                                            "triggerType": "TriggerNoRepeat",
+                                            "born": {
+                                                "$type": "ConfigBornBySelf",
+                                                "useRotation": true
+                                            },
+                                            "ILKJCNJJPEL": 4.0
+                                        },
+                                        "attackInfo": {
+                                            "attackTag": "",
+                                            "attenuationTag": "",
+                                            "attenuationGroup": "default",
+                                            "attackProperty": {
+                                                "GDADKLDBGIM": 0.0,
+                                                "elementType": "Fire",
+                                                "bonusCriticalHurt": 25.0,
+                                                "ignoreAttackerProperty": true,
+                                                "strikeType": "Default",
+                                                "enBreak": 0.0,
+                                                "damageExtra": [
+                                                    "Override_Ratio",
+                                                    "System_Damage",
+                                                    "MUL"
+                                                ],
+                                                "trueDamage": true,
+                                                "bonusCritical": true
+                                            },
+                                            "hitPattern": {
+                                                "onHitEffectName": "",
+                                                "hitImpulseType": "LV2",
+                                                "hitHaltTimeScale": 0.05000000074505806
+                                            }
+                                        }
+                                    },
+                                    "targetType": "Enemy"
+                                }
+                            ],
+                            "failActions": [
+                                {
+                                    "$type": "Randomed",
+                                    "chance": 0.33000001311302185,
+                                    "successActions": [
+                                        {
+                                            "$type": "FireEffect",
+                                            "target": "Applier",
+                                            "healLimitedByCasterMaxHPRatio": "Eff_Avatar_ShockWave_Water",
+                                            "MEMHGJDEPJA": -1.0
+                                        },
+                                        {
+                                            "$type": "TriggerAttackEvent",
+                                            "target": "Applier",
+                                            "attackEvent": {
+                                                "attackPattern": {
+                                                    "$type": "ConfigAttackSphere",
+                                                    "triggerType": "TriggerNoRepeat",
+                                                    "born": {
+                                                        "$type": "ConfigBornBySelf",
+                                                        "useRotation": true
+                                                    },
+                                                    "ILKJCNJJPEL": 4.0
+                                                },
+                                                "attackInfo": {
+                                                    "attackTag": "",
+                                                    "attenuationTag": "",
+                                                    "attenuationGroup": "default",
+                                                    "attackProperty": {
+                                                        "GDADKLDBGIM": 0.0,
+                                                        "elementType": "Water",
+                                                        "bonusCriticalHurt": 25.0,
+                                                        "ignoreAttackerProperty": true,
+                                                        "strikeType": "Default",
+                                                        "enBreak": 0.0,
+                                                        "damageExtra": [
+                                                            "Override_Ratio",
+                                                            "System_Damage",
+                                                            "MUL"
+                                                        ],
+                                                        "trueDamage": true,
+                                                        "bonusCritical": true
+                                                    },
+                                                    "hitPattern": {
+                                                        "onHitEffectName": "",
+                                                        "hitImpulseType": "LV2",
+                                                        "hitHaltTimeScale": 0.05000000074505806
+                                                    }
+                                                }
+                                            },
+                                            "targetType": "Enemy"
+                                        }
+                                    ],
+                                    "failActions": [
+                                        {
+                                            "$type": "Randomed",
+                                            "chance": 0.5,
+                                            "successActions": [
+                                                {
+                                                    "$type": "FireEffect",
+                                                    "target": "Applier",
+                                                    "healLimitedByCasterMaxHPRatio": "Eff_Avatar_ShockWave_Electric",
+                                                    "MEMHGJDEPJA": -1.0
+                                                },
+                                                {
+                                                    "$type": "TriggerAttackEvent",
+                                                    "target": "Applier",
+                                                    "attackEvent": {
+                                                        "attackPattern": {
+                                                            "$type": "ConfigAttackSphere",
+                                                            "triggerType": "TriggerNoRepeat",
+                                                            "born": {
+                                                                "$type": "ConfigBornBySelf",
+                                                                "useRotation": true
+                                                            },
+                                                            "ILKJCNJJPEL": 4.0
+                                                        },
+                                                        "attackInfo": {
+                                                            "attackTag": "",
+                                                            "attenuationTag": "",
+                                                            "attenuationGroup": "default",
+                                                            "attackProperty": {
+                                                                "GDADKLDBGIM": 0.0,
+                                                                "elementType": "Electric",
+                                                                "bonusCriticalHurt": 25.0,
+                                                                "ignoreAttackerProperty": true,
+                                                                "strikeType": "Default",
+                                                                "enBreak": 0.0,
+                                                                "damageExtra": [
+                                                                    "Override_Ratio",
+                                                                    "System_Damage",
+                                                                    "MUL"
+                                                                ],
+                                                                "trueDamage": true,
+                                                                "bonusCritical": true
+                                                            },
+                                                            "hitPattern": {
+                                                                "onHitEffectName": "",
+                                                                "hitImpulseType": "LV2",
+                                                                "hitHaltTimeScale": 0.05000000074505806
+                                                            }
+                                                        }
+                                                    },
+                                                    "targetType": "Enemy"
+                                                }
+                                            ],
+                                            "failActions": [
+                                                {
+                                                    "$type": "FireEffect",
+                                                    "target": "Applier",
+                                                    "healLimitedByCasterMaxHPRatio": "Eff_Avatar_ShockWave_Ice",
+                                                    "MEMHGJDEPJA": -1.0
+                                                },
+                                                {
+                                                    "$type": "TriggerAttackEvent",
+                                                    "target": "Applier",
+                                                    "attackEvent": {
+                                                        "attackPattern": {
+                                                            "$type": "ConfigAttackSphere",
+                                                            "triggerType": "TriggerNoRepeat",
+                                                            "born": {
+                                                                "$type": "ConfigBornBySelf",
+                                                                "useRotation": true
+                                                            },
+                                                            "ILKJCNJJPEL": 4.0
+                                                        },
+                                                        "attackInfo": {
+                                                            "attackTag": "",
+                                                            "attenuationTag": "",
+                                                            "attenuationGroup": "default",
+                                                            "attackProperty": {
+                                                                "GDADKLDBGIM": 0.0,
+                                                                "elementType": "Ice",
+                                                                "bonusCriticalHurt": 25.0,
+                                                                "ignoreAttackerProperty": true,
+                                                                "strikeType": "Default",
+                                                                "enBreak": 0.0,
+                                                                "damageExtra": [
+                                                                    "Override_Ratio",
+                                                                    "System_Damage",
+                                                                    "MUL"
+                                                                ],
+                                                                "trueDamage": true,
+                                                                "bonusCritical": true
+                                                            },
+                                                            "hitPattern": {
+                                                                "onHitEffectName": "",
+                                                                "hitImpulseType": "LV2",
+                                                                "hitHaltTimeScale": 0.05000000074505806
+                                                            }
+                                                        }
+                                                    },
+                                                    "targetType": "Enemy"
+                                                }
+                                            ]
+                                        }
+                                    ]
+                                }
+                            ]
+                        }
+                    ]
+                }
+            },
+            "onAdded": [
+                {
+                    "$type": "SetSystemValueToOverrideMap",
+                    "key": "System_Damage",
+                    "type": "ElementLevelCo"
+                },
+                {
+                    "$type": "AttachModifier",
+                    "modifierName": "MistTrial_Level6_Handler_OnTeam"
+                }
+            ],
+            "isDynamicAbility": true
+        }
+    },
+    {
+        "Default": {
+            "$type": "ConfigAbility",
+            "abilityName": "ActivityAbility_SuperTrial_RandomRoomRevive_V3",
+            "abilityMixins": [
+                {
+                    "$type": "AttachModifierToSelfGlobalValueNoInitMixin",
+                    "globalValueKey": "SGV_MistTrial_Revive",
+                    "valueSteps": [
+                        -0.5,
+                        0.5,
+                        1.5
+                    ],
+                    "modifierNameSteps": [
+                        "Blank",
+                        "ActivityAbility_SuperTrial_Revive"
+                    ]
+                }
+            ],
+            "abilitySpecials": {
+                "Value_Hp": 0.25
+            },
+            "modifiers": {
+                "Blank": {
+                    "modifierName": "",
+                    "bonusCriticalHurt": 100.0
+                },
+                "ActivityAbility_SuperTrial_Revive": {
+                    "modifierName": "",
+                    "DCEFILPANJI": 0.5,
+                    "bonusCriticalHurt": 100.0,
+                    "onAdded": [
+                        {
+                            "$type": "HealHP",
+                            "target": "CurTeamAvatars",
+                            "RotationDampTime": true,
+                            "amountByCasterMaxHPRatio": "Value_Hp"
+                        },
+                        {
+                            "$type": "ReviveDeadAvatar",
+                            "target": "CurTeamAvatars",
+                            "RotationDampTime": true,
+                            "amountByCasterMaxHPRatio": "Value_Hp",
+                            "cdDelta": 1.0
+                        }
+                    ]
+                }
+            },
+            "isDynamicAbility": true
+        }
+    },
+    {
+        "Default": {
+            "$type": "ConfigAbility",
+            "abilityName": "LevelEntity_MistTrialV3_MonsterHpUp_01",
+            "abilitySpecials": {
+                "HPUpRatio": 0.0
+            },
+            "modifiers": {
+                "UNIQUE_LevelEntity_MistTrialV3_MonsterHpUp_01": {
+                    "stacking": "Unique",
+                    "modifierName": "",
+                    "isUnique": true,
+                    "bonusCriticalHurt": 100.0,
+                    "properties": {
+                        "Actor_MaxHPRatio": "HPUpRatio"
+                    },
+                    "isLimitedProperties": true
+                }
+            },
+            "onAdded": [
+                {
+                    "$type": "AttachModifier",
+                    "modifierName": "UNIQUE_LevelEntity_MistTrialV3_MonsterHpUp_01"
+                }
+            ],
+            "isDynamicAbility": true
+        }
+    },
+    {
+        "Default": {
+            "$type": "ConfigAbility",
+            "abilityName": "LevelEntity_MistTrialV3_MonsterHpUp_02",
+            "abilitySpecials": {
+                "HPUpRatio": 0.0
+            },
+            "modifiers": {
+                "UNIQUE_LevelEntity_MistTrialV3_MonsterHpUp_02": {
+                    "stacking": "Unique",
+                    "modifierName": "",
+                    "isUnique": true,
+                    "bonusCriticalHurt": 100.0,
+                    "properties": {
+                        "Actor_MaxHPRatio": "HPUpRatio"
+                    },
+                    "isLimitedProperties": true
+                }
+            },
+            "onAdded": [
+                {
+                    "$type": "AttachModifier",
+                    "modifierName": "UNIQUE_LevelEntity_MistTrialV3_MonsterHpUp_02"
+                }
+            ],
+            "isDynamicAbility": true
+        }
+    }
+]

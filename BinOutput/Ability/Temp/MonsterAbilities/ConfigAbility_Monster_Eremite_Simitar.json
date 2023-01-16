@@ -1,0 +1,293 @@
+[
+    {
+        "Default": {
+            "$type": "ConfigAbility",
+            "abilityName": "Eremite_Simitar_AnimatorSteer",
+            "abilityMixins": [
+                {
+                    "$type": "SteerAttackTraceMixin",
+                    "steerStateIDs": [
+                        "Slash01",
+                        "Loop_Slash01"
+                    ],
+                    "startNormalizedTime": 0.08699999749660492,
+                    "endNormalizedTime": 0.3370000123977661,
+                    "angularSpeed": 55.0,
+                    "attackTrigger": ""
+                },
+                {
+                    "$type": "SteerAttackMixin",
+                    "steerStateIDs": [
+                        "Slash01_AB"
+                    ],
+                    "angularSpeed": 300.0,
+                    "attackTrigger": ""
+                },
+                {
+                    "$type": "SteerAttackTraceMixin",
+                    "steerStateIDs": [
+                        "Slash02",
+                        "Loop_Slash02"
+                    ],
+                    "startNormalizedTime": 0.10199999809265137,
+                    "endNormalizedTime": 0.3610000014305115,
+                    "angularSpeed": 55.0,
+                    "attackTrigger": ""
+                },
+                {
+                    "$type": "SteerAttackMixin",
+                    "steerStateIDs": [
+                        "Slash02_AB"
+                    ],
+                    "angularSpeed": 300.0,
+                    "attackTrigger": ""
+                },
+                {
+                    "$type": "SteerAttackMixin",
+                    "steerStateIDs": [
+                        "JumpBack"
+                    ],
+                    "endNormalizedTime": 0.14100000262260437,
+                    "angularSpeed": 600.0,
+                    "attackTrigger": ""
+                },
+                {
+                    "$type": "SteerAttackTraceMixin",
+                    "steerStateIDs": [
+                        "Feint_Loop"
+                    ],
+                    "endNormalizedTime": 99.0,
+                    "angularSpeed": 45.0,
+                    "attackTrigger": ""
+                },
+                {
+                    "$type": "SteerAttackMixin",
+                    "steerStateIDs": [
+                        "Feint_BS"
+                    ],
+                    "angularSpeed": 300.0,
+                    "attackTrigger": ""
+                },
+                {
+                    "$type": "SteerAttackMixin",
+                    "steerStateIDs": [
+                        "Taunt"
+                    ],
+                    "angularSpeed": 300.0,
+                    "attackTrigger": ""
+                },
+                {
+                    "$type": "SteerAttackMixin",
+                    "steerStateIDs": [
+                        "Alert"
+                    ],
+                    "angularSpeed": 270.0,
+                    "attackTrigger": ""
+                },
+                {
+                    "$type": "SteerAttackMixin",
+                    "steerStateIDs": [
+                        "Crossleg_Alert"
+                    ],
+                    "startNormalizedTime": 0.13699999451637268,
+                    "endNormalizedTime": 0.800000011920929,
+                    "angularSpeed": 320.0,
+                    "attackTrigger": ""
+                }
+            ]
+        }
+    },
+    {
+        "Default": {
+            "$type": "ConfigAbility",
+            "abilityName": "Eremite_Simitar_Slash_Dist_Calc",
+            "onAbilityStart": [
+                {
+                    "$type": "SetAnimatorTrigger",
+                    "predicates": [
+                        {
+                            "$type": "ByTargetPositionToSelfPosition",
+                            "target": "SelfAttackTarget",
+                            "logic": "Lesser",
+                            "ratio": 4.0
+                        }
+                    ],
+                    "triggerID": "JumpBackTrigger"
+                }
+            ]
+        }
+    },
+    {
+        "Default": {
+            "$type": "ConfigAbility",
+            "abilityName": "Eremite_Simitar_Feint_Manager",
+            "modifiers": {
+                "Simitar_Feint_Monitor": {
+                    "modifierName": "",
+                    "bonusCriticalHurt": 100.0,
+                    "onAttackLanded": [
+                        {
+                            "$type": "Predicated",
+                            "target": "Target",
+                            "targetPredicates": [
+                                {
+                                    "$type": "ByEntityTypes",
+                                    "entityTypes": [
+                                        "Avatar",
+                                        "Monster",
+                                        "Partner"
+                                    ]
+                                },
+                                {
+                                    "$type": "ByAttackTags",
+                                    "attackTags": [
+                                        "Simitar_Feint_Detection"
+                                    ]
+                                }
+                            ],
+                            "successActions": [
+                                {
+                                    "$type": "SetAnimatorTrigger",
+                                    "triggerID": "FeintHitTrigger"
+                                },
+                                {
+                                    "$type": "SetSelfAttackTarget",
+                                    "target": "Target"
+                                }
+                            ]
+                        }
+                    ]
+                }
+            },
+            "onAdded": [
+                {
+                    "$type": "ApplyModifier",
+                    "modifierName": "Simitar_Feint_Monitor"
+                }
+            ],
+            "onAbilityStart": [
+                {
+                    "$type": "SetAnimatorTrigger",
+                    "predicates": [
+                        {
+                            "$type": "ByTargetPositionToSelfPosition",
+                            "target": "SelfAttackTarget",
+                            "ratio": 11.5
+                        }
+                    ],
+                    "triggerID": "FeintEndTrigger"
+                },
+                {
+                    "$type": "SetAnimatorTrigger",
+                    "predicates": [
+                        {
+                            "$type": "ByTargetPositionToSelfPosition",
+                            "target": "SelfAttackTarget",
+                            "logic": "Lesser",
+                            "ratio": 2.299999952316284
+                        }
+                    ],
+                    "triggerID": "FeintHitTrigger"
+                }
+            ]
+        }
+    },
+    {
+        "Default": {
+            "$type": "ConfigAbility",
+            "abilityName": "Eremite_Simitar_SpecialTaunt",
+            "abilityMixins": [
+                {
+                    "$type": "AttachToNormalizedTimeMixin",
+                    "stateID": "Taunt01",
+                    "modifierName": "SpecialTaunt_Monitor",
+                    "normalizeStart": 0.10999999940395355,
+                    "normalizeEnd": 0.8899999856948853
+                }
+            ],
+            "modifiers": {
+                "SpecialTaunt_Monitor": {
+                    "modifierName": "",
+                    "bonusCriticalHurt": 100.0,
+                    "onBeingHit": [
+                        {
+                            "$type": "Predicated",
+                            "target": "Target",
+                            "targetPredicates": [
+                                {
+                                    "$type": "ByEntityTypes",
+                                    "entityTypes": [
+                                        "Bullet"
+                                    ]
+                                }
+                            ],
+                            "successActions": [
+                                {
+                                    "$type": "ApplyModifier",
+                                    "target": "TargetOwner",
+                                    "predicates": [
+                                        {
+                                            "$type": "ByEntityTypes",
+                                            "entityTypes": [
+                                                "Avatar"
+                                            ]
+                                        }
+                                    ],
+                                    "modifierName": "Achievement_82129_Unlocker"
+                                },
+                                {
+                                    "$type": "DamageByAttackValue",
+                                    "attackInfo": {
+                                        "attackTag": "",
+                                        "attenuationTag": "",
+                                        "attenuationGroup": "default",
+                                        "attackProperty": {
+                                            "GDADKLDBGIM": 0.0,
+                                            "bonusCriticalHurt": 100.0,
+                                            "strikeType": "Default",
+                                            "enBreak": 200.0,
+                                            "damageExtra": 0.0,
+                                            "bonusCritical": true
+                                        },
+                                        "hitPattern": {
+                                            "onHitEffectName": "default",
+                                            "hitImpulseType": "LV5"
+                                        },
+                                        "canHitHead": true
+                                    }
+                                }
+                            ]
+                        }
+                    ]
+                },
+                "Achievement_82129_Unlocker": {
+                    "modifierName": "",
+                    "DCEFILPANJI": 0.10000000149011612,
+                    "bonusCriticalHurt": 100.0,
+                    "onAdded": [
+                        {
+                            "$type": "DoWatcherSystemAction",
+                            "watcherId": 82129,
+                            "authorityOnly": true
+                        }
+                    ]
+                }
+            }
+        }
+    },
+    {
+        "Default": {
+            "$type": "ConfigAbility",
+            "abilityName": "Affix_Eremite_Simitar_NeverTaunt",
+            "onAdded": [
+                {
+                    "$type": "SetAnimatorBool",
+                    "canBeHandledOnRecover": true,
+                    "boolID": "DisableTaunt",
+                    "ratio": true
+                }
+            ],
+            "isDynamicAbility": true
+        }
+    }
+]

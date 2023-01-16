@@ -1,0 +1,471 @@
+[
+    {
+        "Default": {
+            "$type": "ConfigAbility",
+            "abilityName": "SceneObj_Area_Dq_Property_Prop_SmokeDevice_01",
+            "abilityMixins": [
+                {
+                    "$type": "AttachToGadgetStateMixin",
+                    "modifierName": "Close"
+                },
+                {
+                    "$type": "AttachToGadgetStateMixin",
+                    "gadgetState": 201,
+                    "modifierName": "Open"
+                },
+                {
+                    "$type": "AttachToGadgetStateMixin",
+                    "gadgetState": 202,
+                    "modifierName": "CoolDown"
+                }
+            ],
+            "modifiers": {
+                "HachiSmokeArea": {
+                    "modifierName": "",
+                    "DCEFILPANJI": 1.5,
+                    "bonusCriticalHurt": 100.0,
+                    "onAdded": [
+                        {
+                            "$type": "ServerLuaCall",
+                            "luaCallType": "FromGroup",
+                            "funcName": "SLC_SmokeClearThreat",
+                            "CIBOAMHBGPK": 0.0,
+                            "KOFAICAGHOC": 0.0,
+                            "BIFENCJLAFA": 0.0
+                        }
+                    ],
+                    "onRemoved": [
+                        {
+                            "$type": "ServerLuaCall",
+                            "luaCallType": "FromGroup",
+                            "funcName": "SLC_SmokeSetThreat",
+                            "CIBOAMHBGPK": 0.0,
+                            "KOFAICAGHOC": 0.0,
+                            "BIFENCJLAFA": 0.0
+                        }
+                    ]
+                },
+                "HachiDenyLockOn": {
+                    "modifierName": "",
+                    "DCEFILPANJI": 1.5,
+                    "bonusCriticalHurt": 100.0,
+                    "state": "DenyLockOn"
+                },
+                "Close": {
+                    "modifierName": "",
+                    "bonusCriticalHurt": 100.0,
+                    "onAdded": [
+                        {
+                            "$type": "AttachEffect",
+                            "healLimitedByCasterMaxHPRatio": "Eff_Item_Hint_SearchPoint",
+                            "MEMHGJDEPJA": -1.0
+                        }
+                    ],
+                    "onBeingHit": [
+                        {
+                            "$type": "ExecuteGadgetLua",
+                            "predicates": [
+                                {
+                                    "$type": "ByNot",
+                                    "predicates": [
+                                        {
+                                            "$type": "ByAttackTags",
+                                            "attackTags": [
+                                                "BurningDamage",
+                                                "ShockDamage"
+                                            ]
+                                        }
+                                    ]
+                                }
+                            ],
+                            "param1": 201
+                        }
+                    ]
+                },
+                "CoolDown": {
+                    "modifierName": "",
+                    "bonusCriticalHurt": 100.0,
+                    "onAdded": [
+                        {
+                            "$type": "ApplyModifier",
+                            "modifierName": "DisableInteractTimer"
+                        }
+                    ]
+                },
+                "OpenStateTimer": {
+                    "modifierName": "",
+                    "DCEFILPANJI": 5.0,
+                    "bonusCriticalHurt": 100.0,
+                    "onRemoved": [
+                        {
+                            "$type": "ExecuteGadgetLua",
+                            "param1": 202
+                        }
+                    ]
+                },
+                "DisableInteractTimer": {
+                    "modifierName": "",
+                    "DCEFILPANJI": 10.0,
+                    "bonusCriticalHurt": 100.0,
+                    "onRemoved": [
+                        {
+                            "$type": "ExecuteGadgetLua"
+                        }
+                    ]
+                },
+                "Open": {
+                    "modifierName": "",
+                    "bonusCriticalHurt": 100.0,
+                    "thinkInterval": 0.5,
+                    "onAdded": [
+                        {
+                            "$type": "AttachEffect",
+                            "healLimitedByCasterMaxHPRatio": "Eff_ScenObj_SmokeDevice_01_Fog",
+                            "scale": 0.5,
+                            "MEMHGJDEPJA": -1.0
+                        },
+                        {
+                            "$type": "ApplyModifier",
+                            "modifierName": "OpenStateTimer"
+                        },
+                        {
+                            "$type": "ServerLuaCall",
+                            "luaCallType": "FromGroup",
+                            "funcName": "SLC_HachiGadgetActionMark",
+                            "DHJFGDAOGEK": 1,
+                            "CIBOAMHBGPK": 1.0,
+                            "KOFAICAGHOC": 0.0,
+                            "BIFENCJLAFA": 0.0
+                        }
+                    ],
+                    "onThinkInterval": [
+                        {
+                            "$type": "Predicated",
+                            "otherTargets": {
+                                "$type": "SelectTargetsByShape",
+                                "shapeName": "CircleR5",
+                                "campTargetType": "All",
+                                "sizeRatio": 1.0
+                            },
+                            "targetPredicates": [
+                                {
+                                    "$type": "ByEntityTypes",
+                                    "entityTypes": [
+                                        "Avatar"
+                                    ]
+                                }
+                            ],
+                            "successActions": [
+                                {
+                                    "$type": "ApplyModifier",
+                                    "modifierName": "HachiSmokeArea"
+                                },
+                                {
+                                    "$type": "ApplyModifier",
+                                    "target": "Other",
+                                    "modifierName": "HachiDenyLockOn"
+                                }
+                            ]
+                        }
+                    ]
+                }
+            },
+            "onAdded": [
+                {
+                    "$type": "AttachAbilityStateResistance",
+                    "resistanceListID": 11002
+                }
+            ]
+        }
+    },
+    {
+        "Default": {
+            "$type": "ConfigAbility",
+            "abilityName": "SceneObj_Area_Dq_Property_Prop_NoisyBait_01",
+            "abilityMixins": [
+                {
+                    "$type": "AttachToGadgetStateMixin",
+                    "modifierName": "Close"
+                },
+                {
+                    "$type": "AttachToGadgetStateMixin",
+                    "gadgetState": 201,
+                    "modifierName": "Open"
+                },
+                {
+                    "$type": "AttachToGadgetStateMixin",
+                    "gadgetState": 202,
+                    "modifierName": "CoolDown"
+                }
+            ],
+            "modifiers": {
+                "Close": {
+                    "modifierName": "",
+                    "bonusCriticalHurt": 100.0,
+                    "onAdded": [
+                        {
+                            "$type": "AttachEffect",
+                            "healLimitedByCasterMaxHPRatio": "Eff_Item_Hint_SearchPoint",
+                            "MEMHGJDEPJA": -1.0
+                        },
+                        {
+                            "$type": "AttachEffect",
+                            "healLimitedByCasterMaxHPRatio": "Eff_Quest_SiteInteract_Event",
+                            "born": {
+                                "$type": "ConfigBornBySelf",
+                                "offset": {
+                                    "AMODPKJAIGF": 0.0,
+                                    "DBJCBJPOOAP": 0.6000000238418579,
+                                    "JDFJGADACKC": 0.0
+                                }
+                            },
+                            "MEMHGJDEPJA": -1.0
+                        }
+                    ],
+                    "onBeingHit": [
+                        {
+                            "$type": "ExecuteGadgetLua",
+                            "predicates": [
+                                {
+                                    "$type": "ByNot",
+                                    "predicates": [
+                                        {
+                                            "$type": "ByAttackTags",
+                                            "attackTags": [
+                                                "BurningDamage",
+                                                "ShockDamage"
+                                            ]
+                                        }
+                                    ]
+                                }
+                            ],
+                            "param1": 201
+                        }
+                    ]
+                },
+                "CoolDown": {
+                    "modifierName": "",
+                    "bonusCriticalHurt": 100.0,
+                    "onAdded": [
+                        {
+                            "$type": "ApplyModifier",
+                            "modifierName": "DisableInteractTimer"
+                        }
+                    ]
+                },
+                "OpenStateTimer": {
+                    "modifierName": "",
+                    "DCEFILPANJI": 10.0,
+                    "bonusCriticalHurt": 100.0,
+                    "onRemoved": [
+                        {
+                            "$type": "ExecuteGadgetLua",
+                            "param1": 202
+                        }
+                    ]
+                },
+                "DisableInteractTimer": {
+                    "modifierName": "",
+                    "DCEFILPANJI": 5.0,
+                    "bonusCriticalHurt": 100.0,
+                    "onRemoved": [
+                        {
+                            "$type": "ExecuteGadgetLua"
+                        }
+                    ]
+                },
+                "Open": {
+                    "modifierName": "",
+                    "bonusCriticalHurt": 100.0,
+                    "thinkInterval": 0.5,
+                    "onAdded": [
+                        {
+                            "$type": "ApplyModifier",
+                            "modifierName": "OpenStateTimer"
+                        },
+                        {
+                            "$type": "AttachEffect",
+                            "healLimitedByCasterMaxHPRatio": "Eff_SceneObj_NoisyBait_01",
+                            "born": {
+                                "$type": "ConfigBornByAttachPoint",
+                                "attachPointName": "RootNode"
+                            },
+                            "MEMHGJDEPJA": -1.0
+                        },
+                        {
+                            "$type": "ServerLuaCall",
+                            "luaCallType": "FromGroup",
+                            "funcName": "SLC_HachiGadgetActionMark",
+                            "DHJFGDAOGEK": 1,
+                            "CIBOAMHBGPK": 2.0,
+                            "KOFAICAGHOC": 0.0,
+                            "BIFENCJLAFA": 0.0
+                        }
+                    ],
+                    "onThinkInterval": [
+                        {
+                            "$type": "Predicated",
+                            "otherTargets": {
+                                "$type": "SelectTargetsByShape",
+                                "sortType": "Nearest",
+                                "shapeName": "CircleR10",
+                                "campTargetType": "All",
+                                "sizeRatio": 1.0
+                            },
+                            "targetPredicates": [
+                                {
+                                    "$type": "ByTargetGlobalValue",
+                                    "key": "_IS_INU_SHIHANDAI",
+                                    "ratio": 1.0
+                                }
+                            ],
+                            "successActions": [
+                                {
+                                    "$type": "ApplyModifier",
+                                    "target": "Target",
+                                    "modifierName": "UNIQUE_HappyPoint_Attracted"
+                                },
+                                {
+                                    "$type": "SetGlobalPos",
+                                    "target": "Target",
+                                    "key": "_HAPPY_POINT_POS",
+                                    "born": {
+                                        "$type": "ConfigBornBySelf"
+                                    }
+                                }
+                            ]
+                        }
+                    ]
+                },
+                "UNIQUE_HappyPoint_Attracted": {
+                    "stacking": "RefreshUniqueDurability",
+                    "modifierName": "",
+                    "isUnique": true,
+                    "DCEFILPANJI": 1.0,
+                    "bonusCriticalHurt": 100.0,
+                    "onAdded": [
+                        {
+                            "$type": "SetGlobalValue",
+                            "ratio": 1.0,
+                            "key": "_FIND_HAPPY_POINT",
+                            "maxValue": 0.0,
+                            "minValue": 0.0
+                        }
+                    ],
+                    "onRemoved": [
+                        {
+                            "$type": "SetGlobalValue",
+                            "ratio": 0.0,
+                            "key": "_FIND_HAPPY_POINT",
+                            "maxValue": 0.0,
+                            "minValue": 0.0
+                        }
+                    ]
+                }
+            },
+            "onAdded": [
+                {
+                    "$type": "AttachAbilityStateResistance",
+                    "resistanceListID": 11002
+                }
+            ]
+        }
+    },
+    {
+        "Default": {
+            "$type": "ConfigAbility",
+            "abilityName": "SceneObj_Area_Dq_Property_Prop_HachiWayPoint_01",
+            "onFieldEnter": [
+                {
+                    "$type": "Predicated",
+                    "target": "Target",
+                    "targetPredicates": [
+                        {
+                            "$type": "ByTargetGlobalValue",
+                            "key": "_IS_INU_SHIHANDAI",
+                            "ratio": 1.0
+                        }
+                    ],
+                    "successActions": [
+                        {
+                            "$type": "SetGlobalValue",
+                            "target": "Target",
+                            "ratio": 1.0,
+                            "key": "_SHIHANDAI_TO_SEARCH",
+                            "maxValue": 0.0,
+                            "minValue": 0.0
+                        }
+                    ]
+                }
+            ]
+        }
+    },
+    {
+        "Default": {
+            "$type": "ConfigAbility",
+            "abilityName": "SceneObj_Gear_Property_Ani_Prop_WoodenCage_01",
+            "abilityMixins": [
+                {
+                    "$type": "AttachToGadgetStateMixin",
+                    "gadgetState": 201,
+                    "modifierName": "Door_Open"
+                }
+            ],
+            "modifiers": {
+                "Door_Open": {
+                    "modifierName": "",
+                    "bonusCriticalHurt": 100.0,
+                    "onAdded": [
+                        {
+                            "$type": "FireEffect",
+                            "healLimitedByCasterMaxHPRatio": "Eff_CoverSmoke_Mini_01",
+                            "born": {
+                                "$type": "ConfigBornByAttachPoint",
+                                "attachPointName": "LockPosition"
+                            },
+                            "MEMHGJDEPJA": -1.0
+                        },
+                        {
+                            "$type": "ExecuteGadgetLua",
+                            "param1": 202
+                        }
+                    ]
+                }
+            }
+        }
+    },
+    {
+        "Default": {
+            "$type": "ConfigAbility",
+            "abilityName": "SceneObj_Area_Common_Property_Prop_HintPoint_01",
+            "abilityMixins": [
+                {
+                    "$type": "AttachToGadgetStateMixin",
+                    "modifierName": "DefaultEffect"
+                },
+                {
+                    "$type": "AttachToGadgetStateMixin",
+                    "gadgetState": 201,
+                    "modifierName": "HideEffect"
+                }
+            ],
+            "modifiers": {
+                "DefaultEffect": {
+                    "modifierName": "",
+                    "bonusCriticalHurt": 100.0,
+                    "onAdded": [
+                        {
+                            "$type": "AttachEffect",
+                            "healLimitedByCasterMaxHPRatio": "Eff_QuestGuide_Position",
+                            "MEMHGJDEPJA": -1.0
+                        }
+                    ]
+                },
+                "HideEffect": {
+                    "modifierName": "",
+                    "bonusCriticalHurt": 100.0
+                }
+            }
+        }
+    }
+]

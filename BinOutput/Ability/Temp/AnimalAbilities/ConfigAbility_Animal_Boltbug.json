@@ -1,0 +1,138 @@
+[
+    {
+        "Default": {
+            "$type": "ConfigAbility",
+            "abilityName": "Boltbug_Scarab_UnderGroundHandler",
+            "abilityMixins": [
+                {
+                    "$type": "AttachToAnimatorStateIDMixin",
+                    "stateIDs": [
+                        "Standby",
+                        "MakeBall",
+                        "IdleFree01",
+                        "Walk"
+                    ],
+                    "modifierName": "Boltbug_Scarab_AboveGround"
+                },
+                {
+                    "$type": "AttachToAnimatorStateIDMixin",
+                    "stateIDs": [
+                        "DigIn",
+                        "Standby_Hide",
+                        "DigOut"
+                    ],
+                    "modifierName": "Boltbug_Scarab_UnderGround"
+                }
+            ],
+            "modifiers": {
+                "Boltbug_Scarab_AboveGround": {
+                    "modifierName": "",
+                    "bonusCriticalHurt": 100.0
+                },
+                "Boltbug_Scarab_UnderGround": {
+                    "modifierName": "",
+                    "bonusCriticalHurt": 100.0,
+                    "modifierMixins": [
+                        {
+                            "$type": "DisableMonsterPickedUpMixin"
+                        }
+                    ]
+                },
+                "Boltbug_Scarab_Invincible": {
+                    "modifierName": "",
+                    "bonusCriticalHurt": 100.0,
+                    "state": "LockHP"
+                }
+            },
+            "onAdded": [
+                {
+                    "$type": "ApplyModifier",
+                    "modifierName": "Boltbug_Scarab_Invincible"
+                }
+            ]
+        }
+    },
+    {
+        "Default": {
+            "$type": "ConfigAbility",
+            "abilityName": "Boltbug_Scarab_MakeBall",
+            "onAbilityStart": [
+                {
+                    "$type": "CreateGadget",
+                    "born": {
+                        "$type": "ConfigBornBySelf",
+                        "offset": {
+                            "AMODPKJAIGF": 0.03382803872227669,
+                            "DBJCBJPOOAP": 0.0,
+                            "JDFJGADACKC": -0.3788909912109375
+                        },
+                        "onGround": true,
+                        "onGroundRaycastUpDist": 0.5,
+                        "alongGround": true
+                    },
+                    "gadgetID": 42805001,
+                    "campID": 4001
+                }
+            ]
+        }
+    },
+    {
+        "Default": {
+            "$type": "ConfigAbility",
+            "abilityName": "Boltbug_Scarab_DestroyBall",
+            "onAbilityStart": [
+                {
+                    "$type": "TriggerAbility",
+                    "otherTargets": {
+                        "$type": "SelectTargetsByChildren",
+                        "topLimit": 1,
+                        "configID": 42805001
+                    },
+                    "abilityName": "Boltbug_Scarab_Ball"
+                }
+            ]
+        }
+    },
+    {
+        "Default": {
+            "$type": "ConfigAbility",
+            "abilityName": "Boltbug_Scarab_Ball",
+            "modifiers": {
+                "Boltbug_Scarab_Ball": {
+                    "modifierName": "",
+                    "bonusCriticalHurt": 100.0,
+                    "onAdded": [
+                        {
+                            "$type": "AttachEffect",
+                            "healLimitedByCasterMaxHPRatio": "Eff_Animal_Boltbug_Scarab_Ball",
+                            "MEMHGJDEPJA": -1.0
+                        }
+                    ],
+                    "onBeingHit": [
+                        {
+                            "$type": "TriggerAbility",
+                            "abilityName": "Monster_Fungus_Raptor_01_SummonAttackBullet_OnGround"
+                        }
+                    ]
+                }
+            },
+            "onAdded": [
+                {
+                    "$type": "AttachModifier",
+                    "modifierName": "Boltbug_Scarab_Ball"
+                }
+            ],
+            "onAbilityStart": [
+                {
+                    "$type": "FireEffect",
+                    "healLimitedByCasterMaxHPRatio": "Eff_Animal_Boltbug_Scarab_BallDestroy",
+                    "MEMHGJDEPJA": -1.0
+                },
+                {
+                    "$type": "RemoveModifier",
+                    "modifierName": "Boltbug_Scarab_Ball"
+                }
+            ]
+        }
+    }
+]

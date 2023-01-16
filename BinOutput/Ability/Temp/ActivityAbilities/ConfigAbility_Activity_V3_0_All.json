@@ -1,0 +1,155 @@
+[
+    {
+        "Default": {
+            "$type": "ConfigAbility",
+            "abilityName": "Activity_GravenInnocence_Parkour_TeamAbility",
+            "abilityMixins": [
+                {
+                    "$type": "AttachModifierToSelfGlobalValueMixin",
+                    "globalValueKey": "GV_CoinRangeLevel",
+                    "defaultGlobalValueOnCreate": 0.0,
+                    "valueSteps": [
+                        -0.5,
+                        0.5,
+                        1.5,
+                        100.0
+                    ],
+                    "modifierNameSteps": [
+                        "Blank",
+                        "NormalRange",
+                        "SuperRange"
+                    ]
+                }
+            ],
+            "modifiers": {
+                "Blank": {
+                    "modifierName": "",
+                    "bonusCriticalHurt": 100.0
+                },
+                "NormalRange": {
+                    "modifierName": "",
+                    "bonusCriticalHurt": 100.0,
+                    "thinkInterval": 0.10000000149011612,
+                    "onAdded": [
+                        {
+                            "$type": "DebugLog",
+                            "content": "基础拾取距离"
+                        }
+                    ],
+                    "onThinkInterval": [
+                        {
+                            "$type": "Predicated",
+                            "otherTargets": {
+                                "$type": "SelectTargetsByTag",
+                                "topLimit": 6,
+                                "sortType": "Nearest",
+                                "tag": "IS_COIN"
+                            },
+                            "successActions": [
+                                {
+                                    "$type": "SetGlobalValue",
+                                    "target": "Target",
+                                    "predicates": [
+                                        {
+                                            "$type": "ByTargetPositionToSelfPosition",
+                                            "logic": "LesserOrEqual",
+                                            "compareType": "XYZ",
+                                            "ratio": 2.0
+                                        }
+                                    ],
+                                    "ratio": 1.0,
+                                    "key": "GV_Picked",
+                                    "maxValue": 0.0,
+                                    "minValue": 0.0
+                                }
+                            ]
+                        }
+                    ]
+                },
+                "SuperRange": {
+                    "modifierName": "",
+                    "bonusCriticalHurt": 100.0,
+                    "thinkInterval": 0.10000000149011612,
+                    "modifierMixins": [
+                        {
+                            "$type": "CurLocalAvatarMixinV2",
+                            "modifierName": "Avatar_SuperRange_Eff"
+                        }
+                    ],
+                    "onAdded": [
+                        {
+                            "$type": "DebugLog",
+                            "content": "超级拾取距离"
+                        }
+                    ],
+                    "onThinkInterval": [
+                        {
+                            "$type": "Predicated",
+                            "otherTargets": {
+                                "$type": "SelectTargetsByTag",
+                                "topLimit": 6,
+                                "sortType": "Nearest",
+                                "tag": "IS_COIN"
+                            },
+                            "successActions": [
+                                {
+                                    "$type": "SetGlobalValue",
+                                    "target": "Target",
+                                    "predicates": [
+                                        {
+                                            "$type": "ByTargetPositionToSelfPosition",
+                                            "logic": "LesserOrEqual",
+                                            "compareType": "XYZ",
+                                            "ratio": 5.0
+                                        }
+                                    ],
+                                    "ratio": 1.0,
+                                    "key": "GV_Picked",
+                                    "maxValue": 0.0,
+                                    "minValue": 0.0
+                                }
+                            ]
+                        }
+                    ]
+                },
+                "Avatar_SuperRange_Eff": {
+                    "modifierName": "",
+                    "bonusCriticalHurt": 100.0,
+                    "onAdded": [
+                        {
+                            "$type": "AttachEffect",
+                            "RotationDampTime": true,
+                            "healLimitedByCasterMaxHPRatio": "Eff_SceneObj_ExpandAccessCoin_02",
+                            "MEMHGJDEPJA": -1.0
+                        }
+                    ]
+                }
+            },
+            "onAdded": [
+                {
+                    "$type": "SetGlobalValue",
+                    "target": "Team",
+                    "ratio": 1.0,
+                    "key": "GV_CoinRangeLevel",
+                    "maxValue": 0.0,
+                    "minValue": 0.0
+                }
+            ],
+            "onRemoved": [
+                {
+                    "$type": "RemoveUniqueModifier",
+                    "target": "Team",
+                    "modifierName": "UNIQUE_PickRangeBuff"
+                },
+                {
+                    "$type": "SetGlobalValue",
+                    "target": "Team",
+                    "ratio": 0.0,
+                    "key": "GV_CoinRangeLevel",
+                    "maxValue": 0.0,
+                    "minValue": 0.0
+                }
+            ]
+        }
+    }
+]

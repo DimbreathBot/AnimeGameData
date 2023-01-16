@@ -1,0 +1,1240 @@
+[
+    {
+        "Default": {
+            "$type": "ConfigAbility",
+            "abilityName": "Monster_Hound_Riftstalker_Electric_Pose",
+            "abilityMixins": [
+                {
+                    "$type": "AttachModifierToSelfGlobalValueMixin",
+                    "globalValueKey": "_Riftstalker_POSE_TAG_",
+                    "defaultGlobalValueOnCreate": 0.0,
+                    "valueSteps": [
+                        -0.5,
+                        0.5,
+                        1.5,
+                        2.5
+                    ],
+                    "modifierNameSteps": [
+                        "Pose_None",
+                        "Pose_NormalToActivated",
+                        "Pose_Activated"
+                    ]
+                },
+                {
+                    "$type": "AttachToPoseIDMixin",
+                    "poseIDs": [
+                        201,
+                        301,
+                        401
+                    ],
+                    "modifierName": "Riftstalker_ChargeBar_Handler"
+                }
+            ],
+            "modifiers": {
+                "Riftstalker_ChargeBar_Handler": {
+                    "modifierName": "",
+                    "bonusCriticalHurt": 100.0,
+                    "onAdded": [
+                        {
+                            "$type": "ApplyModifier",
+                            "modifierName": "UNIQUE_Riftstalker_ChargeBar"
+                        }
+                    ],
+                    "onRemoved": [
+                        {
+                            "$type": "RemoveUniqueModifier",
+                            "modifierName": "UNIQUE_Riftstalker_ChargeBar"
+                        }
+                    ]
+                },
+                "UNIQUE_Riftstalker_ChargeBar": {
+                    "modifierName": "",
+                    "isUnique": true,
+                    "bonusCriticalHurt": 100.0,
+                    "modifierMixins": [
+                        {
+                            "$type": "ChargeBarMixin",
+                            "FGPIKDPAODC": "Electric",
+                            "FLJEDLPGMPA": 2,
+                            "JBEONJLMCOD": 0.0,
+                            "maxValue": 100.0
+                        },
+                        {
+                            "$type": "AttachModifierToSelfGlobalValueMixin",
+                            "globalValueKey": "_CHARGEBAR_VALUE",
+                            "defaultGlobalValueOnCreate": 0.0,
+                            "valueSteps": [
+                                99.5,
+                                100.5
+                            ],
+                            "modifierNameSteps": [
+                                "ChargeActivated"
+                            ]
+                        }
+                    ],
+                    "onAdded": [
+                        {
+                            "$type": "SetChargeBarValue",
+                            "ratio": 0.0
+                        }
+                    ]
+                },
+                "ChargeActivated": {
+                    "modifierName": "",
+                    "bonusCriticalHurt": 100.0,
+                    "onAdded": [
+                        {
+                            "$type": "SetGlobalValue",
+                            "ratio": 1.0,
+                            "key": "_Riftstalker_POSE_TAG_",
+                            "maxValue": 0.0,
+                            "minValue": 0.0
+                        }
+                    ]
+                },
+                "Pose_None": {
+                    "modifierName": "",
+                    "bonusCriticalHurt": 100.0,
+                    "onAdded": [
+                        {
+                            "$type": "SetPoseInt",
+                            "intID": "ActivatedTag"
+                        },
+                        {
+                            "$type": "SetAnimatorBool",
+                            "boolID": "ActivatedTag"
+                        },
+                        {
+                            "$type": "SetAnimatorBool",
+                            "boolID": "ShaderActivatedTag"
+                        }
+                    ]
+                },
+                "Pose_NormalToActivated": {
+                    "modifierName": "",
+                    "bonusCriticalHurt": 100.0,
+                    "onAdded": [
+                        {
+                            "$type": "SetPoseInt",
+                            "intID": "ActivatedTag",
+                            "value": 1
+                        },
+                        {
+                            "$type": "SetAISkillGCD",
+                            "value": 0.20000000298023224
+                        }
+                    ]
+                },
+                "Pose_Activated": {
+                    "modifierName": "",
+                    "bonusCriticalHurt": 100.0,
+                    "properties": {
+                        "Actor_ElecSubHurtDelta": -0.6499999761581421
+                    },
+                    "state": "DefenseDown",
+                    "onAdded": [
+                        {
+                            "$type": "SetPoseInt",
+                            "intID": "ActivatedTag",
+                            "value": 2
+                        },
+                        {
+                            "$type": "SetAnimatorBool",
+                            "boolID": "ActivatedTag",
+                            "ratio": true
+                        },
+                        {
+                            "$type": "SetAnimatorBool",
+                            "boolID": "ShaderActivatedTag",
+                            "ratio": true
+                        },
+                        {
+                            "$type": "SetAISkillGCD",
+                            "value": 1.399999976158142
+                        }
+                    ]
+                },
+                "UNIQUE_Riftstalker_BeHitCheck": {
+                    "modifierName": "",
+                    "isUnique": true,
+                    "bonusCriticalHurt": 100.0,
+                    "onBeingHit": [
+                        {
+                            "$type": "Predicated",
+                            "target": "Target",
+                            "targetPredicates": [
+                                {
+                                    "$type": "ByEntityTypes",
+                                    "entityTypes": [
+                                        "Avatar"
+                                    ]
+                                },
+                                {
+                                    "$type": "ByHitElement",
+                                    "element": "Electric"
+                                }
+                            ],
+                            "successActions": [
+                                {
+                                    "$type": "AddChargeBarValue",
+                                    "ratio": 20.0,
+                                    "maxValue": 0.0,
+                                    "minValue": 0.0
+                                }
+                            ]
+                        },
+                        {
+                            "$type": "Predicated",
+                            "target": "TargetOriginOwner",
+                            "targetPredicates": [
+                                {
+                                    "$type": "ByEntityTypes",
+                                    "entityTypes": [
+                                        "Avatar"
+                                    ]
+                                },
+                                {
+                                    "$type": "ByHitElement",
+                                    "element": "Electric"
+                                }
+                            ],
+                            "successActions": [
+                                {
+                                    "$type": "AddChargeBarValue",
+                                    "ratio": 20.0,
+                                    "maxValue": 0.0,
+                                    "minValue": 0.0
+                                }
+                            ]
+                        }
+                    ]
+                }
+            },
+            "onAdded": [
+                {
+                    "$type": "ApplyModifier",
+                    "modifierName": "UNIQUE_Riftstalker_BeHitCheck"
+                },
+                {
+                    "$type": "SetGlobalValue",
+                    "ratio": 1.0,
+                    "key": "_RIFTSTALKER_ELECTRIC_TAG_",
+                    "maxValue": 0.0,
+                    "minValue": 0.0
+                }
+            ]
+        }
+    },
+    {
+        "Default": {
+            "$type": "ConfigAbility",
+            "abilityName": "Monster_Hound_Riftstalker_Electric_Steer",
+            "abilityMixins": [
+                {
+                    "$type": "SteerAttackMixin",
+                    "steerStateIDs": [
+                        "RandomWalk"
+                    ],
+                    "angularSpeed": 720.0,
+                    "attackTrigger": ""
+                },
+                {
+                    "$type": "SteerAttackMixin",
+                    "steerStateIDs": [
+                        "WavePaw"
+                    ],
+                    "endNormalizedTime": 0.20000000298023224,
+                    "angularSpeed": 120.0,
+                    "attackTrigger": ""
+                },
+                {
+                    "$type": "SteerAttackMixin",
+                    "steerStateIDs": [
+                        "Strike_BS"
+                    ],
+                    "endNormalizedTime": 0.18000000715255737,
+                    "angularSpeed": 180.0,
+                    "attackTrigger": ""
+                },
+                {
+                    "$type": "SteerAttackMixin",
+                    "steerStateIDs": [
+                        "Biting"
+                    ],
+                    "endNormalizedTime": 0.25,
+                    "angularSpeed": 120.0,
+                    "attackTrigger": ""
+                },
+                {
+                    "$type": "SteerAttackMixin",
+                    "steerStateIDs": [
+                        "JumpBack"
+                    ],
+                    "endNormalizedTime": 0.10000000149011612,
+                    "angularSpeed": 270.0,
+                    "attackTrigger": ""
+                },
+                {
+                    "$type": "SteerAttackMixin",
+                    "steerStateIDs": [
+                        "ShockWave"
+                    ],
+                    "endNormalizedTime": 0.11999999731779099,
+                    "angularSpeed": 270.0,
+                    "attackTrigger": ""
+                },
+                {
+                    "$type": "SteerAttackMixin",
+                    "steerStateIDs": [
+                        "ShockWave"
+                    ],
+                    "startNormalizedTime": 0.5,
+                    "endNormalizedTime": 0.5899999737739563,
+                    "angularSpeed": 270.0,
+                    "attackTrigger": ""
+                }
+            ]
+        }
+    },
+    {
+        "Default": {
+            "$type": "ConfigAbility",
+            "abilityName": "Monster_Hound_Riftstalker_Electric_AddBodyEff",
+            "modifiers": {
+                "UNIQUE_Riftstalker_Electric_BodyEff": {
+                    "modifierName": "",
+                    "isUnique": true,
+                    "bonusCriticalHurt": 100.0,
+                    "onAdded": [
+                        {
+                            "$type": "AttachEffect",
+                            "healLimitedByCasterMaxHPRatio": "Eff_Monster_Riftstalker_Electric_Body",
+                            "MEMHGJDEPJA": -1.0
+                        }
+                    ]
+                },
+                "UNIQUE_Riftstalker_Electric_EyeEff": {
+                    "modifierName": "",
+                    "isUnique": true,
+                    "bonusCriticalHurt": 100.0,
+                    "onAdded": [
+                        {
+                            "$type": "AttachEffect",
+                            "healLimitedByCasterMaxHPRatio": "Eff_Monster_Riftstalker_Electric_Eye",
+                            "born": {
+                                "$type": "ConfigBornByAttachPoint",
+                                "offset": {
+                                    "AMODPKJAIGF": 0.0,
+                                    "DBJCBJPOOAP": 0.0,
+                                    "JDFJGADACKC": 0.0
+                                },
+                                "attachPointName": "Mouth"
+                            },
+                            "MEMHGJDEPJA": -1.0
+                        }
+                    ]
+                }
+            },
+            "onAdded": [
+                {
+                    "$type": "ApplyModifier",
+                    "modifierName": "UNIQUE_Riftstalker_Electric_BodyEff"
+                },
+                {
+                    "$type": "ApplyModifier",
+                    "modifierName": "UNIQUE_Riftstalker_Electric_EyeEff"
+                }
+            ],
+            "onAbilityStart": [
+                {
+                    "$type": "ApplyModifier",
+                    "modifierName": "UNIQUE_Riftstalker_Electric_BodyEff"
+                },
+                {
+                    "$type": "ApplyModifier",
+                    "modifierName": "UNIQUE_Riftstalker_Electric_EyeEff"
+                }
+            ]
+        }
+    },
+    {
+        "Default": {
+            "$type": "ConfigAbility",
+            "abilityName": "Monster_Hound_Riftstalker_Electric_RemoveBodyEff",
+            "onAbilityStart": [
+                {
+                    "$type": "RemoveUniqueModifier",
+                    "modifierName": "UNIQUE_Riftstalker_Electric_BodyEff"
+                },
+                {
+                    "$type": "RemoveUniqueModifier",
+                    "modifierName": "UNIQUE_Riftstalker_Electric_EyeEff"
+                }
+            ]
+        }
+    },
+    {
+        "Default": {
+            "$type": "ConfigAbility",
+            "abilityName": "Monster_Hound_Riftstalker_Electric_Strike_State",
+            "abilityMixins": [
+                {
+                    "$type": "AttachToStateIDMixin",
+                    "stateIDs": [
+                        "Strike_Loop_01",
+                        "Strike_Loop_02",
+                        "Strike_Loop_03"
+                    ],
+                    "modifierName": "UNIQUE_Strike_Actions"
+                },
+                {
+                    "$type": "AttachToStateIDMixin",
+                    "stateIDs": [
+                        "Strike_Loop_02"
+                    ],
+                    "modifierName": "Strike_FindBlinkPointActions"
+                },
+                {
+                    "$type": "AttachToStateIDMixin",
+                    "stateIDs": [
+                        "Strike_Loop_03"
+                    ],
+                    "modifierName": "Strike_BlinkActions"
+                }
+            ],
+            "modifiers": {
+                "UNIQUE_Strike_Actions": {
+                    "modifierName": "",
+                    "isUnique": true,
+                    "bonusCriticalHurt": 100.0,
+                    "onAdded": [
+                        {
+                            "$type": "ClearLockTarget",
+                            "target": "CurLocalAvatar"
+                        },
+                        {
+                            "$type": "AttachModifier",
+                            "modifierName": "Strike_Invincible"
+                        },
+                        {
+                            "$type": "AttachModifier",
+                            "modifierName": "Strike_DenyLockOn"
+                        },
+                        {
+                            "$type": "TriggerSetVisible"
+                        },
+                        {
+                            "$type": "HideUIBillBoard",
+                            "hide": true
+                        },
+                        {
+                            "$type": "EnableHitBoxByName",
+                            "hitBoxNames": [
+                                "HitBox_Head",
+                                "HitBox_Body"
+                            ]
+                        },
+                        {
+                            "$type": "EnablePushColliderName",
+                            "pushColliderNames": [
+                                "PushCollider"
+                            ]
+                        },
+                        {
+                            "$type": "TriggerAbility",
+                            "abilityName": "Monster_Hound_Riftstalker_Electric_RemoveBodyEff"
+                        }
+                    ],
+                    "onRemoved": [
+                        {
+                            "$type": "EnableHitBoxByName",
+                            "hitBoxNames": [
+                                "HitBox_Head",
+                                "HitBox_Body"
+                            ],
+                            "setEnable": true
+                        },
+                        {
+                            "$type": "EnablePushColliderName",
+                            "pushColliderNames": [
+                                "PushCollider"
+                            ],
+                            "setEnable": true
+                        },
+                        {
+                            "$type": "TriggerSetVisible",
+                            "visible": true
+                        },
+                        {
+                            "$type": "HideUIBillBoard"
+                        },
+                        {
+                            "$type": "TriggerAbility",
+                            "abilityName": "Monster_Hound_Riftstalker_Electric_AddBodyEff"
+                        }
+                    ]
+                },
+                "Strike_Invincible": {
+                    "modifierName": "",
+                    "bonusCriticalHurt": 100.0,
+                    "state": "Invincible"
+                },
+                "Strike_DenyLockOn": {
+                    "modifierName": "",
+                    "bonusCriticalHurt": 100.0,
+                    "state": "DenyLockOn"
+                },
+                "Strike_FindBlinkPointActions": {
+                    "modifierName": "",
+                    "bonusCriticalHurt": 100.0,
+                    "onAdded": [
+                        {
+                            "$type": "TriggerAbility",
+                            "abilityName": "Monster_Hound_Riftstalker_Electric_Strike_FindBlinkPoint"
+                        }
+                    ]
+                },
+                "Strike_BlinkActions": {
+                    "modifierName": "",
+                    "bonusCriticalHurt": 100.0,
+                    "onAdded": [
+                        {
+                            "$type": "TriggerAbility",
+                            "abilityName": "Monster_Hound_Riftstalker_Electric_Strike_DoBlink"
+                        }
+                    ],
+                    "onRemoved": [
+                        {
+                            "$type": "FireEffect",
+                            "healLimitedByCasterMaxHPRatio": "Eff_Monster_Riftstalker_Electric_Strike_AS",
+                            "born": {
+                                "$type": "ConfigBornByTeleportToPoint"
+                            },
+                            "MEMHGJDEPJA": -1.0
+                        }
+                    ]
+                }
+            }
+        }
+    },
+    {
+        "Default": {
+            "$type": "ConfigAbility",
+            "abilityName": "Monster_Hound_Riftstalker_Electric_Strike_FindBlinkPoint",
+            "onAbilityStart": [
+                {
+                    "$type": "TryFindBlinkPointByBorn",
+                    "target": "SelfAttackTarget",
+                    "predicates": [
+                        {
+                            "$type": "ByTargetGlobalValue",
+                            "target": "Self",
+                            "key": "_ROUGUE_HOUNDSTRIKE_TAG_",
+                            "ratio": 0.0,
+                            "compareType": "NoneOrEqual"
+                        }
+                    ],
+                    "born": {
+                        "$type": "ConfigBornByTargetLinearPoint",
+                        "offset": {
+                            "AMODPKJAIGF": 0.0,
+                            "DBJCBJPOOAP": 0.0,
+                            "JDFJGADACKC": 0.0
+                        },
+                        "onGround": true,
+                        "linearOffset": 4.800000190734863,
+                        "linearXZ": false,
+                        "linearMin": 0.0,
+                        "linearMax": 40.0
+                    },
+                    "hitSceneType": "BlinkHitSceneTestByThreeSegments",
+                    "limitY": 2.5
+                },
+                {
+                    "$type": "TryFindBlinkPointByBorn",
+                    "target": "SelfAttackTarget",
+                    "predicates": [
+                        {
+                            "$type": "ByTargetGlobalValue",
+                            "target": "Self",
+                            "key": "_ROUGUE_HOUNDSTRIKE_TAG_",
+                            "ratio": 1.0
+                        }
+                    ],
+                    "born": {
+                        "$type": "ConfigBornByTargetLinearPoint",
+                        "offset": {
+                            "AMODPKJAIGF": 0.0,
+                            "DBJCBJPOOAP": 0.0,
+                            "JDFJGADACKC": 0.0
+                        },
+                        "onGround": true,
+                        "linearOffset": 4.800000190734863,
+                        "linearXZ": false,
+                        "linearMin": 0.0,
+                        "linearMax": 40.0
+                    },
+                    "hitSceneType": "BlinkHitSceneTestByThreeSegments",
+                    "limitY": 2.5
+                }
+            ]
+        }
+    },
+    {
+        "Default": {
+            "$type": "ConfigAbility",
+            "abilityName": "Monster_Hound_Riftstalker_Electric_Strike_DoBlink",
+            "onAbilityStart": [
+                {
+                    "$type": "DoBlink"
+                },
+                {
+                    "$type": "TurnDirectionToPos",
+                    "target": "SelfAttackTarget",
+                    "toPos": {
+                        "$type": "ConfigBornByTarget"
+                    }
+                }
+            ]
+        }
+    },
+    {
+        "Default": {
+            "$type": "ConfigAbility",
+            "abilityName": "Monster_Hound_Riftstalker_Electric_Strike_Attack",
+            "onAbilityStart": [
+                {
+                    "$type": "TriggerAttackEvent",
+                    "attackEvent": {
+                        "attackPattern": {
+                            "$type": "ConfigAttackCircle",
+                            "triggerType": "TriggerNoRepeat",
+                            "born": {
+                                "$type": "ConfigBornBySelf",
+                                "offset": {
+                                    "AMODPKJAIGF": -1.4900000095367432,
+                                    "DBJCBJPOOAP": -0.18000000715255737,
+                                    "JDFJGADACKC": 1.600000023841858
+                                },
+                                "direction": {
+                                    "$type": "ConfigDirectionByDefault",
+                                    "angleOffset": {
+                                        "AMODPKJAIGF": -9.380000114440918,
+                                        "DBJCBJPOOAP": -4.0,
+                                        "JDFJGADACKC": 16.5
+                                    }
+                                }
+                            },
+                            "height": 2.950000047683716,
+                            "fanAngle": 270.0,
+                            "ILKJCNJJPEL": 4.0
+                        },
+                        "attackInfo": {
+                            "attackTag": "Hound_Corruption_Tag",
+                            "attenuationTag": "",
+                            "attenuationGroup": "default",
+                            "attackProperty": {
+                                "EHFOGJFHDPE": 1.0,
+                                "GDADKLDBGIM": 0.0,
+                                "elementType": "Electric",
+                                "bonusCriticalHurt": 50.0,
+                                "strikeType": "Default",
+                                "enBreak": 20.0
+                            },
+                            "hitPattern": {
+                                "onHitEffectName": "Eff_Monster_Riftstalker_Hit",
+                                "hitImpulseType": "LV2",
+                                "hitHaltTimeScale": 0.05000000074505806
+                            }
+                        }
+                    },
+                    "targetType": "Enemy"
+                }
+            ]
+        }
+    },
+    {
+        "Default": {
+            "$type": "ConfigAbility",
+            "abilityName": "Monster_Hound_Riftstalker_Electric_JumpBack",
+            "abilityMixins": [
+                {
+                    "$type": "AttachToStateIDMixin",
+                    "stateIDs": [
+                        "JumpBack"
+                    ],
+                    "modifierName": "Riftstalker_JumpBack_Actions"
+                }
+            ],
+            "modifiers": {
+                "Riftstalker_JumpBack_Actions": {
+                    "modifierName": "",
+                    "bonusCriticalHurt": 100.0,
+                    "onAdded": [
+                        {
+                            "$type": "FireEffect",
+                            "healLimitedByCasterMaxHPRatio": "Eff_Monster_Riftstalker_Electric_JumpBack",
+                            "MEMHGJDEPJA": -1.0
+                        },
+                        {
+                            "$type": "TryFindBlinkPointByBorn",
+                            "target": "SelfAttackTarget",
+                            "born": {
+                                "$type": "ConfigBornBySelf",
+                                "offset": {
+                                    "AMODPKJAIGF": 0.0,
+                                    "DBJCBJPOOAP": 0.0,
+                                    "JDFJGADACKC": -8.0
+                                }
+                            },
+                            "hitSceneType": "BlinkHitSceneTestByThreeSegments",
+                            "limitY": 2.5
+                        },
+                        {
+                            "$type": "FixedMonsterRushMove",
+                            "toPos": {
+                                "$type": "ConfigBornByTeleportToPoint"
+                            },
+                            "timeRange": 1.0,
+                            "animatorStateIDs": [
+                                "JumpBack"
+                            ],
+                            "overrideMoveCollider": ""
+                        }
+                    ]
+                }
+            }
+        }
+    },
+    {
+        "Default": {
+            "$type": "ConfigAbility",
+            "abilityName": "Monster_Hound_Riftstalker_Electric_Howl",
+            "abilityMixins": [
+                {
+                    "$type": "DoActionByAnimatorStateIDMixin",
+                    "stateIDs": [
+                        "Howl"
+                    ],
+                    "exitActions": [
+                        {
+                            "$type": "ApplyModifier",
+                            "modifierName": "Watcher_82124_Moniter_Cleaner"
+                        }
+                    ]
+                },
+                {
+                    "$type": "DoActionByAnimatorStateIDMixin",
+                    "stateIDs": [
+                        "Die"
+                    ],
+                    "enterActions": [
+                        {
+                            "$type": "DoWatcherSystemAction",
+                            "predicates": [
+                                {
+                                    "$type": "ByHasModifier",
+                                    "modifierName": "Watcher_82124_Moniter"
+                                }
+                            ],
+                            "watcherId": 82124,
+                            "inThreatListOnly": true
+                        }
+                    ]
+                }
+            ],
+            "modifiers": {
+                "UNIQUE_Hound_Riftstalker_Electric_Howl": {
+                    "stacking": "Multiple",
+                    "modifierName": "",
+                    "isUnique": true,
+                    "DCEFILPANJI": 10.0,
+                    "bonusCriticalHurt": 100.0,
+                    "properties": {
+                        "Actor_AttackRatio": 0.25
+                    },
+                    "onAdded": [
+                        {
+                            "$type": "SetAISkillCDAvailableNow",
+                            "skillIDs": [
+                                304
+                            ]
+                        },
+                        {
+                            "$type": "FireEffect",
+                            "healLimitedByCasterMaxHPRatio": "Eff_Monster_Riftstalker_Electric_Howl_Response",
+                            "MEMHGJDEPJA": -1.0
+                        }
+                    ]
+                },
+                "Watcher_82124_Moniter": {
+                    "modifierName": "",
+                    "DCEFILPANJI": 8.0,
+                    "bonusCriticalHurt": 100.0
+                },
+                "Watcher_82124_Moniter_Cleaner": {
+                    "modifierName": "",
+                    "DCEFILPANJI": 0.8799999952316284,
+                    "bonusCriticalHurt": 100.0,
+                    "onRemoved": [
+                        {
+                            "$type": "RemoveModifier",
+                            "modifierName": "Watcher_82124_Moniter"
+                        }
+                    ]
+                }
+            },
+            "onAdded": [
+                {
+                    "$type": "SetGlobalValue",
+                    "ratio": 2.0,
+                    "key": "_RIFTSTALKER_ELECTRIC_HOWL_COUNT_",
+                    "maxValue": 0.0,
+                    "minValue": 0.0
+                }
+            ],
+            "onAbilityStart": [
+                {
+                    "$type": "Predicated",
+                    "otherTargets": {
+                        "$type": "SelectTargetsByShape",
+                        "sortType": "Nearest",
+                        "shapeName": "CircleR30",
+                        "campTargetType": "Alliance",
+                        "sizeRatio": 1.0
+                    },
+                    "targetPredicates": [
+                        {
+                            "$type": "ByTargetGlobalValue",
+                            "key": "_KANIS_TAG_",
+                            "ratio": 1.0
+                        },
+                        {
+                            "$type": "ByTargetGlobalValue",
+                            "target": "Self",
+                            "key": "_RIFTSTALKER_ELECTRIC_HOWL_COUNT_",
+                            "ratio": 0.0,
+                            "compareType": "MoreThan"
+                        }
+                    ],
+                    "successActions": [
+                        {
+                            "$type": "ApplyModifier",
+                            "target": "Target",
+                            "modifierName": "UNIQUE_Hound_Riftstalker_Electric_Howl"
+                        },
+                        {
+                            "$type": "AddGlobalValue",
+                            "ratio": -1.0,
+                            "key": "_RIFTSTALKER_ELECTRIC_HOWL_COUNT_",
+                            "useLimitRange": true,
+                            "maxValue": 2.0,
+                            "minValue": 0.0
+                        }
+                    ]
+                },
+                {
+                    "$type": "SetGlobalValue",
+                    "ratio": 2.0,
+                    "key": "_RIFTSTALKER_ELECTRIC_HOWL_COUNT_",
+                    "maxValue": 0.0,
+                    "minValue": 0.0
+                },
+                {
+                    "$type": "ApplyModifier",
+                    "modifierName": "Watcher_82124_Moniter"
+                }
+            ]
+        }
+    },
+    {
+        "Default": {
+            "$type": "ConfigAbility",
+            "abilityName": "Monster_Hound_Riftstalker_Electric_Smash",
+            "abilityMixins": [
+                {
+                    "$type": "AttachToStateIDMixin",
+                    "stateIDs": [
+                        "Smash_Loop_01",
+                        "Smash_Loop_02",
+                        "Smash_Loop_03"
+                    ],
+                    "modifierName": "Smash_Actions"
+                },
+                {
+                    "$type": "SteerAttackMixin",
+                    "steerStateIDs": [
+                        "Smash_BS"
+                    ],
+                    "endNormalizedTime": 0.5,
+                    "angularSpeed": 270.0,
+                    "attackTrigger": ""
+                },
+                {
+                    "$type": "AttachToStateIDMixin",
+                    "stateIDs": [
+                        "Smash_BS",
+                        "Smash_Loop_01",
+                        "Smash_Loop_02",
+                        "Smash_Loop_03",
+                        "Smash_AS"
+                    ],
+                    "modifierName": "Smash_ShaderProtect"
+                }
+            ],
+            "modifiers": {
+                "Smash_Actions": {
+                    "modifierName": "",
+                    "bonusCriticalHurt": 100.0,
+                    "onAdded": [
+                        {
+                            "$type": "AttachModifier",
+                            "modifierName": "Smash_EffHandler"
+                        },
+                        {
+                            "$type": "AttachModifier",
+                            "modifierName": "Smash_Rush"
+                        },
+                        {
+                            "$type": "TriggerBullet",
+                            "bulletID": 42205004,
+                            "born": {
+                                "$type": "ConfigBornByAttachPoint",
+                                "offset": {
+                                    "AMODPKJAIGF": 0.0,
+                                    "DBJCBJPOOAP": 0.0,
+                                    "JDFJGADACKC": -4.0
+                                },
+                                "attachPointName": "Body"
+                            },
+                            "trackTarget": "Self",
+                            "MALEKPEEJIE": true
+                        },
+                        {
+                            "$type": "EnablePushColliderName",
+                            "pushColliderNames": [
+                                "PushCollider"
+                            ]
+                        }
+                    ],
+                    "onRemoved": [
+                        {
+                            "$type": "KillSelf",
+                            "otherTargets": {
+                                "$type": "SelectTargetsByChildren",
+                                "configID": 42205004
+                            }
+                        },
+                        {
+                            "$type": "EnablePushColliderName",
+                            "pushColliderNames": [
+                                "PushCollider"
+                            ],
+                            "setEnable": true
+                        }
+                    ]
+                },
+                "Smash_EffHandler": {
+                    "modifierName": "",
+                    "bonusCriticalHurt": 100.0,
+                    "onAdded": [
+                        {
+                            "$type": "AttachEffect",
+                            "healLimitedByCasterMaxHPRatio": "Eff_Monster_Riftstalker_Electric_Smash_Loop",
+                            "MEMHGJDEPJA": -1.0
+                        }
+                    ],
+                    "onRemoved": [
+                        {
+                            "$type": "RemoveModifier",
+                            "modifierName": "Smash_ShaderHandler"
+                        }
+                    ]
+                },
+                "Smash_ShaderHandler": {
+                    "modifierName": "",
+                    "bonusCriticalHurt": 100.0,
+                    "onAdded": [
+                        {
+                            "$type": "SetAnimatorBool",
+                            "boolID": "ShaderSmashTag",
+                            "ratio": true
+                        }
+                    ],
+                    "onRemoved": [
+                        {
+                            "$type": "SetAnimatorBool",
+                            "boolID": "ShaderSmashTag"
+                        }
+                    ]
+                },
+                "Smash_Rush": {
+                    "modifierName": "",
+                    "bonusCriticalHurt": 100.0,
+                    "onAdded": [
+                        {
+                            "$type": "TryFindBlinkPointByBorn",
+                            "target": "SelfAttackTarget",
+                            "born": {
+                                "$type": "ConfigBornByTargetLinearPoint",
+                                "offset": {
+                                    "AMODPKJAIGF": 0.0,
+                                    "DBJCBJPOOAP": 0.0,
+                                    "JDFJGADACKC": 0.0
+                                },
+                                "linearOffset": 6.5,
+                                "linearMin": 10.0,
+                                "linearMax": 15.0
+                            },
+                            "hitSceneTest": false,
+                            "limitY": 2.5
+                        },
+                        {
+                            "$type": "FixedMonsterRushMove",
+                            "toPos": {
+                                "$type": "ConfigBornByTeleportToPoint"
+                            },
+                            "timeRange": 0.4000000059604645,
+                            "animatorStateIDs": [
+                                "Smash_Loop_01",
+                                "Smash_Loop_02",
+                                "Smash_Loop_03"
+                            ],
+                            "overrideMoveCollider": "",
+                            "checkAnimatorStateOnExitOnly": true
+                        }
+                    ]
+                },
+                "Smash_ShaderProtect": {
+                    "modifierName": "",
+                    "bonusCriticalHurt": 100.0,
+                    "onRemoved": [
+                        {
+                            "$type": "RemoveModifier",
+                            "modifierName": "Smash_ShaderHandler"
+                        }
+                    ]
+                }
+            },
+            "onAbilityStart": [
+                {
+                    "$type": "ApplyModifier",
+                    "modifierName": "Smash_ShaderHandler"
+                }
+            ]
+        }
+    },
+    {
+        "Default": {
+            "$type": "ConfigAbility",
+            "abilityName": "Hound_Riftstalker_Electric_Smash_FollowBullet_Hit",
+            "abilityMixins": [
+                {
+                    "$type": "AttackHittingSceneMixin",
+                    "onHittingScene": [
+                        {
+                            "$type": "SetAnimatorTrigger",
+                            "target": "Owner",
+                            "triggerID": "SmashEnd"
+                        },
+                        {
+                            "$type": "ActCameraShake",
+                            "cameraShake": {
+                                "shakeRange": 0.1599999964237213,
+                                "shakeTime": 0.09000000357627869,
+                                "shakeDistance": 25.0
+                            }
+                        }
+                    ]
+                }
+            ],
+            "onAbilityStart": [
+                {
+                    "$type": "TriggerAttackEvent",
+                    "attackEvent": {
+                        "attackPattern": {
+                            "$type": "ConfigAttackSphere",
+                            "triggerType": "TriggerNoRepeat",
+                            "born": {
+                                "$type": "ConfigBornByCollisionPoint"
+                            },
+                            "ILKJCNJJPEL": 1.0
+                        },
+                        "attackInfo": {
+                            "attackTag": "Hound_Corruption_Tag",
+                            "attenuationTag": "",
+                            "attenuationGroup": "default",
+                            "attackProperty": {
+                                "EHFOGJFHDPE": 0.8500000238418579,
+                                "GDADKLDBGIM": 0.0,
+                                "elementType": "Electric",
+                                "bonusCriticalHurt": 50.0,
+                                "strikeType": "Blunt",
+                                "enBreak": 1.0
+                            },
+                            "hitPattern": {
+                                "onHitEffectName": "Eff_Monster_Riftstalker_Hit",
+                                "hitImpulseType": "LV1",
+                                "hitHaltTimeScale": 0.009999999776482582
+                            },
+                            "canBeModifiedBy": "OriginOwner"
+                        }
+                    },
+                    "targetType": "Enemy"
+                }
+            ]
+        }
+    },
+    {
+        "Default": {
+            "$type": "ConfigAbility",
+            "abilityName": "Monster_Hound_Riftstalker_Electric_Acitvated",
+            "abilityMixins": [
+                {
+                    "$type": "AttachToStateIDMixin",
+                    "stateIDs": [
+                        "Activated"
+                    ],
+                    "modifierName": "Riftstalker_Activated_Actions"
+                }
+            ],
+            "modifiers": {
+                "Riftstalker_Activated_Actions": {
+                    "modifierName": "",
+                    "bonusCriticalHurt": 100.0,
+                    "onAdded": [
+                        {
+                            "$type": "SetGlobalValue",
+                            "ratio": 2.0,
+                            "key": "_Riftstalker_POSE_TAG_",
+                            "maxValue": 0.0,
+                            "minValue": 0.0
+                        }
+                    ],
+                    "onRemoved": [
+                        {
+                            "$type": "RemoveUniqueModifier",
+                            "modifierName": "UNIQUE_Riftstalker_ChargeBar"
+                        },
+                        {
+                            "$type": "SetAISkillCDAvailableNow",
+                            "skillIDs": [
+                                901
+                            ]
+                        }
+                    ]
+                }
+            }
+        }
+    },
+    {
+        "Default": {
+            "$type": "ConfigAbility",
+            "abilityName": "Monster_Hound_Riftstalker_Electric_ShockWave_Bullet",
+            "onAbilityStart": [
+                {
+                    "$type": "TriggerBullet",
+                    "bulletID": 42205002,
+                    "born": {
+                        "$type": "ConfigBornByAttachPoint",
+                        "attachPointName": "BulletAttachPoint"
+                    }
+                }
+            ]
+        }
+    },
+    {
+        "Default": {
+            "$type": "ConfigAbility",
+            "abilityName": "Monster_Hound_Riftstalker_Electric_ShockWave_Effect",
+            "onAbilityStart": [
+                {
+                    "$type": "FireEffect",
+                    "healLimitedByCasterMaxHPRatio": "Eff_Monster_Riftstalker_Electric_ShockWave",
+                    "MEMHGJDEPJA": -1.0
+                }
+            ]
+        }
+    },
+    {
+        "Default": {
+            "$type": "ConfigAbility",
+            "abilityName": "Hound_Riftstalker_Electric_ShockWave_Bullet",
+            "modifiers": {
+                "ShockWave_Bullet_Effect": {
+                    "modifierName": "",
+                    "bonusCriticalHurt": 100.0,
+                    "onAdded": [
+                        {
+                            "$type": "AttachEffect",
+                            "healLimitedByCasterMaxHPRatio": "Eff_Monster_Riftstalker_Electric_ShockWave_Bullet",
+                            "MEMHGJDEPJA": -1.0
+                        },
+                        {
+                            "$type": "AttachEffect",
+                            "healLimitedByCasterMaxHPRatio": "Eff_Monster_Riftstalker_Electric_ShockWave_Bullet_Trail",
+                            "MEMHGJDEPJA": -1.0
+                        }
+                    ]
+                }
+            },
+            "onAdded": [
+                {
+                    "$type": "ApplyModifier",
+                    "modifierName": "ShockWave_Bullet_Effect"
+                }
+            ],
+            "onAbilityStart": [
+                {
+                    "$type": "TriggerAttackEvent",
+                    "attackEvent": {
+                        "attackPattern": {
+                            "$type": "ConfigAttackSphere",
+                            "triggerType": "TriggerNoRepeat",
+                            "born": {
+                                "$type": "ConfigBornBySelf",
+                                "offset": {
+                                    "AMODPKJAIGF": 0.0,
+                                    "DBJCBJPOOAP": 0.0,
+                                    "JDFJGADACKC": 0.0
+                                }
+                            },
+                            "ILKJCNJJPEL": 1.7000000476837158
+                        },
+                        "attackInfo": {
+                            "attackTag": "Hound_Corruption_Tag",
+                            "attenuationTag": "",
+                            "attenuationGroup": "default",
+                            "attackProperty": {
+                                "EHFOGJFHDPE": 0.949999988079071,
+                                "GDADKLDBGIM": 0.0,
+                                "elementType": "Electric",
+                                "bonusCriticalHurt": 50.0,
+                                "strikeType": "Default",
+                                "enBreak": 1.0
+                            },
+                            "hitPattern": {
+                                "onHitEffectName": "Eff_Monster_Riftstalker_Hit",
+                                "hitImpulseType": "LV2",
+                                "hitHaltTimeScale": 0.05000000074505806
+                            }
+                        }
+                    },
+                    "targetType": "Enemy"
+                },
+                {
+                    "$type": "RemoveModifier",
+                    "modifierName": "ShockWave_Bullet_Effect"
+                },
+                {
+                    "$type": "FireEffect",
+                    "healLimitedByCasterMaxHPRatio": "Eff_Monster_Riftstalker_Electric_ShockWave_Explode",
+                    "MEMHGJDEPJA": -1.0
+                },
+                {
+                    "$type": "KillSelf"
+                }
+            ]
+        }
+    }
+]
