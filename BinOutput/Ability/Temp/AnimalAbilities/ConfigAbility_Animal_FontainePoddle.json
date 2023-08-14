@@ -1,0 +1,284 @@
+[
+    {
+        "Default": {
+            "$type": "ConfigAbility",
+            "abilityName": "Animal_FontainePoddle_AIStateInitial",
+            "abilityMixins": [
+                {
+                    "$type": "SteerAttackMixin",
+                    "steerStateIDs": [
+                        "Turn"
+                    ],
+                    "endNormalizedTime": 999.0,
+                    "angularSpeed": 60.0,
+                    "attackTrigger": ""
+                },
+                {
+                    "$type": "SteerAttackMixin",
+                    "steerStateIDs": [
+                        "Dodge"
+                    ],
+                    "endNormalizedTime": 0.18000000715255737,
+                    "angularSpeed": 3600.0,
+                    "attackTrigger": ""
+                }
+            ],
+            "modifiers": {
+                "UNIQUE_Invincible": {
+                    "modifierName": "",
+                    "isUnique": true,
+                    "bonusCritical": 100.0,
+                    "state": "Invincible"
+                },
+                "DenyLockOn": {
+                    "modifierName": "",
+                    "bonusCritical": 100.0,
+                    "state": "DenyLockOn"
+                }
+            },
+            "onAdded": [
+                {
+                    "$type": "AttachModifier",
+                    "modifierName": "UNIQUE_Invincible"
+                },
+                {
+                    "$type": "AttachModifier",
+                    "modifierName": "DenyLockOn"
+                },
+                {
+                    "$type": "AttachAbilityStateResistance",
+                    "resistanceListID": 11001
+                }
+            ]
+        }
+    },
+    {
+        "Default": {
+            "$type": "ConfigAbility",
+            "abilityName": "Animal_FontainePoddle_Prone",
+            "onAbilityStart": [
+                {
+                    "$type": "SetPoseInt",
+                    "intID": "RandomPose",
+                    "value": 2
+                }
+            ]
+        }
+    },
+    {
+        "Default": {
+            "$type": "ConfigAbility",
+            "abilityName": "Animal_FontainePoddle_Stand",
+            "onAbilityStart": [
+                {
+                    "$type": "SetPoseInt",
+                    "intID": "RandomPose",
+                    "value": 1
+                }
+            ]
+        }
+    },
+    {
+        "Default": {
+            "$type": "ConfigAbility",
+            "abilityName": "Animal_FontainePoddle_BeHit",
+            "abilityMixins": [
+                {
+                    "$type": "AttachToPoseIDMixin",
+                    "poseIDs": [
+                        1,
+                        2,
+                        4,
+                        5,
+                        101,
+                        201,
+                        401,
+                        501
+                    ],
+                    "modifierName": "BeHitDetect"
+                },
+                {
+                    "$type": "DoActionByPoseIDMixin",
+                    "poseIDs": [
+                        901,
+                        902
+                    ],
+                    "enterActions": [
+                        {
+                            "$type": "ApplyModifier",
+                            "modifierName": "FleeCountDown"
+                        }
+                    ]
+                }
+            ],
+            "modifiers": {
+                "BeHitDetect": {
+                    "modifierName": "",
+                    "bonusCritical": 100.0,
+                    "onBeingHit": [
+                        {
+                            "$type": "Predicated",
+                            "target": "Target",
+                            "targetPredicates": [
+                                {
+                                    "$type": "HDOFEAAHAKF",
+                                    "entityTypes": [
+                                        "Avatar",
+                                        "Monster",
+                                        "Gadget",
+                                        "Bullet"
+                                    ]
+                                }
+                            ],
+                            "successActions": [
+                                {
+                                    "$type": "SetPoseBool",
+                                    "boolID": "FleeHasTarget",
+                                    "ratio": true
+                                },
+                                {
+                                    "$type": "SetAnimatorTrigger",
+                                    "triggerID": "BeHitTrigger"
+                                }
+                            ],
+                            "failActions": [
+                                {
+                                    "$type": "SetPoseBool",
+                                    "boolID": "FleeNoTarget",
+                                    "ratio": true
+                                }
+                            ]
+                        }
+                    ]
+                },
+                "FleeCountDown": {
+                    "stacking": "Unique",
+                    "modifierName": "",
+                    "duration": 10.0,
+                    "bonusCritical": 100.0,
+                    "onRemoved": [
+                        {
+                            "$type": "StartDither",
+                            "duration": 3.0
+                        },
+                        {
+                            "$type": "KillSelf",
+                            "duration": 2.5,
+                            "banDrop": true,
+                            "banExp": true,
+                            "killSelfType": "Disappear"
+                        }
+                    ]
+                }
+            }
+        }
+    },
+    {
+        "Default": {
+            "$type": "ConfigAbility",
+            "abilityName": "Animal_FontainePoddle_Guard_TurnToProne",
+            "onAbilityStart": [
+                {
+                    "$type": "SetAISkillCDAvailableNow",
+                    "skillIDs": [
+                        101,
+                        102
+                    ]
+                }
+            ]
+        }
+    },
+    {
+        "Default": {
+            "$type": "ConfigAbility",
+            "abilityName": "Animal_FontainePoddle_Guard_BeHit",
+            "abilityMixins": [
+                {
+                    "$type": "AttachToPoseIDMixin",
+                    "poseIDs": [
+                        1,
+                        2,
+                        3,
+                        101,
+                        201,
+                        301
+                    ],
+                    "modifierName": "BeHitDetect"
+                },
+                {
+                    "$type": "DoActionByPoseIDMixin",
+                    "poseIDs": [
+                        901,
+                        902
+                    ],
+                    "enterActions": [
+                        {
+                            "$type": "ApplyModifier",
+                            "modifierName": "FleeCountDown"
+                        }
+                    ]
+                }
+            ],
+            "modifiers": {
+                "BeHitDetect": {
+                    "modifierName": "",
+                    "bonusCritical": 100.0,
+                    "onBeingHit": [
+                        {
+                            "$type": "Predicated",
+                            "target": "Target",
+                            "targetPredicates": [
+                                {
+                                    "$type": "HDOFEAAHAKF",
+                                    "entityTypes": [
+                                        "Avatar",
+                                        "Monster",
+                                        "Gadget",
+                                        "Bullet"
+                                    ]
+                                }
+                            ],
+                            "successActions": [
+                                {
+                                    "$type": "SetPoseBool",
+                                    "boolID": "FleeHasTarget",
+                                    "ratio": true
+                                },
+                                {
+                                    "$type": "SetAnimatorTrigger",
+                                    "triggerID": "BeHitTrigger"
+                                }
+                            ],
+                            "failActions": [
+                                {
+                                    "$type": "SetPoseBool",
+                                    "boolID": "FleeNoTarget",
+                                    "ratio": true
+                                }
+                            ]
+                        }
+                    ]
+                },
+                "FleeCountDown": {
+                    "stacking": "Unique",
+                    "modifierName": "",
+                    "duration": 10.0,
+                    "bonusCritical": 100.0,
+                    "onRemoved": [
+                        {
+                            "$type": "StartDither",
+                            "duration": 3.0
+                        },
+                        {
+                            "$type": "KillSelf",
+                            "duration": 2.5,
+                            "banDrop": true,
+                            "banExp": true,
+                            "killSelfType": "Disappear"
+                        }
+                    ]
+                }
+            }
+        }
+    }
+]
