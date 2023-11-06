@@ -1,0 +1,361 @@
+[
+    {
+        "Default": {
+            "$type": "ConfigAbility",
+            "abilityName": "Fungus_BVB_Universal_ElementalBlast_Immediately",
+            "abilityMixins": [
+                {
+                    "$type": "AttachModifierToGlobalValueMixin",
+                    "globalValueKey": "SGV_Fungus_StartBurst_Immediately",
+                    "valueSteps": [
+                        -0.5,
+                        0.5,
+                        1.5
+                    ],
+                    "modifierNameSteps": [
+                        "Dummy1",
+                        "Reset_GV_State_1"
+                    ]
+                }
+            ],
+            "modifiers": {
+                "Dummy1": {
+                    "modifierName": "",
+                    "bonusCriticalHurt": 100.0
+                },
+                "Reset_GV_State_1": {
+                    "modifierName": "",
+                    "duration": 0.5,
+                    "bonusCriticalHurt": 100.0,
+                    "onAdded": [
+                        {
+                            "$type": "SetAnimatorTrigger",
+                            "triggerID": "BurstImmediately"
+                        },
+                        {
+                            "$type": "FireEffect",
+                            "HMGKAKGAJLE": "Eff_Monster_FungusFight_UnionBurstGlitter",
+                            "effectTempleteID": -1.0
+                        }
+                    ]
+                }
+            },
+            "onAbilityStart": [
+                {
+                    "$type": "ServerLuaCall",
+                    "luaCallType": "CurGalleryControlGroup",
+                    "funcName": "SLC_MushroomMonsterAlertDoSkill",
+                    "KPOGPNLFAAE": 0.0,
+                    "param2": 0.0,
+                    "param3": 0.0
+                }
+            ]
+        }
+    },
+    {
+        "Default": {
+            "$type": "ConfigAbility",
+            "abilityName": "FungusFighter_Universal_LineMixin",
+            "abilityMixins": [
+                {
+                    "$type": "ActivityFungusV3Mixin",
+                    "KBMKGKFLJBL": "Eff_Monster_FungusFighterV2_LineToMouse",
+                    "NBFCOCNJLBD": "Eff_Monster_FungusFighterV2_LineToMouse_Ring",
+                    "LPJACFOBIEI": "Eff_Monster_FungusFighterV2_MoveCommand",
+                    "abilityName": "Fungus_BVB_Universal_ElementalBlast_Immediately",
+                    "CNFIOMMCMLM": "Eff_Monster_FungusFighterV2_SkillRange",
+                    "DALIIAMIDCN": "Eff_Monster_FungusFighterV2_Ring",
+                    "COAODBJBKGB": "Eff_Monster_FungusFighterV2_SideArrow",
+                    "CEENHLNIJKA": "",
+                    "FIBKAGICOAK": ""
+                }
+            ],
+            "onAdded": [
+                {
+                    "$type": "SetGlobalValue",
+                    "ratio": 1.0,
+                    "key": "BATTLE_FUNGUS_MARK",
+                    "maxValue": 0.0,
+                    "minValue": 0.0
+                },
+                {
+                    "$type": "SetAnimatorBool",
+                    "boolID": "IsPartner",
+                    "ratio": true
+                }
+            ]
+        }
+    },
+    {
+        "Default": {
+            "$type": "ConfigAbility",
+            "abilityName": "Monster_Fungus_Trois_RotationVFX",
+            "abilityMixins": [
+                {
+                    "$type": "AttachToStateIDMixin",
+                    "stateIDs": [
+                        "Born",
+                        "NormalIdle",
+                        "NormalMove"
+                    ],
+                    "modifierName": "Rotating_VFX"
+                }
+            ],
+            "modifiers": {
+                "Rotating_VFX": {
+                    "modifierName": "",
+                    "bonusCriticalHurt": 100.0,
+                    "onAdded": [
+                        {
+                            "$type": "AttachEffect",
+                            "HMGKAKGAJLE": "Eff_Monster_FungusFight_Trois_RotateIdle",
+                            "effectTempleteID": -1.0
+                        }
+                    ]
+                }
+            }
+        }
+    },
+    {
+        "Default": {
+            "$type": "ConfigAbility",
+            "abilityName": "Monster_Fungus_Un_FlyStateManager",
+            "abilityMixins": [
+                {
+                    "$type": "AttachToAnimatorStateIDMixin",
+                    "stateIDs": [
+                        "Jump_BS",
+                        "Launch_Loop"
+                    ],
+                    "modifierName": "JumpLaunch"
+                },
+                {
+                    "$type": "AttachToAnimatorStateIDMixin",
+                    "stateIDs": [
+                        "Jump_AS",
+                        "Drop_Loop",
+                        "Land_AS"
+                    ],
+                    "modifierName": "JumpDrop"
+                },
+                {
+                    "$type": "AttachToAnimatorStateIDMixin",
+                    "stateIDs": [
+                        "HitThrow",
+                        "HitThrowDrop",
+                        "ReturnToBorn_BS"
+                    ],
+                    "modifierName": "JumpLand"
+                },
+                {
+                    "$type": "SteerAttackMixin",
+                    "steerStateIDs": [
+                        "JumpProcess"
+                    ],
+                    "endNormalizedTime": 999.0,
+                    "angularSpeed": 180.0,
+                    "attackTrigger": ""
+                }
+            ],
+            "modifiers": {
+                "JumpLaunch": {
+                    "modifierName": "",
+                    "bonusCriticalHurt": 100.0,
+                    "onAdded": [
+                        {
+                            "$type": "SetPoseBool",
+                            "boolID": "AirTag",
+                            "ratio": true
+                        }
+                    ]
+                },
+                "JumpDrop": {
+                    "modifierName": "",
+                    "bonusCriticalHurt": 100.0,
+                    "modifierMixins": [
+                        {
+                            "$type": "MonsterLandMixin",
+                            "onMotionChange": [
+                                {
+                                    "$type": "SetPoseBool",
+                                    "boolID": "AirTag"
+                                }
+                            ],
+                            "dropToPos": ""
+                        }
+                    ]
+                },
+                "JumpLand": {
+                    "modifierName": "",
+                    "bonusCriticalHurt": 100.0,
+                    "onAdded": [
+                        {
+                            "$type": "SetPoseBool",
+                            "boolID": "AirTag"
+                        }
+                    ]
+                }
+            }
+        }
+    },
+    {
+        "Default": {
+            "$type": "ConfigAbility",
+            "abilityName": "Fungus_BVB_Un_Water_Bubble_Reject",
+            "abilityMixins": [
+                {
+                    "$type": "AttachToStateIDMixin",
+                    "stateIDs": [
+                        "UnionBurst"
+                    ],
+                    "modifierName": "Bubble_Reject_Mark"
+                }
+            ],
+            "modifiers": {
+                "Bubble_Reject_Mark": {
+                    "modifierName": "",
+                    "bonusCriticalHurt": 100.0,
+                    "onAdded": [
+                        {
+                            "$type": "AttachAbilityStateResistance",
+                            "resistanceBuffDebuffs": [
+                                "Struggle",
+                                "ElementFreeze",
+                                "ElementFrozen"
+                            ]
+                        }
+                    ]
+                }
+            }
+        }
+    },
+    {
+        "Default": {
+            "$type": "ConfigAbility",
+            "abilityName": "FungusFight_V3_Affix01",
+            "abilitySpecials": {
+                "bloom_ratio": 1.5,
+                "electro_charged_ratio": 1.5
+            },
+            "modifiers": {
+                "FungusFight_V3_Affix01_Modifier": {
+                    "modifierName": "",
+                    "bonusCriticalHurt": 100.0,
+                    "properties": {
+                        "Actor_ElemReactOvergrowDelta": "bloom_ratio",
+                        "Actor_ElemReactOvergrowFireDelta": "bloom_ratio",
+                        "Actor_ElemReactOvergrowElectricDelta": "bloom_ratio",
+                        "Actor_ElemReactElectricDelta": "electro_charged_ratio"
+                    }
+                }
+            },
+            "onAdded": [
+                {
+                    "$type": "ApplyModifier",
+                    "modifierName": "FungusFight_V3_Affix01_Modifier"
+                }
+            ],
+            "isDynamicAbility": true
+        }
+    },
+    {
+        "Default": {
+            "$type": "ConfigAbility",
+            "abilityName": "FungusFight_V3_Affix02",
+            "abilitySpecials": {
+                "swirl_ratio": 1.5
+            },
+            "modifiers": {
+                "FungusFight_V3_Affix02_Modifier": {
+                    "modifierName": "",
+                    "bonusCriticalHurt": 100.0,
+                    "properties": {
+                        "Actor_ElemReactSwirlFireDelta": "swirl_ratio",
+                        "Actor_ElemReactSwirlIceDelta": "swirl_ratio",
+                        "Actor_ElemReactSwirlWaterDelta": "swirl_ratio",
+                        "Actor_ElemReactSwirlElectricDelta": "swirl_ratio"
+                    }
+                }
+            },
+            "onAdded": [
+                {
+                    "$type": "ApplyModifier",
+                    "modifierName": "FungusFight_V3_Affix02_Modifier"
+                }
+            ],
+            "isDynamicAbility": true
+        }
+    },
+    {
+        "Default": {
+            "$type": "ConfigAbility",
+            "abilityName": "FungusFight_V3_Affix03",
+            "abilitySpecials": {
+                "superconduct_ratio": 1.5,
+                "overloaded_ratio": 1.5
+            },
+            "modifiers": {
+                "FungusFight_V3_Affix03_Modifier": {
+                    "modifierName": "",
+                    "bonusCriticalHurt": 100.0,
+                    "properties": {
+                        "Actor_ElemReactSConductDelta": "superconduct_ratio",
+                        "Actor_ElemReactExplodeDelta": "overloaded_ratio"
+                    }
+                }
+            },
+            "onAdded": [
+                {
+                    "$type": "ApplyModifier",
+                    "modifierName": "FungusFight_V3_Affix03_Modifier"
+                }
+            ],
+            "isDynamicAbility": true
+        }
+    },
+    {
+        "Default": {
+            "$type": "ConfigAbility",
+            "abilityName": "FungusFight_V3_Level3InuDisappear_Adapter",
+            "abilityMixins": [
+                {
+                    "$type": "AttachModifierToSelfGlobalValueMixin",
+                    "globalValueKey": "_MONSTER_DIS_FUNFIGHTV3",
+                    "defaultGlobalValueOnCreate": 0.0,
+                    "valueSteps": [
+                        -0.5,
+                        0.5,
+                        1.5
+                    ],
+                    "modifierNameSteps": [
+                        "Battle_Normal",
+                        "Battle_NoTarget"
+                    ]
+                }
+            ],
+            "modifiers": {
+                "Battle_Normal": {
+                    "modifierName": "",
+                    "bonusCriticalHurt": 100.0,
+                    "onAdded": [
+                        {
+                            "$type": "SetPoseBool",
+                            "boolID": "NoTarget"
+                        }
+                    ]
+                },
+                "Battle_NoTarget": {
+                    "modifierName": "",
+                    "bonusCriticalHurt": 100.0,
+                    "onAdded": [
+                        {
+                            "$type": "SetPoseBool",
+                            "boolID": "NoTarget",
+                            "ratio": true
+                        }
+                    ]
+                }
+            }
+        }
+    }
+]
