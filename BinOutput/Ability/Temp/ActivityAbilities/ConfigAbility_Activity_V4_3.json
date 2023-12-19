@@ -1,0 +1,1431 @@
+[
+    {
+        "Default": {
+            "$type": "ConfigAbility",
+            "abilityName": "Activity_FilmfestBallGame_TeamAbility",
+            "abilityMixins": [
+                {
+                    "$type": "AttachModifierToSelfGlobalValueMixin",
+                    "globalValueKey": "GV_JumpUpBuff",
+                    "GVInTalk": 0.0,
+                    "valueSteps": [
+                        0.5,
+                        1.5
+                    ],
+                    "modifierNameSteps": [
+                        "UNIQUE_FilmfestBallGame_RocketJump"
+                    ]
+                },
+                {
+                    "$type": "AttachModifierToSelfGlobalValueNoInitMixin",
+                    "globalValueKey": "SGV_BallGame_Player",
+                    "valueSteps": [
+                        -0.5,
+                        0.5,
+                        999.0
+                    ],
+                    "modifierNameSteps": [
+                        "FilmfestBallGame_ClearIndicator",
+                        "FilmfestBallGame_CreateIndicator"
+                    ],
+                    "EEEHPOEMFKM": true
+                },
+                {
+                    "$type": "CurLocalAvatarMixinV2",
+                    "modifierName": "FilmfestBallGame_Sprint_ReduceCost"
+                },
+                {
+                    "$type": "CurLocalAvatarMixinV2",
+                    "modifierName": "FilmfestBallGame_Fly_ForbidFly"
+                },
+                {
+                    "$type": "AttachModifierToPredicateMixin",
+                    "predicates": [
+                        {
+                            "$type": "PKELFKHABED",
+                            "predicates": [
+                                {
+                                    "$type": "NGNODMLFFCB",
+                                    "target": "Self",
+                                    "key": "GV_GateForbidArea_GateMark",
+                                    "ratio": 0.0,
+                                    "ACJBNJNEBOC": "MoreThan"
+                                },
+                                {
+                                    "$type": "NGNODMLFFCB",
+                                    "target": "Self",
+                                    "key": "SGV_BallGame_Player",
+                                    "ratio": 0.0,
+                                    "ACJBNJNEBOC": "MoreThan"
+                                },
+                                {
+                                    "$type": "BAMBPOIJFPG",
+                                    "predicates": [
+                                        {
+                                            "$type": "NGNODMLFFCB",
+                                            "target": "Self",
+                                            "key": "GV_GateForbidArea_GateMark",
+                                            "ratio": "SGV_BallGame_Player"
+                                        }
+                                    ]
+                                }
+                            ]
+                        }
+                    ],
+                    "modifierName": "FilmfestBallGame_PlayerInOthersArea"
+                },
+                {
+                    "$type": "CurLocalAvatarMixinV2",
+                    "modifierName": "FilmfestBallGame_TeleportState"
+                }
+            ],
+            "AHNJEEFOHIC": [
+                "SGV_BallGame_Player",
+                "GV_GateForbidArea_GateMark",
+                "GV_GateForbidArea_PrevGateMark"
+            ],
+            "modifiers": {
+                "FilmfestBallGame_TeleportState": {
+                    "modifierName": "",
+                    "bonusCriticalHurt": 100.0,
+                    "modifierMixins": [
+                        {
+                            "$type": "AttachToStateIDMixin",
+                            "stateIDs": [
+                                "ActivitySkill_CommonMove"
+                            ],
+                            "modifierName": "FilmfestBallGame_PlayerTeleporting"
+                        }
+                    ]
+                },
+                "FilmfestBallGame_PlayerTeleporting": {
+                    "modifierName": "",
+                    "bonusCriticalHurt": 100.0,
+                    "state": "IsGhostToEnemy",
+                    "onAdded": [
+                        {
+                            "$type": "AddGlobalValueV2",
+                            "target": "Team",
+                            "ratio": 1.0,
+                            "key": "_FilmfestBallGame_PunishmentCount",
+                            "useLimitRange": true,
+                            "maxValue": 10.0,
+                            "minValue": 0.0
+                        },
+                        {
+                            "$type": "SetGlobalValueV2",
+                            "target": "Team",
+                            "ratio": 0.0,
+                            "key": "GV_GateForbidArea_GateMark",
+                            "maxValue": 0.0,
+                            "minValue": 0.0
+                        }
+                    ],
+                    "onRemoved": [
+                        {
+                            "$type": "SetGlobalValueV2",
+                            "target": "Team",
+                            "ratio": 0.0,
+                            "key": "GV_GateForbidArea_GateMark",
+                            "maxValue": 0.0,
+                            "minValue": 0.0
+                        }
+                    ]
+                },
+                "FilmfestBallGame_PunishScore": {
+                    "modifierName": "",
+                    "bonusCriticalHurt": 100.0,
+                    "thinkInterval": 1.0,
+                    "onThinkInterval": [
+                        {
+                            "$type": "Predicated",
+                            "target": "Team",
+                            "targetPredicates": [
+                                {
+                                    "$type": "GHCGPIKJOGA",
+                                    "modifierName": "FilmfestBallGame_PlayerInOthersArea"
+                                }
+                            ],
+                            "successActions": [
+                                {
+                                    "$type": "AddGlobalValueV2",
+                                    "ratio": 1.0,
+                                    "key": "_FilmfestBallGame_AreaWarning",
+                                    "useLimitRange": true,
+                                    "maxValue": 11.0,
+                                    "minValue": 0.0
+                                }
+                            ],
+                            "failActions": [
+                                {
+                                    "$type": "AddGlobalValueV2",
+                                    "ratio": -1.0,
+                                    "key": "_FilmfestBallGame_AreaWarning",
+                                    "useLimitRange": true,
+                                    "maxValue": 11.0,
+                                    "minValue": 0.0
+                                }
+                            ]
+                        }
+                    ]
+                },
+                "FilmfestBallGame_PlayerInOthersArea_Fatal": {
+                    "modifierName": "",
+                    "bonusCriticalHurt": 100.0,
+                    "modifierMixins": [
+                        {
+                            "$type": "AttachModifierToSelfGlobalValueNoInitMixin",
+                            "globalValueKey": "_FilmfestBallGame_AreaWarning",
+                            "valueSteps": [
+                                2.5,
+                                4.5,
+                                9999.0
+                            ],
+                            "modifierNameSteps": [
+                                "FilmfestBallGame_PlayerInOthersArea_Warning",
+                                "FilmfestBallGame_PlayerInOthersArea_Punish"
+                            ],
+                            "EEEHPOEMFKM": true
+                        }
+                    ]
+                },
+                "FilmfestBallGame_PlayerInOthersArea_Normal": {
+                    "modifierName": "",
+                    "bonusCriticalHurt": 100.0,
+                    "modifierMixins": [
+                        {
+                            "$type": "AttachModifierToSelfGlobalValueNoInitMixin",
+                            "globalValueKey": "_FilmfestBallGame_AreaWarning",
+                            "valueSteps": [
+                                4.5,
+                                6.5,
+                                9999.0
+                            ],
+                            "modifierNameSteps": [
+                                "FilmfestBallGame_PlayerInOthersArea_Warning",
+                                "FilmfestBallGame_PlayerInOthersArea_Punish"
+                            ],
+                            "EEEHPOEMFKM": true
+                        }
+                    ]
+                },
+                "FilmfestBallGame_PlayerInOthersArea": {
+                    "modifierName": "",
+                    "bonusCriticalHurt": 100.0,
+                    "modifierMixins": [
+                        {
+                            "$type": "AttachModifierToSelfGlobalValueNoInitMixin",
+                            "globalValueKey": "_FilmfestBallGame_PunishmentCount",
+                            "valueSteps": [
+                                -0.5,
+                                2.5,
+                                9999.0
+                            ],
+                            "modifierNameSteps": [
+                                "FilmfestBallGame_PlayerInOthersArea_Normal",
+                                "FilmfestBallGame_PlayerInOthersArea_Fatal"
+                            ],
+                            "EEEHPOEMFKM": true
+                        }
+                    ],
+                    "onAdded": [
+                        {
+                            "$type": "Predicated",
+                            "targetPredicates": [
+                                {
+                                    "$type": "BAMBPOIJFPG",
+                                    "predicates": [
+                                        {
+                                            "$type": "NGNODMLFFCB",
+                                            "target": "Self",
+                                            "key": "GV_GateForbidArea_GateMark",
+                                            "ratio": "GV_GateForbidArea_PrevGateMark"
+                                        }
+                                    ]
+                                }
+                            ],
+                            "successActions": [
+                                {
+                                    "$type": "SetGlobalValueV2",
+                                    "ratio": 0.0,
+                                    "key": "_FilmfestBallGame_AreaWarning",
+                                    "maxValue": 0.0,
+                                    "minValue": 0.0
+                                },
+                                {
+                                    "$type": "CopyGlobalValue",
+                                    "srcTarget": "Self",
+                                    "dstTarget": "Self",
+                                    "srcKey": "GV_GateForbidArea_GateMark",
+                                    "dstKey": "GV_GateForbidArea_PrevGateMark"
+                                }
+                            ]
+                        }
+                    ]
+                },
+                "FilmfestBallGame_PlayerInOthersArea_Warning": {
+                    "modifierName": "",
+                    "bonusCriticalHurt": 100.0,
+                    "onAdded": [
+                        {
+                            "$type": "ShowReminder",
+                            "muteRemoteAction": true,
+                            "id": 477110102
+                        }
+                    ]
+                },
+                "FilmfestBallGame_PlayerInOthersArea_Punish": {
+                    "modifierName": "",
+                    "bonusCriticalHurt": 100.0,
+                    "onAdded": [
+                        {
+                            "$type": "ServerLuaCall",
+                            "luaCallType": "CurGalleryControlGroup",
+                            "funcName": "SLC_Filmfest_BallGame_Punish",
+                            "paramNum": 1,
+                            "AFEHPHNEJHM": "GV_GateForbidArea_GateMark",
+                            "param2": 0.0,
+                            "param3": 0.0
+                        },
+                        {
+                            "$type": "SetGlobalValueV2",
+                            "ratio": 0.0,
+                            "key": "GV_GateForbidArea_GateMark",
+                            "maxValue": 0.0,
+                            "minValue": 0.0
+                        }
+                    ]
+                },
+                "FilmfestBallGame_ClearIndicator": {
+                    "modifierName": "",
+                    "bonusCriticalHurt": 100.0,
+                    "onAdded": [
+                        {
+                            "$type": "KillGadget",
+                            "gadgetInfo": {
+                                "configID": 70331050
+                            }
+                        }
+                    ]
+                },
+                "FilmfestBallGame_CreateIndicator": {
+                    "modifierName": "",
+                    "bonusCriticalHurt": 100.0,
+                    "onAdded": [
+                        {
+                            "$type": "CreateGadget",
+                            "predicates": [
+                                {
+                                    "$type": "NGNODMLFFCB",
+                                    "key": "SGV_BallGame_Player",
+                                    "ratio": 1.0
+                                }
+                            ],
+                            "born": {
+                                "$type": "CEMKHGNDEAL",
+                                "AELOCCAGABC": {
+                                    "x": 200.0,
+                                    "y": 16.799999237060547,
+                                    "z": 216.5
+                                }
+                            },
+                            "gadgetID": 70331050,
+                            "campID": 5001
+                        },
+                        {
+                            "$type": "CreateGadget",
+                            "predicates": [
+                                {
+                                    "$type": "NGNODMLFFCB",
+                                    "key": "SGV_BallGame_Player",
+                                    "ratio": 2.0
+                                }
+                            ],
+                            "born": {
+                                "$type": "CEMKHGNDEAL",
+                                "AELOCCAGABC": {
+                                    "x": 216.5,
+                                    "y": 16.799999237060547,
+                                    "z": 200.0
+                                }
+                            },
+                            "gadgetID": 70331050,
+                            "campID": 5001
+                        },
+                        {
+                            "$type": "CreateGadget",
+                            "predicates": [
+                                {
+                                    "$type": "NGNODMLFFCB",
+                                    "key": "SGV_BallGame_Player",
+                                    "ratio": 3.0
+                                }
+                            ],
+                            "born": {
+                                "$type": "CEMKHGNDEAL",
+                                "AELOCCAGABC": {
+                                    "x": 200.0,
+                                    "y": 16.799999237060547,
+                                    "z": 183.5
+                                }
+                            },
+                            "gadgetID": 70331050,
+                            "campID": 5001
+                        },
+                        {
+                            "$type": "CreateGadget",
+                            "predicates": [
+                                {
+                                    "$type": "NGNODMLFFCB",
+                                    "key": "SGV_BallGame_Player",
+                                    "ratio": 4.0
+                                }
+                            ],
+                            "born": {
+                                "$type": "CEMKHGNDEAL",
+                                "AELOCCAGABC": {
+                                    "x": 183.5,
+                                    "y": 16.799999237060547,
+                                    "z": 200.0
+                                }
+                            },
+                            "gadgetID": 70331050,
+                            "campID": 5001
+                        }
+                    ],
+                    "onReconnect": [
+                        {
+                            "$type": "CreateGadget",
+                            "predicates": [
+                                {
+                                    "$type": "NGNODMLFFCB",
+                                    "key": "SGV_BallGame_Player",
+                                    "ratio": 1.0
+                                }
+                            ],
+                            "born": {
+                                "$type": "CEMKHGNDEAL",
+                                "AELOCCAGABC": {
+                                    "x": 200.0,
+                                    "y": 16.799999237060547,
+                                    "z": 216.5
+                                }
+                            },
+                            "gadgetID": 70331050,
+                            "campID": 5001
+                        },
+                        {
+                            "$type": "CreateGadget",
+                            "predicates": [
+                                {
+                                    "$type": "NGNODMLFFCB",
+                                    "key": "SGV_BallGame_Player",
+                                    "ratio": 2.0
+                                }
+                            ],
+                            "born": {
+                                "$type": "CEMKHGNDEAL",
+                                "AELOCCAGABC": {
+                                    "x": 216.5,
+                                    "y": 16.799999237060547,
+                                    "z": 200.0
+                                }
+                            },
+                            "gadgetID": 70331050,
+                            "campID": 5001
+                        },
+                        {
+                            "$type": "CreateGadget",
+                            "predicates": [
+                                {
+                                    "$type": "NGNODMLFFCB",
+                                    "key": "SGV_BallGame_Player",
+                                    "ratio": 3.0
+                                }
+                            ],
+                            "born": {
+                                "$type": "CEMKHGNDEAL",
+                                "AELOCCAGABC": {
+                                    "x": 200.0,
+                                    "y": 16.799999237060547,
+                                    "z": 183.5
+                                }
+                            },
+                            "gadgetID": 70331050,
+                            "campID": 5001
+                        },
+                        {
+                            "$type": "CreateGadget",
+                            "predicates": [
+                                {
+                                    "$type": "NGNODMLFFCB",
+                                    "key": "SGV_BallGame_Player",
+                                    "ratio": 4.0
+                                }
+                            ],
+                            "born": {
+                                "$type": "CEMKHGNDEAL",
+                                "AELOCCAGABC": {
+                                    "x": 183.5,
+                                    "y": 16.799999237060547,
+                                    "z": 200.0
+                                }
+                            },
+                            "gadgetID": 70331050,
+                            "campID": 5001
+                        }
+                    ]
+                },
+                "FilmfestBallGame_Fly_ForbidFly": {
+                    "modifierName": "",
+                    "bonusCriticalHurt": 100.0,
+                    "modifierMixins": [
+                        {
+                            "$type": "ForbidAvatarFlyMixin"
+                        }
+                    ]
+                },
+                "UNIQUE_FilmfestBallGame_CameraFix": {
+                    "stacking": "Unique",
+                    "modifierName": "",
+                    "isUnique": true,
+                    "bonusCriticalHurt": 100.0,
+                    "modifierMixins": [
+                        {
+                            "$type": "ModifyCameraMaxDistanceMixin",
+                            "MaxDistance": 10.0,
+                            "ResetToMaxOnStart": true,
+                            "LerpInDuration": 0.5,
+                            "LerpOutDuration": 2.0
+                        }
+                    ]
+                },
+                "UNIQUE_FilmfestBallGame_Billboard": {
+                    "stacking": "Unique",
+                    "modifierName": "",
+                    "isUnique": true,
+                    "bonusCriticalHurt": 100.0,
+                    "modifierMixins": [
+                        {
+                            "$type": "CurLocalAvatarMixinV2",
+                            "modifierName": "FilmfestBallGame_Billboard_Avator"
+                        }
+                    ]
+                },
+                "FilmfestBallGame_Billboard_Avator": {
+                    "modifierName": "",
+                    "bonusCriticalHurt": 100.0,
+                    "modifierMixins": [
+                        {
+                            "$type": "ChangeBillboardMixin",
+                            "billboard": {
+                                "$type": "EDINIDKGKCI",
+                                "attachPoint": "BillboardAttach",
+                                "offset": {
+                                    "y": 2.0
+                                },
+                                "KFOHDDPEHMC": 0.5,
+                                "showDistance": 80.0,
+                                "LKPBDMPNLPM": "FilmfestBallGame",
+                                "type": "FilmfestBallgame"
+                            }
+                        }
+                    ]
+                },
+                "UNIQUE_FilmfestBallGame_RocketJump": {
+                    "stacking": "Unique",
+                    "modifierName": "",
+                    "isUnique": true,
+                    "bonusCriticalHurt": 100.0,
+                    "modifierMixins": [
+                        {
+                            "$type": "CurLocalAvatarMixinV2",
+                            "modifierName": "FilmfestBallGame_RocketJump_Avator"
+                        }
+                    ]
+                },
+                "FilmfestBallGame_RocketJump_Avator": {
+                    "modifierName": "",
+                    "bonusCriticalHurt": 100.0,
+                    "modifierMixins": [
+                        {
+                            "$type": "AttachToStateIDMixin",
+                            "stateIDs": [
+                                "Jump"
+                            ],
+                            "modifierName": "FilmfestBallGame_RocketJumpEffect"
+                        }
+                    ],
+                    "onAdded": [
+                        {
+                            "$type": "AttachEffect",
+                            "shieldHP": "Eff_SceneObj_JumpUp_01_Buff",
+                            "effectTempleteID": -1.0
+                        },
+                        {
+                            "$type": "EnableRocketJump",
+                            "canBeHandledOnRecover": true,
+                            "type": "DungeonJump",
+                            "enable": true,
+                            "extention": {
+                                "xzMultiplier": 2.5,
+                                "yMultiplier": 3.0
+                            }
+                        }
+                    ],
+                    "onRemoved": [
+                        {
+                            "$type": "EnableRocketJump",
+                            "target": "CurTeamAvatars",
+                            "PositionDampTime": true,
+                            "type": "DungeonJump"
+                        }
+                    ]
+                },
+                "FilmfestBallGame_RocketJumpEffect": {
+                    "modifierName": "",
+                    "duration": 0.5,
+                    "bonusCriticalHurt": 100.0,
+                    "onAdded": [
+                        {
+                            "$type": "ServerLuaCall",
+                            "luaCallType": "CurGalleryControlGroup",
+                            "funcName": "SLC_Filmfest_BallGame_DoJump",
+                            "AFEHPHNEJHM": 0.0,
+                            "param2": 0.0,
+                            "param3": 0.0
+                        },
+                        {
+                            "$type": "FireEffect",
+                            "shieldHP": "Eff_Stages_Level_Common_Jumpplatform_01_Active",
+                            "effectTempleteID": -1.0
+                        }
+                    ]
+                },
+                "UNIQUE_FilmfestBallGame_Forbid": {
+                    "modifierName": "",
+                    "isUnique": true,
+                    "bonusCriticalHurt": 100.0,
+                    "modifierMixins": [
+                        {
+                            "$type": "HideAvatarSkillMixin",
+                            "skillIDs": [
+                                10413,
+                                10013
+                            ]
+                        },
+                        {
+                            "$type": "HideActionSlotMixin",
+                            "slotType": "SlotQuickUse"
+                        },
+                        {
+                            "$type": "HideActionSlotMixin"
+                        },
+                        {
+                            "$type": "HideActionSlotMixin",
+                            "slotType": "Slot1"
+                        },
+                        {
+                            "$type": "HideActionSlotMixin",
+                            "slotType": "Slot2"
+                        },
+                        {
+                            "$type": "HideActionSlotMixin",
+                            "slotType": "Slot5"
+                        },
+                        {
+                            "$type": "ForbidAvatarFlyMixin"
+                        }
+                    ]
+                },
+                "FilmfestBallGame_Sprint_ReduceCost": {
+                    "modifierName": "",
+                    "bonusCriticalHurt": 100.0,
+                    "thinkInterval": 1.0,
+                    "properties": {
+                        "Actor_CostStaminaRatio": -1.0
+                    },
+                    "onThinkInterval": [
+                        {
+                            "$type": "ReviveStamina",
+                            "target": "CurLocalAvatar",
+                            "PositionDampTime": true,
+                            "ratio": 100.0
+                        }
+                    ]
+                },
+                "UNIQUE_FilmfestBallGame_Immune_Avatar": {
+                    "modifierName": "",
+                    "isUnique": true,
+                    "bonusCriticalHurt": 100.0,
+                    "properties": {
+                        "Actor_FallingDamageRatio": -1.0
+                    }
+                },
+                "UNIQUE_FilmfestBallGame_Immune": {
+                    "modifierName": "",
+                    "isUnique": true,
+                    "bonusCriticalHurt": 100.0,
+                    "modifierMixins": [
+                        {
+                            "$type": "CurLocalAvatarMixinV2",
+                            "modifierName": "UNIQUE_FilmfestBallGame_Immune_Avatar"
+                        }
+                    ]
+                }
+            },
+            "onAdded": [
+                {
+                    "$type": "AttachModifier",
+                    "modifierName": "UNIQUE_FilmfestBallGame_CameraFix"
+                },
+                {
+                    "$type": "AttachModifier",
+                    "modifierName": "UNIQUE_FilmfestBallGame_Forbid"
+                },
+                {
+                    "$type": "AttachModifier",
+                    "modifierName": "UNIQUE_FilmfestBallGame_Billboard"
+                },
+                {
+                    "$type": "AttachModifier",
+                    "modifierName": "UNIQUE_FilmfestBallGame_Immune"
+                },
+                {
+                    "$type": "AttachModifier",
+                    "modifierName": "FilmfestBallGame_PunishScore"
+                },
+                {
+                    "$type": "SetGlobalValueV2",
+                    "ratio": 0.0,
+                    "key": "_FilmfestBallGame_AreaWarning",
+                    "useLimitRange": true,
+                    "maxValue": 11.0,
+                    "minValue": 0.0
+                },
+                {
+                    "$type": "SetGlobalValueV2",
+                    "ratio": 0.0,
+                    "key": "_FilmfestBallGame_PunishmentCount",
+                    "maxValue": 0.0,
+                    "minValue": 0.0
+                }
+            ],
+            "isDynamicAbility": true
+        }
+    },
+    {
+        "Default": {
+            "$type": "ConfigAbility",
+            "abilityName": "Activity_FilmfestBallGame_TeamAbility_PlayerMark_01",
+            "onAdded": [
+                {
+                    "$type": "ServerLuaCall",
+                    "luaCallType": "SpecificGroup",
+                    "CallParamList": [
+                        247711001
+                    ],
+                    "funcName": "SLC_Filmfest_BallGame_GetPlayerIndex",
+                    "AFEHPHNEJHM": 0.0,
+                    "param2": 0.0,
+                    "param3": 0.0
+                }
+            ],
+            "isDynamicAbility": true
+        }
+    },
+    {
+        "Default": {
+            "$type": "ConfigAbility",
+            "abilityName": "Activity_FilmfestBallGame_TeamAbility_PlayerMark_02",
+            "onAdded": [
+                {
+                    "$type": "ServerLuaCall",
+                    "luaCallType": "SpecificGroup",
+                    "CallParamList": [
+                        247712001
+                    ],
+                    "funcName": "SLC_Filmfest_BallGame_GetPlayerIndex",
+                    "AFEHPHNEJHM": 0.0,
+                    "param2": 0.0,
+                    "param3": 0.0
+                }
+            ],
+            "isDynamicAbility": true
+        }
+    },
+    {
+        "Default": {
+            "$type": "ConfigAbility",
+            "abilityName": "Activity_FilmfestBallGame_TeamAbility_PlayerMark_03",
+            "onAdded": [
+                {
+                    "$type": "ServerLuaCall",
+                    "luaCallType": "SpecificGroup",
+                    "CallParamList": [
+                        247713001
+                    ],
+                    "funcName": "SLC_Filmfest_BallGame_GetPlayerIndex",
+                    "AFEHPHNEJHM": 0.0,
+                    "param2": 0.0,
+                    "param3": 0.0
+                }
+            ],
+            "isDynamicAbility": true
+        }
+    },
+    {
+        "Default": {
+            "$type": "ConfigAbility",
+            "abilityName": "Activity_FilmfestBallGame_TeamAbility_PlayerMark_04",
+            "onAdded": [
+                {
+                    "$type": "ServerLuaCall",
+                    "luaCallType": "SpecificGroup",
+                    "CallParamList": [
+                        247714001
+                    ],
+                    "funcName": "SLC_Filmfest_BallGame_GetPlayerIndex",
+                    "AFEHPHNEJHM": 0.0,
+                    "param2": 0.0,
+                    "param3": 0.0
+                }
+            ],
+            "isDynamicAbility": true
+        }
+    },
+    {
+        "Default": {
+            "$type": "ConfigAbility",
+            "abilityName": "Activity_FilmfestBallGame_TeamAbility_PlayerMark_05",
+            "onAdded": [
+                {
+                    "$type": "ServerLuaCall",
+                    "luaCallType": "SpecificGroup",
+                    "CallParamList": [
+                        247715001
+                    ],
+                    "funcName": "SLC_Filmfest_BallGame_GetPlayerIndex",
+                    "AFEHPHNEJHM": 0.0,
+                    "param2": 0.0,
+                    "param3": 0.0
+                }
+            ],
+            "isDynamicAbility": true
+        }
+    },
+    {
+        "Default": {
+            "$type": "ConfigAbility",
+            "abilityName": "Activity_FilmfestSniper_AvatarAbility",
+            "modifiers": {
+                "UNIQUE_FilmfestSniper_Invincible": {
+                    "stacking": "Unique",
+                    "modifierName": "",
+                    "isUnique": true,
+                    "bonusCriticalHurt": 100.0,
+                    "state": "LockHP"
+                },
+                "UNIQUE_FilmfestSniper_IsGhost": {
+                    "stacking": "Unique",
+                    "modifierName": "",
+                    "isUnique": true,
+                    "bonusCriticalHurt": 100.0,
+                    "state": "IsGhostToEnemy"
+                },
+                "UNIQUE_FilmfestSniper_IsGhostToAllied": {
+                    "stacking": "Unique",
+                    "modifierName": "",
+                    "isUnique": true,
+                    "bonusCriticalHurt": 100.0,
+                    "state": "IsGhostToAllied"
+                },
+                "UNIQUE_FilmfestSniper_Immobilize": {
+                    "stacking": "Unique",
+                    "modifierName": "",
+                    "isUnique": true,
+                    "bonusCriticalHurt": 100.0,
+                    "properties": {
+                        "Animator_MoveSpeedRatio": -1.0,
+                        "Animator_OverallSpeedRatioMultiplied": 0.0
+                    },
+                    "state": "ElementDeadTime"
+                },
+                "UNIQUE_FilmfestSniper_AvatarState": {
+                    "stacking": "Unique",
+                    "modifierName": "",
+                    "isUnique": true,
+                    "bonusCriticalHurt": 100.0,
+                    "modifierMixins": [
+                        {
+                            "$type": "EntityInVisibleMixin",
+                            "reason": "Gallary",
+                            "disableAudio": true
+                        }
+                    ],
+                    "state": "DenyLockOn",
+                    "onAdded": [
+                        {
+                            "$type": "AttachModifier",
+                            "modifierName": "UNIQUE_FilmfestSniper_Immobilize"
+                        },
+                        {
+                            "$type": "AttachModifier",
+                            "modifierName": "UNIQUE_FilmfestSniper_Invincible"
+                        },
+                        {
+                            "$type": "AttachModifier",
+                            "modifierName": "UNIQUE_FilmfestSniper_IsGhost"
+                        },
+                        {
+                            "$type": "AttachModifier",
+                            "modifierName": "UNIQUE_FilmfestSniper_IsGhostToAllied"
+                        },
+                        {
+                            "$type": "EnablePushColliderName",
+                            "pushColliderNames": [
+                                "MoveCollider"
+                            ]
+                        },
+                        {
+                            "$type": "TriggerSetPassThrough",
+                            "PositionDampTime": true
+                        },
+                        {
+                            "$type": "EnableHDMesh",
+                            "HJEPAPGHHBH": "Default"
+                        },
+                        {
+                            "$type": "EnableHitBoxByName",
+                            "PositionDampTime": true,
+                            "hitBoxNames": [
+                                "HitBox",
+                                "HitBox_Skill"
+                            ]
+                        }
+                    ],
+                    "onRemoved": [
+                        {
+                            "$type": "EnablePushColliderName",
+                            "pushColliderNames": [
+                                "MoveCollider"
+                            ],
+                            "setEnable": true
+                        }
+                    ]
+                }
+            },
+            "onAdded": [
+                {
+                    "$type": "AttachModifier",
+                    "modifierName": "UNIQUE_FilmfestSniper_AvatarState"
+                }
+            ],
+            "isDynamicAbility": true
+        }
+    },
+    {
+        "Default": {
+            "$type": "ConfigAbility",
+            "abilityName": "Activity_FilmfestBattle_TeamAbility_01",
+            "abilityMixins": [
+                {
+                    "$type": "ServerUpdateGlobalValueMixin",
+                    "key": "GV_FilmfestBattle_Charge",
+                    "useLimitRange": true,
+                    "maxValue": 60.0,
+                    "minValue": 0.0
+                },
+                {
+                    "$type": "AttachModifierToSelfGlobalValueMixin",
+                    "globalValueKey": "GV_FilmfestBattle_Charge",
+                    "GVInTalk": 0.0,
+                    "valueSteps": [
+                        59.5,
+                        60.5
+                    ],
+                    "modifierNameSteps": [
+                        "FilmfestBattle_IsCharge"
+                    ]
+                }
+            ],
+            "modifiers": {
+                "FilmfestBattle_Timer": {
+                    "modifierName": "",
+                    "duration": 20.0,
+                    "bonusCriticalHurt": 100.0,
+                    "onRemoved": [
+                        {
+                            "$type": "Predicated",
+                            "targetPredicates": [
+                                {
+                                    "$type": "NGNODMLFFCB",
+                                    "key": "GV_FilmfestBattle_Charge",
+                                    "ratio": 60.0,
+                                    "ACJBNJNEBOC": "MoreThanAndEqual"
+                                }
+                            ],
+                            "successActions": [
+                                {
+                                    "$type": "ShowReminder",
+                                    "id": 477110103
+                                }
+                            ]
+                        }
+                    ]
+                },
+                "FilmfestBattle_IsCharge": {
+                    "modifierName": "",
+                    "bonusCriticalHurt": 100.0,
+                    "onAdded": [
+                        {
+                            "$type": "Predicated",
+                            "targetPredicates": [
+                                {
+                                    "$type": "GHCGPIKJOGA",
+                                    "modifierName": "FilmfestBattle_Timer"
+                                }
+                            ],
+                            "failActions": [
+                                {
+                                    "$type": "ShowReminder",
+                                    "id": 477110103
+                                }
+                            ]
+                        }
+                    ]
+                }
+            },
+            "onAdded": [
+                {
+                    "$type": "ShowExtraAbility",
+                    "skillID": 20080
+                },
+                {
+                    "$type": "SetGlobalValueV2",
+                    "ratio": 0.0,
+                    "key": "GV_FilmfestBattle_Charge",
+                    "maxValue": 0.0,
+                    "minValue": 0.0
+                },
+                {
+                    "$type": "SetExtraAbilityEnable",
+                    "enable": true
+                }
+            ],
+            "onRemoved": [
+                {
+                    "$type": "ShowExtraAbility"
+                }
+            ],
+            "onAbilityStart": [
+                {
+                    "$type": "AttachModifier",
+                    "modifierName": "FilmfestBattle_Timer"
+                },
+                {
+                    "$type": "SetExtraAbilityState"
+                },
+                {
+                    "$type": "ServerLuaCall",
+                    "luaCallType": "CurGalleryControlGroup",
+                    "funcName": "SLC_FilmfestBattle_ChargeSkill",
+                    "AFEHPHNEJHM": 0.0,
+                    "param2": 0.0,
+                    "param3": 0.0
+                },
+                {
+                    "$type": "TriggerAbility",
+                    "target": "Team",
+                    "abilityName": "ActivityAbility_FilmfestBattle_Level_1"
+                },
+                {
+                    "$type": "SetGlobalValueV2",
+                    "ratio": 0.0,
+                    "key": "GV_FilmfestBattle_Charge",
+                    "maxValue": 0.0,
+                    "minValue": 0.0
+                }
+            ],
+            "isDynamicAbility": true
+        }
+    },
+    {
+        "Default": {
+            "$type": "ConfigAbility",
+            "abilityName": "Activity_FilmfestBattle_TeamAbility_02",
+            "abilityMixins": [
+                {
+                    "$type": "ServerUpdateGlobalValueMixin",
+                    "key": "GV_FilmfestBattle_Charge",
+                    "useLimitRange": true,
+                    "maxValue": 60.0,
+                    "minValue": 0.0
+                },
+                {
+                    "$type": "AttachModifierToSelfGlobalValueMixin",
+                    "globalValueKey": "GV_FilmfestBattle_Charge",
+                    "GVInTalk": 0.0,
+                    "valueSteps": [
+                        59.5,
+                        60.5
+                    ],
+                    "modifierNameSteps": [
+                        "FilmfestBattle_IsCharge"
+                    ]
+                }
+            ],
+            "modifiers": {
+                "FilmfestBattle_Timer": {
+                    "modifierName": "",
+                    "duration": 20.0,
+                    "bonusCriticalHurt": 100.0,
+                    "onRemoved": [
+                        {
+                            "$type": "Predicated",
+                            "targetPredicates": [
+                                {
+                                    "$type": "NGNODMLFFCB",
+                                    "key": "GV_FilmfestBattle_Charge",
+                                    "ratio": 60.0,
+                                    "ACJBNJNEBOC": "MoreThanAndEqual"
+                                }
+                            ],
+                            "successActions": [
+                                {
+                                    "$type": "ShowReminder",
+                                    "id": 477110103
+                                }
+                            ]
+                        }
+                    ]
+                },
+                "FilmfestBattle_IsCharge": {
+                    "modifierName": "",
+                    "bonusCriticalHurt": 100.0,
+                    "onAdded": [
+                        {
+                            "$type": "Predicated",
+                            "targetPredicates": [
+                                {
+                                    "$type": "GHCGPIKJOGA",
+                                    "modifierName": "FilmfestBattle_Timer"
+                                }
+                            ],
+                            "failActions": [
+                                {
+                                    "$type": "ShowReminder",
+                                    "id": 477110103
+                                }
+                            ]
+                        }
+                    ]
+                }
+            },
+            "onAdded": [
+                {
+                    "$type": "ShowExtraAbility",
+                    "skillID": 20081
+                },
+                {
+                    "$type": "SetGlobalValueV2",
+                    "ratio": 0.0,
+                    "key": "GV_FilmfestBattle_Charge",
+                    "maxValue": 0.0,
+                    "minValue": 0.0
+                },
+                {
+                    "$type": "SetExtraAbilityEnable",
+                    "enable": true
+                }
+            ],
+            "onRemoved": [
+                {
+                    "$type": "ShowExtraAbility"
+                }
+            ],
+            "onAbilityStart": [
+                {
+                    "$type": "AttachModifier",
+                    "modifierName": "FilmfestBattle_Timer"
+                },
+                {
+                    "$type": "SetExtraAbilityState"
+                },
+                {
+                    "$type": "ServerLuaCall",
+                    "luaCallType": "CurGalleryControlGroup",
+                    "funcName": "SLC_FilmfestBattle_ChargeSkill",
+                    "AFEHPHNEJHM": 0.0,
+                    "param2": 0.0,
+                    "param3": 0.0
+                },
+                {
+                    "$type": "TriggerAbility",
+                    "target": "Team",
+                    "abilityName": "ActivityAbility_FilmfestBattle_Level_2"
+                },
+                {
+                    "$type": "SetGlobalValueV2",
+                    "ratio": 0.0,
+                    "key": "GV_FilmfestBattle_Charge",
+                    "maxValue": 0.0,
+                    "minValue": 0.0
+                }
+            ],
+            "isDynamicAbility": true
+        }
+    },
+    {
+        "Default": {
+            "$type": "ConfigAbility",
+            "abilityName": "Activity_FilmfestBattle_TeamAbility_03",
+            "abilityMixins": [
+                {
+                    "$type": "ServerUpdateGlobalValueMixin",
+                    "key": "GV_FilmfestBattle_Charge",
+                    "useLimitRange": true,
+                    "maxValue": 60.0,
+                    "minValue": 0.0
+                },
+                {
+                    "$type": "AttachModifierToSelfGlobalValueMixin",
+                    "globalValueKey": "GV_FilmfestBattle_Charge",
+                    "GVInTalk": 0.0,
+                    "valueSteps": [
+                        59.5,
+                        60.5
+                    ],
+                    "modifierNameSteps": [
+                        "FilmfestBattle_IsCharge"
+                    ]
+                }
+            ],
+            "modifiers": {
+                "FilmfestBattle_Timer": {
+                    "modifierName": "",
+                    "duration": 20.0,
+                    "bonusCriticalHurt": 100.0,
+                    "onRemoved": [
+                        {
+                            "$type": "Predicated",
+                            "targetPredicates": [
+                                {
+                                    "$type": "NGNODMLFFCB",
+                                    "key": "GV_FilmfestBattle_Charge",
+                                    "ratio": 60.0,
+                                    "ACJBNJNEBOC": "MoreThanAndEqual"
+                                }
+                            ],
+                            "successActions": [
+                                {
+                                    "$type": "ShowReminder",
+                                    "id": 477110103
+                                }
+                            ]
+                        }
+                    ]
+                },
+                "FilmfestBattle_IsCharge": {
+                    "modifierName": "",
+                    "bonusCriticalHurt": 100.0,
+                    "onAdded": [
+                        {
+                            "$type": "Predicated",
+                            "targetPredicates": [
+                                {
+                                    "$type": "GHCGPIKJOGA",
+                                    "modifierName": "FilmfestBattle_Timer"
+                                }
+                            ],
+                            "failActions": [
+                                {
+                                    "$type": "ShowReminder",
+                                    "id": 477110103
+                                }
+                            ]
+                        }
+                    ]
+                }
+            },
+            "onAdded": [
+                {
+                    "$type": "ShowExtraAbility",
+                    "skillID": 20082
+                },
+                {
+                    "$type": "SetGlobalValueV2",
+                    "ratio": 0.0,
+                    "key": "GV_FilmfestBattle_Charge",
+                    "maxValue": 0.0,
+                    "minValue": 0.0
+                },
+                {
+                    "$type": "SetExtraAbilityEnable",
+                    "enable": true
+                }
+            ],
+            "onRemoved": [
+                {
+                    "$type": "ShowExtraAbility"
+                }
+            ],
+            "onAbilityStart": [
+                {
+                    "$type": "AttachModifier",
+                    "modifierName": "FilmfestBattle_Timer"
+                },
+                {
+                    "$type": "SetExtraAbilityState"
+                },
+                {
+                    "$type": "ServerLuaCall",
+                    "luaCallType": "CurGalleryControlGroup",
+                    "funcName": "SLC_FilmfestBattle_ChargeSkill",
+                    "AFEHPHNEJHM": 0.0,
+                    "param2": 0.0,
+                    "param3": 0.0
+                },
+                {
+                    "$type": "TriggerAbility",
+                    "target": "Team",
+                    "abilityName": "ActivityAbility_FilmfestBattle_Level_3"
+                },
+                {
+                    "$type": "SetGlobalValueV2",
+                    "ratio": 0.0,
+                    "key": "GV_FilmfestBattle_Charge",
+                    "maxValue": 0.0,
+                    "minValue": 0.0
+                }
+            ],
+            "isDynamicAbility": true
+        }
+    },
+    {
+        "Default": {
+            "$type": "ConfigAbility",
+            "abilityName": "Activity_FilmfestBattle_TeamAbility_04",
+            "abilityMixins": [
+                {
+                    "$type": "ServerUpdateGlobalValueMixin",
+                    "key": "GV_FilmfestBattle_Charge",
+                    "useLimitRange": true,
+                    "maxValue": 60.0,
+                    "minValue": 0.0
+                },
+                {
+                    "$type": "AttachModifierToSelfGlobalValueMixin",
+                    "globalValueKey": "GV_FilmfestBattle_Charge",
+                    "GVInTalk": 0.0,
+                    "valueSteps": [
+                        59.5,
+                        60.5
+                    ],
+                    "modifierNameSteps": [
+                        "FilmfestBattle_IsCharge"
+                    ]
+                }
+            ],
+            "modifiers": {
+                "FilmfestBattle_Timer": {
+                    "modifierName": "",
+                    "duration": 20.0,
+                    "bonusCriticalHurt": 100.0,
+                    "onRemoved": [
+                        {
+                            "$type": "Predicated",
+                            "targetPredicates": [
+                                {
+                                    "$type": "NGNODMLFFCB",
+                                    "key": "GV_FilmfestBattle_Charge",
+                                    "ratio": 60.0,
+                                    "ACJBNJNEBOC": "MoreThanAndEqual"
+                                }
+                            ],
+                            "successActions": [
+                                {
+                                    "$type": "ShowReminder",
+                                    "id": 477110103
+                                }
+                            ]
+                        }
+                    ]
+                },
+                "FilmfestBattle_IsCharge": {
+                    "modifierName": "",
+                    "bonusCriticalHurt": 100.0,
+                    "onAdded": [
+                        {
+                            "$type": "Predicated",
+                            "targetPredicates": [
+                                {
+                                    "$type": "GHCGPIKJOGA",
+                                    "modifierName": "FilmfestBattle_Timer"
+                                }
+                            ],
+                            "failActions": [
+                                {
+                                    "$type": "ShowReminder",
+                                    "id": 477110103
+                                }
+                            ]
+                        }
+                    ]
+                }
+            },
+            "onAdded": [
+                {
+                    "$type": "ShowExtraAbility",
+                    "skillID": 20083
+                },
+                {
+                    "$type": "SetGlobalValueV2",
+                    "ratio": 0.0,
+                    "key": "GV_FilmfestBattle_Charge",
+                    "maxValue": 0.0,
+                    "minValue": 0.0
+                },
+                {
+                    "$type": "SetExtraAbilityEnable",
+                    "enable": true
+                }
+            ],
+            "onRemoved": [
+                {
+                    "$type": "ShowExtraAbility"
+                }
+            ],
+            "onAbilityStart": [
+                {
+                    "$type": "AttachModifier",
+                    "modifierName": "FilmfestBattle_Timer"
+                },
+                {
+                    "$type": "SetExtraAbilityState"
+                },
+                {
+                    "$type": "ServerLuaCall",
+                    "luaCallType": "CurGalleryControlGroup",
+                    "funcName": "SLC_FilmfestBattle_ChargeSkill",
+                    "AFEHPHNEJHM": 0.0,
+                    "param2": 0.0,
+                    "param3": 0.0
+                },
+                {
+                    "$type": "TriggerAbility",
+                    "target": "Team",
+                    "abilityName": "ActivityAbility_FilmfestBattle_Level_4"
+                },
+                {
+                    "$type": "SetGlobalValueV2",
+                    "ratio": 0.0,
+                    "key": "GV_FilmfestBattle_Charge",
+                    "maxValue": 0.0,
+                    "minValue": 0.0
+                }
+            ],
+            "isDynamicAbility": true
+        }
+    }
+]
