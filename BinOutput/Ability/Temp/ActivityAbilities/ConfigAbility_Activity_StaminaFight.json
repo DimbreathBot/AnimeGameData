@@ -1,0 +1,1265 @@
+[
+    {
+        "Default": {
+            "$type": "ConfigAbility",
+            "abilityName": "ActivityAbility_StaminaFight_Level_1",
+            "abilityMixins": [
+                {
+                    "$type": "ServerUpdateGlobalValueMixin",
+                    "key": "SGV_StaminaFight",
+                    "useLimitRange": true,
+                    "maxValue": 2.0,
+                    "minValue": 0.0
+                },
+                {
+                    "$type": "AttachModifierToSelfGlobalValueNoInitMixin",
+                    "globalValueKey": "SGV_StaminaFight",
+                    "valueSteps": [
+                        -0.5,
+                        0.5,
+                        1.5,
+                        2.5
+                    ],
+                    "modifierNameSteps": [
+                        "Blank",
+                        "StaminaFight_Level1_Handler_OnTeam",
+                        "StaminaFight_Level1_Handler_OnTeam"
+                    ],
+                    "actionQueues": [
+                        [
+                            {
+                                "$type": "SetOverrideMapValue",
+                                "ratio": "CriticalUp_Lv0",
+                                "overrideMapKey": "Override_Ratio",
+                                "maxValue": 0.0,
+                                "minValue": 0.0
+                            }
+                        ],
+                        [
+                            {
+                                "$type": "SetOverrideMapValue",
+                                "ratio": "CriticalUp_Lv1",
+                                "overrideMapKey": "Override_Ratio",
+                                "maxValue": 0.0,
+                                "minValue": 0.0
+                            }
+                        ],
+                        [
+                            {
+                                "$type": "SetOverrideMapValue",
+                                "ratio": "CriticalUp_Lv2",
+                                "overrideMapKey": "Override_Ratio",
+                                "maxValue": 0.0,
+                                "minValue": 0.0
+                            }
+                        ]
+                    ],
+                    "KPDABGIOFID": true
+                }
+            ],
+            "abilitySpecials": {
+                "Override_Ratio": 0.0,
+                "Buff_Duration": 0.0,
+                "CriticalUp_Lv0": 0.0,
+                "CriticalUp_Lv1": 0.0,
+                "CriticalUp_Lv2": 0.0,
+                "CDTime": 0.0,
+                "BuffMaxLevel": 0.0
+            },
+            "modifiers": {
+                "Blank": {
+                    "modifierName": "",
+                    "bonusCriticalHurt": 100.0
+                },
+                "StaminaFight_Level1_Handler_OnTeam": {
+                    "modifierName": "",
+                    "bonusCriticalHurt": 100.0,
+                    "modifierMixins": [
+                        {
+                            "$type": "LocalAvatarsMixin",
+                            "modifierName": "StaminaFight_Level1_Handler_OnAvatar"
+                        }
+                    ],
+                    "onAdded": [
+                        {
+                            "$type": "TriggerAbility",
+                            "abilityName": "ActivityAbility_StaminaFight_Level_1"
+                        }
+                    ]
+                },
+                "StaminaFight_Level1_Handler_OnAvatar": {
+                    "modifierName": "",
+                    "bonusCriticalHurt": 100.0,
+                    "modifierMixins": [
+                        {
+                            "$type": "DoActionByEventMixin",
+                            "onEvent": "HPChange",
+                            "actions": [
+                                {
+                                    "$type": "Predicated",
+                                    "PositionDampTime": true,
+                                    "targetPredicates": [
+                                        {
+                                            "$type": "BMLGBKCIOIN",
+                                            "target": "Team",
+                                            "key": "StaminaFight_Level1_CD",
+                                            "ratio": 0.0,
+                                            "PODFMDAEAGL": "NoneOrEqual"
+                                        }
+                                    ],
+                                    "successActions": [
+                                        {
+                                            "$type": "ApplyModifier",
+                                            "target": "CurLocalAvatar",
+                                            "PositionDampTime": true,
+                                            "modifierName": "StaminaFight_Level1_Buff_CriticalUp"
+                                        },
+                                        {
+                                            "$type": "ApplyModifier",
+                                            "target": "Team",
+                                            "PositionDampTime": true,
+                                            "modifierName": "StaminaFight_Level1_Buff_CD"
+                                        }
+                                    ]
+                                }
+                            ],
+                            "costEnergyDeltaName": ""
+                        }
+                    ]
+                },
+                "StaminaFight_Level1_Buff_CriticalUp": {
+                    "stacking": "MultipleRefreshNoRemove",
+                    "stackingOption": {
+                        "abilitySpecialName": "",
+                        "maxModifierNumForMultipleType": "BuffMaxLevel"
+                    },
+                    "modifierName": "",
+                    "duration": "Buff_Duration",
+                    "bonusCriticalHurt": 100.0,
+                    "properties": {
+                        "Actor_CriticalDelta": "Override_Ratio"
+                    },
+                    "state": "AttackUp",
+                    "onAvatarOut": [
+                        {
+                            "$type": "RemoveModifier",
+                            "PositionDampTime": true,
+                            "modifierName": "StaminaFight_Level1_Buff_CriticalUp"
+                        }
+                    ],
+                    "isLimitedProperties": true
+                },
+                "StaminaFight_Level1_Buff_CD": {
+                    "modifierName": "",
+                    "duration": "CDTime",
+                    "bonusCriticalHurt": 100.0,
+                    "onAdded": [
+                        {
+                            "$type": "SetGlobalValue",
+                            "target": "Team",
+                            "PositionDampTime": true,
+                            "ratio": -1.0,
+                            "key": "StaminaFight_Level1_CD",
+                            "maxValue": 0.0,
+                            "minValue": 0.0
+                        }
+                    ],
+                    "onRemoved": [
+                        {
+                            "$type": "SetGlobalValue",
+                            "target": "Team",
+                            "PositionDampTime": true,
+                            "ratio": 0.0,
+                            "key": "StaminaFight_Level1_CD",
+                            "maxValue": 0.0,
+                            "minValue": 0.0
+                        }
+                    ]
+                }
+            },
+            "onAdded": [
+                {
+                    "$type": "SetGlobalValue",
+                    "target": "Team",
+                    "ratio": 0.0,
+                    "key": "StaminaFight_Level1_CD",
+                    "maxValue": 0.0,
+                    "minValue": 0.0
+                }
+            ],
+            "onAbilityStart": [
+                {
+                    "$type": "Predicated",
+                    "target": "Team",
+                    "targetPredicates": [
+                        {
+                            "$type": "BMLGBKCIOIN",
+                            "target": "Team",
+                            "key": "SGV_StaminaFight",
+                            "ratio": 0.0,
+                            "PODFMDAEAGL": "NoneOrEqual"
+                        }
+                    ],
+                    "successActions": [
+                        {
+                            "$type": "SetOverrideMapValue",
+                            "ratio": "CriticalUp_Lv0",
+                            "overrideMapKey": "Override_Ratio",
+                            "maxValue": 0.0,
+                            "minValue": 0.0
+                        }
+                    ]
+                },
+                {
+                    "$type": "Predicated",
+                    "target": "Team",
+                    "targetPredicates": [
+                        {
+                            "$type": "BMLGBKCIOIN",
+                            "target": "Team",
+                            "key": "SGV_StaminaFight",
+                            "ratio": 1.0
+                        }
+                    ],
+                    "successActions": [
+                        {
+                            "$type": "SetOverrideMapValue",
+                            "ratio": "CriticalUp_Lv1",
+                            "overrideMapKey": "Override_Ratio",
+                            "maxValue": 0.0,
+                            "minValue": 0.0
+                        }
+                    ]
+                },
+                {
+                    "$type": "Predicated",
+                    "target": "Team",
+                    "targetPredicates": [
+                        {
+                            "$type": "BMLGBKCIOIN",
+                            "target": "Team",
+                            "key": "SGV_StaminaFight",
+                            "ratio": 2.0
+                        }
+                    ],
+                    "successActions": [
+                        {
+                            "$type": "SetOverrideMapValue",
+                            "ratio": "CriticalUp_Lv2",
+                            "overrideMapKey": "Override_Ratio",
+                            "maxValue": 0.0,
+                            "minValue": 0.0
+                        }
+                    ]
+                }
+            ],
+            "isDynamicAbility": true
+        }
+    },
+    {
+        "Default": {
+            "$type": "ConfigAbility",
+            "abilityName": "ActivityAbility_StaminaFight_Level_2",
+            "abilityMixins": [
+                {
+                    "$type": "ServerUpdateGlobalValueMixin",
+                    "key": "SGV_StaminaFight",
+                    "useLimitRange": true,
+                    "maxValue": 2.0,
+                    "minValue": 0.0
+                },
+                {
+                    "$type": "AttachModifierToSelfGlobalValueNoInitMixin",
+                    "globalValueKey": "SGV_StaminaFight",
+                    "valueSteps": [
+                        -0.5,
+                        0.5,
+                        1.5,
+                        2.5
+                    ],
+                    "modifierNameSteps": [
+                        "Blank",
+                        "StaminaFight_Level2_Handler_OnTeam",
+                        "StaminaFight_Level2_Handler_OnTeam"
+                    ],
+                    "actionQueues": [
+                        [
+                            {
+                                "$type": "SetOverrideMapValue",
+                                "ratio": "CJBDamage_Lv0",
+                                "overrideMapKey": "Override_Ratio",
+                                "maxValue": 0.0,
+                                "minValue": 0.0
+                            }
+                        ],
+                        [
+                            {
+                                "$type": "SetOverrideMapValue",
+                                "ratio": "CJBDamage_Lv1",
+                                "overrideMapKey": "Override_Ratio",
+                                "maxValue": 0.0,
+                                "minValue": 0.0
+                            }
+                        ],
+                        [
+                            {
+                                "$type": "SetOverrideMapValue",
+                                "ratio": "CJBDamage_Lv2",
+                                "overrideMapKey": "Override_Ratio",
+                                "maxValue": 0.0,
+                                "minValue": 0.0
+                            }
+                        ]
+                    ],
+                    "KPDABGIOFID": true
+                }
+            ],
+            "abilitySpecials": {
+                "Override_Ratio": 0.0,
+                "DamageSystemValue": 0.0,
+                "CJBDamage_Lv0": 0.0,
+                "CJBDamage_Lv1": 0.0,
+                "CJBDamage_Lv2": 0.0,
+                "CDTime": 0.0
+            },
+            "modifiers": {
+                "Blank": {
+                    "modifierName": "",
+                    "bonusCriticalHurt": 100.0
+                },
+                "StaminaFight_Level2_Handler_OnTeam": {
+                    "modifierName": "",
+                    "bonusCriticalHurt": 100.0,
+                    "modifierMixins": [
+                        {
+                            "$type": "LocalAvatarsMixin",
+                            "modifierName": "StaminaFight_Level2_Handler_OnAvatar"
+                        }
+                    ],
+                    "onAdded": [
+                        {
+                            "$type": "TriggerAbility",
+                            "abilityName": "ActivityAbility_StaminaFight_Level_2"
+                        }
+                    ]
+                },
+                "StaminaFight_Level2_Handler_OnAvatar": {
+                    "modifierName": "",
+                    "bonusCriticalHurt": 100.0,
+                    "onAttackLanded": [
+                        {
+                            "$type": "Predicated",
+                            "target": "Other",
+                            "PositionDampTime": true,
+                            "targetPredicates": [
+                                {
+                                    "$type": "CACJBJLHLDL",
+                                    "entityTypes": [
+                                        "Monster"
+                                    ]
+                                },
+                                {
+                                    "$type": "BEAICMDDNON",
+                                    "attackTags": [
+                                        "FallingAttack"
+                                    ]
+                                },
+                                {
+                                    "$type": "BMLGBKCIOIN",
+                                    "target": "Team",
+                                    "key": "StaminaFight_Level2_CD",
+                                    "ratio": 0.0,
+                                    "PODFMDAEAGL": "NoneOrEqual"
+                                }
+                            ],
+                            "successActions": [
+                                {
+                                    "$type": "SetGlobalPos",
+                                    "target": "SelfAttackTarget",
+                                    "PositionDampTime": true,
+                                    "key": "_StaminaFight_CJB_Pos_Team",
+                                    "born": {
+                                        "$type": "ALJGHOOKOAP",
+                                        "offset": {
+                                            "EMBMLEBGFOI": 0.0,
+                                            "NABPJFNICAE": 0.0,
+                                            "MLOLIKEJCKB": 0.0
+                                        },
+                                        "CMLNNDEJCEF": true
+                                    },
+                                    "setTarget": false
+                                },
+                                {
+                                    "$type": "CopyGlobalValue",
+                                    "PositionDampTime": true,
+                                    "srcTarget": "Team",
+                                    "dstTarget": "Self",
+                                    "srcKey": "_StaminaFight_CJB_Pos_Team_0",
+                                    "dstKey": "_StaminaFight_CJB_Pos_Avatar_0"
+                                },
+                                {
+                                    "$type": "CopyGlobalValue",
+                                    "PositionDampTime": true,
+                                    "srcTarget": "Team",
+                                    "dstTarget": "Self",
+                                    "srcKey": "_StaminaFight_CJB_Pos_Team_1",
+                                    "dstKey": "_StaminaFight_CJB_Pos_Avatar_1"
+                                },
+                                {
+                                    "$type": "CopyGlobalValue",
+                                    "PositionDampTime": true,
+                                    "srcTarget": "Team",
+                                    "dstTarget": "Self",
+                                    "srcKey": "_StaminaFight_CJB_Pos_Team_2",
+                                    "dstKey": "_StaminaFight_CJB_Pos_Avatar_2"
+                                },
+                                {
+                                    "$type": "ApplyModifier",
+                                    "target": "CurLocalAvatar",
+                                    "PositionDampTime": true,
+                                    "modifierName": "StaminaFight_Level2_Handler_Buff_AoeEffect"
+                                },
+                                {
+                                    "$type": "AttachModifier",
+                                    "target": "Team",
+                                    "PositionDampTime": true,
+                                    "modifierName": "StaminaFight_Level2_Handler_Buff_CD"
+                                }
+                            ]
+                        }
+                    ]
+                },
+                "StaminaFight_Level2_Handler_Buff_AoeEffect": {
+                    "modifierName": "",
+                    "duration": 0.10000000149011612,
+                    "bonusCriticalHurt": 100.0,
+                    "onAdded": [
+                        {
+                            "$type": "FireEffect",
+                            "shieldHP": "Eff_Stages_GainWave_01",
+                            "born": {
+                                "$type": "NNOMECHMEBA",
+                                "NLBFCDKCPAH": true,
+                                "positionKey": "_StaminaFight_CJB_Pos_Avatar",
+                                "directionKey": ""
+                            },
+                            "effectTempleteID": -1.0
+                        },
+                        {
+                            "$type": "TriggerAttackEvent",
+                            "target": "CurLocalAvatar",
+                            "PositionDampTime": true,
+                            "attackEvent": {
+                                "attackPattern": {
+                                    "$type": "AHDHJOAODLF",
+                                    "triggerType": "TriggerNoRepeat",
+                                    "born": {
+                                        "$type": "NNOMECHMEBA",
+                                        "NLBFCDKCPAH": true,
+                                        "positionKey": "_StaminaFight_CJB_Pos_Avatar",
+                                        "directionKey": ""
+                                    },
+                                    "DLFACKMBPCH": 5.0
+                                },
+                                "attackInfo": {
+                                    "attackTag": "",
+                                    "attenuationTag": "",
+                                    "attenuationGroup": "default",
+                                    "attackProperty": {
+                                        "JIICGJODDDM": 0.0,
+                                        "bonusCriticalHurt": 0.0,
+                                        "ignoreAttackerProperty": true,
+                                        "enBreak": 0.0,
+                                        "damageExtra": [
+                                            "Override_Ratio",
+                                            "DamageSystemValue",
+                                            "MUL"
+                                        ],
+                                        "trueDamage": true,
+                                        "ignoreModifyDamage": true,
+                                        "damagePercentage": 0.0
+                                    },
+                                    "hitPattern": {
+                                        "onHitEffectName": "default",
+                                        "hitImpulseType": "LV2",
+                                        "hitHaltTimeScale": 0.019999999552965164
+                                    }
+                                }
+                            },
+                            "targetType": "Enemy"
+                        }
+                    ]
+                },
+                "StaminaFight_Level2_Handler_Buff_CD": {
+                    "modifierName": "",
+                    "duration": "CDTime",
+                    "bonusCriticalHurt": 100.0,
+                    "onAdded": [
+                        {
+                            "$type": "SetGlobalValue",
+                            "target": "Team",
+                            "PositionDampTime": true,
+                            "ratio": -1.0,
+                            "key": "StaminaFight_Level2_CD",
+                            "maxValue": 0.0,
+                            "minValue": 0.0
+                        }
+                    ],
+                    "onRemoved": [
+                        {
+                            "$type": "SetGlobalValue",
+                            "target": "Team",
+                            "PositionDampTime": true,
+                            "ratio": 0.0,
+                            "key": "StaminaFight_Level2_CD",
+                            "maxValue": 0.0,
+                            "minValue": 0.0
+                        }
+                    ]
+                }
+            },
+            "onAdded": [
+                {
+                    "$type": "SetSystemValueToOverrideMap",
+                    "key": "DamageSystemValue",
+                    "type": "ElementLevelCo"
+                },
+                {
+                    "$type": "SetGlobalValue",
+                    "target": "Team",
+                    "ratio": 0.0,
+                    "key": "StaminaFight_Level2_CD",
+                    "maxValue": 0.0,
+                    "minValue": 0.0
+                }
+            ],
+            "onAbilityStart": [
+                {
+                    "$type": "Predicated",
+                    "target": "Team",
+                    "targetPredicates": [
+                        {
+                            "$type": "BMLGBKCIOIN",
+                            "target": "Team",
+                            "key": "SGV_StaminaFight",
+                            "ratio": 0.0,
+                            "PODFMDAEAGL": "NoneOrEqual"
+                        }
+                    ],
+                    "successActions": [
+                        {
+                            "$type": "SetOverrideMapValue",
+                            "ratio": "CJBDamage_Lv0",
+                            "overrideMapKey": "Override_Ratio",
+                            "maxValue": 0.0,
+                            "minValue": 0.0
+                        }
+                    ]
+                },
+                {
+                    "$type": "Predicated",
+                    "target": "Team",
+                    "targetPredicates": [
+                        {
+                            "$type": "BMLGBKCIOIN",
+                            "target": "Team",
+                            "key": "SGV_StaminaFight",
+                            "ratio": 1.0
+                        }
+                    ],
+                    "successActions": [
+                        {
+                            "$type": "SetOverrideMapValue",
+                            "ratio": "CJBDamage_Lv1",
+                            "overrideMapKey": "Override_Ratio",
+                            "maxValue": 0.0,
+                            "minValue": 0.0
+                        }
+                    ]
+                },
+                {
+                    "$type": "Predicated",
+                    "target": "Team",
+                    "targetPredicates": [
+                        {
+                            "$type": "BMLGBKCIOIN",
+                            "target": "Team",
+                            "key": "SGV_StaminaFight",
+                            "ratio": 2.0
+                        }
+                    ],
+                    "successActions": [
+                        {
+                            "$type": "SetOverrideMapValue",
+                            "ratio": "CJBDamage_Lv2",
+                            "overrideMapKey": "Override_Ratio",
+                            "maxValue": 0.0,
+                            "minValue": 0.0
+                        }
+                    ]
+                }
+            ],
+            "isDynamicAbility": true
+        }
+    },
+    {
+        "Default": {
+            "$type": "ConfigAbility",
+            "abilityName": "ActivityAbility_StaminaFight_Level_3",
+            "abilitySpecials": {
+                "Override_Ratio": 0.0,
+                "Buff_Duration": 0.0,
+                "DamageUp_Lv0": 0.0,
+                "DamageUp_Lv1": 0.0,
+                "DamageUp_Lv2": 0.0
+            },
+            "modifiers": {
+                "StaminaFight_Level3_BuffHandler": {
+                    "modifierName": "",
+                    "bonusCriticalHurt": 100.0,
+                    "modifierMixins": [
+                        {
+                            "$type": "ServerUpdateGlobalValueMixin",
+                            "key": "SGV_StaminaFight",
+                            "useLimitRange": true,
+                            "maxValue": 2.0,
+                            "minValue": 0.0
+                        },
+                        {
+                            "$type": "AttachModifierToSelfGlobalValueNoInitMixin",
+                            "globalValueKey": "SGV_StaminaFight",
+                            "valueSteps": [
+                                -0.5,
+                                0.5,
+                                1.5,
+                                2.5
+                            ],
+                            "modifierNameSteps": [
+                                "Blank",
+                                "StaminaFight_Level3_Handler_OnTeam",
+                                "StaminaFight_Level3_Handler_OnTeam"
+                            ],
+                            "actionQueues": [
+                                [
+                                    {
+                                        "$type": "SetOverrideMapValue",
+                                        "PositionDampTime": true,
+                                        "ratio": "DamageUp_Lv0",
+                                        "overrideMapKey": "Override_Ratio",
+                                        "maxValue": 0.0,
+                                        "minValue": 0.0
+                                    }
+                                ],
+                                [
+                                    {
+                                        "$type": "SetOverrideMapValue",
+                                        "PositionDampTime": true,
+                                        "ratio": "DamageUp_Lv1",
+                                        "overrideMapKey": "Override_Ratio",
+                                        "maxValue": 0.0,
+                                        "minValue": 0.0
+                                    }
+                                ],
+                                [
+                                    {
+                                        "$type": "SetOverrideMapValue",
+                                        "PositionDampTime": true,
+                                        "ratio": "DamageUp_Lv2",
+                                        "overrideMapKey": "Override_Ratio",
+                                        "maxValue": 0.0,
+                                        "minValue": 0.0
+                                    }
+                                ]
+                            ],
+                            "KPDABGIOFID": true
+                        }
+                    ]
+                },
+                "Blank": {
+                    "modifierName": "",
+                    "bonusCriticalHurt": 100.0
+                },
+                "StaminaFight_Level3_Handler_OnTeam": {
+                    "modifierName": "",
+                    "bonusCriticalHurt": 100.0,
+                    "modifierMixins": [
+                        {
+                            "$type": "LocalAvatarsMixin",
+                            "modifierName": "StaminaFight_Level3_Handler_OnAvatar"
+                        }
+                    ]
+                },
+                "StaminaFight_Level3_Handler_OnAvatar": {
+                    "modifierName": "",
+                    "bonusCriticalHurt": 100.0,
+                    "modifierMixins": [
+                        {
+                            "$type": "DoActionByElementReactionMixin",
+                            "range": 50.0,
+                            "FEDNAMEGHPM": true,
+                            "entityTypes": [
+                                "Monster"
+                            ],
+                            "reactionTypes": [
+                                "Stream"
+                            ],
+                            "actions": [
+                                {
+                                    "$type": "TriggerAbility",
+                                    "PositionDampTime": true,
+                                    "abilityName": "ActivityAbility_StaminaFight_Level_3"
+                                }
+                            ]
+                        },
+                        {
+                            "$type": "DoActionByElementReactionMixin",
+                            "range": 50.0,
+                            "FEDNAMEGHPM": true,
+                            "entityTypes": [
+                                "Monster"
+                            ],
+                            "reactionTypes": [
+                                "Melt"
+                            ],
+                            "actions": [
+                                {
+                                    "$type": "TriggerAbility",
+                                    "PositionDampTime": true,
+                                    "abilityName": "ActivityAbility_StaminaFight_Level_3"
+                                }
+                            ]
+                        }
+                    ]
+                },
+                "StaminaFight_Level3_Buff_ElementReactionDamageUp": {
+                    "modifierName": "",
+                    "duration": "Buff_Duration",
+                    "bonusCriticalHurt": 100.0,
+                    "properties": {
+                        "Actor_ElemReactSteamDelta": "Override_Ratio",
+                        "Actor_ElemReactMeltDelta": "Override_Ratio"
+                    },
+                    "state": "AttackUp"
+                }
+            },
+            "onAdded": [
+                {
+                    "$type": "AttachModifier",
+                    "target": "Team",
+                    "PositionDampTime": true,
+                    "modifierName": "StaminaFight_Level3_BuffHandler"
+                }
+            ],
+            "onAbilityStart": [
+                {
+                    "$type": "Predicated",
+                    "target": "Team",
+                    "targetPredicates": [
+                        {
+                            "$type": "BMLGBKCIOIN",
+                            "target": "Team",
+                            "key": "SGV_StaminaFight",
+                            "ratio": 0.0,
+                            "PODFMDAEAGL": "NoneOrEqual"
+                        }
+                    ],
+                    "successActions": [
+                        {
+                            "$type": "SetOverrideMapValue",
+                            "ratio": "DamageUp_Lv0",
+                            "overrideMapKey": "Override_Ratio",
+                            "maxValue": 0.0,
+                            "minValue": 0.0
+                        }
+                    ]
+                },
+                {
+                    "$type": "Predicated",
+                    "target": "Team",
+                    "targetPredicates": [
+                        {
+                            "$type": "BMLGBKCIOIN",
+                            "target": "Team",
+                            "key": "SGV_StaminaFight",
+                            "ratio": 1.0
+                        }
+                    ],
+                    "successActions": [
+                        {
+                            "$type": "SetOverrideMapValue",
+                            "ratio": "DamageUp_Lv1",
+                            "overrideMapKey": "Override_Ratio",
+                            "maxValue": 0.0,
+                            "minValue": 0.0
+                        }
+                    ]
+                },
+                {
+                    "$type": "Predicated",
+                    "target": "Team",
+                    "targetPredicates": [
+                        {
+                            "$type": "BMLGBKCIOIN",
+                            "target": "Team",
+                            "key": "SGV_StaminaFight",
+                            "ratio": 2.0
+                        }
+                    ],
+                    "successActions": [
+                        {
+                            "$type": "SetOverrideMapValue",
+                            "ratio": "DamageUp_Lv2",
+                            "overrideMapKey": "Override_Ratio",
+                            "maxValue": 0.0,
+                            "minValue": 0.0
+                        }
+                    ]
+                },
+                {
+                    "$type": "ApplyModifier",
+                    "PositionDampTime": true,
+                    "modifierName": "StaminaFight_Level3_Buff_ElementReactionDamageUp"
+                }
+            ],
+            "isDynamicAbility": true
+        }
+    },
+    {
+        "Default": {
+            "$type": "ConfigAbility",
+            "abilityName": "ActivityAbility_StaminaFight_Level_4",
+            "abilityMixins": [
+                {
+                    "$type": "ServerUpdateGlobalValueMixin",
+                    "key": "SGV_StaminaFight",
+                    "useLimitRange": true,
+                    "maxValue": 2.0,
+                    "minValue": 0.0
+                },
+                {
+                    "$type": "AttachModifierToSelfGlobalValueNoInitMixin",
+                    "globalValueKey": "SGV_StaminaFight",
+                    "valueSteps": [
+                        -0.5,
+                        0.5,
+                        1.5,
+                        2.5
+                    ],
+                    "modifierNameSteps": [
+                        "Blank",
+                        "StaminaFight_Level4_Handler_OnTeam",
+                        "StaminaFight_Level4_Handler_OnTeam"
+                    ],
+                    "actionQueues": [
+                        [
+                            {
+                                "$type": "SetOverrideMapValue",
+                                "ratio": "MasteryUp_Lv0",
+                                "overrideMapKey": "Override_Ratio",
+                                "maxValue": 0.0,
+                                "minValue": 0.0
+                            }
+                        ],
+                        [
+                            {
+                                "$type": "SetOverrideMapValue",
+                                "ratio": "MasteryUp_Lv1",
+                                "overrideMapKey": "Override_Ratio",
+                                "maxValue": 0.0,
+                                "minValue": 0.0
+                            }
+                        ],
+                        [
+                            {
+                                "$type": "SetOverrideMapValue",
+                                "ratio": "MasteryUp_Lv2",
+                                "overrideMapKey": "Override_Ratio",
+                                "maxValue": 0.0,
+                                "minValue": 0.0
+                            }
+                        ]
+                    ],
+                    "KPDABGIOFID": true
+                }
+            ],
+            "abilitySpecials": {
+                "Override_Ratio": 0.0,
+                "Buff_Duration": 0.0,
+                "MasteryUp_Lv0": 0.0,
+                "MasteryUp_Lv1": 0.0,
+                "MasteryUp_Lv2": 0.0
+            },
+            "modifiers": {
+                "Blank": {
+                    "modifierName": "",
+                    "bonusCriticalHurt": 100.0
+                },
+                "StaminaFight_Level4_Handler_OnTeam": {
+                    "modifierName": "",
+                    "bonusCriticalHurt": 100.0,
+                    "modifierMixins": [
+                        {
+                            "$type": "LocalAvatarsMixin",
+                            "modifierName": "StaminaFight_Level4_Handler_OnAvatar"
+                        }
+                    ],
+                    "onAdded": [
+                        {
+                            "$type": "TriggerAbility",
+                            "abilityName": "ActivityAbility_StaminaFight_Level_4"
+                        }
+                    ]
+                },
+                "StaminaFight_Level4_Handler_OnAvatar": {
+                    "modifierName": "",
+                    "bonusCriticalHurt": 100.0,
+                    "onAttackLanded": [
+                        {
+                            "$type": "Predicated",
+                            "target": "Other",
+                            "PositionDampTime": true,
+                            "targetPredicates": [
+                                {
+                                    "$type": "CACJBJLHLDL",
+                                    "entityTypes": [
+                                        "Monster"
+                                    ]
+                                },
+                                {
+                                    "$type": "EPMJKNBAIPE",
+                                    "OCCFCJJBLFH": 0.0
+                                },
+                                {
+                                    "$type": "GANAKOPLMGI",
+                                    "predicates": [
+                                        {
+                                            "$type": "EBFGFMPDFLE",
+                                            "element": "Fire"
+                                        },
+                                        {
+                                            "$type": "EBFGFMPDFLE",
+                                            "element": "Water"
+                                        },
+                                        {
+                                            "$type": "EBFGFMPDFLE",
+                                            "element": "Electric"
+                                        },
+                                        {
+                                            "$type": "EBFGFMPDFLE",
+                                            "element": "Wind"
+                                        },
+                                        {
+                                            "$type": "EBFGFMPDFLE",
+                                            "element": "Ice"
+                                        },
+                                        {
+                                            "$type": "EBFGFMPDFLE",
+                                            "element": "Rock"
+                                        },
+                                        {
+                                            "$type": "EBFGFMPDFLE",
+                                            "element": "Grass"
+                                        }
+                                    ]
+                                }
+                            ],
+                            "successActions": [
+                                {
+                                    "$type": "RemoveModifier",
+                                    "target": "AllPlayerAvatars",
+                                    "PositionDampTime": true,
+                                    "modifierName": "StaminaFight_Level4_Buff_MasteryUp"
+                                },
+                                {
+                                    "$type": "ApplyModifier",
+                                    "target": "AllPlayerAvatars",
+                                    "PositionDampTime": true,
+                                    "modifierName": "StaminaFight_Level4_Buff_MasteryUp"
+                                }
+                            ]
+                        }
+                    ]
+                },
+                "StaminaFight_Level4_Buff_MasteryUp": {
+                    "modifierName": "",
+                    "duration": "Buff_Duration",
+                    "bonusCriticalHurt": 100.0,
+                    "properties": {
+                        "Actor_ElemMasteryDelta": "Override_Ratio"
+                    },
+                    "state": "AttackUp",
+                    "isLimitedProperties": true
+                }
+            },
+            "onAbilityStart": [
+                {
+                    "$type": "Predicated",
+                    "target": "Team",
+                    "targetPredicates": [
+                        {
+                            "$type": "BMLGBKCIOIN",
+                            "target": "Team",
+                            "key": "SGV_StaminaFight",
+                            "ratio": 0.0,
+                            "PODFMDAEAGL": "NoneOrEqual"
+                        }
+                    ],
+                    "successActions": [
+                        {
+                            "$type": "SetOverrideMapValue",
+                            "ratio": "MasteryUp_Lv0",
+                            "overrideMapKey": "Override_Ratio",
+                            "maxValue": 0.0,
+                            "minValue": 0.0
+                        }
+                    ]
+                },
+                {
+                    "$type": "Predicated",
+                    "target": "Team",
+                    "targetPredicates": [
+                        {
+                            "$type": "BMLGBKCIOIN",
+                            "target": "Team",
+                            "key": "SGV_StaminaFight",
+                            "ratio": 1.0
+                        }
+                    ],
+                    "successActions": [
+                        {
+                            "$type": "SetOverrideMapValue",
+                            "ratio": "MasteryUp_Lv1",
+                            "overrideMapKey": "Override_Ratio",
+                            "maxValue": 0.0,
+                            "minValue": 0.0
+                        }
+                    ]
+                },
+                {
+                    "$type": "Predicated",
+                    "target": "Team",
+                    "targetPredicates": [
+                        {
+                            "$type": "BMLGBKCIOIN",
+                            "target": "Team",
+                            "key": "SGV_StaminaFight",
+                            "ratio": 2.0
+                        }
+                    ],
+                    "successActions": [
+                        {
+                            "$type": "SetOverrideMapValue",
+                            "ratio": "MasteryUp_Lv2",
+                            "overrideMapKey": "Override_Ratio",
+                            "maxValue": 0.0,
+                            "minValue": 0.0
+                        }
+                    ]
+                }
+            ],
+            "isDynamicAbility": true
+        }
+    },
+    {
+        "Default": {
+            "$type": "ConfigAbility",
+            "abilityName": "ActivityAbility_StaminaFight_Level_5",
+            "abilityMixins": [
+                {
+                    "$type": "ServerUpdateGlobalValueMixin",
+                    "key": "SGV_StaminaFight",
+                    "useLimitRange": true,
+                    "maxValue": 2.0,
+                    "minValue": 0.0
+                },
+                {
+                    "$type": "AttachModifierToSelfGlobalValueNoInitMixin",
+                    "globalValueKey": "SGV_StaminaFight",
+                    "valueSteps": [
+                        -0.5,
+                        0.5,
+                        1.5,
+                        2.5
+                    ],
+                    "modifierNameSteps": [
+                        "Blank",
+                        "StaminaFight_Level5_Handler_OnTeam",
+                        "StaminaFight_Level5_Handler_OnTeam"
+                    ],
+                    "actionQueues": [
+                        [
+                            {
+                                "$type": "SetOverrideMapValue",
+                                "ratio": "MasteryUp_Lv0",
+                                "overrideMapKey": "Override_Ratio",
+                                "maxValue": 0.0,
+                                "minValue": 0.0
+                            }
+                        ],
+                        [
+                            {
+                                "$type": "SetOverrideMapValue",
+                                "ratio": "MasteryUp_Lv1",
+                                "overrideMapKey": "Override_Ratio",
+                                "maxValue": 0.0,
+                                "minValue": 0.0
+                            }
+                        ],
+                        [
+                            {
+                                "$type": "SetOverrideMapValue",
+                                "ratio": "MasteryUp_Lv2",
+                                "overrideMapKey": "Override_Ratio",
+                                "maxValue": 0.0,
+                                "minValue": 0.0
+                            }
+                        ]
+                    ],
+                    "KPDABGIOFID": true
+                }
+            ],
+            "abilitySpecials": {
+                "Override_Ratio": 0.0,
+                "Buff_Duration": 0.0,
+                "MasteryUp_Lv0": 0.0,
+                "MasteryUp_Lv1": 0.0,
+                "MasteryUp_Lv2": 0.0
+            },
+            "modifiers": {
+                "Blank": {
+                    "modifierName": "",
+                    "bonusCriticalHurt": 100.0
+                },
+                "StaminaFight_Level5_Handler_OnTeam": {
+                    "modifierName": "",
+                    "bonusCriticalHurt": 100.0,
+                    "modifierMixins": [
+                        {
+                            "$type": "LocalAvatarsMixin",
+                            "modifierName": "StaminaFight_Level5_Handler_OnAvatar"
+                        }
+                    ],
+                    "onAdded": [
+                        {
+                            "$type": "TriggerAbility",
+                            "abilityName": "ActivityAbility_StaminaFight_Level_5"
+                        }
+                    ]
+                },
+                "StaminaFight_Level5_Handler_OnAvatar": {
+                    "modifierName": "",
+                    "bonusCriticalHurt": 100.0,
+                    "modifierMixins": [
+                        {
+                            "$type": "DoActionByElementReactionMixin",
+                            "range": 50.0,
+                            "entityTypes": [
+                                "Monster"
+                            ],
+                            "reactionTypes": [
+                                "Burning",
+                                "Overdose",
+                                "Overgrow",
+                                "OverdoseGrass",
+                                "OverdoseElectric",
+                                "OvergrowMushroomElectric",
+                                "OvergrowMushroomFire"
+                            ],
+                            "actions": [
+                                {
+                                    "$type": "RemoveModifier",
+                                    "target": "AllPlayerAvatars",
+                                    "PositionDampTime": true,
+                                    "modifierName": "StaminaFight_Level5_Buff_MasteryUp"
+                                },
+                                {
+                                    "$type": "ApplyModifier",
+                                    "target": "AllPlayerAvatars",
+                                    "PositionDampTime": true,
+                                    "modifierName": "StaminaFight_Level5_Buff_MasteryUp"
+                                }
+                            ]
+                        }
+                    ]
+                },
+                "StaminaFight_Level5_Buff_MasteryUp": {
+                    "modifierName": "",
+                    "duration": "Buff_Duration",
+                    "bonusCriticalHurt": 100.0,
+                    "properties": {
+                        "Actor_ElemMasteryDelta": "Override_Ratio"
+                    },
+                    "state": "AttackUp",
+                    "isLimitedProperties": true
+                }
+            },
+            "onAbilityStart": [
+                {
+                    "$type": "Predicated",
+                    "target": "Team",
+                    "targetPredicates": [
+                        {
+                            "$type": "BMLGBKCIOIN",
+                            "target": "Team",
+                            "key": "SGV_StaminaFight",
+                            "ratio": 0.0,
+                            "PODFMDAEAGL": "NoneOrEqual"
+                        }
+                    ],
+                    "successActions": [
+                        {
+                            "$type": "SetOverrideMapValue",
+                            "ratio": "MasteryUp_Lv0",
+                            "overrideMapKey": "Override_Ratio",
+                            "maxValue": 0.0,
+                            "minValue": 0.0
+                        }
+                    ]
+                },
+                {
+                    "$type": "Predicated",
+                    "target": "Team",
+                    "targetPredicates": [
+                        {
+                            "$type": "BMLGBKCIOIN",
+                            "target": "Team",
+                            "key": "SGV_StaminaFight",
+                            "ratio": 1.0
+                        }
+                    ],
+                    "successActions": [
+                        {
+                            "$type": "SetOverrideMapValue",
+                            "ratio": "MasteryUp_Lv1",
+                            "overrideMapKey": "Override_Ratio",
+                            "maxValue": 0.0,
+                            "minValue": 0.0
+                        }
+                    ]
+                },
+                {
+                    "$type": "Predicated",
+                    "target": "Team",
+                    "targetPredicates": [
+                        {
+                            "$type": "BMLGBKCIOIN",
+                            "target": "Team",
+                            "key": "SGV_StaminaFight",
+                            "ratio": 2.0
+                        }
+                    ],
+                    "successActions": [
+                        {
+                            "$type": "SetOverrideMapValue",
+                            "ratio": "MasteryUp_Lv2",
+                            "overrideMapKey": "Override_Ratio",
+                            "maxValue": 0.0,
+                            "minValue": 0.0
+                        }
+                    ]
+                }
+            ],
+            "isDynamicAbility": true
+        }
+    }
+]

@@ -1,0 +1,310 @@
+[
+    {
+        "Default": {
+            "$type": "ConfigAbility",
+            "abilityName": "Animal_Goat_StateChange",
+            "abilityMixins": [
+                {
+                    "$type": "AttachToAIAlertnessMixin",
+                    "alertness": [
+                        2
+                    ],
+                    "modifierName": "SetPoseFalse"
+                }
+            ],
+            "modifiers": {
+                "SetPoseFalse": {
+                    "modifierName": "",
+                    "bonusCriticalHurt": 100.0,
+                    "onAdded": [
+                        {
+                            "$type": "SetPoseBool",
+                            "boolID": "LookAround"
+                        },
+                        {
+                            "$type": "SetPoseBool",
+                            "boolID": "Stretch"
+                        },
+                        {
+                            "$type": "SetPoseBool",
+                            "boolID": "AlertCrush"
+                        },
+                        {
+                            "$type": "HideUIBillBoard"
+                        }
+                    ]
+                }
+            }
+        }
+    },
+    {
+        "Default": {
+            "$type": "ConfigAbility",
+            "abilityName": "Animal_Goat_Random",
+            "abilityMixins": [
+                {
+                    "$type": "AttachToAnimatorStateIDMixin",
+                    "stateIDs": [
+                        "Personality_103_BS"
+                    ],
+                    "modifierName": "Random_MoveSpeedRatio"
+                }
+            ],
+            "abilitySpecials": {
+                "RandomTimes": 0.0
+            },
+            "modifiers": {
+                "Random_MoveSpeedRatio": {
+                    "modifierName": "",
+                    "bonusCriticalHurt": 100.0,
+                    "onAdded": [
+                        {
+                            "$type": "SetRandomOverrideMapValue",
+                            "valueRangeMax": 4.0,
+                            "valueRangeMin": 2.0,
+                            "overrideMapKey": "RandomTimes"
+                        },
+                        {
+                            "$type": "SetAnimatorInt",
+                            "intID": "LoopTimes",
+                            "ratio": "RandomTimes"
+                        }
+                    ]
+                }
+            }
+        }
+    },
+    {
+        "Default": {
+            "$type": "ConfigAbility",
+            "abilityName": "Animal_Goat_Disappear",
+            "abilityMixins": [
+                {
+                    "$type": "AttachToAnimatorStateIDMixin",
+                    "stateIDs": [
+                        "Disappear"
+                    ],
+                    "modifierName": "DisappearTimer"
+                }
+            ],
+            "modifiers": {
+                "DisappearTimer": {
+                    "modifierName": "",
+                    "bonusCriticalHurt": 100.0,
+                    "onAdded": [
+                        {
+                            "$type": "StartDither",
+                            "duration": 3.0
+                        },
+                        {
+                            "$type": "HideUIBillBoard",
+                            "hide": true
+                        },
+                        {
+                            "$type": "SetAnimatorBool",
+                            "boolID": "Disappear",
+                            "ratio": true
+                        },
+                        {
+                            "$type": "KillSelf",
+                            "duration": 1.5,
+                            "banDrop": true,
+                            "banExp": true,
+                            "killSelfType": "Disappear"
+                        }
+                    ]
+                }
+            }
+        }
+    },
+    {
+        "Default": {
+            "$type": "ConfigAbility",
+            "abilityName": "Animal_Goat_FleeMode",
+            "abilityMixins": [
+                {
+                    "$type": "AttachToPoseIDMixin",
+                    "poseIDs": [
+                        1,
+                        2
+                    ],
+                    "modifierName": "FleeMode_Monitor"
+                }
+            ],
+            "modifiers": {
+                "FleeMode_Monitor": {
+                    "modifierName": "",
+                    "bonusCriticalHurt": 100.0,
+                    "onAdded": [
+                        {
+                            "$type": "SetPoseBool",
+                            "boolID": "FleeMode",
+                            "ratio": true
+                        }
+                    ],
+                    "onBeingHit": [
+                        {
+                            "$type": "SetPoseBool",
+                            "boolID": "FleeMode"
+                        },
+                        {
+                            "$type": "Predicated",
+                            "target": "Target",
+                            "targetPredicates": [
+                                {
+                                    "$type": "LAEHCOBNNDC",
+                                    "logic": "GreaterOrEqual",
+                                    "ratio": 5.0
+                                }
+                            ],
+                            "successActions": [
+                                {
+                                    "$type": "SetPoseBool",
+                                    "boolID": "FleeMode",
+                                    "ratio": true
+                                }
+                            ]
+                        },
+                        {
+                            "$type": "Predicated",
+                            "target": "TargetOriginOwner",
+                            "targetPredicates": [
+                                {
+                                    "$type": "LAEHCOBNNDC",
+                                    "logic": "GreaterOrEqual",
+                                    "ratio": 5.0
+                                }
+                            ],
+                            "successActions": [
+                                {
+                                    "$type": "SetPoseBool",
+                                    "boolID": "FleeMode",
+                                    "ratio": true
+                                }
+                            ]
+                        },
+                        {
+                            "$type": "SetPoseBool",
+                            "boolID": "HitFlag",
+                            "ratio": true
+                        }
+                    ]
+                }
+            }
+        }
+    },
+    {
+        "Default": {
+            "$type": "ConfigAbility",
+            "abilityName": "Animal_Goat_CrushAtk",
+            "abilityMixins": [
+                {
+                    "$type": "SteerAttackMixin",
+                    "steerStateIDs": [
+                        "CrushAtk"
+                    ],
+                    "startNormalizedTime": 0.07999999821186066,
+                    "endNormalizedTime": 0.6169999837875366,
+                    "angularSpeed": 180.0,
+                    "attackTrigger": "",
+                    "attackDistance": 1.5
+                },
+                {
+                    "$type": "SteerAttackMixin",
+                    "steerStateIDs": [
+                        "AlertCrush_BS"
+                    ],
+                    "startNormalizedTime": 0.23999999463558197,
+                    "endNormalizedTime": 0.550000011920929,
+                    "angularSpeed": 180.0,
+                    "attackTrigger": "",
+                    "attackDistance": 1.5
+                },
+                {
+                    "$type": "AttachToAnimatorStateIDMixin",
+                    "stateIDs": [
+                        "AlertCrush_Loop"
+                    ],
+                    "modifierName": "AlertCrush_TargetMonitor"
+                }
+            ],
+            "modifiers": {
+                "AlertCrush_TargetMonitor": {
+                    "modifierName": "",
+                    "bonusCriticalHurt": 100.0,
+                    "thinkInterval": 0.30000001192092896,
+                    "onRemoved": [
+                        {
+                            "$type": "SetPoseBool",
+                            "boolID": "FleeMode",
+                            "ratio": true
+                        }
+                    ],
+                    "onThinkInterval": [
+                        {
+                            "$type": "SetAnimatorTrigger",
+                            "predicates": [
+                                {
+                                    "$type": "LAEHCOBNNDC",
+                                    "target": "SelfAttackTarget",
+                                    "logic": "LesserOrEqual",
+                                    "ratio": 6.0
+                                }
+                            ],
+                            "triggerID": "AlertCrush"
+                        }
+                    ]
+                }
+            },
+            "onAbilityStart": [
+                {
+                    "$type": "TriggerAttackEvent",
+                    "attackEvent": {
+                        "attackPattern": {
+                            "$type": "BOIOFIPLBNK",
+                            "triggerType": "TriggerNoRepeat",
+                            "born": {
+                                "$type": "AJCFIBNMGKO",
+                                "offset": {
+                                    "EMBMLEBGFOI": 0.0,
+                                    "NABPJFNICAE": 0.5,
+                                    "MLOLIKEJCKB": 0.0
+                                },
+                                "NLBFCDKCPAH": true
+                            },
+                            "size": {
+                                "EMBMLEBGFOI": 1.5,
+                                "NABPJFNICAE": 2.0,
+                                "MLOLIKEJCKB": 2.5
+                            }
+                        },
+                        "attackInfo": {
+                            "attackTag": "",
+                            "attenuationTag": "",
+                            "attenuationGroup": "default",
+                            "attackProperty": {
+                                "ACKCDHKEGCK": 1.0,
+                                "JIICGJODDDM": 0.0,
+                                "bonusCriticalHurt": 100.0,
+                                "strikeType": "Blunt",
+                                "enBreak": 1000.0,
+                                "damagePercentage": 0.0
+                            },
+                            "hitPattern": {
+                                "onHitEffectName": "default",
+                                "hitImpulseType": "LV4",
+                                "canBeDefenceHalt": true
+                            }
+                        }
+                    },
+                    "targetType": "Enemy"
+                },
+                {
+                    "$type": "SetPoseBool",
+                    "boolID": "FleeMode",
+                    "ratio": true
+                }
+            ]
+        }
+    }
+]
