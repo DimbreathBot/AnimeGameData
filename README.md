@@ -1,6 +1,10 @@
 # GenshinData
 Repository containing the release data for Genshin Impact.
 
+# Update
+
+As of 5.5.0 they implemented a new encryption and shuffle of field order of which the former is incredibly hard to dump so BinOutput will be currently unavailable (I'm still recovering from potentially COVID) and the field order shuffle has completely harmed deobfuscation so for the time being fields will stay obfuscate.d
+
 ## Support
 
 If you would like to support the work done to create and maintain the data repositories, you can do so here: https://patreon.com/Dimbreath.
