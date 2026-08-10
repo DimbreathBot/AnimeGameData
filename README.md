@@ -3,7 +3,7 @@ Repository containing the release data for Genshin Impact.
 
 # Update
 
-As of 5.5.0 they implemented a new encryption and shuffle of field order of which the former is incredibly hard to dump so BinOutput will be currently unavailable (I'm still recovering from potentially COVID) and the field order shuffle has completely harmed deobfuscation so for the time being fields will stay obfuscate.d
+Please report any issue with any ExcelBinOutput/TextMap file via Twitter DM or somewhere. BinOutput still stays the same.
 
 ## Support
 
