@@ -1,9 +1,5 @@
 # GenshinData
-Repository containing the release data for Genshin Impact.
-
-# Update
-
-Please report any issue with any ExcelBinOutput/TextMap file via Twitter DM or somewhere. BinOutput still stays the same.
+Repository containing the release data for Genshin Impact. Please report any issue, mismatched or incorrect value with any ExcelBinOutput, BinOutput or TextMap file via Twitter DM.
 
 ## Support
 
