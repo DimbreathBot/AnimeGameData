@@ -1,39 +1,42 @@
 [
   {
     "Default": {
-      "ANHJPOLNHIG": [
-        "SGV_CoinType"
-      ],
       "abilityName": "SceneObj_Level_Common_Property_Ani_Prop_BulletHellCoin_01",
-      "PFJMEMFDGOH": [
+      "onAdded": [
+        {
+          "$type": "FireSubEmitterEffect",
+          "effectPattern": "Eff_SceneObj_GlideChampCoin_Appear_Super_Sub"
+        }
+      ],
+      "onFieldEnter": [
         {
           "$type": "Predicated",
           "successActions": [
             {
               "$type": "Predicated",
-              "successActions": [
-                {
-                  "$type": "FireEffect",
-                  "effectPattern": "Eff_SceneObj_GlideChampCoin_Hit_Super",
-                  "scale": 1.0,
-                  "ILLLPEOODKP": "",
-                  "effectTempleteID": -1.0
-                }
-              ],
               "failActions": [
                 {
                   "$type": "FireEffect",
                   "effectPattern": "Eff_SceneObj_GlideChampCoin_Hit",
+                  "effectTempleteID": -1.0,
                   "scale": 1.0,
-                  "ILLLPEOODKP": "",
-                  "effectTempleteID": -1.0
+                  "ILLLPEOODKP": ""
+                }
+              ],
+              "successActions": [
+                {
+                  "$type": "FireEffect",
+                  "effectPattern": "Eff_SceneObj_GlideChampCoin_Hit_Super",
+                  "effectTempleteID": -1.0,
+                  "scale": 1.0,
+                  "ILLLPEOODKP": ""
                 }
               ],
               "targetPredicates": [
                 {
-                  "$type": "EOFDCELPGFO",
-                  "CBOMLBFIPJM": 2.0,
-                  "key": "SGV_CoinType"
+                  "$type": "ByTargetGlobalValue",
+                  "key": "SGV_CoinType",
+                  "value": 2.0
                 }
               ]
             },
@@ -42,89 +45,83 @@
               "key": "gv_SubTimerAddNotify",
               "maxValue": 0.0,
               "minValue": 0.0,
-              "CBOMLBFIPJM": 1.0,
-              "target": "TargetTeam"
+              "target": "TargetTeam",
+              "value": 1.0
             },
             {
               "$type": "ServerLuaCall",
+              "funcName": "SLC_Coin_Collected",
+              "luaCallType": "FromGroup",
               "param1": "SGV_CoinType",
               "param2": 0.0,
-              "paramNum": 1,
-              "funcName": "SLC_Coin_Collected",
-              "AHCNJKIEMPP": 0.0,
-              "luaCallType": "FromGroup"
+              "param3": 0.0,
+              "paramNum": 1
             },
             {
               "$type": "KillSelf",
-              "MBGFJOOIMOK": [
+              "configIdArray": [
                 70291299,
                 70291300
               ]
             }
           ],
+          "target": "Target",
           "targetPredicates": [
             {
-              "$type": "DEOFBICNFHF",
+              "$type": "ByEntityTypes",
               "entityTypes": [
                 "Avatar"
               ]
             }
-          ],
-          "target": "Target"
+          ]
         }
       ],
-      "onAdded": [
-        {
-          "$type": "FireSubEmitterEffect",
-          "effectPattern": "Eff_SceneObj_GlideChampCoin_Appear_Super_Sub"
-        }
+      "ANHJPOLNHIG": [
+        "SGV_CoinType"
       ]
     }
   },
   {
     "Default": {
+      "abilityName": "ActivityAbility_BulletHell_BarragePreLoad",
+      "isDynamicAbility": true,
       "modifiers": {
         "preLoadModifier": {
+          "elementDurability": 100.0,
+          "modifierName": "",
           "onAdded": [
             {
               "$type": "CreateGadget",
-              "gadgetID": 70291294,
-              "campID": 5001
+              "campID": 5001,
+              "gadgetID": 70291294
             },
             {
               "$type": "CreateGadget",
-              "gadgetID": 70291295,
-              "campID": 5001
+              "campID": 5001,
+              "gadgetID": 70291295
             }
           ],
-          "elementDurability": 100.0,
-          "modifierName": "",
           "AIHNJLDFEGJ": 0.0
         }
-      },
-      "abilityName": "ActivityAbility_BulletHell_BarragePreLoad",
-      "isDynamicAbility": true
+      }
     }
   },
   {
     "Default": {
+      "abilityMixins": [
+        {
+          "$type": "AttachToGadgetStateMixin",
+          "modifierName": "BulletEffect"
+        }
+      ],
+      "abilityName": "SceneObj_Activity_Common_Property_Ani_Prop_BulletHell_Barrage_Bullet_01",
+      "abilitySpecials": {
+        "ElementLevelCo": 1.0,
+        "DamageRatio": 2.5
+      },
       "modifiers": {
         "BulletEffect": {
-          "onReconnect": [
-            {
-              "$type": "KillSelf",
-              "MBGFJOOIMOK": [
-                70291295
-              ]
-            }
-          ],
           "duration": 16.0,
-          "onRemoved": [
-            {
-              "$type": "TriggerAbility",
-              "abilityName": "SceneObj_Activity_Common_Property_Ani_Prop_AutoTimeStop_Barrage_Bullet_02_Ability"
-            }
-          ],
           "elementDurability": 100.0,
           "modifierMixins": [
             {
@@ -135,19 +132,39 @@
             }
           ],
           "modifierName": "",
+          "onReconnect": [
+            {
+              "$type": "KillSelf",
+              "configIdArray": [
+                70291295
+              ]
+            }
+          ],
+          "onRemoved": [
+            {
+              "$type": "TriggerAbility",
+              "abilityName": "SceneObj_Activity_Common_Property_Ani_Prop_AutoTimeStop_Barrage_Bullet_02_Ability"
+            }
+          ],
           "AIHNJLDFEGJ": 0.0
         }
       },
       "onAbilityStart": [
         {
           "$type": "Predicated",
+          "failActions": [
+            {
+              "$type": "TriggerAbility",
+              "abilityName": "SceneObj_Activity_Common_Property_Ani_Prop_BulletHell_Barrage_Bullet_toCoin"
+            }
+          ],
           "successActions": [
             {
               "$type": "SetGlobalValue",
               "key": "gv_bulletHitting",
-              "minValue": 0.0,
               "maxValue": 0.0,
-              "CBOMLBFIPJM": 1.0
+              "minValue": 0.0,
+              "value": 1.0
             },
             {
               "$type": "FireSubEmitterEffect",
@@ -155,71 +172,52 @@
             },
             {
               "$type": "TriggerAttackEvent",
-              "targetType": "Enemy",
               "attackEvent": {
                 "attackInfo": {
                   "attackProperty": {
                     "attackType": "Melee",
                     "damagePercentageRatio": 0.0,
+                    "elementDurability": 100.0,
+                    "enBreak": 200.0,
                     "ignoreAttackerProperty": true,
                     "strikeType": "Pierce",
-                    "enBreak": 200.0,
                     "trueDamage": true,
-                    "elementDurability": 100.0,
-                    "arkheGrade": 0.0
+                    "IIPHCFEONLK": 0.0
                   },
-                  "hitPattern": {
-                    "FLFCIDDNMNA": "",
-                    "onHitEffectName": "default",
-                    "hitImpulseType": "LV3"
-                  },
+                  "attackTag": "BulletHell_BulletHit_1",
                   "attenuationGroup": "default",
                   "attenuationTag": "",
-                  "attackTag": "BulletHell_BulletHit_1"
+                  "hitPattern": {
+                    "hitImpulseType": "LV3",
+                    "onHitEffectName": "default",
+                    "FLFCIDDNMNA": ""
+                  }
                 },
                 "attackPattern": {
-                  "$type": "HCAGHMDHEGG",
-                  "radius": 0.5,
-                  "triggerType": "TriggerNoRepeat",
+                  "$type": "ConfigAttackSphere",
                   "born": {
-                    "$type": "NHPKNMOMIFH"
-                  }
+                    "$type": "ConfigBornByCollisionPoint"
+                  },
+                  "radius": 0.5,
+                  "triggerType": "TriggerNoRepeat"
                 }
-              }
+              },
+              "targetType": "Enemy"
             },
             {
               "$type": "KillSelf",
-              "MBGFJOOIMOK": [
+              "configIdArray": [
                 70291295
               ]
             }
           ],
-          "failActions": [
-            {
-              "$type": "TriggerAbility",
-              "abilityName": "SceneObj_Activity_Common_Property_Ani_Prop_BulletHell_Barrage_Bullet_toCoin"
-            }
-          ],
           "targetPredicates": [
             {
-              "$type": "NBMIFIMDPII"
+              "$type": "ByTargetGadgetState"
             }
           ]
         }
       ],
-      "onKill": [
-        {
-          "$type": "RemoveModifier",
-          "modifierName": "BulletEffect"
-        }
-      ],
-      "abilityMixins": [
-        {
-          "$type": "AttachToGadgetStateMixin",
-          "modifierName": "BulletEffect"
-        }
-      ],
-      "abilityName": "SceneObj_Activity_Common_Property_Ani_Prop_BulletHell_Barrage_Bullet_01",
       "onAdded": [
         {
           "$type": "FireSubEmitterEffect",
@@ -227,97 +225,114 @@
         },
         {
           "$type": "SetSystemValueToOverrideMap",
-          "OAEJNDBEDPO": -1.0,
+          "doOffStage": true,
           "key": "ElementLevelCo",
           "type": "ElementLevelCo",
-          "doOffStage": true
+          "OAEJNDBEDPO": -1.0
         }
       ],
-      "abilitySpecials": {
-        "ElementLevelCo": 1.0,
-        "DamageRatio": 2.5
-      }
+      "onKill": [
+        {
+          "$type": "RemoveModifier",
+          "modifierName": "BulletEffect"
+        }
+      ]
     }
   },
   {
     "Default": {
+      "abilityMixins": [
+        {
+          "$type": "AttachToGadgetStateMixin",
+          "modifierName": "BulletEffect"
+        }
+      ],
+      "abilityName": "SceneObj_Activity_Common_Property_Ani_Prop_BulletHell_Barrage_Bullet_02",
+      "abilitySpecials": {
+        "RandomTimeRatio": 0.0,
+        "VelocityRatio": 18.0,
+        "ElementLevelCo": 1.0,
+        "DamageRatio": 2.5
+      },
       "modifiers": {
         "BulletEffect": {
-          "onReconnect": [
-            {
-              "$type": "KillSelf",
-              "MBGFJOOIMOK": [
-                70291294
-              ]
-            }
-          ],
           "duration": 16.0,
-          "onRemoved": [
-            {
-              "$type": "TriggerAbility",
-              "abilityName": "SceneObj_Activity_Common_Property_Ani_Prop_AutoTimeStop_Barrage_Bullet_02_Ability"
-            }
-          ],
+          "elementDurability": 100.0,
+          "modifierName": "",
           "onAdded": [
             {
               "$type": "AttachEffect",
-              "ILLLPEOODKP": "",
-              "scale": 1.0,
               "effectPattern": "Eff_SceneObj_ActivityAutoTimeStop_Buttle_04",
-              "effectTempleteID": -1.0
+              "effectTempleteID": -1.0,
+              "scale": 1.0,
+              "ILLLPEOODKP": ""
             },
             {
               "$type": "SetRandomOverrideMapValue",
-              "valueRangeMin": 0.2,
               "overrideMapKey": "RandomTimeRatio",
+              "predicates": [
+                {
+                  "$type": "ByTargetPositionToSelfPosition",
+                  "logic": "LesserOrEqual",
+                  "value": 5.0,
+                  "JBOGOHPICML": "",
+                  "NJICAELBCCB": ""
+                }
+              ],
               "valueRangeMax": 0.4,
-              "predicates": [
-                {
-                  "$type": "CNFMGJJEOPM",
-                  "NJICAELBCCB": "",
-                  "JBOGOHPICML": "",
-                  "CBOMLBFIPJM": 5.0,
-                  "logic": "LesserOrEqual"
-                }
-              ]
+              "valueRangeMin": 0.2
             },
             {
               "$type": "SetRandomOverrideMapValue",
-              "valueRangeMin": 0.3,
               "overrideMapKey": "RandomTimeRatio",
-              "valueRangeMax": 0.6,
               "predicates": [
                 {
-                  "$type": "CNFMGJJEOPM",
-                  "NJICAELBCCB": "",
+                  "$type": "ByTargetPositionToSelfPosition",
+                  "value": 5.0,
                   "JBOGOHPICML": "",
-                  "CBOMLBFIPJM": 5.0
+                  "NJICAELBCCB": ""
                 }
-              ]
+              ],
+              "valueRangeMax": 0.6,
+              "valueRangeMin": 0.3
             },
             {
               "$type": "SetBulletTrackTarget",
               "target": "AllTeams"
             }
           ],
-          "elementDurability": 100.0,
-          "modifierName": "",
+          "onReconnect": [
+            {
+              "$type": "KillSelf",
+              "configIdArray": [
+                70291294
+              ]
+            }
+          ],
+          "onRemoved": [
+            {
+              "$type": "TriggerAbility",
+              "abilityName": "SceneObj_Activity_Common_Property_Ani_Prop_AutoTimeStop_Barrage_Bullet_02_Ability"
+            }
+          ],
           "AIHNJLDFEGJ": 0.0
         },
         "Timer": {
           "duration": "RandomTimeRatio",
+          "elementDurability": 100.0,
+          "modifierName": "",
           "onRemoved": [
             {
               "$type": "ApplyModifier",
               "modifierName": "AngularVelocityUp"
             }
           ],
-          "elementDurability": 100.0,
-          "modifierName": "",
           "AIHNJLDFEGJ": 0.0
         },
         "AngularVelocityUp": {
           "duration": 0.3,
+          "elementDurability": 100.0,
+          "modifierName": "",
           "onRemoved": [
             {
               "$type": "ApplyModifier",
@@ -327,29 +342,33 @@
           "properties": {
             "Actor_BulletMoveAngularVelocityRatio": "VelocityRatio"
           },
-          "elementDurability": 100.0,
-          "modifierName": "",
           "AIHNJLDFEGJ": 0.0
         },
         "AngularVelocityNoTrack": {
+          "elementDurability": 100.0,
+          "modifierName": "",
           "properties": {
             "Actor_BulletMoveAngularVelocityRatio": 0.01
           },
-          "elementDurability": 100.0,
-          "modifierName": "",
           "AIHNJLDFEGJ": 0.0
         }
       },
       "onAbilityStart": [
         {
           "$type": "Predicated",
+          "failActions": [
+            {
+              "$type": "TriggerAbility",
+              "abilityName": "SceneObj_Activity_Common_Property_Ani_Prop_BulletHell_Barrage_Bullet_toCoin"
+            }
+          ],
           "successActions": [
             {
               "$type": "SetGlobalValue",
               "key": "gv_bulletHitting",
-              "minValue": 0.0,
               "maxValue": 0.0,
-              "CBOMLBFIPJM": 1.0
+              "minValue": 0.0,
+              "value": 1.0
             },
             {
               "$type": "FireSubEmitterEffect",
@@ -357,71 +376,52 @@
             },
             {
               "$type": "TriggerAttackEvent",
-              "targetType": "Enemy",
               "attackEvent": {
                 "attackInfo": {
                   "attackProperty": {
                     "attackType": "Melee",
                     "damagePercentageRatio": 0.0,
+                    "elementDurability": 100.0,
+                    "enBreak": 200.0,
                     "ignoreAttackerProperty": true,
                     "strikeType": "Pierce",
-                    "enBreak": 200.0,
                     "trueDamage": true,
-                    "elementDurability": 100.0,
-                    "arkheGrade": 0.0
+                    "IIPHCFEONLK": 0.0
                   },
-                  "hitPattern": {
-                    "FLFCIDDNMNA": "",
-                    "onHitEffectName": "default",
-                    "hitImpulseType": "LV3"
-                  },
+                  "attackTag": "BulletHell_BulletHit_2",
                   "attenuationGroup": "default",
                   "attenuationTag": "",
-                  "attackTag": "BulletHell_BulletHit_2"
+                  "hitPattern": {
+                    "hitImpulseType": "LV3",
+                    "onHitEffectName": "default",
+                    "FLFCIDDNMNA": ""
+                  }
                 },
                 "attackPattern": {
-                  "$type": "HCAGHMDHEGG",
-                  "radius": 0.5,
-                  "triggerType": "TriggerNoRepeat",
+                  "$type": "ConfigAttackSphere",
                   "born": {
-                    "$type": "NHPKNMOMIFH"
-                  }
+                    "$type": "ConfigBornByCollisionPoint"
+                  },
+                  "radius": 0.5,
+                  "triggerType": "TriggerNoRepeat"
                 }
-              }
+              },
+              "targetType": "Enemy"
             },
             {
               "$type": "KillSelf",
-              "MBGFJOOIMOK": [
+              "configIdArray": [
                 70291294
               ]
             }
           ],
-          "failActions": [
-            {
-              "$type": "TriggerAbility",
-              "abilityName": "SceneObj_Activity_Common_Property_Ani_Prop_BulletHell_Barrage_Bullet_toCoin"
-            }
-          ],
           "targetPredicates": [
             {
-              "$type": "NBMIFIMDPII"
+              "$type": "ByTargetGadgetState"
             }
           ]
         }
       ],
-      "onKill": [
-        {
-          "$type": "RemoveModifier",
-          "modifierName": "BulletEffect"
-        }
-      ],
-      "abilityMixins": [
-        {
-          "$type": "AttachToGadgetStateMixin",
-          "modifierName": "BulletEffect"
-        }
-      ],
-      "abilityName": "SceneObj_Activity_Common_Property_Ani_Prop_BulletHell_Barrage_Bullet_02",
       "onAdded": [
         {
           "$type": "FireSubEmitterEffect",
@@ -429,117 +429,14 @@
         },
         {
           "$type": "SetSystemValueToOverrideMap",
-          "OAEJNDBEDPO": -1.0,
+          "doOffStage": true,
           "key": "ElementLevelCo",
           "type": "ElementLevelCo",
-          "doOffStage": true
+          "OAEJNDBEDPO": -1.0
         },
         {
           "$type": "ApplyModifier",
           "modifierName": "Timer"
-        }
-      ],
-      "abilitySpecials": {
-        "RandomTimeRatio": 0.0,
-        "VelocityRatio": 18.0,
-        "ElementLevelCo": 1.0,
-        "DamageRatio": 2.5
-      }
-    }
-  },
-  {
-    "Default": {
-      "modifiers": {
-        "BulletEffect": {
-          "onReconnect": [
-            {
-              "$type": "KillSelf",
-              "MBGFJOOIMOK": [
-                70291291
-              ]
-            }
-          ],
-          "onAdded": [
-            {
-              "$type": "AttachEffect",
-              "ILLLPEOODKP": "",
-              "scale": 1.0,
-              "effectPattern": "Eff_SceneObj_ActivityAutoTimeStop_Buttle_04",
-              "effectTempleteID": -1.0
-            }
-          ],
-          "elementDurability": 100.0,
-          "modifierName": "",
-          "AIHNJLDFEGJ": 0.0
-        }
-      },
-      "onAbilityStart": [
-        {
-          "$type": "Predicated",
-          "successActions": [
-            {
-              "$type": "SetGlobalValue",
-              "key": "gv_bulletHitting",
-              "minValue": 0.0,
-              "maxValue": 0.0,
-              "CBOMLBFIPJM": 1.0
-            },
-            {
-              "$type": "FireSubEmitterEffect",
-              "effectPattern": "Eff_SceneObj_ActivityAutoTimeStop_Hit_02"
-            },
-            {
-              "$type": "TriggerAttackEvent",
-              "targetType": "Enemy",
-              "attackEvent": {
-                "attackInfo": {
-                  "attackProperty": {
-                    "attackType": "Melee",
-                    "damagePercentageRatio": 0.0,
-                    "ignoreAttackerProperty": true,
-                    "strikeType": "Pierce",
-                    "enBreak": 200.0,
-                    "trueDamage": true,
-                    "elementDurability": 100.0,
-                    "arkheGrade": 0.0
-                  },
-                  "hitPattern": {
-                    "FLFCIDDNMNA": "",
-                    "onHitEffectName": "default",
-                    "hitImpulseType": "LV3"
-                  },
-                  "attenuationGroup": "default",
-                  "attenuationTag": "",
-                  "attackTag": "BulletHell_BulletHit_1"
-                },
-                "attackPattern": {
-                  "$type": "HCAGHMDHEGG",
-                  "radius": 0.5,
-                  "triggerType": "TriggerNoRepeat",
-                  "born": {
-                    "$type": "NHPKNMOMIFH"
-                  }
-                }
-              }
-            },
-            {
-              "$type": "KillSelf",
-              "MBGFJOOIMOK": [
-                70291291
-              ]
-            }
-          ],
-          "failActions": [
-            {
-              "$type": "TriggerAbility",
-              "abilityName": "SceneObj_Activity_Common_Property_Ani_Prop_BulletHell_Barrage_Bullet_toCoin"
-            }
-          ],
-          "targetPredicates": [
-            {
-              "$type": "NBMIFIMDPII"
-            }
-          ]
         }
       ],
       "onKill": [
@@ -547,7 +444,11 @@
           "$type": "RemoveModifier",
           "modifierName": "BulletEffect"
         }
-      ],
+      ]
+    }
+  },
+  {
+    "Default": {
       "abilityMixins": [
         {
           "$type": "AttachToGadgetStateMixin",
@@ -555,6 +456,103 @@
         }
       ],
       "abilityName": "SceneObj_Level_Common_Property_Ani_Prop_BulletHell_StaticBullet_01",
+      "abilitySpecials": {
+        "ElementLevelCo": 1.0,
+        "DamageRatio": 2.5
+      },
+      "modifiers": {
+        "BulletEffect": {
+          "elementDurability": 100.0,
+          "modifierName": "",
+          "onAdded": [
+            {
+              "$type": "AttachEffect",
+              "effectPattern": "Eff_SceneObj_ActivityAutoTimeStop_Buttle_04",
+              "effectTempleteID": -1.0,
+              "scale": 1.0,
+              "ILLLPEOODKP": ""
+            }
+          ],
+          "onReconnect": [
+            {
+              "$type": "KillSelf",
+              "configIdArray": [
+                70291291
+              ]
+            }
+          ],
+          "AIHNJLDFEGJ": 0.0
+        }
+      },
+      "onAbilityStart": [
+        {
+          "$type": "Predicated",
+          "failActions": [
+            {
+              "$type": "TriggerAbility",
+              "abilityName": "SceneObj_Activity_Common_Property_Ani_Prop_BulletHell_Barrage_Bullet_toCoin"
+            }
+          ],
+          "successActions": [
+            {
+              "$type": "SetGlobalValue",
+              "key": "gv_bulletHitting",
+              "maxValue": 0.0,
+              "minValue": 0.0,
+              "value": 1.0
+            },
+            {
+              "$type": "FireSubEmitterEffect",
+              "effectPattern": "Eff_SceneObj_ActivityAutoTimeStop_Hit_02"
+            },
+            {
+              "$type": "TriggerAttackEvent",
+              "attackEvent": {
+                "attackInfo": {
+                  "attackProperty": {
+                    "attackType": "Melee",
+                    "damagePercentageRatio": 0.0,
+                    "elementDurability": 100.0,
+                    "enBreak": 200.0,
+                    "ignoreAttackerProperty": true,
+                    "strikeType": "Pierce",
+                    "trueDamage": true,
+                    "IIPHCFEONLK": 0.0
+                  },
+                  "attackTag": "BulletHell_BulletHit_1",
+                  "attenuationGroup": "default",
+                  "attenuationTag": "",
+                  "hitPattern": {
+                    "hitImpulseType": "LV3",
+                    "onHitEffectName": "default",
+                    "FLFCIDDNMNA": ""
+                  }
+                },
+                "attackPattern": {
+                  "$type": "ConfigAttackSphere",
+                  "born": {
+                    "$type": "ConfigBornByCollisionPoint"
+                  },
+                  "radius": 0.5,
+                  "triggerType": "TriggerNoRepeat"
+                }
+              },
+              "targetType": "Enemy"
+            },
+            {
+              "$type": "KillSelf",
+              "configIdArray": [
+                70291291
+              ]
+            }
+          ],
+          "targetPredicates": [
+            {
+              "$type": "ByTargetGadgetState"
+            }
+          ]
+        }
+      ],
       "onAdded": [
         {
           "$type": "FireSubEmitterEffect",
@@ -562,22 +560,34 @@
         },
         {
           "$type": "SetSystemValueToOverrideMap",
-          "OAEJNDBEDPO": -1.0,
+          "doOffStage": true,
           "key": "ElementLevelCo",
           "type": "ElementLevelCo",
-          "doOffStage": true
+          "OAEJNDBEDPO": -1.0
         }
       ],
-      "abilitySpecials": {
-        "ElementLevelCo": 1.0,
-        "DamageRatio": 2.5
-      }
+      "onKill": [
+        {
+          "$type": "RemoveModifier",
+          "modifierName": "BulletEffect"
+        }
+      ]
     }
   },
   {
     "Default": {
+      "abilityMixins": [
+        {
+          "$type": "AttachToGadgetStateMixin",
+          "gadgetState": 201,
+          "modifierName": "CoinEffect"
+        }
+      ],
+      "abilityName": "SceneObj_Activity_Common_Property_Ani_Prop_BulletHell_Barrage_Bullet_toCoin",
       "modifiers": {
         "CoinEffect": {
+          "elementDurability": 100.0,
+          "modifierName": "",
           "onAdded": [
             {
               "$type": "Predicated",
@@ -588,10 +598,10 @@
                 },
                 {
                   "$type": "AttachEffect",
-                  "ILLLPEOODKP": "",
-                  "scale": 1.0,
                   "effectPattern": "Eff_SceneObj_AdventurerCoin_NoShadows_01",
-                  "effectTempleteID": -1.0
+                  "effectTempleteID": -1.0,
+                  "scale": 1.0,
+                  "ILLLPEOODKP": ""
                 },
                 {
                   "$type": "TriggerAbility",
@@ -600,10 +610,10 @@
               ],
               "targetPredicates": [
                 {
-                  "$type": "EOFDCELPGFO",
-                  "CBOMLBFIPJM": 0.0,
+                  "$type": "ByTargetGlobalValue",
                   "compareType": "NoneOrEqual",
-                  "key": "gv_bulletHitting"
+                  "key": "gv_bulletHitting",
+                  "value": 0.0
                 }
               ]
             }
@@ -612,8 +622,6 @@
             "Actor_BulletMoveSpeedRatio": -1.0,
             "Actor_BulletMoveAngularVelocityRatio": -1.0
           },
-          "elementDurability": 100.0,
-          "modifierName": "",
           "AIHNJLDFEGJ": 0.0
         }
       },
@@ -627,35 +635,35 @@
                 {
                   "$type": "SetGlobalValue",
                   "key": "gv_playerEntered",
-                  "minValue": 0.0,
                   "maxValue": 0.0,
-                  "CBOMLBFIPJM": 0.0
+                  "minValue": 0.0,
+                  "value": 0.0
                 },
                 {
                   "$type": "Predicated",
-                  "successActions": [
-                    {
-                      "$type": "FireEffect",
-                      "effectPattern": "Eff_SceneObj_GlideChampCoin_Hit_Super",
-                      "scale": 1.0,
-                      "ILLLPEOODKP": "",
-                      "effectTempleteID": -1.0
-                    }
-                  ],
                   "failActions": [
                     {
                       "$type": "FireEffect",
                       "effectPattern": "Eff_SceneObj_GlideChampCoin_Hit",
+                      "effectTempleteID": -1.0,
                       "scale": 1.0,
-                      "ILLLPEOODKP": "",
-                      "effectTempleteID": -1.0
+                      "ILLLPEOODKP": ""
+                    }
+                  ],
+                  "successActions": [
+                    {
+                      "$type": "FireEffect",
+                      "effectPattern": "Eff_SceneObj_GlideChampCoin_Hit_Super",
+                      "effectTempleteID": -1.0,
+                      "scale": 1.0,
+                      "ILLLPEOODKP": ""
                     }
                   ],
                   "targetPredicates": [
                     {
-                      "$type": "EOFDCELPGFO",
-                      "CBOMLBFIPJM": 2.0,
-                      "key": "SGV_CoinType"
+                      "$type": "ByTargetGlobalValue",
+                      "key": "SGV_CoinType",
+                      "value": 2.0
                     }
                   ]
                 },
@@ -664,40 +672,40 @@
                   "key": "gv_SubTimerAddNotify",
                   "maxValue": 0.0,
                   "minValue": 0.0,
-                  "CBOMLBFIPJM": 1.0,
                   "target": "TempTarget",
+                  "value": 1.0,
                   "DJOOHHCGMDG": {
                     "GCGFDNHKCIH": "_ABILITY_BulletToCoin_TargetTeam"
                   }
                 },
                 {
                   "$type": "ServerLuaCall",
+                  "funcName": "SLC_Coin_Collected",
+                  "luaCallType": "FromGroup",
                   "param1": "SGV_CoinType",
                   "param2": 0.0,
-                  "paramNum": 1,
-                  "funcName": "SLC_Coin_Collected",
-                  "AHCNJKIEMPP": 0.0,
-                  "luaCallType": "FromGroup"
+                  "param3": 0.0,
+                  "paramNum": 1
                 },
                 {
                   "$type": "KillSelf",
-                  "MBGFJOOIMOK": [
+                  "configIdArray": [
                     70291294,
                     70291295
                   ]
                 }
               ],
+              "target": "TempTarget",
               "targetPredicates": [
                 {
-                  "$type": "CNFMGJJEOPM",
-                  "NJICAELBCCB": "",
-                  "JBOGOHPICML": "",
+                  "$type": "ByTargetPositionToSelfPosition",
                   "compareType": "XYZ",
-                  "CBOMLBFIPJM": 2.5,
-                  "logic": "LesserOrEqual"
+                  "logic": "LesserOrEqual",
+                  "value": 2.5,
+                  "JBOGOHPICML": "",
+                  "NJICAELBCCB": ""
                 }
               ],
-              "target": "TempTarget",
               "DJOOHHCGMDG": {
                 "GCGFDNHKCIH": "_ABILITY_BulletToCoin_TargetTeam"
               }
@@ -705,59 +713,70 @@
           ],
           "targetPredicates": [
             {
-              "$type": "EOFDCELPGFO",
-              "CBOMLBFIPJM": 1.0,
-              "key": "gv_playerEntered"
+              "$type": "ByTargetGlobalValue",
+              "key": "gv_playerEntered",
+              "value": 1.0
             }
           ]
         }
       ],
-      "ANHJPOLNHIG": [
-        "SGV_CoinType"
-      ],
-      "onKill": [
-        {
-          "$type": "RemoveModifier",
-          "modifierName": "CoinEffect"
-        }
-      ],
-      "abilityMixins": [
-        {
-          "$type": "AttachToGadgetStateMixin",
-          "modifierName": "CoinEffect",
-          "gadgetState": 201
-        }
-      ],
-      "abilityName": "SceneObj_Activity_Common_Property_Ani_Prop_BulletHell_Barrage_Bullet_toCoin",
-      "PFJMEMFDGOH": [
+      "onFieldEnter": [
         {
           "$type": "Predicated",
-          "successActions": [
+          "failActions": [
             {
               "$type": "Predicated",
               "successActions": [
                 {
-                  "$type": "FireEffect",
-                  "effectPattern": "Eff_SceneObj_GlideChampCoin_Hit_Super",
-                  "scale": 1.0,
-                  "ILLLPEOODKP": "",
-                  "effectTempleteID": -1.0
+                  "$type": "SetTargetToTargetKey",
+                  "target": "TargetTeam",
+                  "targetKey": "_ABILITY_BulletToCoin_TargetTeam"
+                },
+                {
+                  "$type": "SetGlobalValue",
+                  "key": "gv_playerEntered",
+                  "maxValue": 0.0,
+                  "minValue": 0.0,
+                  "value": 1.0
                 }
               ],
+              "target": "Target",
+              "targetPredicates": [
+                {
+                  "$type": "ByEntityTypes",
+                  "entityTypes": [
+                    "Avatar"
+                  ]
+                }
+              ]
+            }
+          ],
+          "successActions": [
+            {
+              "$type": "Predicated",
               "failActions": [
                 {
                   "$type": "FireEffect",
                   "effectPattern": "Eff_SceneObj_GlideChampCoin_Hit",
+                  "effectTempleteID": -1.0,
                   "scale": 1.0,
-                  "ILLLPEOODKP": "",
-                  "effectTempleteID": -1.0
+                  "ILLLPEOODKP": ""
+                }
+              ],
+              "successActions": [
+                {
+                  "$type": "FireEffect",
+                  "effectPattern": "Eff_SceneObj_GlideChampCoin_Hit_Super",
+                  "effectTempleteID": -1.0,
+                  "scale": 1.0,
+                  "ILLLPEOODKP": ""
                 }
               ],
               "targetPredicates": [
                 {
-                  "$type": "EOFDCELPGFO",
-                  "CBOMLBFIPJM": 2.0,
-                  "key": "SGV_CoinType"
+                  "$type": "ByTargetGlobalValue",
+                  "key": "SGV_CoinType",
+                  "value": 2.0
                 }
               ]
             },
@@ -766,75 +785,56 @@
               "key": "gv_SubTimerAddNotify",
               "maxValue": 0.0,
               "minValue": 0.0,
-              "CBOMLBFIPJM": 1.0,
-              "target": "TargetTeam"
+              "target": "TargetTeam",
+              "value": 1.0
             },
             {
               "$type": "ServerLuaCall",
+              "funcName": "SLC_Coin_Collected",
+              "luaCallType": "FromGroup",
               "param1": "SGV_CoinType",
               "param2": 0.0,
-              "paramNum": 1,
-              "funcName": "SLC_Coin_Collected",
-              "AHCNJKIEMPP": 0.0,
-              "luaCallType": "FromGroup"
+              "param3": 0.0,
+              "paramNum": 1
             },
             {
               "$type": "KillSelf",
-              "MBGFJOOIMOK": [
+              "configIdArray": [
                 70291294,
                 70291295
               ]
             }
           ],
-          "failActions": [
-            {
-              "$type": "Predicated",
-              "successActions": [
-                {
-                  "$type": "SetTargetToTargetKey",
-                  "targetKey": "_ABILITY_BulletToCoin_TargetTeam",
-                  "target": "TargetTeam"
-                },
-                {
-                  "$type": "SetGlobalValue",
-                  "key": "gv_playerEntered",
-                  "minValue": 0.0,
-                  "maxValue": 0.0,
-                  "CBOMLBFIPJM": 1.0
-                }
-              ],
-              "targetPredicates": [
-                {
-                  "$type": "DEOFBICNFHF",
-                  "entityTypes": [
-                    "Avatar"
-                  ]
-                }
-              ],
-              "target": "Target"
-            }
-          ],
+          "target": "Target",
           "targetPredicates": [
             {
-              "$type": "DEOFBICNFHF",
+              "$type": "ByEntityTypes",
               "entityTypes": [
                 "Avatar"
               ]
             },
             {
-              "$type": "NBMIFIMDPII",
+              "$type": "ByTargetGadgetState",
               "gadgetState": 201,
               "target": "Self"
             },
             {
-              "$type": "EOFDCELPGFO",
-              "CBOMLBFIPJM": 0.0,
+              "$type": "ByTargetGlobalValue",
               "compareType": "NoneOrEqual",
-              "key": "gv_bulletHitting"
+              "key": "gv_bulletHitting",
+              "value": 0.0
             }
-          ],
-          "target": "Target"
+          ]
         }
+      ],
+      "onKill": [
+        {
+          "$type": "RemoveModifier",
+          "modifierName": "CoinEffect"
+        }
+      ],
+      "ANHJPOLNHIG": [
+        "SGV_CoinType"
       ]
     }
   },
@@ -846,7 +846,7 @@
           "actions": [
             {
               "$type": "KillSelf",
-              "MBGFJOOIMOK": [
+              "configIdArray": [
                 70291294,
                 70291295
               ]
@@ -860,17 +860,9 @@
   },
   {
     "Default": {
+      "abilityName": "SceneObj_Level_Common_Property_Ani_Prop_CoinDummy_beHit",
       "modifiers": {
         "BarFunction": {
-          "onRemoved": [
-            {
-              "$type": "KillSelf",
-              "MBGFJOOIMOK": [
-                70291292,
-                70291293
-              ]
-            }
-          ],
           "elementDurability": 100.0,
           "modifierMixins": [
             {
@@ -879,7 +871,6 @@
             }
           ],
           "modifierName": "",
-          "AIHNJLDFEGJ": 0.0,
           "onBeingHit": [
             {
               "$type": "SetAnimatorTrigger",
@@ -890,57 +881,67 @@
               "key": "gv_curCoinIndex",
               "maxValue": 0.0,
               "minValue": 0.0,
-              "CBOMLBFIPJM": "SGV_createCoinPerHit"
+              "value": "SGV_createCoinPerHit"
             },
             {
               "$type": "ServerLuaCall",
+              "funcName": "SLC_BulletHell_GenCoin",
+              "luaCallType": "FromGroup",
               "param1": "gv_curCoinIndex",
               "param2": "SGV_maxCoinIndex",
-              "paramNum": 3,
-              "funcName": "SLC_BulletHell_GenCoin",
-              "AHCNJKIEMPP": "SGV_createCoinPerHit",
-              "luaCallType": "FromGroup"
+              "param3": "SGV_createCoinPerHit",
+              "paramNum": 3
             },
             {
               "$type": "AddElementDurability",
-              "CBOMLBFIPJM": [
+              "doOffStage": true,
+              "maxValue": 100.0,
+              "minValue": 0.0,
+              "modifierName": "BarFunction",
+              "useLimitRange": true,
+              "value": [
                 0.0,
                 "SGV_costHealthPerHit",
                 "SUB"
-              ],
-              "useLimitRange": true,
-              "minValue": 0.0,
-              "maxValue": 100.0,
-              "modifierName": "BarFunction",
-              "doOffStage": true
+              ]
             }
-          ]
+          ],
+          "onRemoved": [
+            {
+              "$type": "KillSelf",
+              "configIdArray": [
+                70291292,
+                70291293
+              ]
+            }
+          ],
+          "AIHNJLDFEGJ": 0.0
         }
       },
-      "ANHJPOLNHIG": [
-        "gv_curCoinIndex",
-        "SGV_maxCoinIndex",
-        "SGV_createCoinPerHit",
-        "SGV_costHealthPerHit"
-      ],
-      "abilityName": "SceneObj_Level_Common_Property_Ani_Prop_CoinDummy_beHit",
       "onAdded": [
         {
           "$type": "SetGlobalValue",
           "key": "gv_curCoinIndex",
-          "minValue": 0.0,
           "maxValue": 0.0,
-          "CBOMLBFIPJM": 0.0
+          "minValue": 0.0,
+          "value": 0.0
         },
         {
           "$type": "ApplyModifier",
           "modifierName": "BarFunction"
         }
+      ],
+      "ANHJPOLNHIG": [
+        "gv_curCoinIndex",
+        "SGV_maxCoinIndex",
+        "SGV_createCoinPerHit",
+        "SGV_costHealthPerHit"
       ]
     }
   },
   {
     "Default": {
+      "abilityName": "SceneObj_Level_Common_Property_Ani_Prop_CoinDummySmall_Eff",
       "modifiers": {
         "onHitEffect": {
           "elementDurability": 100.0,
@@ -948,158 +949,173 @@
           "AIHNJLDFEGJ": 0.0
         }
       },
-      "onKill": [
-        {
-          "$type": "FireEffect",
-          "effectPattern": "Eff_SceneObj_SmallMegaModel_Coin_01_Die",
-          "scale": 1.0,
-          "ILLLPEOODKP": "",
-          "effectTempleteID": -1.0
-        }
-      ],
-      "abilityName": "SceneObj_Level_Common_Property_Ani_Prop_CoinDummySmall_Eff",
       "onAdded": [
         {
           "$type": "FireEffect",
           "effectPattern": "Eff_SceneObj_SmallMegaModel_01_Appear",
+          "effectTempleteID": -1.0,
           "scale": 1.0,
-          "ILLLPEOODKP": "",
-          "effectTempleteID": -1.0
+          "ILLLPEOODKP": ""
         },
         {
           "$type": "ApplyModifier",
           "modifierName": "onHitEffect"
+        }
+      ],
+      "onKill": [
+        {
+          "$type": "FireEffect",
+          "effectPattern": "Eff_SceneObj_SmallMegaModel_Coin_01_Die",
+          "effectTempleteID": -1.0,
+          "scale": 1.0,
+          "ILLLPEOODKP": ""
         }
       ]
     }
   },
   {
     "Default": {
+      "abilityName": "SceneObj_Level_Common_Property_Ani_Prop_CoinDummyBig_Eff",
       "modifiers": {
         "onHitEffect": {
           "elementDurability": 100.0,
           "modifierName": "",
-          "AIHNJLDFEGJ": 0.0,
           "onBeingHit": [
             {
               "$type": "FireEffect",
               "effectPattern": "Eff_SceneObj_BigMegaModel_01_Coin_Hit",
+              "effectTempleteID": -1.0,
               "scale": 1.0,
-              "ILLLPEOODKP": "",
-              "effectTempleteID": -1.0
+              "ILLLPEOODKP": ""
             }
-          ]
+          ],
+          "AIHNJLDFEGJ": 0.0
         }
       },
-      "onKill": [
-        {
-          "$type": "FireEffect",
-          "effectPattern": "Eff_SceneObj_BigMegaModel_01_Die",
-          "scale": 1.0,
-          "ILLLPEOODKP": "",
-          "effectTempleteID": -1.0
-        }
-      ],
-      "abilityName": "SceneObj_Level_Common_Property_Ani_Prop_CoinDummyBig_Eff",
       "onAdded": [
         {
           "$type": "FireEffect",
           "effectPattern": "Eff_SceneObj_BigMegaModel_01_Appear",
+          "effectTempleteID": -1.0,
           "scale": 1.0,
-          "ILLLPEOODKP": "",
-          "effectTempleteID": -1.0
+          "ILLLPEOODKP": ""
         },
         {
           "$type": "ApplyModifier",
           "modifierName": "onHitEffect"
+        }
+      ],
+      "onKill": [
+        {
+          "$type": "FireEffect",
+          "effectPattern": "Eff_SceneObj_BigMegaModel_01_Die",
+          "effectTempleteID": -1.0,
+          "scale": 1.0,
+          "ILLLPEOODKP": ""
         }
       ]
     }
   },
   {
     "Default": {
+      "abilityMixins": [
+        {
+          "$type": "AttachModifierToSelfGlobalValueMixin",
+          "defaultGlobalValueOnCreate": 0.0,
+          "globalValueKey": "gv_playerReach",
+          "modifierNameSteps": [
+            "LeaserWall_GadgetTimer"
+          ],
+          "valueSteps": [
+            0.5,
+            1.5
+          ]
+        }
+      ],
+      "abilityName": "SceneObj_Level_Common_Property_Ani_Prop_LeaserWall_01",
       "modifiers": {
         "delay_enableField": {
           "duration": 2.0,
+          "elementDurability": 100.0,
+          "modifierName": "",
+          "onAdded": [
+            {
+              "$type": "EnableSceneTransformByName",
+              "transformNames": [
+                "FieldRoot"
+              ]
+            }
+          ],
           "onRemoved": [
             {
               "$type": "ApplyModifier",
               "modifierName": "enableField"
             }
           ],
-          "onAdded": [
-            {
-              "$type": "EnableSceneTransformByName",
-              "PLDFIIMNOCD": [
-                "FieldRoot"
-              ]
-            }
-          ],
-          "elementDurability": 100.0,
-          "modifierName": "",
           "AIHNJLDFEGJ": 0.0
         },
         "enableField": {
+          "elementDurability": 100.0,
+          "modifierName": "",
           "onAdded": [
             {
               "$type": "EnableSceneTransformByName",
               "setEnable": true,
-              "PLDFIIMNOCD": [
+              "transformNames": [
                 "FieldRoot"
               ]
             }
           ],
-          "elementDurability": 100.0,
-          "modifierName": "",
           "AIHNJLDFEGJ": 0.0
         },
         "Leaser_Effect_delay": {
           "duration": 2.0,
+          "elementDurability": 100.0,
+          "modifierName": "",
           "onRemoved": [
             {
               "$type": "ApplyModifier",
               "modifierName": "Leaser_Effect"
             }
           ],
-          "elementDurability": 100.0,
-          "modifierName": "",
           "AIHNJLDFEGJ": 0.0
         },
         "Leaser_Effect": {
+          "elementDurability": 100.0,
+          "modifierName": "",
           "onAdded": [
             {
               "$type": "AttachEffect",
-              "ILLLPEOODKP": "",
               "born": {
-                "$type": "BGOLIIIHLMO",
+                "$type": "ConfigBornByAttachPoint",
                 "attachPointName": "leaserPoint1",
                 "attachPointTargetType": "Self",
                 "useRotation": true
               },
-              "scale": 1.0,
               "effectPattern": "Eff_SceneObj_MegaRayWall_01",
-              "effectTempleteID": -1.0
+              "effectTempleteID": -1.0,
+              "scale": 1.0,
+              "ILLLPEOODKP": ""
             },
             {
               "$type": "AttachEffect",
-              "ILLLPEOODKP": "",
               "born": {
-                "$type": "BGOLIIIHLMO",
+                "$type": "ConfigBornByAttachPoint",
                 "attachPointName": "leaserPoint2",
                 "attachPointTargetType": "Self",
                 "useRotation": true
               },
-              "scale": 1.0,
               "effectPattern": "Eff_SceneObj_MegaRayWall_01",
-              "effectTempleteID": -1.0
+              "effectTempleteID": -1.0,
+              "scale": 1.0,
+              "ILLLPEOODKP": ""
             }
           ],
-          "elementDurability": 100.0,
-          "modifierName": "",
           "AIHNJLDFEGJ": 0.0
         },
         "LeaserWall_GadgetTimer": {
-          "thinkInterval": 0.25,
+          "elementDurability": 100.0,
+          "modifierName": "",
           "onAdded": [
             {
               "$type": "Predicated",
@@ -1117,21 +1133,19 @@
                   "abilityName": "SceneObj_Level_Common_Property_Ani_Prop_LeaserWall_01"
                 }
               ],
+              "target": "TempTarget",
               "targetPredicates": [
                 {
-                  "$type": "LJBLAFGJKGI",
+                  "$type": "ByHasModifier",
                   "modifierName": "LeaserWall_TeamTimer",
                   "target": "TempTarget"
                 }
               ],
-              "target": "TempTarget",
               "DJOOHHCGMDG": {
                 "GCGFDNHKCIH": "_ABILITY_LeaserWall_TargetTeam"
               }
             }
           ],
-          "elementDurability": 100.0,
-          "modifierName": "",
           "onThinkInterval": [
             {
               "$type": "Predicated",
@@ -1149,19 +1163,20 @@
                   "abilityName": "SceneObj_Level_Common_Property_Ani_Prop_LeaserWall_01"
                 }
               ],
+              "target": "TempTarget",
               "targetPredicates": [
                 {
-                  "$type": "LJBLAFGJKGI",
+                  "$type": "ByHasModifier",
                   "modifierName": "LeaserWall_TeamTimer",
                   "target": "TempTarget"
                 }
               ],
-              "target": "TempTarget",
               "DJOOHHCGMDG": {
                 "GCGFDNHKCIH": "_ABILITY_LeaserWall_TargetTeam"
               }
             }
           ],
+          "thinkInterval": 0.25,
           "AIHNJLDFEGJ": 0.0
         },
         "LeaserWall_TeamTimer": {
@@ -1171,123 +1186,51 @@
           "AIHNJLDFEGJ": 0.0
         }
       },
-      "MKDAOFGPAEM": [
-        {
-          "$type": "Predicated",
-          "successActions": [
-            {
-              "$type": "SetGlobalValue",
-              "key": "gv_playerReach",
-              "minValue": 0.0,
-              "maxValue": 0.0,
-              "CBOMLBFIPJM": 0.0
-            }
-          ],
-          "targetPredicates": [
-            {
-              "$type": "DEOFBICNFHF",
-              "entityTypes": [
-                "Avatar"
-              ]
-            }
-          ],
-          "target": "Target"
-        }
-      ],
       "onAbilityStart": [
         {
           "$type": "TriggerAttackEvent",
-          "targetType": "Enemy",
           "attackEvent": {
             "attackInfo": {
               "attackProperty": {
                 "attackType": "Melee",
                 "damagePercentageRatio": 0.0,
+                "elementDurability": 100.0,
+                "enBreak": 200.0,
                 "ignoreAttackerProperty": true,
                 "strikeType": "Pierce",
-                "enBreak": 200.0,
                 "trueDamage": true,
-                "elementDurability": 100.0,
-                "arkheGrade": 0.0
+                "IIPHCFEONLK": 0.0
               },
-              "hitPattern": {
-                "FLFCIDDNMNA": "",
-                "onHitEffectName": "default",
-                "hitImpulseType": "LV3"
-              },
+              "attackTag": "BulletHell_BulletHit_3",
               "attenuationGroup": "default",
               "attenuationTag": "",
-              "attackTag": "BulletHell_BulletHit_3"
+              "hitPattern": {
+                "hitImpulseType": "LV3",
+                "onHitEffectName": "default",
+                "FLFCIDDNMNA": ""
+              }
             },
             "attackPattern": {
-              "$type": "CBACJBPBPOL",
-              "size": {
-                "x": 10.0,
-                "z": 0.6,
-                "y": 2.0
-              },
-              "triggerType": "TriggerNoRepeat",
-              "entityAttackFilter": "IgnoreSceneProp",
+              "$type": "ConfigAttackBox",
               "born": {
-                "$type": "NABPLNFPHCK",
-                "useRotation": true,
+                "$type": "ConfigBornBySelf",
                 "offset": {
                   "x": 0.0,
-                  "z": 0.0,
-                  "y": 0.0
-                }
-              }
+                  "y": 0.0,
+                  "z": 0.0
+                },
+                "useRotation": true
+              },
+              "entityAttackFilter": "IgnoreSceneProp",
+              "size": {
+                "x": 0.6,
+                "y": 2.0,
+                "z": 10.0
+              },
+              "triggerType": "TriggerNoRepeat"
             }
-          }
-        }
-      ],
-      "onKill": [
-        {
-          "$type": "RemoveModifier",
-          "modifierName": "Leaser_Effect"
-        }
-      ],
-      "abilityMixins": [
-        {
-          "$type": "AttachModifierToSelfGlobalValueMixin",
-          "modifierNameSteps": [
-            "LeaserWall_GadgetTimer"
-          ],
-          "valueSteps": [
-            0.5,
-            1.5
-          ],
-          "globalValueKey": "gv_playerReach",
-          "defaultGlobalValueOnCreate": 0.0
-        }
-      ],
-      "abilityName": "SceneObj_Level_Common_Property_Ani_Prop_LeaserWall_01",
-      "PFJMEMFDGOH": [
-        {
-          "$type": "Predicated",
-          "successActions": [
-            {
-              "$type": "SetTargetToTargetKey",
-              "targetKey": "_ABILITY_LeaserWall_TargetTeam",
-              "target": "TargetTeam"
-            },
-            {
-              "$type": "SetGlobalValue",
-              "key": "gv_playerReach",
-              "minValue": 0.0,
-              "maxValue": 0.0,
-              "CBOMLBFIPJM": 1.0
-            }
-          ],
-          "targetPredicates": [
-            {
-              "$type": "DEOFBICNFHF",
-              "entityTypes": [
-                "Avatar"
-              ]
-            }
-          ],
-          "target": "Target"
+          },
+          "targetType": "Enemy"
         }
       ],
       "onAdded": [
@@ -1298,6 +1241,63 @@
         {
           "$type": "ApplyModifier",
           "modifierName": "delay_enableField"
+        }
+      ],
+      "onFieldEnter": [
+        {
+          "$type": "Predicated",
+          "successActions": [
+            {
+              "$type": "SetTargetToTargetKey",
+              "target": "TargetTeam",
+              "targetKey": "_ABILITY_LeaserWall_TargetTeam"
+            },
+            {
+              "$type": "SetGlobalValue",
+              "key": "gv_playerReach",
+              "maxValue": 0.0,
+              "minValue": 0.0,
+              "value": 1.0
+            }
+          ],
+          "target": "Target",
+          "targetPredicates": [
+            {
+              "$type": "ByEntityTypes",
+              "entityTypes": [
+                "Avatar"
+              ]
+            }
+          ]
+        }
+      ],
+      "onFieldExit": [
+        {
+          "$type": "Predicated",
+          "successActions": [
+            {
+              "$type": "SetGlobalValue",
+              "key": "gv_playerReach",
+              "maxValue": 0.0,
+              "minValue": 0.0,
+              "value": 0.0
+            }
+          ],
+          "target": "Target",
+          "targetPredicates": [
+            {
+              "$type": "ByEntityTypes",
+              "entityTypes": [
+                "Avatar"
+              ]
+            }
+          ]
+        }
+      ],
+      "onKill": [
+        {
+          "$type": "RemoveModifier",
+          "modifierName": "Leaser_Effect"
         }
       ]
     }

@@ -1,6 +1,32 @@
 [
   {
     "Default": {
+      "abilityMixins": [
+        {
+          "$type": "AttachToAnimatorStateIDMixin",
+          "modifierName": "Modifier_Heal_OnlyOne",
+          "stateIDs": [
+            "Heal_BS",
+            "Heal"
+          ],
+          "LJPPDIGCJMJ": ""
+        },
+        {
+          "$type": "AttachModifierToSelfGlobalValueMixin",
+          "defaultGlobalValueOnCreate": 0.0,
+          "globalValueKey": "_NeedHornLightCheck",
+          "modifierNameSteps": [
+            "Blank",
+            "Modifier_HornLightCheck"
+          ],
+          "valueSteps": [
+            -0.5,
+            0.5,
+            1.5
+          ]
+        }
+      ],
+      "abilityName": "Animal_Reindeer_Heal_BS",
       "modifiers": {
         "Blank": {
           "elementDurability": 100.0,
@@ -8,104 +34,103 @@
           "AIHNJLDFEGJ": 0.0
         },
         "Modifier_ReconnectSupport": {
-          "onReconnect": [
-            {
-              "$type": "SetAnimatorBool",
-              "CBOMLBFIPJM": true,
-              "boolID": "Can_BeHit"
-            },
-            {
-              "$type": "SetGlobalValueV2",
-              "minValue": 0.0,
-              "key": "_Flee_Prepare",
-              "maxValue": 0.0,
-              "CBOMLBFIPJM": 1.0
-            },
-            {
-              "$type": "SetGlobalValueV2",
-              "minValue": 0.0,
-              "key": "_NeedHornLightCheck",
-              "maxValue": 0.0,
-              "CBOMLBFIPJM": 1.0
-            }
-          ],
+          "elementDurability": 100.0,
+          "modifierName": "",
           "onKill": [
             {
               "$type": "StartDither",
               "duration": 3.0,
               "predicates": [
                 {
-                  "$type": "DGBGFPCHLAB",
-                  "JLMHCHIHKJO": "DieDrawn"
+                  "$type": "ByDieStateFlag",
+                  "dieStateFlag": "DieDrawn"
                 }
               ]
             }
           ],
-          "elementDurability": 100.0,
-          "modifierName": "",
+          "onReconnect": [
+            {
+              "$type": "SetAnimatorBool",
+              "boolID": "Can_BeHit",
+              "value": true
+            },
+            {
+              "$type": "SetGlobalValueV2",
+              "key": "_Flee_Prepare",
+              "maxValue": 0.0,
+              "minValue": 0.0,
+              "value": 1.0
+            },
+            {
+              "$type": "SetGlobalValueV2",
+              "key": "_NeedHornLightCheck",
+              "maxValue": 0.0,
+              "minValue": 0.0,
+              "value": 1.0
+            }
+          ],
           "AIHNJLDFEGJ": 0.0
         },
         "Modifier_HornLightCheck": {
-          "thinkInterval": 6.0,
+          "elementDurability": 100.0,
+          "modifierName": "",
           "onAdded": [
             {
               "$type": "TriggerThinkInterval"
             }
           ],
-          "elementDurability": 100.0,
-          "modifierName": "",
           "onThinkInterval": [
             {
               "$type": "Predicated",
-              "successActions": [
-                {
-                  "$type": "SetAnimatorFloat",
-                  "floatID": "Emission",
-                  "CBOMLBFIPJM": 1.0
-                },
-                {
-                  "$type": "SetPoseBool",
-                  "CBOMLBFIPJM": true,
-                  "boolID": "ToResponse_ByTimer"
-                },
-                {
-                  "$type": "SetGlobalValueV2",
-                  "minValue": 0.0,
-                  "key": "_CanResponse",
-                  "maxValue": 0.0,
-                  "CBOMLBFIPJM": 1.0
-                },
-                {
-                  "$type": "SetGlobalValueV2",
-                  "minValue": 0.0,
-                  "key": "_CanResponse_Not",
-                  "maxValue": 0.0,
-                  "CBOMLBFIPJM": 0.0
-                },
-                {
-                  "$type": "RemoveUniqueModifier",
-                  "modifierName": "UNIQUE_Modifier_Response_Interval"
-                }
-              ],
               "failActions": [
                 {
                   "$type": "SetAnimatorFloat",
                   "floatID": "Emission",
-                  "CBOMLBFIPJM": 0.0
+                  "value": 0.0
                 },
                 {
                   "$type": "SetGlobalValueV2",
-                  "minValue": 0.0,
                   "key": "_CanResponse",
                   "maxValue": 0.0,
-                  "CBOMLBFIPJM": 0.0
+                  "minValue": 0.0,
+                  "value": 0.0
                 },
                 {
                   "$type": "SetGlobalValueV2",
-                  "minValue": 0.0,
                   "key": "_CanResponse_Not",
                   "maxValue": 0.0,
-                  "CBOMLBFIPJM": 1.0
+                  "minValue": 0.0,
+                  "value": 1.0
+                }
+              ],
+              "successActions": [
+                {
+                  "$type": "SetAnimatorFloat",
+                  "floatID": "Emission",
+                  "value": 1.0
+                },
+                {
+                  "$type": "SetPoseBool",
+                  "boolID": "ToResponse_ByTimer",
+                  "value": true
+                },
+                {
+                  "$type": "SetGlobalValueV2",
+                  "key": "_CanResponse",
+                  "maxValue": 0.0,
+                  "minValue": 0.0,
+                  "value": 1.0
+                },
+                {
+                  "$type": "SetGlobalValueV2",
+                  "key": "_CanResponse_Not",
+                  "maxValue": 0.0,
+                  "minValue": 0.0,
+                  "value": 0.0
+                },
+                {
+                  "$type": "RemoveUniqueModifier",
+                  "modifierName": "UNIQUE_Modifier_Response_Interval"
                 }
               ],
               "targetPredicates": [
@@ -116,59 +141,26 @@
               ]
             }
           ],
+          "thinkInterval": 6.0,
           "AIHNJLDFEGJ": 0.0
         },
         "Modifier_Heal_OnlyOne": {
-          "onRemoved": [
-            {
-              "$type": "SetAnimatorBool",
-              "CBOMLBFIPJM": true,
-              "boolID": "Can_BeHit"
-            },
-            {
-              "$type": "RemoveModifierByAbilityStateResistanceID",
-              "resistanceListID": 13002
-            },
-            {
-              "$type": "SetGlobalValueV2",
-              "minValue": 0.0,
-              "key": "_NeedHornLightCheck",
-              "maxValue": 0.0,
-              "CBOMLBFIPJM": 1.0
-            },
-            {
-              "$type": "ApplyModifier",
-              "modifierName": "Modifier_Heal_Open",
-              "otherTargets": {
-                "$type": "INIACGFCEDH",
-                "sizeRatio": 1.0,
-                "campTargetType": "Alliance",
-                "shapeName": "CircleR100H80"
-              },
-              "DNMKCEFIAPB": [
-                {
-                  "$type": "ILMHBGFOAJN",
-                  "MBGFJOOIMOK": [
-                    28021501
-                  ]
-                }
-              ]
-            }
-          ],
+          "elementDurability": 100.0,
+          "modifierName": "",
           "onAdded": [
             {
               "$type": "ApplyModifier",
               "modifierName": "Modifier_Heal_Close",
               "otherTargets": {
-                "$type": "INIACGFCEDH",
-                "sizeRatio": 1.0,
+                "$type": "SelectTargetsByShape",
                 "campTargetType": "Alliance",
-                "shapeName": "CircleR100H80"
+                "shapeName": "CircleR100H80",
+                "sizeRatio": 1.0
               },
-              "DNMKCEFIAPB": [
+              "predicatesForeach": [
                 {
                   "$type": "ILMHBGFOAJN",
-                  "MBGFJOOIMOK": [
+                  "configIdArray": [
                     28021501
                   ]
                 }
@@ -184,128 +176,136 @@
             },
             {
               "$type": "SetGlobalValueV2",
-              "minValue": 0.0,
               "key": "_NeedHornLightCheck",
               "maxValue": 0.0,
-              "CBOMLBFIPJM": 0.0
+              "minValue": 0.0,
+              "value": 0.0
+            }
+          ],
+          "onRemoved": [
+            {
+              "$type": "SetAnimatorBool",
+              "boolID": "Can_BeHit",
+              "value": true
+            },
+            {
+              "$type": "RemoveModifierByAbilityStateResistanceID",
+              "resistanceListID": 13002
+            },
+            {
+              "$type": "SetGlobalValueV2",
+              "key": "_NeedHornLightCheck",
+              "maxValue": 0.0,
+              "minValue": 0.0,
+              "value": 1.0
+            },
+            {
+              "$type": "ApplyModifier",
+              "modifierName": "Modifier_Heal_Open",
+              "otherTargets": {
+                "$type": "SelectTargetsByShape",
+                "campTargetType": "Alliance",
+                "shapeName": "CircleR100H80",
+                "sizeRatio": 1.0
+              },
+              "predicatesForeach": [
+                {
+                  "$type": "ILMHBGFOAJN",
+                  "configIdArray": [
+                    28021501
+                  ]
+                }
+              ]
             }
           ],
           "properties": {
             "Actor_EndureDelta": 0.0
           },
-          "elementDurability": 100.0,
-          "modifierName": "",
           "AIHNJLDFEGJ": 0.0
         },
         "Modifier_Heal_Close": {
           "duration": 0.5,
+          "elementDurability": 100.0,
+          "modifierName": "",
           "onAdded": [
             {
               "$type": "SetAnimatorFloat",
               "floatID": "Emission",
-              "CBOMLBFIPJM": 0.0
+              "value": 0.0
             },
             {
               "$type": "SetGlobalValueV2",
-              "minValue": 0.0,
               "key": "_CanResponse",
               "maxValue": 0.0,
-              "CBOMLBFIPJM": 0.0
+              "minValue": 0.0,
+              "value": 0.0
             },
             {
               "$type": "SetGlobalValueV2",
-              "minValue": 0.0,
               "key": "_CanResponse_Not",
               "maxValue": 0.0,
-              "CBOMLBFIPJM": 1.0
+              "minValue": 0.0,
+              "value": 1.0
             },
             {
               "$type": "SetGlobalValueV2",
-              "minValue": 0.0,
               "key": "_NeedHornLightCheck",
               "maxValue": 0.0,
-              "CBOMLBFIPJM": 0.0
+              "minValue": 0.0,
+              "value": 0.0
             }
           ],
-          "elementDurability": 100.0,
-          "modifierName": "",
           "AIHNJLDFEGJ": 0.0
         },
         "Modifier_Heal_Open": {
           "duration": 0.5,
+          "elementDurability": 100.0,
+          "modifierName": "",
           "onAdded": [
             {
               "$type": "SetGlobalValueV2",
-              "minValue": 0.0,
               "key": "_NeedHornLightCheck",
               "maxValue": 0.0,
-              "CBOMLBFIPJM": 1.0
+              "minValue": 0.0,
+              "value": 1.0
             }
           ],
-          "elementDurability": 100.0,
-          "modifierName": "",
           "AIHNJLDFEGJ": 0.0
         },
         "Modifier_HornTrigger": {
           "duration": 1.0,
+          "elementDurability": 100.0,
+          "modifierName": "",
           "onAdded": [
             {
               "$type": "SetAnimatorFloat",
               "floatID": "Emission",
-              "CBOMLBFIPJM": 2.0
+              "value": 2.0
             }
           ],
-          "elementDurability": 100.0,
-          "modifierName": "",
           "AIHNJLDFEGJ": 0.0
         }
       },
       "onAbilityStart": [
         {
           "$type": "FireEffect",
-          "effectPattern": "Eff_Animal_Reindeer_Heal",
-          "scale": 1.0,
           "born": {
-            "$type": "NABPLNFPHCK",
-            "useRotation": true,
+            "$type": "ConfigBornBySelf",
             "offset": {
               "y": 1.5
-            }
+            },
+            "useRotation": true
           },
-          "ILLLPEOODKP": "",
-          "effectTempleteID": -1.0
+          "effectPattern": "Eff_Animal_Reindeer_Heal",
+          "effectTempleteID": -1.0,
+          "scale": 1.0,
+          "ILLLPEOODKP": ""
         },
         {
           "$type": "ApplyModifier",
           "modifierName": "Modifier_HornTrigger"
         }
       ],
-      "abilityMixins": [
-        {
-          "$type": "AttachToAnimatorStateIDMixin",
-          "LJPPDIGCJMJ": "",
-          "stateIDs": [
-            "Heal_BS",
-            "Heal"
-          ],
-          "modifierName": "Modifier_Heal_OnlyOne"
-        },
-        {
-          "$type": "AttachModifierToSelfGlobalValueMixin",
-          "modifierNameSteps": [
-            "Blank",
-            "Modifier_HornLightCheck"
-          ],
-          "valueSteps": [
-            -0.5,
-            0.5,
-            1.5
-          ],
-          "globalValueKey": "_NeedHornLightCheck",
-          "defaultGlobalValueOnCreate": 0.0
-        }
-      ],
-      "abilityName": "Animal_Reindeer_Heal_BS",
       "onAdded": [
         {
           "$type": "ApplyModifier",
@@ -313,19 +313,22 @@
         },
         {
           "$type": "SetGlobalValueV2",
-          "minValue": 0.0,
           "key": "_NeedHornLightCheck",
           "maxValue": 0.0,
-          "CBOMLBFIPJM": 1.0
+          "minValue": 0.0,
+          "value": 1.0
         }
       ]
     }
   },
   {
     "Default": {
+      "abilityName": "Animal_Reindeer_Heal",
       "modifiers": {
         "Modifier_Reindeer_Heal": {
           "duration": 0.2,
+          "elementDurability": 100.0,
+          "modifierName": "",
           "onAdded": [
             {
               "$type": "Predicated",
@@ -337,8 +340,8 @@
               ],
               "targetPredicates": [
                 {
-                  "$type": "HGKCHJOOMCH",
-                  "KIKIBABLEMA": 1.0,
+                  "$type": "ByTargetHPRatio",
+                  "hpRatio": 1.0,
                   "logic": "Equal",
                   "target": "Self"
                 }
@@ -346,9 +349,9 @@
             },
             {
               "$type": "HealHP",
-              "FPOCDLCHDPE": 0.5,
-              "FFNEJGGNAFF": "",
-              "target": "CurTeamAvatars"
+              "amountByTargetMaxHPRatio": 0.5,
+              "target": "CurTeamAvatars",
+              "FFNEJGGNAFF": ""
             },
             {
               "$type": "ReviveElemEnergy",
@@ -356,23 +359,21 @@
               "target": "CurTeamAvatars"
             }
           ],
-          "elementDurability": 100.0,
-          "modifierName": "",
           "AIHNJLDFEGJ": 0.0
         },
         "Modifier_Reindeer_Heal_Fx": {
           "duration": 0.1,
+          "elementDurability": 100.0,
+          "modifierName": "",
           "onRemoved": [
             {
               "$type": "FireEffect",
               "effectPattern": "Eff_AvatarCommon_Heal",
+              "effectTempleteID": -1.0,
               "scale": 1.0,
-              "ILLLPEOODKP": "",
-              "effectTempleteID": -1.0
+              "ILLLPEOODKP": ""
             }
           ],
-          "elementDurability": 100.0,
-          "modifierName": "",
           "AIHNJLDFEGJ": 0.0
         }
       },
@@ -381,14 +382,14 @@
           "$type": "ApplyModifier",
           "modifierName": "Modifier_Reindeer_Heal",
           "otherTargets": {
-            "$type": "INIACGFCEDH",
-            "sizeRatio": 1.0,
+            "$type": "SelectTargetsByShape",
             "campTargetType": "Enemy",
-            "shapeName": "CircleR30H10"
+            "shapeName": "CircleR30H10",
+            "sizeRatio": 1.0
           },
           "predicates": [
             {
-              "$type": "DEOFBICNFHF",
+              "$type": "ByEntityTypes",
               "entityTypes": [
                 "Avatar"
               ]
@@ -398,109 +399,137 @@
         {
           "$type": "SetAnimatorFloat",
           "floatID": "Emission",
-          "CBOMLBFIPJM": 3.0
+          "value": 3.0
         },
         {
           "$type": "SetGlobalValueV2",
-          "minValue": 0.0,
           "key": "_CanResponse",
           "maxValue": 0.0,
-          "CBOMLBFIPJM": 0.0
+          "minValue": 0.0,
+          "value": 0.0
         },
         {
           "$type": "SetGlobalValueV2",
-          "minValue": 0.0,
           "key": "_CanResponse_Not",
           "maxValue": 0.0,
-          "CBOMLBFIPJM": 1.0
+          "minValue": 0.0,
+          "value": 1.0
         },
         {
           "$type": "RefreshCycleDropSubfield",
-          "GOLEPGKMMLO": 1001,
-          "subfieldName": ""
+          "subfieldName": "",
+          "GOLEPGKMMLO": 1001
         }
-      ],
-      "abilityName": "Animal_Reindeer_Heal"
+      ]
     }
   },
   {
     "Default": {
-      "modifiers": {
-        "Modifier_Reindeer_HitState_1": {
-          "onRemoved": [
-            {
-              "$type": "SetAnimatorInt",
-              "intID": "HitState",
-              "CBOMLBFIPJM": 0.0
-            }
-          ],
-          "onAdded": [
-            {
-              "$type": "SetAnimatorInt",
-              "intID": "HitState",
-              "CBOMLBFIPJM": 1.0
-            }
-          ],
-          "elementDurability": 100.0,
-          "modifierName": "",
-          "AIHNJLDFEGJ": 0.0
-        },
-        "Modifier_Reindeer_HitState_2": {
-          "onRemoved": [
-            {
-              "$type": "SetAnimatorInt",
-              "intID": "HitState",
-              "CBOMLBFIPJM": 0.0
-            }
-          ],
-          "onAdded": [
-            {
-              "$type": "SetAnimatorInt",
-              "intID": "HitState",
-              "CBOMLBFIPJM": 2.0
-            }
-          ],
-          "elementDurability": 100.0,
-          "modifierName": "",
-          "AIHNJLDFEGJ": 0.0
-        }
-      },
       "abilityMixins": [
         {
           "$type": "AttachToAnimatorStateIDMixin",
-          "LJPPDIGCJMJ": "",
+          "modifierName": "Modifier_Reindeer_HitState_1",
           "stateIDs": [
             "Kindy"
           ],
-          "modifierName": "Modifier_Reindeer_HitState_1"
+          "LJPPDIGCJMJ": ""
         },
         {
           "$type": "AttachToAnimatorStateIDMixin",
-          "LJPPDIGCJMJ": "",
+          "modifierName": "Modifier_Reindeer_HitState_2",
           "stateIDs": [
             "Perform01"
           ],
-          "modifierName": "Modifier_Reindeer_HitState_2"
+          "LJPPDIGCJMJ": ""
         }
       ],
-      "abilityName": "Animal_Reindeer_HitStateSet"
+      "abilityName": "Animal_Reindeer_HitStateSet",
+      "modifiers": {
+        "Modifier_Reindeer_HitState_1": {
+          "elementDurability": 100.0,
+          "modifierName": "",
+          "onAdded": [
+            {
+              "$type": "SetAnimatorInt",
+              "intID": "HitState",
+              "value": 1.0
+            }
+          ],
+          "onRemoved": [
+            {
+              "$type": "SetAnimatorInt",
+              "intID": "HitState",
+              "value": 0.0
+            }
+          ],
+          "AIHNJLDFEGJ": 0.0
+        },
+        "Modifier_Reindeer_HitState_2": {
+          "elementDurability": 100.0,
+          "modifierName": "",
+          "onAdded": [
+            {
+              "$type": "SetAnimatorInt",
+              "intID": "HitState",
+              "value": 2.0
+            }
+          ],
+          "onRemoved": [
+            {
+              "$type": "SetAnimatorInt",
+              "intID": "HitState",
+              "value": 0.0
+            }
+          ],
+          "AIHNJLDFEGJ": 0.0
+        }
+      }
     }
   },
   {
     "Default": {
+      "abilityMixins": [
+        {
+          "$type": "AttachToAIAlertnessMixin",
+          "alertness": [
+            0
+          ],
+          "modifierName": "Modifier_Reindeer_TransDelayReSet"
+        },
+        {
+          "$type": "AttachToAIAlertnessMixin",
+          "alertness": [
+            1,
+            2
+          ],
+          "modifierName": "Modifier_Reindeer_CheckResponse"
+        },
+        {
+          "$type": "AttachToAnimatorStateIDMixin",
+          "modifierName": "Modifier_ExitResposePose_Skill",
+          "stateIDs": [
+            "Heal_BS",
+            "Kindy"
+          ],
+          "LJPPDIGCJMJ": ""
+        }
+      ],
+      "abilityName": "Animal_Reindeer_CheckResponse",
       "modifiers": {
         "Modifier_Reindeer_TransDelayReSet": {
+          "elementDurability": 100.0,
+          "modifierName": "",
           "onAdded": [
             {
               "$type": "SetPoseBool",
               "boolID": "TransDelay"
             }
           ],
-          "elementDurability": 100.0,
-          "modifierName": "",
           "AIHNJLDFEGJ": 0.0
         },
         "Modifier_ExitResposePose_Skill": {
+          "elementDurability": 100.0,
+          "modifierName": "",
           "onAdded": [
             {
               "$type": "SetPoseBool",
@@ -511,73 +540,73 @@
               "modifierName": "UNIQUE_Modifier_Response_Interval"
             }
           ],
-          "elementDurability": 100.0,
-          "modifierName": "",
           "AIHNJLDFEGJ": 0.0
         },
         "UNIQUE_Modifier_Response_Interval": {
           "duration": 120.0,
+          "elementDurability": 100.0,
+          "isUnique": true,
+          "modifierName": "",
           "onRemoved": [
             {
               "$type": "SetPoseBool",
-              "CBOMLBFIPJM": true,
-              "boolID": "ToResponse_ByTimer"
+              "boolID": "ToResponse_ByTimer",
+              "value": true
             }
           ],
-          "elementDurability": 100.0,
-          "modifierName": "",
-          "isUnique": true,
           "AIHNJLDFEGJ": 0.0
         },
         "Modifier_Reindeer_CheckResponse": {
           "duration": 1.0,
+          "elementDurability": 100.0,
+          "modifierName": "",
           "onAdded": [
             {
               "$type": "Predicated",
-              "successActions": [
-                {
-                  "$type": "SetAnimatorFloat",
-                  "floatID": "Emission",
-                  "CBOMLBFIPJM": 1.0
-                },
-                {
-                  "$type": "SetGlobalValueV2",
-                  "minValue": 0.0,
-                  "key": "_CanResponse",
-                  "maxValue": 0.0,
-                  "CBOMLBFIPJM": 1.0
-                },
-                {
-                  "$type": "SetGlobalValueV2",
-                  "minValue": 0.0,
-                  "key": "_CanResponse_Not",
-                  "maxValue": 0.0,
-                  "CBOMLBFIPJM": 0.0
-                },
-                {
-                  "$type": "RemoveUniqueModifier",
-                  "modifierName": "UNIQUE_Modifier_Response_Interval"
-                }
-              ],
               "failActions": [
                 {
                   "$type": "SetAnimatorFloat",
                   "floatID": "Emission",
-                  "CBOMLBFIPJM": 0.0
+                  "value": 0.0
                 },
                 {
                   "$type": "SetGlobalValueV2",
-                  "minValue": 0.0,
                   "key": "_CanResponse",
                   "maxValue": 0.0,
-                  "CBOMLBFIPJM": 0.0
+                  "minValue": 0.0,
+                  "value": 0.0
                 },
                 {
                   "$type": "SetGlobalValueV2",
-                  "minValue": 0.0,
                   "key": "_CanResponse_Not",
                   "maxValue": 0.0,
-                  "CBOMLBFIPJM": 1.0
+                  "minValue": 0.0,
+                  "value": 1.0
+                }
+              ],
+              "successActions": [
+                {
+                  "$type": "SetAnimatorFloat",
+                  "floatID": "Emission",
+                  "value": 1.0
+                },
+                {
+                  "$type": "SetGlobalValueV2",
+                  "key": "_CanResponse",
+                  "maxValue": 0.0,
+                  "minValue": 0.0,
+                  "value": 1.0
+                },
+                {
+                  "$type": "SetGlobalValueV2",
+                  "key": "_CanResponse_Not",
+                  "maxValue": 0.0,
+                  "minValue": 0.0,
+                  "value": 0.0
+                },
+                {
+                  "$type": "RemoveUniqueModifier",
+                  "modifierName": "UNIQUE_Modifier_Response_Interval"
                 }
               ],
               "targetPredicates": [
@@ -588,54 +617,35 @@
               ]
             }
           ],
-          "elementDurability": 100.0,
-          "modifierName": "",
           "AIHNJLDFEGJ": 0.0
         }
-      },
-      "abilityMixins": [
-        {
-          "$type": "AttachToAIAlertnessMixin",
-          "MKDABMCENDB": [
-            0
-          ],
-          "modifierName": "Modifier_Reindeer_TransDelayReSet"
-        },
-        {
-          "$type": "AttachToAIAlertnessMixin",
-          "MKDABMCENDB": [
-            1,
-            2
-          ],
-          "modifierName": "Modifier_Reindeer_CheckResponse"
-        },
-        {
-          "$type": "AttachToAnimatorStateIDMixin",
-          "LJPPDIGCJMJ": "",
-          "stateIDs": [
-            "Heal_BS",
-            "Kindy"
-          ],
-          "modifierName": "Modifier_ExitResposePose_Skill"
-        }
-      ],
-      "abilityName": "Animal_Reindeer_CheckResponse"
+      }
     }
   },
   {
     "Default": {
+      "abilityMixins": [
+        {
+          "$type": "AttachToPoseIDMixin",
+          "modifierName": "Modifier_CheckTransDelay",
+          "poseIDs": [
+            201
+          ]
+        }
+      ],
+      "abilityName": "Animal_Reindeer_CheckMoonPlayer",
       "modifiers": {
         "Modifier_CheckTransDelay": {
           "duration": 0.4,
+          "elementDurability": 100.0,
+          "modifierName": "",
           "onRemoved": [
             {
               "$type": "SetPoseBool",
-              "CBOMLBFIPJM": true,
-              "boolID": "TransDelay"
+              "boolID": "TransDelay",
+              "value": true
             }
           ],
-          "elementDurability": 100.0,
-          "modifierName": "",
           "AIHNJLDFEGJ": 0.0
         },
         "CombatCheck_FromFriendlyAnimal": {
@@ -647,13 +657,13 @@
               "GNECHIFJPOH": [
                 {
                   "$type": "SetPoseBool",
-                  "CBOMLBFIPJM": true,
-                  "boolID": "ShouldFlee"
+                  "boolID": "ShouldFlee",
+                  "value": true
                 },
                 {
                   "$type": "SetAnimatorBool",
-                  "CBOMLBFIPJM": true,
-                  "boolID": "ShouldFlee"
+                  "boolID": "ShouldFlee",
+                  "value": true
                 }
               ]
             }
@@ -666,6 +676,8 @@
           "modifierMixins": [
             {
               "$type": "AITargetChangeMixin",
+              "FIJEIIFBIEN": true,
+              "KIDFDPFFPCG": true,
               "IMNEMHCGFKL": [
                 {
                   "$type": "RemoveModifier",
@@ -676,28 +688,110 @@
                   "successActions": [
                     {
                       "$type": "SetGlobalValueV2",
-                      "minValue": 0.0,
                       "key": "_Animal_CanResponseToMoon",
                       "maxValue": 0.0,
-                      "CBOMLBFIPJM": 0.0
+                      "minValue": 0.0,
+                      "value": 0.0
                     },
                     {
                       "$type": "SetPoseInt",
                       "intID": "HasMoonChar"
                     }
                   ],
+                  "target": "TempTarget",
                   "targetPredicates": [
                     {
-                      "$type": "DEOFBICNFHF",
+                      "$type": "ByEntityTypes",
                       "entityTypes": [
                         "Monster"
                       ],
                       "target": "Self"
                     }
                   ],
-                  "target": "TempTarget",
                   "DJOOHHCGMDG": {
                     "GCGFDNHKCIH": "_AITargetChangeMixin_FromTarget"
+                  }
+                }
+              ],
+              "PKLNJMEJDLB": [
+                {
+                  "$type": "Predicated",
+                  "failActions": [
+                    {
+                      "$type": "SetGlobalValueV2",
+                      "key": "_Animal_CanResponseToMoon",
+                      "maxValue": 0.0,
+                      "minValue": 0.0,
+                      "value": 0.0
+                    },
+                    {
+                      "$type": "SetPoseInt",
+                      "intID": "HasMoonChar",
+                      "value": 2
+                    }
+                  ],
+                  "successActions": [
+                    {
+                      "$type": "SetGlobalValueV2",
+                      "key": "_Animal_CanResponseToMoon",
+                      "maxValue": 0.0,
+                      "minValue": 0.0,
+                      "value": 1.0
+                    },
+                    {
+                      "$type": "SetPoseInt",
+                      "intID": "HasMoonChar",
+                      "value": 1
+                    }
+                  ],
+                  "target": "TempTarget",
+                  "targetPredicates": [
+                    {
+                      "$type": "BLLNFILPFBO",
+                      "featureTagID": 2201,
+                      "logic": "GreaterOrEqual",
+                      "number": 1,
+                      "OIGFOJBODGL": true
+                    },
+                    {
+                      "$type": "ByTargetInArea",
+                      "areas": [
+                        7
+                      ]
+                    }
+                  ],
+                  "DJOOHHCGMDG": {
+                    "GCGFDNHKCIH": "_AITargetChangeMixin_ToTarget"
+                  }
+                },
+                {
+                  "$type": "Predicated",
+                  "failActions": [
+                    {
+                      "$type": "AttachModifier",
+                      "modifierName": "CombatCheck_FromFriendlyAnimal"
+                    }
+                  ],
+                  "successActions": [
+                    {
+                      "$type": "SetPoseBool",
+                      "boolID": "ShouldFlee",
+                      "value": true
+                    },
+                    {
+                      "$type": "SetAnimatorBool",
+                      "boolID": "ShouldFlee",
+                      "value": true
+                    }
+                  ],
+                  "target": "TempTarget",
+                  "targetPredicates": [
+                    {
+                      "$type": "HCNBFNFDDGM"
+                    }
+                  ],
+                  "DJOOHHCGMDG": {
+                    "GCGFDNHKCIH": "_AITargetChangeMixin_ToTarget"
                   }
                 }
               ],
@@ -708,164 +802,80 @@
                 },
                 {
                   "$type": "Predicated",
-                  "successActions": [
-                    {
-                      "$type": "SetGlobalValueV2",
-                      "minValue": 0.0,
-                      "key": "_Animal_CanResponseToMoon",
-                      "maxValue": 0.0,
-                      "CBOMLBFIPJM": 1.0
-                    },
-                    {
-                      "$type": "SetPoseInt",
-                      "GGKIEIJLCJJ": 1,
-                      "intID": "HasMoonChar"
-                    }
-                  ],
                   "failActions": [
                     {
                       "$type": "SetGlobalValueV2",
-                      "minValue": 0.0,
                       "key": "_Animal_CanResponseToMoon",
                       "maxValue": 0.0,
-                      "CBOMLBFIPJM": 0.0
+                      "minValue": 0.0,
+                      "value": 0.0
                     },
                     {
                       "$type": "SetPoseInt",
-                      "GGKIEIJLCJJ": 2,
-                      "intID": "HasMoonChar"
+                      "intID": "HasMoonChar",
+                      "value": 2
                     }
                   ],
+                  "successActions": [
+                    {
+                      "$type": "SetGlobalValueV2",
+                      "key": "_Animal_CanResponseToMoon",
+                      "maxValue": 0.0,
+                      "minValue": 0.0,
+                      "value": 1.0
+                    },
+                    {
+                      "$type": "SetPoseInt",
+                      "intID": "HasMoonChar",
+                      "value": 1
+                    }
+                  ],
+                  "target": "TempTarget",
                   "targetPredicates": [
                     {
                       "$type": "BLLNFILPFBO",
                       "featureTagID": 2201,
+                      "logic": "GreaterOrEqual",
                       "number": 1,
-                      "OIGFOJBODGL": true,
-                      "logic": "GreaterOrEqual"
+                      "OIGFOJBODGL": true
                     },
                     {
-                      "$type": "NIACELEBMLD",
-                      "OALJGKDNOEK": [
+                      "$type": "ByTargetInArea",
+                      "areas": [
                         7
                       ]
                     }
                   ],
-                  "target": "TempTarget",
                   "DJOOHHCGMDG": {
                     "GCGFDNHKCIH": "_AITargetChangeMixin_ToTarget"
                   }
                 },
                 {
                   "$type": "Predicated",
-                  "successActions": [
-                    {
-                      "$type": "SetPoseBool",
-                      "CBOMLBFIPJM": true,
-                      "boolID": "ShouldFlee"
-                    },
-                    {
-                      "$type": "SetAnimatorBool",
-                      "CBOMLBFIPJM": true,
-                      "boolID": "ShouldFlee"
-                    }
-                  ],
                   "failActions": [
                     {
                       "$type": "AttachModifier",
                       "modifierName": "CombatCheck_FromFriendlyAnimal"
                     }
                   ],
-                  "targetPredicates": [
-                    {
-                      "$type": "HCNBFNFDDGM"
-                    }
-                  ],
-                  "target": "TempTarget",
-                  "DJOOHHCGMDG": {
-                    "GCGFDNHKCIH": "_AITargetChangeMixin_ToTarget"
-                  }
-                }
-              ],
-              "KIDFDPFFPCG": true,
-              "FIJEIIFBIEN": true,
-              "PKLNJMEJDLB": [
-                {
-                  "$type": "Predicated",
-                  "successActions": [
-                    {
-                      "$type": "SetGlobalValueV2",
-                      "minValue": 0.0,
-                      "key": "_Animal_CanResponseToMoon",
-                      "maxValue": 0.0,
-                      "CBOMLBFIPJM": 1.0
-                    },
-                    {
-                      "$type": "SetPoseInt",
-                      "GGKIEIJLCJJ": 1,
-                      "intID": "HasMoonChar"
-                    }
-                  ],
-                  "failActions": [
-                    {
-                      "$type": "SetGlobalValueV2",
-                      "minValue": 0.0,
-                      "key": "_Animal_CanResponseToMoon",
-                      "maxValue": 0.0,
-                      "CBOMLBFIPJM": 0.0
-                    },
-                    {
-                      "$type": "SetPoseInt",
-                      "GGKIEIJLCJJ": 2,
-                      "intID": "HasMoonChar"
-                    }
-                  ],
-                  "targetPredicates": [
-                    {
-                      "$type": "BLLNFILPFBO",
-                      "featureTagID": 2201,
-                      "number": 1,
-                      "OIGFOJBODGL": true,
-                      "logic": "GreaterOrEqual"
-                    },
-                    {
-                      "$type": "NIACELEBMLD",
-                      "OALJGKDNOEK": [
-                        7
-                      ]
-                    }
-                  ],
-                  "target": "TempTarget",
-                  "DJOOHHCGMDG": {
-                    "GCGFDNHKCIH": "_AITargetChangeMixin_ToTarget"
-                  }
-                },
-                {
-                  "$type": "Predicated",
                   "successActions": [
                     {
                       "$type": "SetPoseBool",
-                      "CBOMLBFIPJM": true,
-                      "boolID": "ShouldFlee"
+                      "boolID": "ShouldFlee",
+                      "value": true
                     },
                     {
                       "$type": "SetAnimatorBool",
-                      "CBOMLBFIPJM": true,
-                      "boolID": "ShouldFlee"
+                      "boolID": "ShouldFlee",
+                      "value": true
                     }
                   ],
-                  "failActions": [
-                    {
-                      "$type": "AttachModifier",
-                      "modifierName": "CombatCheck_FromFriendlyAnimal"
-                    }
-                  ],
+                  "target": "TempTarget",
                   "targetPredicates": [
                     {
                       "$type": "HCNBFNFDDGM"
                     }
                   ],
-                  "target": "TempTarget",
                   "DJOOHHCGMDG": {
                     "GCGFDNHKCIH": "_AITargetChangeMixin_ToTarget"
                   }
@@ -877,16 +887,6 @@
           "AIHNJLDFEGJ": 0.0
         }
       },
-      "abilityMixins": [
-        {
-          "$type": "AttachToPoseIDMixin",
-          "GGOLBNPLGJH": [
-            201
-          ],
-          "modifierName": "Modifier_CheckTransDelay"
-        }
-      ],
-      "abilityName": "Animal_Reindeer_CheckMoonPlayer",
       "onAdded": [
         {
           "$type": "ApplyModifier",
@@ -895,230 +895,117 @@
         {
           "$type": "SetGlobalValue",
           "key": "_AITargetChangeMixin_FromTarget_0",
-          "minValue": 0.0,
           "maxValue": 0.0,
-          "CBOMLBFIPJM": 0.0
+          "minValue": 0.0,
+          "value": 0.0
         },
         {
           "$type": "SetGlobalValue",
           "key": "_AITargetChangeMixin_FromTarget_1",
-          "minValue": 0.0,
           "maxValue": 0.0,
-          "CBOMLBFIPJM": 0.0
+          "minValue": 0.0,
+          "value": 0.0
         },
         {
           "$type": "SetGlobalValue",
           "key": "_AITargetChangeMixin_ToTarget_0",
-          "minValue": 0.0,
           "maxValue": 0.0,
-          "CBOMLBFIPJM": 0.0
+          "minValue": 0.0,
+          "value": 0.0
         },
         {
           "$type": "SetGlobalValue",
           "key": "_AITargetChangeMixin_ToTarget_1",
-          "minValue": 0.0,
           "maxValue": 0.0,
-          "CBOMLBFIPJM": 0.0
+          "minValue": 0.0,
+          "value": 0.0
         }
       ]
     }
   },
   {
     "Default": {
+      "abilityName": "Animal_ResponseToMoon_Mark",
       "onAbilityStart": [
         {
           "$type": "FireEffect",
-          "effectPattern": "Eff_Animal_ResponseToMoon",
-          "scale": 1.0,
           "born": {
-            "$type": "BGOLIIIHLMO",
+            "$type": "ConfigBornByAttachPoint",
             "attachPointName": "BillboardAttach",
             "useRotation": true
           },
-          "ILLLPEOODKP": "",
-          "effectTempleteID": -1.0
+          "effectPattern": "Eff_Animal_ResponseToMoon",
+          "effectTempleteID": -1.0,
+          "scale": 1.0,
+          "ILLLPEOODKP": ""
         }
-      ],
-      "abilityName": "Animal_ResponseToMoon_Mark"
+      ]
     }
   },
   {
     "Default": {
+      "abilityMixins": [
+        {
+          "$type": "AttachToPoseIDMixin",
+          "modifierName": "Modifier_PlayMarkEffect",
+          "poseIDs": [
+            301
+          ]
+        }
+      ],
+      "abilityName": "Animal_ResponseToMoon_Mark_EnterFriendly",
       "modifiers": {
         "Modifier_PlayMarkEffect": {
           "duration": 1.0,
+          "elementDurability": 100.0,
+          "modifierName": "",
           "onAdded": [
             {
               "$type": "FireEffect",
-              "effectPattern": "Eff_Animal_ResponseToMoon",
-              "scale": 1.0,
               "born": {
-                "$type": "BGOLIIIHLMO",
+                "$type": "ConfigBornByAttachPoint",
                 "attachPointName": "BillboardAttach",
                 "useRotation": true
               },
-              "ILLLPEOODKP": "",
-              "effectTempleteID": -1.0
+              "effectPattern": "Eff_Animal_ResponseToMoon",
+              "effectTempleteID": -1.0,
+              "scale": 1.0,
+              "ILLLPEOODKP": ""
             }
           ],
-          "elementDurability": 100.0,
-          "modifierName": "",
           "AIHNJLDFEGJ": 0.0
         }
       },
       "onAbilityStart": [
         {
           "$type": "FireEffect",
-          "effectPattern": "Eff_Animal_ResponseToMoon",
-          "scale": 1.0,
           "born": {
-            "$type": "BGOLIIIHLMO",
+            "$type": "ConfigBornByAttachPoint",
             "attachPointName": "BillboardAttach",
             "useRotation": true
           },
-          "ILLLPEOODKP": "",
-          "effectTempleteID": -1.0
+          "effectPattern": "Eff_Animal_ResponseToMoon",
+          "effectTempleteID": -1.0,
+          "scale": 1.0,
+          "ILLLPEOODKP": ""
         }
-      ],
-      "abilityMixins": [
-        {
-          "$type": "AttachToPoseIDMixin",
-          "GGOLBNPLGJH": [
-            301
-          ],
-          "modifierName": "Modifier_PlayMarkEffect"
-        }
-      ],
-      "abilityName": "Animal_ResponseToMoon_Mark_EnterFriendly"
+      ]
     }
   },
   {
     "Default": {
-      "modifiers": {
-        "Flee_Pre": {
-          "onRemoved": [
-            {
-              "$type": "SetGlobalValue",
-              "key": "_Flee_Prepare",
-              "minValue": 0.0,
-              "maxValue": 0.0,
-              "CBOMLBFIPJM": 0.0
-            }
-          ],
-          "onAdded": [
-            {
-              "$type": "SetRandomOverrideMapValue",
-              "valueRangeMin": 1.5,
-              "overrideMapKey": "RandomTimer",
-              "valueRangeMax": 3.5
-            }
-          ],
-          "elementDurability": 100.0,
-          "modifierMixins": [
-            {
-              "$type": "AttachModifierToSelfGlobalValueNoInitMixin",
-              "modifierNameSteps": [
-                "Blank",
-                "Flee"
-              ],
-              "valueSteps": [
-                -0.5,
-                0.5,
-                1.5
-              ],
-              "globalValueKey": "_Flee_Prepare"
-            }
-          ],
-          "modifierName": "",
-          "AIHNJLDFEGJ": 0.0
-        },
-        "Blank": {
-          "elementDurability": 100.0,
-          "modifierName": "",
-          "AIHNJLDFEGJ": 0.0
-        },
-        "Modifier_SetFleeGV": {
-          "onRemoved": [
-            {
-              "$type": "SetGlobalValueV2",
-              "minValue": 0.0,
-              "key": "_Flee_Prepare",
-              "maxValue": 0.0,
-              "CBOMLBFIPJM": 1.0
-            }
-          ],
-          "onAdded": [
-            {
-              "$type": "SetGlobalValueV2",
-              "minValue": 0.0,
-              "key": "_Flee_Prepare",
-              "maxValue": 0.0,
-              "CBOMLBFIPJM": 0.0
-            }
-          ],
-          "elementDurability": 100.0,
-          "modifierName": "",
-          "AIHNJLDFEGJ": 0.0
-        },
-        "Flee": {
-          "duration": "RandomTimer",
-          "onRemoved": [
-            {
-              "$type": "ApplyModifier",
-              "modifierName": "DisappearTimer"
-            }
-          ],
-          "elementDurability": 100.0,
-          "modifierName": "",
-          "AIHNJLDFEGJ": 0.0
-        },
-        "DisappearTimer": {
-          "duration": 2.0,
-          "onRemoved": [
-            {
-              "$type": "SetAnimatorBool",
-              "CBOMLBFIPJM": true,
-              "boolID": "Disappear"
-            },
-            {
-              "$type": "KillSelf",
-              "killSelfType": "Disappear",
-              "MBGFJOOIMOK": [
-                28021501,
-                28021502,
-                28021503
-              ],
-              "KBKCMPMOKGM": true,
-              "ELJJHIPAFKC": true
-            }
-          ],
-          "onAdded": [
-            {
-              "$type": "StartDither",
-              "duration": 3.5
-            },
-            {
-              "$type": "HideUIBillBoard",
-              "hide": true
-            }
-          ],
-          "elementDurability": 100.0,
-          "modifierName": "",
-          "AIHNJLDFEGJ": 0.0
-        }
-      },
       "abilityMixins": [
         {
           "$type": "AttachToPoseIDMixin",
-          "GGOLBNPLGJH": [
+          "modifierName": "Flee_Pre",
+          "poseIDs": [
             902
-          ],
-          "modifierName": "Flee_Pre"
+          ]
         },
         {
           "$type": "AttachToAnimatorStateIDMixin",
           "isCheckOnAttach": true,
-          "LJPPDIGCJMJ": "",
+          "modifierName": "Modifier_SetFleeGV",
           "stateIDs": [
             "Heal_BS",
             "Heal",
@@ -1130,81 +1017,194 @@
             "Perform01_AS",
             "Lookout_Headcontrol"
           ],
-          "modifierName": "Modifier_SetFleeGV"
+          "LJPPDIGCJMJ": ""
         }
       ],
       "abilityName": "Animal_Reindeer_ExitState",
+      "abilitySpecials": {
+        "RandomTimer": 2.0
+      },
+      "modifiers": {
+        "Flee_Pre": {
+          "elementDurability": 100.0,
+          "modifierMixins": [
+            {
+              "$type": "AttachModifierToSelfGlobalValueNoInitMixin",
+              "globalValueKey": "_Flee_Prepare",
+              "modifierNameSteps": [
+                "Blank",
+                "Flee"
+              ],
+              "valueSteps": [
+                -0.5,
+                0.5,
+                1.5
+              ]
+            }
+          ],
+          "modifierName": "",
+          "onAdded": [
+            {
+              "$type": "SetRandomOverrideMapValue",
+              "overrideMapKey": "RandomTimer",
+              "valueRangeMax": 3.5,
+              "valueRangeMin": 1.5
+            }
+          ],
+          "onRemoved": [
+            {
+              "$type": "SetGlobalValue",
+              "key": "_Flee_Prepare",
+              "maxValue": 0.0,
+              "minValue": 0.0,
+              "value": 0.0
+            }
+          ],
+          "AIHNJLDFEGJ": 0.0
+        },
+        "Blank": {
+          "elementDurability": 100.0,
+          "modifierName": "",
+          "AIHNJLDFEGJ": 0.0
+        },
+        "Modifier_SetFleeGV": {
+          "elementDurability": 100.0,
+          "modifierName": "",
+          "onAdded": [
+            {
+              "$type": "SetGlobalValueV2",
+              "key": "_Flee_Prepare",
+              "maxValue": 0.0,
+              "minValue": 0.0,
+              "value": 0.0
+            }
+          ],
+          "onRemoved": [
+            {
+              "$type": "SetGlobalValueV2",
+              "key": "_Flee_Prepare",
+              "maxValue": 0.0,
+              "minValue": 0.0,
+              "value": 1.0
+            }
+          ],
+          "AIHNJLDFEGJ": 0.0
+        },
+        "Flee": {
+          "duration": "RandomTimer",
+          "elementDurability": 100.0,
+          "modifierName": "",
+          "onRemoved": [
+            {
+              "$type": "ApplyModifier",
+              "modifierName": "DisappearTimer"
+            }
+          ],
+          "AIHNJLDFEGJ": 0.0
+        },
+        "DisappearTimer": {
+          "duration": 2.0,
+          "elementDurability": 100.0,
+          "modifierName": "",
+          "onAdded": [
+            {
+              "$type": "StartDither",
+              "duration": 3.5
+            },
+            {
+              "$type": "HideUIBillBoard",
+              "hide": true
+            }
+          ],
+          "onRemoved": [
+            {
+              "$type": "SetAnimatorBool",
+              "boolID": "Disappear",
+              "value": true
+            },
+            {
+              "$type": "KillSelf",
+              "configIdArray": [
+                28021501,
+                28021502,
+                28021503
+              ],
+              "killSelfType": "Disappear",
+              "ELJJHIPAFKC": true,
+              "KBKCMPMOKGM": true
+            }
+          ],
+          "AIHNJLDFEGJ": 0.0
+        }
+      },
       "onAdded": [
         {
           "$type": "SetGlobalValueV2",
-          "minValue": 0.0,
           "key": "_Flee_Prepare",
           "maxValue": 0.0,
-          "CBOMLBFIPJM": 1.0
+          "minValue": 0.0,
+          "value": 1.0
         }
-      ],
-      "abilitySpecials": {
-        "RandomTimer": 2.0
-      }
+      ]
     }
   },
   {
     "Default": {
+      "abilityMixins": [
+        {
+          "$type": "AttachToPoseIDMixin",
+          "modifierName": "Modifier_Hurt",
+          "poseIDs": [
+            902
+          ]
+        }
+      ],
+      "abilityName": "Animal_Reindeer_Die",
       "modifiers": {
         "Modifier_Hurt": {
+          "elementDurability": 100.0,
+          "modifierName": "",
           "onAdded": [
             {
               "$type": "HideUIBillBoard"
             }
           ],
-          "elementDurability": 100.0,
-          "modifierName": "",
           "AIHNJLDFEGJ": 0.0
         }
-      },
-      "abilityMixins": [
-        {
-          "$type": "AttachToPoseIDMixin",
-          "GGOLBNPLGJH": [
-            902
-          ],
-          "modifierName": "Modifier_Hurt"
-        }
-      ],
-      "abilityName": "Animal_Reindeer_Die"
+      }
     }
   },
   {
     "Default": {
-      "modifiers": {
-        "Modifier_PoseTrans": {
-          "onAdded": [
-            {
-              "$type": "SetPoseBool",
-              "CBOMLBFIPJM": true,
-              "boolID": "TransDelay"
-            },
-            {
-              "$type": "SetPoseInt",
-              "GGKIEIJLCJJ": 2,
-              "intID": "HasMoonChar"
-            }
-          ],
-          "elementDurability": 100.0,
-          "modifierName": "",
-          "AIHNJLDFEGJ": 0.0
-        }
-      },
       "abilityMixins": [
         {
           "$type": "AttachToPoseIDMixin",
-          "GGOLBNPLGJH": [
+          "modifierName": "Modifier_PoseTrans",
+          "poseIDs": [
             201
-          ],
-          "modifierName": "Modifier_PoseTrans"
+          ]
         }
       ],
-      "abilityName": "Animal_Reindeer_Normal_PoseControl"
+      "abilityName": "Animal_Reindeer_Normal_PoseControl",
+      "modifiers": {
+        "Modifier_PoseTrans": {
+          "elementDurability": 100.0,
+          "modifierName": "",
+          "onAdded": [
+            {
+              "$type": "SetPoseBool",
+              "boolID": "TransDelay",
+              "value": true
+            },
+            {
+              "$type": "SetPoseInt",
+              "intID": "HasMoonChar",
+              "value": 2
+            }
+          ],
+          "AIHNJLDFEGJ": 0.0
+        }
+      }
     }
   }
 ]

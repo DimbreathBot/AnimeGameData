@@ -1,9 +1,120 @@
 [
   {
     "Default": {
+      "abilityMixins": [
+        {
+          "$type": "AttachModifierToSelfGlobalValueNoInitMixin",
+          "globalValueKey": "_CURRENT_AMMO_NUMBER",
+          "modifierNameSteps": [
+            "Auto_Trigger_Reload"
+          ],
+          "valueSteps": [
+            -0.5,
+            0.5
+          ]
+        },
+        {
+          "$type": "DoActionOnGlobalValueChangeMixin",
+          "actions": [
+            {
+              "$type": "CopyGlobalValue",
+              "doOffStage": true,
+              "dstKey": "GV_Filmfest_Sniper_Pos",
+              "dstTarget": "Other",
+              "otherTargets": {
+                "$type": "SelectTargetsByTag",
+                "tag": "Is_SniperCamera"
+              },
+              "srcKey": "GV_Filmfest_Sniper_Pos",
+              "srcTarget": "Self"
+            }
+          ],
+          "globalValueKey": "GV_Filmfest_Sniper_Pos"
+        },
+        {
+          "$type": "DoActionOnGlobalValueChangeMixin",
+          "actions": [
+            {
+              "$type": "CopyGlobalValue",
+              "doOffStage": true,
+              "dstKey": "GV_Is_Scope_On",
+              "dstTarget": "Other",
+              "otherTargets": {
+                "$type": "SelectTargetsByTag",
+                "tag": "Is_SniperCamera"
+              },
+              "srcKey": "GV_Is_Scope_On",
+              "srcTarget": "Self"
+            }
+          ],
+          "globalValueKey": "GV_Is_Scope_On"
+        },
+        {
+          "$type": "ShootFromCameraMixin",
+          "actionList": [
+            {
+              "$type": "Predicated",
+              "predicates": [
+                {
+                  "$type": "ByTargetGlobalValue",
+                  "compareType": "MoreThanAndEqual",
+                  "key": "_CURRENT_AMMO_NUMBER",
+                  "target": "Self",
+                  "value": 1.0
+                }
+              ],
+              "successActions": [
+                {
+                  "$type": "TriggerBullet",
+                  "born": {
+                    "$type": "ConfigBornByGlobalValue",
+                    "directionKey": "GV_ShootDir",
+                    "positionKey": "GV_ShootPos"
+                  },
+                  "bulletID": 70331002
+                },
+                {
+                  "$type": "ActCameraShake",
+                  "cameraShake": {
+                    "extension": {
+                      "baseCycle": 1.0,
+                      "baseOnCamera": true,
+                      "cycleDamping": 0.0,
+                      "rangeAttenuation": 0.1
+                    },
+                    "shakeDir": {
+                      "y": 1.0
+                    },
+                    "shakeDistance": 500.0,
+                    "shakeRange": 1.2,
+                    "shakeTime": 0.6,
+                    "shakeType": "CustomVector",
+                    "MNKFEFOKFKP": ""
+                  }
+                },
+                {
+                  "$type": "AddGlobalValueV2",
+                  "key": "_CURRENT_AMMO_NUMBER",
+                  "maxValue": 0.0,
+                  "minValue": 0.0,
+                  "value": -1.0
+                }
+              ]
+            }
+          ],
+          "gvBulletForward": "GV_ShootDir",
+          "gvBulletInitPos": "GV_ShootPos",
+          "offsetFromCamera": {
+            "x": -0.03,
+            "y": -0.15,
+            "z": -2.0
+          },
+          "uiMessageId": "FireBullet_FromCamera"
+        }
+      ],
+      "abilityName": "SceneObj_Activity_Common_Property_Ani_Prop_Snipper_01",
       "modifiers": {
         "Reload_Performance": {
-          "thinkInterval": 1.0,
           "duration": 1.2,
           "elementDurability": 100.0,
           "modifierName": "",
@@ -12,41 +123,44 @@
               "$type": "ActCameraShake",
               "cameraShake": {
                 "extension": {
-                  "baseOnCamera": true,
-                  "baseCycle": 1.0
+                  "baseCycle": 1.0,
+                  "baseOnCamera": true
                 },
                 "shakeDir": {
-                  "y": 1.0,
-                  "x": 1.0
+                  "x": 1.0,
+                  "y": 1.0
                 },
+                "shakeDistance": 500.0,
+                "shakeRange": 0.5,
                 "shakeTime": 1.5,
                 "shakeType": "CustomVector",
-                "shakeDistance": 500.0,
-                "MNKFEFOKFKP": "",
-                "shakeRange": 0.5
+                "MNKFEFOKFKP": ""
               }
             }
           ],
+          "thinkInterval": 1.0,
           "AIHNJLDFEGJ": 0.0
         },
         "Reload_Performance_UI": {
-          "thinkInterval": 0.8,
           "duration": 1.0,
           "elementDurability": 100.0,
           "modifierName": "",
           "onThinkInterval": [
             {
               "$type": "NotifyUI",
-              "uiContextName": "FilmfestSniperPlayPage",
-              "stringParam": "",
+              "floatParam": 1.2,
               "message": "ReloadStart",
-              "BOCLFKJKEBD": 1.2
+              "stringParam": "",
+              "uiContextName": "FilmfestSniperPlayPage"
             }
           ],
+          "thinkInterval": 0.8,
           "AIHNJLDFEGJ": 0.0
         },
         "Auto_Trigger_Reload": {
           "duration": 0.2,
+          "elementDurability": 100.0,
+          "modifierName": "",
           "onAdded": [
             {
               "$type": "ApplyModifier",
@@ -62,213 +176,100 @@
               ],
               "targetPredicates": [
                 {
-                  "$type": "EOFDCELPGFO",
-                  "CBOMLBFIPJM": 1.0,
+                  "$type": "ByTargetGlobalValue",
                   "compareType": "NoneOrEqual",
-                  "key": "SGV_FilmFestSniper_HasBullet"
+                  "key": "SGV_FilmFestSniper_HasBullet",
+                  "value": 1.0
                 }
               ]
             }
           ],
-          "elementDurability": 100.0,
-          "modifierName": "",
           "AIHNJLDFEGJ": 0.0
         }
       },
-      "ANHJPOLNHIG": [
-        "_AMMO_COST"
-      ],
-      "abilityMixins": [
-        {
-          "$type": "AttachModifierToSelfGlobalValueNoInitMixin",
-          "modifierNameSteps": [
-            "Auto_Trigger_Reload"
-          ],
-          "valueSteps": [
-            -0.5,
-            0.5
-          ],
-          "globalValueKey": "_CURRENT_AMMO_NUMBER"
-        },
-        {
-          "$type": "DoActionOnGlobalValueChangeMixin",
-          "actions": [
-            {
-              "$type": "CopyGlobalValue",
-              "srcKey": "GV_Filmfest_Sniper_Pos",
-              "dstTarget": "Other",
-              "srcTarget": "Self",
-              "dstKey": "GV_Filmfest_Sniper_Pos",
-              "doOffStage": true,
-              "otherTargets": {
-                "$type": "DBPHPMIHBCO",
-                "tag": "Is_SniperCamera"
-              }
-            }
-          ],
-          "globalValueKey": "GV_Filmfest_Sniper_Pos"
-        },
-        {
-          "$type": "DoActionOnGlobalValueChangeMixin",
-          "actions": [
-            {
-              "$type": "CopyGlobalValue",
-              "srcKey": "GV_Is_Scope_On",
-              "dstTarget": "Other",
-              "srcTarget": "Self",
-              "dstKey": "GV_Is_Scope_On",
-              "doOffStage": true,
-              "otherTargets": {
-                "$type": "DBPHPMIHBCO",
-                "tag": "Is_SniperCamera"
-              }
-            }
-          ],
-          "globalValueKey": "GV_Is_Scope_On"
-        },
-        {
-          "$type": "ShootFromCameraMixin",
-          "gvBulletForward": "GV_ShootDir",
-          "NHHHOHDGJDF": {
-            "y": -0.15,
-            "z": -2.0,
-            "x": -0.03
-          },
-          "gvBulletInitPos": "GV_ShootPos",
-          "actionList": [
-            {
-              "$type": "Predicated",
-              "successActions": [
-                {
-                  "$type": "TriggerBullet",
-                  "born": {
-                    "$type": "LKIBKKFEOLJ",
-                    "positionKey": "GV_ShootPos",
-                    "directionKey": "GV_ShootDir"
-                  },
-                  "bulletID": 70331002
-                },
-                {
-                  "$type": "ActCameraShake",
-                  "cameraShake": {
-                    "extension": {
-                      "rangeAttenuation": 0.1,
-                      "baseOnCamera": true,
-                      "baseCycle": 1.0,
-                      "cycleDamping": 0.0
-                    },
-                    "shakeDir": {
-                      "y": 1.0
-                    },
-                    "shakeTime": 0.6,
-                    "shakeType": "CustomVector",
-                    "shakeDistance": 500.0,
-                    "MNKFEFOKFKP": "",
-                    "shakeRange": 1.2
-                  }
-                },
-                {
-                  "$type": "AddGlobalValueV2",
-                  "minValue": 0.0,
-                  "key": "_CURRENT_AMMO_NUMBER",
-                  "CBOMLBFIPJM": -1.0,
-                  "maxValue": 0.0
-                }
-              ],
-              "predicates": [
-                {
-                  "$type": "EOFDCELPGFO",
-                  "CBOMLBFIPJM": 1.0,
-                  "compareType": "MoreThanAndEqual",
-                  "key": "_CURRENT_AMMO_NUMBER",
-                  "target": "Self"
-                }
-              ]
-            }
-          ],
-          "uimessageid": "FireBullet_FromCamera"
-        }
-      ],
-      "abilityName": "SceneObj_Activity_Common_Property_Ani_Prop_Snipper_01",
       "onAdded": [
         {
           "$type": "SetGlobalValueV2",
-          "minValue": 0.0,
           "key": "_AMMO_RELOADING",
           "maxValue": 0.0,
-          "CBOMLBFIPJM": 0.0
+          "minValue": 0.0,
+          "value": 0.0
         },
         {
           "$type": "SetGlobalValueV2",
-          "minValue": 0.0,
           "key": "_CURRENT_AMMO_NUMBER",
           "maxValue": 0.0,
-          "CBOMLBFIPJM": 1.0
+          "minValue": 0.0,
+          "value": 1.0
         },
         {
           "$type": "SetGlobalValueV2",
-          "minValue": 0.0,
           "key": "_AMMO_COST",
           "maxValue": 0.0,
-          "CBOMLBFIPJM": 0.0
+          "minValue": 0.0,
+          "value": 0.0
         },
         {
           "$type": "SetGlobalValueV2",
-          "minValue": 0.0,
           "key": "GV_Filmfest_Sniper_Pos",
           "maxValue": 0.0,
-          "CBOMLBFIPJM": 0.0
+          "minValue": 0.0,
+          "value": 0.0
         },
         {
           "$type": "ServerLuaCall",
+          "funcName": "SLC_Filmfest_Sniper_OnInit",
+          "luaCallType": "CurGalleryControlGroup",
           "param1": 0.0,
           "param2": 0.0,
-          "funcName": "SLC_Filmfest_Sniper_OnInit",
-          "AHCNJKIEMPP": 0.0,
-          "luaCallType": "CurGalleryControlGroup"
+          "param3": 0.0
         }
+      ],
+      "ANHJPOLNHIG": [
+        "_AMMO_COST"
       ]
     }
   },
   {
     "Default": {
+      "abilityName": "SceneObj_Activity_Common_Property_Ani_Prop_Snipper_Reload",
       "modifiers": {
         "Snipper_Reload": {
           "duration": 2.0,
-          "onRemoved": [
-            {
-              "$type": "SetGlobalValue",
-              "key": "_AMMO_RELOADING",
-              "minValue": 0.0,
-              "maxValue": 0.0,
-              "CBOMLBFIPJM": 0.0
-            },
-            {
-              "$type": "AddGlobalValueV2",
-              "minValue": 0.0,
-              "key": "_CURRENT_AMMO_NUMBER",
-              "CBOMLBFIPJM": 1.0,
-              "maxValue": 0.0
-            }
-          ],
+          "elementDurability": 100.0,
+          "modifierName": "",
           "onAdded": [
             {
               "$type": "SetGlobalValue",
               "key": "_AMMO_RELOADING",
-              "minValue": 0.0,
               "maxValue": 0.0,
-              "CBOMLBFIPJM": 1.0
+              "minValue": 0.0,
+              "value": 1.0
             },
             {
               "$type": "AddGlobalValueV2",
-              "minValue": 0.0,
               "key": "_AMMO_COST",
-              "CBOMLBFIPJM": 1.0,
-              "maxValue": 0.0
+              "maxValue": 0.0,
+              "minValue": 0.0,
+              "value": 1.0
             }
           ],
-          "elementDurability": 100.0,
-          "modifierName": "",
+          "onRemoved": [
+            {
+              "$type": "SetGlobalValue",
+              "key": "_AMMO_RELOADING",
+              "maxValue": 0.0,
+              "minValue": 0.0,
+              "value": 0.0
+            },
+            {
+              "$type": "AddGlobalValueV2",
+              "key": "_CURRENT_AMMO_NUMBER",
+              "maxValue": 0.0,
+              "minValue": 0.0,
+              "value": 1.0
+            }
+          ],
           "AIHNJLDFEGJ": 0.0
         }
       },
@@ -277,154 +278,156 @@
           "$type": "ApplyModifier",
           "modifierName": "Snipper_Reload"
         }
-      ],
-      "abilityName": "SceneObj_Activity_Common_Property_Ani_Prop_Snipper_Reload"
+      ]
     }
   },
   {
     "Default": {
+      "abilityMixins": [
+        {
+          "$type": "AttachToGadgetStateMixin",
+          "gadgetState": 202,
+          "modifierName": "BalloonBomb_Suicide"
+        }
+      ],
+      "abilityName": "SceneObj_Level_Fd_Property_Ani_Prop_FilmfestSniper_BalloonBomb_01",
       "modifiers": {
         "BalloonBomb_Eff": {
+          "elementDurability": 100.0,
+          "modifierName": "",
           "onAdded": [
             {
               "$type": "AttachEffect",
-              "ILLLPEOODKP": "",
-              "scale": 1.0,
               "effectPattern": "Eff_SceneObj_FilmfestSniper_01_BalloonBombMoving",
-              "effectTempleteID": -1.0
+              "effectTempleteID": -1.0,
+              "scale": 1.0,
+              "ILLLPEOODKP": ""
             }
           ],
-          "elementDurability": 100.0,
-          "modifierName": "",
           "AIHNJLDFEGJ": 0.0
         },
         "BalloonBomb_Suicide": {
+          "elementDurability": 100.0,
+          "modifierName": "",
           "onAdded": [
             {
               "$type": "KillSelf"
             }
           ],
-          "elementDurability": 100.0,
-          "modifierName": "",
           "AIHNJLDFEGJ": 0.0
         }
       },
-      "onKill": [
-        {
-          "$type": "FireEffect",
-          "effectPattern": "Eff_SceneObj_FilmfestSniper_01_BalloonBombExplode",
-          "scale": 1.0,
-          "ILLLPEOODKP": "",
-          "effectTempleteID": -1.0
-        },
-        {
-          "$type": "TriggerAttackEvent",
-          "targetType": "Enemy",
-          "attackEvent": {
-            "attackInfo": {
-              "attackProperty": {
-                "damagePercentageRatio": 0.0,
-                "strikeType": "Blunt",
-                "enBreak": 9999999.0,
-                "damagePercentage": 9999999.0,
-                "elementDurability": 50.0,
-                "arkheGrade": 0.0
-              },
-              "cameraShake": {
-                "shakeTime": 0.36,
-                "MNKFEFOKFKP": "",
-                "shakeRange": 0.36
-              },
-              "hitPattern": {
-                "FLFCIDDNMNA": "",
-                "onHitEffectName": "default",
-                "hitHaltTimeScale": 0.05,
-                "hitImpulseType": "LV6"
-              },
-              "forceCameraShake": true,
-              "attenuationGroup": "default",
-              "attenuationTag": "",
-              "attackTag": "FilmfestSniper_Bomb"
-            },
-            "attackPattern": {
-              "$type": "HCAGHMDHEGG",
-              "radius": 6.0,
-              "triggerType": "TriggerNoRepeat",
-              "ignoreMassive": true,
-              "born": {
-                "$type": "BOJMMDAIGMM",
-                "offset": {
-                  "x": 0.0,
-                  "z": 0.0,
-                  "y": 0.5
-                }
-              }
-            }
-          }
-        },
-        {
-          "$type": "TriggerAttackEvent",
-          "targetType": "All",
-          "attackEvent": {
-            "attackInfo": {
-              "attackProperty": {
-                "damagePercentageRatio": 0.0,
-                "strikeType": "Blunt",
-                "enBreak": 0.0,
-                "damagePercentage": 1.0,
-                "elementDurability": 50.0,
-                "arkheGrade": 0.0
-              },
-              "attenuationGroup": "default",
-              "attenuationTag": "",
-              "attackTag": ""
-            },
-            "attackPattern": {
-              "$type": "HCAGHMDHEGG",
-              "radius": 2.0,
-              "triggerType": "TriggerNoRepeat",
-              "born": {
-                "$type": "BOJMMDAIGMM"
-              }
-            }
-          }
-        }
-      ],
-      "abilityMixins": [
-        {
-          "$type": "AttachToGadgetStateMixin",
-          "modifierName": "BalloonBomb_Suicide",
-          "gadgetState": 202
-        }
-      ],
-      "abilityName": "SceneObj_Level_Fd_Property_Ani_Prop_FilmfestSniper_BalloonBomb_01",
       "onAdded": [
         {
           "$type": "FireEffect",
           "effectPattern": "Eff_SceneObj_FilmfestSniper_01_BalloonBombAppear",
+          "effectTempleteID": -1.0,
           "scale": 1.0,
-          "ILLLPEOODKP": "",
-          "effectTempleteID": -1.0
+          "ILLLPEOODKP": ""
         },
         {
           "$type": "SetGlobalValueV2",
-          "minValue": 0.0,
           "key": "Is_FilmfestSniper_Breakable",
           "maxValue": 0.0,
-          "CBOMLBFIPJM": 1.0
+          "minValue": 0.0,
+          "value": 1.0
         },
         {
           "$type": "AttachModifier",
           "modifierName": "BalloonBomb_Eff"
+        }
+      ],
+      "onKill": [
+        {
+          "$type": "FireEffect",
+          "effectPattern": "Eff_SceneObj_FilmfestSniper_01_BalloonBombExplode",
+          "effectTempleteID": -1.0,
+          "scale": 1.0,
+          "ILLLPEOODKP": ""
+        },
+        {
+          "$type": "TriggerAttackEvent",
+          "attackEvent": {
+            "attackInfo": {
+              "attackProperty": {
+                "damagePercentage": 9999999.0,
+                "damagePercentageRatio": 0.0,
+                "elementDurability": 50.0,
+                "enBreak": 9999999.0,
+                "strikeType": "Blunt",
+                "IIPHCFEONLK": 0.0
+              },
+              "attackTag": "FilmfestSniper_Bomb",
+              "attenuationGroup": "default",
+              "attenuationTag": "",
+              "cameraShake": {
+                "shakeRange": 0.36,
+                "shakeTime": 0.36,
+                "MNKFEFOKFKP": ""
+              },
+              "forceCameraShake": true,
+              "hitPattern": {
+                "hitHaltTimeScale": 0.05,
+                "hitImpulseType": "LV6",
+                "onHitEffectName": "default",
+                "FLFCIDDNMNA": ""
+              }
+            },
+            "attackPattern": {
+              "$type": "ConfigAttackSphere",
+              "born": {
+                "$type": "ConfigBornByTarget",
+                "offset": {
+                  "x": 0.0,
+                  "y": 0.5,
+                  "z": 0.0
+                }
+              },
+              "ignoreMassive": true,
+              "radius": 6.0,
+              "triggerType": "TriggerNoRepeat"
+            }
+          },
+          "targetType": "Enemy"
+        },
+        {
+          "$type": "TriggerAttackEvent",
+          "attackEvent": {
+            "attackInfo": {
+              "attackProperty": {
+                "damagePercentage": 1.0,
+                "damagePercentageRatio": 0.0,
+                "elementDurability": 50.0,
+                "enBreak": 0.0,
+                "strikeType": "Blunt",
+                "IIPHCFEONLK": 0.0
+              },
+              "attackTag": "",
+              "attenuationGroup": "default",
+              "attenuationTag": ""
+            },
+            "attackPattern": {
+              "$type": "ConfigAttackSphere",
+              "born": {
+                "$type": "ConfigBornByTarget"
+              },
+              "radius": 2.0,
+              "triggerType": "TriggerNoRepeat"
+            }
+          },
+          "targetType": "All"
         }
       ]
     }
   },
   {
     "Default": {
+      "abilityName": "SceneObj_Level_Fd_Property_Ani_Prop_FilmfestSniper_GateForbidArea_01",
       "modifiers": {
         "GateForbidArea_GateMarkRemove": {
           "duration": 0.1,
+          "elementDurability": 100.0,
+          "modifierName": "",
           "onAdded": [
             {
               "$type": "RemoveModifier",
@@ -432,18 +435,18 @@
             },
             {
               "$type": "SetGlobalValueV2",
-              "minValue": 0.0,
               "key": "GV_GateForbidArea_GateMark",
               "maxValue": 0.0,
-              "CBOMLBFIPJM": 0.0
+              "minValue": 0.0,
+              "value": 0.0
             }
           ],
-          "elementDurability": 100.0,
-          "modifierName": "",
           "AIHNJLDFEGJ": 0.0
         },
         "GateForbidArea_GateMark": {
           "duration": 0.1,
+          "elementDurability": 100.0,
+          "modifierName": "",
           "onAdded": [
             {
               "$type": "RemoveModifier",
@@ -451,40 +454,16 @@
             },
             {
               "$type": "CopyGlobalValue",
-              "srcKey": "SGV_GateForbidArea_GateMark",
-              "dstTarget": "Self",
+              "doOffStage": true,
               "dstKey": "GV_GateForbidArea_GateMark",
-              "doOffStage": true
+              "dstTarget": "Self",
+              "srcKey": "SGV_GateForbidArea_GateMark"
             }
           ],
-          "elementDurability": 100.0,
-          "modifierName": "",
           "AIHNJLDFEGJ": 0.0
         }
       },
-      "MKDAOFGPAEM": [
-        {
-          "$type": "Predicated",
-          "successActions": [
-            {
-              "$type": "ApplyModifier",
-              "modifierName": "GateForbidArea_GateMarkRemove",
-              "target": "TargetTeam"
-            }
-          ],
-          "targetPredicates": [
-            {
-              "$type": "DEOFBICNFHF",
-              "entityTypes": [
-                "Avatar"
-              ]
-            }
-          ],
-          "target": "Target"
-        }
-      ],
-      "abilityName": "SceneObj_Level_Fd_Property_Ani_Prop_FilmfestSniper_GateForbidArea_01",
-      "PFJMEMFDGOH": [
+      "onFieldEnter": [
         {
           "$type": "Predicated",
           "successActions": [
@@ -494,21 +473,47 @@
               "target": "TargetTeam"
             }
           ],
+          "target": "Target",
           "targetPredicates": [
             {
-              "$type": "DEOFBICNFHF",
+              "$type": "ByEntityTypes",
               "entityTypes": [
                 "Avatar"
               ]
             }
+          ]
+        }
+      ],
+      "onFieldExit": [
+        {
+          "$type": "Predicated",
+          "successActions": [
+            {
+              "$type": "ApplyModifier",
+              "modifierName": "GateForbidArea_GateMarkRemove",
+              "target": "TargetTeam"
+            }
           ],
-          "target": "Target"
+          "target": "Target",
+          "targetPredicates": [
+            {
+              "$type": "ByEntityTypes",
+              "entityTypes": [
+                "Avatar"
+              ]
+            }
+          ]
         }
       ]
     }
   },
   {
     "Default": {
+      "abilityName": "SceneObj_Activity_Common_Property_Ani_Prop_SnipperBullet_01",
+      "abilitySpecials": {
+        "DamagePercentage": 0.0,
+        "LevelEntity_AvatarDot_SystemValue": 1.0
+      },
       "modifiers": {
         "Blank": {
           "elementDurability": 100.0,
@@ -517,113 +522,115 @@
         },
         "FilmFest_SniperBullet_HitGroundRespond": {
           "duration": 0.5,
+          "elementDurability": 100.0,
+          "modifierName": "",
           "onAdded": [
             {
               "$type": "SetGlobalValueV2",
-              "minValue": 0.0,
               "key": "GV_RespondType",
               "maxValue": 0.0,
-              "CBOMLBFIPJM": 2.0
+              "minValue": 0.0,
+              "value": 2.0
             },
             {
               "$type": "TriggerAbility",
               "abilityName": "MonsterAffix_FilmFest_Shooting_MonsterStateSwitch"
             }
           ],
-          "elementDurability": 100.0,
-          "modifierName": "",
           "AIHNJLDFEGJ": 0.0
         },
         "FilmFest_SniperBullet_HitGadgetRespond": {
           "duration": 0.5,
+          "elementDurability": 100.0,
+          "modifierName": "",
           "onAdded": [
             {
               "$type": "SetGlobalValueV2",
-              "minValue": 0.0,
               "key": "GV_RespondType",
               "maxValue": 0.0,
-              "CBOMLBFIPJM": 3.0
+              "minValue": 0.0,
+              "value": 3.0
             },
             {
               "$type": "TriggerAbility",
               "abilityName": "MonsterAffix_FilmFest_Shooting_MonsterStateSwitch"
             }
           ],
-          "elementDurability": 100.0,
-          "modifierName": "",
           "AIHNJLDFEGJ": 0.0
         },
         "FilmFest_SniperBullet_HitMonsterRespond": {
           "duration": 0.5,
+          "elementDurability": 100.0,
+          "modifierName": "",
           "onAdded": [
             {
               "$type": "SetGlobalValueV2",
-              "minValue": 0.0,
               "key": "GV_RespondType",
               "maxValue": 0.0,
-              "CBOMLBFIPJM": 3.0
+              "minValue": 0.0,
+              "value": 3.0
             },
             {
               "$type": "TriggerAbility",
               "abilityName": "MonsterAffix_FilmFest_Shooting_MonsterStateSwitch"
             }
           ],
-          "elementDurability": 100.0,
-          "modifierName": "",
           "AIHNJLDFEGJ": 0.0
         },
         "FilmFest_SniperBullet_Killer": {
           "duration": 0.5,
+          "elementDurability": 100.0,
+          "modifierName": "",
           "onAdded": [
             {
               "$type": "ServerLuaCall",
+              "funcName": "SLC_Filmfest_Sniper_HitMonster",
+              "luaCallType": "CurGalleryControlGroup",
               "param1": 0.0,
               "param2": 0.0,
-              "funcName": "SLC_Filmfest_Sniper_HitMonster",
-              "AHCNJKIEMPP": 0.0,
-              "luaCallType": "CurGalleryControlGroup",
+              "param3": 0.0,
               "target": "CasterOwner"
             },
             {
               "$type": "Predicated",
-              "successActions": [
-                {
-                  "$type": "NotifyUI",
-                  "uiContextName": "FilmfestSniperPlayPage",
-                  "stringParam": "",
-                  "message": "MonsterKill",
-                  "intParam": 1
-                },
-                {
-                  "$type": "SetGlobalValueV2",
-                  "minValue": 0.0,
-                  "key": "GV_FilmfestSniper_MonsterResponsable",
-                  "maxValue": 0.0,
-                  "CBOMLBFIPJM": 0.0
-                }
-              ],
               "failActions": [
                 {
                   "$type": "NotifyUI",
-                  "uiContextName": "FilmfestSniperPlayPage",
+                  "message": "MonsterKill",
                   "stringParam": "",
-                  "message": "MonsterKill"
+                  "uiContextName": "FilmfestSniperPlayPage"
+                }
+              ],
+              "successActions": [
+                {
+                  "$type": "NotifyUI",
+                  "intParam": 1,
+                  "message": "MonsterKill",
+                  "stringParam": "",
+                  "uiContextName": "FilmfestSniperPlayPage"
+                },
+                {
+                  "$type": "SetGlobalValueV2",
+                  "key": "GV_FilmfestSniper_MonsterResponsable",
+                  "maxValue": 0.0,
+                  "minValue": 0.0,
+                  "value": 0.0
                 }
               ],
               "targetPredicates": [
                 {
-                  "$type": "GPEMEIHPCCF",
+                  "$type": "ByAny",
                   "predicates": [
                     {
-                      "$type": "HGKCHJOOMCH",
-                      "KIKIBABLEMA": 0.5,
+                      "$type": "ByTargetHPRatio",
+                      "hpRatio": 0.5,
                       "logic": "Lesser"
                     },
                     {
-                      "$type": "EOFDCELPGFO",
-                      "CBOMLBFIPJM": 1.0,
+                      "$type": "ByTargetGlobalValue",
                       "compareType": "NoneOrEqual",
-                      "key": "_FilmFest_Shooting_MonsterLabel"
+                      "key": "_FilmFest_Shooting_MonsterLabel",
+                      "value": 1.0
                     }
                   ]
                 }
@@ -631,221 +638,252 @@
             },
             {
               "$type": "Predicated",
-              "successActions": [
-                {
-                  "$type": "LoseHP",
-                  "MBGFJOOIMOK": [
-                    70000000
-                  ],
-                  "PBEMJNJJAFK": "",
-                  "FPOCDLCHDPE": 1.0,
-                  "JBKJGMEJFFI": ""
-                }
-              ],
               "failActions": [
                 {
                   "$type": "LoseHP",
-                  "MBGFJOOIMOK": [
+                  "amountByTargetMaxHPRatio": 0.51,
+                  "configIdArray": [
                     70000000
                   ],
-                  "PBEMJNJJAFK": "",
-                  "FPOCDLCHDPE": 0.51,
-                  "JBKJGMEJFFI": ""
+                  "JBKJGMEJFFI": "",
+                  "PBEMJNJJAFK": ""
+                }
+              ],
+              "successActions": [
+                {
+                  "$type": "LoseHP",
+                  "amountByTargetMaxHPRatio": 1.0,
+                  "configIdArray": [
+                    70000000
+                  ],
+                  "JBKJGMEJFFI": "",
+                  "PBEMJNJJAFK": ""
                 }
               ],
               "targetPredicates": [
                 {
-                  "$type": "EOFDCELPGFO",
-                  "CBOMLBFIPJM": 1.0,
+                  "$type": "ByTargetGlobalValue",
                   "compareType": "NoneOrEqual",
-                  "key": "_FilmFest_Shooting_MonsterLabel"
+                  "key": "_FilmFest_Shooting_MonsterLabel",
+                  "value": 1.0
                 }
               ]
             }
           ],
-          "elementDurability": 100.0,
-          "modifierName": "",
           "AIHNJLDFEGJ": 0.0
         },
         "FilmFest_SniperBullet_Effect": {
+          "elementDurability": 100.0,
+          "modifierName": "",
           "onAdded": [
             {
               "$type": "AttachEffect",
-              "ILLLPEOODKP": "",
-              "scale": 1.0,
               "effectPattern": "Eff_FilmfestSniper_Bullet_01",
-              "effectTempleteID": -1.0
+              "effectTempleteID": -1.0,
+              "scale": 1.0,
+              "ILLLPEOODKP": ""
             },
             {
               "$type": "AttachEffect",
-              "ILLLPEOODKP": "",
-              "scale": 1.0,
               "effectPattern": "Eff_FilmfestSniper_Bullet_01_Trail",
-              "effectTempleteID": -1.0
+              "effectTempleteID": -1.0,
+              "scale": 1.0,
+              "ILLLPEOODKP": ""
             }
           ],
-          "elementDurability": 100.0,
-          "modifierName": "",
           "AIHNJLDFEGJ": 0.0
         }
       },
       "onAbilityStart": [
         {
           "$type": "Predicated",
-          "successActions": [
-            {
-              "$type": "FireEffect",
-              "effectPattern": "Eff_FilmfestSniper_Bullet_HitEffect_01",
-              "scale": 1.0,
-              "born": {
-                "$type": "EEIECHOPFGM"
-              },
-              "ILLLPEOODKP": "",
-              "effectTempleteID": -1.0,
-              "target": "Target"
-            },
-            {
-              "$type": "DebugLog",
-              "content": "############# HitMonster ###############"
-            },
-            {
-              "$type": "SetGlobalValueV2",
-              "minValue": 0.0,
-              "key": "GV_Filmfest_SniperBullet_Triggered",
-              "maxValue": 0.0,
-              "CBOMLBFIPJM": 1.0
-            },
-            {
-              "$type": "DamageByAttackValue",
-              "attackInfo": {
-                "attackProperty": {
-                  "damagePercentageRatio": 0.0,
-                  "strikeType": "Blunt",
-                  "enBreak": 99999.0,
-                  "damagePercentage": 0.0,
-                  "elementDurability": 0.0,
-                  "ignoreLevelDiff": true,
-                  "arkheGrade": 0.0
-                },
-                "hitPattern": {
-                  "FLFCIDDNMNA": "",
-                  "onHitEffectName": "none",
-                  "hitHaltTimeScale": 0.01,
-                  "muteHitText": true,
-                  "hitImpulseType": "LV5"
-                },
-                "attenuationGroup": "default",
-                "attenuationTag": "",
-                "attackTag": ""
-              },
-              "target": "Other",
-              "predicates": [
-                {
-                  "$type": "EOFDCELPGFO",
-                  "CBOMLBFIPJM": 1.0,
-                  "compareType": "NoneOrEqual",
-                  "key": "_FilmFest_Shooting_MonsterLabel"
-                }
-              ]
-            },
-            {
-              "$type": "DamageByAttackValue",
-              "attackInfo": {
-                "attackProperty": {
-                  "damagePercentageRatio": 0.0,
-                  "strikeType": "Blunt",
-                  "enBreak": 99999.0,
-                  "damagePercentage": 0.0,
-                  "elementDurability": 0.0,
-                  "ignoreLevelDiff": true,
-                  "arkheGrade": 0.0
-                },
-                "hitPattern": {
-                  "FLFCIDDNMNA": "",
-                  "onHitEffectName": "none",
-                  "hitHaltTimeScale": 0.01,
-                  "muteHitText": true,
-                  "hitImpulseType": "LV4"
-                },
-                "attenuationGroup": "default",
-                "attenuationTag": "",
-                "attackTag": ""
-              },
-              "target": "Other",
-              "predicates": [
-                {
-                  "$type": "EOFDCELPGFO",
-                  "CBOMLBFIPJM": 2.0,
-                  "key": "_FilmFest_Shooting_MonsterLabel"
-                }
-              ]
-            },
-            {
-              "$type": "ApplyModifier",
-              "modifierName": "FilmFest_SniperBullet_Killer",
-              "target": "Target"
-            },
-            {
-              "$type": "SetGlobalPos",
-              "setTarget": false,
-              "key": "GV_Hit_Pos",
-              "born": {
-                "$type": "EEIECHOPFGM"
-              },
-              "target": "Target"
-            },
-            {
-              "$type": "Predicated",
-              "successActions": [
-                {
-                  "$type": "Predicated",
-                  "successActions": [
-                    {
-                      "$type": "CopyGlobalValue",
-                      "srcKey": "GV_Hit_Pos_0",
-                      "srcTarget": "Self",
-                      "dstKey": "GV_Hit_Pos_0",
-                      "target": "Target"
-                    },
-                    {
-                      "$type": "CopyGlobalValue",
-                      "srcKey": "GV_Hit_Pos_1",
-                      "srcTarget": "Self",
-                      "dstKey": "GV_Hit_Pos_1",
-                      "target": "Target"
-                    },
-                    {
-                      "$type": "CopyGlobalValue",
-                      "srcKey": "GV_Hit_Pos_2",
-                      "srcTarget": "Self",
-                      "dstKey": "GV_Hit_Pos_2",
-                      "target": "Target"
-                    },
-                    {
-                      "$type": "ApplyModifier",
-                      "modifierName": "FilmFest_SniperBullet_HitMonsterRespond",
-                      "target": "Target"
-                    }
-                  ],
-                  "targetPredicates": [
-                    {
-                      "$type": "EOFDCELPGFO",
-                      "CBOMLBFIPJM": 1.0,
-                      "key": "GV_FilmfestSniper_MonsterResponsable"
-                    }
-                  ],
-                  "target": "Target"
-                }
-              ],
-              "otherTargets": {
-                "$type": "DBPHPMIHBCO",
-                "tag": "Filmfest_Monster"
-              }
-            }
-          ],
           "failActions": [
             {
               "$type": "Predicated",
+              "failActions": [
+                {
+                  "$type": "SetGlobalPos",
+                  "born": {
+                    "$type": "EEIECHOPFGM"
+                  },
+                  "key": "GV_Hit_Pos",
+                  "setTarget": false,
+                  "target": "Target"
+                },
+                {
+                  "$type": "Predicated",
+                  "failActions": [
+                    {
+                      "$type": "DebugLog",
+                      "content": "############# HitGround ###############"
+                    },
+                    {
+                      "$type": "ServerLuaCall",
+                      "funcName": "SLC_Filmfest_Sniper_HitGround",
+                      "luaCallType": "CurGalleryControlGroup",
+                      "param1": 0.0,
+                      "param2": 0.0,
+                      "param3": 0.0,
+                      "target": "CasterOwner"
+                    },
+                    {
+                      "$type": "Predicated",
+                      "otherTargets": {
+                        "$type": "SelectTargetsByTag",
+                        "tag": "Filmfest_Monster"
+                      },
+                      "successActions": [
+                        {
+                          "$type": "Predicated",
+                          "successActions": [
+                            {
+                              "$type": "CopyGlobalValue",
+                              "dstKey": "GV_Hit_Pos_0",
+                              "srcKey": "GV_Hit_Pos_0",
+                              "srcTarget": "Self",
+                              "target": "Target"
+                            },
+                            {
+                              "$type": "CopyGlobalValue",
+                              "dstKey": "GV_Hit_Pos_1",
+                              "srcKey": "GV_Hit_Pos_1",
+                              "srcTarget": "Self",
+                              "target": "Target"
+                            },
+                            {
+                              "$type": "CopyGlobalValue",
+                              "dstKey": "GV_Hit_Pos_2",
+                              "srcKey": "GV_Hit_Pos_2",
+                              "srcTarget": "Self",
+                              "target": "Target"
+                            },
+                            {
+                              "$type": "ApplyModifier",
+                              "modifierName": "FilmFest_SniperBullet_HitGroundRespond",
+                              "target": "Target"
+                            }
+                          ],
+                          "target": "Target",
+                          "targetPredicates": [
+                            {
+                              "$type": "ByTargetGlobalValue",
+                              "key": "GV_FilmfestSniper_MonsterResponsable",
+                              "value": 1.0
+                            }
+                          ]
+                        }
+                      ]
+                    },
+                    {
+                      "$type": "FireHitEffect",
+                      "hitEntity": "",
+                      "hitScene": {
+                        "defaultEffect": "Eff_Arrow_Hit_Earth",
+                        "surfaceEffect": {
+                          "Water": "Eff_Arrow_Hit_Water"
+                        }
+                      }
+                    },
+                    {
+                      "$type": "SetGlobalValueV2",
+                      "key": "GV_Filmfest_SniperBullet_Triggered",
+                      "maxValue": 0.0,
+                      "minValue": 0.0,
+                      "value": 1.0
+                    }
+                  ],
+                  "successActions": [
+                    {
+                      "$type": "DebugLog",
+                      "content": "############# HitGround(Gadget) ###############"
+                    },
+                    {
+                      "$type": "Predicated",
+                      "otherTargets": {
+                        "$type": "SelectTargetsByTag",
+                        "tag": "Filmfest_Monster"
+                      },
+                      "successActions": [
+                        {
+                          "$type": "Predicated",
+                          "successActions": [
+                            {
+                              "$type": "CopyGlobalValue",
+                              "dstKey": "GV_Hit_Pos_0",
+                              "srcKey": "GV_Hit_Pos_0",
+                              "srcTarget": "Self",
+                              "target": "Target"
+                            },
+                            {
+                              "$type": "CopyGlobalValue",
+                              "dstKey": "GV_Hit_Pos_1",
+                              "srcKey": "GV_Hit_Pos_1",
+                              "srcTarget": "Self",
+                              "target": "Target"
+                            },
+                            {
+                              "$type": "CopyGlobalValue",
+                              "dstKey": "GV_Hit_Pos_2",
+                              "srcKey": "GV_Hit_Pos_2",
+                              "srcTarget": "Self",
+                              "target": "Target"
+                            },
+                            {
+                              "$type": "ApplyModifier",
+                              "modifierName": "FilmFest_SniperBullet_HitGroundRespond",
+                              "target": "Target"
+                            }
+                          ],
+                          "target": "Target",
+                          "targetPredicates": [
+                            {
+                              "$type": "ByTargetGlobalValue",
+                              "key": "GV_FilmfestSniper_MonsterResponsable",
+                              "value": 1.0
+                            }
+                          ]
+                        }
+                      ]
+                    },
+                    {
+                      "$type": "FireEffect",
+                      "born": {
+                        "$type": "EEIECHOPFGM"
+                      },
+                      "effectPattern": "Eff_FilmfestSniper_Bullet_HitEffect_01",
+                      "effectTempleteID": -1.0,
+                      "scale": 1.0,
+                      "target": "Target",
+                      "ILLLPEOODKP": ""
+                    },
+                    {
+                      "$type": "SetGlobalValueV2",
+                      "key": "GV_Filmfest_SniperBullet_Triggered",
+                      "maxValue": 0.0,
+                      "minValue": 0.0,
+                      "value": 1.0
+                    },
+                    {
+                      "$type": "ServerLuaCall",
+                      "funcName": "SLC_Filmfest_Sniper_HitGround",
+                      "luaCallType": "CurGalleryControlGroup",
+                      "param1": 0.0,
+                      "param2": 0.0,
+                      "param3": 0.0,
+                      "target": "CasterOwner"
+                    }
+                  ],
+                  "target": "Target",
+                  "targetPredicates": [
+                    {
+                      "$type": "ByEntityTypes",
+                      "entityTypes": [
+                        "Gadget"
+                      ]
+                    }
+                  ]
+                }
+              ],
               "successActions": [
                 {
                   "$type": "DebugLog",
@@ -853,41 +891,45 @@
                 },
                 {
                   "$type": "SetGlobalPos",
-                  "setTarget": false,
-                  "key": "GV_Hit_Pos",
                   "born": {
                     "$type": "EEIECHOPFGM"
                   },
+                  "key": "GV_Hit_Pos",
+                  "setTarget": false,
                   "target": "Target"
                 },
                 {
                   "$type": "Predicated",
+                  "otherTargets": {
+                    "$type": "SelectTargetsByTag",
+                    "tag": "Filmfest_Monster"
+                  },
                   "successActions": [
                     {
                       "$type": "Predicated",
                       "successActions": [
                         {
                           "$type": "CopyGlobalValue",
-                          "srcKey": "GV_Hit_Pos_0",
-                          "dstTarget": "Other",
-                          "srcTarget": "Self",
                           "dstKey": "GV_Hit_Pos_0",
+                          "dstTarget": "Other",
+                          "srcKey": "GV_Hit_Pos_0",
+                          "srcTarget": "Self",
                           "target": "Other"
                         },
                         {
                           "$type": "CopyGlobalValue",
-                          "srcKey": "GV_Hit_Pos_1",
-                          "dstTarget": "Other",
-                          "srcTarget": "Self",
                           "dstKey": "GV_Hit_Pos_1",
+                          "dstTarget": "Other",
+                          "srcKey": "GV_Hit_Pos_1",
+                          "srcTarget": "Self",
                           "target": "Other"
                         },
                         {
                           "$type": "CopyGlobalValue",
-                          "srcKey": "GV_Hit_Pos_2",
-                          "dstTarget": "Other",
-                          "srcTarget": "Self",
                           "dstKey": "GV_Hit_Pos_2",
+                          "dstTarget": "Other",
+                          "srcKey": "GV_Hit_Pos_2",
+                          "srcTarget": "Self",
                           "target": "Other"
                         },
                         {
@@ -896,289 +938,251 @@
                           "target": "Other"
                         }
                       ],
+                      "target": "Target",
                       "targetPredicates": [
                         {
-                          "$type": "EOFDCELPGFO",
-                          "CBOMLBFIPJM": 1.0,
-                          "key": "GV_FilmfestSniper_MonsterResponsable"
+                          "$type": "ByTargetGlobalValue",
+                          "key": "GV_FilmfestSniper_MonsterResponsable",
+                          "value": 1.0
                         }
-                      ],
-                      "target": "Target"
+                      ]
                     }
-                  ],
-                  "otherTargets": {
-                    "$type": "DBPHPMIHBCO",
-                    "tag": "Filmfest_Monster"
-                  }
+                  ]
                 },
                 {
                   "$type": "FireEffect",
-                  "effectPattern": "Eff_FilmfestSniper_Bullet_HitEffect_01",
-                  "scale": 1.0,
                   "born": {
                     "$type": "EEIECHOPFGM"
                   },
-                  "ILLLPEOODKP": "",
+                  "effectPattern": "Eff_FilmfestSniper_Bullet_HitEffect_01",
                   "effectTempleteID": -1.0,
-                  "target": "Target"
+                  "scale": 1.0,
+                  "target": "Target",
+                  "ILLLPEOODKP": ""
                 },
                 {
                   "$type": "SetGlobalValueV2",
-                  "minValue": 0.0,
                   "key": "GV_Filmfest_SniperBullet_Triggered",
                   "maxValue": 0.0,
-                  "CBOMLBFIPJM": 1.0
+                  "minValue": 0.0,
+                  "value": 1.0
                 },
                 {
                   "$type": "ServerLuaCall",
+                  "doOffStage": true,
+                  "funcName": "SLC_Filmfest_Sniper_HitGadget",
+                  "luaCallType": "CurGalleryControlGroup",
                   "param1": 0.0,
                   "param2": 0.0,
-                  "funcName": "SLC_Filmfest_Sniper_HitGadget",
-                  "AHCNJKIEMPP": 0.0,
-                  "luaCallType": "CurGalleryControlGroup",
-                  "target": "CasterOwner",
-                  "doOffStage": true
+                  "param3": 0.0,
+                  "target": "CasterOwner"
                 },
                 {
                   "$type": "DamageByAttackValue",
                   "attackInfo": {
                     "attackProperty": {
-                      "damagePercentageRatio": 0.0,
-                      "strikeType": "Default",
-                      "damagePercentage": 1.0,
                       "damageExtra": 99999.0,
+                      "damagePercentage": 1.0,
+                      "damagePercentageRatio": 0.0,
                       "elementDurability": 25.0,
-                      "arkheGrade": 0.0
+                      "strikeType": "Default",
+                      "IIPHCFEONLK": 0.0
                     },
-                    "hitPattern": {
-                      "FLFCIDDNMNA": "",
-                      "onHitEffectName": "default",
-                      "hitHaltTimeScale": 0.05,
-                      "hitImpulseType": "LV1"
-                    },
+                    "attackTag": "FilmfestSniper_Bullet",
                     "attenuationGroup": "default",
                     "attenuationTag": "",
-                    "attackTag": "FilmfestSniper_Bullet"
+                    "hitPattern": {
+                      "hitHaltTimeScale": 0.05,
+                      "hitImpulseType": "LV1",
+                      "onHitEffectName": "default",
+                      "FLFCIDDNMNA": ""
+                    }
                   },
                   "target": "Target"
                 }
               ],
-              "failActions": [
+              "target": "Target",
+              "targetPredicates": [
                 {
-                  "$type": "SetGlobalPos",
-                  "setTarget": false,
-                  "key": "GV_Hit_Pos",
-                  "born": {
-                    "$type": "EEIECHOPFGM"
-                  },
-                  "target": "Target"
+                  "$type": "ByTargetGlobalValue",
+                  "compareType": "MoreThanAndEqual",
+                  "key": "Is_FilmfestSniper_Breakable",
+                  "value": 1.0
+                }
+              ]
+            }
+          ],
+          "predicates": [
+            {
+              "$type": "ByTargetGlobalValue",
+              "compareType": "NoneOrEqual",
+              "key": "GV_Filmfest_SniperBullet_Triggered",
+              "target": "Self",
+              "value": 0.0
+            }
+          ],
+          "successActions": [
+            {
+              "$type": "FireEffect",
+              "born": {
+                "$type": "EEIECHOPFGM"
+              },
+              "effectPattern": "Eff_FilmfestSniper_Bullet_HitEffect_01",
+              "effectTempleteID": -1.0,
+              "scale": 1.0,
+              "target": "Target",
+              "ILLLPEOODKP": ""
+            },
+            {
+              "$type": "DebugLog",
+              "content": "############# HitMonster ###############"
+            },
+            {
+              "$type": "SetGlobalValueV2",
+              "key": "GV_Filmfest_SniperBullet_Triggered",
+              "maxValue": 0.0,
+              "minValue": 0.0,
+              "value": 1.0
+            },
+            {
+              "$type": "DamageByAttackValue",
+              "attackInfo": {
+                "attackProperty": {
+                  "damagePercentage": 0.0,
+                  "damagePercentageRatio": 0.0,
+                  "elementDurability": 0.0,
+                  "enBreak": 99999.0,
+                  "ignoreLevelDiff": true,
+                  "strikeType": "Blunt",
+                  "IIPHCFEONLK": 0.0
                 },
+                "attackTag": "",
+                "attenuationGroup": "default",
+                "attenuationTag": "",
+                "hitPattern": {
+                  "hitHaltTimeScale": 0.01,
+                  "hitImpulseType": "LV5",
+                  "muteHitText": true,
+                  "onHitEffectName": "none",
+                  "FLFCIDDNMNA": ""
+                }
+              },
+              "predicates": [
+                {
+                  "$type": "ByTargetGlobalValue",
+                  "compareType": "NoneOrEqual",
+                  "key": "_FilmFest_Shooting_MonsterLabel",
+                  "value": 1.0
+                }
+              ],
+              "target": "Other"
+            },
+            {
+              "$type": "DamageByAttackValue",
+              "attackInfo": {
+                "attackProperty": {
+                  "damagePercentage": 0.0,
+                  "damagePercentageRatio": 0.0,
+                  "elementDurability": 0.0,
+                  "enBreak": 99999.0,
+                  "ignoreLevelDiff": true,
+                  "strikeType": "Blunt",
+                  "IIPHCFEONLK": 0.0
+                },
+                "attackTag": "",
+                "attenuationGroup": "default",
+                "attenuationTag": "",
+                "hitPattern": {
+                  "hitHaltTimeScale": 0.01,
+                  "hitImpulseType": "LV4",
+                  "muteHitText": true,
+                  "onHitEffectName": "none",
+                  "FLFCIDDNMNA": ""
+                }
+              },
+              "predicates": [
+                {
+                  "$type": "ByTargetGlobalValue",
+                  "key": "_FilmFest_Shooting_MonsterLabel",
+                  "value": 2.0
+                }
+              ],
+              "target": "Other"
+            },
+            {
+              "$type": "ApplyModifier",
+              "modifierName": "FilmFest_SniperBullet_Killer",
+              "target": "Target"
+            },
+            {
+              "$type": "SetGlobalPos",
+              "born": {
+                "$type": "EEIECHOPFGM"
+              },
+              "key": "GV_Hit_Pos",
+              "setTarget": false,
+              "target": "Target"
+            },
+            {
+              "$type": "Predicated",
+              "otherTargets": {
+                "$type": "SelectTargetsByTag",
+                "tag": "Filmfest_Monster"
+              },
+              "successActions": [
                 {
                   "$type": "Predicated",
                   "successActions": [
                     {
-                      "$type": "DebugLog",
-                      "content": "############# HitGround(Gadget) ###############"
-                    },
-                    {
-                      "$type": "Predicated",
-                      "successActions": [
-                        {
-                          "$type": "Predicated",
-                          "successActions": [
-                            {
-                              "$type": "CopyGlobalValue",
-                              "srcKey": "GV_Hit_Pos_0",
-                              "srcTarget": "Self",
-                              "dstKey": "GV_Hit_Pos_0",
-                              "target": "Target"
-                            },
-                            {
-                              "$type": "CopyGlobalValue",
-                              "srcKey": "GV_Hit_Pos_1",
-                              "srcTarget": "Self",
-                              "dstKey": "GV_Hit_Pos_1",
-                              "target": "Target"
-                            },
-                            {
-                              "$type": "CopyGlobalValue",
-                              "srcKey": "GV_Hit_Pos_2",
-                              "srcTarget": "Self",
-                              "dstKey": "GV_Hit_Pos_2",
-                              "target": "Target"
-                            },
-                            {
-                              "$type": "ApplyModifier",
-                              "modifierName": "FilmFest_SniperBullet_HitGroundRespond",
-                              "target": "Target"
-                            }
-                          ],
-                          "targetPredicates": [
-                            {
-                              "$type": "EOFDCELPGFO",
-                              "CBOMLBFIPJM": 1.0,
-                              "key": "GV_FilmfestSniper_MonsterResponsable"
-                            }
-                          ],
-                          "target": "Target"
-                        }
-                      ],
-                      "otherTargets": {
-                        "$type": "DBPHPMIHBCO",
-                        "tag": "Filmfest_Monster"
-                      }
-                    },
-                    {
-                      "$type": "FireEffect",
-                      "effectPattern": "Eff_FilmfestSniper_Bullet_HitEffect_01",
-                      "scale": 1.0,
-                      "born": {
-                        "$type": "EEIECHOPFGM"
-                      },
-                      "ILLLPEOODKP": "",
-                      "effectTempleteID": -1.0,
+                      "$type": "CopyGlobalValue",
+                      "dstKey": "GV_Hit_Pos_0",
+                      "srcKey": "GV_Hit_Pos_0",
+                      "srcTarget": "Self",
                       "target": "Target"
                     },
                     {
-                      "$type": "SetGlobalValueV2",
-                      "minValue": 0.0,
-                      "key": "GV_Filmfest_SniperBullet_Triggered",
-                      "maxValue": 0.0,
-                      "CBOMLBFIPJM": 1.0
+                      "$type": "CopyGlobalValue",
+                      "dstKey": "GV_Hit_Pos_1",
+                      "srcKey": "GV_Hit_Pos_1",
+                      "srcTarget": "Self",
+                      "target": "Target"
                     },
                     {
-                      "$type": "ServerLuaCall",
-                      "param1": 0.0,
-                      "param2": 0.0,
-                      "funcName": "SLC_Filmfest_Sniper_HitGround",
-                      "AHCNJKIEMPP": 0.0,
-                      "luaCallType": "CurGalleryControlGroup",
-                      "target": "CasterOwner"
+                      "$type": "CopyGlobalValue",
+                      "dstKey": "GV_Hit_Pos_2",
+                      "srcKey": "GV_Hit_Pos_2",
+                      "srcTarget": "Self",
+                      "target": "Target"
+                    },
+                    {
+                      "$type": "ApplyModifier",
+                      "modifierName": "FilmFest_SniperBullet_HitMonsterRespond",
+                      "target": "Target"
                     }
                   ],
-                  "failActions": [
-                    {
-                      "$type": "DebugLog",
-                      "content": "############# HitGround ###############"
-                    },
-                    {
-                      "$type": "ServerLuaCall",
-                      "param1": 0.0,
-                      "param2": 0.0,
-                      "funcName": "SLC_Filmfest_Sniper_HitGround",
-                      "AHCNJKIEMPP": 0.0,
-                      "luaCallType": "CurGalleryControlGroup",
-                      "target": "CasterOwner"
-                    },
-                    {
-                      "$type": "Predicated",
-                      "successActions": [
-                        {
-                          "$type": "Predicated",
-                          "successActions": [
-                            {
-                              "$type": "CopyGlobalValue",
-                              "srcKey": "GV_Hit_Pos_0",
-                              "srcTarget": "Self",
-                              "dstKey": "GV_Hit_Pos_0",
-                              "target": "Target"
-                            },
-                            {
-                              "$type": "CopyGlobalValue",
-                              "srcKey": "GV_Hit_Pos_1",
-                              "srcTarget": "Self",
-                              "dstKey": "GV_Hit_Pos_1",
-                              "target": "Target"
-                            },
-                            {
-                              "$type": "CopyGlobalValue",
-                              "srcKey": "GV_Hit_Pos_2",
-                              "srcTarget": "Self",
-                              "dstKey": "GV_Hit_Pos_2",
-                              "target": "Target"
-                            },
-                            {
-                              "$type": "ApplyModifier",
-                              "modifierName": "FilmFest_SniperBullet_HitGroundRespond",
-                              "target": "Target"
-                            }
-                          ],
-                          "targetPredicates": [
-                            {
-                              "$type": "EOFDCELPGFO",
-                              "CBOMLBFIPJM": 1.0,
-                              "key": "GV_FilmfestSniper_MonsterResponsable"
-                            }
-                          ],
-                          "target": "Target"
-                        }
-                      ],
-                      "otherTargets": {
-                        "$type": "DBPHPMIHBCO",
-                        "tag": "Filmfest_Monster"
-                      }
-                    },
-                    {
-                      "$type": "FireHitEffect",
-                      "hitEntity": "",
-                      "MPNIJNGFBIH": {
-                        "JEAMJBPPGBA": "Eff_Arrow_Hit_Earth",
-                        "JHGJLDPNJHG": {
-                          "Water": "Eff_Arrow_Hit_Water"
-                        }
-                      }
-                    },
-                    {
-                      "$type": "SetGlobalValueV2",
-                      "minValue": 0.0,
-                      "key": "GV_Filmfest_SniperBullet_Triggered",
-                      "maxValue": 0.0,
-                      "CBOMLBFIPJM": 1.0
-                    }
-                  ],
+                  "target": "Target",
                   "targetPredicates": [
                     {
-                      "$type": "DEOFBICNFHF",
-                      "entityTypes": [
-                        "Gadget"
-                      ]
+                      "$type": "ByTargetGlobalValue",
+                      "key": "GV_FilmfestSniper_MonsterResponsable",
+                      "value": 1.0
                     }
-                  ],
-                  "target": "Target"
+                  ]
                 }
-              ],
-              "targetPredicates": [
-                {
-                  "$type": "EOFDCELPGFO",
-                  "CBOMLBFIPJM": 1.0,
-                  "compareType": "MoreThanAndEqual",
-                  "key": "Is_FilmfestSniper_Breakable"
-                }
-              ],
-              "target": "Target"
-            }
-          ],
-          "targetPredicates": [
-            {
-              "$type": "DEOFBICNFHF",
-              "entityTypes": [
-                "Monster"
               ]
             }
           ],
           "target": "Target",
-          "predicates": [
+          "targetPredicates": [
             {
-              "$type": "EOFDCELPGFO",
-              "CBOMLBFIPJM": 0.0,
-              "compareType": "NoneOrEqual",
-              "key": "GV_Filmfest_SniperBullet_Triggered",
-              "target": "Self"
+              "$type": "ByEntityTypes",
+              "entityTypes": [
+                "Monster"
+              ]
             }
           ]
         }
       ],
-      "abilityName": "SceneObj_Activity_Common_Property_Ani_Prop_SnipperBullet_01",
       "onAdded": [
         {
           "$type": "ApplyModifier",
@@ -1186,84 +1190,30 @@
         },
         {
           "$type": "SetSystemValueToOverrideMap",
-          "OAEJNDBEDPO": -1.0,
           "key": "LevelEntity_AvatarDot_SystemValue",
-          "type": "ElementLevelCo"
+          "type": "ElementLevelCo",
+          "OAEJNDBEDPO": -1.0
         }
-      ],
-      "abilitySpecials": {
-        "DamagePercentage": 0.0,
-        "LevelEntity_AvatarDot_SystemValue": 1.0
-      }
+      ]
     }
   },
   {
     "Default": {
-      "modifiers": {
-        "CameraPos_01_Normal": {
-          "elementDurability": 100.0,
-          "modifierMixins": [
-            {
-              "$type": "SpawnCameraStateMixin",
-              "AFDENKPAECI": {
-                "$type": "JNEOLFPBKBG",
-                "CMJBOELEJPF": -55.0,
-                "MBILMDAEMAG": 150.0,
-                "BABKMAAEDIA": 1.0,
-                "GJBAJGLBEBK": {
-                  "z": -1.0
-                },
-                "POIDNBJALBF": 4.4118,
-                "IDIKEPGBBOM": 0.1,
-                "BKKBOKOBELI": 55.0,
-                "CFNKMIHINBJ": true,
-                "NFMCBONAMOF": "CameraPivot_1",
-                "EKDCFEFJCBE": 35.0,
-                "LLMLMENGFIP": -20.0,
-                "fov": 40.0,
-                "JAILGILPJEI": [
-                  21010105,
-                  21020704,
-                  21010404,
-                  24060903,
-                  24061103,
-                  25010226,
-                  70331003,
-                  70331033
-                ]
-              }
-            }
-          ],
-          "modifierName": "",
-          "AIHNJLDFEGJ": 0.0
-        }
-      },
       "abilityMixins": [
         {
           "$type": "AttachModifierToSelfGlobalValueMixin",
+          "defaultGlobalValueOnCreate": 0.0,
+          "globalValueKey": "GV_Filmfest_Sniper_Pos",
           "modifierNameSteps": [
             "CameraPos_01_Normal"
           ],
           "valueSteps": [
             -0.5,
             1.5
-          ],
-          "globalValueKey": "GV_Filmfest_Sniper_Pos",
-          "defaultGlobalValueOnCreate": 0.0
+          ]
         }
       ],
       "abilityName": "SceneObj_Activity_Common_Property_Ani_Prop_FilmFestSniperCamera_01",
-      "onAdded": [
-        {
-          "$type": "ChangeTag",
-          "tag": "Is_SniperCamera",
-          "isAdd": true
-        }
-      ]
-    }
-  },
-  {
-    "Default": {
       "modifiers": {
         "CameraPos_01_Normal": {
           "elementDurability": 100.0,
@@ -1272,20 +1222,17 @@
               "$type": "SpawnCameraStateMixin",
               "AFDENKPAECI": {
                 "$type": "JNEOLFPBKBG",
-                "CMJBOELEJPF": -50.0,
-                "MBILMDAEMAG": 150.0,
-                "BABKMAAEDIA": 1.0,
-                "GJBAJGLBEBK": {
-                  "z": -1.0
-                },
-                "POIDNBJALBF": 4.4118,
+                "fov": 40.0,
+                "CMJBOELEJPF": -55.0,
+                "LLMLMENGFIP": -20.0,
                 "IDIKEPGBBOM": 0.1,
-                "BKKBOKOBELI": 80.0,
+                "BABKMAAEDIA": 1.0,
+                "POIDNBJALBF": 4.4118,
+                "EKDCFEFJCBE": 35.0,
+                "BKKBOKOBELI": 55.0,
+                "MBILMDAEMAG": 150.0,
                 "CFNKMIHINBJ": true,
                 "NFMCBONAMOF": "CameraPivot_1",
-                "EKDCFEFJCBE": 30.0,
-                "LLMLMENGFIP": -20.0,
-                "fov": 40.0,
                 "JAILGILPJEI": [
                   21010105,
                   21020704,
@@ -1295,44 +1242,10 @@
                   25010226,
                   70331003,
                   70331033
-                ]
-              }
-            }
-          ],
-          "modifierName": "",
-          "AIHNJLDFEGJ": 0.0
-        },
-        "CameraPos_02_Normal": {
-          "elementDurability": 100.0,
-          "modifierMixins": [
-            {
-              "$type": "SpawnCameraStateMixin",
-              "AFDENKPAECI": {
-                "$type": "JNEOLFPBKBG",
-                "CMJBOELEJPF": -40.0,
-                "MBILMDAEMAG": 150.0,
-                "BABKMAAEDIA": 1.0,
+                ],
                 "GJBAJGLBEBK": {
                   "z": -1.0
-                },
-                "POIDNBJALBF": 4.4118,
-                "IDIKEPGBBOM": 0.1,
-                "BKKBOKOBELI": 80.0,
-                "CFNKMIHINBJ": true,
-                "NFMCBONAMOF": "CameraPivot_2",
-                "EKDCFEFJCBE": 30.0,
-                "LLMLMENGFIP": -30.0,
-                "fov": 40.0,
-                "JAILGILPJEI": [
-                  21010105,
-                  21020704,
-                  21010404,
-                  24060903,
-                  24061103,
-                  25010226,
-                  70331003,
-                  70331033
-                ]
+                }
               }
             }
           ],
@@ -1340,9 +1253,22 @@
           "AIHNJLDFEGJ": 0.0
         }
       },
+      "onAdded": [
+        {
+          "$type": "ChangeTag",
+          "isAdd": true,
+          "tag": "Is_SniperCamera"
+        }
+      ]
+    }
+  },
+  {
+    "Default": {
       "abilityMixins": [
         {
           "$type": "AttachModifierToSelfGlobalValueMixin",
+          "defaultGlobalValueOnCreate": 0.0,
+          "globalValueKey": "GV_Filmfest_Sniper_Pos",
           "modifierNameSteps": [
             "CameraPos_01_Normal",
             "CameraPos_02_Normal"
@@ -1351,23 +1277,10 @@
             -0.5,
             0.5,
             1.5
-          ],
-          "globalValueKey": "GV_Filmfest_Sniper_Pos",
-          "defaultGlobalValueOnCreate": 0.0
+          ]
         }
       ],
       "abilityName": "SceneObj_Activity_Common_Property_Ani_Prop_FilmFestSniperCamera_02",
-      "onAdded": [
-        {
-          "$type": "ChangeTag",
-          "tag": "Is_SniperCamera",
-          "isAdd": true
-        }
-      ]
-    }
-  },
-  {
-    "Default": {
       "modifiers": {
         "CameraPos_01_Normal": {
           "elementDurability": 100.0,
@@ -1376,20 +1289,17 @@
               "$type": "SpawnCameraStateMixin",
               "AFDENKPAECI": {
                 "$type": "JNEOLFPBKBG",
+                "fov": 40.0,
                 "CMJBOELEJPF": -50.0,
-                "MBILMDAEMAG": 150.0,
-                "BABKMAAEDIA": 1.0,
-                "GJBAJGLBEBK": {
-                  "z": -1.0
-                },
-                "POIDNBJALBF": 4.4118,
+                "LLMLMENGFIP": -20.0,
                 "IDIKEPGBBOM": 0.1,
+                "BABKMAAEDIA": 1.0,
+                "POIDNBJALBF": 4.4118,
+                "EKDCFEFJCBE": 30.0,
                 "BKKBOKOBELI": 80.0,
+                "MBILMDAEMAG": 150.0,
                 "CFNKMIHINBJ": true,
                 "NFMCBONAMOF": "CameraPivot_1",
-                "EKDCFEFJCBE": 40.0,
-                "LLMLMENGFIP": -30.0,
-                "fov": 40.0,
                 "JAILGILPJEI": [
                   21010105,
                   21020704,
@@ -1399,72 +1309,10 @@
                   25010226,
                   70331003,
                   70331033
-                ]
-              }
-            }
-          ],
-          "modifierName": "",
-          "AIHNJLDFEGJ": 0.0
-        }
-      },
-      "abilityMixins": [
-        {
-          "$type": "AttachModifierToSelfGlobalValueMixin",
-          "modifierNameSteps": [
-            "CameraPos_01_Normal"
-          ],
-          "valueSteps": [
-            -0.5,
-            1.5
-          ],
-          "globalValueKey": "GV_Filmfest_Sniper_Pos",
-          "defaultGlobalValueOnCreate": 0.0
-        }
-      ],
-      "abilityName": "SceneObj_Activity_Common_Property_Ani_Prop_FilmFestSniperCamera_03",
-      "onAdded": [
-        {
-          "$type": "ChangeTag",
-          "tag": "Is_SniperCamera",
-          "isAdd": true
-        }
-      ]
-    }
-  },
-  {
-    "Default": {
-      "modifiers": {
-        "CameraPos_01_Normal": {
-          "elementDurability": 100.0,
-          "modifierMixins": [
-            {
-              "$type": "SpawnCameraStateMixin",
-              "AFDENKPAECI": {
-                "$type": "JNEOLFPBKBG",
-                "CMJBOELEJPF": -25.0,
-                "MBILMDAEMAG": 150.0,
-                "BABKMAAEDIA": 1.0,
+                ],
                 "GJBAJGLBEBK": {
                   "z": -1.0
-                },
-                "POIDNBJALBF": 4.4118,
-                "IDIKEPGBBOM": 0.1,
-                "BKKBOKOBELI": 85.0,
-                "CFNKMIHINBJ": true,
-                "NFMCBONAMOF": "CameraPivot_1",
-                "EKDCFEFJCBE": 25.0,
-                "LLMLMENGFIP": -30.0,
-                "fov": 40.0,
-                "JAILGILPJEI": [
-                  21010105,
-                  21020704,
-                  21010404,
-                  24060903,
-                  24061103,
-                  25010226,
-                  70331003,
-                  70331033
-                ]
+                }
               }
             }
           ],
@@ -1478,20 +1326,17 @@
               "$type": "SpawnCameraStateMixin",
               "AFDENKPAECI": {
                 "$type": "JNEOLFPBKBG",
-                "CMJBOELEJPF": -90.0,
-                "MBILMDAEMAG": 150.0,
-                "BABKMAAEDIA": 1.0,
-                "GJBAJGLBEBK": {
-                  "z": -1.0
-                },
-                "POIDNBJALBF": 4.4118,
+                "fov": 40.0,
+                "CMJBOELEJPF": -40.0,
+                "LLMLMENGFIP": -30.0,
                 "IDIKEPGBBOM": 0.1,
-                "BKKBOKOBELI": 60.0,
+                "BABKMAAEDIA": 1.0,
+                "POIDNBJALBF": 4.4118,
+                "EKDCFEFJCBE": 30.0,
+                "BKKBOKOBELI": 80.0,
+                "MBILMDAEMAG": 150.0,
                 "CFNKMIHINBJ": true,
                 "NFMCBONAMOF": "CameraPivot_2",
-                "EKDCFEFJCBE": 30.0,
-                "LLMLMENGFIP": -30.0,
-                "fov": 40.0,
                 "JAILGILPJEI": [
                   21010105,
                   21020704,
@@ -1501,7 +1346,10 @@
                   25010226,
                   70331003,
                   70331033
-                ]
+                ],
+                "GJBAJGLBEBK": {
+                  "z": -1.0
+                }
               }
             }
           ],
@@ -1509,34 +1357,32 @@
           "AIHNJLDFEGJ": 0.0
         }
       },
-      "abilityMixins": [
-        {
-          "$type": "AttachModifierToSelfGlobalValueMixin",
-          "modifierNameSteps": [
-            "CameraPos_01_Normal",
-            "CameraPos_02_Normal"
-          ],
-          "valueSteps": [
-            -0.5,
-            0.5,
-            1.5
-          ],
-          "globalValueKey": "GV_Filmfest_Sniper_Pos",
-          "defaultGlobalValueOnCreate": 0.0
-        }
-      ],
-      "abilityName": "SceneObj_Activity_Common_Property_Ani_Prop_FilmFestSniperCamera_04",
       "onAdded": [
         {
           "$type": "ChangeTag",
-          "tag": "Is_SniperCamera",
-          "isAdd": true
+          "isAdd": true,
+          "tag": "Is_SniperCamera"
         }
       ]
     }
   },
   {
     "Default": {
+      "abilityMixins": [
+        {
+          "$type": "AttachModifierToSelfGlobalValueMixin",
+          "defaultGlobalValueOnCreate": 0.0,
+          "globalValueKey": "GV_Filmfest_Sniper_Pos",
+          "modifierNameSteps": [
+            "CameraPos_01_Normal"
+          ],
+          "valueSteps": [
+            -0.5,
+            1.5
+          ]
+        }
+      ],
+      "abilityName": "SceneObj_Activity_Common_Property_Ani_Prop_FilmFestSniperCamera_03",
       "modifiers": {
         "CameraPos_01_Normal": {
           "elementDurability": 100.0,
@@ -1545,20 +1391,17 @@
               "$type": "SpawnCameraStateMixin",
               "AFDENKPAECI": {
                 "$type": "JNEOLFPBKBG",
-                "CMJBOELEJPF": -55.0,
-                "MBILMDAEMAG": 150.0,
-                "BABKMAAEDIA": 1.0,
-                "GJBAJGLBEBK": {
-                  "z": -1.0
-                },
-                "POIDNBJALBF": 4.4118,
+                "fov": 40.0,
+                "CMJBOELEJPF": -50.0,
+                "LLMLMENGFIP": -30.0,
                 "IDIKEPGBBOM": 0.1,
-                "BKKBOKOBELI": 55.0,
+                "BABKMAAEDIA": 1.0,
+                "POIDNBJALBF": 4.4118,
+                "EKDCFEFJCBE": 40.0,
+                "BKKBOKOBELI": 80.0,
+                "MBILMDAEMAG": 150.0,
                 "CFNKMIHINBJ": true,
                 "NFMCBONAMOF": "CameraPivot_1",
-                "EKDCFEFJCBE": 20.0,
-                "LLMLMENGFIP": -30.0,
-                "fov": 40.0,
                 "JAILGILPJEI": [
                   21010105,
                   21020704,
@@ -1568,7 +1411,10 @@
                   25010226,
                   70331003,
                   70331033
-                ]
+                ],
+                "GJBAJGLBEBK": {
+                  "z": -1.0
+                }
               }
             }
           ],
@@ -1576,123 +1422,277 @@
           "AIHNJLDFEGJ": 0.0
         }
       },
-      "abilityMixins": [
-        {
-          "$type": "AttachModifierToSelfGlobalValueMixin",
-          "modifierNameSteps": [
-            "CameraPos_01_Normal"
-          ],
-          "valueSteps": [
-            -0.5,
-            1.5
-          ],
-          "globalValueKey": "GV_Filmfest_Sniper_Pos",
-          "defaultGlobalValueOnCreate": 0.0
-        }
-      ],
-      "abilityName": "SceneObj_Activity_Common_Property_Ani_Prop_FilmFestSniperCamera_05",
       "onAdded": [
         {
           "$type": "ChangeTag",
-          "tag": "Is_SniperCamera",
-          "isAdd": true
+          "isAdd": true,
+          "tag": "Is_SniperCamera"
         }
       ]
     }
   },
   {
     "Default": {
-      "onKill": [
+      "abilityMixins": [
         {
-          "$type": "FireEffect",
-          "effectPattern": "Eff_SceneObj_FilmfestSniper_01_Appear",
-          "scale": 1.2,
-          "ILLLPEOODKP": "",
-          "effectTempleteID": -1.0
+          "$type": "AttachModifierToSelfGlobalValueMixin",
+          "defaultGlobalValueOnCreate": 0.0,
+          "globalValueKey": "GV_Filmfest_Sniper_Pos",
+          "modifierNameSteps": [
+            "CameraPos_01_Normal",
+            "CameraPos_02_Normal"
+          ],
+          "valueSteps": [
+            -0.5,
+            0.5,
+            1.5
+          ]
         }
       ],
+      "abilityName": "SceneObj_Activity_Common_Property_Ani_Prop_FilmFestSniperCamera_04",
+      "modifiers": {
+        "CameraPos_01_Normal": {
+          "elementDurability": 100.0,
+          "modifierMixins": [
+            {
+              "$type": "SpawnCameraStateMixin",
+              "AFDENKPAECI": {
+                "$type": "JNEOLFPBKBG",
+                "fov": 40.0,
+                "LLMLMENGFIP": -30.0,
+                "CMJBOELEJPF": -25.0,
+                "IDIKEPGBBOM": 0.1,
+                "BABKMAAEDIA": 1.0,
+                "POIDNBJALBF": 4.4118,
+                "EKDCFEFJCBE": 25.0,
+                "BKKBOKOBELI": 85.0,
+                "MBILMDAEMAG": 150.0,
+                "CFNKMIHINBJ": true,
+                "NFMCBONAMOF": "CameraPivot_1",
+                "JAILGILPJEI": [
+                  21010105,
+                  21020704,
+                  21010404,
+                  24060903,
+                  24061103,
+                  25010226,
+                  70331003,
+                  70331033
+                ],
+                "GJBAJGLBEBK": {
+                  "z": -1.0
+                }
+              }
+            }
+          ],
+          "modifierName": "",
+          "AIHNJLDFEGJ": 0.0
+        },
+        "CameraPos_02_Normal": {
+          "elementDurability": 100.0,
+          "modifierMixins": [
+            {
+              "$type": "SpawnCameraStateMixin",
+              "AFDENKPAECI": {
+                "$type": "JNEOLFPBKBG",
+                "fov": 40.0,
+                "CMJBOELEJPF": -90.0,
+                "LLMLMENGFIP": -30.0,
+                "IDIKEPGBBOM": 0.1,
+                "BABKMAAEDIA": 1.0,
+                "POIDNBJALBF": 4.4118,
+                "EKDCFEFJCBE": 30.0,
+                "BKKBOKOBELI": 60.0,
+                "MBILMDAEMAG": 150.0,
+                "CFNKMIHINBJ": true,
+                "NFMCBONAMOF": "CameraPivot_2",
+                "JAILGILPJEI": [
+                  21010105,
+                  21020704,
+                  21010404,
+                  24060903,
+                  24061103,
+                  25010226,
+                  70331003,
+                  70331033
+                ],
+                "GJBAJGLBEBK": {
+                  "z": -1.0
+                }
+              }
+            }
+          ],
+          "modifierName": "",
+          "AIHNJLDFEGJ": 0.0
+        }
+      },
+      "onAdded": [
+        {
+          "$type": "ChangeTag",
+          "isAdd": true,
+          "tag": "Is_SniperCamera"
+        }
+      ]
+    }
+  },
+  {
+    "Default": {
+      "abilityMixins": [
+        {
+          "$type": "AttachModifierToSelfGlobalValueMixin",
+          "defaultGlobalValueOnCreate": 0.0,
+          "globalValueKey": "GV_Filmfest_Sniper_Pos",
+          "modifierNameSteps": [
+            "CameraPos_01_Normal"
+          ],
+          "valueSteps": [
+            -0.5,
+            1.5
+          ]
+        }
+      ],
+      "abilityName": "SceneObj_Activity_Common_Property_Ani_Prop_FilmFestSniperCamera_05",
+      "modifiers": {
+        "CameraPos_01_Normal": {
+          "elementDurability": 100.0,
+          "modifierMixins": [
+            {
+              "$type": "SpawnCameraStateMixin",
+              "AFDENKPAECI": {
+                "$type": "JNEOLFPBKBG",
+                "fov": 40.0,
+                "CMJBOELEJPF": -55.0,
+                "LLMLMENGFIP": -30.0,
+                "IDIKEPGBBOM": 0.1,
+                "BABKMAAEDIA": 1.0,
+                "POIDNBJALBF": 4.4118,
+                "EKDCFEFJCBE": 20.0,
+                "BKKBOKOBELI": 55.0,
+                "MBILMDAEMAG": 150.0,
+                "CFNKMIHINBJ": true,
+                "NFMCBONAMOF": "CameraPivot_1",
+                "JAILGILPJEI": [
+                  21010105,
+                  21020704,
+                  21010404,
+                  24060903,
+                  24061103,
+                  25010226,
+                  70331003,
+                  70331033
+                ],
+                "GJBAJGLBEBK": {
+                  "z": -1.0
+                }
+              }
+            }
+          ],
+          "modifierName": "",
+          "AIHNJLDFEGJ": 0.0
+        }
+      },
+      "onAdded": [
+        {
+          "$type": "ChangeTag",
+          "isAdd": true,
+          "tag": "Is_SniperCamera"
+        }
+      ]
+    }
+  },
+  {
+    "Default": {
       "abilityName": "SceneObj_Level_Fd_Property_Ani_Prop_FilmfestSniper_Blindage_01",
       "onAdded": [
         {
           "$type": "FireEffect",
           "effectPattern": "Eff_SceneObj_FilmfestSniper_01_Appear",
+          "effectTempleteID": -1.0,
           "scale": 1.2,
-          "ILLLPEOODKP": "",
-          "effectTempleteID": -1.0
+          "ILLLPEOODKP": ""
+        }
+      ],
+      "onKill": [
+        {
+          "$type": "FireEffect",
+          "effectPattern": "Eff_SceneObj_FilmfestSniper_01_Appear",
+          "effectTempleteID": -1.0,
+          "scale": 1.2,
+          "ILLLPEOODKP": ""
         }
       ]
     }
   },
   {
     "Default": {
+      "abilityName": "SceneObj_Activity_Common_Property_Ani_Prop_FilmFestBallGame_01",
       "modifiers": {
         "FilmfestBallGame": {
           "elementDurability": 100.0,
           "modifierMixins": [
             {
               "$type": "ActivityFilmfestBallGameMixin",
-              "AMKDINMLOGM": 100,
-              "JKKDBAAHEPC": "SGV_FilmFestBallGame_Start",
+              "pingInterval": 100,
               "CDCHKOCPBJP": 3.0,
+              "AMKDINMLOGM": 100,
               "LGDBBEMKDFP": 300,
               "ABEAMHKBLJM": "",
-              "pingInterval": 100
+              "JKKDBAAHEPC": "SGV_FilmFestBallGame_Start"
             }
           ],
           "modifierName": "",
           "AIHNJLDFEGJ": 0.0
         },
         "FilmfestBallGame_Preload": {
+          "elementDurability": 100.0,
+          "modifierName": "",
           "onAdded": [
             {
               "$type": "FireEffect",
               "effectPattern": "Eff_SceneObj_FilmfestBallGame_SealBall_01_Appear",
+              "effectTempleteID": -1.0,
               "scale": 1.0,
-              "ILLLPEOODKP": "",
-              "effectTempleteID": -1.0
+              "ILLLPEOODKP": ""
             },
             {
               "$type": "FireEffect",
               "effectPattern": "Eff_SceneObj_FilmfestBallGame_SealBall_01_Die",
+              "effectTempleteID": -1.0,
               "scale": 1.0,
-              "ILLLPEOODKP": "",
-              "effectTempleteID": -1.0
+              "ILLLPEOODKP": ""
             },
             {
               "$type": "AttachEffect",
-              "ILLLPEOODKP": "",
-              "scale": 1.0,
               "effectPattern": "Eff_SceneObj_FilmfestBallGame_SealBall_01_Loop",
-              "effectTempleteID": -1.0
+              "effectTempleteID": -1.0,
+              "scale": 1.0,
+              "ILLLPEOODKP": ""
             },
             {
               "$type": "FireEffect",
               "effectPattern": "Eff_SceneObj_FilmfestBallGame_SealBall_02_Appear",
+              "effectTempleteID": -1.0,
               "scale": 1.0,
-              "ILLLPEOODKP": "",
-              "effectTempleteID": -1.0
+              "ILLLPEOODKP": ""
             },
             {
               "$type": "FireEffect",
               "effectPattern": "Eff_SceneObj_FilmfestBallGame_SealBall_02_Die",
+              "effectTempleteID": -1.0,
               "scale": 1.0,
-              "ILLLPEOODKP": "",
-              "effectTempleteID": -1.0
+              "ILLLPEOODKP": ""
             },
             {
               "$type": "AttachEffect",
-              "ILLLPEOODKP": "",
-              "scale": 1.0,
               "effectPattern": "Eff_SceneObj_FilmfestBallGame_SealBall_02_Loop",
-              "effectTempleteID": -1.0
+              "effectTempleteID": -1.0,
+              "scale": 1.0,
+              "ILLLPEOODKP": ""
             }
           ],
-          "elementDurability": 100.0,
-          "modifierName": "",
           "AIHNJLDFEGJ": 0.0
         }
       },
-      "abilityName": "SceneObj_Activity_Common_Property_Ani_Prop_FilmFestBallGame_01",
       "onAdded": [
         {
           "$type": "AttachModifier",
@@ -1703,6 +1703,14 @@
   },
   {
     "Default": {
+      "abilityMixins": [
+        {
+          "$type": "AttachToGadgetStateMixin",
+          "gadgetState": 204,
+          "modifierName": "Finish"
+        }
+      ],
+      "abilityName": "SceneObj_Level_Fd_Property_Ani_Prop_FilmfestSniper_BalloonCart_01",
       "modifiers": {
         "BalloonCart_Normal": {
           "elementDurability": 100.0,
@@ -1710,28 +1718,30 @@
           "AIHNJLDFEGJ": 0.0
         },
         "BalloonCart_Hited": {
+          "elementDurability": 100.0,
+          "modifierName": "",
           "onAdded": [
             {
               "$type": "ExecuteGadgetLua",
               "param1": 202
             }
           ],
-          "elementDurability": 100.0,
-          "modifierName": "",
           "AIHNJLDFEGJ": 0.0
         },
         "BalloonCart_Borken": {
+          "elementDurability": 100.0,
+          "modifierName": "",
           "onAdded": [
             {
               "$type": "ExecuteGadgetLua",
               "param1": 203
             }
           ],
-          "elementDurability": 100.0,
-          "modifierName": "",
           "AIHNJLDFEGJ": 0.0
         },
         "Finish": {
+          "elementDurability": 100.0,
+          "modifierName": "",
           "onAdded": [
             {
               "$type": "HideUIBillBoard",
@@ -1742,27 +1752,40 @@
               "modifierName": "Taunting"
             }
           ],
-          "elementDurability": 100.0,
-          "modifierName": "",
           "AIHNJLDFEGJ": 0.0
         },
         "Taunting": {
-          "thinkInterval": 2.0,
           "elementDurability": 100.0,
           "modifierName": "",
+          "onBeingHit": [
+            {
+              "$type": "ServerLuaCall",
+              "funcName": "SLC_Filmfest_Sniper_BalloonHPDown",
+              "luaCallType": "CurGalleryControlGroup",
+              "param1": 0.0,
+              "param2": 0.0,
+              "param3": 0.0,
+              "predicates": [
+                {
+                  "$type": "ByHitDamage",
+                  "damage": 0.0
+                }
+              ]
+            }
+          ],
           "onThinkInterval": [
             {
               "$type": "TriggerTaunt",
               "careValue": 10.0,
               "otherTargets": {
-                "$type": "INIACGFCEDH",
-                "sizeRatio": 1.0,
+                "$type": "SelectTargetsByShape",
                 "campTargetType": "Enemy",
-                "shapeName": "CircleR25"
+                "shapeName": "CircleR25",
+                "sizeRatio": 1.0
               },
               "predicates": [
                 {
-                  "$type": "DEOFBICNFHF",
+                  "$type": "ByEntityTypes",
                   "entityTypes": [
                     "Monster"
                   ]
@@ -1770,23 +1793,8 @@
               ]
             }
           ],
-          "AIHNJLDFEGJ": 0.0,
-          "onBeingHit": [
-            {
-              "$type": "ServerLuaCall",
-              "param1": 0.0,
-              "param2": 0.0,
-              "funcName": "SLC_Filmfest_Sniper_BalloonHPDown",
-              "AHCNJKIEMPP": 0.0,
-              "luaCallType": "CurGalleryControlGroup",
-              "predicates": [
-                {
-                  "$type": "AJJPBBPBCMO",
-                  "damage": 0.0
-                }
-              ]
-            }
-          ]
+          "thinkInterval": 2.0,
+          "AIHNJLDFEGJ": 0.0
         }
       },
       "onAbilityStart": [
@@ -1795,24 +1803,13 @@
           "modifierName": "Taunting"
         }
       ],
-      "ANHJPOLNHIG": [
-        "GV_FilmfestBalloon_HP_PERCENT"
-      ],
-      "abilityMixins": [
-        {
-          "$type": "AttachToGadgetStateMixin",
-          "modifierName": "Finish",
-          "gadgetState": 204
-        }
-      ],
-      "abilityName": "SceneObj_Level_Fd_Property_Ani_Prop_FilmfestSniper_BalloonCart_01",
       "onAdded": [
         {
           "$type": "FireEffect",
           "effectPattern": "Eff_SceneObj_FilmfestSniper_01_Appear",
+          "effectTempleteID": -1.0,
           "scale": 2.3,
-          "ILLLPEOODKP": "",
-          "effectTempleteID": -1.0
+          "ILLLPEOODKP": ""
         },
         {
           "$type": "ApplyModifier",
@@ -1821,40 +1818,44 @@
         {
           "$type": "SetGlobalValue",
           "key": "Is_Filmfest_Balloon",
-          "minValue": 0.0,
           "maxValue": 0.0,
-          "CBOMLBFIPJM": 1.0
+          "minValue": 0.0,
+          "value": 1.0
         },
         {
           "$type": "ChangeTag",
-          "tag": "SniperEscort",
-          "isAdd": true
+          "isAdd": true,
+          "tag": "SniperEscort"
         }
+      ],
+      "ANHJPOLNHIG": [
+        "GV_FilmfestBalloon_HP_PERCENT"
       ]
     }
   },
   {
     "Default": {
+      "abilityName": "SceneObj_Level_Fd_Property_Ani_Prop_FilmfestSniper_BalloonCart_Brk1",
       "modifiers": {
         "Cart_Brk1_Effect": {
+          "elementDurability": 100.0,
+          "modifierName": "",
           "onAdded": [
             {
               "$type": "AttachEffect",
-              "ILLLPEOODKP": "",
-              "scale": 1.0,
               "effectPattern": "Eff_Balloon_Broken_FanBase_01",
-              "effectTempleteID": -1.0
+              "effectTempleteID": -1.0,
+              "scale": 1.0,
+              "ILLLPEOODKP": ""
             },
             {
               "$type": "AttachEffect",
-              "ILLLPEOODKP": "",
-              "scale": 1.0,
               "effectPattern": "Eff_Balloon_Broken_Base_01",
-              "effectTempleteID": -1.0
+              "effectTempleteID": -1.0,
+              "scale": 1.0,
+              "ILLLPEOODKP": ""
             }
           ],
-          "elementDurability": 100.0,
-          "modifierName": "",
           "AIHNJLDFEGJ": 0.0
         }
       },
@@ -1863,32 +1864,32 @@
           "$type": "ApplyModifier",
           "modifierName": "Cart_Brk1_Effect"
         }
-      ],
-      "abilityName": "SceneObj_Level_Fd_Property_Ani_Prop_FilmfestSniper_BalloonCart_Brk1"
+      ]
     }
   },
   {
     "Default": {
+      "abilityName": "SceneObj_Level_Fd_Property_Ani_Prop_FilmfestSniper_BalloonCart_Brk2",
       "modifiers": {
         "Cart_Brk2_Effect": {
+          "elementDurability": 100.0,
+          "modifierName": "",
           "onAdded": [
             {
               "$type": "AttachEffect",
-              "ILLLPEOODKP": "",
-              "scale": 1.0,
               "effectPattern": "Eff_Balloon_Broken_Fan_01",
-              "effectTempleteID": -1.0
+              "effectTempleteID": -1.0,
+              "scale": 1.0,
+              "ILLLPEOODKP": ""
             },
             {
               "$type": "AttachEffect",
-              "ILLLPEOODKP": "",
-              "scale": 1.0,
               "effectPattern": "Eff_Balloon_Broken_Balloon_01",
-              "effectTempleteID": -1.0
+              "effectTempleteID": -1.0,
+              "scale": 1.0,
+              "ILLLPEOODKP": ""
             }
           ],
-          "elementDurability": 100.0,
-          "modifierName": "",
           "AIHNJLDFEGJ": 0.0
         }
       },
@@ -1897,43 +1898,23 @@
           "$type": "ApplyModifier",
           "modifierName": "Cart_Brk2_Effect"
         }
-      ],
-      "abilityName": "SceneObj_Level_Fd_Property_Ani_Prop_FilmfestSniper_BalloonCart_Brk2"
+      ]
     }
   },
   {
     "Default": {
+      "abilityName": "SceneObj_Activity_Common_Property_Ani_Prop_FilmFestBallGameGate_01",
       "modifiers": {
         "UNIQUE_FilmFestBallGameGate_MonsterKillSelf": {
-          "onAdded": [
-            {
-              "$type": "KillSelf"
-            },
-            {
-              "$type": "HideUIBillBoard",
-              "hide": true
-            },
-            {
-              "$type": "FireEffect",
-              "effectPattern": "Eff_Monster_Slime_Fire_Die",
-              "scale": 1.0,
-              "ILLLPEOODKP": "",
-              "effectTempleteID": -1.0
-            }
-          ],
-          "stacking": "RefreshUniqueDurability",
-          "GMGIAGMCGLF": {
-            "PFEHHABPHDB": "",
-            "HJKNBILJBKK": true
-          },
           "elementDurability": 100.0,
+          "isUnique": true,
           "modifierMixins": [
             {
               "$type": "DiePatternSwitchMixin",
-              "KFFCFLCPIPL": true,
+              "dieDisappearEffect": "",
               "dieForceDisappearTime": 2.0,
-              "LOPFIMMLLMC": true,
-              "dieDisappearEffect": ""
+              "ignoreElementDie": true,
+              "KFFCFLCPIPL": true
             },
             {
               "$type": "ReplaceEventPatternMixin",
@@ -1952,12 +1933,31 @@
             }
           ],
           "modifierName": "",
-          "isUnique": true,
+          "onAdded": [
+            {
+              "$type": "KillSelf"
+            },
+            {
+              "$type": "HideUIBillBoard",
+              "hide": true
+            },
+            {
+              "$type": "FireEffect",
+              "effectPattern": "Eff_Monster_Slime_Fire_Die",
+              "effectTempleteID": -1.0,
+              "scale": 1.0,
+              "ILLLPEOODKP": ""
+            }
+          ],
+          "stacking": "RefreshUniqueDurability",
+          "stackingOption": {
+            "abilitySpecialName": "",
+            "enableMixedUnique": true
+          },
           "AIHNJLDFEGJ": 0.0
         }
       },
-      "abilityName": "SceneObj_Activity_Common_Property_Ani_Prop_FilmFestBallGameGate_01",
-      "PFJMEMFDGOH": [
+      "onFieldEnter": [
         {
           "$type": "Predicated",
           "successActions": [
@@ -1967,52 +1967,42 @@
               "target": "Target"
             }
           ],
+          "target": "Target",
           "targetPredicates": [
             {
-              "$type": "DEOFBICNFHF",
+              "$type": "ByEntityTypes",
               "entityTypes": [
                 "Monster"
               ]
             },
             {
-              "$type": "GKGBIPDLMMG",
+              "$type": "ByNot",
               "predicates": [
                 {
-                  "$type": "LJBLAFGJKGI",
+                  "$type": "ByHasModifier",
                   "modifierName": "UNIQUE_FilmFestBallGameGate_MonsterKillSelf"
                 }
               ]
             }
-          ],
-          "target": "Target"
+          ]
         }
       ]
     }
   },
   {
     "Default": {
+      "abilityName": "SceneObj_Activity_Common_Property_Ani_Prop_FilmFestWoodenObject_01",
       "modifiers": {
         "WoodMaterial": {
-          "onRemoved": [
-            {
-              "$type": "AddGlobalValue",
-              "key": "_WoodenObject_DeathType",
-              "maxValue": 0.0,
-              "minValue": 0.0,
-              "CBOMLBFIPJM": 1.0
-            }
-          ],
+          "elementDurability": 30.0,
+          "elementType": "Wood",
+          "modifierName": "",
           "onAdded": [
             {
               "$type": "AttachModifier",
               "modifierName": "Die_Effect"
             }
           ],
-          "elementDurability": 30.0,
-          "elementType": "Wood",
-          "state": "Limbo",
-          "modifierName": "",
-          "AIHNJLDFEGJ": 0.0,
           "onBeingHit": [
             {
               "$type": "Predicated",
@@ -2020,9 +2010,9 @@
                 {
                   "$type": "FireEffect",
                   "effectPattern": "Eff_SceneObj_WoodenObject_Broken",
+                  "effectTempleteID": -1.0,
                   "scale": 1.0,
-                  "ILLLPEOODKP": "",
-                  "effectTempleteID": -1.0
+                  "ILLLPEOODKP": ""
                 },
                 {
                   "$type": "KillSelf"
@@ -2030,24 +2020,24 @@
               ],
               "targetPredicates": [
                 {
-                  "$type": "GKGBIPDLMMG",
+                  "$type": "ByNot",
                   "predicates": [
                     {
-                      "$type": "ICMKHKKAALL",
+                      "$type": "ByHitElement",
                       "element": "Fire"
                     },
                     {
-                      "$type": "AJJPBBPBCMO",
+                      "$type": "ByHitDamage",
                       "damage": 0.0,
                       "logic": "Equal"
                     }
                   ]
                 },
                 {
-                  "$type": "GKGBIPDLMMG",
+                  "$type": "ByNot",
                   "predicates": [
                     {
-                      "$type": "DHJDIBHFDKB",
+                      "$type": "ByHasElement",
                       "element": "Fire"
                     }
                   ]
@@ -2060,9 +2050,9 @@
                 {
                   "$type": "FireEffect",
                   "effectPattern": "Eff_SceneObj_WoodenObject_Broken",
+                  "effectTempleteID": -1.0,
                   "scale": 1.0,
-                  "ILLLPEOODKP": "",
-                  "effectTempleteID": -1.0
+                  "ILLLPEOODKP": ""
                 },
                 {
                   "$type": "KillSelf"
@@ -2070,14 +2060,14 @@
               ],
               "targetPredicates": [
                 {
-                  "$type": "DHJDIBHFDKB",
+                  "$type": "ByHasElement",
                   "element": "Water"
                 },
                 {
-                  "$type": "GKGBIPDLMMG",
+                  "$type": "ByNot",
                   "predicates": [
                     {
-                      "$type": "AJJPBBPBCMO",
+                      "$type": "ByHitDamage",
                       "damage": 0.0,
                       "logic": "Equal"
                     }
@@ -2085,67 +2075,60 @@
                 }
               ]
             }
-          ]
+          ],
+          "onRemoved": [
+            {
+              "$type": "AddGlobalValue",
+              "key": "_WoodenObject_DeathType",
+              "maxValue": 0.0,
+              "minValue": 0.0,
+              "value": 1.0
+            }
+          ],
+          "state": "Limbo",
+          "AIHNJLDFEGJ": 0.0
         },
         "Die_Effect": {
+          "elementDurability": 100.0,
+          "modifierName": "",
           "onRemoved": [
             {
               "$type": "FireEffect",
               "effectPattern": "Eff_SceneObj_HiliWoodenBox_01_BurnOut",
-              "scale": 1.0,
-              "ILLLPEOODKP": "",
               "effectTempleteID": -1.0,
               "predicates": [
                 {
-                  "$type": "EOFDCELPGFO",
-                  "CBOMLBFIPJM": 0.0,
+                  "$type": "ByTargetGlobalValue",
                   "compareType": "MoreThan",
-                  "key": "_WoodenObject_DeathType"
+                  "key": "_WoodenObject_DeathType",
+                  "value": 0.0
                 }
-              ]
+              ],
+              "scale": 1.0,
+              "ILLLPEOODKP": ""
             },
             {
               "$type": "KillSelf",
               "predicates": [
                 {
-                  "$type": "EOFDCELPGFO",
-                  "CBOMLBFIPJM": 0.0,
+                  "$type": "ByTargetGlobalValue",
                   "compareType": "MoreThan",
-                  "key": "_WoodenObject_DeathType"
+                  "key": "_WoodenObject_DeathType",
+                  "value": 0.0
                 }
               ]
             }
           ],
-          "elementDurability": 100.0,
-          "modifierName": "",
           "AIHNJLDFEGJ": 0.0
         }
       },
-      "onKill": [
-        {
-          "$type": "FireEffect",
-          "effectPattern": "Eff_SceneObj_WoodenObject_Broken",
-          "scale": 1.0,
-          "ILLLPEOODKP": "",
-          "effectTempleteID": -1.0,
-          "predicates": [
-            {
-              "$type": "EOFDCELPGFO",
-              "CBOMLBFIPJM": 0.0,
-              "compareType": "NoneOrEqual",
-              "key": "_WoodenObject_DeathType"
-            }
-          ]
-        }
-      ],
-      "abilityName": "SceneObj_Activity_Common_Property_Ani_Prop_FilmFestWoodenObject_01",
       "onAdded": [
         {
           "$type": "FireEffect",
           "effectPattern": "Eff_SceneObj_FilmfestSniper_01_Appear",
+          "effectTempleteID": -1.0,
           "scale": 0.9,
-          "ILLLPEOODKP": "",
-          "effectTempleteID": -1.0
+          "ILLLPEOODKP": ""
         },
         {
           "$type": "ApplyModifier",
@@ -2156,22 +2139,39 @@
           "key": "_WoodenObject_DeathType",
           "maxValue": 0.0,
           "minValue": 0.0,
-          "CBOMLBFIPJM": 0.0
+          "value": 0.0
         },
         {
           "$type": "SetGlobalValueV2",
-          "minValue": 0.0,
           "key": "Is_FilmfestSniper_Breakable",
           "maxValue": 0.0,
-          "CBOMLBFIPJM": 1.0
+          "minValue": 0.0,
+          "value": 1.0
         },
         {
           "$type": "AddGlobalValue",
-          "useLimitRange": true,
           "key": "_ABILITY_BURNING_IGNITE_ONLY",
           "maxValue": 1.0,
           "minValue": 1.0,
-          "CBOMLBFIPJM": 1.0
+          "useLimitRange": true,
+          "value": 1.0
+        }
+      ],
+      "onKill": [
+        {
+          "$type": "FireEffect",
+          "effectPattern": "Eff_SceneObj_WoodenObject_Broken",
+          "effectTempleteID": -1.0,
+          "predicates": [
+            {
+              "$type": "ByTargetGlobalValue",
+              "compareType": "NoneOrEqual",
+              "key": "_WoodenObject_DeathType",
+              "value": 0.0
+            }
+          ],
+          "scale": 1.0,
+          "ILLLPEOODKP": ""
         }
       ]
     }
@@ -2183,130 +2183,38 @@
         {
           "$type": "FireEffect",
           "effectPattern": "Eff_SceneObj_FilmfestSniper_01_Appear",
+          "effectTempleteID": -1.0,
           "scale": 0.45,
-          "ILLLPEOODKP": "",
-          "effectTempleteID": -1.0
+          "ILLLPEOODKP": ""
         },
         {
           "$type": "SetGlobalValueV2",
-          "minValue": 0.0,
           "key": "Is_FilmfestSniper_Breakable",
           "maxValue": 0.0,
-          "CBOMLBFIPJM": 1.0
+          "minValue": 0.0,
+          "value": 1.0
         }
       ]
     }
   },
   {
     "Default": {
+      "abilityName": "SceneObj_Level_Fd_Property_Ani_Prop_FilmfestSniper_BombBox_01",
       "modifiers": {
         "BombBoxLoop": {
-          "onRemoved": [
-            {
-              "$type": "FireEffect",
-              "effectPattern": "Eff_SceneObj_BombBarrel_03_Explode",
-              "scale": 1.0,
-              "ILLLPEOODKP": "",
-              "effectTempleteID": -1.0
-            },
-            {
-              "$type": "TriggerAttackEvent",
-              "targetType": "Enemy",
-              "attackEvent": {
-                "attackInfo": {
-                  "attackProperty": {
-                    "damagePercentageRatio": 0.0,
-                    "strikeType": "Blunt",
-                    "enBreak": 9999999.0,
-                    "damagePercentage": 9999999.0,
-                    "elementDurability": 50.0,
-                    "arkheGrade": 0.0
-                  },
-                  "cameraShake": {
-                    "shakeTime": 0.36,
-                    "MNKFEFOKFKP": "",
-                    "shakeRange": 0.36
-                  },
-                  "hitPattern": {
-                    "FLFCIDDNMNA": "",
-                    "onHitEffectName": "default",
-                    "hitHaltTimeScale": 0.05,
-                    "hitImpulseType": "LV6"
-                  },
-                  "forceCameraShake": true,
-                  "attenuationGroup": "default",
-                  "attenuationTag": "",
-                  "attackTag": "FilmfestSniper_Bomb"
-                },
-                "attackPattern": {
-                  "$type": "HCAGHMDHEGG",
-                  "radius": 6.0,
-                  "triggerType": "TriggerNoRepeat",
-                  "ignoreMassive": true,
-                  "born": {
-                    "$type": "BOJMMDAIGMM",
-                    "offset": {
-                      "x": 0.0,
-                      "z": 0.0,
-                      "y": 0.5
-                    }
-                  }
-                }
-              }
-            },
-            {
-              "$type": "TriggerAttackEvent",
-              "targetType": "All",
-              "attackEvent": {
-                "attackInfo": {
-                  "attackProperty": {
-                    "damagePercentageRatio": 0.0,
-                    "strikeType": "Blunt",
-                    "enBreak": 0.0,
-                    "damagePercentage": 1.0,
-                    "elementDurability": 50.0,
-                    "arkheGrade": 0.0
-                  },
-                  "attenuationGroup": "default",
-                  "attenuationTag": "",
-                  "attackTag": ""
-                },
-                "attackPattern": {
-                  "$type": "HCAGHMDHEGG",
-                  "radius": 2.0,
-                  "triggerType": "TriggerNoRepeat",
-                  "born": {
-                    "$type": "BOJMMDAIGMM"
-                  }
-                }
-              }
-            },
-            {
-              "$type": "KillSelf",
-              "hideEntity": true,
-              "duration": 1.0
-            }
-          ],
           "elementDurability": 1.0,
-          "onCrash": [
-            {
-              "$type": "RemoveModifier",
-              "modifierName": "BombBoxLoop"
-            }
-          ],
           "elementType": "Wood",
           "modifierName": "",
-          "AIHNJLDFEGJ": 0.0,
           "onBeingHit": [
             {
               "$type": "RemoveModifier",
               "modifierName": "BombBoxLoop",
               "predicates": [
                 {
-                  "$type": "GKGBIPDLMMG",
+                  "$type": "ByNot",
                   "predicates": [
                     {
-                      "$type": "AJJPBBPBCMO",
+                      "$type": "ByHitDamage",
                       "damage": 0.0,
                       "logic": "Equal"
                     }
@@ -2314,25 +2222,102 @@
                 }
               ]
             }
-          ]
-        }
-      },
-      "onKill": [
-        {
-          "$type": "FireEffect",
-          "effectPattern": "Eff_SceneObj_FilmfestSniper_01_Appear",
-          "scale": 0.45,
-          "ILLLPEOODKP": "",
-          "effectTempleteID": -1.0,
-          "predicates": [
+          ],
+          "onCrash": [
             {
-              "$type": "LJBLAFGJKGI",
+              "$type": "RemoveModifier",
               "modifierName": "BombBoxLoop"
             }
-          ]
+          ],
+          "onRemoved": [
+            {
+              "$type": "FireEffect",
+              "effectPattern": "Eff_SceneObj_BombBarrel_03_Explode",
+              "effectTempleteID": -1.0,
+              "scale": 1.0,
+              "ILLLPEOODKP": ""
+            },
+            {
+              "$type": "TriggerAttackEvent",
+              "attackEvent": {
+                "attackInfo": {
+                  "attackProperty": {
+                    "damagePercentage": 9999999.0,
+                    "damagePercentageRatio": 0.0,
+                    "elementDurability": 50.0,
+                    "enBreak": 9999999.0,
+                    "strikeType": "Blunt",
+                    "IIPHCFEONLK": 0.0
+                  },
+                  "attackTag": "FilmfestSniper_Bomb",
+                  "attenuationGroup": "default",
+                  "attenuationTag": "",
+                  "cameraShake": {
+                    "shakeRange": 0.36,
+                    "shakeTime": 0.36,
+                    "MNKFEFOKFKP": ""
+                  },
+                  "forceCameraShake": true,
+                  "hitPattern": {
+                    "hitHaltTimeScale": 0.05,
+                    "hitImpulseType": "LV6",
+                    "onHitEffectName": "default",
+                    "FLFCIDDNMNA": ""
+                  }
+                },
+                "attackPattern": {
+                  "$type": "ConfigAttackSphere",
+                  "born": {
+                    "$type": "ConfigBornByTarget",
+                    "offset": {
+                      "x": 0.0,
+                      "y": 0.5,
+                      "z": 0.0
+                    }
+                  },
+                  "ignoreMassive": true,
+                  "radius": 6.0,
+                  "triggerType": "TriggerNoRepeat"
+                }
+              },
+              "targetType": "Enemy"
+            },
+            {
+              "$type": "TriggerAttackEvent",
+              "attackEvent": {
+                "attackInfo": {
+                  "attackProperty": {
+                    "damagePercentage": 1.0,
+                    "damagePercentageRatio": 0.0,
+                    "elementDurability": 50.0,
+                    "enBreak": 0.0,
+                    "strikeType": "Blunt",
+                    "IIPHCFEONLK": 0.0
+                  },
+                  "attackTag": "",
+                  "attenuationGroup": "default",
+                  "attenuationTag": ""
+                },
+                "attackPattern": {
+                  "$type": "ConfigAttackSphere",
+                  "born": {
+                    "$type": "ConfigBornByTarget"
+                  },
+                  "radius": 2.0,
+                  "triggerType": "TriggerNoRepeat"
+                }
+              },
+              "targetType": "All"
+            },
+            {
+              "$type": "KillSelf",
+              "duration": 1.0,
+              "hideEntity": true
+            }
+          ],
+          "AIHNJLDFEGJ": 0.0
         }
-      ],
-      "abilityName": "SceneObj_Level_Fd_Property_Ani_Prop_FilmfestSniper_BombBox_01",
+      },
       "onAdded": [
         {
           "$type": "ApplyModifier",
@@ -2340,17 +2325,32 @@
         },
         {
           "$type": "SetGlobalValueV2",
-          "minValue": 0.0,
           "key": "Is_FilmfestSniper_Breakable",
           "maxValue": 0.0,
-          "CBOMLBFIPJM": 1.0
+          "minValue": 0.0,
+          "value": 1.0
         },
         {
           "$type": "FireEffect",
           "effectPattern": "Eff_SceneObj_FilmfestSniper_01_Appear",
+          "effectTempleteID": -1.0,
           "scale": 0.45,
-          "ILLLPEOODKP": "",
-          "effectTempleteID": -1.0
+          "ILLLPEOODKP": ""
+        }
+      ],
+      "onKill": [
+        {
+          "$type": "FireEffect",
+          "effectPattern": "Eff_SceneObj_FilmfestSniper_01_Appear",
+          "effectTempleteID": -1.0,
+          "predicates": [
+            {
+              "$type": "ByHasModifier",
+              "modifierName": "BombBoxLoop"
+            }
+          ],
+          "scale": 0.45,
+          "ILLLPEOODKP": ""
         }
       ]
     }
@@ -2361,103 +2361,18 @@
       "onAdded": [
         {
           "$type": "EnableGadgetSpecialCamera",
-          "enable": true,
-          "canBeHandledOnRecover": true
+          "canBeHandledOnRecover": true,
+          "enable": true
         }
       ]
     }
   },
   {
     "Default": {
-      "modifiers": {
-        "Filmfest_BallGame_BuffPicked": {
-          "duration": 0.1,
-          "onAdded": [
-            {
-              "$type": "ServerLuaCall",
-              "param1": 0.0,
-              "param2": 0.0,
-              "funcName": "SLC_Filmfest_BallGame_BuffPicked",
-              "AHCNJKIEMPP": 0.0,
-              "luaCallType": "CurGalleryControlGroup"
-            }
-          ],
-          "elementDurability": 100.0,
-          "modifierName": "",
-          "AIHNJLDFEGJ": 0.0
-        },
-        "UNIQUE_JumpUpuff_Filmfest_BallGame": {
-          "duration": 10.0,
-          "onRemoved": [
-            {
-              "$type": "SetGlobalValue",
-              "useLimitRange": true,
-              "key": "GV_JumpUpBuff",
-              "minValue": 0.0,
-              "maxValue": 1.0,
-              "CBOMLBFIPJM": 0.0,
-              "target": "Team"
-            }
-          ],
-          "onAdded": [
-            {
-              "$type": "SetGlobalValue",
-              "useLimitRange": true,
-              "key": "GV_JumpUpBuff",
-              "minValue": 0.0,
-              "maxValue": 1.0,
-              "CBOMLBFIPJM": 1.0,
-              "target": "Team"
-            }
-          ],
-          "stacking": "RefreshUniqueDurability",
-          "elementDurability": 100.0,
-          "modifierName": "",
-          "isUnique": true,
-          "AIHNJLDFEGJ": 0.0
-        },
-        "Interactable": {
-          "onRemoved": [
-            {
-              "$type": "FireEffect",
-              "effectPattern": "Eff_SceneObj_JumpUp_01_Dis",
-              "scale": 1.0,
-              "ILLLPEOODKP": "",
-              "effectTempleteID": -1.0
-            }
-          ],
-          "onAdded": [
-            {
-              "$type": "AttachEffect",
-              "ILLLPEOODKP": "",
-              "scale": 1.0,
-              "effectPattern": "Eff_SceneObj_JumpUp_01",
-              "effectTempleteID": -1.0
-            }
-          ],
-          "elementDurability": 100.0,
-          "modifierName": "",
-          "AIHNJLDFEGJ": 0.0
-        },
-        "Mute": {
-          "duration": 1.0,
-          "onRemoved": [
-            {
-              "$type": "SetGlobalValue",
-              "key": "CharAmusement_JumpUp",
-              "minValue": 0.0,
-              "maxValue": 0.0,
-              "CBOMLBFIPJM": 1.0
-            }
-          ],
-          "elementDurability": 100.0,
-          "modifierName": "",
-          "AIHNJLDFEGJ": 0.0
-        }
-      },
       "abilityMixins": [
         {
           "$type": "AttachModifierToSelfGlobalValueNoInitMixin",
+          "globalValueKey": "CharAmusement_JumpUp",
           "modifierNameSteps": [
             "Mute",
             "Interactable"
@@ -2466,12 +2381,106 @@
             -1.5,
             0.5,
             1.5
-          ],
-          "globalValueKey": "CharAmusement_JumpUp"
+          ]
         }
       ],
       "abilityName": "SceneObj_Gear_Common_Property_Prop_JumpUp_03",
-      "PFJMEMFDGOH": [
+      "modifiers": {
+        "Filmfest_BallGame_BuffPicked": {
+          "duration": 0.1,
+          "elementDurability": 100.0,
+          "modifierName": "",
+          "onAdded": [
+            {
+              "$type": "ServerLuaCall",
+              "funcName": "SLC_Filmfest_BallGame_BuffPicked",
+              "luaCallType": "CurGalleryControlGroup",
+              "param1": 0.0,
+              "param2": 0.0,
+              "param3": 0.0
+            }
+          ],
+          "AIHNJLDFEGJ": 0.0
+        },
+        "UNIQUE_JumpUpuff_Filmfest_BallGame": {
+          "duration": 10.0,
+          "elementDurability": 100.0,
+          "isUnique": true,
+          "modifierName": "",
+          "onAdded": [
+            {
+              "$type": "SetGlobalValue",
+              "key": "GV_JumpUpBuff",
+              "maxValue": 1.0,
+              "minValue": 0.0,
+              "target": "Team",
+              "useLimitRange": true,
+              "value": 1.0
+            }
+          ],
+          "onRemoved": [
+            {
+              "$type": "SetGlobalValue",
+              "key": "GV_JumpUpBuff",
+              "maxValue": 1.0,
+              "minValue": 0.0,
+              "target": "Team",
+              "useLimitRange": true,
+              "value": 0.0
+            }
+          ],
+          "stacking": "RefreshUniqueDurability",
+          "AIHNJLDFEGJ": 0.0
+        },
+        "Interactable": {
+          "elementDurability": 100.0,
+          "modifierName": "",
+          "onAdded": [
+            {
+              "$type": "AttachEffect",
+              "effectPattern": "Eff_SceneObj_JumpUp_01",
+              "effectTempleteID": -1.0,
+              "scale": 1.0,
+              "ILLLPEOODKP": ""
+            }
+          ],
+          "onRemoved": [
+            {
+              "$type": "FireEffect",
+              "effectPattern": "Eff_SceneObj_JumpUp_01_Dis",
+              "effectTempleteID": -1.0,
+              "scale": 1.0,
+              "ILLLPEOODKP": ""
+            }
+          ],
+          "AIHNJLDFEGJ": 0.0
+        },
+        "Mute": {
+          "duration": 1.0,
+          "elementDurability": 100.0,
+          "modifierName": "",
+          "onRemoved": [
+            {
+              "$type": "SetGlobalValue",
+              "key": "CharAmusement_JumpUp",
+              "maxValue": 0.0,
+              "minValue": 0.0,
+              "value": 1.0
+            }
+          ],
+          "AIHNJLDFEGJ": 0.0
+        }
+      },
+      "onAdded": [
+        {
+          "$type": "SetGlobalValue",
+          "key": "CharAmusement_JumpUp",
+          "maxValue": 0.0,
+          "minValue": 0.0,
+          "value": 1.0
+        }
+      ],
+      "onFieldEnter": [
         {
           "$type": "Predicated",
           "successActions": [
@@ -2488,53 +2497,45 @@
             {
               "$type": "SetGlobalValue",
               "key": "CharAmusement_JumpUp",
-              "minValue": 0.0,
               "maxValue": 0.0,
-              "CBOMLBFIPJM": 0.0
+              "minValue": 0.0,
+              "value": 0.0
             }
           ],
+          "target": "Target",
           "targetPredicates": [
             {
-              "$type": "EOFDCELPGFO",
-              "CBOMLBFIPJM": 1.0,
+              "$type": "ByTargetGlobalValue",
               "key": "CharAmusement_JumpUp",
-              "target": "Self"
+              "target": "Self",
+              "value": 1.0
             }
-          ],
-          "target": "Target"
-        }
-      ],
-      "onAdded": [
-        {
-          "$type": "SetGlobalValue",
-          "key": "CharAmusement_JumpUp",
-          "minValue": 0.0,
-          "maxValue": 0.0,
-          "CBOMLBFIPJM": 1.0
+          ]
         }
       ]
     }
   },
   {
     "Default": {
+      "abilityName": "SceneObj_Level_Common_Property_Ani_Light_GoalFollowSpot_01",
       "modifiers": {
         "LightManager": {
+          "elementDurability": 100.0,
+          "modifierName": "",
           "onAdded": [
             {
               "$type": "AttachEffect",
-              "ILLLPEOODKP": "",
               "born": {
-                "$type": "BGOLIIIHLMO",
+                "$type": "ConfigBornByAttachPoint",
                 "attachPointName": "LightAttachPoint",
                 "useRotation": true
               },
-              "scale": 1.0,
               "effectPattern": "Eff_SceneObj_GoalFollowSpot",
-              "effectTempleteID": -1.0
+              "effectTempleteID": -1.0,
+              "scale": 1.0,
+              "ILLLPEOODKP": ""
             }
           ],
-          "elementDurability": 100.0,
-          "modifierName": "",
           "AIHNJLDFEGJ": 0.0
         },
         "StateManager": {
@@ -2546,72 +2547,71 @@
             },
             {
               "$type": "AttachToGadgetStateMixin",
-              "modifierName": "LightOn",
-              "gadgetState": 201
+              "gadgetState": 201,
+              "modifierName": "LightOn"
             }
           ],
           "modifierName": "",
           "AIHNJLDFEGJ": 0.0
         },
         "CloseState": {
+          "elementDurability": 100.0,
+          "modifierMixins": [
+            {
+              "$type": "ShaderStateMachineSwitchMixin",
+              "HIJJCMPHDLA": true,
+              "MGLMGICCHHK": ""
+            }
+          ],
+          "modifierName": "",
           "onAdded": [
             {
               "$type": "EnableSceneTransformByName",
-              "PLDFIIMNOCD": [
+              "transformNames": [
                 "Light"
               ]
             },
             {
               "$type": "SendEffectTrigger",
-              "parameter": "State",
+              "attachPoint": "",
               "effectPattern": "Eff_SceneObj_GoalFollowSpot",
-              "type": "Int",
-              "attachPoint": ""
+              "parameter": "State",
+              "type": "Int"
             }
           ],
+          "AIHNJLDFEGJ": 0.0
+        },
+        "LightOn": {
           "elementDurability": 100.0,
           "modifierMixins": [
             {
               "$type": "ShaderStateMachineSwitchMixin",
-              "MGLMGICCHHK": "",
-              "HIJJCMPHDLA": true
+              "IKJPMDJLPLP": 1,
+              "HIJJCMPHDLA": true,
+              "MGLMGICCHHK": ""
             }
           ],
           "modifierName": "",
-          "AIHNJLDFEGJ": 0.0
-        },
-        "LightOn": {
           "onAdded": [
             {
               "$type": "EnableSceneTransformByName",
               "setEnable": true,
-              "PLDFIIMNOCD": [
+              "transformNames": [
                 "Light"
               ]
             },
             {
               "$type": "SendEffectTrigger",
-              "parameter": "State",
-              "GGKIEIJLCJJ": 201,
+              "attachPoint": "",
               "effectPattern": "Eff_SceneObj_GoalFollowSpot",
+              "parameter": "State",
               "type": "Int",
-              "attachPoint": ""
+              "value": 201
             }
           ],
-          "elementDurability": 100.0,
-          "modifierMixins": [
-            {
-              "$type": "ShaderStateMachineSwitchMixin",
-              "MGLMGICCHHK": "",
-              "HIJJCMPHDLA": true,
-              "IKJPMDJLPLP": 1
-            }
-          ],
-          "modifierName": "",
           "AIHNJLDFEGJ": 0.0
         }
       },
-      "abilityName": "SceneObj_Level_Common_Property_Ani_Light_GoalFollowSpot_01",
       "onAdded": [
         {
           "$type": "ApplyModifier",
@@ -2626,89 +2626,90 @@
   },
   {
     "Default": {
+      "abilityName": "SceneObj_Area_Common_Property_Ani_Decal_Quest_Stain_01",
       "modifiers": {
         "Default_0": {
+          "elementDurability": 100.0,
+          "modifierName": "",
           "onAdded": [
             {
               "$type": "AttachEffect",
-              "ILLLPEOODKP": "",
+              "effectPattern": "Eff_SceneObj_GroundDirty_02",
+              "effectTempleteID": -1.0,
               "scale": 1.0,
-              "effectPattern": "Eff_SceneObj_GroundDirty_02",
-              "effectTempleteID": -1.0
+              "ILLLPEOODKP": ""
             }
           ],
-          "onKill": [
-            {
-              "$type": "SendEffectTrigger",
-              "parameter": "NoDirty",
-              "effectPattern": "Eff_SceneObj_GroundDirty_02",
-              "attachPoint": ""
-            }
-          ],
-          "elementDurability": 100.0,
-          "modifierName": "",
-          "AIHNJLDFEGJ": 0.0,
           "onBeingHit": [
             {
               "$type": "AddGlobalValue",
-              "useLimitRange": true,
               "key": "_WIND_HIT_COUNT",
               "maxValue": 2.0,
               "minValue": 0.0,
-              "CBOMLBFIPJM": 1.0,
               "predicates": [
                 {
-                  "$type": "ICMKHKKAALL",
+                  "$type": "ByHitElement",
                   "element": "Wind"
                 }
-              ]
+              ],
+              "useLimitRange": true,
+              "value": 1.0
             },
             {
               "$type": "SendEffectTrigger",
-              "parameter": "HalfDirty",
-              "effectPattern": "Eff_SceneObj_GroundDirty_02",
               "attachPoint": "",
+              "effectPattern": "Eff_SceneObj_GroundDirty_02",
+              "parameter": "HalfDirty",
               "predicates": [
                 {
-                  "$type": "EOFDCELPGFO",
-                  "CBOMLBFIPJM": 1.0,
-                  "key": "_WIND_HIT_COUNT"
+                  "$type": "ByTargetGlobalValue",
+                  "key": "_WIND_HIT_COUNT",
+                  "value": 1.0
                 }
               ]
             },
             {
               "$type": "FireEffect",
               "effectPattern": "Eff_SceneObj_GroundDirty_Blow",
-              "scale": 1.0,
-              "ILLLPEOODKP": "",
               "effectTempleteID": -1.0,
               "predicates": [
                 {
-                  "$type": "ICMKHKKAALL",
+                  "$type": "ByHitElement",
                   "element": "Wind"
                 }
-              ]
+              ],
+              "scale": 1.0,
+              "ILLLPEOODKP": ""
             },
             {
               "$type": "ApplyModifier",
               "modifierName": "CameraFog",
-              "target": "Team",
               "predicates": [
                 {
-                  "$type": "ICMKHKKAALL",
+                  "$type": "ByHitElement",
                   "element": "Wind"
                 }
-              ]
+              ],
+              "target": "Team"
             },
             {
               "$type": "FireEffect",
               "effectPattern": "Eff_SceneObj_GroundDirty_Wash",
-              "scale": 1.0,
-              "ILLLPEOODKP": "",
               "effectTempleteID": -1.0,
               "predicates": [
                 {
-                  "$type": "ICMKHKKAALL",
+                  "$type": "ByHitElement",
+                  "element": "Water"
+                }
+              ],
+              "scale": 1.0,
+              "ILLLPEOODKP": ""
+            },
+            {
+              "$type": "KillSelf",
+              "predicates": [
+                {
+                  "$type": "ByHitElement",
                   "element": "Water"
                 }
               ]
@@ -2717,22 +2718,22 @@
               "$type": "KillSelf",
               "predicates": [
                 {
-                  "$type": "ICMKHKKAALL",
-                  "element": "Water"
-                }
-              ]
-            },
-            {
-              "$type": "KillSelf",
-              "predicates": [
-                {
-                  "$type": "EOFDCELPGFO",
-                  "CBOMLBFIPJM": 2.0,
-                  "key": "_WIND_HIT_COUNT"
+                  "$type": "ByTargetGlobalValue",
+                  "key": "_WIND_HIT_COUNT",
+                  "value": 2.0
                 }
               ]
             }
-          ]
+          ],
+          "onKill": [
+            {
+              "$type": "SendEffectTrigger",
+              "attachPoint": "",
+              "effectPattern": "Eff_SceneObj_GroundDirty_02",
+              "parameter": "NoDirty"
+            }
+          ],
+          "AIHNJLDFEGJ": 0.0
         },
         "CameraFog": {
           "duration": 1.5,
@@ -2748,7 +2749,6 @@
           "AIHNJLDFEGJ": 0.0
         }
       },
-      "abilityName": "SceneObj_Area_Common_Property_Ani_Decal_Quest_Stain_01",
       "onAdded": [
         {
           "$type": "ApplyModifier",

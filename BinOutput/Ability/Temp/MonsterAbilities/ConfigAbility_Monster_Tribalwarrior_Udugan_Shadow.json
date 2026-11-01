@@ -1,95 +1,11 @@
 [
   {
     "Default": {
-      "modifiers": {
-        "BasicSettings": {
-          "onAdded": [
-            {
-              "$type": "AttachAbilityStateResistance",
-              "LOJOPMOGIGH": [
-                "ElementFreeze",
-                "Struggle",
-                "ElementPetrifaction"
-              ],
-              "doOffStage": true
-            }
-          ],
-          "properties": {
-            "Actor_EndureDelta": 0.01
-          },
-          "elementDurability": 100.0,
-          "modifierName": "",
-          "AIHNJLDFEGJ": 0.0
-        },
-        "Shadow_Attacked_Ready": {
-          "onAdded": [
-            {
-              "$type": "SetAnimatorBool",
-              "CBOMLBFIPJM": true,
-              "boolID": "BlinkAfterAttack"
-            },
-            {
-              "$type": "SetPoseBool",
-              "boolID": "ShadowEnding"
-            },
-            {
-              "$type": "SetGlobalValue",
-              "key": "CAN_CAUSE_UDUGAN_HIT",
-              "minValue": 0.0,
-              "maxValue": 0.0,
-              "CBOMLBFIPJM": 0.0
-            }
-          ],
-          "elementDurability": 100.0,
-          "modifierName": "",
-          "AIHNJLDFEGJ": 0.0
-        },
-        "Shadow_Attacked_Timer": {
-          "elementDurability": 100.0,
-          "modifierName": "",
-          "AIHNJLDFEGJ": 0.0
-        },
-        "ClearState": {
-          "onRemoved": [
-            {
-              "$type": "SetAnimatorTrigger",
-              "MPTriggerOnRemote": true,
-              "triggerID": "EndReturnToBorn"
-            }
-          ],
-          "onAdded": [
-            {
-              "$type": "SetAnimatorTrigger",
-              "triggerID": "StartReturnToBorn"
-            }
-          ],
-          "elementDurability": 100.0,
-          "modifierName": "",
-          "AIHNJLDFEGJ": 0.0
-        }
-      },
-      "onAbilityStart": [
-        {
-          "$type": "RemoveUniqueModifier",
-          "modifierName": "UNIQUE_Invincible"
-        },
-        {
-          "$type": "SetAnimatorTrigger",
-          "triggerID": "EnterDeadTime"
-        },
-        {
-          "$type": "SetAnimatorBool",
-          "CBOMLBFIPJM": true,
-          "boolID": "PreventHide"
-        },
-        {
-          "$type": "TriggerAbility",
-          "abilityName": "Monster_Tribalwarrior_Udugan_EnterDeadTimeDelay"
-        }
-      ],
       "abilityMixins": [
         {
           "$type": "AttachModifierToSelfGlobalValueMixin",
+          "defaultGlobalValueOnCreate": 1.0,
+          "globalValueKey": "SHADOW_PREPARE_TO_ATTACK",
           "modifierNameSteps": [
             "Shadow_Attacked_Timer",
             "Shadow_Attacked_Ready"
@@ -98,18 +14,16 @@
             -0.5,
             0.5,
             1.5
-          ],
-          "globalValueKey": "SHADOW_PREPARE_TO_ATTACK",
-          "defaultGlobalValueOnCreate": 1.0
+          ]
         },
         {
           "$type": "DoActionByAnimatorStateIDMixin",
-          "JGJMIJEEGBP": [
+          "enterActions": [
             {
               "$type": "TriggerAbility",
               "abilityName": "Monster_Tribalwarrior_Udugan_ResetAttackTimer",
-              "ADPHDOOEDEI": true,
-              "target": "OriginOwner"
+              "target": "OriginOwner",
+              "ADPHDOOEDEI": true
             }
           ],
           "stateIDs": [
@@ -126,35 +40,28 @@
         },
         {
           "$type": "DoActionByAnimatorStateIDMixin",
-          "JGJMIJEEGBP": [
+          "enterActions": [
             {
               "$type": "SetGlobalValue",
               "key": "SHADOW_PREPARE_TO_ATTACK",
-              "minValue": 0.0,
               "maxValue": 0.0,
-              "CBOMLBFIPJM": 0.0
+              "minValue": 0.0,
+              "value": 0.0
             },
             {
               "$type": "DoDiffActionToTargets",
-              "IPGCOPKAFFH": {
-                "$type": "INIACGFCEDH",
-                "sizeRatio": 1.0,
-                "campTargetType": "Alliance",
-                "shapeName": "CircleR70H15C",
-                "sortType": "Random"
-              },
               "targetPredicates": [
                 {
-                  "$type": "EOFDCELPGFO",
-                  "CBOMLBFIPJM": 1.0,
+                  "$type": "ByTargetGlobalValue",
                   "key": "_UDUGAN_SHADOW_MARK",
-                  "target": "Other"
+                  "target": "Other",
+                  "value": 1.0
                 },
                 {
-                  "$type": "EOFDCELPGFO",
-                  "CBOMLBFIPJM": 1.0,
+                  "$type": "ByTargetGlobalValue",
                   "key": "SHADOW_PREPARE_TO_ATTACK",
-                  "target": "Other"
+                  "target": "Other",
+                  "value": 1.0
                 }
               ],
               "LAPMNDNLBLI": [
@@ -164,17 +71,24 @@
                 },
                 {
                   "$type": "SetPoseBool",
-                  "CBOMLBFIPJM": true,
-                  "boolID": "ShadowEnding"
+                  "boolID": "ShadowEnding",
+                  "value": true
                 },
                 {
                   "$type": "SetGlobalValue",
                   "key": "CAN_CAUSE_UDUGAN_HIT",
-                  "minValue": 0.0,
                   "maxValue": 0.0,
-                  "CBOMLBFIPJM": 1.0
+                  "minValue": 0.0,
+                  "value": 1.0
                 }
-              ]
+              ],
+              "IPGCOPKAFFH": {
+                "$type": "SelectTargetsByShape",
+                "campTargetType": "Alliance",
+                "shapeName": "CircleR70H15C",
+                "sizeRatio": 1.0,
+                "sortType": "Random"
+              }
             }
           ],
           "stateIDs": [
@@ -184,29 +98,29 @@
         },
         {
           "$type": "DoActionByAnimatorStateIDMixin",
-          "JGJMIJEEGBP": [
+          "enterActions": [
             {
               "$type": "TriggerAbility",
               "abilityName": "Monster_Tribalwarrior_Udugan_SummonedShadow_ResetAttackCD",
               "otherTargets": {
-                "$type": "INIACGFCEDH",
-                "sizeRatio": 1.0,
+                "$type": "SelectTargetsByShape",
                 "campTargetType": "AllianceIncludeSelf",
                 "shapeName": "CircleR70H15C",
+                "sizeRatio": 1.0,
                 "sortType": "Random"
               },
               "predicates": [
                 {
-                  "$type": "EOFDCELPGFO",
-                  "CBOMLBFIPJM": 1.0,
+                  "$type": "ByTargetGlobalValue",
                   "key": "_UDUGAN_SHADOW_MARK",
-                  "target": "Other"
+                  "target": "Other",
+                  "value": 1.0
                 },
                 {
-                  "$type": "EOFDCELPGFO",
-                  "CBOMLBFIPJM": 1.0,
+                  "$type": "ByTargetGlobalValue",
                   "key": "CAN_CAUSE_UDUGAN_HIT",
-                  "target": "Self"
+                  "target": "Self",
+                  "value": 1.0
                 }
               ]
             }
@@ -222,15 +136,101 @@
         },
         {
           "$type": "AttachToPoseIDMixin",
-          "GGOLBNPLGJH": [
+          "modifierName": "ClearState",
+          "poseIDs": [
             901,
             902,
             903
-          ],
-          "modifierName": "ClearState"
+          ]
         }
       ],
       "abilityName": "Monster_Tribalwarrior_Udugan_SummonedShadow",
+      "modifiers": {
+        "BasicSettings": {
+          "elementDurability": 100.0,
+          "modifierName": "",
+          "onAdded": [
+            {
+              "$type": "AttachAbilityStateResistance",
+              "doOffStage": true,
+              "resistanceBuffDebuffs": [
+                "ElementFreeze",
+                "Struggle",
+                "ElementPetrifaction"
+              ]
+            }
+          ],
+          "properties": {
+            "Actor_EndureDelta": 0.01
+          },
+          "AIHNJLDFEGJ": 0.0
+        },
+        "Shadow_Attacked_Ready": {
+          "elementDurability": 100.0,
+          "modifierName": "",
+          "onAdded": [
+            {
+              "$type": "SetAnimatorBool",
+              "boolID": "BlinkAfterAttack",
+              "value": true
+            },
+            {
+              "$type": "SetPoseBool",
+              "boolID": "ShadowEnding"
+            },
+            {
+              "$type": "SetGlobalValue",
+              "key": "CAN_CAUSE_UDUGAN_HIT",
+              "maxValue": 0.0,
+              "minValue": 0.0,
+              "value": 0.0
+            }
+          ],
+          "AIHNJLDFEGJ": 0.0
+        },
+        "Shadow_Attacked_Timer": {
+          "elementDurability": 100.0,
+          "modifierName": "",
+          "AIHNJLDFEGJ": 0.0
+        },
+        "ClearState": {
+          "elementDurability": 100.0,
+          "modifierName": "",
+          "onAdded": [
+            {
+              "$type": "SetAnimatorTrigger",
+              "triggerID": "StartReturnToBorn"
+            }
+          ],
+          "onRemoved": [
+            {
+              "$type": "SetAnimatorTrigger",
+              "mpTriggerOnRemote": true,
+              "triggerID": "EndReturnToBorn"
+            }
+          ],
+          "AIHNJLDFEGJ": 0.0
+        }
+      },
+      "onAbilityStart": [
+        {
+          "$type": "RemoveUniqueModifier",
+          "modifierName": "UNIQUE_Invincible"
+        },
+        {
+          "$type": "SetAnimatorTrigger",
+          "triggerID": "EnterDeadTime"
+        },
+        {
+          "$type": "SetAnimatorBool",
+          "boolID": "PreventHide",
+          "value": true
+        },
+        {
+          "$type": "TriggerAbility",
+          "abilityName": "Monster_Tribalwarrior_Udugan_EnterDeadTimeDelay"
+        }
+      ],
       "onAdded": [
         {
           "$type": "ApplyModifier",
@@ -238,43 +238,43 @@
         },
         {
           "$type": "SetGlobalValueV2",
-          "minValue": 0.0,
           "key": "_UDUGAN_SHADOW_MARK",
           "maxValue": 0.0,
-          "CBOMLBFIPJM": 1.0
+          "minValue": 0.0,
+          "value": 1.0
         },
         {
           "$type": "SetPoseBool",
-          "CBOMLBFIPJM": true,
-          "boolID": "IsShadow"
+          "boolID": "IsShadow",
+          "value": true
         },
         {
           "$type": "SetGlobalValueV2",
-          "minValue": 0.0,
           "key": "SpecialScanInteract_OtherEntity",
           "maxValue": 0.0,
-          "CBOMLBFIPJM": 1.0
+          "minValue": 0.0,
+          "value": 1.0
         },
         {
           "$type": "SetGlobalValueV2",
-          "minValue": 0.0,
           "key": "_SHADOW_ENABLE_ATTACK",
           "maxValue": 0.0,
-          "CBOMLBFIPJM": 1.0
+          "minValue": 0.0,
+          "value": 1.0
         },
         {
           "$type": "CopyGlobalPos",
           "dstKey": "_CENTER_POS",
+          "dstTarget": "Self",
           "srcKey": "_CENTER_POS",
-          "srcTarget": "OriginOwner",
-          "dstTarget": "Self"
+          "srcTarget": "OriginOwner"
         },
         {
           "$type": "SetSkillAnchor",
           "born": {
-            "$type": "LKIBKKFEOLJ",
-            "positionKey": "_CENTER_POS",
-            "directionKey": ""
+            "$type": "ConfigBornByGlobalValue",
+            "directionKey": "",
+            "positionKey": "_CENTER_POS"
           }
         }
       ]
@@ -282,77 +282,139 @@
   },
   {
     "Default": {
+      "abilityName": "Monster_Tribalwarrior_Udugan_SummonedShadow_ResetAttackCD",
       "onAbilityStart": [
         {
           "$type": "SetAISkillCDAvailableNow",
-          "BKAONOKDMLG": [
+          "skillIDs": [
             9901
           ]
         },
         {
           "$type": "SetGlobalValue",
           "key": "SHADOW_PREPARE_TO_ATTACK",
-          "minValue": 0.0,
           "maxValue": 0.0,
-          "CBOMLBFIPJM": 1.0
+          "minValue": 0.0,
+          "value": 1.0
         }
-      ],
-      "abilityName": "Monster_Tribalwarrior_Udugan_SummonedShadow_ResetAttackCD"
+      ]
     }
   },
   {
     "Default": {
+      "abilityName": "Monster_Tribalwarrior_Udugan_ResetShadowAttackCD",
       "onAbilityStart": [
         {
           "$type": "TriggerAbility",
           "abilityName": "Monster_Tribalwarrior_Udugan_SummonedShadow_ResetAttackCD",
           "otherTargets": {
-            "$type": "HMFKEDOMDMA",
+            "$type": "SelectTargetsByChildren",
             "configID": 25520102
           }
         }
-      ],
-      "abilityName": "Monster_Tribalwarrior_Udugan_ResetShadowAttackCD"
+      ]
     }
   },
   {
     "Default": {
+      "abilityName": "Monster_Tribalwarrior_Udugan_EnterDeadTimeDelay",
       "onAbilityStart": [
         {
           "$type": "SetGlobalValue",
           "key": "SHADOW_DEAD_TIME_CONTROL",
-          "minValue": 0.0,
           "maxValue": 0.0,
-          "CBOMLBFIPJM": 1.0
+          "minValue": 0.0,
+          "value": 1.0
         }
-      ],
-      "abilityName": "Monster_Tribalwarrior_Udugan_EnterDeadTimeDelay"
+      ]
     }
   },
   {
     "Default": {
+      "abilityMixins": [
+        {
+          "$type": "AttachModifierToGlobalValueMixin",
+          "globalValueKey": "_SHADOW_ALIVE_COUNTS",
+          "globalValueTarget": "Owner",
+          "modifierNameSteps": [
+            "Shadow_KillSelf"
+          ],
+          "valueSteps": [
+            -0.5,
+            0.5
+          ]
+        },
+        {
+          "$type": "AttachModifierToSelfGlobalValueMixin",
+          "defaultGlobalValueOnCreate": 0.0,
+          "globalValueKey": "SHADOW_DEAD_TIME_CONTROL",
+          "modifierNameSteps": [
+            "Shadow_InDeadTime"
+          ],
+          "valueSteps": [
+            0.5,
+            1.5
+          ]
+        }
+      ],
+      "abilityName": "Monster_Tribalwarrior_Udugan_IceShield",
+      "abilitySpecials": {
+        "element_shield_durability": 200.0,
+        "be_scanned_decrease": -50.0
+      },
       "modifiers": {
         "FrozenElementShield": {
+          "elementDurability": "element_shield_durability",
+          "elementType": "Frozen",
+          "modifierMixins": [
+            {
+              "$type": "ElementShieldMixin",
+              "damageRatio": 0.0,
+              "elementType": "Frozen",
+              "shieldAngle": 360.0,
+              "shieldHPRatio": 1.0,
+              "showDamageText": "",
+              "useMutiPlayerFixData": true,
+              "GPIBKOHGEIJ": ""
+            }
+          ],
+          "modifierName": "",
+          "onAdded": [
+            {
+              "$type": "SetGlobalValue",
+              "key": "_HAS_REMOVE_ACTIONS",
+              "maxValue": 0.0,
+              "minValue": 0.0,
+              "value": 1.0
+            }
+          ],
           "onRemoved": [
             {
               "$type": "Predicated",
+              "predicates": [
+                {
+                  "$type": "ByTargetGlobalValue",
+                  "key": "_HAS_REMOVE_ACTIONS",
+                  "value": 1.0
+                }
+              ],
               "successActions": [
                 {
                   "$type": "SetGlobalPos",
-                  "key": "BROKEN_SHADOW_POS",
                   "born": {
-                    "$type": "NABPLNFPHCK",
+                    "$type": "ConfigBornBySelf",
                     "useRotation": true
-                  }
+                  },
+                  "key": "BROKEN_SHADOW_POS"
                 },
                 {
                   "$type": "SetGlobalPos",
-                  "setTarget": false,
-                  "key": "FACE_DIRECTION",
                   "born": {
-                    "$type": "BOJMMDAIGMM",
+                    "$type": "ConfigBornByTarget",
                     "useRotation": true
                   },
+                  "key": "FACE_DIRECTION",
+                  "setTarget": false,
                   "target": "SelfAttackTarget"
                 },
                 {
@@ -360,160 +422,71 @@
                   "modifierName": "OnShadowBeKilled",
                   "target": "OriginOwner"
                 }
-              ],
-              "predicates": [
-                {
-                  "$type": "EOFDCELPGFO",
-                  "CBOMLBFIPJM": 1.0,
-                  "key": "_HAS_REMOVE_ACTIONS"
-                }
               ]
             },
             {
               "$type": "EnablePushColliderName",
-              "EFOJFJDLLMK": [
+              "pushColliderNames": [
                 "PushCollider"
               ]
             },
             {
               "$type": "FireEffect",
-              "effectPattern": "Eff_Monster_Tribalwarrior_Udugan_Disappear",
-              "scale": 1.0,
               "born": {
-                "$type": "BGOLIIIHLMO",
+                "$type": "ConfigBornByAttachPoint",
                 "attachPointName": "RootNode",
                 "useRotation": true
               },
-              "ILLLPEOODKP": "",
-              "effectTempleteID": -1.0
+              "effectPattern": "Eff_Monster_Tribalwarrior_Udugan_Disappear",
+              "effectTempleteID": -1.0,
+              "scale": 1.0,
+              "ILLLPEOODKP": ""
             },
             {
               "$type": "KillSelf",
               "target": "Caster"
             }
           ],
-          "onAdded": [
-            {
-              "$type": "SetGlobalValue",
-              "key": "_HAS_REMOVE_ACTIONS",
-              "minValue": 0.0,
-              "maxValue": 0.0,
-              "CBOMLBFIPJM": 1.0
-            }
-          ],
           "properties": {
             "Actor_EndureDelta": 0.0001
           },
           "stacking": "Unique",
-          "elementDurability": "element_shield_durability",
-          "modifierMixins": [
-            {
-              "$type": "ElementShieldMixin",
-              "GPIBKOHGEIJ": "",
-              "shieldHPRatio": 1.0,
-              "shieldAngle": 360.0,
-              "useMutiPlayerFixData": true,
-              "elementType": "Frozen",
-              "showDamageText": "",
-              "EBCOGOJCLAE": 0.0
-            }
-          ],
-          "elementType": "Frozen",
-          "modifierName": "",
           "AIHNJLDFEGJ": 0.0
         },
         "OnShadowBeKilled": {
           "duration": 0.1,
+          "elementDurability": 100.0,
+          "modifierName": "",
           "onAdded": [
             {
               "$type": "AddGlobalValue",
               "key": "_ACHIEVEMENT_SHADOW_TOTAL_KILLED",
               "maxValue": 0.0,
               "minValue": 0.0,
-              "CBOMLBFIPJM": 1.0
+              "value": 1.0
             },
             {
               "$type": "DoWatcherSystemAction",
               "inThreatListOnly": true,
-              "watcherId": 82277,
               "predicates": [
                 {
-                  "$type": "EOFDCELPGFO",
-                  "CBOMLBFIPJM": 8.0,
+                  "$type": "ByTargetGlobalValue",
                   "compareType": "MoreThanAndEqual",
-                  "key": "_ACHIEVEMENT_SHADOW_TOTAL_KILLED"
+                  "key": "_ACHIEVEMENT_SHADOW_TOTAL_KILLED",
+                  "value": 8.0
                 }
-              ]
+              ],
+              "watcherId": 82277
             },
             {
               "$type": "AddGlobalValue",
               "key": "_SHADOW_ALIVE_COUNTS",
               "maxValue": 0.0,
               "minValue": 0.0,
-              "CBOMLBFIPJM": -1.0
+              "value": -1.0
             },
             {
               "$type": "Predicated",
-              "successActions": [
-                {
-                  "$type": "CopyGlobalPos",
-                  "dstKey": "BROKEN_SHADOW_POS",
-                  "srcKey": "BROKEN_SHADOW_POS",
-                  "srcTarget": "Applier",
-                  "dstTarget": "Self"
-                },
-                {
-                  "$type": "CopyGlobalPos",
-                  "dstKey": "FACE_DIRECTION",
-                  "srcKey": "FACE_DIRECTION",
-                  "srcTarget": "Applier",
-                  "dstTarget": "Self"
-                },
-                {
-                  "$type": "DoBlinkByGlobalPos",
-                  "positionKey": "BROKEN_SHADOW_POS",
-                  "directionKey": ""
-                },
-                {
-                  "$type": "TurnDirectionToPos",
-                  "toPos": {
-                    "$type": "LKIBKKFEOLJ",
-                    "positionKey": "FACE_DIRECTION",
-                    "directionKey": ""
-                  }
-                },
-                {
-                  "$type": "SetGlobalValue",
-                  "key": "UDUGAN_STATE",
-                  "minValue": 0.0,
-                  "maxValue": 0.0,
-                  "CBOMLBFIPJM": 1.0
-                },
-                {
-                  "$type": "SetAnimatorTrigger",
-                  "triggerID": "StunTrigger"
-                },
-                {
-                  "$type": "FireEffect",
-                  "effectPattern": "Eff_Monster_Tribalwarrior_Udugan_Blink",
-                  "scale": 1.0,
-                  "ILLLPEOODKP": "",
-                  "effectTempleteID": -1.0
-                },
-                {
-                  "$type": "SetGlobalValue",
-                  "key": "_ONE_FRAME_PROTECTION",
-                  "minValue": 0.0,
-                  "maxValue": 0.0,
-                  "CBOMLBFIPJM": 1.0
-                },
-                {
-                  "$type": "ServerMonsterLog",
-                  "paramList": [
-                    2
-                  ]
-                }
-              ],
               "failActions": [
                 {
                   "$type": "Predicated",
@@ -521,36 +494,36 @@
                     {
                       "$type": "CopyGlobalPos",
                       "dstKey": "BROKEN_SHADOW_POS",
+                      "dstTarget": "Self",
                       "srcKey": "BROKEN_SHADOW_POS",
-                      "srcTarget": "Applier",
-                      "dstTarget": "Self"
+                      "srcTarget": "Applier"
                     },
                     {
                       "$type": "CopyGlobalPos",
                       "dstKey": "FACE_DIRECTION",
+                      "dstTarget": "Self",
                       "srcKey": "FACE_DIRECTION",
-                      "srcTarget": "Applier",
-                      "dstTarget": "Self"
+                      "srcTarget": "Applier"
                     },
                     {
                       "$type": "DoBlinkByGlobalPos",
-                      "positionKey": "BROKEN_SHADOW_POS",
-                      "directionKey": ""
+                      "directionKey": "",
+                      "positionKey": "BROKEN_SHADOW_POS"
                     },
                     {
                       "$type": "TurnDirectionToPos",
                       "toPos": {
-                        "$type": "LKIBKKFEOLJ",
-                        "positionKey": "FACE_DIRECTION",
-                        "directionKey": ""
+                        "$type": "ConfigBornByGlobalValue",
+                        "directionKey": "",
+                        "positionKey": "FACE_DIRECTION"
                       }
                     },
                     {
                       "$type": "SetGlobalValue",
                       "key": "UDUGAN_STATE",
-                      "minValue": 0.0,
                       "maxValue": 0.0,
-                      "CBOMLBFIPJM": 3.0
+                      "minValue": 0.0,
+                      "value": 3.0
                     },
                     {
                       "$type": "SetAnimatorTrigger",
@@ -559,137 +532,195 @@
                     {
                       "$type": "FireEffect",
                       "effectPattern": "Eff_Monster_Tribalwarrior_Udugan_Blink",
+                      "effectTempleteID": -1.0,
                       "scale": 1.0,
-                      "ILLLPEOODKP": "",
-                      "effectTempleteID": -1.0
+                      "ILLLPEOODKP": ""
                     },
                     {
                       "$type": "SetGlobalValue",
                       "key": "_ATTACK_RESET_TIMER",
-                      "minValue": 0.0,
                       "maxValue": 0.0,
-                      "CBOMLBFIPJM": 0.0
+                      "minValue": 0.0,
+                      "value": 0.0
                     }
                   ],
                   "targetPredicates": [
                     {
-                      "$type": "EOFDCELPGFO",
-                      "CBOMLBFIPJM": 1.0,
+                      "$type": "ByTargetGlobalValue",
                       "key": "CAN_CAUSE_UDUGAN_HIT",
-                      "target": "Applier"
+                      "target": "Applier",
+                      "value": 1.0
                     }
+                  ]
+                }
+              ],
+              "successActions": [
+                {
+                  "$type": "CopyGlobalPos",
+                  "dstKey": "BROKEN_SHADOW_POS",
+                  "dstTarget": "Self",
+                  "srcKey": "BROKEN_SHADOW_POS",
+                  "srcTarget": "Applier"
+                },
+                {
+                  "$type": "CopyGlobalPos",
+                  "dstKey": "FACE_DIRECTION",
+                  "dstTarget": "Self",
+                  "srcKey": "FACE_DIRECTION",
+                  "srcTarget": "Applier"
+                },
+                {
+                  "$type": "DoBlinkByGlobalPos",
+                  "directionKey": "",
+                  "positionKey": "BROKEN_SHADOW_POS"
+                },
+                {
+                  "$type": "TurnDirectionToPos",
+                  "toPos": {
+                    "$type": "ConfigBornByGlobalValue",
+                    "directionKey": "",
+                    "positionKey": "FACE_DIRECTION"
+                  }
+                },
+                {
+                  "$type": "SetGlobalValue",
+                  "key": "UDUGAN_STATE",
+                  "maxValue": 0.0,
+                  "minValue": 0.0,
+                  "value": 1.0
+                },
+                {
+                  "$type": "SetAnimatorTrigger",
+                  "triggerID": "StunTrigger"
+                },
+                {
+                  "$type": "FireEffect",
+                  "effectPattern": "Eff_Monster_Tribalwarrior_Udugan_Blink",
+                  "effectTempleteID": -1.0,
+                  "scale": 1.0,
+                  "ILLLPEOODKP": ""
+                },
+                {
+                  "$type": "SetGlobalValue",
+                  "key": "_ONE_FRAME_PROTECTION",
+                  "maxValue": 0.0,
+                  "minValue": 0.0,
+                  "value": 1.0
+                },
+                {
+                  "$type": "ServerMonsterLog",
+                  "paramList": [
+                    2
                   ]
                 }
               ],
               "targetPredicates": [
                 {
-                  "$type": "EOFDCELPGFO",
-                  "CBOMLBFIPJM": 0.0,
+                  "$type": "ByTargetGlobalValue",
                   "compareType": "LessAndEqual",
-                  "key": "_SHADOW_ALIVE_COUNTS"
+                  "key": "_SHADOW_ALIVE_COUNTS",
+                  "value": 0.0
                 }
               ]
             }
           ],
           "stacking": "Multiple",
-          "elementDurability": 100.0,
-          "modifierName": "",
           "AIHNJLDFEGJ": 0.0
         },
         "Shadow_KillSelf": {
+          "elementDurability": 100.0,
+          "modifierName": "",
           "onAdded": [
             {
               "$type": "TriggerAbility",
               "abilityName": "Monster_Tribalwarrior_Udugan_IceShield"
             }
           ],
-          "elementDurability": 100.0,
-          "modifierName": "",
           "AIHNJLDFEGJ": 0.0
         },
         "Shadow_InDeadTime": {
-          "thinkInterval": 13.5,
-          "onRemoved": [
+          "elementDurability": 100.0,
+          "modifierName": "",
+          "onAdded": [
             {
               "$type": "SetGlobalValue",
               "key": "_SHADOW_ENABLE_ATTACK",
-              "minValue": 0.0,
               "maxValue": 0.0,
-              "CBOMLBFIPJM": 1.0
-            },
-            {
-              "$type": "FireEffect",
-              "effectPattern": "Eff_Monster_Tribalwarrior_Udugan_DeadTime_As",
-              "scale": 1.0,
-              "ILLLPEOODKP": "",
-              "effectTempleteID": -1.0
+              "minValue": 0.0,
+              "value": 0.0
             },
             {
               "$type": "SetGlobalValue",
               "key": "SpecialScanInteract_OtherEntity",
-              "minValue": 0.0,
               "maxValue": 0.0,
-              "CBOMLBFIPJM": 1.0
+              "minValue": 0.0,
+              "value": 0.0
+            },
+            {
+              "$type": "AddElementDurability",
+              "maxValue": "element_shield_durability",
+              "minValue": 0.0,
+              "modifierName": "FrozenElementShield",
+              "useLimitRange": true,
+              "useMutiPlayerFixData": true,
+              "value": "be_scanned_decrease"
+            },
+            {
+              "$type": "AttachEffect",
+              "effectPattern": "Eff_Monster_Tribalwarrior_Udugan_DeadTime",
+              "effectTempleteID": -1.0,
+              "scale": 1.0,
+              "ILLLPEOODKP": ""
+            },
+            {
+              "$type": "AttachEffect",
+              "effectPattern": "Eff_Monster_Tribalwarrior_Udugan_DeadTime_AimPoint",
+              "effectTempleteID": -1.0,
+              "scale": 1.0,
+              "ILLLPEOODKP": ""
+            }
+          ],
+          "onRemoved": [
+            {
+              "$type": "SetGlobalValue",
+              "key": "_SHADOW_ENABLE_ATTACK",
+              "maxValue": 0.0,
+              "minValue": 0.0,
+              "value": 1.0
+            },
+            {
+              "$type": "FireEffect",
+              "effectPattern": "Eff_Monster_Tribalwarrior_Udugan_DeadTime_As",
+              "effectTempleteID": -1.0,
+              "scale": 1.0,
+              "ILLLPEOODKP": ""
+            },
+            {
+              "$type": "SetGlobalValue",
+              "key": "SpecialScanInteract_OtherEntity",
+              "maxValue": 0.0,
+              "minValue": 0.0,
+              "value": 1.0
             },
             {
               "$type": "SetAnimatorBool",
               "boolID": "PreventHide"
             }
           ],
-          "onAdded": [
+          "onThinkInterval": [
             {
               "$type": "SetGlobalValue",
-              "key": "_SHADOW_ENABLE_ATTACK",
-              "minValue": 0.0,
+              "key": "SHADOW_DEAD_TIME_CONTROL",
               "maxValue": 0.0,
-              "CBOMLBFIPJM": 0.0
-            },
-            {
-              "$type": "SetGlobalValue",
-              "key": "SpecialScanInteract_OtherEntity",
               "minValue": 0.0,
-              "maxValue": 0.0,
-              "CBOMLBFIPJM": 0.0
-            },
-            {
-              "$type": "AddElementDurability",
-              "CBOMLBFIPJM": "be_scanned_decrease",
-              "useLimitRange": true,
-              "minValue": 0.0,
-              "useMutiPlayerFixData": true,
-              "maxValue": "element_shield_durability",
-              "modifierName": "FrozenElementShield"
-            },
-            {
-              "$type": "AttachEffect",
-              "ILLLPEOODKP": "",
-              "scale": 1.0,
-              "effectPattern": "Eff_Monster_Tribalwarrior_Udugan_DeadTime",
-              "effectTempleteID": -1.0
-            },
-            {
-              "$type": "AttachEffect",
-              "ILLLPEOODKP": "",
-              "scale": 1.0,
-              "effectPattern": "Eff_Monster_Tribalwarrior_Udugan_DeadTime_AimPoint",
-              "effectTempleteID": -1.0
+              "value": 0.0
             }
           ],
           "properties": {
             "Entity_MassRatio": 10000.0
           },
-          "elementDurability": 100.0,
           "state": "ElementDeadTime",
-          "modifierName": "",
-          "onThinkInterval": [
-            {
-              "$type": "SetGlobalValue",
-              "key": "SHADOW_DEAD_TIME_CONTROL",
-              "minValue": 0.0,
-              "maxValue": 0.0,
-              "CBOMLBFIPJM": 0.0
-            }
-          ],
+          "thinkInterval": 13.5,
           "AIHNJLDFEGJ": 0.0
         }
       },
@@ -699,182 +730,46 @@
           "target": "Caster"
         }
       ],
-      "abilityMixins": [
-        {
-          "$type": "AttachModifierToGlobalValueMixin",
-          "modifierNameSteps": [
-            "Shadow_KillSelf"
-          ],
-          "globalValueTarget": "Owner",
-          "globalValueKey": "_SHADOW_ALIVE_COUNTS",
-          "valueSteps": [
-            -0.5,
-            0.5
-          ]
-        },
-        {
-          "$type": "AttachModifierToSelfGlobalValueMixin",
-          "modifierNameSteps": [
-            "Shadow_InDeadTime"
-          ],
-          "valueSteps": [
-            0.5,
-            1.5
-          ],
-          "globalValueKey": "SHADOW_DEAD_TIME_CONTROL",
-          "defaultGlobalValueOnCreate": 0.0
-        }
-      ],
-      "abilityName": "Monster_Tribalwarrior_Udugan_IceShield",
       "onAdded": [
         {
           "$type": "ApplyModifier",
           "modifierName": "FrozenElementShield"
         }
-      ],
-      "abilitySpecials": {
-        "element_shield_durability": 200.0,
-        "be_scanned_decrease": -50.0
-      }
+      ]
     }
   },
   {
     "Default": {
-      "onAbilityStart": [
-        {
-          "$type": "SetGlobalPos",
-          "key": "_SELF_POS",
-          "born": {
-            "$type": "NABPLNFPHCK",
-            "useRotation": true
-          }
-        },
-        {
-          "$type": "SetGlobalValue",
-          "key": "_ONE_FRAME_PROTECTION",
-          "minValue": 0.0,
-          "maxValue": 0.0,
-          "CBOMLBFIPJM": 0.0
-        },
-        {
-          "$type": "CreateGadget",
-          "gadgetID": 42552103,
-          "FGNHCAEHEJK": true,
-          "born": {
-            "$type": "NABPLNFPHCK",
-            "useRotation": true,
-            "offset": {
-              "x": "distance",
-              "z": "distance"
-            },
-            "direction": {
-              "$type": "AHMJKPBKKHA",
-              "positionKey": "_SELF_POS",
-              "useCorrectDir": true
-            }
-          }
-        },
-        {
-          "$type": "CreateGadget",
-          "gadgetID": 42552103,
-          "FGNHCAEHEJK": true,
-          "born": {
-            "$type": "NABPLNFPHCK",
-            "useRotation": true,
-            "offset": {
-              "x": [
-                0.0,
-                "distance",
-                "SUB"
-              ],
-              "z": "distance"
-            },
-            "direction": {
-              "$type": "AHMJKPBKKHA",
-              "positionKey": "_SELF_POS",
-              "useCorrectDir": true
-            }
-          }
-        },
-        {
-          "$type": "CreateGadget",
-          "gadgetID": 42552103,
-          "FGNHCAEHEJK": true,
-          "born": {
-            "$type": "NABPLNFPHCK",
-            "useRotation": true,
-            "offset": {
-              "x": "distance",
-              "z": [
-                0.0,
-                "distance",
-                "SUB"
-              ]
-            },
-            "direction": {
-              "$type": "AHMJKPBKKHA",
-              "positionKey": "_SELF_POS",
-              "useCorrectDir": true
-            }
-          }
-        },
-        {
-          "$type": "CreateGadget",
-          "gadgetID": 42552103,
-          "FGNHCAEHEJK": true,
-          "born": {
-            "$type": "NABPLNFPHCK",
-            "useRotation": true,
-            "offset": {
-              "x": [
-                0.0,
-                "distance",
-                "SUB"
-              ],
-              "z": [
-                0.0,
-                "distance",
-                "SUB"
-              ]
-            },
-            "direction": {
-              "$type": "AHMJKPBKKHA",
-              "positionKey": "_SELF_POS",
-              "useCorrectDir": true
-            }
-          }
-        }
-      ],
       "abilityMixins": [
         {
           "$type": "SteerAttackTraceToPosMixin",
-          "globalPosKey": "_CENTER_POS",
-          "LJPPDIGCJMJ": "",
           "angularSpeed": 900.0,
-          "AAPNADMFCNO": true,
-          "HDLABDJANFN": [
+          "attackTrigger": "",
+          "globalPosKey": "_CENTER_POS",
+          "steerStateIDs": [
             "Ultimate_BackToCenter"
           ],
-          "EOHCONFEGPO": ""
+          "AAPNADMFCNO": true,
+          "LJPPDIGCJMJ": ""
         },
         {
           "$type": "DoActionByAnimatorStateIDMixin",
-          "JGJMIJEEGBP": [
+          "enterActions": [
             {
               "$type": "FixedMonsterRushMove",
-              "overrideMoveCollider": "",
-              "maxRange": -1.0,
               "animatorStateIDs": [
                 "Ultimate_BackToCenter"
               ],
+              "checkAnimatorStateOnExitOnly": true,
+              "maxRange": -1.0,
+              "overrideMoveCollider": "",
+              "timeRange": 1.2,
               "toPos": {
-                "$type": "LKIBKKFEOLJ",
-                "positionKey": "_CENTER_POS",
-                "directionKey": ""
+                "$type": "ConfigBornByGlobalValue",
+                "directionKey": "",
+                "positionKey": "_CENTER_POS"
               },
-              "OHPJIHKPEMD": true,
-              "GKOFKDIFIMA": 0.4,
-              "timeRange": 1.2
+              "GKOFKDIFIMA": 0.4
             }
           ],
           "stateIDs": [
@@ -884,246 +779,210 @@
         }
       ],
       "abilityName": "Monster_Tribalwarrior_Udugan_SummonCircle_Create",
+      "abilitySpecials": {
+        "distance": 7.5
+      },
+      "onAbilityStart": [
+        {
+          "$type": "SetGlobalPos",
+          "born": {
+            "$type": "ConfigBornBySelf",
+            "useRotation": true
+          },
+          "key": "_SELF_POS"
+        },
+        {
+          "$type": "SetGlobalValue",
+          "key": "_ONE_FRAME_PROTECTION",
+          "maxValue": 0.0,
+          "minValue": 0.0,
+          "value": 0.0
+        },
+        {
+          "$type": "CreateGadget",
+          "born": {
+            "$type": "ConfigBornBySelf",
+            "direction": {
+              "$type": "AHMJKPBKKHA",
+              "positionKey": "_SELF_POS",
+              "useCorrectDir": true
+            },
+            "offset": {
+              "x": "distance",
+              "z": "distance"
+            },
+            "useRotation": true
+          },
+          "gadgetID": 42552103,
+          "FGNHCAEHEJK": true
+        },
+        {
+          "$type": "CreateGadget",
+          "born": {
+            "$type": "ConfigBornBySelf",
+            "direction": {
+              "$type": "AHMJKPBKKHA",
+              "positionKey": "_SELF_POS",
+              "useCorrectDir": true
+            },
+            "offset": {
+              "x": "distance",
+              "z": [
+                0.0,
+                "distance",
+                "SUB"
+              ]
+            },
+            "useRotation": true
+          },
+          "gadgetID": 42552103,
+          "FGNHCAEHEJK": true
+        },
+        {
+          "$type": "CreateGadget",
+          "born": {
+            "$type": "ConfigBornBySelf",
+            "direction": {
+              "$type": "AHMJKPBKKHA",
+              "positionKey": "_SELF_POS",
+              "useCorrectDir": true
+            },
+            "offset": {
+              "x": [
+                0.0,
+                "distance",
+                "SUB"
+              ],
+              "z": "distance"
+            },
+            "useRotation": true
+          },
+          "gadgetID": 42552103,
+          "FGNHCAEHEJK": true
+        },
+        {
+          "$type": "CreateGadget",
+          "born": {
+            "$type": "ConfigBornBySelf",
+            "direction": {
+              "$type": "AHMJKPBKKHA",
+              "positionKey": "_SELF_POS",
+              "useCorrectDir": true
+            },
+            "offset": {
+              "x": [
+                0.0,
+                "distance",
+                "SUB"
+              ],
+              "z": [
+                0.0,
+                "distance",
+                "SUB"
+              ]
+            },
+            "useRotation": true
+          },
+          "gadgetID": 42552103,
+          "FGNHCAEHEJK": true
+        }
+      ],
       "onAdded": [
         {
           "$type": "SetGlobalValue",
           "key": "_SHADOW_ALIVE_COUNTS",
-          "minValue": 0.0,
           "maxValue": 0.0,
-          "CBOMLBFIPJM": 0.0
-        }
-      ],
-      "abilitySpecials": {
-        "distance": 7.5
-      }
-    }
-  },
-  {
-    "Default": {
-      "onAbilityStart": [
-        {
-          "$type": "FireEffect",
-          "effectPattern": "Eff_Monster_Tribalwarrior_Udugan_Ultimate_Born",
-          "scale": 1.0,
-          "ILLLPEOODKP": "",
-          "effectTempleteID": -1.0
-        },
-        {
-          "$type": "Summon",
-          "CKEDDBOLAJE": true,
-          "born": {
-            "$type": "NABPLNFPHCK",
-            "useRotation": true
-          },
-          "PCLFAKBGHCI": 25520102,
-          "monsterID": 25520102,
-          "CEMJCDOPCGG": true,
-          "AKMNMNKJHFP": true
-        },
-        {
-          "$type": "TriggerAttackEvent",
-          "targetType": "Enemy",
-          "attackEvent": {
-            "attackInfo": {
-              "attackProperty": {
-                "elementType": "Ice",
-                "attackType": "Melee",
-                "damagePercentageRatio": 0.0,
-                "strikeType": "Blunt",
-                "enBreak": 200.0,
-                "damagePercentage": 0.25,
-                "elementDurability": 25.0,
-                "arkheGrade": 0.0
-              },
-              "hitPattern": {
-                "FLFCIDDNMNA": "",
-                "onHitEffectName": "default",
-                "KINLKPNBHMM": {
-                  "hitLevel": "Heavy",
-                  "LJPNDFKCFJB": 700.0
-                },
-                "hitImpulseType": ""
-              },
-              "attenuationGroup": "default",
-              "attenuationTag": "",
-              "attackTag": "",
-              "canBeModifiedBy": "Owner"
-            },
-            "attackPattern": {
-              "$type": "DDLDAMKEKJD",
-              "radius": 3.25,
-              "height": 2.9,
-              "triggerType": "TriggerNoRepeat",
-              "born": {
-                "$type": "NABPLNFPHCK",
-                "useRotation": true,
-                "offset": {
-                  "y": -0.4
-                }
-              }
-            }
-          }
-        }
-      ],
-      "abilityName": "Monster_Tribalwarrior_Udugan_SummonCircle_SummonShadow",
-      "onAdded": [
-        {
-          "$type": "FireEffect",
-          "effectPattern": "Eff_Monster_Tribalwarrior_Udugan_Ultimate_Attack_Line",
-          "scale": 1.0,
-          "ILLLPEOODKP": "",
-          "effectTempleteID": -1.0
+          "minValue": 0.0,
+          "value": 0.0
         }
       ]
     }
   },
   {
     "Default": {
-      "modifiers": {
-        "InBlink": {
-          "onRemoved": [
-            {
-              "$type": "FireEffect",
-              "effectPattern": "Eff_Monster_Tribalwarrior_Udugan_Blink",
-              "scale": 1.0,
-              "ILLLPEOODKP": "",
-              "effectTempleteID": -1.0
-            }
-          ],
-          "onAdded": [
-            {
-              "$type": "AttachModifier",
-              "modifierName": "StartDither"
+      "abilityName": "Monster_Tribalwarrior_Udugan_SummonCircle_SummonShadow",
+      "onAbilityStart": [
+        {
+          "$type": "FireEffect",
+          "effectPattern": "Eff_Monster_Tribalwarrior_Udugan_Ultimate_Born",
+          "effectTempleteID": -1.0,
+          "scale": 1.0,
+          "ILLLPEOODKP": ""
+        },
+        {
+          "$type": "Summon",
+          "born": {
+            "$type": "ConfigBornBySelf",
+            "useRotation": true
+          },
+          "monsterID": 25520102,
+          "sightGroupWithOwner": true,
+          "summonTag": 25520102,
+          "AKMNMNKJHFP": true,
+          "CKEDDBOLAJE": true
+        },
+        {
+          "$type": "TriggerAttackEvent",
+          "attackEvent": {
+            "attackInfo": {
+              "attackProperty": {
+                "attackType": "Melee",
+                "damagePercentage": 0.25,
+                "damagePercentageRatio": 0.0,
+                "elementDurability": 25.0,
+                "elementType": "Ice",
+                "enBreak": 200.0,
+                "strikeType": "Blunt",
+                "IIPHCFEONLK": 0.0
+              },
+              "attackTag": "",
+              "attenuationGroup": "default",
+              "attenuationTag": "",
+              "canBeModifiedBy": "Owner",
+              "hitPattern": {
+                "hitImpulseType": "",
+                "onHitEffectName": "default",
+                "overrideHitImpulse": {
+                  "hitImpulseX": 700.0,
+                  "hitLevel": "Heavy"
+                },
+                "FLFCIDDNMNA": ""
+              }
             },
-            {
-              "$type": "AttachModifier",
-              "modifierName": "GhostState"
-            },
-            {
-              "$type": "FireEffect",
-              "effectPattern": "Eff_Monster_Tribalwarrior_Udugan_Disappear",
-              "scale": 1.0,
+            "attackPattern": {
+              "$type": "ConfigAttackCircle",
               "born": {
-                "$type": "BGOLIIIHLMO",
-                "attachPointName": "RootNode",
+                "$type": "ConfigBornBySelf",
+                "offset": {
+                  "y": -0.4
+                },
                 "useRotation": true
               },
-              "ILLLPEOODKP": "",
-              "effectTempleteID": -1.0
+              "height": 2.9,
+              "radius": 3.25,
+              "triggerType": "TriggerNoRepeat"
             }
-          ],
-          "elementDurability": 100.0,
-          "modifierMixins": [
-            {
-              "$type": "AttachActionToModifierMixin",
-              "onAdded": [
-                {
-                  "$type": "EnableHitBoxByName",
-                  "MPHBGGFPBII": [
-                    "HitBox",
-                    "HeadBox",
-                    "ProtectHitbox"
-                  ]
-                },
-                {
-                  "$type": "EnablePushColliderName",
-                  "EFOJFJDLLMK": [
-                    "PushCollider"
-                  ]
-                },
-                {
-                  "$type": "HideUIBillBoard",
-                  "hide": true
-                }
-              ],
-              "onRemoved": [
-                {
-                  "$type": "EnableHitBoxByName",
-                  "MPHBGGFPBII": [
-                    "HitBox",
-                    "HeadBox",
-                    "ProtectHitbox"
-                  ],
-                  "setEnable": true
-                },
-                {
-                  "$type": "EnablePushColliderName",
-                  "setEnable": true,
-                  "EFOJFJDLLMK": [
-                    "PushCollider"
-                  ]
-                },
-                {
-                  "$type": "HideUIBillBoard"
-                }
-              ]
-            }
-          ],
-          "state": "DenyLockOn",
-          "modifierName": "",
-          "AIHNJLDFEGJ": 0.0
-        },
-        "GhostState": {
-          "elementDurability": 100.0,
-          "state": "IsGhostToEnemy",
-          "modifierName": "",
-          "AIHNJLDFEGJ": 0.0
-        },
-        "UNIQUE_Invincible": {
-          "elementDurability": 100.0,
-          "state": "Invincible",
-          "modifierName": "",
-          "isUnique": true,
-          "AIHNJLDFEGJ": 0.0
-        },
-        "StartDither": {
-          "thinkInterval": 0.12,
-          "duration": 0.5,
-          "onAdded": [
-            {
-              "$type": "StartDither",
-              "duration": 0.12,
-              "CJKPCCEKEGA": 0.2
-            }
-          ],
-          "elementDurability": 100.0,
-          "modifierName": "",
-          "onThinkInterval": [
-            {
-              "$type": "AttachModifierToParent",
-              "modifierName": "VisibleManager"
-            },
-            {
-              "$type": "RemoveModifier",
-              "modifierName": "StartDither"
-            }
-          ],
-          "AIHNJLDFEGJ": 0.0
-        },
-        "VisibleManager": {
-          "onRemoved": [
-            {
-              "$type": "StartDither",
-              "reverse": true,
-              "duration": 0.06
-            }
-          ],
-          "elementDurability": 100.0,
-          "modifierMixins": [
-            {
-              "$type": "EntityInVisibleMixin",
-              "AAHPKGHIPPG": true,
-              "reason": "SelfAbility"
-            }
-          ],
-          "modifierName": "",
-          "AIHNJLDFEGJ": 0.0
+          },
+          "targetType": "Enemy"
         }
-      },
+      ],
+      "onAdded": [
+        {
+          "$type": "FireEffect",
+          "effectPattern": "Eff_Monster_Tribalwarrior_Udugan_Ultimate_Attack_Line",
+          "effectTempleteID": -1.0,
+          "scale": 1.0,
+          "ILLLPEOODKP": ""
+        }
+      ]
+    }
+  },
+  {
+    "Default": {
       "abilityMixins": [
         {
           "$type": "AttachToAnimatorStateIDMixin",
-          "LJPPDIGCJMJ": "",
+          "modifierName": "InBlink",
           "stateIDs": [
             "Shadow_Hide",
             "Shadow_MoveB_Hide",
@@ -1132,36 +991,36 @@
             "Ultimate_BackToCenter_Hide",
             "StartReturn"
           ],
-          "modifierName": "InBlink"
+          "LJPPDIGCJMJ": ""
         },
         {
           "$type": "AttachToAnimatorStateIDMixin",
-          "LJPPDIGCJMJ": "",
+          "modifierName": "UNIQUE_Invincible",
           "stateIDs": [
             "Ultimate_BackToCenter_Hide",
             "StartReturn"
           ],
-          "modifierName": "UNIQUE_Invincible"
+          "LJPPDIGCJMJ": ""
         },
         {
           "$type": "DoActionByAnimatorStateIDMixin",
-          "JGJMIJEEGBP": [
+          "enterActions": [
             {
               "$type": "SetGlobalPos",
-              "setTarget": false,
-              "key": "FACE_DIRECTION",
               "born": {
-                "$type": "BOJMMDAIGMM",
+                "$type": "ConfigBornByTarget",
                 "useRotation": true
               },
+              "key": "FACE_DIRECTION",
+              "setTarget": false,
               "target": "SelfAttackTarget"
             },
             {
               "$type": "TryFindBlinkPoint",
-              "GBINFPFKLHL": true,
-              "minRange": 1.5,
-              "maxRange": 2.0,
+              "checkInCamera": true,
               "forwardAngle": 120.0,
+              "maxRange": 2.0,
+              "minRange": 1.5,
               "target": "SelfAttackTarget"
             },
             {
@@ -1170,9 +1029,9 @@
             {
               "$type": "TurnDirectionToPos",
               "toPos": {
-                "$type": "LKIBKKFEOLJ",
-                "positionKey": "FACE_DIRECTION",
-                "directionKey": ""
+                "$type": "ConfigBornByGlobalValue",
+                "directionKey": "",
+                "positionKey": "FACE_DIRECTION"
               }
             }
           ],
@@ -1188,110 +1047,110 @@
         },
         {
           "$type": "DoActionByAnimatorStateIDMixin",
-          "JGJMIJEEGBP": [
+          "enterActions": [
             {
               "$type": "SetGlobalPos",
-              "setTarget": false,
-              "key": "FACE_DIRECTION",
               "born": {
-                "$type": "BOJMMDAIGMM",
+                "$type": "ConfigBornByTarget",
                 "useRotation": true
               },
+              "key": "FACE_DIRECTION",
+              "setTarget": false,
               "target": "SelfAttackTarget"
             },
             {
               "$type": "TryFindBlinkPoint",
-              "minRange": 12.0,
-              "maxRange": 16.0,
               "forwardAngle": 360.0,
+              "maxRange": 16.0,
+              "minRange": 12.0,
               "target": "SelfAttackTarget"
             },
             {
               "$type": "SetGlobalPos",
-              "key": "_DISTANCE_CALC",
               "born": {
-                "$type": "CAGGGLCIFFN",
+                "$type": "ConfigBornByTeleportToPoint",
                 "useRotation": true
-              }
+              },
+              "key": "_DISTANCE_CALC"
             },
             {
               "$type": "Predicated",
-              "successActions": [
-                {
-                  "$type": "DoBlink"
-                }
-              ],
               "failActions": [
                 {
                   "$type": "TryFindBlinkPoint",
-                  "minRange": 12.0,
-                  "maxRange": 16.0,
                   "forwardAngle": 360.0,
+                  "maxRange": 16.0,
+                  "minRange": 12.0,
                   "target": "SelfAttackTarget"
                 },
                 {
                   "$type": "SetGlobalPos",
-                  "key": "_DISTANCE_CALC",
                   "born": {
-                    "$type": "CAGGGLCIFFN",
+                    "$type": "ConfigBornByTeleportToPoint",
                     "useRotation": true
-                  }
+                  },
+                  "key": "_DISTANCE_CALC"
                 },
                 {
                   "$type": "Predicated",
+                  "failActions": [
+                    {
+                      "$type": "SetGlobalPos",
+                      "born": {
+                        "$type": "ConfigBornByGlobalValue",
+                        "bornRandom": {
+                          "$type": "BornRandomFromCenter",
+                          "maxRandomRange": 7.0,
+                          "minRandomRange": 3.0
+                        },
+                        "directionKey": "",
+                        "positionKey": "_CENTER_POS"
+                      },
+                      "key": "_DISTANCE_CALC"
+                    },
+                    {
+                      "$type": "DoBlinkByGlobalPos",
+                      "directionKey": "",
+                      "positionKey": "_DISTANCE_CALC"
+                    }
+                  ],
                   "successActions": [
                     {
                       "$type": "DoBlink"
                     }
                   ],
-                  "failActions": [
-                    {
-                      "$type": "SetGlobalPos",
-                      "key": "_DISTANCE_CALC",
-                      "born": {
-                        "$type": "LKIBKKFEOLJ",
-                        "positionKey": "_CENTER_POS",
-                        "directionKey": "",
-                        "bornRandom": {
-                          "$type": "DBJNGNDCMAH",
-                          "minRandomRange": 3.0,
-                          "maxRandomRange": 7.0
-                        }
-                      }
-                    },
-                    {
-                      "$type": "DoBlinkByGlobalPos",
-                      "positionKey": "_DISTANCE_CALC",
-                      "directionKey": ""
-                    }
-                  ],
                   "targetPredicates": [
                     {
-                      "$type": "EDCKDFJGHFN",
-                      "CDJEMNEGFMP": "_DISTANCE_CALC",
-                      "BLAJKPCKAFG": "_CENTER_POS",
-                      "CBOMLBFIPJM": 31.0,
-                      "logic": "Lesser"
+                      "$type": "ByGlobalPosToGlobalPosDistance",
+                      "logic": "Lesser",
+                      "positionKey1": "_DISTANCE_CALC",
+                      "positionKey2": "_CENTER_POS",
+                      "value": 31.0
                     }
                   ]
                 }
               ],
+              "successActions": [
+                {
+                  "$type": "DoBlink"
+                }
+              ],
               "targetPredicates": [
                 {
-                  "$type": "EDCKDFJGHFN",
-                  "CDJEMNEGFMP": "_DISTANCE_CALC",
-                  "BLAJKPCKAFG": "_CENTER_POS",
-                  "CBOMLBFIPJM": 31.0,
-                  "logic": "Lesser"
+                  "$type": "ByGlobalPosToGlobalPosDistance",
+                  "logic": "Lesser",
+                  "positionKey1": "_DISTANCE_CALC",
+                  "positionKey2": "_CENTER_POS",
+                  "value": 31.0
                 }
               ]
             },
             {
               "$type": "TurnDirectionToPos",
               "toPos": {
-                "$type": "LKIBKKFEOLJ",
-                "positionKey": "FACE_DIRECTION",
-                "directionKey": ""
+                "$type": "ConfigBornByGlobalValue",
+                "directionKey": "",
+                "positionKey": "FACE_DIRECTION"
               }
             }
           ],
@@ -1302,42 +1161,184 @@
         },
         {
           "$type": "DoActionByAnimatorStateIDMixin",
-          "stateIDs": [
-            "Ultimate_BackToCenter_Hide"
-          ],
-          "LJPPDIGCJMJ": "",
-          "AJAPIFCKFHP": [
+          "exitActions": [
             {
               "$type": "SetGlobalPos",
-              "setTarget": false,
-              "key": "FACE_DIRECTION",
               "born": {
-                "$type": "BOJMMDAIGMM",
+                "$type": "ConfigBornByTarget",
                 "useRotation": true
               },
+              "key": "FACE_DIRECTION",
+              "setTarget": false,
               "target": "SelfAttackTarget"
             },
             {
               "$type": "DoBlinkByGlobalPos",
-              "positionKey": "_CENTER_POS",
-              "directionKey": ""
+              "directionKey": "",
+              "positionKey": "_CENTER_POS"
             },
             {
               "$type": "TurnDirectionToPos",
               "toPos": {
-                "$type": "LKIBKKFEOLJ",
-                "positionKey": "FACE_DIRECTION",
-                "directionKey": ""
+                "$type": "ConfigBornByGlobalValue",
+                "directionKey": "",
+                "positionKey": "FACE_DIRECTION"
               }
             }
-          ]
+          ],
+          "stateIDs": [
+            "Ultimate_BackToCenter_Hide"
+          ],
+          "LJPPDIGCJMJ": ""
         }
       ],
-      "abilityName": "Monster_Tribalwarrior_Udugan_Blink_logic"
+      "abilityName": "Monster_Tribalwarrior_Udugan_Blink_logic",
+      "modifiers": {
+        "InBlink": {
+          "elementDurability": 100.0,
+          "modifierMixins": [
+            {
+              "$type": "AttachActionToModifierMixin",
+              "onAdded": [
+                {
+                  "$type": "EnableHitBoxByName",
+                  "hitBoxNames": [
+                    "HitBox",
+                    "HeadBox",
+                    "ProtectHitbox"
+                  ]
+                },
+                {
+                  "$type": "EnablePushColliderName",
+                  "pushColliderNames": [
+                    "PushCollider"
+                  ]
+                },
+                {
+                  "$type": "HideUIBillBoard",
+                  "hide": true
+                }
+              ],
+              "onRemoved": [
+                {
+                  "$type": "EnableHitBoxByName",
+                  "hitBoxNames": [
+                    "HitBox",
+                    "HeadBox",
+                    "ProtectHitbox"
+                  ],
+                  "setEnable": true
+                },
+                {
+                  "$type": "EnablePushColliderName",
+                  "pushColliderNames": [
+                    "PushCollider"
+                  ],
+                  "setEnable": true
+                },
+                {
+                  "$type": "HideUIBillBoard"
+                }
+              ]
+            }
+          ],
+          "modifierName": "",
+          "onAdded": [
+            {
+              "$type": "AttachModifier",
+              "modifierName": "StartDither"
+            },
+            {
+              "$type": "AttachModifier",
+              "modifierName": "GhostState"
+            },
+            {
+              "$type": "FireEffect",
+              "born": {
+                "$type": "ConfigBornByAttachPoint",
+                "attachPointName": "RootNode",
+                "useRotation": true
+              },
+              "effectPattern": "Eff_Monster_Tribalwarrior_Udugan_Disappear",
+              "effectTempleteID": -1.0,
+              "scale": 1.0,
+              "ILLLPEOODKP": ""
+            }
+          ],
+          "onRemoved": [
+            {
+              "$type": "FireEffect",
+              "effectPattern": "Eff_Monster_Tribalwarrior_Udugan_Blink",
+              "effectTempleteID": -1.0,
+              "scale": 1.0,
+              "ILLLPEOODKP": ""
+            }
+          ],
+          "state": "DenyLockOn",
+          "AIHNJLDFEGJ": 0.0
+        },
+        "GhostState": {
+          "elementDurability": 100.0,
+          "modifierName": "",
+          "state": "IsGhostToEnemy",
+          "AIHNJLDFEGJ": 0.0
+        },
+        "UNIQUE_Invincible": {
+          "elementDurability": 100.0,
+          "isUnique": true,
+          "modifierName": "",
+          "state": "Invincible",
+          "AIHNJLDFEGJ": 0.0
+        },
+        "StartDither": {
+          "duration": 0.5,
+          "elementDurability": 100.0,
+          "modifierName": "",
+          "onAdded": [
+            {
+              "$type": "StartDither",
+              "duration": 0.12,
+              "CJKPCCEKEGA": 0.2
+            }
+          ],
+          "onThinkInterval": [
+            {
+              "$type": "AttachModifierToParent",
+              "modifierName": "VisibleManager"
+            },
+            {
+              "$type": "RemoveModifier",
+              "modifierName": "StartDither"
+            }
+          ],
+          "thinkInterval": 0.12,
+          "AIHNJLDFEGJ": 0.0
+        },
+        "VisibleManager": {
+          "elementDurability": 100.0,
+          "modifierMixins": [
+            {
+              "$type": "EntityInVisibleMixin",
+              "reason": "SelfAbility",
+              "AAHPKGHIPPG": true
+            }
+          ],
+          "modifierName": "",
+          "onRemoved": [
+            {
+              "$type": "StartDither",
+              "duration": 0.06,
+              "reverse": true
+            }
+          ],
+          "AIHNJLDFEGJ": 0.0
+        }
+      }
     }
   },
   {
     "Default": {
+      "abilityName": "Monster_Tribalwarrior_Udugan_BeScanned",
       "onAbilityStart": [
         {
           "$type": "Predicated",
@@ -1345,19 +1346,19 @@
             {
               "$type": "TriggerAbility",
               "abilityName": "Monster_Tribalwarrior_Udugan_OlorunEasterEgg",
-              "ADPHDOOEDEI": true,
-              "target": "OriginOwner"
+              "target": "OriginOwner",
+              "ADPHDOOEDEI": true
             }
           ],
+          "target": "TempTarget",
           "targetPredicates": [
             {
-              "$type": "AJPLICCNACO",
-              "BFLILDJLGHP": [
+              "$type": "ByHasFeatureTag",
+              "featureTagIDs": [
                 10105
               ]
             }
           ],
-          "target": "TempTarget",
           "DJOOHHCGMDG": {
             "GCGFDNHKCIH": "_ABILITY_Udugan_Shadow_Target"
           }
@@ -1368,19 +1369,19 @@
             {
               "$type": "TriggerAbility",
               "abilityName": "Monster_Tribalwarrior_Udugan_CitlaliEasterEgg",
-              "ADPHDOOEDEI": true,
-              "target": "OriginOwner"
+              "target": "OriginOwner",
+              "ADPHDOOEDEI": true
             }
           ],
+          "target": "TempTarget",
           "targetPredicates": [
             {
-              "$type": "AJPLICCNACO",
-              "BFLILDJLGHP": [
+              "$type": "ByHasFeatureTag",
+              "featureTagIDs": [
                 10107
               ]
             }
           ],
-          "target": "TempTarget",
           "DJOOHHCGMDG": {
             "GCGFDNHKCIH": "_ABILITY_Udugan_Shadow_Target"
           }
@@ -1388,22 +1389,22 @@
         {
           "$type": "TriggerAbility",
           "abilityName": "Monster_Tribalwarrior_Udugan_SummonedShadow",
-          "ADPHDOOEDEI": true,
           "otherTargets": {
-            "$type": "INIACGFCEDH",
-            "sizeRatio": 1.0,
+            "$type": "SelectTargetsByShape",
             "campTargetType": "Alliance",
             "shapeName": "CircleR70H15C",
+            "sizeRatio": 1.0,
             "sortType": "Random"
           },
           "predicates": [
             {
-              "$type": "EOFDCELPGFO",
-              "CBOMLBFIPJM": 1.0,
+              "$type": "ByTargetGlobalValue",
               "key": "_UDUGAN_SHADOW_MARK",
-              "target": "Other"
+              "target": "Other",
+              "value": 1.0
             }
-          ]
+          ],
+          "ADPHDOOEDEI": true
         },
         {
           "$type": "TriggerAbility",
@@ -1415,8 +1416,7 @@
             3
           ]
         }
-      ],
-      "abilityName": "Monster_Tribalwarrior_Udugan_BeScanned"
+      ]
     }
   }
 ]

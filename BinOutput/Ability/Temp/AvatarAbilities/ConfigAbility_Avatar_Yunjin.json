@@ -4,59 +4,59 @@
       "abilityMixins": [
         {
           "$type": "ModifyDamageMixin",
-          "damagePercentageRatio": 0.0,
-          "damagePercentage": "Yunjin_NormalAttack_01_Damage_AtkRatio",
           "animEventNames": [
             "ATK01"
-          ]
+          ],
+          "damagePercentage": "Yunjin_NormalAttack_01_Damage_AtkRatio",
+          "damagePercentageRatio": 0.0
         },
         {
           "$type": "ModifyDamageMixin",
-          "damagePercentageRatio": 0.0,
-          "damagePercentage": "Yunjin_NormalAttack_02_Damage_AtkRatio",
           "animEventNames": [
             "ATK02"
-          ]
+          ],
+          "damagePercentage": "Yunjin_NormalAttack_02_Damage_AtkRatio",
+          "damagePercentageRatio": 0.0
         },
         {
           "$type": "ModifyDamageMixin",
-          "damagePercentageRatio": 0.0,
-          "damagePercentage": "Yunjin_NormalAttack_03A_Damage_AtkRatio",
           "animEventNames": [
             "ATK03A"
-          ]
+          ],
+          "damagePercentage": "Yunjin_NormalAttack_03A_Damage_AtkRatio",
+          "damagePercentageRatio": 0.0
         },
         {
           "$type": "ModifyDamageMixin",
-          "damagePercentageRatio": 0.0,
-          "damagePercentage": "Yunjin_NormalAttack_03B_Damage_AtkRatio",
           "animEventNames": [
             "ATK03B"
-          ]
+          ],
+          "damagePercentage": "Yunjin_NormalAttack_03B_Damage_AtkRatio",
+          "damagePercentageRatio": 0.0
         },
         {
           "$type": "ModifyDamageMixin",
-          "damagePercentageRatio": 0.0,
-          "damagePercentage": "Yunjin_NormalAttack_04A_Damage_AtkRatio",
           "animEventNames": [
             "ATK04A"
-          ]
+          ],
+          "damagePercentage": "Yunjin_NormalAttack_04A_Damage_AtkRatio",
+          "damagePercentageRatio": 0.0
         },
         {
           "$type": "ModifyDamageMixin",
-          "damagePercentageRatio": 0.0,
-          "damagePercentage": "Yunjin_NormalAttack_04B_Damage_AtkRatio",
           "animEventNames": [
             "ATK04B"
-          ]
+          ],
+          "damagePercentage": "Yunjin_NormalAttack_04B_Damage_AtkRatio",
+          "damagePercentageRatio": 0.0
         },
         {
           "$type": "ModifyDamageMixin",
-          "damagePercentageRatio": 0.0,
-          "damagePercentage": "Yunjin_NormalAttack_05_Damage_AtkRatio",
           "animEventNames": [
             "ATK05"
-          ]
+          ],
+          "damagePercentage": "Yunjin_NormalAttack_05_Damage_AtkRatio",
+          "damagePercentageRatio": 0.0
         }
       ],
       "abilityName": "Avatar_Yunjin_NormalAttack_DamageHandler",
@@ -73,66 +73,227 @@
   },
   {
     "Default": {
+      "abilityMixins": [
+        {
+          "$type": "AttachToStateIDMixin",
+          "modifierName": "ExtraAttack_FX",
+          "stateIDs": [
+            "ExtraAttack"
+          ],
+          "LJPPDIGCJMJ": ""
+        },
+        {
+          "$type": "AttachToStateIDMixin",
+          "modifierName": "ExtraAttack_BS_FX",
+          "stateIDs": [
+            "ExtraAttack_BS"
+          ],
+          "LJPPDIGCJMJ": ""
+        },
+        {
+          "$type": "AttachToStateIDMixin",
+          "modifierName": "ExtraAttack_CloseCollider",
+          "stateIDs": [
+            "ExtraAttack"
+          ],
+          "LJPPDIGCJMJ": ""
+        },
+        {
+          "$type": "ButtonHoldChargeMixin",
+          "chargeStateIDs": [
+            "Attack01",
+            "Attack02",
+            "Attack03",
+            "Attack04",
+            "Run"
+          ],
+          "chargeTime": 0.12,
+          "onBeginCharged": [
+            {
+              "$type": "SetAnimatorBool",
+              "boolID": "IsCharging",
+              "value": true
+            }
+          ],
+          "onBeginSecondCharged": [
+            {
+              "$type": "SetAnimatorTrigger",
+              "predicates": [
+                {
+                  "$type": "ByLocalAvatarStamina",
+                  "logic": "GreaterOrEqual",
+                  "stamina": [
+                    "ExtraAttack_Pole_Stamina_Cost",
+                    "Flexible_Stamina",
+                    "ADD"
+                  ]
+                }
+              ],
+              "triggerID": "DoSkill"
+            },
+            {
+              "$type": "SetAnimatorInt",
+              "intID": "SkillID",
+              "predicates": [
+                {
+                  "$type": "ByLocalAvatarStamina",
+                  "logic": "GreaterOrEqual",
+                  "stamina": [
+                    "ExtraAttack_Pole_Stamina_Cost",
+                    "Flexible_Stamina",
+                    "ADD"
+                  ]
+                }
+              ],
+              "value": 6.0
+            },
+            {
+              "$type": "SetAnimatorBool",
+              "boolID": "IsCharging"
+            }
+          ],
+          "onBeginUncharged": [
+            {
+              "$type": "SetAnimatorTrigger",
+              "triggerID": "DoSkill"
+            },
+            {
+              "$type": "SetAnimatorInt",
+              "intID": "SkillID",
+              "predicates": [
+                {
+                  "$type": "ByAny",
+                  "predicates": [
+                    {
+                      "$type": "ByAnimatorInt",
+                      "logic": "Equal",
+                      "parameter": "ComboCount",
+                      "value": 0
+                    },
+                    {
+                      "$type": "ByAnimatorInt",
+                      "logic": "Equal",
+                      "parameter": "ComboCount",
+                      "value": 5
+                    }
+                  ]
+                }
+              ],
+              "value": 99.0
+            },
+            {
+              "$type": "SetAnimatorBool",
+              "boolID": "IsCharging"
+            }
+          ],
+          "onReleaseCharged": [
+            {
+              "$type": "SetAnimatorBool",
+              "boolID": "IsCharging"
+            },
+            {
+              "$type": "SetAnimatorInt",
+              "intID": "SkillID",
+              "value": 1.0
+            }
+          ],
+          "onReleaseUncharged": [
+            {
+              "$type": "SetAnimatorInt",
+              "intID": "SkillID",
+              "value": 1.0
+            }
+          ],
+          "secondChargeTime": 0.2,
+          "skillID": 10641
+        },
+        {
+          "$type": "AttachToStateIDMixin",
+          "modifierName": "ExtraAttack_StaminaCost",
+          "stateIDs": [
+            "ExtraAttack"
+          ],
+          "LJPPDIGCJMJ": ""
+        }
+      ],
+      "abilityName": "Avatar_Yunjin_ExtraAttack",
+      "abilitySpecials": {
+        "ExtraAttack_Pole_Stamina_Cost": 0.0,
+        "Flexible_Stamina": -2.0
+      },
       "modifiers": {
         "ExtraAttack_StaminaCost": {
+          "elementDurability": 100.0,
+          "modifierName": "",
           "onAdded": [
             {
               "$type": "AvatarSkillStart",
-              "skillID": 10002,
-              "BGNJBEPEJBO": 1.0,
+              "cdRatio": 1.0,
               "costStaminaRatio": "ExtraAttack_Pole_Stamina_Cost",
-              "cdRatio": 1.0
+              "skillID": 10002,
+              "GIBAINFKPBO": 1.0
             }
           ],
-          "elementDurability": 100.0,
-          "modifierName": "",
           "AIHNJLDFEGJ": 0.0
         },
         "ExtraAttack_FX": {
+          "elementDurability": 100.0,
+          "modifierName": "",
           "onAdded": [
             {
               "$type": "AttachEffect",
-              "ILLLPEOODKP": "",
               "born": {
-                "$type": "BOJMMDAIGMM",
+                "$type": "ConfigBornByTarget",
                 "offset": {
                   "x": 0.0,
-                  "z": 0.0,
-                  "y": -0.3
+                  "y": -0.3,
+                  "z": 0.0
                 }
               },
-              "scale": 1.0,
               "effectPattern": "Eff_Avatar_Girl_Pole_Yunjin_ExtraAttack_Sprint",
-              "effectTempleteID": -1.0
+              "effectTempleteID": -1.0,
+              "scale": 1.0,
+              "ILLLPEOODKP": ""
             }
           ],
-          "elementDurability": 100.0,
-          "modifierName": "",
           "AIHNJLDFEGJ": 0.0
         },
         "ExtraAttack_BS_FX": {
+          "elementDurability": 100.0,
+          "modifierName": "",
           "onAdded": [
             {
               "$type": "AttachEffect",
-              "ILLLPEOODKP": "",
               "born": {
-                "$type": "BOJMMDAIGMM",
+                "$type": "ConfigBornByTarget",
                 "offset": {
                   "x": 0.0,
-                  "z": 0.0,
-                  "y": -0.3
+                  "y": -0.3,
+                  "z": 0.0
                 }
               },
-              "scale": 1.0,
               "effectPattern": "Eff_Avatar_Girl_Pole_Yunjin_ExtraAttack_BS",
-              "effectTempleteID": -1.0
+              "effectTempleteID": -1.0,
+              "scale": 1.0,
+              "ILLLPEOODKP": ""
             }
           ],
-          "elementDurability": 100.0,
-          "modifierName": "",
           "AIHNJLDFEGJ": 0.0
         },
         "ExtraAttack_CloseCollider": {
+          "elementDurability": 100.0,
+          "modifierName": "",
+          "onAdded": [
+            {
+              "$type": "TriggerSetPassThrough",
+              "doOffStage": true,
+              "passThrough": true
+            },
+            {
+              "$type": "EnableHDMesh",
+              "hdMeshKey": "Default"
+            }
+          ],
           "onRemoved": [
             {
               "$type": "TriggerSetPassThrough",
@@ -141,1036 +302,238 @@
             },
             {
               "$type": "EnableHDMesh",
+              "canBeHandledOnRecover": true,
               "enable": true,
-              "hdMeshKey": "Default",
-              "canBeHandledOnRecover": true
+              "hdMeshKey": "Default"
             },
             {
               "$type": "KillGadget",
+              "doOffStage": true,
               "gadgetInfo": {
                 "configID": 41064011
-              },
-              "doOffStage": true
+              }
             }
           ],
-          "onAdded": [
-            {
-              "$type": "TriggerSetPassThrough",
-              "GMPACBDHKMB": true,
-              "doOffStage": true
-            },
-            {
-              "$type": "EnableHDMesh",
-              "hdMeshKey": "Default"
-            }
-          ],
-          "elementDurability": 100.0,
-          "modifierName": "",
           "AIHNJLDFEGJ": 0.0
         }
-      },
-      "abilityMixins": [
-        {
-          "$type": "AttachToStateIDMixin",
-          "LJPPDIGCJMJ": "",
-          "stateIDs": [
-            "ExtraAttack"
-          ],
-          "modifierName": "ExtraAttack_FX"
-        },
-        {
-          "$type": "AttachToStateIDMixin",
-          "LJPPDIGCJMJ": "",
-          "stateIDs": [
-            "ExtraAttack_BS"
-          ],
-          "modifierName": "ExtraAttack_BS_FX"
-        },
-        {
-          "$type": "AttachToStateIDMixin",
-          "LJPPDIGCJMJ": "",
-          "stateIDs": [
-            "ExtraAttack"
-          ],
-          "modifierName": "ExtraAttack_CloseCollider"
-        },
-        {
-          "$type": "ButtonHoldChargeMixin",
-          "skillID": 10641,
-          "OnReleaseCharged": [
-            {
-              "$type": "SetAnimatorBool",
-              "boolID": "IsCharging"
-            },
-            {
-              "$type": "SetAnimatorInt",
-              "intID": "SkillID",
-              "CBOMLBFIPJM": 1.0
-            }
-          ],
-          "OnBeginUncharged": [
-            {
-              "$type": "SetAnimatorTrigger",
-              "triggerID": "DoSkill"
-            },
-            {
-              "$type": "SetAnimatorInt",
-              "intID": "SkillID",
-              "CBOMLBFIPJM": 99.0,
-              "predicates": [
-                {
-                  "$type": "GPEMEIHPCCF",
-                  "predicates": [
-                    {
-                      "$type": "LDOPHDHPCHA",
-                      "CBOMLBFIPJM": 0,
-                      "parameter": "ComboCount",
-                      "logic": "Equal"
-                    },
-                    {
-                      "$type": "LDOPHDHPCHA",
-                      "CBOMLBFIPJM": 5,
-                      "parameter": "ComboCount",
-                      "logic": "Equal"
-                    }
-                  ]
-                }
-              ]
-            },
-            {
-              "$type": "SetAnimatorBool",
-              "boolID": "IsCharging"
-            }
-          ],
-          "secondChargeTime": 0.2,
-          "chargeTime": 0.12,
-          "OnBeginCharged": [
-            {
-              "$type": "SetAnimatorBool",
-              "CBOMLBFIPJM": true,
-              "boolID": "IsCharging"
-            }
-          ],
-          "OnBeginSecondCharged": [
-            {
-              "$type": "SetAnimatorTrigger",
-              "triggerID": "DoSkill",
-              "predicates": [
-                {
-                  "$type": "OPLIAABFJGD",
-                  "stamina": [
-                    "ExtraAttack_Pole_Stamina_Cost",
-                    "Flexible_Stamina",
-                    "ADD"
-                  ],
-                  "logic": "GreaterOrEqual"
-                }
-              ]
-            },
-            {
-              "$type": "SetAnimatorInt",
-              "intID": "SkillID",
-              "CBOMLBFIPJM": 6.0,
-              "predicates": [
-                {
-                  "$type": "OPLIAABFJGD",
-                  "stamina": [
-                    "ExtraAttack_Pole_Stamina_Cost",
-                    "Flexible_Stamina",
-                    "ADD"
-                  ],
-                  "logic": "GreaterOrEqual"
-                }
-              ]
-            },
-            {
-              "$type": "SetAnimatorBool",
-              "boolID": "IsCharging"
-            }
-          ],
-          "chargeStateIDs": [
-            "Attack01",
-            "Attack02",
-            "Attack03",
-            "Attack04",
-            "Run"
-          ],
-          "OnReleaseUncharged": [
-            {
-              "$type": "SetAnimatorInt",
-              "intID": "SkillID",
-              "CBOMLBFIPJM": 1.0
-            }
-          ]
-        },
-        {
-          "$type": "AttachToStateIDMixin",
-          "LJPPDIGCJMJ": "",
-          "stateIDs": [
-            "ExtraAttack"
-          ],
-          "modifierName": "ExtraAttack_StaminaCost"
-        }
-      ],
-      "abilityName": "Avatar_Yunjin_ExtraAttack",
-      "abilitySpecials": {
-        "ExtraAttack_Pole_Stamina_Cost": 0.0,
-        "Flexible_Stamina": -2.0
       }
     }
   },
   {
     "Default": {
+      "abilityName": "Avatar_Yunjin_ExtraAttack_Cast",
       "onAbilityStart": [
         {
           "$type": "TriggerBullet",
           "bulletID": 41064011
         }
-      ],
-      "abilityName": "Avatar_Yunjin_ExtraAttack_Cast"
+      ]
     }
   },
   {
     "Default": {
+      "abilityName": "Avatar_Yunjin_ExtraAttack_Bullet",
+      "abilitySpecials": {
+        "Yunjin_ExtraAttack_Damage_AtkRatio": 0.0
+      },
       "onAbilityStart": [
         {
           "$type": "Predicated",
+          "failActions": [
+            {
+              "$type": "TriggerAttackEvent",
+              "attackEvent": {
+                "attackInfo": {
+                  "attackProperty": {
+                    "attackType": "Melee",
+                    "damagePercentage": "Yunjin_ExtraAttack_Damage_AtkRatio",
+                    "damagePercentageRatio": 0.0,
+                    "elementDurability": 25.0,
+                    "enBreak": 120.0,
+                    "overrideByWeapon": true,
+                    "strikeType": "Spear",
+                    "IIPHCFEONLK": 0.0
+                  },
+                  "attackTag": "ExtraAttack",
+                  "attenuationGroup": "Avatar_Pole_ExtraAttack",
+                  "attenuationTag": "ExtraAttack",
+                  "cameraShake": {
+                    "shakeDir": {
+                      "y": -1.0
+                    },
+                    "shakeDistance": 30.0,
+                    "shakeRange": 0.36,
+                    "shakeTime": 0.12,
+                    "shakeType": "CustomVector",
+                    "MNKFEFOKFKP": ""
+                  },
+                  "canBeModifiedBy": "OriginOwner",
+                  "hitPattern": {
+                    "canBeDefenceHalt": true,
+                    "hitHaltTimeScale": 0.01,
+                    "hitImpulseType": "LV5",
+                    "onHitEffectName": "default",
+                    "FLFCIDDNMNA": ""
+                  }
+                },
+                "attackPattern": {
+                  "$type": "ConfigAttackSphere",
+                  "born": {
+                    "$type": "ConfigBornByCollisionPoint",
+                    "offset": {
+                      "x": 0.0,
+                      "y": 0.0,
+                      "z": 0.0
+                    }
+                  },
+                  "radius": 0.8,
+                  "triggerType": "TriggerNoRepeat"
+                }
+              },
+              "targetType": "Enemy"
+            }
+          ],
           "successActions": [
             {
               "$type": "DamageByAttackValue",
               "attackInfo": {
                 "attackProperty": {
                   "attackType": "Melee",
-                  "damagePercentageRatio": 0.0,
-                  "strikeType": "Spear",
-                  "enBreak": 120.0,
                   "damagePercentage": "Yunjin_ExtraAttack_Damage_AtkRatio",
+                  "damagePercentageRatio": 0.0,
                   "elementDurability": 25.0,
+                  "enBreak": 120.0,
                   "overrideByWeapon": true,
-                  "arkheGrade": 0.0
+                  "strikeType": "Spear",
+                  "IIPHCFEONLK": 0.0
                 },
+                "attackTag": "ExtraAttack",
+                "attenuationGroup": "Avatar_Pole_ExtraAttack",
+                "attenuationTag": "ExtraAttack",
                 "cameraShake": {
                   "shakeDir": {
                     "y": -1.0
                   },
+                  "shakeDistance": 30.0,
+                  "shakeRange": 0.36,
                   "shakeTime": 0.12,
                   "shakeType": "CustomVector",
-                  "shakeDistance": 30.0,
-                  "MNKFEFOKFKP": "",
-                  "shakeRange": 0.36
+                  "MNKFEFOKFKP": ""
                 },
+                "canBeModifiedBy": "OriginOwner",
                 "hitPattern": {
-                  "FLFCIDDNMNA": "",
-                  "onHitEffectName": "default",
-                  "hitHaltTimeScale": 0.01,
                   "canBeDefenceHalt": true,
-                  "hitImpulseType": "LV6"
-                },
-                "attenuationGroup": "Avatar_Pole_ExtraAttack",
-                "attenuationTag": "ExtraAttack",
-                "attackTag": "ExtraAttack",
-                "canBeModifiedBy": "OriginOwner"
+                  "hitHaltTimeScale": 0.01,
+                  "hitImpulseType": "LV6",
+                  "onHitEffectName": "default",
+                  "FLFCIDDNMNA": ""
+                }
               },
               "target": "Target"
             }
           ],
-          "failActions": [
-            {
-              "$type": "TriggerAttackEvent",
-              "targetType": "Enemy",
-              "attackEvent": {
-                "attackInfo": {
-                  "attackProperty": {
-                    "attackType": "Melee",
-                    "damagePercentageRatio": 0.0,
-                    "strikeType": "Spear",
-                    "enBreak": 120.0,
-                    "damagePercentage": "Yunjin_ExtraAttack_Damage_AtkRatio",
-                    "elementDurability": 25.0,
-                    "overrideByWeapon": true,
-                    "arkheGrade": 0.0
-                  },
-                  "cameraShake": {
-                    "shakeDir": {
-                      "y": -1.0
-                    },
-                    "shakeTime": 0.12,
-                    "shakeType": "CustomVector",
-                    "shakeDistance": 30.0,
-                    "MNKFEFOKFKP": "",
-                    "shakeRange": 0.36
-                  },
-                  "hitPattern": {
-                    "FLFCIDDNMNA": "",
-                    "onHitEffectName": "default",
-                    "hitHaltTimeScale": 0.01,
-                    "canBeDefenceHalt": true,
-                    "hitImpulseType": "LV5"
-                  },
-                  "attenuationGroup": "Avatar_Pole_ExtraAttack",
-                  "attenuationTag": "ExtraAttack",
-                  "attackTag": "ExtraAttack",
-                  "canBeModifiedBy": "OriginOwner"
-                },
-                "attackPattern": {
-                  "$type": "HCAGHMDHEGG",
-                  "radius": 0.8,
-                  "triggerType": "TriggerNoRepeat",
-                  "born": {
-                    "$type": "NHPKNMOMIFH",
-                    "offset": {
-                      "x": 0.0,
-                      "z": 0.0,
-                      "y": 0.0
-                    }
-                  }
-                }
-              }
-            }
-          ],
+          "target": "Target",
           "targetPredicates": [
             {
-              "$type": "DEOFBICNFHF",
+              "$type": "ByEntityTypes",
               "entityTypes": [
                 "MonsterEquip"
               ]
             }
-          ],
-          "target": "Target"
+          ]
         }
-      ],
-      "abilityName": "Avatar_Yunjin_ExtraAttack_Bullet",
-      "abilitySpecials": {
-        "Yunjin_ExtraAttack_Damage_AtkRatio": 0.0
-      }
+      ]
     }
   },
   {
     "Default": {
-      "modifiers": {
-        "FallingAnthem_BS_Material": {
-          "duration": 0.53,
-          "onRemoved": [
-            {
-              "$type": "ActCameraRadialBlur",
-              "NFBFBAJDMPJ": {
-                "BKICBNIALGL": 0.3,
-                "LCOPJHPGJCO": 0.15,
-                "LFMGJKCOGPI": 0.3
-              }
-            }
-          ],
-          "onAdded": [
-            {
-              "$type": "FireEffect",
-              "effectPattern": "Eff_Avatar_Pole_FallingAnthem_BS_Normal",
-              "scale": 1.0,
-              "ILLLPEOODKP": "",
-              "effectTempleteID": -1.0
-            },
-            {
-              "$type": "FireEffect",
-              "effectPattern": "Eff_Avatar_Sprint_Boost",
-              "scale": 1.0,
-              "ILLLPEOODKP": "",
-              "effectTempleteID": -1.0
-            }
-          ],
-          "elementDurability": 100.0,
-          "modifierName": "",
-          "AIHNJLDFEGJ": 0.0
-        },
-        "FallingAnthem_BS_VelocityForce_Initialize": {
-          "onAdded": [
-            {
-              "$type": "RemoveVelocityForce",
-              "HALNPNMJJAN": [
-                "RushMoveType"
-              ]
-            }
-          ],
-          "properties": {
-            "Actor_AddGravityScale": -2.0
-          },
-          "elementDurability": 100.0,
-          "modifierName": "",
-          "AIHNJLDFEGJ": 0.0
-        },
-        "FallingAnthem_LoopDamage": {
-          "thinkInterval": 0.3,
-          "onAdded": [
-            {
-              "$type": "TriggerAttackEvent",
-              "targetType": "Enemy",
-              "attackEvent": {
-                "attackInfo": {
-                  "attackProperty": {
-                    "attackType": "Melee",
-                    "damagePercentageRatio": 0.0,
-                    "strikeType": "Slash",
-                    "enBreak": 25.0,
-                    "damagePercentage": "FallingAnthem_Normal_Loop_Damage",
-                    "elementDurability": 0.0,
-                    "overrideByWeapon": true,
-                    "arkheGrade": 0.0
-                  },
-                  "hitPattern": {
-                    "FLFCIDDNMNA": "",
-                    "onHitEffectName": "default",
-                    "hitHaltTimeScale": 0.02,
-                    "hitImpulseType": "LV2"
-                  },
-                  "attenuationGroup": "default",
-                  "attenuationTag": "",
-                  "attackTag": "FallingAttack"
-                },
-                "attackPattern": {
-                  "$type": "HCAGHMDHEGG",
-                  "radius": 1.0,
-                  "triggerType": "TriggerNoRepeat",
-                  "born": {
-                    "$type": "NABPLNFPHCK",
-                    "offset": {
-                      "x": 0.0,
-                      "z": 1.0,
-                      "y": 0.0
-                    }
-                  }
-                }
-              }
-            }
-          ],
-          "elementDurability": 100.0,
-          "modifierName": "",
-          "onThinkInterval": [
-            {
-              "$type": "TriggerAttackEvent",
-              "targetType": "Enemy",
-              "attackEvent": {
-                "attackInfo": {
-                  "attackProperty": {
-                    "attackType": "Melee",
-                    "damagePercentageRatio": 0.0,
-                    "strikeType": "Slash",
-                    "enBreak": 25.0,
-                    "damagePercentage": "FallingAnthem_Normal_Loop_Damage",
-                    "elementDurability": 0.0,
-                    "overrideByWeapon": true,
-                    "arkheGrade": 0.0
-                  },
-                  "hitPattern": {
-                    "FLFCIDDNMNA": "",
-                    "onHitEffectName": "default",
-                    "hitHaltTimeScale": 0.02,
-                    "hitImpulseType": "LV4"
-                  },
-                  "attenuationGroup": "default",
-                  "attenuationTag": "",
-                  "attackTag": "FallingAttack"
-                },
-                "attackPattern": {
-                  "$type": "HCAGHMDHEGG",
-                  "radius": 1.0,
-                  "triggerType": "TriggerNoRepeat",
-                  "born": {
-                    "$type": "NABPLNFPHCK",
-                    "offset": {
-                      "x": 0.0,
-                      "z": 1.0,
-                      "y": 0.0
-                    }
-                  }
-                }
-              }
-            }
-          ],
-          "AIHNJLDFEGJ": 0.0
-        },
-        "FallingAnthem_FallingDamageImmune_01": {
-          "onAdded": [
-            {
-              "$type": "ClearGlobalValue",
-              "key": "_ABILITY_FallingAttack_Altitude"
-            },
-            {
-              "$type": "AddGlobalValue",
-              "useLimitRange": true,
-              "key": "_ABILITY_FallingAttack_Altitude",
-              "maxValue": "FallingAnthem_FallingDamageRatio_Lv0",
-              "minValue": "FallingAnthem_FallingDamageRatio_Lv0",
-              "CBOMLBFIPJM": "FallingAnthem_FallingDamageRatio_Lv0",
-              "predicates": [
-                {
-                  "$type": "AKINJGNEPNO",
-                  "CBOMLBFIPJM": "FallingAnthem_Altitude_Lv0",
-                  "logic": "LesserOrEqual"
-                }
-              ]
-            },
-            {
-              "$type": "AddGlobalValue",
-              "useLimitRange": true,
-              "key": "_ABILITY_FallingAttack_Altitude",
-              "maxValue": "FallingAnthem_FallingDamageRatio_Lv1",
-              "minValue": "FallingAnthem_FallingDamageRatio_Lv1",
-              "CBOMLBFIPJM": "FallingAnthem_FallingDamageRatio_Lv1",
-              "predicates": [
-                {
-                  "$type": "AKINJGNEPNO",
-                  "CBOMLBFIPJM": "FallingAnthem_Altitude_Lv1",
-                  "logic": "LesserOrEqual"
-                },
-                {
-                  "$type": "AKINJGNEPNO",
-                  "CBOMLBFIPJM": "FallingAnthem_Altitude_Lv0"
-                }
-              ]
-            },
-            {
-              "$type": "AddGlobalValue",
-              "useLimitRange": true,
-              "key": "_ABILITY_FallingAttack_Altitude",
-              "maxValue": "FallingAnthem_FallingDamageRatio_Lv2",
-              "minValue": "FallingAnthem_FallingDamageRatio_Lv2",
-              "CBOMLBFIPJM": "FallingAnthem_FallingDamageRatio_Lv2",
-              "predicates": [
-                {
-                  "$type": "AKINJGNEPNO",
-                  "CBOMLBFIPJM": "FallingAnthem_Altitude_Lv2",
-                  "logic": "LesserOrEqual"
-                },
-                {
-                  "$type": "AKINJGNEPNO",
-                  "CBOMLBFIPJM": "FallingAnthem_Altitude_Lv1"
-                }
-              ]
-            },
-            {
-              "$type": "AddGlobalValue",
-              "useLimitRange": true,
-              "key": "_ABILITY_FallingAttack_Altitude",
-              "maxValue": "FallingAnthem_FallingDamageRatio_Lv3",
-              "minValue": "FallingAnthem_FallingDamageRatio_Lv3",
-              "CBOMLBFIPJM": "FallingAnthem_FallingDamageRatio_Lv3",
-              "predicates": [
-                {
-                  "$type": "AKINJGNEPNO",
-                  "CBOMLBFIPJM": "FallingAnthem_Altitude_Lv3",
-                  "logic": "LesserOrEqual"
-                },
-                {
-                  "$type": "AKINJGNEPNO",
-                  "CBOMLBFIPJM": "FallingAnthem_Altitude_Lv2"
-                }
-              ]
-            },
-            {
-              "$type": "AddGlobalValue",
-              "useLimitRange": true,
-              "key": "_ABILITY_FallingAttack_Altitude",
-              "maxValue": "FallingAnthem_FallingDamageRatio_Lv4",
-              "minValue": "FallingAnthem_FallingDamageRatio_Lv4",
-              "CBOMLBFIPJM": "FallingAnthem_FallingDamageRatio_Lv4",
-              "predicates": [
-                {
-                  "$type": "AKINJGNEPNO",
-                  "CBOMLBFIPJM": "FallingAnthem_Altitude_Lv3"
-                }
-              ]
-            },
-            {
-              "$type": "AttachModifier",
-              "modifierName": "FallingAnthem_FallingDamageImmune_02"
-            }
-          ],
-          "elementDurability": 100.0,
-          "modifierName": "",
-          "AIHNJLDFEGJ": 0.0
-        },
-        "FallingAnthem_FallingDamageImmune_02": {
-          "onAdded": [
-            {
-              "$type": "SetGlobalValueToOverrideMap",
-              "globalValueKey": "_ABILITY_FallingAttack_Altitude",
-              "abilityName": "",
-              "overrideMapKey": "FallingAnthem_FallingDamageRatio"
-            },
-            {
-              "$type": "AttachModifier",
-              "modifierName": "FallingAnthem_FallingDamageImmune_03"
-            }
-          ],
-          "elementDurability": 100.0,
-          "modifierName": "",
-          "AIHNJLDFEGJ": 0.0
-        },
-        "FallingAnthem_FallingDamageImmune_03": {
-          "properties": {
-            "Actor_FallingDamageRatio": "FallingAnthem_FallingDamageRatio"
-          },
-          "elementDurability": 100.0,
-          "modifierName": "",
-          "AIHNJLDFEGJ": 0.0
-        },
-        "FallingAnthem_Loop_Normal": {
-          "elementDurability": 100.0,
-          "modifierMixins": [
-            {
-              "$type": "AttachModifierToSelfGlobalValueMixin",
-              "modifierNameSteps": [
-                "FallingAnthem_Loop_Normal_Rank_1",
-                "FallingAnthem_Loop_Normal_Rank_2"
-              ],
-              "valueSteps": [
-                -1.0,
-                0.5,
-                1.5
-              ],
-              "globalValueKey": "_ABILITY_FallingAnthem_UseCamera",
-              "defaultGlobalValueOnCreate": 0.0
-            }
-          ],
-          "modifierName": "",
-          "AIHNJLDFEGJ": 0.0
-        },
-        "FallingAnthem_Loop_Normal_Rank_1": {
-          "onAdded": [
-            {
-              "$type": "FireEffect",
-              "effectPattern": "Eff_Avatar_Pole_FallingAnthem_Loop_01_Normal",
-              "scale": 1.0,
-              "ILLLPEOODKP": "",
-              "effectTempleteID": -1.0
-            }
-          ],
-          "elementDurability": 100.0,
-          "modifierName": "",
-          "AIHNJLDFEGJ": 0.0
-        },
-        "FallingAnthem_Loop_Normal_Rank_2": {
-          "onAdded": [
-            {
-              "$type": "AttachEffect",
-              "ILLLPEOODKP": "",
-              "scale": 1.0,
-              "effectPattern": "Eff_Avatar_Pole_FallingAnthem_Loop_02_Normal",
-              "effectTempleteID": -1.0
-            }
-          ],
-          "elementDurability": 100.0,
-          "modifierName": "",
-          "AIHNJLDFEGJ": 0.0
-        },
-        "Inertia": {
-          "elementDurability": 100.0,
-          "modifierMixins": [
-            {
-              "$type": "ApplyInertiaVelocityMixin",
-              "JOHELJNOOBE": false,
-              "useY": false
-            }
-          ],
-          "modifierName": "",
-          "AIHNJLDFEGJ": 0.0
-        },
-        "FallingAnthem_Height_Detect": {
-          "onRemoved": [
-            {
-              "$type": "SetAnimatorFloat",
-              "floatID": "FallingAnthem_UseCamera",
-              "CBOMLBFIPJM": 0.0
-            },
-            {
-              "$type": "AddGlobalValue",
-              "useLimitRange": true,
-              "key": "_ABILITY_FallingAnthem_UseCamera",
-              "maxValue": 0.0,
-              "minValue": 0.0,
-              "CBOMLBFIPJM": 0.0
-            }
-          ],
-          "onAdded": [
-            {
-              "$type": "AddGlobalValue",
-              "useLimitRange": true,
-              "key": "_ABILITY_FallingAnthem_UseCamera",
-              "maxValue": 0.0,
-              "minValue": 0.0,
-              "CBOMLBFIPJM": 0.0,
-              "predicates": [
-                {
-                  "$type": "AKINJGNEPNO",
-                  "CBOMLBFIPJM": 2.4,
-                  "logic": "LesserOrEqual"
-                }
-              ]
-            },
-            {
-              "$type": "AddGlobalValue",
-              "useLimitRange": true,
-              "key": "_ABILITY_FallingAnthem_UseCamera",
-              "maxValue": 1.0,
-              "minValue": 0.0,
-              "CBOMLBFIPJM": 5.0,
-              "predicates": [
-                {
-                  "$type": "AKINJGNEPNO",
-                  "CBOMLBFIPJM": 2.4
-                }
-              ]
-            },
-            {
-              "$type": "SetAnimatorFloat",
-              "floatID": "FallingAnthem_UseCamera",
-              "CBOMLBFIPJM": 0.0,
-              "predicates": [
-                {
-                  "$type": "AKINJGNEPNO",
-                  "CBOMLBFIPJM": 2.4,
-                  "logic": "LesserOrEqual"
-                }
-              ]
-            },
-            {
-              "$type": "SetAnimatorFloat",
-              "floatID": "FallingAnthem_UseCamera",
-              "CBOMLBFIPJM": 1.0,
-              "predicates": [
-                {
-                  "$type": "AKINJGNEPNO",
-                  "CBOMLBFIPJM": 2.4
-                }
-              ]
-            }
-          ],
-          "elementDurability": 100.0,
-          "modifierName": "",
-          "AIHNJLDFEGJ": 0.0
-        },
-        "FallingAnthem_OverHead_Camera": {
-          "onAdded": [
-            {
-              "$type": "AvatarCameraParam",
-              "cameraParam": {
-                "shouldKeepForceRadius": true,
-                "forceRadiusDuration": 0.2,
-                "forceRadius": 4.5
-              },
-              "predicates": [
-                {
-                  "$type": "GCFOJENHAMH",
-                  "parameter": "FallingAnthem_UseCamera",
-                  "CBOMLBFIPJM": 1.0,
-                  "logic": "Equal"
-                }
-              ]
-            }
-          ],
-          "elementDurability": 100.0,
-          "modifierName": "",
-          "AIHNJLDFEGJ": 0.0
-        },
-        "FallingAnthem_OverHead_Camera_Remover": {
-          "onAdded": [
-            {
-              "$type": "AvatarExitCameraShot",
-              "doOffStage": true
-            }
-          ],
-          "elementDurability": 100.0,
-          "modifierName": "",
-          "AIHNJLDFEGJ": 0.0
-        },
-        "FallingAnthem_Landed_Camera": {
-          "onAdded": [
-            {
-              "$type": "AvatarCameraParam",
-              "cameraParam": {
-                "shouldKeepForceRadius": true,
-                "forceRadiusDuration": 0.1,
-                "forceRadius": 6.0
-              },
-              "predicates": [
-                {
-                  "$type": "GCFOJENHAMH",
-                  "parameter": "FallingAnthem_UseCamera",
-                  "CBOMLBFIPJM": 1.0,
-                  "logic": "Equal"
-                }
-              ]
-            }
-          ],
-          "elementDurability": 100.0,
-          "modifierName": "",
-          "AIHNJLDFEGJ": 0.0
-        },
-        "FallingAnthem_ClearVelocityForce": {
-          "onAdded": [
-            {
-              "$type": "RemoveVelocityForce",
-              "HALNPNMJJAN": [
-                "RushMoveType",
-                "InertiaType"
-              ]
-            }
-          ],
-          "elementDurability": 100.0,
-          "modifierName": "",
-          "AIHNJLDFEGJ": 0.0
-        }
-      },
-      "onAbilityStart": [
-        {
-          "$type": "TriggerAttackEvent",
-          "targetType": "Enemy",
-          "attackEvent": {
-            "attackInfo": {
-              "attackProperty": {
-                "attackType": "Melee",
-                "damagePercentageRatio": 0.0,
-                "strikeType": "Blunt",
-                "enBreak": 100.0,
-                "damagePercentage": "FallingAnthem_Normal_Rank_1_Damage",
-                "elementDurability": 25.0,
-                "overrideByWeapon": true,
-                "arkheGrade": 0.0
-              },
-              "cameraShake": {
-                "extension": {
-                  "rangeAttenuation": 0.3,
-                  "baseCycle": 0.24,
-                  "cycleDamping": 0.0
-                },
-                "shakeDir": {
-                  "y": 1.0
-                },
-                "shakeTime": 0.12,
-                "shakeType": "CustomVector",
-                "shakeDistance": 30.0,
-                "MNKFEFOKFKP": "",
-                "shakeRange": 0.24
-              },
-              "hitPattern": {
-                "FLFCIDDNMNA": "",
-                "onHitEffectName": "none",
-                "hitHaltTimeScale": 0.1,
-                "hitImpulseType": "LV4"
-              },
-              "forceCameraShake": true,
-              "attenuationGroup": "default",
-              "attenuationTag": "",
-              "attackTag": "FallingAttack"
-            },
-            "attackPattern": {
-              "$type": "DDLDAMKEKJD",
-              "radius": 3.0,
-              "height": 2.0,
-              "triggerType": "TriggerNoRepeat",
-              "born": {
-                "$type": "BOJMMDAIGMM",
-                "offset": {
-                  "x": 0.0,
-                  "z": 1.0,
-                  "y": -0.5
-                }
-              }
-            }
-          },
-          "predicates": [
-            {
-              "$type": "EOFDCELPGFO",
-              "CBOMLBFIPJM": 0.0,
-              "compareType": "NoneOrEqual",
-              "key": "_ABILITY_FallingAnthem_UseCamera",
-              "value": true
-            }
-          ]
-        },
-        {
-          "$type": "TriggerAttackEvent",
-          "targetType": "Enemy",
-          "attackEvent": {
-            "attackInfo": {
-              "attackProperty": {
-                "attackType": "Melee",
-                "damagePercentageRatio": 0.0,
-                "strikeType": "Blunt",
-                "enBreak": 150.0,
-                "damagePercentage": "FallingAnthem_Normal_Rank_2_Damage",
-                "elementDurability": 25.0,
-                "overrideByWeapon": true,
-                "arkheGrade": 0.0
-              },
-              "cameraShake": {
-                "extension": {
-                  "rangeAttenuation": 0.3,
-                  "baseCycle": 0.4,
-                  "cycleDamping": 0.0
-                },
-                "shakeDir": {
-                  "y": 1.0,
-                  "z": 1.0
-                },
-                "shakeTime": 0.2,
-                "shakeType": "CustomVector",
-                "shakeDistance": 30.0,
-                "MNKFEFOKFKP": "",
-                "shakeRange": 0.5
-              },
-              "hitPattern": {
-                "FLFCIDDNMNA": "",
-                "onHitEffectName": "none",
-                "hitHaltTimeScale": 0.1,
-                "hitImpulseType": "LV7"
-              },
-              "forceCameraShake": true,
-              "attenuationGroup": "default",
-              "attenuationTag": "",
-              "attackTag": "FallingAttack"
-            },
-            "attackPattern": {
-              "$type": "DDLDAMKEKJD",
-              "radius": 5.0,
-              "height": 2.0,
-              "triggerType": "TriggerNoRepeat",
-              "born": {
-                "$type": "BOJMMDAIGMM",
-                "offset": {
-                  "x": 0.0,
-                  "z": 1.0,
-                  "y": -0.5
-                }
-              }
-            }
-          },
-          "predicates": [
-            {
-              "$type": "EOFDCELPGFO",
-              "CBOMLBFIPJM": 1.0,
-              "key": "_ABILITY_FallingAnthem_UseCamera",
-              "value": true
-            }
-          ]
-        },
-        {
-          "$type": "FireEffect",
-          "effectPattern": "Eff_Avatar_Pole_FallingAnthem_Strike_01_Normal",
-          "scale": 1.0,
-          "ILLLPEOODKP": "",
-          "effectTempleteID": -1.0,
-          "predicates": [
-            {
-              "$type": "EOFDCELPGFO",
-              "CBOMLBFIPJM": 0.0,
-              "compareType": "NoneOrEqual",
-              "key": "_ABILITY_FallingAnthem_UseCamera",
-              "value": true
-            }
-          ]
-        },
-        {
-          "$type": "FireEffect",
-          "effectPattern": "Eff_Avatar_Pole_FallingAnthem_Strike_02_Normal",
-          "scale": 1.0,
-          "ILLLPEOODKP": "",
-          "effectTempleteID": -1.0,
-          "predicates": [
-            {
-              "$type": "EOFDCELPGFO",
-              "CBOMLBFIPJM": 1.0,
-              "key": "_ABILITY_FallingAnthem_UseCamera",
-              "value": true
-            }
-          ]
-        }
-      ],
       "abilityMixins": [
         {
           "$type": "AvatarChangeSkillMixin",
-          "OLDBNEGFONF": 5064010,
-          "flySkillID": 5064010
+          "flySkillID": 5064010,
+          "OLDBNEGFONF": 5064010
         },
         {
           "$type": "AttachToStateIDMixin",
-          "LJPPDIGCJMJ": "",
+          "modifierName": "FallingAnthem_BS_Material",
           "stateIDs": [
             "FallingAnthem_BS"
           ],
-          "modifierName": "FallingAnthem_BS_Material"
+          "LJPPDIGCJMJ": ""
         },
         {
           "$type": "AttachToStateIDMixin",
-          "LJPPDIGCJMJ": "",
+          "modifierName": "FallingAnthem_Loop_Normal",
           "stateIDs": [
             "FallingAnthem_Loop"
           ],
-          "modifierName": "FallingAnthem_Loop_Normal"
+          "LJPPDIGCJMJ": ""
         },
         {
           "$type": "AttachToStateIDMixin",
-          "LJPPDIGCJMJ": "",
+          "modifierName": "FallingAnthem_LoopDamage",
           "stateIDs": [
             "FallingAnthem_Loop"
           ],
-          "modifierName": "FallingAnthem_LoopDamage"
+          "LJPPDIGCJMJ": ""
         },
         {
           "$type": "AttachToStateIDMixin",
-          "LJPPDIGCJMJ": "",
+          "modifierName": "FallingAnthem_BS_VelocityForce_Initialize",
           "stateIDs": [
             "FallingAnthem_BS"
           ],
-          "modifierName": "FallingAnthem_BS_VelocityForce_Initialize"
+          "LJPPDIGCJMJ": ""
         },
         {
           "$type": "AttachToStateIDMixin",
-          "LJPPDIGCJMJ": "",
+          "modifierName": "FallingAnthem_Height_Detect",
           "stateIDs": [
             "FallingAnthem_BS",
             "FallingAnthem_Loop",
             "FallingAnthem_AS_1",
             "FallingAnthem_AS_2"
           ],
-          "modifierName": "FallingAnthem_Height_Detect"
+          "LJPPDIGCJMJ": ""
         },
         {
           "$type": "AttachToStateIDMixin",
-          "LJPPDIGCJMJ": "",
+          "modifierName": "FallingAnthem_FallingDamageImmune_01",
           "stateIDs": [
             "FallingAnthem_BS",
             "FallingAnthem_Loop",
             "FallingAnthem_AS_1",
             "FallingAnthem_AS_2"
           ],
-          "modifierName": "FallingAnthem_FallingDamageImmune_01"
+          "LJPPDIGCJMJ": ""
         },
         {
           "$type": "AttachToStateIDMixin",
-          "LJPPDIGCJMJ": "",
+          "modifierName": "Inertia",
           "stateIDs": [
             "FallingAnthem_BS",
             "FallingAnthem_Loop"
           ],
-          "modifierName": "Inertia"
+          "LJPPDIGCJMJ": ""
         },
         {
           "$type": "AttachToStateIDMixin",
-          "LJPPDIGCJMJ": "",
+          "modifierName": "FallingAnthem_OverHead_Camera",
           "stateIDs": [
             "FallingAnthem_BS",
             "FallingAnthem_Loop",
             "FallingAnthem_AS_1",
             "FallingAnthem_AS_2"
           ],
-          "modifierName": "FallingAnthem_OverHead_Camera"
+          "LJPPDIGCJMJ": ""
         },
         {
           "$type": "AttachToStateIDMixin",
-          "LJPPDIGCJMJ": "",
+          "modifierName": "FallingAnthem_ClearVelocityForce",
           "stateIDs": [
             "FallingAnthem_BS"
           ],
-          "modifierName": "FallingAnthem_ClearVelocityForce"
+          "LJPPDIGCJMJ": ""
         }
       ],
       "abilityName": "Avatar_Yunjin_FallingAnthem",
@@ -1189,49 +552,799 @@
         "FallingAnthem_FallingDamageRatio_Lv3": -0.8,
         "FallingAnthem_FallingDamageRatio_Lv4": -0.6,
         "FallingAnthem_FallingDamageRatio": 0.0
-      }
+      },
+      "modifiers": {
+        "FallingAnthem_BS_Material": {
+          "duration": 0.53,
+          "elementDurability": 100.0,
+          "modifierName": "",
+          "onAdded": [
+            {
+              "$type": "FireEffect",
+              "effectPattern": "Eff_Avatar_Pole_FallingAnthem_BS_Normal",
+              "effectTempleteID": -1.0,
+              "scale": 1.0,
+              "ILLLPEOODKP": ""
+            },
+            {
+              "$type": "FireEffect",
+              "effectPattern": "Eff_Avatar_Sprint_Boost",
+              "effectTempleteID": -1.0,
+              "scale": 1.0,
+              "ILLLPEOODKP": ""
+            }
+          ],
+          "onRemoved": [
+            {
+              "$type": "ActCameraRadialBlur",
+              "cameraRadialBlur": {
+                "blurTime": 0.3,
+                "fadeTime": 0.15,
+                "power": 0.3
+              }
+            }
+          ],
+          "AIHNJLDFEGJ": 0.0
+        },
+        "FallingAnthem_BS_VelocityForce_Initialize": {
+          "elementDurability": 100.0,
+          "modifierName": "",
+          "onAdded": [
+            {
+              "$type": "RemoveVelocityForce",
+              "forces": [
+                "RushMoveType"
+              ]
+            }
+          ],
+          "properties": {
+            "Actor_AddGravityScale": -2.0
+          },
+          "AIHNJLDFEGJ": 0.0
+        },
+        "FallingAnthem_LoopDamage": {
+          "elementDurability": 100.0,
+          "modifierName": "",
+          "onAdded": [
+            {
+              "$type": "TriggerAttackEvent",
+              "attackEvent": {
+                "attackInfo": {
+                  "attackProperty": {
+                    "attackType": "Melee",
+                    "damagePercentage": "FallingAnthem_Normal_Loop_Damage",
+                    "damagePercentageRatio": 0.0,
+                    "elementDurability": 0.0,
+                    "enBreak": 25.0,
+                    "overrideByWeapon": true,
+                    "strikeType": "Slash",
+                    "IIPHCFEONLK": 0.0
+                  },
+                  "attackTag": "FallingAttack",
+                  "attenuationGroup": "default",
+                  "attenuationTag": "",
+                  "hitPattern": {
+                    "hitHaltTimeScale": 0.02,
+                    "hitImpulseType": "LV2",
+                    "onHitEffectName": "default",
+                    "FLFCIDDNMNA": ""
+                  }
+                },
+                "attackPattern": {
+                  "$type": "ConfigAttackSphere",
+                  "born": {
+                    "$type": "ConfigBornBySelf",
+                    "offset": {
+                      "x": 1.0,
+                      "y": 0.0,
+                      "z": 0.0
+                    }
+                  },
+                  "radius": 1.0,
+                  "triggerType": "TriggerNoRepeat"
+                }
+              },
+              "targetType": "Enemy"
+            }
+          ],
+          "onThinkInterval": [
+            {
+              "$type": "TriggerAttackEvent",
+              "attackEvent": {
+                "attackInfo": {
+                  "attackProperty": {
+                    "attackType": "Melee",
+                    "damagePercentage": "FallingAnthem_Normal_Loop_Damage",
+                    "damagePercentageRatio": 0.0,
+                    "elementDurability": 0.0,
+                    "enBreak": 25.0,
+                    "overrideByWeapon": true,
+                    "strikeType": "Slash",
+                    "IIPHCFEONLK": 0.0
+                  },
+                  "attackTag": "FallingAttack",
+                  "attenuationGroup": "default",
+                  "attenuationTag": "",
+                  "hitPattern": {
+                    "hitHaltTimeScale": 0.02,
+                    "hitImpulseType": "LV4",
+                    "onHitEffectName": "default",
+                    "FLFCIDDNMNA": ""
+                  }
+                },
+                "attackPattern": {
+                  "$type": "ConfigAttackSphere",
+                  "born": {
+                    "$type": "ConfigBornBySelf",
+                    "offset": {
+                      "x": 1.0,
+                      "y": 0.0,
+                      "z": 0.0
+                    }
+                  },
+                  "radius": 1.0,
+                  "triggerType": "TriggerNoRepeat"
+                }
+              },
+              "targetType": "Enemy"
+            }
+          ],
+          "thinkInterval": 0.3,
+          "AIHNJLDFEGJ": 0.0
+        },
+        "FallingAnthem_FallingDamageImmune_01": {
+          "elementDurability": 100.0,
+          "modifierName": "",
+          "onAdded": [
+            {
+              "$type": "ClearGlobalValue",
+              "key": "_ABILITY_FallingAttack_Altitude"
+            },
+            {
+              "$type": "AddGlobalValue",
+              "key": "_ABILITY_FallingAttack_Altitude",
+              "maxValue": "FallingAnthem_FallingDamageRatio_Lv0",
+              "minValue": "FallingAnthem_FallingDamageRatio_Lv0",
+              "predicates": [
+                {
+                  "$type": "ByTargetAltitude",
+                  "logic": "LesserOrEqual",
+                  "value": "FallingAnthem_Altitude_Lv0"
+                }
+              ],
+              "useLimitRange": true,
+              "value": "FallingAnthem_FallingDamageRatio_Lv0"
+            },
+            {
+              "$type": "AddGlobalValue",
+              "key": "_ABILITY_FallingAttack_Altitude",
+              "maxValue": "FallingAnthem_FallingDamageRatio_Lv1",
+              "minValue": "FallingAnthem_FallingDamageRatio_Lv1",
+              "predicates": [
+                {
+                  "$type": "ByTargetAltitude",
+                  "logic": "LesserOrEqual",
+                  "value": "FallingAnthem_Altitude_Lv1"
+                },
+                {
+                  "$type": "ByTargetAltitude",
+                  "value": "FallingAnthem_Altitude_Lv0"
+                }
+              ],
+              "useLimitRange": true,
+              "value": "FallingAnthem_FallingDamageRatio_Lv1"
+            },
+            {
+              "$type": "AddGlobalValue",
+              "key": "_ABILITY_FallingAttack_Altitude",
+              "maxValue": "FallingAnthem_FallingDamageRatio_Lv2",
+              "minValue": "FallingAnthem_FallingDamageRatio_Lv2",
+              "predicates": [
+                {
+                  "$type": "ByTargetAltitude",
+                  "logic": "LesserOrEqual",
+                  "value": "FallingAnthem_Altitude_Lv2"
+                },
+                {
+                  "$type": "ByTargetAltitude",
+                  "value": "FallingAnthem_Altitude_Lv1"
+                }
+              ],
+              "useLimitRange": true,
+              "value": "FallingAnthem_FallingDamageRatio_Lv2"
+            },
+            {
+              "$type": "AddGlobalValue",
+              "key": "_ABILITY_FallingAttack_Altitude",
+              "maxValue": "FallingAnthem_FallingDamageRatio_Lv3",
+              "minValue": "FallingAnthem_FallingDamageRatio_Lv3",
+              "predicates": [
+                {
+                  "$type": "ByTargetAltitude",
+                  "logic": "LesserOrEqual",
+                  "value": "FallingAnthem_Altitude_Lv3"
+                },
+                {
+                  "$type": "ByTargetAltitude",
+                  "value": "FallingAnthem_Altitude_Lv2"
+                }
+              ],
+              "useLimitRange": true,
+              "value": "FallingAnthem_FallingDamageRatio_Lv3"
+            },
+            {
+              "$type": "AddGlobalValue",
+              "key": "_ABILITY_FallingAttack_Altitude",
+              "maxValue": "FallingAnthem_FallingDamageRatio_Lv4",
+              "minValue": "FallingAnthem_FallingDamageRatio_Lv4",
+              "predicates": [
+                {
+                  "$type": "ByTargetAltitude",
+                  "value": "FallingAnthem_Altitude_Lv3"
+                }
+              ],
+              "useLimitRange": true,
+              "value": "FallingAnthem_FallingDamageRatio_Lv4"
+            },
+            {
+              "$type": "AttachModifier",
+              "modifierName": "FallingAnthem_FallingDamageImmune_02"
+            }
+          ],
+          "AIHNJLDFEGJ": 0.0
+        },
+        "FallingAnthem_FallingDamageImmune_02": {
+          "elementDurability": 100.0,
+          "modifierName": "",
+          "onAdded": [
+            {
+              "$type": "SetGlobalValueToOverrideMap",
+              "abilityName": "",
+              "globalValueKey": "_ABILITY_FallingAttack_Altitude",
+              "overrideMapKey": "FallingAnthem_FallingDamageRatio"
+            },
+            {
+              "$type": "AttachModifier",
+              "modifierName": "FallingAnthem_FallingDamageImmune_03"
+            }
+          ],
+          "AIHNJLDFEGJ": 0.0
+        },
+        "FallingAnthem_FallingDamageImmune_03": {
+          "elementDurability": 100.0,
+          "modifierName": "",
+          "properties": {
+            "Actor_FallingDamageRatio": "FallingAnthem_FallingDamageRatio"
+          },
+          "AIHNJLDFEGJ": 0.0
+        },
+        "FallingAnthem_Loop_Normal": {
+          "elementDurability": 100.0,
+          "modifierMixins": [
+            {
+              "$type": "AttachModifierToSelfGlobalValueMixin",
+              "defaultGlobalValueOnCreate": 0.0,
+              "globalValueKey": "_ABILITY_FallingAnthem_UseCamera",
+              "modifierNameSteps": [
+                "FallingAnthem_Loop_Normal_Rank_1",
+                "FallingAnthem_Loop_Normal_Rank_2"
+              ],
+              "valueSteps": [
+                -1.0,
+                0.5,
+                1.5
+              ]
+            }
+          ],
+          "modifierName": "",
+          "AIHNJLDFEGJ": 0.0
+        },
+        "FallingAnthem_Loop_Normal_Rank_1": {
+          "elementDurability": 100.0,
+          "modifierName": "",
+          "onAdded": [
+            {
+              "$type": "FireEffect",
+              "effectPattern": "Eff_Avatar_Pole_FallingAnthem_Loop_01_Normal",
+              "effectTempleteID": -1.0,
+              "scale": 1.0,
+              "ILLLPEOODKP": ""
+            }
+          ],
+          "AIHNJLDFEGJ": 0.0
+        },
+        "FallingAnthem_Loop_Normal_Rank_2": {
+          "elementDurability": 100.0,
+          "modifierName": "",
+          "onAdded": [
+            {
+              "$type": "AttachEffect",
+              "effectPattern": "Eff_Avatar_Pole_FallingAnthem_Loop_02_Normal",
+              "effectTempleteID": -1.0,
+              "scale": 1.0,
+              "ILLLPEOODKP": ""
+            }
+          ],
+          "AIHNJLDFEGJ": 0.0
+        },
+        "Inertia": {
+          "elementDurability": 100.0,
+          "modifierMixins": [
+            {
+              "$type": "ApplyInertiaVelocityMixin",
+              "JOHELJNOOBE": false,
+              "LBKNDHDOIIG": false
+            }
+          ],
+          "modifierName": "",
+          "AIHNJLDFEGJ": 0.0
+        },
+        "FallingAnthem_Height_Detect": {
+          "elementDurability": 100.0,
+          "modifierName": "",
+          "onAdded": [
+            {
+              "$type": "AddGlobalValue",
+              "key": "_ABILITY_FallingAnthem_UseCamera",
+              "maxValue": 0.0,
+              "minValue": 0.0,
+              "predicates": [
+                {
+                  "$type": "ByTargetAltitude",
+                  "logic": "LesserOrEqual",
+                  "value": 2.4
+                }
+              ],
+              "useLimitRange": true,
+              "value": 0.0
+            },
+            {
+              "$type": "AddGlobalValue",
+              "key": "_ABILITY_FallingAnthem_UseCamera",
+              "maxValue": 1.0,
+              "minValue": 0.0,
+              "predicates": [
+                {
+                  "$type": "ByTargetAltitude",
+                  "value": 2.4
+                }
+              ],
+              "useLimitRange": true,
+              "value": 5.0
+            },
+            {
+              "$type": "SetAnimatorFloat",
+              "floatID": "FallingAnthem_UseCamera",
+              "predicates": [
+                {
+                  "$type": "ByTargetAltitude",
+                  "logic": "LesserOrEqual",
+                  "value": 2.4
+                }
+              ],
+              "value": 0.0
+            },
+            {
+              "$type": "SetAnimatorFloat",
+              "floatID": "FallingAnthem_UseCamera",
+              "predicates": [
+                {
+                  "$type": "ByTargetAltitude",
+                  "value": 2.4
+                }
+              ],
+              "value": 1.0
+            }
+          ],
+          "onRemoved": [
+            {
+              "$type": "SetAnimatorFloat",
+              "floatID": "FallingAnthem_UseCamera",
+              "value": 0.0
+            },
+            {
+              "$type": "AddGlobalValue",
+              "key": "_ABILITY_FallingAnthem_UseCamera",
+              "maxValue": 0.0,
+              "minValue": 0.0,
+              "useLimitRange": true,
+              "value": 0.0
+            }
+          ],
+          "AIHNJLDFEGJ": 0.0
+        },
+        "FallingAnthem_OverHead_Camera": {
+          "elementDurability": 100.0,
+          "modifierName": "",
+          "onAdded": [
+            {
+              "$type": "AvatarCameraParam",
+              "cameraParam": {
+                "forceRadius": 4.5,
+                "forceRadiusDuration": 0.2,
+                "shouldKeepForceRadius": true
+              },
+              "predicates": [
+                {
+                  "$type": "ByAnimatorFloat",
+                  "logic": "Equal",
+                  "parameter": "FallingAnthem_UseCamera",
+                  "value": 1.0
+                }
+              ]
+            }
+          ],
+          "AIHNJLDFEGJ": 0.0
+        },
+        "FallingAnthem_OverHead_Camera_Remover": {
+          "elementDurability": 100.0,
+          "modifierName": "",
+          "onAdded": [
+            {
+              "$type": "AvatarExitCameraShot",
+              "doOffStage": true
+            }
+          ],
+          "AIHNJLDFEGJ": 0.0
+        },
+        "FallingAnthem_Landed_Camera": {
+          "elementDurability": 100.0,
+          "modifierName": "",
+          "onAdded": [
+            {
+              "$type": "AvatarCameraParam",
+              "cameraParam": {
+                "forceRadius": 6.0,
+                "forceRadiusDuration": 0.1,
+                "shouldKeepForceRadius": true
+              },
+              "predicates": [
+                {
+                  "$type": "ByAnimatorFloat",
+                  "logic": "Equal",
+                  "parameter": "FallingAnthem_UseCamera",
+                  "value": 1.0
+                }
+              ]
+            }
+          ],
+          "AIHNJLDFEGJ": 0.0
+        },
+        "FallingAnthem_ClearVelocityForce": {
+          "elementDurability": 100.0,
+          "modifierName": "",
+          "onAdded": [
+            {
+              "$type": "RemoveVelocityForce",
+              "forces": [
+                "RushMoveType",
+                "InertiaType"
+              ]
+            }
+          ],
+          "AIHNJLDFEGJ": 0.0
+        }
+      },
+      "onAbilityStart": [
+        {
+          "$type": "TriggerAttackEvent",
+          "attackEvent": {
+            "attackInfo": {
+              "attackProperty": {
+                "attackType": "Melee",
+                "damagePercentage": "FallingAnthem_Normal_Rank_1_Damage",
+                "damagePercentageRatio": 0.0,
+                "elementDurability": 25.0,
+                "enBreak": 100.0,
+                "overrideByWeapon": true,
+                "strikeType": "Blunt",
+                "IIPHCFEONLK": 0.0
+              },
+              "attackTag": "FallingAttack",
+              "attenuationGroup": "default",
+              "attenuationTag": "",
+              "cameraShake": {
+                "extension": {
+                  "baseCycle": 0.24,
+                  "cycleDamping": 0.0,
+                  "rangeAttenuation": 0.3
+                },
+                "shakeDir": {
+                  "y": 1.0
+                },
+                "shakeDistance": 30.0,
+                "shakeRange": 0.24,
+                "shakeTime": 0.12,
+                "shakeType": "CustomVector",
+                "MNKFEFOKFKP": ""
+              },
+              "forceCameraShake": true,
+              "hitPattern": {
+                "hitHaltTimeScale": 0.1,
+                "hitImpulseType": "LV4",
+                "onHitEffectName": "none",
+                "FLFCIDDNMNA": ""
+              }
+            },
+            "attackPattern": {
+              "$type": "ConfigAttackCircle",
+              "born": {
+                "$type": "ConfigBornByTarget",
+                "offset": {
+                  "x": 1.0,
+                  "y": -0.5,
+                  "z": 0.0
+                }
+              },
+              "height": 2.0,
+              "radius": 3.0,
+              "triggerType": "TriggerNoRepeat"
+            }
+          },
+          "predicates": [
+            {
+              "$type": "ByTargetGlobalValue",
+              "compareType": "NoneOrEqual",
+              "forceByCaster": true,
+              "key": "_ABILITY_FallingAnthem_UseCamera",
+              "value": 0.0
+            }
+          ],
+          "targetType": "Enemy"
+        },
+        {
+          "$type": "TriggerAttackEvent",
+          "attackEvent": {
+            "attackInfo": {
+              "attackProperty": {
+                "attackType": "Melee",
+                "damagePercentage": "FallingAnthem_Normal_Rank_2_Damage",
+                "damagePercentageRatio": 0.0,
+                "elementDurability": 25.0,
+                "enBreak": 150.0,
+                "overrideByWeapon": true,
+                "strikeType": "Blunt",
+                "IIPHCFEONLK": 0.0
+              },
+              "attackTag": "FallingAttack",
+              "attenuationGroup": "default",
+              "attenuationTag": "",
+              "cameraShake": {
+                "extension": {
+                  "baseCycle": 0.4,
+                  "cycleDamping": 0.0,
+                  "rangeAttenuation": 0.3
+                },
+                "shakeDir": {
+                  "y": 1.0,
+                  "z": 1.0
+                },
+                "shakeDistance": 30.0,
+                "shakeRange": 0.5,
+                "shakeTime": 0.2,
+                "shakeType": "CustomVector",
+                "MNKFEFOKFKP": ""
+              },
+              "forceCameraShake": true,
+              "hitPattern": {
+                "hitHaltTimeScale": 0.1,
+                "hitImpulseType": "LV7",
+                "onHitEffectName": "none",
+                "FLFCIDDNMNA": ""
+              }
+            },
+            "attackPattern": {
+              "$type": "ConfigAttackCircle",
+              "born": {
+                "$type": "ConfigBornByTarget",
+                "offset": {
+                  "x": 1.0,
+                  "y": -0.5,
+                  "z": 0.0
+                }
+              },
+              "height": 2.0,
+              "radius": 5.0,
+              "triggerType": "TriggerNoRepeat"
+            }
+          },
+          "predicates": [
+            {
+              "$type": "ByTargetGlobalValue",
+              "forceByCaster": true,
+              "key": "_ABILITY_FallingAnthem_UseCamera",
+              "value": 1.0
+            }
+          ],
+          "targetType": "Enemy"
+        },
+        {
+          "$type": "FireEffect",
+          "effectPattern": "Eff_Avatar_Pole_FallingAnthem_Strike_01_Normal",
+          "effectTempleteID": -1.0,
+          "predicates": [
+            {
+              "$type": "ByTargetGlobalValue",
+              "compareType": "NoneOrEqual",
+              "forceByCaster": true,
+              "key": "_ABILITY_FallingAnthem_UseCamera",
+              "value": 0.0
+            }
+          ],
+          "scale": 1.0,
+          "ILLLPEOODKP": ""
+        },
+        {
+          "$type": "FireEffect",
+          "effectPattern": "Eff_Avatar_Pole_FallingAnthem_Strike_02_Normal",
+          "effectTempleteID": -1.0,
+          "predicates": [
+            {
+              "$type": "ByTargetGlobalValue",
+              "forceByCaster": true,
+              "key": "_ABILITY_FallingAnthem_UseCamera",
+              "value": 1.0
+            }
+          ],
+          "scale": 1.0,
+          "ILLLPEOODKP": ""
+        }
+      ]
     }
   },
   {
     "Default": {
+      "abilityMixins": [
+        {
+          "$type": "SkillButtonHoldChargeMixin",
+          "beforeStateIDs": [
+            "Yunjin_ElementalArt_BS"
+          ],
+          "chargeLoopDurations": [
+            0.58,
+            0.72,
+            0.5
+          ],
+          "chargeLoopStateIDs": [
+            "Yunjin_ElementalArt_Loop_1",
+            "Yunjin_ElementalArt_Loop_2",
+            "Yunjin_ElementalArt_Loop_3"
+          ],
+          "endHoldTrigger": "EndHoldTrigger",
+          "nextLoopTriggerID": "NextLoopTrigger",
+          "skillID": 10642
+        },
+        {
+          "$type": "AttachToStateIDMixin",
+          "modifierName": "Yunjin_ElementalArt_Loop_1",
+          "stateIDs": [
+            "Yunjin_ElementalArt_Loop_1"
+          ],
+          "LJPPDIGCJMJ": ""
+        },
+        {
+          "$type": "AttachToStateIDMixin",
+          "modifierName": "Yunjin_ElementalArt_Loop_2",
+          "stateIDs": [
+            "Yunjin_ElementalArt_Loop_2"
+          ],
+          "LJPPDIGCJMJ": ""
+        },
+        {
+          "$type": "AttachToStateIDMixin",
+          "modifierName": "Yunjin_ElementalArt_Loop_3",
+          "stateIDs": [
+            "Yunjin_ElementalArt_Loop_3"
+          ],
+          "LJPPDIGCJMJ": ""
+        },
+        {
+          "$type": "AttachToStateIDMixin",
+          "modifierName": "Yunjin_ElementalArt_Shield",
+          "stateIDs": [
+            "Yunjin_ElementalArt_BS",
+            "Yunjin_ElementalArt_Loop_1",
+            "Yunjin_ElementalArt_Loop_2",
+            "Yunjin_ElementalArt_Loop_3",
+            "Yunjin_ElementalArt_Cast"
+          ],
+          "LJPPDIGCJMJ": ""
+        },
+        {
+          "$type": "AttachToStateIDMixin",
+          "modifierName": "Yunjin_ElementalArt_Charge_VFX",
+          "stateIDs": [
+            "Yunjin_ElementalArt_Loop_1",
+            "Yunjin_ElementalArt_Loop_2",
+            "Yunjin_ElementalArt_Loop_3"
+          ],
+          "LJPPDIGCJMJ": ""
+        },
+        {
+          "$type": "AttachToStateIDMixin",
+          "modifierName": "Yunjin_ElementalArt_Hit_Handler",
+          "stateIDs": [
+            "Yunjin_ElementalArt_BS",
+            "Yunjin_ElementalArt_Loop_1",
+            "Yunjin_ElementalArt_Loop_2",
+            "Yunjin_ElementalArt_Loop_3"
+          ],
+          "LJPPDIGCJMJ": ""
+        },
+        {
+          "$type": "AttachToStateIDMixin",
+          "modifierName": "Yunjin_ElementalArt_Endura",
+          "stateIDs": [
+            "Yunjin_ElementalArt_BS",
+            "Yunjin_ElementalArt_Loop_1",
+            "Yunjin_ElementalArt_Loop_2",
+            "Yunjin_ElementalArt_Loop_3",
+            "Yunjin_ElementalArt_Cast"
+          ],
+          "LJPPDIGCJMJ": ""
+        },
+        {
+          "$type": "AttachToStateIDMixin",
+          "modifierName": "Yunjin_ElementalArt_Kaoqi_VFX",
+          "stateIDs": [
+            "Yunjin_ElementalArt_Loop_1"
+          ],
+          "LJPPDIGCJMJ": ""
+        },
+        {
+          "$type": "AttachToNormalizedTimeMixin",
+          "modifierName": "Avatar_Yunjin_ElementalArt_Remover",
+          "normalizeStart": 0.12,
+          "stateID": "Yunjin_ElementalArt_Cast",
+          "LJPPDIGCJMJ": ""
+        }
+      ],
+      "abilityName": "Avatar_Yunjin_ElementalArt_Handler",
+      "abilitySpecials": {
+        "CounterStage": 0.0,
+        "Yunjin_ElementalArt_Shield_HPRatio": 0.0,
+        "Yunjin_ElementalArt_Shield_Base": 0.0
+      },
       "modifiers": {
         "Yunjin_ElementalArt_Loop_1": {
+          "elementDurability": 100.0,
+          "modifierName": "",
           "onAdded": [
             {
               "$type": "SetGlobalValue",
               "key": "_ABILITY_Yunjin_ElementalArt_Stage",
-              "minValue": 0.0,
               "maxValue": 0.0,
-              "CBOMLBFIPJM": 1.0
+              "minValue": 0.0,
+              "value": 1.0
             },
             {
               "$type": "SetAnimatorInt",
               "intID": "CounterStage",
-              "CBOMLBFIPJM": 1.0
+              "value": 1.0
             },
             {
               "$type": "AttachModifier",
               "modifierName": "Yunjin_ElementalArt_Weapon_VFX_1"
             }
           ],
-          "elementDurability": 100.0,
-          "modifierName": "",
           "AIHNJLDFEGJ": 0.0
         },
         "Yunjin_ElementalArt_Loop_2": {
+          "elementDurability": 100.0,
+          "modifierName": "",
           "onAdded": [
             {
               "$type": "SetGlobalValue",
               "key": "_ABILITY_Yunjin_ElementalArt_Stage",
-              "minValue": 0.0,
               "maxValue": 0.0,
-              "CBOMLBFIPJM": 2.0
+              "minValue": 0.0,
+              "value": 2.0
             },
             {
               "$type": "SendEffectTrigger",
-              "parameter": "Stage_2",
+              "attachPoint": "",
               "effectPattern": "Eff_Avatar_Girl_Pole_Yunjin_Kaoqi",
-              "attachPoint": ""
+              "parameter": "Stage_2"
             },
             {
               "$type": "AttachModifier",
@@ -1244,36 +1357,36 @@
                   "baseCycle": 0.08,
                   "cycleDamping": -0.04
                 },
-                "shakeTime": 0.12,
                 "shakeDistance": 30.0,
-                "MNKFEFOKFKP": "",
-                "shakeRange": 0.3
+                "shakeRange": 0.3,
+                "shakeTime": 0.12,
+                "MNKFEFOKFKP": ""
               }
             }
           ],
-          "elementDurability": 100.0,
-          "modifierName": "",
           "AIHNJLDFEGJ": 0.0
         },
         "Yunjin_ElementalArt_Loop_3": {
+          "elementDurability": 100.0,
+          "modifierName": "",
           "onAdded": [
             {
               "$type": "SetGlobalValue",
               "key": "_ABILITY_Yunjin_ElementalArt_Stage",
-              "minValue": 0.0,
               "maxValue": 0.0,
-              "CBOMLBFIPJM": 3.0
+              "minValue": 0.0,
+              "value": 3.0
             },
             {
               "$type": "SendEffectTrigger",
-              "parameter": "Stage_3",
+              "attachPoint": "",
               "effectPattern": "Eff_Avatar_Girl_Pole_Yunjin_Kaoqi",
-              "attachPoint": ""
+              "parameter": "Stage_3"
             },
             {
               "$type": "SetAnimatorInt",
               "intID": "CounterStage",
-              "CBOMLBFIPJM": 3.0
+              "value": 3.0
             },
             {
               "$type": "AttachModifier",
@@ -1286,135 +1399,123 @@
                   "baseCycle": 0.08,
                   "cycleDamping": -0.04
                 },
-                "shakeTime": 0.16,
                 "shakeDistance": 30.0,
-                "MNKFEFOKFKP": "",
-                "shakeRange": 0.32
+                "shakeRange": 0.32,
+                "shakeTime": 0.16,
+                "MNKFEFOKFKP": ""
               }
             },
             {
               "$type": "ActCameraRadialBlur",
-              "NFBFBAJDMPJ": {
-                "BKICBNIALGL": 0.3,
-                "LCOPJHPGJCO": 0.15,
-                "LFMGJKCOGPI": 1.0
+              "cameraRadialBlur": {
+                "blurTime": 0.3,
+                "fadeTime": 0.15,
+                "power": 1.0
               }
             }
           ],
-          "elementDurability": 100.0,
-          "modifierName": "",
           "AIHNJLDFEGJ": 0.0
         },
         "Yunjin_ElementalArt_Weapon_VFX_1": {
-          "onRemoved": [
-            {
-              "$type": "SetEmissionScaler",
-              "materialType": "Weapon",
-              "GGKIEIJLCJJ": -1.0,
-              "duration": 0.1
-            }
-          ],
+          "elementDurability": 100.0,
+          "modifierName": "",
           "onAdded": [
             {
               "$type": "SetEmissionScaler",
+              "duration": 0.1,
               "materialType": "Weapon",
-              "GGKIEIJLCJJ": 3.0,
-              "duration": 0.1
+              "value": 3.0
             }
           ],
-          "elementDurability": 100.0,
-          "modifierName": "",
+          "onRemoved": [
+            {
+              "$type": "SetEmissionScaler",
+              "duration": 0.1,
+              "materialType": "Weapon",
+              "value": -1.0
+            }
+          ],
           "AIHNJLDFEGJ": 0.0
         },
         "Yunjin_ElementalArt_Weapon_VFX_2": {
-          "onRemoved": [
-            {
-              "$type": "SetEmissionScaler",
-              "materialType": "Weapon",
-              "GGKIEIJLCJJ": -1.0,
-              "duration": 0.1
-            }
-          ],
+          "elementDurability": 100.0,
+          "modifierName": "",
           "onAdded": [
             {
               "$type": "SetEmissionScaler",
+              "duration": 0.1,
               "materialType": "Weapon",
-              "GGKIEIJLCJJ": 6.0,
-              "duration": 0.1
+              "value": 6.0
             }
           ],
-          "elementDurability": 100.0,
-          "modifierName": "",
+          "onRemoved": [
+            {
+              "$type": "SetEmissionScaler",
+              "duration": 0.1,
+              "materialType": "Weapon",
+              "value": -1.0
+            }
+          ],
           "AIHNJLDFEGJ": 0.0
         },
         "Yunjin_ElementalArt_Weapon_VFX_3": {
-          "onRemoved": [
-            {
-              "$type": "SetEmissionScaler",
-              "materialType": "Weapon",
-              "GGKIEIJLCJJ": -1.0,
-              "duration": 0.1
-            }
-          ],
+          "elementDurability": 100.0,
+          "modifierName": "",
           "onAdded": [
             {
               "$type": "SetEmissionScaler",
+              "duration": 0.1,
               "materialType": "Weapon",
-              "GGKIEIJLCJJ": 8.0,
-              "duration": 0.1
+              "value": 8.0
             }
           ],
-          "elementDurability": 100.0,
-          "modifierName": "",
+          "onRemoved": [
+            {
+              "$type": "SetEmissionScaler",
+              "duration": 0.1,
+              "materialType": "Weapon",
+              "value": -1.0
+            }
+          ],
           "AIHNJLDFEGJ": 0.0
         },
         "Yunjin_ElementalArt_Weapon_Cast_Handler": {
+          "elementDurability": 100.0,
+          "modifierName": "",
           "onAdded": [
             {
               "$type": "AttachModifier",
               "modifierName": "Yunjin_ElementalArt_Weapon_Cast_VFX"
             }
           ],
-          "elementDurability": 100.0,
-          "modifierName": "",
           "AIHNJLDFEGJ": 0.0
         },
         "Yunjin_ElementalArt_Weapon_Cast_VFX": {
+          "elementDurability": 100.0,
+          "modifierName": "",
+          "onAdded": [
+            {
+              "$type": "SetEmissionScaler",
+              "duration": 0.1,
+              "materialType": "Weapon",
+              "value": 8.0
+            }
+          ],
           "onRemoved": [
             {
               "$type": "SetEmissionScaler",
+              "duration": 0.1,
               "materialType": "Weapon",
-              "GGKIEIJLCJJ": -1.0,
-              "duration": 0.1
+              "value": -1.0
             }
           ],
-          "onAdded": [
-            {
-              "$type": "SetEmissionScaler",
-              "materialType": "Weapon",
-              "GGKIEIJLCJJ": 8.0,
-              "duration": 0.1
-            }
-          ],
-          "elementDurability": 100.0,
-          "modifierName": "",
           "AIHNJLDFEGJ": 0.0
         },
         "Yunjin_ElementalArt_Shield": {
-          "onAdded": [
-            {
-              "$type": "AttachEffect",
-              "ILLLPEOODKP": "",
-              "scale": 1.0,
-              "effectPattern": "Eff_Avatar_Girl_Pole_Yunjin_ElementalArt_Shield",
-              "effectTempleteID": -1.0
-            }
-          ],
           "elementDurability": 100.0,
           "modifierMixins": [
             {
               "$type": "EliteShieldMixin",
-              "showDamageText": "INFO_ELITE_DEFENCE",
               "costShieldRatioName": "",
               "onShieldBroken": [
                 {
@@ -1422,14 +1523,23 @@
                   "triggerID": "EndHoldTrigger"
                 }
               ],
-              "shieldType": "Avatar_Rock",
-              "shieldHPRatio": "Yunjin_ElementalArt_Shield_HPRatio",
+              "shieldAngle": 360.0,
               "shieldHP": "Yunjin_ElementalArt_Shield_Base",
-              "shieldAngle": 360.0
+              "shieldHPRatio": "Yunjin_ElementalArt_Shield_HPRatio",
+              "shieldType": "Avatar_Rock",
+              "showDamageText": "INFO_ELITE_DEFENCE"
             }
           ],
           "modifierName": "",
-          "AIHNJLDFEGJ": 0.0,
+          "onAdded": [
+            {
+              "$type": "AttachEffect",
+              "effectPattern": "Eff_Avatar_Girl_Pole_Yunjin_ElementalArt_Shield",
+              "effectTempleteID": -1.0,
+              "scale": 1.0,
+              "ILLLPEOODKP": ""
+            }
+          ],
           "onBeingHit": [
             {
               "$type": "Predicated",
@@ -1439,54 +1549,57 @@
                   "modifierName": "Yunjin_ElementalArt_Shield_Hit_Handler"
                 }
               ],
+              "target": "Target",
               "targetPredicates": [
                 {
-                  "$type": "FCLGMLGFNHI",
-                  "hitEnBreak": 0.0
+                  "$type": "ByHitEnBreak",
+                  "enBreak": 0.0
                 }
-              ],
-              "target": "Target"
+              ]
             }
-          ]
+          ],
+          "AIHNJLDFEGJ": 0.0
         },
         "Yunjin_ElementalArt_Shield_Hit_Handler": {
           "duration": 0.5,
+          "elementDurability": 100.0,
+          "modifierName": "",
           "onAdded": [
             {
               "$type": "SendEffectTrigger",
-              "parameter": "Hit",
+              "attachPoint": "",
               "effectPattern": "Eff_Avatar_Girl_Pole_Yunjin_ElementalArt_Shield",
-              "attachPoint": ""
+              "parameter": "Hit"
             }
           ],
           "stacking": "Unique",
-          "elementDurability": 100.0,
-          "modifierName": "",
           "AIHNJLDFEGJ": 0.0
         },
         "Yunjin_ElementalArt_Charge_VFX": {
+          "elementDurability": 100.0,
+          "modifierName": "",
           "onAdded": [
             {
               "$type": "AttachEffect",
-              "ILLLPEOODKP": "",
-              "scale": 1.0,
               "effectPattern": "Eff_Avatar_Girl_Pole_Yunjin_ElementalArt_Charge",
-              "effectTempleteID": -1.0
+              "effectTempleteID": -1.0,
+              "scale": 1.0,
+              "ILLLPEOODKP": ""
             }
           ],
-          "elementDurability": 100.0,
-          "modifierName": "",
           "AIHNJLDFEGJ": 0.0
         },
         "Yunjin_ElementalArt_Endura": {
+          "elementDurability": 100.0,
+          "modifierName": "",
           "properties": {
             "Actor_EndureDelta": 0.0
           },
-          "elementDurability": 100.0,
-          "modifierName": "",
           "AIHNJLDFEGJ": 0.0
         },
         "Yunjin_ElementalArt_Hit_Handler": {
+          "elementDurability": 100.0,
+          "modifierName": "",
           "onAdded": [
             {
               "$type": "ClearEndura"
@@ -1494,29 +1607,26 @@
             {
               "$type": "SetGlobalValue",
               "key": "_ABILITY_Yunjin_ElementalArt_Stage",
-              "minValue": 0.0,
               "maxValue": 0.0,
-              "CBOMLBFIPJM": 1.0
+              "minValue": 0.0,
+              "value": 1.0
             },
             {
               "$type": "SetAnimatorInt",
               "intID": "CounterStage",
-              "CBOMLBFIPJM": 1.0
+              "value": 1.0
             },
             {
               "$type": "ApplyModifier",
               "modifierName": "UNIQUE_Yunjin_ElementalArt_JustGuard_Timer",
               "predicates": [
                 {
-                  "$type": "LCCNMKNDACG",
+                  "$type": "ByUnlockTalentParam",
                   "talentParam": "Yunjin_PermanentSkill_1_JustGuard"
                 }
               ]
             }
           ],
-          "elementDurability": 100.0,
-          "modifierName": "",
-          "AIHNJLDFEGJ": 0.0,
           "onBeingHit": [
             {
               "$type": "ActCameraShake",
@@ -1525,84 +1635,87 @@
                   "baseCycle": 0.08,
                   "cycleDamping": -0.04
                 },
-                "shakeTime": 0.12,
                 "shakeDistance": 30.0,
-                "MNKFEFOKFKP": "",
-                "shakeRange": 0.3
+                "shakeRange": 0.3,
+                "shakeTime": 0.12,
+                "MNKFEFOKFKP": ""
               },
               "predicates": [
                 {
-                  "$type": "EOFDCELPGFO",
-                  "CBOMLBFIPJM": 3.0,
+                  "$type": "ByTargetGlobalValue",
                   "compareType": "MoreThanAndEqual",
                   "key": "_ABILITY_Yunjin_ElementalArt_Stage",
-                  "target": "Self"
+                  "target": "Self",
+                  "value": 3.0
                 },
                 {
-                  "$type": "FCLGMLGFNHI",
-                  "hitEnBreak": 0.0
+                  "$type": "ByHitEnBreak",
+                  "enBreak": 0.0
                 }
               ]
             }
-          ]
+          ],
+          "AIHNJLDFEGJ": 0.0
         },
         "UNIQUE_Yunjin_ElementalArt_JustGuard_Timer": {
           "duration": 0.3,
-          "onRemoved": [
-            {
-              "$type": "SetGlobalValue",
-              "key": "_ABILITY_Yunjin_JustGuard_Flag",
-              "minValue": 0.0,
-              "maxValue": 0.0,
-              "CBOMLBFIPJM": 0.0,
-              "doOffStage": true
-            }
-          ],
+          "elementDurability": 100.0,
+          "isUnique": true,
+          "modifierName": "",
           "onAdded": [
             {
               "$type": "SetGlobalValue",
               "key": "_ABILITY_Yunjin_JustGuard_Flag",
-              "minValue": 0.0,
               "maxValue": 0.0,
-              "CBOMLBFIPJM": 1.0
+              "minValue": 0.0,
+              "value": 1.0
             }
           ],
-          "elementDurability": 100.0,
-          "modifierName": "",
-          "isUnique": true,
-          "AIHNJLDFEGJ": 0.0,
           "onBeingHit": [
             {
               "$type": "ApplyModifier",
               "modifierName": "Yunjin_ElementalArt_JustGuard_Handler",
               "predicates": [
                 {
-                  "$type": "FCLGMLGFNHI",
-                  "hitEnBreak": 0.0
+                  "$type": "ByHitEnBreak",
+                  "enBreak": 0.0
                 }
               ]
             }
-          ]
+          ],
+          "onRemoved": [
+            {
+              "$type": "SetGlobalValue",
+              "doOffStage": true,
+              "key": "_ABILITY_Yunjin_JustGuard_Flag",
+              "maxValue": 0.0,
+              "minValue": 0.0,
+              "value": 0.0
+            }
+          ],
+          "AIHNJLDFEGJ": 0.0
         },
         "Avatar_Yunjin_ElementalArt_Remover": {
+          "elementDurability": 100.0,
+          "modifierName": "",
           "onAdded": [
             {
               "$type": "RemoveUniqueModifier",
               "modifierName": "UNIQUE_Yunjin_ElementalArt_JustGuard_Timer",
               "predicates": [
                 {
-                  "$type": "LCCNMKNDACG",
+                  "$type": "ByUnlockTalentParam",
                   "talentParam": "Yunjin_PermanentSkill_1_JustGuard"
                 }
               ]
             }
           ],
-          "elementDurability": 100.0,
-          "modifierName": "",
           "AIHNJLDFEGJ": 0.0
         },
         "Yunjin_ElementalArt_JustGuard_Handler": {
           "duration": 0.3,
+          "elementDurability": 100.0,
+          "modifierName": "",
           "onAdded": [
             {
               "$type": "ActCameraShake",
@@ -1611,67 +1724,67 @@
                   "baseCycle": 0.08,
                   "cycleDamping": -0.04
                 },
-                "shakeTime": 0.16,
                 "shakeDistance": 30.0,
-                "MNKFEFOKFKP": "",
-                "shakeRange": 0.32
+                "shakeRange": 0.32,
+                "shakeTime": 0.16,
+                "MNKFEFOKFKP": ""
               }
             },
             {
               "$type": "SetGlobalValue",
               "key": "_ABILITY_Yunjin_ElementalArt_Stage",
-              "minValue": 0.0,
               "maxValue": 0.0,
-              "CBOMLBFIPJM": 3.0
+              "minValue": 0.0,
+              "value": 3.0
             },
             {
               "$type": "SetGlobalValueToOverrideMap",
-              "globalValueKey": "_ABILITY_Yunjin_ElementalArt_Stage",
               "abilityName": "",
+              "globalValueKey": "_ABILITY_Yunjin_ElementalArt_Stage",
               "overrideMapKey": "CounterStage"
             },
             {
               "$type": "SetAnimatorInt",
               "intID": "CounterStage",
-              "CBOMLBFIPJM": "CounterStage"
+              "value": "CounterStage"
             },
             {
               "$type": "SendEffectTrigger",
-              "parameter": "Stage_3",
-              "effectPattern": "Eff_Avatar_Girl_Pole_Yunjin_Kaoqi",
               "attachPoint": "",
+              "effectPattern": "Eff_Avatar_Girl_Pole_Yunjin_Kaoqi",
+              "parameter": "Stage_3",
               "predicates": [
                 {
-                  "$type": "FCLGMLGFNHI",
-                  "hitEnBreak": 0.0
+                  "$type": "ByHitEnBreak",
+                  "enBreak": 0.0
                 }
               ]
             },
             {
               "$type": "FireEffect",
               "effectPattern": "Eff_Avatar_Girl_Pole_Yunjin_ElementalArt_JustGuard",
-              "scale": 1.0,
-              "ILLLPEOODKP": "",
               "effectTempleteID": -1.0,
               "predicates": [
                 {
-                  "$type": "FCLGMLGFNHI",
-                  "hitEnBreak": 0.0
+                  "$type": "ByHitEnBreak",
+                  "enBreak": 0.0
                 },
                 {
-                  "$type": "EOFDCELPGFO",
-                  "CBOMLBFIPJM": 1.0,
+                  "$type": "ByTargetGlobalValue",
                   "key": "_ABILITY_Yunjin_JustGuard_Flag",
-                  "target": "Self"
+                  "target": "Self",
+                  "value": 1.0
                 }
-              ]
+              ],
+              "scale": 1.0,
+              "ILLLPEOODKP": ""
             }
           ],
-          "elementDurability": 100.0,
-          "modifierName": "",
           "AIHNJLDFEGJ": 0.0
         },
         "Yunjin_ElementalArt_ElementalBall_Handler": {
+          "elementDurability": 100.0,
+          "modifierName": "",
           "onAttackLanded": [
             {
               "$type": "Predicated",
@@ -1681,35 +1794,35 @@
                   "modifierName": "Yunjin_ElementalArt_ElementalBall"
                 }
               ],
+              "target": "Target",
               "targetPredicates": [
                 {
-                  "$type": "CCHPEOBKOBO",
+                  "$type": "ByAttackTags",
                   "attackTags": [
                     "Elemental_Art"
                   ]
                 },
                 {
-                  "$type": "DEOFBICNFHF",
+                  "$type": "ByEntityTypes",
                   "entityTypes": [
                     "Monster"
                   ]
                 },
                 {
-                  "$type": "EOFDCELPGFO",
-                  "CBOMLBFIPJM": 0.0,
+                  "$type": "ByTargetGlobalValue",
                   "compareType": "NoneOrEqual",
-                  "key": "_ANIMAL_ENTITY_TYPE"
+                  "key": "_ANIMAL_ENTITY_TYPE",
+                  "value": 0.0
                 }
-              ],
-              "target": "Target"
+              ]
             }
           ],
-          "elementDurability": 100.0,
-          "modifierName": "",
           "AIHNJLDFEGJ": 0.0
         },
         "Yunjin_ElementalArt_ElementalBall": {
           "duration": 0.3,
+          "elementDurability": 100.0,
+          "modifierName": "",
           "onAdded": [
             {
               "$type": "Randomed",
@@ -1717,329 +1830,257 @@
               "successActions": [
                 {
                   "$type": "GenerateElemBall",
-                  "ratio": 1.0,
+                  "baseEnergy": 6.0,
                   "born": {
-                    "$type": "BOJMMDAIGMM",
+                    "$type": "ConfigBornByTarget",
                     "offset": {
-                      "x": 0.0,
-                      "z": 1.0,
-                      "y": 0.0
+                      "x": 1.0,
+                      "y": 0.0,
+                      "z": 0.0
                     }
                   },
                   "configID": 2023,
-                  "baseEnergy": 6.0
+                  "ratio": 1.0
                 }
               ]
             },
             {
               "$type": "Randomed",
               "chance": 0.5,
+              "predicates": [
+                {
+                  "$type": "ByTargetGlobalValue",
+                  "key": "_ABILITY_Yunjin_ElementalArt_Stage",
+                  "value": 2.0
+                }
+              ],
               "successActions": [
                 {
                   "$type": "GenerateElemBall",
-                  "ratio": 1.0,
+                  "baseEnergy": 3.0,
                   "born": {
-                    "$type": "BOJMMDAIGMM",
+                    "$type": "ConfigBornByTarget",
                     "offset": {
-                      "x": 0.0,
-                      "z": 1.0,
-                      "y": 0.0
+                      "x": 1.0,
+                      "y": 0.0,
+                      "z": 0.0
                     }
                   },
                   "configID": 2023,
-                  "baseEnergy": 3.0
-                }
-              ],
-              "predicates": [
-                {
-                  "$type": "EOFDCELPGFO",
-                  "CBOMLBFIPJM": 2.0,
-                  "key": "_ABILITY_Yunjin_ElementalArt_Stage"
+                  "ratio": 1.0
                 }
               ]
             },
             {
               "$type": "Randomed",
               "chance": 1.0,
+              "predicates": [
+                {
+                  "$type": "ByTargetGlobalValue",
+                  "compareType": "MoreThanAndEqual",
+                  "key": "_ABILITY_Yunjin_ElementalArt_Stage",
+                  "value": 3.0
+                }
+              ],
               "successActions": [
                 {
                   "$type": "GenerateElemBall",
-                  "ratio": 1.0,
+                  "baseEnergy": 3.0,
                   "born": {
-                    "$type": "BOJMMDAIGMM",
+                    "$type": "ConfigBornByTarget",
                     "offset": {
-                      "x": 0.0,
-                      "z": 1.0,
-                      "y": 0.0
+                      "x": 1.0,
+                      "y": 0.0,
+                      "z": 0.0
                     }
                   },
                   "configID": 2023,
-                  "baseEnergy": 3.0
-                }
-              ],
-              "predicates": [
-                {
-                  "$type": "EOFDCELPGFO",
-                  "CBOMLBFIPJM": 3.0,
-                  "compareType": "MoreThanAndEqual",
-                  "key": "_ABILITY_Yunjin_ElementalArt_Stage"
+                  "ratio": 1.0
                 }
               ]
             }
           ],
           "stacking": "Unique",
-          "elementDurability": 100.0,
-          "modifierName": "",
           "AIHNJLDFEGJ": 0.0
         },
         "Yunjin_ElementalArt_Kaoqi_VFX": {
+          "elementDurability": 100.0,
+          "modifierName": "",
           "onAdded": [
             {
               "$type": "TriggerAbility",
               "abilityName": "Avatar_Yunjin_Kaoqi"
             }
           ],
-          "elementDurability": 100.0,
-          "modifierName": "",
           "AIHNJLDFEGJ": 0.0
         }
       },
-      "abilityMixins": [
-        {
-          "$type": "SkillButtonHoldChargeMixin",
-          "JPEKCGKKAID": [
-            "Yunjin_ElementalArt_BS"
-          ],
-          "endHoldTrigger": "EndHoldTrigger",
-          "LMBNECOHFFE": [
-            "Yunjin_ElementalArt_Loop_1",
-            "Yunjin_ElementalArt_Loop_2",
-            "Yunjin_ElementalArt_Loop_3"
-          ],
-          "NBHCEPEGENL": [
-            0.58,
-            0.72,
-            0.5
-          ],
-          "skillID": 10642,
-          "nextLoopTriggerID": "NextLoopTrigger"
-        },
-        {
-          "$type": "AttachToStateIDMixin",
-          "LJPPDIGCJMJ": "",
-          "stateIDs": [
-            "Yunjin_ElementalArt_Loop_1"
-          ],
-          "modifierName": "Yunjin_ElementalArt_Loop_1"
-        },
-        {
-          "$type": "AttachToStateIDMixin",
-          "LJPPDIGCJMJ": "",
-          "stateIDs": [
-            "Yunjin_ElementalArt_Loop_2"
-          ],
-          "modifierName": "Yunjin_ElementalArt_Loop_2"
-        },
-        {
-          "$type": "AttachToStateIDMixin",
-          "LJPPDIGCJMJ": "",
-          "stateIDs": [
-            "Yunjin_ElementalArt_Loop_3"
-          ],
-          "modifierName": "Yunjin_ElementalArt_Loop_3"
-        },
-        {
-          "$type": "AttachToStateIDMixin",
-          "LJPPDIGCJMJ": "",
-          "stateIDs": [
-            "Yunjin_ElementalArt_BS",
-            "Yunjin_ElementalArt_Loop_1",
-            "Yunjin_ElementalArt_Loop_2",
-            "Yunjin_ElementalArt_Loop_3",
-            "Yunjin_ElementalArt_Cast"
-          ],
-          "modifierName": "Yunjin_ElementalArt_Shield"
-        },
-        {
-          "$type": "AttachToStateIDMixin",
-          "LJPPDIGCJMJ": "",
-          "stateIDs": [
-            "Yunjin_ElementalArt_Loop_1",
-            "Yunjin_ElementalArt_Loop_2",
-            "Yunjin_ElementalArt_Loop_3"
-          ],
-          "modifierName": "Yunjin_ElementalArt_Charge_VFX"
-        },
-        {
-          "$type": "AttachToStateIDMixin",
-          "LJPPDIGCJMJ": "",
-          "stateIDs": [
-            "Yunjin_ElementalArt_BS",
-            "Yunjin_ElementalArt_Loop_1",
-            "Yunjin_ElementalArt_Loop_2",
-            "Yunjin_ElementalArt_Loop_3"
-          ],
-          "modifierName": "Yunjin_ElementalArt_Hit_Handler"
-        },
-        {
-          "$type": "AttachToStateIDMixin",
-          "LJPPDIGCJMJ": "",
-          "stateIDs": [
-            "Yunjin_ElementalArt_BS",
-            "Yunjin_ElementalArt_Loop_1",
-            "Yunjin_ElementalArt_Loop_2",
-            "Yunjin_ElementalArt_Loop_3",
-            "Yunjin_ElementalArt_Cast"
-          ],
-          "modifierName": "Yunjin_ElementalArt_Endura"
-        },
-        {
-          "$type": "AttachToStateIDMixin",
-          "LJPPDIGCJMJ": "",
-          "stateIDs": [
-            "Yunjin_ElementalArt_Loop_1"
-          ],
-          "modifierName": "Yunjin_ElementalArt_Kaoqi_VFX"
-        },
-        {
-          "$type": "AttachToNormalizedTimeMixin",
-          "modifierName": "Avatar_Yunjin_ElementalArt_Remover",
-          "LJPPDIGCJMJ": "",
-          "stateID": "Yunjin_ElementalArt_Cast",
-          "normalizeStart": 0.12
-        }
-      ],
-      "abilityName": "Avatar_Yunjin_ElementalArt_Handler",
       "onAdded": [
         {
           "$type": "SetGlobalValue",
           "key": "_ABILITY_Yunjin_ElementalArt_Stage",
-          "minValue": 0.0,
           "maxValue": 0.0,
-          "CBOMLBFIPJM": 0.0
+          "minValue": 0.0,
+          "value": 0.0
         },
         {
           "$type": "AttachModifier",
           "modifierName": "Yunjin_ElementalArt_ElementalBall_Handler"
         }
-      ],
-      "abilitySpecials": {
-        "CounterStage": 0.0,
-        "Yunjin_ElementalArt_Shield_HPRatio": 0.0,
-        "Yunjin_ElementalArt_Shield_Base": 0.0
-      }
+      ]
     }
   },
   {
     "Default": {
+      "abilityMixins": [
+        {
+          "$type": "AttachToStateIDMixin",
+          "modifierName": "Avatar_Yunjin_Kaoqi_Reset",
+          "stateIDs": [
+            "Yunjin_ElementalArt_BS"
+          ],
+          "LJPPDIGCJMJ": ""
+        },
+        {
+          "$type": "AttachToStateIDMixin",
+          "modifierName": "Yunjin_ElementalArt_Kaoqi_Cast",
+          "stateIDs": [
+            "Yunjin_ElementalArt_Cast"
+          ],
+          "LJPPDIGCJMJ": ""
+        },
+        {
+          "$type": "AttachToStateIDMixin",
+          "modifierName": "Yunjin_ElementalArt_Kaoqi_Dissolve",
+          "stateIDs": [
+            "Yunjin_ElementalArt_Loop_2",
+            "Yunjin_ElementalArt_Loop_3",
+            "Yunjin_ElementalArt_Cast"
+          ],
+          "LJPPDIGCJMJ": ""
+        },
+        {
+          "$type": "AttachToStateIDMixin",
+          "modifierName": "Yunjin_ElementalArt_Kaoqi_Flag",
+          "stateIDs": [
+            "Yunjin_ElementalArt_BS",
+            "Yunjin_ElementalArt_Loop_1",
+            "Yunjin_ElementalArt_Loop_2",
+            "Yunjin_ElementalArt_Loop_3",
+            "Yunjin_ElementalArt_Cast"
+          ],
+          "LJPPDIGCJMJ": ""
+        }
+      ],
+      "abilityName": "Avatar_Yunjin_Kaoqi",
       "modifiers": {
         "Avatar_Yunjin_Kaoqi_Reset": {
+          "elementDurability": 100.0,
+          "modifierName": "",
           "onAdded": [
             {
               "$type": "RemoveUniqueModifier",
               "modifierName": "UNIQUE_Avatar_Yunjin_Kaoqi"
             }
           ],
-          "elementDurability": 100.0,
-          "modifierName": "",
           "AIHNJLDFEGJ": 0.0
         },
         "Yunjin_ElementalArt_Kaoqi_Flag": {
-          "onRemoved": [
-            {
-              "$type": "SetGlobalValue",
-              "key": "_ABILITY_Yunjin_ElementalArt_Flag",
-              "minValue": 0.0,
-              "maxValue": 0.0,
-              "CBOMLBFIPJM": 0.0,
-              "doOffStage": true
-            }
-          ],
+          "elementDurability": 100.0,
+          "modifierName": "",
           "onAdded": [
             {
               "$type": "SetGlobalValue",
               "key": "_ABILITY_Yunjin_ElementalArt_Flag",
-              "minValue": 0.0,
               "maxValue": 0.0,
-              "CBOMLBFIPJM": 1.0
+              "minValue": 0.0,
+              "value": 1.0
             }
           ],
-          "elementDurability": 100.0,
-          "modifierName": "",
+          "onRemoved": [
+            {
+              "$type": "SetGlobalValue",
+              "doOffStage": true,
+              "key": "_ABILITY_Yunjin_ElementalArt_Flag",
+              "maxValue": 0.0,
+              "minValue": 0.0,
+              "value": 0.0
+            }
+          ],
           "AIHNJLDFEGJ": 0.0
         },
         "UNIQUE_Avatar_Yunjin_Kaoqi": {
+          "elementDurability": 100.0,
+          "isUnique": true,
+          "modifierName": "",
           "onAdded": [
             {
               "$type": "AttachEffect",
-              "ILLLPEOODKP": "",
-              "scale": 1.0,
               "effectPattern": "Eff_Avatar_Girl_Pole_Yunjin_Kaoqi",
-              "effectTempleteID": -1.0
+              "effectTempleteID": -1.0,
+              "scale": 1.0,
+              "ILLLPEOODKP": ""
             }
           ],
-          "elementDurability": 100.0,
-          "modifierName": "",
-          "isUnique": true,
           "AIHNJLDFEGJ": 0.0
         },
         "Yunjin_ElementalArt_Kaoqi_Cast": {
+          "elementDurability": 100.0,
+          "modifierName": "",
           "onAdded": [
             {
               "$type": "SendEffectTrigger",
-              "parameter": "Cast",
+              "attachPoint": "",
               "effectPattern": "Eff_Avatar_Girl_Pole_Yunjin_Kaoqi",
-              "attachPoint": ""
+              "parameter": "Cast"
             }
           ],
-          "elementDurability": 100.0,
-          "modifierName": "",
           "AIHNJLDFEGJ": 0.0
         },
         "Yunjin_ElementalArt_Kaoqi_Dissolve": {
+          "elementDurability": 100.0,
+          "modifierName": "",
           "onRemoved": [
             {
               "$type": "ApplyModifier",
-              "modifierName": "Avatar_Yunjin_Kaoqi_Remover",
-              "doOffStage": true
+              "doOffStage": true,
+              "modifierName": "Avatar_Yunjin_Kaoqi_Remover"
             }
           ],
-          "elementDurability": 100.0,
-          "modifierName": "",
           "AIHNJLDFEGJ": 0.0
         },
         "Avatar_Yunjin_Kaoqi_Remover": {
           "duration": 0.6,
+          "elementDurability": 100.0,
+          "modifierName": "",
+          "onAdded": [
+            {
+              "$type": "SendEffectTrigger",
+              "attachPoint": "",
+              "effectPattern": "Eff_Avatar_Girl_Pole_Yunjin_Kaoqi",
+              "parameter": "Dissolve"
+            }
+          ],
           "onRemoved": [
             {
               "$type": "RemoveUniqueModifier",
-              "modifierName": "UNIQUE_Avatar_Yunjin_Kaoqi",
               "doOffStage": true,
+              "modifierName": "UNIQUE_Avatar_Yunjin_Kaoqi",
               "predicates": [
                 {
-                  "$type": "GKGBIPDLMMG",
+                  "$type": "ByNot",
                   "predicates": [
                     {
-                      "$type": "EOFDCELPGFO",
-                      "CBOMLBFIPJM": 1.0,
+                      "$type": "ByTargetGlobalValue",
+                      "forceByCaster": true,
                       "key": "_ABILITY_Yunjin_ElementalArt_Flag",
-                      "value": true
+                      "value": 1.0
                     }
                   ]
                 }
               ]
             }
           ],
-          "onAdded": [
-            {
-              "$type": "SendEffectTrigger",
-              "parameter": "Dissolve",
-              "effectPattern": "Eff_Avatar_Girl_Pole_Yunjin_Kaoqi",
-              "attachPoint": ""
-            }
-          ],
-          "elementDurability": 100.0,
-          "modifierName": "",
           "AIHNJLDFEGJ": 0.0
         }
       },
@@ -2048,112 +2089,86 @@
           "$type": "ApplyModifier",
           "modifierName": "UNIQUE_Avatar_Yunjin_Kaoqi"
         }
-      ],
-      "abilityMixins": [
-        {
-          "$type": "AttachToStateIDMixin",
-          "LJPPDIGCJMJ": "",
-          "stateIDs": [
-            "Yunjin_ElementalArt_BS"
-          ],
-          "modifierName": "Avatar_Yunjin_Kaoqi_Reset"
-        },
-        {
-          "$type": "AttachToStateIDMixin",
-          "LJPPDIGCJMJ": "",
-          "stateIDs": [
-            "Yunjin_ElementalArt_Cast"
-          ],
-          "modifierName": "Yunjin_ElementalArt_Kaoqi_Cast"
-        },
-        {
-          "$type": "AttachToStateIDMixin",
-          "LJPPDIGCJMJ": "",
-          "stateIDs": [
-            "Yunjin_ElementalArt_Loop_2",
-            "Yunjin_ElementalArt_Loop_3",
-            "Yunjin_ElementalArt_Cast"
-          ],
-          "modifierName": "Yunjin_ElementalArt_Kaoqi_Dissolve"
-        },
-        {
-          "$type": "AttachToStateIDMixin",
-          "LJPPDIGCJMJ": "",
-          "stateIDs": [
-            "Yunjin_ElementalArt_BS",
-            "Yunjin_ElementalArt_Loop_1",
-            "Yunjin_ElementalArt_Loop_2",
-            "Yunjin_ElementalArt_Loop_3",
-            "Yunjin_ElementalArt_Cast"
-          ],
-          "modifierName": "Yunjin_ElementalArt_Kaoqi_Flag"
-        }
-      ],
-      "abilityName": "Avatar_Yunjin_Kaoqi"
+      ]
     }
   },
   {
     "Default": {
+      "abilityMixins": [
+        {
+          "$type": "AttachToNormalizedTimeMixin",
+          "modifierName": "Avatar_Yunjin_ElementalArt_Strike_VFX",
+          "normalizeStart": 0.14,
+          "stateID": "Yunjin_ElementalArt_Cast",
+          "LJPPDIGCJMJ": ""
+        }
+      ],
+      "abilityName": "Avatar_Yunjin_ElementalArt_Strike",
+      "abilitySpecials": {
+        "Yunjin_ElementalArt_LV1_Damage_DefRatio": 0.0,
+        "Yunjin_ElementalArt_LV2_Damage_DefRatio": 0.0,
+        "Yunjin_ElementalArt_LV3_Damage_DefRatio": 0.0
+      },
       "modifiers": {
         "Avatar_Yunjin_ElementalArt_Strike_VFX": {
+          "elementDurability": 100.0,
+          "modifierName": "",
           "onAdded": [
             {
               "$type": "FireEffect",
               "effectPattern": "Eff_Avatar_Girl_Pole_Yunjin_ElementalArt_Cast_1",
-              "scale": 1.0,
-              "ILLLPEOODKP": "",
               "effectTempleteID": -1.0,
               "predicates": [
                 {
-                  "$type": "EOFDCELPGFO",
-                  "CBOMLBFIPJM": 1.0,
+                  "$type": "ByTargetGlobalValue",
                   "compareType": "NoneOrEqual",
-                  "key": "_ABILITY_Yunjin_ElementalArt_Stage"
+                  "key": "_ABILITY_Yunjin_ElementalArt_Stage",
+                  "value": 1.0
                 }
-              ]
+              ],
+              "scale": 1.0,
+              "ILLLPEOODKP": ""
             },
             {
               "$type": "FireEffect",
               "effectPattern": "Eff_Avatar_Girl_Pole_Yunjin_ElementalArt_Cast_2",
-              "scale": 1.0,
-              "ILLLPEOODKP": "",
               "effectTempleteID": -1.0,
               "predicates": [
                 {
-                  "$type": "EOFDCELPGFO",
-                  "CBOMLBFIPJM": 2.0,
-                  "key": "_ABILITY_Yunjin_ElementalArt_Stage"
+                  "$type": "ByTargetGlobalValue",
+                  "key": "_ABILITY_Yunjin_ElementalArt_Stage",
+                  "value": 2.0
                 }
-              ]
+              ],
+              "scale": 1.0,
+              "ILLLPEOODKP": ""
             },
             {
               "$type": "FireEffect",
               "effectPattern": "Eff_Avatar_Girl_Pole_Yunjin_ElementalArt_Cast_3",
-              "scale": 1.0,
-              "ILLLPEOODKP": "",
               "effectTempleteID": -1.0,
               "predicates": [
                 {
-                  "$type": "EOFDCELPGFO",
-                  "CBOMLBFIPJM": 3.0,
-                  "key": "_ABILITY_Yunjin_ElementalArt_Stage"
+                  "$type": "ByTargetGlobalValue",
+                  "key": "_ABILITY_Yunjin_ElementalArt_Stage",
+                  "value": 3.0
                 }
-              ]
+              ],
+              "scale": 1.0,
+              "ILLLPEOODKP": ""
             },
             {
               "$type": "ApplyModifier",
               "modifierName": "Avatar_Yunjin_ElementalArt_Strike_Weather",
               "predicates": [
                 {
-                  "$type": "EOFDCELPGFO",
-                  "CBOMLBFIPJM": 3.0,
-                  "key": "_ABILITY_Yunjin_ElementalArt_Stage"
+                  "$type": "ByTargetGlobalValue",
+                  "key": "_ABILITY_Yunjin_ElementalArt_Stage",
+                  "value": 3.0
                 }
               ]
             }
           ],
-          "elementDurability": 100.0,
-          "modifierName": "",
           "AIHNJLDFEGJ": 0.0
         },
         "Avatar_Yunjin_ElementalArt_Strike_Weather": {
@@ -2175,244 +2190,277 @@
       "onAbilityStart": [
         {
           "$type": "AvatarSkillStart",
-          "skillID": 10642,
-          "BGNJBEPEJBO": 1.0,
-          "costStaminaRatio": 1.0,
           "cdRatio": 1.0,
-          "doOffStage": true
+          "costStaminaRatio": 1.0,
+          "doOffStage": true,
+          "skillID": 10642,
+          "GIBAINFKPBO": 1.0
         },
         {
           "$type": "TriggerAttackEvent",
-          "targetType": "Enemy",
           "attackEvent": {
             "attackInfo": {
               "attackProperty": {
-                "elementType": "Rock",
                 "attackType": "Melee",
-                "damagePercentageRatio": 0.0,
-                "strikeType": "Spear",
-                "enBreak": 100.0,
                 "damageExtra": [
                   "Yunjin_ElementalArt_LV1_Damage_DefRatio",
                   "FIGHT_PROP_CUR_DEFENSE",
                   "MUL"
                 ],
+                "damagePercentageRatio": 0.0,
                 "elementDurability": 50.0,
-                "arkheGrade": 0.0
+                "elementType": "Rock",
+                "enBreak": 100.0,
+                "strikeType": "Spear",
+                "IIPHCFEONLK": 0.0
               },
-              "cameraShake": {
-                "shakeDir": {
-                  "y": -0.2,
-                  "x": 1.0
-                },
-                "shakeTime": 0.21,
-                "shakeType": "CustomVector",
-                "shakeDistance": 30.0,
-                "MNKFEFOKFKP": "",
-                "shakeRange": 0.24
-              },
-              "hitPattern": {
-                "FLFCIDDNMNA": "",
-                "onHitEffectName": "Eff_Avatar_Girl_Pole_Yunjin_ElementalBurst_HitVFX",
-                "hitHaltTimeScale": 0.01,
-                "hitHaltTime": 0.06,
-                "canBeDefenceHalt": true,
-                "hitImpulseType": "LV4"
-              },
+              "attackTag": "Elemental_Art",
               "attenuationGroup": "default",
               "attenuationTag": "",
-              "attackTag": "Elemental_Art"
+              "cameraShake": {
+                "shakeDir": {
+                  "x": 1.0,
+                  "y": -0.2
+                },
+                "shakeDistance": 30.0,
+                "shakeRange": 0.24,
+                "shakeTime": 0.21,
+                "shakeType": "CustomVector",
+                "MNKFEFOKFKP": ""
+              },
+              "hitPattern": {
+                "canBeDefenceHalt": true,
+                "hitHaltTime": 0.06,
+                "hitHaltTimeScale": 0.01,
+                "hitImpulseType": "LV4",
+                "onHitEffectName": "Eff_Avatar_Girl_Pole_Yunjin_ElementalBurst_HitVFX",
+                "FLFCIDDNMNA": ""
+              }
             },
             "attackPattern": {
-              "$type": "DDLDAMKEKJD",
-              "radius": 4.0,
-              "height": 1.5,
-              "detectDirection": "Clockwise",
-              "triggerType": "TriggerNoRepeat",
+              "$type": "ConfigAttackCircle",
               "born": {
-                "$type": "NABPLNFPHCK",
+                "$type": "ConfigBornBySelf",
                 "offset": {
                   "x": 0.0,
-                  "z": 0.0,
-                  "y": 0.0
+                  "y": 0.0,
+                  "z": 0.0
                 }
-              }
+              },
+              "detectDirection": "Clockwise",
+              "height": 1.5,
+              "radius": 4.0,
+              "triggerType": "TriggerNoRepeat"
             }
           },
           "predicates": [
             {
-              "$type": "EOFDCELPGFO",
-              "CBOMLBFIPJM": 1.0,
-              "key": "_ABILITY_Yunjin_ElementalArt_Stage"
+              "$type": "ByTargetGlobalValue",
+              "key": "_ABILITY_Yunjin_ElementalArt_Stage",
+              "value": 1.0
             }
-          ]
+          ],
+          "targetType": "Enemy"
         },
         {
           "$type": "TriggerAttackEvent",
-          "targetType": "Enemy",
           "attackEvent": {
             "attackInfo": {
               "attackProperty": {
-                "elementType": "Rock",
                 "attackType": "Melee",
-                "damagePercentageRatio": 0.0,
-                "strikeType": "Spear",
-                "enBreak": 200.0,
                 "damageExtra": [
                   "Yunjin_ElementalArt_LV2_Damage_DefRatio",
                   "FIGHT_PROP_CUR_DEFENSE",
                   "MUL"
                 ],
+                "damagePercentageRatio": 0.0,
                 "elementDurability": 50.0,
-                "arkheGrade": 0.0
+                "elementType": "Rock",
+                "enBreak": 200.0,
+                "strikeType": "Spear",
+                "IIPHCFEONLK": 0.0
               },
-              "cameraShake": {
-                "shakeDir": {
-                  "y": -0.2,
-                  "x": 1.0
-                },
-                "shakeTime": 0.21,
-                "shakeType": "CustomVector",
-                "shakeDistance": 30.0,
-                "MNKFEFOKFKP": "",
-                "shakeRange": 0.24
-              },
-              "hitPattern": {
-                "FLFCIDDNMNA": "",
-                "onHitEffectName": "Eff_Avatar_Girl_Pole_Yunjin_ElementalBurst_HitVFX",
-                "hitHaltTimeScale": 0.01,
-                "hitHaltTime": 0.09,
-                "canBeDefenceHalt": true,
-                "hitImpulseType": "LV4"
-              },
+              "attackTag": "Elemental_Art",
               "attenuationGroup": "default",
               "attenuationTag": "",
-              "attackTag": "Elemental_Art"
+              "cameraShake": {
+                "shakeDir": {
+                  "x": 1.0,
+                  "y": -0.2
+                },
+                "shakeDistance": 30.0,
+                "shakeRange": 0.24,
+                "shakeTime": 0.21,
+                "shakeType": "CustomVector",
+                "MNKFEFOKFKP": ""
+              },
+              "hitPattern": {
+                "canBeDefenceHalt": true,
+                "hitHaltTime": 0.09,
+                "hitHaltTimeScale": 0.01,
+                "hitImpulseType": "LV4",
+                "onHitEffectName": "Eff_Avatar_Girl_Pole_Yunjin_ElementalBurst_HitVFX",
+                "FLFCIDDNMNA": ""
+              }
             },
             "attackPattern": {
-              "$type": "DDLDAMKEKJD",
-              "radius": 6.0,
-              "height": 1.5,
-              "detectDirection": "Clockwise",
-              "triggerType": "TriggerNoRepeat",
+              "$type": "ConfigAttackCircle",
               "born": {
-                "$type": "NABPLNFPHCK",
+                "$type": "ConfigBornBySelf",
                 "offset": {
                   "x": 0.0,
-                  "z": 0.0,
-                  "y": 0.0
+                  "y": 0.0,
+                  "z": 0.0
                 }
-              }
+              },
+              "detectDirection": "Clockwise",
+              "height": 1.5,
+              "radius": 6.0,
+              "triggerType": "TriggerNoRepeat"
             }
           },
           "predicates": [
             {
-              "$type": "EOFDCELPGFO",
-              "CBOMLBFIPJM": 2.0,
-              "key": "_ABILITY_Yunjin_ElementalArt_Stage"
+              "$type": "ByTargetGlobalValue",
+              "key": "_ABILITY_Yunjin_ElementalArt_Stage",
+              "value": 2.0
             }
-          ]
+          ],
+          "targetType": "Enemy"
         },
         {
           "$type": "TriggerAttackEvent",
-          "targetType": "Enemy",
           "attackEvent": {
             "attackInfo": {
               "attackProperty": {
-                "elementType": "Rock",
                 "attackType": "Melee",
-                "damagePercentageRatio": 0.0,
-                "strikeType": "Spear",
-                "enBreak": 300.0,
                 "damageExtra": [
                   "Yunjin_ElementalArt_LV3_Damage_DefRatio",
                   "FIGHT_PROP_CUR_DEFENSE",
                   "MUL"
                 ],
+                "damagePercentageRatio": 0.0,
                 "elementDurability": 100.0,
-                "arkheGrade": 0.0
+                "elementType": "Rock",
+                "enBreak": 300.0,
+                "strikeType": "Spear",
+                "IIPHCFEONLK": 0.0
               },
-              "cameraShake": {
-                "shakeDir": {
-                  "y": -0.2,
-                  "x": 1.0
-                },
-                "shakeTime": 0.3,
-                "shakeType": "CustomVector",
-                "shakeDistance": 30.0,
-                "MNKFEFOKFKP": "",
-                "shakeRange": 0.36
-              },
-              "hitPattern": {
-                "FLFCIDDNMNA": "",
-                "onHitEffectName": "Eff_Avatar_Girl_Pole_Yunjin_ElementalBurst_HitVFX",
-                "hitHaltTimeScale": 0.01,
-                "hitHaltTime": 0.12,
-                "canBeDefenceHalt": true,
-                "hitImpulseType": "LV6"
-              },
+              "attackTag": "Elemental_Art",
               "attenuationGroup": "default",
               "attenuationTag": "",
-              "attackTag": "Elemental_Art"
+              "cameraShake": {
+                "shakeDir": {
+                  "x": 1.0,
+                  "y": -0.2
+                },
+                "shakeDistance": 30.0,
+                "shakeRange": 0.36,
+                "shakeTime": 0.3,
+                "shakeType": "CustomVector",
+                "MNKFEFOKFKP": ""
+              },
+              "hitPattern": {
+                "canBeDefenceHalt": true,
+                "hitHaltTime": 0.12,
+                "hitHaltTimeScale": 0.01,
+                "hitImpulseType": "LV6",
+                "onHitEffectName": "Eff_Avatar_Girl_Pole_Yunjin_ElementalBurst_HitVFX",
+                "FLFCIDDNMNA": ""
+              }
             },
             "attackPattern": {
-              "$type": "DDLDAMKEKJD",
-              "radius": 8.0,
-              "height": 1.5,
-              "detectDirection": "Clockwise",
-              "triggerType": "TriggerNoRepeat",
+              "$type": "ConfigAttackCircle",
               "born": {
-                "$type": "NABPLNFPHCK",
+                "$type": "ConfigBornBySelf",
                 "offset": {
                   "x": 0.0,
-                  "z": 0.0,
-                  "y": 0.0
+                  "y": 0.0,
+                  "z": 0.0
                 }
-              }
+              },
+              "detectDirection": "Clockwise",
+              "height": 1.5,
+              "radius": 8.0,
+              "triggerType": "TriggerNoRepeat"
             }
           },
           "predicates": [
             {
-              "$type": "EOFDCELPGFO",
-              "CBOMLBFIPJM": 3.0,
-              "key": "_ABILITY_Yunjin_ElementalArt_Stage"
+              "$type": "ByTargetGlobalValue",
+              "key": "_ABILITY_Yunjin_ElementalArt_Stage",
+              "value": 3.0
             }
-          ]
+          ],
+          "targetType": "Enemy"
         }
-      ],
-      "abilityMixins": [
-        {
-          "$type": "AttachToNormalizedTimeMixin",
-          "modifierName": "Avatar_Yunjin_ElementalArt_Strike_VFX",
-          "LJPPDIGCJMJ": "",
-          "stateID": "Yunjin_ElementalArt_Cast",
-          "normalizeStart": 0.14
-        }
-      ],
-      "abilityName": "Avatar_Yunjin_ElementalArt_Strike",
-      "abilitySpecials": {
-        "Yunjin_ElementalArt_LV1_Damage_DefRatio": 0.0,
-        "Yunjin_ElementalArt_LV2_Damage_DefRatio": 0.0,
-        "Yunjin_ElementalArt_LV3_Damage_DefRatio": 0.0
-      }
+      ]
     }
   },
   {
     "Default": {
+      "abilityMixins": [
+        {
+          "$type": "AttachToStateIDMixin",
+          "modifierName": "Weather_Handler",
+          "stateIDs": [
+            "Yunjin_ElementalBurst"
+          ],
+          "LJPPDIGCJMJ": ""
+        },
+        {
+          "$type": "AttachToStateIDMixin",
+          "modifierName": "VFX",
+          "stateIDs": [
+            "Yunjin_ElementalBurst"
+          ],
+          "LJPPDIGCJMJ": ""
+        },
+        {
+          "$type": "AttachToStateIDMixin",
+          "modifierName": "ExitCamera",
+          "stateIDs": [
+            "Yunjin_ElementalBurst"
+          ],
+          "LJPPDIGCJMJ": ""
+        },
+        {
+          "$type": "AttachToStateIDMixin",
+          "modifierName": "SkillStart",
+          "stateIDs": [
+            "Yunjin_ElementalBurst"
+          ],
+          "LJPPDIGCJMJ": ""
+        },
+        {
+          "$type": "AttachToStateIDMixin",
+          "modifierName": "Invincible",
+          "stateIDs": [
+            "Yunjin_ElementalBurst"
+          ],
+          "LJPPDIGCJMJ": ""
+        }
+      ],
+      "abilityName": "Avatar_Yunjin_ElementalBurst_Cast",
+      "abilitySpecials": {
+        "Yunjin_ElementalBurst_Damage_AtkRatio": 0.0
+      },
       "modifiers": {
         "Invincible": {
+          "elementDurability": 100.0,
+          "modifierName": "",
           "onAdded": [
             {
               "$type": "AttachAbilityStateResistance",
               "resistanceListID": 11002
             }
           ],
-          "elementDurability": 100.0,
           "state": "Invincible",
-          "modifierName": "",
           "AIHNJLDFEGJ": 0.0
         },
         "SkillStart": {
+          "elementDurability": 100.0,
+          "modifierName": "",
           "onAdded": [
             {
               "$type": "RemoveUniqueModifier",
@@ -2420,25 +2468,23 @@
             },
             {
               "$type": "AvatarSkillStart",
-              "skillID": 10643,
-              "BGNJBEPEJBO": 1.0,
+              "cdRatio": 1.0,
               "costStaminaRatio": 1.0,
-              "cdRatio": 1.0
+              "skillID": 10643,
+              "GIBAINFKPBO": 1.0
             }
           ],
-          "elementDurability": 100.0,
-          "modifierName": "",
           "AIHNJLDFEGJ": 0.0
         },
         "Weather_Handler": {
+          "elementDurability": 100.0,
+          "modifierName": "",
           "onAdded": [
             {
               "$type": "ApplyModifier",
               "modifierName": "Weather"
             }
           ],
-          "elementDurability": 100.0,
-          "modifierName": "",
           "AIHNJLDFEGJ": 0.0
         },
         "Weather": {
@@ -2457,17 +2503,17 @@
           "AIHNJLDFEGJ": 0.0
         },
         "VFX": {
+          "elementDurability": 100.0,
+          "modifierName": "",
           "onAdded": [
             {
               "$type": "AttachEffect",
-              "ILLLPEOODKP": "",
-              "scale": 1.0,
               "effectPattern": "Eff_Avatar_Girl_Pole_Yunjin_ElementalBurst_BS",
-              "effectTempleteID": -1.0
+              "effectTempleteID": -1.0,
+              "scale": 1.0,
+              "ILLLPEOODKP": ""
             }
           ],
-          "elementDurability": 100.0,
-          "modifierName": "",
           "AIHNJLDFEGJ": 0.0
         },
         "RadialBlur": {
@@ -2476,9 +2522,9 @@
           "modifierMixins": [
             {
               "$type": "CameraBlurMixin",
-              "NFBFBAJDMPJ": {
-                "LCOPJHPGJCO": 0.2,
-                "LFMGJKCOGPI": 1.0
+              "cameraRadialBlur": {
+                "fadeTime": 0.2,
+                "power": 1.0
               }
             }
           ],
@@ -2486,6 +2532,8 @@
           "AIHNJLDFEGJ": 0.0
         },
         "ExitCamera": {
+          "elementDurability": 100.0,
+          "modifierName": "",
           "onRemoved": [
             {
               "$type": "AvatarExitCameraShot",
@@ -2494,15 +2542,13 @@
             {
               "$type": "AvatarCameraParam",
               "cameraParam": {
-                "shouldKeepForceRadius": true,
+                "forceRadius": 6.0,
                 "forceRadiusDuration": 0.0,
-                "forceRadius": 6.0
+                "shouldKeepForceRadius": true
               },
               "doOffStage": true
             }
           ],
-          "elementDurability": 100.0,
-          "modifierName": "",
           "AIHNJLDFEGJ": 0.0
         }
       },
@@ -2510,9 +2556,9 @@
         {
           "$type": "FireEffect",
           "effectPattern": "Eff_Avatar_Girl_Pole_Yunjin_ElementalBurst_Cast",
+          "effectTempleteID": -1.0,
           "scale": 1.0,
-          "ILLLPEOODKP": "",
-          "effectTempleteID": -1.0
+          "ILLLPEOODKP": ""
         },
         {
           "$type": "ApplyModifier",
@@ -2520,631 +2566,74 @@
         },
         {
           "$type": "TriggerAttackEvent",
-          "targetType": "Enemy",
           "attackEvent": {
             "attackInfo": {
               "attackProperty": {
-                "elementType": "Rock",
                 "attackType": "Melee",
-                "damagePercentageRatio": 0.0,
-                "strikeType": "Blunt",
-                "enBreak": 200.0,
                 "damagePercentage": "Yunjin_ElementalBurst_Damage_AtkRatio",
+                "damagePercentageRatio": 0.0,
                 "elementDurability": 50.0,
                 "elementRank": 1.5,
-                "arkheGrade": 0.0
+                "elementType": "Rock",
+                "enBreak": 200.0,
+                "strikeType": "Blunt",
+                "IIPHCFEONLK": 0.0
               },
+              "attackTag": "Elemental_Burst",
+              "attenuationGroup": "default",
+              "attenuationTag": "",
               "cameraShake": {
                 "extension": {
                   "baseCycle": 0.08,
                   "cycleDamping": -0.04
                 },
-                "shakeTime": 0.36,
                 "shakeDistance": 30.0,
-                "MNKFEFOKFKP": "",
-                "shakeRange": 0.6
-              },
-              "hitPattern": {
-                "FLFCIDDNMNA": "",
-                "retreatType": "ByHitDirection",
-                "onHitEffectName": "default",
-                "hitImpulseType": "LV4"
+                "shakeRange": 0.6,
+                "shakeTime": 0.36,
+                "MNKFEFOKFKP": ""
               },
               "forceCameraShake": true,
-              "attenuationGroup": "default",
-              "attenuationTag": "",
-              "attackTag": "Elemental_Burst"
+              "hitPattern": {
+                "hitImpulseType": "LV4",
+                "onHitEffectName": "default",
+                "retreatType": "ByHitDirection",
+                "FLFCIDDNMNA": ""
+              }
             },
             "attackPattern": {
-              "$type": "DDLDAMKEKJD",
-              "radius": 6.0,
-              "height": 4.0,
-              "triggerType": "TriggerNoRepeat",
+              "$type": "ConfigAttackCircle",
               "born": {
-                "$type": "NABPLNFPHCK",
+                "$type": "ConfigBornBySelf",
                 "offset": {
                   "x": 0.0,
-                  "z": 0.0,
-                  "y": 0.0
+                  "y": 0.0,
+                  "z": 0.0
                 }
-              }
+              },
+              "height": 4.0,
+              "radius": 6.0,
+              "triggerType": "TriggerNoRepeat"
             }
-          }
+          },
+          "targetType": "Enemy"
         },
         {
           "$type": "TriggerAbility",
           "abilityName": "Avatar_Yunjin_ElementalBurst_Buff"
         }
-      ],
-      "abilityMixins": [
-        {
-          "$type": "AttachToStateIDMixin",
-          "LJPPDIGCJMJ": "",
-          "stateIDs": [
-            "Yunjin_ElementalBurst"
-          ],
-          "modifierName": "Weather_Handler"
-        },
-        {
-          "$type": "AttachToStateIDMixin",
-          "LJPPDIGCJMJ": "",
-          "stateIDs": [
-            "Yunjin_ElementalBurst"
-          ],
-          "modifierName": "VFX"
-        },
-        {
-          "$type": "AttachToStateIDMixin",
-          "LJPPDIGCJMJ": "",
-          "stateIDs": [
-            "Yunjin_ElementalBurst"
-          ],
-          "modifierName": "ExitCamera"
-        },
-        {
-          "$type": "AttachToStateIDMixin",
-          "LJPPDIGCJMJ": "",
-          "stateIDs": [
-            "Yunjin_ElementalBurst"
-          ],
-          "modifierName": "SkillStart"
-        },
-        {
-          "$type": "AttachToStateIDMixin",
-          "LJPPDIGCJMJ": "",
-          "stateIDs": [
-            "Yunjin_ElementalBurst"
-          ],
-          "modifierName": "Invincible"
-        }
-      ],
-      "abilityName": "Avatar_Yunjin_ElementalBurst_Cast",
-      "abilitySpecials": {
-        "Yunjin_ElementalBurst_Damage_AtkRatio": 0.0
-      }
+      ]
     }
   },
   {
     "Default": {
-      "modifiers": {
-        "UNIQUE_Avatar_Yunjin_ElementalBurst_Buff_Handler": {
-          "duration": "Yunjin_ElementalBurst_Buff_Duration",
-          "onRemoved": [
-            {
-              "$type": "ApplyModifier",
-              "modifierName": "Avatar_Yunjin_Buff_VFX_Remover",
-              "doOffStage": true
-            },
-            {
-              "$type": "SetGlobalValue",
-              "key": "_ABILITY_Yunjin_ElementalBurst_Buff_Mark",
-              "minValue": 0.0,
-              "maxValue": 0.0,
-              "CBOMLBFIPJM": 0.0,
-              "doOffStage": true
-            }
-          ],
-          "onAdded": [
-            {
-              "$type": "SetGlobalValue",
-              "key": "_ABILITY_Yunjin_ElementalBurst_Buff_Mark",
-              "minValue": 0.0,
-              "maxValue": 0.0,
-              "CBOMLBFIPJM": 0.0,
-              "doOffStage": true
-            },
-            {
-              "$type": "SetGlobalValue",
-              "key": "_ABILITY_Yunjin_ElementalBurst_Buff_Mark",
-              "minValue": 0.0,
-              "maxValue": 0.0,
-              "CBOMLBFIPJM": 1.0,
-              "doOffStage": true
-            },
-            {
-              "$type": "AttachModifier",
-              "modifierName": "UNIQUE_Avatar_Yunjin_ElementalBurst_Buff",
-              "doOffStage": true
-            },
-            {
-              "$type": "ApplyModifier",
-              "modifierName": "UNIQUE_Avatar_Yunjin_ElementalBurst_Buff_VFX",
-              "doOffStage": true
-            },
-            {
-              "$type": "AttachModifier",
-              "modifierName": "UNIQUE_Yunjin_ElementalBurst_PermanentSkill_2_ElementNum",
-              "target": "Caster",
-              "predicates": [
-                {
-                  "$type": "LCCNMKNDACG",
-                  "talentParam": "Yunjin_PermanentSkill_2_ElementNum"
-                }
-              ]
-            },
-            {
-              "$type": "AttachModifier",
-              "modifierName": "UNIQUE_Yunjin_Constellation_6",
-              "doOffStage": true,
-              "predicates": [
-                {
-                  "$type": "LCCNMKNDACG",
-                  "talentParam": "Yunjin_Constellation_6"
-                }
-              ]
-            }
-          ],
-          "elementDurability": 100.0,
-          "modifierName": "",
-          "isUnique": true,
-          "AIHNJLDFEGJ": 0.0
-        },
-        "UNIQUE_Avatar_Yunjin_ElementalBurst_Buff": {
-          "elementDurability": 100.0,
-          "modifierMixins": [
-            {
-              "$type": "ModifyDamageCountMixin",
-              "HHHCBHOGLCH": "",
-              "HHIIBHNKGAM": 30.0,
-              "PICKGNONNNH": [
-                {
-                  "$type": "RemoveUniqueModifier",
-                  "modifierName": "UNIQUE_Yunjin_ElementalBurst_PermanentSkill_2_ElementNum",
-                  "doOffStage": true
-                },
-                {
-                  "$type": "RemoveUniqueModifier",
-                  "modifierName": "UNIQUE_Yunjin_Constellation_6",
-                  "doOffStage": true
-                },
-                {
-                  "$type": "ApplyModifier",
-                  "modifierName": "Avatar_Yunjin_Buff_VFX_Remover",
-                  "doOffStage": true
-                }
-              ],
-              "damagePercentageRatio": 0.0,
-              "damageExtra": [
-                "FIGHT_PROP_CUR_DEFENSE",
-                "Yunjin_ElementalBurst_Buff_ExtraDamage_DefRatio",
-                "MUL",
-                "FIGHT_PROP_CUR_DEFENSE",
-                "Yunjin_ElementalBurst_Buff_ExtraDamage_ElementNum",
-                "MUL",
-                "ADD"
-              ],
-              "attackTags": [
-                "NormalAttack_01",
-                "NormalAttack_02",
-                "NormalAttack_03",
-                "NormalAttack_04",
-                "NormalAttack_05",
-                "NormalAttack_06"
-              ],
-              "predicates": [
-                {
-                  "$type": "DEOFBICNFHF",
-                  "entityTypes": [
-                    "Monster"
-                  ]
-                },
-                {
-                  "$type": "EOFDCELPGFO",
-                  "CBOMLBFIPJM": 0.0,
-                  "compareType": "NoneOrEqual",
-                  "key": "_ANIMAL_ENTITY_TYPE"
-                }
-              ]
-            }
-          ],
-          "modifierName": "",
-          "isUnique": true,
-          "AIHNJLDFEGJ": 0.0
-        },
-        "UNIQUE_Avatar_Yunjin_ElementalBurst_Buff_VFX": {
-          "onAdded": [
-            {
-              "$type": "AttachEffect",
-              "ILLLPEOODKP": "",
-              "scale": 1.0,
-              "effectPattern": "Eff_Avatar_Girl_Pole_Yunjin_ElementalBurst_Buff",
-              "effectTempleteID": -1.0,
-              "doOffStage": true
-            }
-          ],
-          "elementDurability": 100.0,
-          "modifierName": "",
-          "isUnique": true,
-          "AIHNJLDFEGJ": 0.0
-        },
-        "UNIQUE_Yunjin_ElementalBurst_PermanentSkill_2_ElementNum": {
-          "thinkInterval": 0.5,
-          "onAdded": [
-            {
-              "$type": "SetGlobalValue",
-              "key": "_ABILITY_Yunjin_PermanentSkill_2_ElementNum",
-              "minValue": 0.0,
-              "maxValue": 0.0,
-              "CBOMLBFIPJM": 0.0,
-              "doOffStage": true
-            }
-          ],
-          "elementDurability": 100.0,
-          "modifierName": "",
-          "isUnique": true,
-          "onThinkInterval": [
-            {
-              "$type": "SetGlobalValue",
-              "key": "_ABILITY_Yunjin_PermanentSkill_2_ElementNum",
-              "minValue": 0.0,
-              "maxValue": 0.0,
-              "CBOMLBFIPJM": 0.0,
-              "doOffStage": true
-            },
-            {
-              "$type": "AddGlobalValue",
-              "useLimitRange": true,
-              "key": "_ABILITY_Yunjin_PermanentSkill_2_ElementNum",
-              "maxValue": 4.0,
-              "minValue": 0.0,
-              "CBOMLBFIPJM": 1.0,
-              "doOffStage": true,
-              "predicates": [
-                {
-                  "$type": "ELJOEJCLCOI",
-                  "logic": "GreaterOrEqual",
-                  "number": 1,
-                  "elementType": "Fire"
-                }
-              ]
-            },
-            {
-              "$type": "AddGlobalValue",
-              "useLimitRange": true,
-              "key": "_ABILITY_Yunjin_PermanentSkill_2_ElementNum",
-              "maxValue": 4.0,
-              "minValue": 0.0,
-              "CBOMLBFIPJM": 1.0,
-              "doOffStage": true,
-              "predicates": [
-                {
-                  "$type": "ELJOEJCLCOI",
-                  "logic": "GreaterOrEqual",
-                  "number": 1,
-                  "elementType": "Water"
-                }
-              ]
-            },
-            {
-              "$type": "AddGlobalValue",
-              "useLimitRange": true,
-              "key": "_ABILITY_Yunjin_PermanentSkill_2_ElementNum",
-              "maxValue": 4.0,
-              "minValue": 0.0,
-              "CBOMLBFIPJM": 1.0,
-              "doOffStage": true,
-              "predicates": [
-                {
-                  "$type": "ELJOEJCLCOI",
-                  "logic": "GreaterOrEqual",
-                  "number": 1,
-                  "elementType": "Electric"
-                }
-              ]
-            },
-            {
-              "$type": "AddGlobalValue",
-              "useLimitRange": true,
-              "key": "_ABILITY_Yunjin_PermanentSkill_2_ElementNum",
-              "maxValue": 4.0,
-              "minValue": 0.0,
-              "CBOMLBFIPJM": 1.0,
-              "doOffStage": true,
-              "predicates": [
-                {
-                  "$type": "ELJOEJCLCOI",
-                  "logic": "GreaterOrEqual",
-                  "number": 1,
-                  "elementType": "Rock"
-                }
-              ]
-            },
-            {
-              "$type": "AddGlobalValue",
-              "useLimitRange": true,
-              "key": "_ABILITY_Yunjin_PermanentSkill_2_ElementNum",
-              "maxValue": 4.0,
-              "minValue": 0.0,
-              "CBOMLBFIPJM": 1.0,
-              "doOffStage": true,
-              "predicates": [
-                {
-                  "$type": "ELJOEJCLCOI",
-                  "logic": "GreaterOrEqual",
-                  "number": 1,
-                  "elementType": "Wind"
-                }
-              ]
-            },
-            {
-              "$type": "AddGlobalValue",
-              "useLimitRange": true,
-              "key": "_ABILITY_Yunjin_PermanentSkill_2_ElementNum",
-              "maxValue": 4.0,
-              "minValue": 0.0,
-              "CBOMLBFIPJM": 1.0,
-              "doOffStage": true,
-              "predicates": [
-                {
-                  "$type": "ELJOEJCLCOI",
-                  "logic": "GreaterOrEqual",
-                  "number": 1,
-                  "elementType": "Grass"
-                }
-              ]
-            },
-            {
-              "$type": "AddGlobalValue",
-              "useLimitRange": true,
-              "key": "_ABILITY_Yunjin_PermanentSkill_2_ElementNum",
-              "maxValue": 4.0,
-              "minValue": 0.0,
-              "CBOMLBFIPJM": 1.0,
-              "doOffStage": true,
-              "predicates": [
-                {
-                  "$type": "ELJOEJCLCOI",
-                  "logic": "GreaterOrEqual",
-                  "number": 1,
-                  "elementType": "Ice"
-                }
-              ]
-            },
-            {
-              "$type": "SetOverrideMapValue",
-              "CBOMLBFIPJM": "Yunjin_PermanentSkill_2_ElementNum_Elem_1",
-              "maxValue": 0.0,
-              "abilityName": "",
-              "minValue": 0.0,
-              "overrideMapKey": "Yunjin_ElementalBurst_Buff_ExtraDamage_ElementNum",
-              "doOffStage": true,
-              "predicates": [
-                {
-                  "$type": "EOFDCELPGFO",
-                  "CBOMLBFIPJM": 1.0,
-                  "key": "_ABILITY_Yunjin_PermanentSkill_2_ElementNum"
-                }
-              ]
-            },
-            {
-              "$type": "SetOverrideMapValue",
-              "CBOMLBFIPJM": "Yunjin_PermanentSkill_2_ElementNum_Elem_2",
-              "maxValue": 0.0,
-              "abilityName": "",
-              "minValue": 0.0,
-              "overrideMapKey": "Yunjin_ElementalBurst_Buff_ExtraDamage_ElementNum",
-              "doOffStage": true,
-              "predicates": [
-                {
-                  "$type": "EOFDCELPGFO",
-                  "CBOMLBFIPJM": 2.0,
-                  "key": "_ABILITY_Yunjin_PermanentSkill_2_ElementNum"
-                }
-              ]
-            },
-            {
-              "$type": "SetOverrideMapValue",
-              "CBOMLBFIPJM": "Yunjin_PermanentSkill_2_ElementNum_Elem_3",
-              "maxValue": 0.0,
-              "abilityName": "",
-              "minValue": 0.0,
-              "overrideMapKey": "Yunjin_ElementalBurst_Buff_ExtraDamage_ElementNum",
-              "doOffStage": true,
-              "predicates": [
-                {
-                  "$type": "EOFDCELPGFO",
-                  "CBOMLBFIPJM": 3.0,
-                  "key": "_ABILITY_Yunjin_PermanentSkill_2_ElementNum"
-                }
-              ]
-            },
-            {
-              "$type": "SetOverrideMapValue",
-              "CBOMLBFIPJM": "Yunjin_PermanentSkill_2_ElementNum_Elem_4",
-              "maxValue": 0.0,
-              "abilityName": "",
-              "minValue": 0.0,
-              "overrideMapKey": "Yunjin_ElementalBurst_Buff_ExtraDamage_ElementNum",
-              "doOffStage": true,
-              "predicates": [
-                {
-                  "$type": "EOFDCELPGFO",
-                  "CBOMLBFIPJM": 4.0,
-                  "key": "_ABILITY_Yunjin_PermanentSkill_2_ElementNum"
-                }
-              ]
-            }
-          ],
-          "AIHNJLDFEGJ": 0.0
-        },
-        "UNIQUE_Yunjin_Constellation_6": {
-          "isLimitedProperties": true,
-          "properties": {
-            "Animator_AttackSpeedRatio": "Yunjin_ElementalBurst_Buff_AttackSpeedRatio"
-          },
-          "elementDurability": 100.0,
-          "modifierName": "",
-          "isUnique": true,
-          "AIHNJLDFEGJ": 0.0
-        },
-        "UNIQUE_Avatar_Yunjin_Constellation_2_Buff": {
-          "duration": "Yunjin_Constellation_2_Buff_Duration",
-          "isLimitedProperties": true,
-          "elementDurability": 100.0,
-          "modifierMixins": [
-            {
-              "$type": "ModifyDamageMixin",
-              "damagePercentageRatio": "Yunjin_Constellation_2_Buff_DamagePercentageRatio",
-              "attackTags": [
-                "NormalAttack_01",
-                "NormalAttack_02",
-                "NormalAttack_03",
-                "NormalAttack_04",
-                "NormalAttack_05",
-                "NormalAttack_06"
-              ]
-            }
-          ],
-          "state": "AttackUp",
-          "modifierName": "",
-          "isUnique": true,
-          "AIHNJLDFEGJ": 0.0
-        },
-        "Avatar_Yunjin_Buff_VFX_Remover": {
-          "duration": 0.4,
-          "onRemoved": [
-            {
-              "$type": "RemoveUniqueModifier",
-              "modifierName": "UNIQUE_Avatar_Yunjin_ElementalBurst_Buff_VFX",
-              "doOffStage": true,
-              "predicates": [
-                {
-                  "$type": "EOFDCELPGFO",
-                  "CBOMLBFIPJM": 0.0,
-                  "key": "_ABILITY_Yunjin_ElementalBurst_Buff_Mark",
-                  "target": "Self"
-                }
-              ]
-            }
-          ],
-          "onAdded": [
-            {
-              "$type": "SendEffectTrigger",
-              "parameter": "Die",
-              "effectPattern": "Eff_Avatar_Girl_Pole_Yunjin_ElementalBurst_Buff",
-              "attachPoint": "",
-              "doOffStage": true
-            }
-          ],
-          "elementDurability": 100.0,
-          "modifierName": "",
-          "AIHNJLDFEGJ": 0.0
-        },
-        "Avatar_Yunjin_ElementalBurst_Reset": {
-          "onAdded": [
-            {
-              "$type": "RemoveUniqueModifier",
-              "modifierName": "UNIQUE_Avatar_Yunjin_ElementalBurst_Buff_Handler",
-              "target": "AllPlayerAvatars",
-              "doOffStage": true,
-              "predicates": [
-                {
-                  "$type": "CNFMGJJEOPM",
-                  "NJICAELBCCB": "",
-                  "JBOGOHPICML": "",
-                  "compareType": "XYZ",
-                  "CBOMLBFIPJM": 40.0,
-                  "logic": "LesserOrEqual"
-                }
-              ]
-            },
-            {
-              "$type": "RemoveUniqueModifier",
-              "modifierName": "UNIQUE_Avatar_Yunjin_Constellation_2_Buff",
-              "target": "AllPlayerAvatars",
-              "doOffStage": true,
-              "predicates": [
-                {
-                  "$type": "LCCNMKNDACG",
-                  "talentParam": "Yunjin_Constellation_2"
-                },
-                {
-                  "$type": "CNFMGJJEOPM",
-                  "NJICAELBCCB": "",
-                  "JBOGOHPICML": "",
-                  "compareType": "XYZ",
-                  "CBOMLBFIPJM": 40.0,
-                  "logic": "LesserOrEqual"
-                }
-              ]
-            }
-          ],
-          "elementDurability": 100.0,
-          "modifierName": "",
-          "AIHNJLDFEGJ": 0.0
-        },
-        "Blank": {
-          "elementDurability": 100.0,
-          "modifierName": "",
-          "AIHNJLDFEGJ": 0.0
-        }
-      },
-      "onAbilityStart": [
-        {
-          "$type": "AttachModifier",
-          "modifierName": "UNIQUE_Avatar_Yunjin_ElementalBurst_Buff_Handler",
-          "target": "AllPlayerAvatars",
-          "doOffStage": true,
-          "predicates": [
-            {
-              "$type": "CNFMGJJEOPM",
-              "NJICAELBCCB": "",
-              "JBOGOHPICML": "",
-              "compareType": "XYZ",
-              "CBOMLBFIPJM": 40.0,
-              "logic": "LesserOrEqual"
-            }
-          ]
-        },
-        {
-          "$type": "AttachModifier",
-          "modifierName": "UNIQUE_Avatar_Yunjin_Constellation_2_Buff",
-          "target": "AllPlayerAvatars",
-          "doOffStage": true,
-          "predicates": [
-            {
-              "$type": "LCCNMKNDACG",
-              "talentParam": "Yunjin_Constellation_2"
-            },
-            {
-              "$type": "CNFMGJJEOPM",
-              "NJICAELBCCB": "",
-              "JBOGOHPICML": "",
-              "compareType": "XYZ",
-              "CBOMLBFIPJM": 40.0,
-              "logic": "LesserOrEqual"
-            }
-          ]
-        }
-      ],
       "abilityMixins": [
         {
           "$type": "AttachToStateIDMixin",
-          "LJPPDIGCJMJ": "",
+          "modifierName": "Avatar_Yunjin_ElementalBurst_Reset",
           "stateIDs": [
             "Yunjin_ElementalBurst"
           ],
-          "modifierName": "Avatar_Yunjin_ElementalBurst_Reset"
+          "LJPPDIGCJMJ": ""
         }
       ],
       "abilityName": "Avatar_Yunjin_ElementalBurst_Buff",
@@ -3159,11 +2648,528 @@
         "Yunjin_PermanentSkill_2_ElementNum_Elem_3": 0.0,
         "Yunjin_PermanentSkill_2_ElementNum_Elem_4": 0.0,
         "Yunjin_ElementalBurst_Buff_AttackSpeedRatio": 0.0
-      }
+      },
+      "modifiers": {
+        "UNIQUE_Avatar_Yunjin_ElementalBurst_Buff_Handler": {
+          "duration": "Yunjin_ElementalBurst_Buff_Duration",
+          "elementDurability": 100.0,
+          "isUnique": true,
+          "modifierName": "",
+          "onAdded": [
+            {
+              "$type": "SetGlobalValue",
+              "doOffStage": true,
+              "key": "_ABILITY_Yunjin_ElementalBurst_Buff_Mark",
+              "maxValue": 0.0,
+              "minValue": 0.0,
+              "value": 0.0
+            },
+            {
+              "$type": "SetGlobalValue",
+              "doOffStage": true,
+              "key": "_ABILITY_Yunjin_ElementalBurst_Buff_Mark",
+              "maxValue": 0.0,
+              "minValue": 0.0,
+              "value": 1.0
+            },
+            {
+              "$type": "AttachModifier",
+              "doOffStage": true,
+              "modifierName": "UNIQUE_Avatar_Yunjin_ElementalBurst_Buff"
+            },
+            {
+              "$type": "ApplyModifier",
+              "doOffStage": true,
+              "modifierName": "UNIQUE_Avatar_Yunjin_ElementalBurst_Buff_VFX"
+            },
+            {
+              "$type": "AttachModifier",
+              "modifierName": "UNIQUE_Yunjin_ElementalBurst_PermanentSkill_2_ElementNum",
+              "predicates": [
+                {
+                  "$type": "ByUnlockTalentParam",
+                  "talentParam": "Yunjin_PermanentSkill_2_ElementNum"
+                }
+              ],
+              "target": "Caster"
+            },
+            {
+              "$type": "AttachModifier",
+              "doOffStage": true,
+              "modifierName": "UNIQUE_Yunjin_Constellation_6",
+              "predicates": [
+                {
+                  "$type": "ByUnlockTalentParam",
+                  "talentParam": "Yunjin_Constellation_6"
+                }
+              ]
+            }
+          ],
+          "onRemoved": [
+            {
+              "$type": "ApplyModifier",
+              "doOffStage": true,
+              "modifierName": "Avatar_Yunjin_Buff_VFX_Remover"
+            },
+            {
+              "$type": "SetGlobalValue",
+              "doOffStage": true,
+              "key": "_ABILITY_Yunjin_ElementalBurst_Buff_Mark",
+              "maxValue": 0.0,
+              "minValue": 0.0,
+              "value": 0.0
+            }
+          ],
+          "AIHNJLDFEGJ": 0.0
+        },
+        "UNIQUE_Avatar_Yunjin_ElementalBurst_Buff": {
+          "elementDurability": 100.0,
+          "isUnique": true,
+          "modifierMixins": [
+            {
+              "$type": "ModifyDamageCountMixin",
+              "attackTags": [
+                "NormalAttack_01",
+                "NormalAttack_02",
+                "NormalAttack_03",
+                "NormalAttack_04",
+                "NormalAttack_05",
+                "NormalAttack_06"
+              ],
+              "damageExtra": [
+                "FIGHT_PROP_CUR_DEFENSE",
+                "Yunjin_ElementalBurst_Buff_ExtraDamage_DefRatio",
+                "MUL",
+                "FIGHT_PROP_CUR_DEFENSE",
+                "Yunjin_ElementalBurst_Buff_ExtraDamage_ElementNum",
+                "MUL",
+                "ADD"
+              ],
+              "damagePercentageRatio": 0.0,
+              "maxCountActions": [
+                {
+                  "$type": "RemoveUniqueModifier",
+                  "doOffStage": true,
+                  "modifierName": "UNIQUE_Yunjin_ElementalBurst_PermanentSkill_2_ElementNum"
+                },
+                {
+                  "$type": "RemoveUniqueModifier",
+                  "doOffStage": true,
+                  "modifierName": "UNIQUE_Yunjin_Constellation_6"
+                },
+                {
+                  "$type": "ApplyModifier",
+                  "doOffStage": true,
+                  "modifierName": "Avatar_Yunjin_Buff_VFX_Remover"
+                }
+              ],
+              "maxModifyCount": 30.0,
+              "predicates": [
+                {
+                  "$type": "ByEntityTypes",
+                  "entityTypes": [
+                    "Monster"
+                  ]
+                },
+                {
+                  "$type": "ByTargetGlobalValue",
+                  "compareType": "NoneOrEqual",
+                  "key": "_ANIMAL_ENTITY_TYPE",
+                  "value": 0.0
+                }
+              ],
+              "HHHCBHOGLCH": ""
+            }
+          ],
+          "modifierName": "",
+          "AIHNJLDFEGJ": 0.0
+        },
+        "UNIQUE_Avatar_Yunjin_ElementalBurst_Buff_VFX": {
+          "elementDurability": 100.0,
+          "isUnique": true,
+          "modifierName": "",
+          "onAdded": [
+            {
+              "$type": "AttachEffect",
+              "doOffStage": true,
+              "effectPattern": "Eff_Avatar_Girl_Pole_Yunjin_ElementalBurst_Buff",
+              "effectTempleteID": -1.0,
+              "scale": 1.0,
+              "ILLLPEOODKP": ""
+            }
+          ],
+          "AIHNJLDFEGJ": 0.0
+        },
+        "UNIQUE_Yunjin_ElementalBurst_PermanentSkill_2_ElementNum": {
+          "elementDurability": 100.0,
+          "isUnique": true,
+          "modifierName": "",
+          "onAdded": [
+            {
+              "$type": "SetGlobalValue",
+              "doOffStage": true,
+              "key": "_ABILITY_Yunjin_PermanentSkill_2_ElementNum",
+              "maxValue": 0.0,
+              "minValue": 0.0,
+              "value": 0.0
+            }
+          ],
+          "onThinkInterval": [
+            {
+              "$type": "SetGlobalValue",
+              "doOffStage": true,
+              "key": "_ABILITY_Yunjin_PermanentSkill_2_ElementNum",
+              "maxValue": 0.0,
+              "minValue": 0.0,
+              "value": 0.0
+            },
+            {
+              "$type": "AddGlobalValue",
+              "doOffStage": true,
+              "key": "_ABILITY_Yunjin_PermanentSkill_2_ElementNum",
+              "maxValue": 4.0,
+              "minValue": 0.0,
+              "predicates": [
+                {
+                  "$type": "ByBigTeamHasElementType",
+                  "elementType": "Fire",
+                  "logic": "GreaterOrEqual",
+                  "number": 1
+                }
+              ],
+              "useLimitRange": true,
+              "value": 1.0
+            },
+            {
+              "$type": "AddGlobalValue",
+              "doOffStage": true,
+              "key": "_ABILITY_Yunjin_PermanentSkill_2_ElementNum",
+              "maxValue": 4.0,
+              "minValue": 0.0,
+              "predicates": [
+                {
+                  "$type": "ByBigTeamHasElementType",
+                  "elementType": "Water",
+                  "logic": "GreaterOrEqual",
+                  "number": 1
+                }
+              ],
+              "useLimitRange": true,
+              "value": 1.0
+            },
+            {
+              "$type": "AddGlobalValue",
+              "doOffStage": true,
+              "key": "_ABILITY_Yunjin_PermanentSkill_2_ElementNum",
+              "maxValue": 4.0,
+              "minValue": 0.0,
+              "predicates": [
+                {
+                  "$type": "ByBigTeamHasElementType",
+                  "elementType": "Electric",
+                  "logic": "GreaterOrEqual",
+                  "number": 1
+                }
+              ],
+              "useLimitRange": true,
+              "value": 1.0
+            },
+            {
+              "$type": "AddGlobalValue",
+              "doOffStage": true,
+              "key": "_ABILITY_Yunjin_PermanentSkill_2_ElementNum",
+              "maxValue": 4.0,
+              "minValue": 0.0,
+              "predicates": [
+                {
+                  "$type": "ByBigTeamHasElementType",
+                  "elementType": "Rock",
+                  "logic": "GreaterOrEqual",
+                  "number": 1
+                }
+              ],
+              "useLimitRange": true,
+              "value": 1.0
+            },
+            {
+              "$type": "AddGlobalValue",
+              "doOffStage": true,
+              "key": "_ABILITY_Yunjin_PermanentSkill_2_ElementNum",
+              "maxValue": 4.0,
+              "minValue": 0.0,
+              "predicates": [
+                {
+                  "$type": "ByBigTeamHasElementType",
+                  "elementType": "Wind",
+                  "logic": "GreaterOrEqual",
+                  "number": 1
+                }
+              ],
+              "useLimitRange": true,
+              "value": 1.0
+            },
+            {
+              "$type": "AddGlobalValue",
+              "doOffStage": true,
+              "key": "_ABILITY_Yunjin_PermanentSkill_2_ElementNum",
+              "maxValue": 4.0,
+              "minValue": 0.0,
+              "predicates": [
+                {
+                  "$type": "ByBigTeamHasElementType",
+                  "elementType": "Grass",
+                  "logic": "GreaterOrEqual",
+                  "number": 1
+                }
+              ],
+              "useLimitRange": true,
+              "value": 1.0
+            },
+            {
+              "$type": "AddGlobalValue",
+              "doOffStage": true,
+              "key": "_ABILITY_Yunjin_PermanentSkill_2_ElementNum",
+              "maxValue": 4.0,
+              "minValue": 0.0,
+              "predicates": [
+                {
+                  "$type": "ByBigTeamHasElementType",
+                  "elementType": "Ice",
+                  "logic": "GreaterOrEqual",
+                  "number": 1
+                }
+              ],
+              "useLimitRange": true,
+              "value": 1.0
+            },
+            {
+              "$type": "SetOverrideMapValue",
+              "abilityName": "",
+              "doOffStage": true,
+              "maxValue": 0.0,
+              "minValue": 0.0,
+              "overrideMapKey": "Yunjin_ElementalBurst_Buff_ExtraDamage_ElementNum",
+              "predicates": [
+                {
+                  "$type": "ByTargetGlobalValue",
+                  "key": "_ABILITY_Yunjin_PermanentSkill_2_ElementNum",
+                  "value": 1.0
+                }
+              ],
+              "value": "Yunjin_PermanentSkill_2_ElementNum_Elem_1"
+            },
+            {
+              "$type": "SetOverrideMapValue",
+              "abilityName": "",
+              "doOffStage": true,
+              "maxValue": 0.0,
+              "minValue": 0.0,
+              "overrideMapKey": "Yunjin_ElementalBurst_Buff_ExtraDamage_ElementNum",
+              "predicates": [
+                {
+                  "$type": "ByTargetGlobalValue",
+                  "key": "_ABILITY_Yunjin_PermanentSkill_2_ElementNum",
+                  "value": 2.0
+                }
+              ],
+              "value": "Yunjin_PermanentSkill_2_ElementNum_Elem_2"
+            },
+            {
+              "$type": "SetOverrideMapValue",
+              "abilityName": "",
+              "doOffStage": true,
+              "maxValue": 0.0,
+              "minValue": 0.0,
+              "overrideMapKey": "Yunjin_ElementalBurst_Buff_ExtraDamage_ElementNum",
+              "predicates": [
+                {
+                  "$type": "ByTargetGlobalValue",
+                  "key": "_ABILITY_Yunjin_PermanentSkill_2_ElementNum",
+                  "value": 3.0
+                }
+              ],
+              "value": "Yunjin_PermanentSkill_2_ElementNum_Elem_3"
+            },
+            {
+              "$type": "SetOverrideMapValue",
+              "abilityName": "",
+              "doOffStage": true,
+              "maxValue": 0.0,
+              "minValue": 0.0,
+              "overrideMapKey": "Yunjin_ElementalBurst_Buff_ExtraDamage_ElementNum",
+              "predicates": [
+                {
+                  "$type": "ByTargetGlobalValue",
+                  "key": "_ABILITY_Yunjin_PermanentSkill_2_ElementNum",
+                  "value": 4.0
+                }
+              ],
+              "value": "Yunjin_PermanentSkill_2_ElementNum_Elem_4"
+            }
+          ],
+          "thinkInterval": 0.5,
+          "AIHNJLDFEGJ": 0.0
+        },
+        "UNIQUE_Yunjin_Constellation_6": {
+          "elementDurability": 100.0,
+          "isLimitedProperties": true,
+          "isUnique": true,
+          "modifierName": "",
+          "properties": {
+            "Animator_AttackSpeedRatio": "Yunjin_ElementalBurst_Buff_AttackSpeedRatio"
+          },
+          "AIHNJLDFEGJ": 0.0
+        },
+        "UNIQUE_Avatar_Yunjin_Constellation_2_Buff": {
+          "duration": "Yunjin_Constellation_2_Buff_Duration",
+          "elementDurability": 100.0,
+          "isLimitedProperties": true,
+          "isUnique": true,
+          "modifierMixins": [
+            {
+              "$type": "ModifyDamageMixin",
+              "attackTags": [
+                "NormalAttack_01",
+                "NormalAttack_02",
+                "NormalAttack_03",
+                "NormalAttack_04",
+                "NormalAttack_05",
+                "NormalAttack_06"
+              ],
+              "damagePercentageRatio": "Yunjin_Constellation_2_Buff_DamagePercentageRatio"
+            }
+          ],
+          "modifierName": "",
+          "state": "AttackUp",
+          "AIHNJLDFEGJ": 0.0
+        },
+        "Avatar_Yunjin_Buff_VFX_Remover": {
+          "duration": 0.4,
+          "elementDurability": 100.0,
+          "modifierName": "",
+          "onAdded": [
+            {
+              "$type": "SendEffectTrigger",
+              "attachPoint": "",
+              "doOffStage": true,
+              "effectPattern": "Eff_Avatar_Girl_Pole_Yunjin_ElementalBurst_Buff",
+              "parameter": "Die"
+            }
+          ],
+          "onRemoved": [
+            {
+              "$type": "RemoveUniqueModifier",
+              "doOffStage": true,
+              "modifierName": "UNIQUE_Avatar_Yunjin_ElementalBurst_Buff_VFX",
+              "predicates": [
+                {
+                  "$type": "ByTargetGlobalValue",
+                  "key": "_ABILITY_Yunjin_ElementalBurst_Buff_Mark",
+                  "target": "Self",
+                  "value": 0.0
+                }
+              ]
+            }
+          ],
+          "AIHNJLDFEGJ": 0.0
+        },
+        "Avatar_Yunjin_ElementalBurst_Reset": {
+          "elementDurability": 100.0,
+          "modifierName": "",
+          "onAdded": [
+            {
+              "$type": "RemoveUniqueModifier",
+              "doOffStage": true,
+              "modifierName": "UNIQUE_Avatar_Yunjin_ElementalBurst_Buff_Handler",
+              "predicates": [
+                {
+                  "$type": "ByTargetPositionToSelfPosition",
+                  "compareType": "XYZ",
+                  "logic": "LesserOrEqual",
+                  "value": 40.0,
+                  "JBOGOHPICML": "",
+                  "NJICAELBCCB": ""
+                }
+              ],
+              "target": "AllPlayerAvatars"
+            },
+            {
+              "$type": "RemoveUniqueModifier",
+              "doOffStage": true,
+              "modifierName": "UNIQUE_Avatar_Yunjin_Constellation_2_Buff",
+              "predicates": [
+                {
+                  "$type": "ByUnlockTalentParam",
+                  "talentParam": "Yunjin_Constellation_2"
+                },
+                {
+                  "$type": "ByTargetPositionToSelfPosition",
+                  "compareType": "XYZ",
+                  "logic": "LesserOrEqual",
+                  "value": 40.0,
+                  "JBOGOHPICML": "",
+                  "NJICAELBCCB": ""
+                }
+              ],
+              "target": "AllPlayerAvatars"
+            }
+          ],
+          "AIHNJLDFEGJ": 0.0
+        },
+        "Blank": {
+          "elementDurability": 100.0,
+          "modifierName": "",
+          "AIHNJLDFEGJ": 0.0
+        }
+      },
+      "onAbilityStart": [
+        {
+          "$type": "AttachModifier",
+          "doOffStage": true,
+          "modifierName": "UNIQUE_Avatar_Yunjin_ElementalBurst_Buff_Handler",
+          "predicates": [
+            {
+              "$type": "ByTargetPositionToSelfPosition",
+              "compareType": "XYZ",
+              "logic": "LesserOrEqual",
+              "value": 40.0,
+              "JBOGOHPICML": "",
+              "NJICAELBCCB": ""
+            }
+          ],
+          "target": "AllPlayerAvatars"
+        },
+        {
+          "$type": "AttachModifier",
+          "doOffStage": true,
+          "modifierName": "UNIQUE_Avatar_Yunjin_Constellation_2_Buff",
+          "predicates": [
+            {
+              "$type": "ByUnlockTalentParam",
+              "talentParam": "Yunjin_Constellation_2"
+            },
+            {
+              "$type": "ByTargetPositionToSelfPosition",
+              "compareType": "XYZ",
+              "logic": "LesserOrEqual",
+              "value": 40.0,
+              "JBOGOHPICML": "",
+              "NJICAELBCCB": ""
+            }
+          ],
+          "target": "AllPlayerAvatars"
+        }
+      ]
     }
   },
   {
     "Default": {
+      "abilityName": "Avatar_Yunjin_Constellation_4",
+      "abilitySpecials": {
+        "Yunjin_CrystallizeAddDef_Duration": 0.0,
+        "Yunjin_CrystallizeAddDef_DefRatio": 0.0
+      },
+      "isDynamicAbility": true,
       "modifiers": {
         "Yunjin_CrystallizeAddDef_Handler": {
           "elementDurability": 100.0,
@@ -3173,14 +3179,14 @@
               "actions": [
                 {
                   "$type": "AttachModifier",
-                  "modifierName": "UNIQUE_Yunjin_CrystallizeAddDef",
-                  "doOffStage": true
+                  "doOffStage": true,
+                  "modifierName": "UNIQUE_Yunjin_CrystallizeAddDef"
                 }
               ],
               "entityTypes": [
                 "Monster"
               ],
-              "IGAMNNAADJB": [
+              "reactionTypes": [
                 "CrystallizeWater",
                 "CrystallizeElectric",
                 "CrystallizeIce",
@@ -3194,29 +3200,23 @@
         },
         "UNIQUE_Yunjin_CrystallizeAddDef": {
           "duration": "Yunjin_CrystallizeAddDef_Duration",
+          "elementDurability": 100.0,
           "isLimitedProperties": true,
+          "isUnique": true,
+          "modifierName": "",
           "properties": {
             "Actor_DefenceRatio": "Yunjin_CrystallizeAddDef_DefRatio"
           },
-          "elementDurability": 100.0,
           "state": "DefenseUp",
-          "modifierName": "",
-          "isUnique": true,
           "AIHNJLDFEGJ": 0.0
         }
       },
-      "abilityName": "Avatar_Yunjin_Constellation_4",
-      "isDynamicAbility": true,
       "onAdded": [
         {
           "$type": "AttachModifier",
           "modifierName": "Yunjin_CrystallizeAddDef_Handler"
         }
-      ],
-      "abilitySpecials": {
-        "Yunjin_CrystallizeAddDef_Duration": 0.0,
-        "Yunjin_CrystallizeAddDef_DefRatio": 0.0
-      }
+      ]
     }
   }
 ]

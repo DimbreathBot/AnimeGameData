@@ -1,16 +1,18 @@
 [
   {
     "Default": {
+      "abilityName": "SceneObj_Photoshoot_FindStrange",
+      "isDynamicAbility": true,
       "modifiers": {
         "GV_Listener": {
           "elementDurability": 100.0,
           "modifierMixins": [
             {
               "$type": "AttachModifierToGlobalValueMixin",
+              "globalValueKey": "GV_StrangeFound",
               "modifierNameSteps": [
                 "PhotoTaken"
               ],
-              "globalValueKey": "GV_StrangeFound",
               "valueSteps": [
                 0.5,
                 1.5
@@ -22,23 +24,21 @@
           "AIHNJLDFEGJ": 0.0
         },
         "PhotoTaken": {
+          "elementDurability": 100.0,
+          "modifierName": "",
           "onAdded": [
             {
               "$type": "ServerLuaCall",
+              "funcName": "SLC_FindStrange",
+              "luaCallType": "FromGroup",
               "param1": 0.0,
               "param2": 0.0,
-              "funcName": "SLC_FindStrange",
-              "AHCNJKIEMPP": 0.0,
-              "luaCallType": "FromGroup"
+              "param3": 0.0
             }
           ],
-          "elementDurability": 100.0,
-          "modifierName": "",
           "AIHNJLDFEGJ": 0.0
         }
       },
-      "abilityName": "SceneObj_Photoshoot_FindStrange",
-      "isDynamicAbility": true,
       "onAdded": [
         {
           "$type": "ApplyModifier",
@@ -47,9 +47,9 @@
         {
           "$type": "SetGlobalValue",
           "key": "GV_StrangeFound",
-          "minValue": 0.0,
           "maxValue": 0.0,
-          "CBOMLBFIPJM": 0.0
+          "minValue": 0.0,
+          "value": 0.0
         }
       ]
     }
@@ -57,34 +57,51 @@
   {
     "Default": {
       "abilityName": "SceneObj_LevelCurveEntrance",
-      "PFJMEMFDGOH": [
+      "onFieldEnter": [
         {
           "$type": "Predicated",
           "successActions": [
             {
               "$type": "ServerLuaCall",
+              "funcName": "SLC_StartCurve",
+              "luaCallType": "FromGroup",
               "param1": 0.0,
               "param2": 0.0,
-              "funcName": "SLC_StartCurve",
-              "AHCNJKIEMPP": 0.0,
-              "luaCallType": "FromGroup"
+              "param3": 0.0
             }
           ],
+          "target": "Target",
           "targetPredicates": [
             {
-              "$type": "DEOFBICNFHF",
+              "$type": "ByEntityTypes",
               "entityTypes": [
                 "Avatar"
               ]
             }
-          ],
-          "target": "Target"
+          ]
         }
       ]
     }
   },
   {
     "Default": {
+      "abilityMixins": [
+        {
+          "$type": "AttachModifierToGlobalValueMixin",
+          "globalValueKey": "GV_IsInCurve",
+          "globalValueTarget": "Team",
+          "modifierNameSteps": [
+            "SetCurveEntranceData_Rot"
+          ],
+          "valueSteps": [
+            0.5,
+            1.5
+          ],
+          "DEFOFMOIAAI": true
+        }
+      ],
+      "abilityName": "DynamicAbility_SetCurveEntranceData",
+      "isDynamicAbility": true,
       "modifiers": {
         "SetCurveEntranceData_Rot": {
           "elementDurability": 100.0,
@@ -92,22 +109,22 @@
             {
               "$type": "SpawnCameraStateMixin",
               "DGPDJMGNEHP": {
-                "BJFFNFAIGBM": 2,
-                "NAOIPIIJHAJ": 21,
                 "duration": 2.0,
-                "AKLMKDHGNAD": 2
+                "AKLMKDHGNAD": 2,
+                "BJFFNFAIGBM": 2,
+                "NAOIPIIJHAJ": 21
               },
               "AFDENKPAECI": {
                 "$type": "PPNIODHBMIC",
-                "FNIDPIDGHAF": 0.75,
-                "EJMHJALFMOG": 0.0,
-                "OPFFBOGCKHE": false,
-                "FPBINHDGKBM": 0.07,
                 "fov": 55.0,
-                "PMMAHBBFEPE": 0.5,
+                "BHIEPGKBNIL": 0.0,
+                "EJMHJALFMOG": 0.0,
                 "EAABOPNFALF": 0.01,
-                "IDMHDDKAHPE": true,
-                "BHIEPGKBNIL": 0.0
+                "FPBINHDGKBM": 0.07,
+                "PMMAHBBFEPE": 0.5,
+                "FNIDPIDGHAF": 0.75,
+                "OPFFBOGCKHE": false,
+                "IDMHDDKAHPE": true
               }
             },
             {
@@ -123,11 +140,11 @@
           "modifierMixins": [
             {
               "$type": "LevelCurveMoveGVMixin",
-              "BJALDKADHCC": true,
-              "MPDDBCKMOAP": "GV_IsInTempCurve",
+              "speed": "GV_CurveSpeed",
               "tag": "",
-              "CIFADBDOAFI": "GV_CurveSpeed",
-              "KANDAGINNDK": "GV_IsInCurve"
+              "BJALDKADHCC": true,
+              "KANDAGINNDK": "GV_IsInCurve",
+              "MPDDBCKMOAP": "GV_IsInTempCurve"
             }
           ],
           "modifierName": "",
@@ -135,28 +152,11 @@
         },
         "DenyLockOn": {
           "elementDurability": 100.0,
-          "state": "DenyLockOn",
           "modifierName": "",
+          "state": "DenyLockOn",
           "AIHNJLDFEGJ": 0.0
         }
       },
-      "abilityMixins": [
-        {
-          "$type": "AttachModifierToGlobalValueMixin",
-          "modifierNameSteps": [
-            "SetCurveEntranceData_Rot"
-          ],
-          "globalValueTarget": "Team",
-          "globalValueKey": "GV_IsInCurve",
-          "valueSteps": [
-            0.5,
-            1.5
-          ],
-          "DEFOFMOIAAI": true
-        }
-      ],
-      "abilityName": "DynamicAbility_SetCurveEntranceData",
-      "isDynamicAbility": true,
       "onAdded": [
         {
           "$type": "AttachModifier",
@@ -166,86 +166,16 @@
         {
           "$type": "SetGlobalValue",
           "key": "GV_IsInCurve",
-          "minValue": 0.0,
           "maxValue": 0.0,
-          "CBOMLBFIPJM": 0.0,
-          "target": "Team"
+          "minValue": 0.0,
+          "target": "Team",
+          "value": 0.0
         }
       ]
     }
   },
   {
     "Default": {
-      "modifiers": {
-        "Opeartor_Recover": {
-          "onReconnect": [
-            {
-              "$type": "ChangeGadgetState"
-            }
-          ],
-          "elementDurability": 100.0,
-          "modifierName": "",
-          "AIHNJLDFEGJ": 0.0
-        },
-        "Opeartor_Show": {
-          "onRemoved": [
-            {
-              "$type": "FireEffect",
-              "effectPattern": "Eff_SceneObj_CameraActiveOperator_01_Disappear",
-              "scale": 1.0,
-              "ILLLPEOODKP": "",
-              "effectTempleteID": -1.0
-            },
-            {
-              "$type": "HideUIBillBoard",
-              "hide": true
-            }
-          ],
-          "onAdded": [
-            {
-              "$type": "AttachEffect",
-              "ILLLPEOODKP": "",
-              "scale": 1.0,
-              "effectPattern": "Eff_SceneObj_CameraActiveOperator_01",
-              "effectTempleteID": -1.0
-            },
-            {
-              "$type": "HideUIBillBoard"
-            }
-          ],
-          "elementDurability": 100.0,
-          "modifierName": "",
-          "AIHNJLDFEGJ": 0.0
-        },
-        "Opeartor_Hide": {
-          "elementDurability": 100.0,
-          "modifierName": "",
-          "AIHNJLDFEGJ": 0.0
-        },
-        "UIPage_Open": {
-          "duration": 1.0,
-          "onAdded": [
-            {
-              "$type": "ChangeGadgetState",
-              "ANIHOKMEKHK": 201
-            }
-          ],
-          "elementDurability": 100.0,
-          "modifierName": "",
-          "AIHNJLDFEGJ": 0.0
-        },
-        "UIPage_Close": {
-          "duration": 1.0,
-          "onAdded": [
-            {
-              "$type": "ChangeGadgetState"
-            }
-          ],
-          "elementDurability": 100.0,
-          "modifierName": "",
-          "AIHNJLDFEGJ": 0.0
-        }
-      },
       "abilityMixins": [
         {
           "$type": "AttachToGadgetStateMixin",
@@ -253,8 +183,8 @@
         },
         {
           "$type": "AttachToGadgetStateMixin",
-          "modifierName": "Opeartor_Hide",
-          "gadgetState": 201
+          "gadgetState": 201,
+          "modifierName": "Opeartor_Hide"
         },
         {
           "$type": "UIInteractMixin",
@@ -264,7 +194,7 @@
               "modifierName": "UIPage_Open"
             }
           ],
-          "uimessageid": "OpenPage"
+          "uiMessageId": "OpenPage"
         },
         {
           "$type": "UIInteractMixin",
@@ -274,10 +204,80 @@
               "modifierName": "UIPage_Close"
             }
           ],
-          "uimessageid": "ClosePage"
+          "uiMessageId": "ClosePage"
         }
       ],
       "abilityName": "SceneObj_Area_Common_Property_Ani_Prop_PaintingRepair_02",
+      "modifiers": {
+        "Opeartor_Recover": {
+          "elementDurability": 100.0,
+          "modifierName": "",
+          "onReconnect": [
+            {
+              "$type": "ChangeGadgetState"
+            }
+          ],
+          "AIHNJLDFEGJ": 0.0
+        },
+        "Opeartor_Show": {
+          "elementDurability": 100.0,
+          "modifierName": "",
+          "onAdded": [
+            {
+              "$type": "AttachEffect",
+              "effectPattern": "Eff_SceneObj_CameraActiveOperator_01",
+              "effectTempleteID": -1.0,
+              "scale": 1.0,
+              "ILLLPEOODKP": ""
+            },
+            {
+              "$type": "HideUIBillBoard"
+            }
+          ],
+          "onRemoved": [
+            {
+              "$type": "FireEffect",
+              "effectPattern": "Eff_SceneObj_CameraActiveOperator_01_Disappear",
+              "effectTempleteID": -1.0,
+              "scale": 1.0,
+              "ILLLPEOODKP": ""
+            },
+            {
+              "$type": "HideUIBillBoard",
+              "hide": true
+            }
+          ],
+          "AIHNJLDFEGJ": 0.0
+        },
+        "Opeartor_Hide": {
+          "elementDurability": 100.0,
+          "modifierName": "",
+          "AIHNJLDFEGJ": 0.0
+        },
+        "UIPage_Open": {
+          "duration": 1.0,
+          "elementDurability": 100.0,
+          "modifierName": "",
+          "onAdded": [
+            {
+              "$type": "ChangeGadgetState",
+              "state": 201
+            }
+          ],
+          "AIHNJLDFEGJ": 0.0
+        },
+        "UIPage_Close": {
+          "duration": 1.0,
+          "elementDurability": 100.0,
+          "modifierName": "",
+          "onAdded": [
+            {
+              "$type": "ChangeGadgetState"
+            }
+          ],
+          "AIHNJLDFEGJ": 0.0
+        }
+      },
       "onAdded": [
         {
           "$type": "AttachModifier",
@@ -288,35 +288,19 @@
   },
   {
     "Default": {
-      "modifiers": {
-        "SceneObj_Area_Common_Property_Ani_Prop_FlawFinding_Static": {
-          "onAdded": [
-            {
-              "$type": "AttachEffect",
-              "ILLLPEOODKP": "",
-              "scale": 1.0,
-              "effectPattern": "Eff_SceneObj_CameraActiveOperator_01",
-              "effectTempleteID": -1.0
-            }
-          ],
-          "elementDurability": 100.0,
-          "modifierName": "",
-          "AIHNJLDFEGJ": 0.0
-        }
-      },
       "abilityMixins": [
         {
           "$type": "WidgetMpSupportMixin",
-          "CMEPEHIJMPL": [
+          "succActions": [
             {
               "$type": "PushInterActionByConfigPath",
               "cfgPath": "UI/open_activity_FlawPhotograph_1",
               "predicates": [
                 {
-                  "$type": "EOFDCELPGFO",
-                  "CBOMLBFIPJM": 1.0,
+                  "$type": "ByTargetGlobalValue",
                   "key": "SGV_Level",
-                  "target": "Self"
+                  "target": "Self",
+                  "value": 1.0
                 }
               ]
             },
@@ -325,10 +309,10 @@
               "cfgPath": "UI/open_activity_FlawPhotograph_2",
               "predicates": [
                 {
-                  "$type": "EOFDCELPGFO",
-                  "CBOMLBFIPJM": 2.0,
+                  "$type": "ByTargetGlobalValue",
                   "key": "SGV_Level",
-                  "target": "Self"
+                  "target": "Self",
+                  "value": 2.0
                 }
               ]
             },
@@ -337,10 +321,10 @@
               "cfgPath": "UI/open_activity_FlawPhotograph_3",
               "predicates": [
                 {
-                  "$type": "EOFDCELPGFO",
-                  "CBOMLBFIPJM": 3.0,
+                  "$type": "ByTargetGlobalValue",
                   "key": "SGV_Level",
-                  "target": "Self"
+                  "target": "Self",
+                  "value": 3.0
                 }
               ]
             }
@@ -348,6 +332,22 @@
         }
       ],
       "abilityName": "SceneObj_Area_Common_Property_Ani_Prop_FlawFinding_Ability",
+      "modifiers": {
+        "SceneObj_Area_Common_Property_Ani_Prop_FlawFinding_Static": {
+          "elementDurability": 100.0,
+          "modifierName": "",
+          "onAdded": [
+            {
+              "$type": "AttachEffect",
+              "effectPattern": "Eff_SceneObj_CameraActiveOperator_01",
+              "effectTempleteID": -1.0,
+              "scale": 1.0,
+              "ILLLPEOODKP": ""
+            }
+          ],
+          "AIHNJLDFEGJ": 0.0
+        }
+      },
       "onAdded": [
         {
           "$type": "AttachModifier",
@@ -358,13 +358,13 @@
   },
   {
     "Default": {
+      "abilityName": "SceneObj_Area_Common_Property_Photoshoot_FindStrange",
       "onAbilityStart": [
         {
           "$type": "ShowReminder",
           "id": 404462
         }
-      ],
-      "abilityName": "SceneObj_Area_Common_Property_Photoshoot_FindStrange"
+      ]
     }
   }
 ]

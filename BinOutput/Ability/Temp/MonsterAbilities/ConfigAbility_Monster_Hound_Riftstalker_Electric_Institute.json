@@ -1,65 +1,296 @@
 [
   {
     "Default": {
-      "modifiers": {
-        "ResetPos_Logic": {
-          "duration": 1.0,
-          "onRemoved": [
+      "abilityMixins": [
+        {
+          "$type": "AttachModifierToHPPercentMixin",
+          "modifierNameSteps": [
+            "Stage1",
+            "Stage2"
+          ],
+          "valueSteps": [
+            [
+              1.0,
+              "total_damage_count",
+              "DIV"
+            ]
+          ]
+        },
+        {
+          "$type": "DoActionByAnimatorStateIDMixin",
+          "enterActions": [
             {
-              "$type": "Predicated",
-              "successActions": [
-                {
-                  "$type": "FireEffect",
-                  "effectPattern": "Eff_Monster_Riftstalker_Electric_Strike_BS",
-                  "scale": 1.0,
-                  "ILLLPEOODKP": "",
-                  "effectTempleteID": -1.0
+              "$type": "TriggerBullet",
+              "born": {
+                "$type": "ConfigBornByAttachPoint",
+                "attachPointName": "BulletAttachPoint",
+                "direction": {
+                  "$type": "ConfigDirectionByAttackTarget",
+                  "startPoint": ""
                 },
-                {
-                  "$type": "DoBlinkByGlobalPos",
-                  "positionKey": "_STANDBY_POS",
-                  "directionKey": ""
-                },
-                {
-                  "$type": "FireEffect",
-                  "effectPattern": "Eff_Monster_Riftstalker_Electric_Strike_BS",
-                  "scale": 1.0,
-                  "born": {
-                    "$type": "LKIBKKFEOLJ",
-                    "positionKey": "_STANDBY_POS",
-                    "directionKey": ""
-                  },
-                  "ILLLPEOODKP": "",
-                  "effectTempleteID": -1.0
-                }
-              ],
+                "useRotation": true
+              },
+              "bulletID": 42205005
+            },
+            {
+              "$type": "AddGlobalValue",
+              "key": "Riftstalker_ShockWave_Count",
+              "maxValue": 0.0,
+              "minValue": 0.0,
+              "value": 1.0
+            },
+            {
+              "$type": "ApplyModifier",
+              "modifierName": "PaimonHint",
               "predicates": [
                 {
-                  "$type": "HPANBNKJCMI",
-                  "CBOMLBFIPJM": 3.0,
-                  "positionKey": "_STANDBY_POS",
-                  "target": "Self"
+                  "$type": "ByTargetGlobalValue",
+                  "key": "Riftstalker_ShockWave_Count",
+                  "value": 2.0
+                },
+                {
+                  "$type": "ByTargetGlobalValue",
+                  "compareType": "NoneOrEqual",
+                  "key": "PLMD_Boss_Mark",
+                  "value": 0.0
                 }
               ]
             }
           ],
+          "stateIDs": [
+            "ShockWave"
+          ],
+          "LJPPDIGCJMJ": ""
+        },
+        {
+          "$type": "SteerAttackTraceToPosMixin",
+          "angularSpeed": 250.0,
+          "attackTrigger": "",
+          "endNormalizedTime": 0.5,
+          "globalPosKey": "_STANDBY_POS",
+          "steerStateIDs": [
+            "ResetPos"
+          ],
+          "IJMBPGKKOJD": 180.0,
+          "AAPNADMFCNO": true,
+          "LJPPDIGCJMJ": ""
+        },
+        {
+          "$type": "AttachModifierToSelfGlobalValueMixin",
+          "defaultGlobalValueOnCreate": 1.0,
+          "globalValueKey": "Riftstalker_ShockWave_Count",
+          "modifierNameSteps": [
+            "UnlockStrikeAttack"
+          ],
+          "valueSteps": [
+            2.5,
+            99.0
+          ]
+        },
+        {
+          "$type": "AttachToAnimatorStateIDMixin",
+          "modifierName": "LockingTarget",
+          "stateIDs": [
+            "Strike_Loop_01"
+          ],
+          "LJPPDIGCJMJ": ""
+        },
+        {
+          "$type": "AttachToAnimatorStateIDMixin",
+          "modifierName": "LockingVFX",
+          "stateIDs": [
+            "Strike_Loop_01",
+            "Strike_AS"
+          ],
+          "LJPPDIGCJMJ": ""
+        },
+        {
+          "$type": "AttachToAnimatorStateIDMixin",
+          "modifierName": "StrikeAttackControl",
+          "stateIDs": [
+            "Strike_AS"
+          ],
+          "LJPPDIGCJMJ": ""
+        },
+        {
+          "$type": "AttachToAnimatorStateIDMixin",
+          "modifierName": "CameraControl",
+          "stateIDs": [
+            "Strike_Loop_01"
+          ],
+          "LJPPDIGCJMJ": ""
+        },
+        {
+          "$type": "AttachToAnimatorStateIDMixin",
+          "modifierName": "ResetPos_Logic",
+          "stateIDs": [
+            "ResetPos02",
+            "ResetPos03"
+          ],
+          "LJPPDIGCJMJ": ""
+        },
+        {
+          "$type": "AttachToStateIDMixin",
+          "modifierName": "CloseFly",
+          "stateIDs": [
+            "BeHitThrow"
+          ],
+          "LJPPDIGCJMJ": ""
+        },
+        {
+          "$type": "AttachModifierToSelfGlobalValueMixin",
+          "defaultGlobalValueOnCreate": 1.0,
+          "globalValueKey": "Riftstalker_BodyVFX",
+          "modifierNameSteps": [
+            "BodyVFX"
+          ],
+          "valueSteps": [
+            0.5,
+            1.5
+          ]
+        },
+        {
+          "$type": "DoActionByAnimatorStateIDMixin",
+          "enterActions": [
+            {
+              "$type": "Predicated",
+              "failActions": [
+                {
+                  "$type": "Predicated",
+                  "predicates": [
+                    {
+                      "$type": "ByAny",
+                      "predicates": [
+                        {
+                          "$type": "ByTargetGlobalValue",
+                          "key": "_STRIKE_MISS_COUNT",
+                          "value": 1.0
+                        },
+                        {
+                          "$type": "ByTargetGlobalValue",
+                          "key": "_STRIKE_MISS_COUNT",
+                          "value": 3.0
+                        }
+                      ]
+                    }
+                  ],
+                  "successActions": [
+                    {
+                      "$type": "ShowReminder",
+                      "id": 1003430050
+                    }
+                  ]
+                },
+                {
+                  "$type": "AddGlobalValue",
+                  "key": "_STRIKE_MISS_COUNT",
+                  "maxValue": 0.0,
+                  "minValue": 0.0,
+                  "value": 1.0
+                }
+              ],
+              "successActions": [
+                {
+                  "$type": "SetGlobalValueV2",
+                  "key": "_STRIKE_MISS_COUNT",
+                  "maxValue": 0.0,
+                  "minValue": 0.0,
+                  "value": 0.0
+                },
+                {
+                  "$type": "ShowReminder",
+                  "id": 1003430054
+                }
+              ],
+              "targetPredicates": [
+                {
+                  "$type": "ByTargetGlobalValue",
+                  "compareType": "MoreThanAndEqual",
+                  "key": "_STRIKE_MISS_COUNT",
+                  "value": 4.0
+                }
+              ]
+            }
+          ],
+          "stateIDs": [
+            "Howl"
+          ],
+          "LJPPDIGCJMJ": ""
+        },
+        {
+          "$type": "DoActionByAnimatorStateIDMixin",
+          "enterActions": [
+            {
+              "$type": "FixedMonsterRushMove",
+              "animatorStateIDs": [
+                "Biting"
+              ],
+              "isInAir": true,
+              "maxRange": 10.0,
+              "overrideMoveCollider": "",
+              "timeRange": 0.45,
+              "toPos": {
+                "$type": "ConfigBornBySelf",
+                "offset": {
+                  "x": 10.0
+                },
+                "onGround": true,
+                "useRotation": true,
+                "DJJOOBHDHEG": 20.0
+              }
+            }
+          ],
+          "stateIDs": [
+            "Biting"
+          ],
+          "LJPPDIGCJMJ": ""
+        },
+        {
+          "$type": "EntityNoPauseMixin"
+        }
+      ],
+      "abilityName": "Monster_Hound_Riftstalker_Institute_StateControl",
+      "abilitySpecials": {
+        "total_damage_count": 3.0
+      },
+      "modifiers": {
+        "ResetPos_Logic": {
+          "duration": 1.0,
+          "elementDurability": 100.0,
+          "modifierMixins": [
+            {
+              "$type": "CameraModifierMixin",
+              "ODEKOPPBIDO": [
+                "BossAdjust"
+              ],
+              "HKNMIFLOKGI": {
+                "$type": "DHIIIAEANGD",
+                "attachPoint": "",
+                "CGABJMFGEKD": 25.0,
+                "OLNPCFDLBEK": 600.0,
+                "KLEDMHBPLJE": 800.0,
+                "DEOFMNPFGDB": "EaseOutQuad"
+              }
+            }
+          ],
+          "modifierName": "",
           "onAdded": [
             {
               "$type": "FixedMonsterRushMove",
-              "overrideMoveCollider": "",
-              "maxRange": 40.0,
               "animatorStateIDs": [
                 "ResetPos02",
                 "ResetPos03"
               ],
-              "toPos": {
-                "$type": "LKIBKKFEOLJ",
-                "positionKey": "_STANDBY_POS",
-                "directionKey": ""
-              },
-              "OHPJIHKPEMD": true,
+              "checkAnimatorStateOnExitOnly": true,
               "isInAir": true,
-              "timeRange": 0.6
+              "maxRange": 40.0,
+              "overrideMoveCollider": "",
+              "timeRange": 0.6,
+              "toPos": {
+                "$type": "ConfigBornByGlobalValue",
+                "directionKey": "",
+                "positionKey": "_STANDBY_POS"
+              }
             },
             {
               "$type": "Predicated",
@@ -74,44 +305,67 @@
                   ],
                   "targetPredicates": [
                     {
-                      "$type": "EOFDCELPGFO",
-                      "CBOMLBFIPJM": 1.0,
-                      "key": "_PAIMON_HINT_TRIGGERED"
+                      "$type": "ByTargetGlobalValue",
+                      "key": "_PAIMON_HINT_TRIGGERED",
+                      "value": 1.0
                     }
                   ]
                 }
               ],
               "targetPredicates": [
                 {
-                  "$type": "EOFDCELPGFO",
-                  "CBOMLBFIPJM": 2.0,
+                  "$type": "ByTargetGlobalValue",
                   "compareType": "MoreThanAndEqual",
-                  "key": "_STRIKE_MISS_COUNT"
+                  "key": "_STRIKE_MISS_COUNT",
+                  "value": 2.0
                 }
               ]
             }
           ],
-          "elementDurability": 100.0,
-          "modifierMixins": [
+          "onRemoved": [
             {
-              "$type": "CameraModifierMixin",
-              "ODEKOPPBIDO": [
-                "BossAdjust"
+              "$type": "Predicated",
+              "predicates": [
+                {
+                  "$type": "ByTargetPosToGlobalPosDistance",
+                  "positionKey": "_STANDBY_POS",
+                  "target": "Self",
+                  "value": 3.0
+                }
               ],
-              "HKNMIFLOKGI": {
-                "$type": "DHIIIAEANGD",
-                "CGABJMFGEKD": 25.0,
-                "attachPoint": "",
-                "KLEDMHBPLJE": 800.0,
-                "DEOFMNPFGDB": "EaseOutQuad",
-                "OLNPCFDLBEK": 600.0
-              }
+              "successActions": [
+                {
+                  "$type": "FireEffect",
+                  "effectPattern": "Eff_Monster_Riftstalker_Electric_Strike_BS",
+                  "effectTempleteID": -1.0,
+                  "scale": 1.0,
+                  "ILLLPEOODKP": ""
+                },
+                {
+                  "$type": "DoBlinkByGlobalPos",
+                  "directionKey": "",
+                  "positionKey": "_STANDBY_POS"
+                },
+                {
+                  "$type": "FireEffect",
+                  "born": {
+                    "$type": "ConfigBornByGlobalValue",
+                    "directionKey": "",
+                    "positionKey": "_STANDBY_POS"
+                  },
+                  "effectPattern": "Eff_Monster_Riftstalker_Electric_Strike_BS",
+                  "effectTempleteID": -1.0,
+                  "scale": 1.0,
+                  "ILLLPEOODKP": ""
+                }
+              ]
             }
           ],
-          "modifierName": "",
           "AIHNJLDFEGJ": 0.0
         },
         "PaimonHint": {
+          "elementDurability": 100.0,
+          "modifierName": "",
           "onAdded": [
             {
               "$type": "ShowReminder",
@@ -119,88 +373,125 @@
             },
             {
               "$type": "SetGlobalValueV2",
-              "minValue": 0.0,
               "key": "_PAIMON_HINT_TRIGGERED",
               "maxValue": 0.0,
-              "CBOMLBFIPJM": 1.0
+              "minValue": 0.0,
+              "value": 1.0
             }
           ],
           "stacking": "Unique",
-          "elementDurability": 100.0,
-          "modifierName": "",
           "AIHNJLDFEGJ": 0.0
         },
         "BodyVFX": {
+          "elementDurability": 100.0,
+          "modifierName": "",
           "onAdded": [
             {
               "$type": "AttachEffect",
-              "ILLLPEOODKP": "",
-              "scale": 1.0,
               "effectPattern": "Eff_Monster_Riftstalker_Electric_Body",
-              "effectTempleteID": -1.0
+              "effectTempleteID": -1.0,
+              "scale": 1.0,
+              "ILLLPEOODKP": ""
             },
             {
               "$type": "AttachEffect",
-              "ILLLPEOODKP": "",
-              "scale": 1.0,
               "effectPattern": "Eff_Monster_Riftstalker_Electric_Eye",
-              "effectTempleteID": -1.0
+              "effectTempleteID": -1.0,
+              "scale": 1.0,
+              "ILLLPEOODKP": ""
             }
           ],
-          "elementDurability": 100.0,
-          "modifierName": "",
           "AIHNJLDFEGJ": 0.0
         },
         "UnlockStrikeAttack": {
-          "onRemoved": [
-            {
-              "$type": "UseSkillEliteSet"
-            }
-          ],
+          "elementDurability": 100.0,
+          "modifierName": "",
           "onAdded": [
             {
               "$type": "UseSkillEliteSet",
               "skillEliteSetID": 1
             }
           ],
-          "elementDurability": 100.0,
-          "modifierName": "",
+          "onRemoved": [
+            {
+              "$type": "UseSkillEliteSet"
+            }
+          ],
           "AIHNJLDFEGJ": 0.0
         },
         "LockingVFX": {
+          "elementDurability": 100.0,
+          "modifierName": "",
           "onAdded": [
             {
               "$type": "Predicated",
               "successActions": [
                 {
                   "$type": "AttachEffect",
-                  "ILLLPEOODKP": "",
-                  "scale": 1.0,
                   "effectPattern": "Eff_Monster_Riftstalker_Electric_Institute_WarningCircle",
                   "effectTempleteID": -1.0,
-                  "target": "TargetTeam"
+                  "scale": 1.0,
+                  "target": "TargetTeam",
+                  "ILLLPEOODKP": ""
                 }
               ],
               "target": "SelfAttackActiveTarget"
             }
           ],
-          "elementDurability": 100.0,
-          "modifierName": "",
           "AIHNJLDFEGJ": 0.0
         },
         "LockingTarget": {
-          "onRemoved": [
+          "elementDurability": 100.0,
+          "modifierMixins": [
             {
-              "$type": "SetGlobalValueV2",
-              "minValue": 0.0,
-              "key": "Riftstalker_BodyVFX",
-              "maxValue": 0.0,
-              "CBOMLBFIPJM": 1.0
+              "$type": "EntityInVisibleMixin",
+              "reason": "SelfAbility",
+              "AAHPKGHIPPG": true
             },
             {
-              "$type": "EnableAIStealthy"
+              "$type": "AttachActionToModifierMixin",
+              "onAdded": [
+                {
+                  "$type": "HideUIBillBoard",
+                  "hide": true
+                },
+                {
+                  "$type": "EnableHitBoxByName",
+                  "hitBoxNames": [
+                    "HitBox_Head",
+                    "HitBox_Body"
+                  ]
+                },
+                {
+                  "$type": "EnablePushColliderName",
+                  "pushColliderNames": [
+                    "PushCollider"
+                  ]
+                }
+              ],
+              "onRemoved": [
+                {
+                  "$type": "EnableHitBoxByName",
+                  "hitBoxNames": [
+                    "HitBox_Head",
+                    "HitBox_Body"
+                  ],
+                  "setEnable": true
+                },
+                {
+                  "$type": "EnablePushColliderName",
+                  "pushColliderNames": [
+                    "PushCollider"
+                  ],
+                  "setEnable": true
+                },
+                {
+                  "$type": "HideUIBillBoard"
+                }
+              ]
             }
           ],
+          "modifierName": "",
           "onAdded": [
             {
               "$type": "ApplyModifier",
@@ -212,128 +503,56 @@
             },
             {
               "$type": "SetGlobalValueV2",
-              "minValue": 0.0,
               "key": "Riftstalker_BodyVFX",
               "maxValue": 0.0,
-              "CBOMLBFIPJM": 0.0
+              "minValue": 0.0,
+              "value": 0.0
             },
             {
               "$type": "EnableAIStealthy",
               "enable": true
             }
           ],
-          "elementDurability": 100.0,
-          "modifierMixins": [
+          "onRemoved": [
             {
-              "$type": "EntityInVisibleMixin",
-              "AAHPKGHIPPG": true,
-              "reason": "SelfAbility"
+              "$type": "SetGlobalValueV2",
+              "key": "Riftstalker_BodyVFX",
+              "maxValue": 0.0,
+              "minValue": 0.0,
+              "value": 1.0
             },
             {
-              "$type": "AttachActionToModifierMixin",
-              "onAdded": [
-                {
-                  "$type": "HideUIBillBoard",
-                  "hide": true
-                },
-                {
-                  "$type": "EnableHitBoxByName",
-                  "MPHBGGFPBII": [
-                    "HitBox_Head",
-                    "HitBox_Body"
-                  ]
-                },
-                {
-                  "$type": "EnablePushColliderName",
-                  "EFOJFJDLLMK": [
-                    "PushCollider"
-                  ]
-                }
-              ],
-              "onRemoved": [
-                {
-                  "$type": "EnableHitBoxByName",
-                  "MPHBGGFPBII": [
-                    "HitBox_Head",
-                    "HitBox_Body"
-                  ],
-                  "setEnable": true
-                },
-                {
-                  "$type": "EnablePushColliderName",
-                  "setEnable": true,
-                  "EFOJFJDLLMK": [
-                    "PushCollider"
-                  ]
-                },
-                {
-                  "$type": "HideUIBillBoard"
-                }
-              ]
+              "$type": "EnableAIStealthy"
             }
           ],
           "state": "DenyLockOn",
-          "modifierName": "",
           "AIHNJLDFEGJ": 0.0
         },
         "GhostState": {
           "elementDurability": 100.0,
-          "state": "IsGhostToEnemy",
           "modifierName": "",
+          "state": "IsGhostToEnemy",
           "AIHNJLDFEGJ": 0.0
         },
         "PositionLockTimer": {
           "duration": 2.33,
+          "elementDurability": 100.0,
+          "modifierName": "",
           "onRemoved": [
             {
               "$type": "SetGlobalPos",
-              "setTarget": false,
-              "key": "_BLINK_ATTACK_POS",
               "born": {
-                "$type": "BOJMMDAIGMM",
+                "$type": "ConfigBornByTarget",
                 "useRotation": true
               },
+              "key": "_BLINK_ATTACK_POS",
+              "setTarget": false,
               "target": "SelfAttackActiveTarget"
             }
           ],
-          "elementDurability": 100.0,
-          "modifierName": "",
           "AIHNJLDFEGJ": 0.0
         },
         "StrikeAttackControl": {
-          "onAdded": [
-            {
-              "$type": "DoBlinkByGlobalPos",
-              "positionKey": "_BLINK_ATTACK_POS",
-              "directionKey": ""
-            },
-            {
-              "$type": "FireEffect",
-              "effectPattern": "Eff_Monster_Riftstalker_Electric_Strike_AS",
-              "scale": 1.0,
-              "born": {
-                "$type": "LKIBKKFEOLJ",
-                "positionKey": "_BLINK_ATTACK_POS",
-                "directionKey": ""
-              },
-              "ILLLPEOODKP": "",
-              "effectTempleteID": -1.0
-            },
-            {
-              "$type": "SetGlobalValueV2",
-              "minValue": 0.0,
-              "key": "Riftstalker_ShockWave_Count",
-              "maxValue": 0.0,
-              "CBOMLBFIPJM": 2.0
-            },
-            {
-              "$type": "AddGlobalValue",
-              "key": "_STRIKE_MISS_COUNT",
-              "maxValue": 0.0,
-              "minValue": 0.0,
-              "CBOMLBFIPJM": 1.0
-            }
-          ],
           "elementDurability": 100.0,
           "modifierMixins": [
             {
@@ -341,39 +560,67 @@
             }
           ],
           "modifierName": "",
+          "onAdded": [
+            {
+              "$type": "DoBlinkByGlobalPos",
+              "directionKey": "",
+              "positionKey": "_BLINK_ATTACK_POS"
+            },
+            {
+              "$type": "FireEffect",
+              "born": {
+                "$type": "ConfigBornByGlobalValue",
+                "directionKey": "",
+                "positionKey": "_BLINK_ATTACK_POS"
+              },
+              "effectPattern": "Eff_Monster_Riftstalker_Electric_Strike_AS",
+              "effectTempleteID": -1.0,
+              "scale": 1.0,
+              "ILLLPEOODKP": ""
+            },
+            {
+              "$type": "SetGlobalValueV2",
+              "key": "Riftstalker_ShockWave_Count",
+              "maxValue": 0.0,
+              "minValue": 0.0,
+              "value": 2.0
+            },
+            {
+              "$type": "AddGlobalValue",
+              "key": "_STRIKE_MISS_COUNT",
+              "maxValue": 0.0,
+              "minValue": 0.0,
+              "value": 1.0
+            }
+          ],
           "AIHNJLDFEGJ": 0.0
         },
         "CameraControl": {
-          "onRemoved": [
-            {
-              "$type": "SetLockingV3Config",
-              "enable": true,
-              "lockTrans": "",
-              "specialCameraName": "default",
-              "GHOJECGJGML": 1
-            }
-          ],
+          "elementDurability": 100.0,
+          "modifierName": "",
           "onAdded": [
             {
               "$type": "SetLockingV3Config",
               "enable": true,
+              "frameDelay": 1,
               "lockTrans": "",
-              "specialCameraName": "strikeState",
-              "GHOJECGJGML": 1
+              "specialCameraName": "strikeState"
             }
           ],
-          "elementDurability": 100.0,
-          "modifierName": "",
+          "onRemoved": [
+            {
+              "$type": "SetLockingV3Config",
+              "enable": true,
+              "frameDelay": 1,
+              "lockTrans": "",
+              "specialCameraName": "default"
+            }
+          ],
           "AIHNJLDFEGJ": 0.0
         },
         "CloseFly": {
-          "onRemoved": [
-            {
-              "$type": "SetPoseBool",
-              "CBOMLBFIPJM": true,
-              "boolID": "Fly"
-            }
-          ],
+          "elementDurability": 100.0,
+          "modifierName": "",
           "onAdded": [
             {
               "$type": "SetPoseBool",
@@ -385,20 +632,24 @@
             },
             {
               "$type": "SetGlobalValueV2",
-              "minValue": 0.0,
               "key": "_STRIKE_MISS_COUNT",
               "maxValue": 0.0,
-              "CBOMLBFIPJM": 1.0
+              "minValue": 0.0,
+              "value": 1.0
             }
           ],
-          "elementDurability": 100.0,
-          "modifierName": "",
+          "onRemoved": [
+            {
+              "$type": "SetPoseBool",
+              "boolID": "Fly",
+              "value": true
+            }
+          ],
           "AIHNJLDFEGJ": 0.0
         },
         "BeHitMonitor": {
           "elementDurability": 100.0,
           "modifierName": "",
-          "AIHNJLDFEGJ": 0.0,
           "onBeingHit": [
             {
               "$type": "Predicated",
@@ -407,8 +658,6 @@
                   "$type": "DamageByAttackValue",
                   "attackInfo": {
                     "attackProperty": {
-                      "damagePercentageRatio": 0.0,
-                      "trueDamage": true,
                       "damageExtra": [
                         "_MAX_HP",
                         "total_damage_count",
@@ -416,59 +665,64 @@
                         1.0,
                         "ADD"
                       ],
+                      "damagePercentageRatio": 0.0,
                       "elementDurability": 100.0,
-                      "ELIEOGNBGKG": 1.0,
-                      "arkheGrade": 0.0
+                      "trueDamage": true,
+                      "IIPHCFEONLK": 0.0,
+                      "ELIEOGNBGKG": 1.0
                     },
-                    "hitPattern": {
-                      "FLFCIDDNMNA": "",
-                      "onHitEffectName": "default",
-                      "hitHaltTimeScale": 0.1,
-                      "hitHaltTime": 0.05,
-                      "hitImpulseType": "LV1"
-                    },
+                    "attackTag": "",
                     "attenuationGroup": "default",
                     "attenuationTag": "",
-                    "attackTag": ""
+                    "hitPattern": {
+                      "hitHaltTime": 0.05,
+                      "hitHaltTimeScale": 0.1,
+                      "hitImpulseType": "LV1",
+                      "onHitEffectName": "default",
+                      "FLFCIDDNMNA": ""
+                    }
                   }
                 }
               ],
               "targetPredicates": [
                 {
-                  "$type": "CCHPEOBKOBO",
+                  "$type": "ByAttackTags",
                   "attackTags": [
                     "LunarisLeakArea"
                   ]
                 }
               ]
             }
-          ]
+          ],
+          "AIHNJLDFEGJ": 0.0
         },
         "Stage1": {
+          "elementDurability": 100.0,
+          "modifierName": "",
           "onAdded": [
             {
               "$type": "SetGlobalValueListV2",
               "BGGHGEAHCGN": [
                 {
-                  "maxValue": 0.0,
-                  "CBOMLBFIPJM": 1.0,
                   "key": "_RIFTSTALKER_STAGE_1",
-                  "minValue": 0.0
+                  "maxValue": 0.0,
+                  "minValue": 0.0,
+                  "value": 1.0
                 },
                 {
-                  "maxValue": 0.0,
-                  "CBOMLBFIPJM": 0.0,
                   "key": "_RIFTSTALKER_STAGE_2",
-                  "minValue": 0.0
+                  "maxValue": 0.0,
+                  "minValue": 0.0,
+                  "value": 0.0
                 }
               ]
             }
           ],
-          "elementDurability": 100.0,
-          "modifierName": "",
           "AIHNJLDFEGJ": 0.0
         },
         "Stage2": {
+          "elementDurability": 100.0,
+          "modifierName": "",
           "onAdded": [
             {
               "$type": "Predicated",
@@ -477,409 +731,155 @@
                   "$type": "SetGlobalValueListV2",
                   "BGGHGEAHCGN": [
                     {
-                      "maxValue": 0.0,
-                      "CBOMLBFIPJM": 0.0,
                       "key": "_RIFTSTALKER_STAGE_1",
-                      "minValue": 0.0
+                      "maxValue": 0.0,
+                      "minValue": 0.0,
+                      "value": 0.0
                     },
                     {
-                      "maxValue": 0.0,
-                      "CBOMLBFIPJM": 1.0,
                       "key": "_RIFTSTALKER_STAGE_2",
-                      "minValue": 0.0
+                      "maxValue": 0.0,
+                      "minValue": 0.0,
+                      "value": 1.0
                     }
                   ]
                 },
                 {
                   "$type": "ServerLuaTriggerEvent",
+                  "luaCallType": "FromGroup",
                   "param1": 0.0,
                   "param2": 0.0,
-                  "AHCNJKIEMPP": 0.0,
-                  "sourceName": "Tostage2",
-                  "luaCallType": "FromGroup"
+                  "param3": 0.0,
+                  "sourceName": "Tostage2"
                 }
               ],
               "targetPredicates": [
                 {
-                  "$type": "EOFDCELPGFO",
-                  "CBOMLBFIPJM": 0.0,
+                  "$type": "ByTargetGlobalValue",
                   "compareType": "NoneOrEqual",
-                  "key": "PLMD_Boss_Mark"
+                  "key": "PLMD_Boss_Mark",
+                  "value": 0.0
                 }
               ]
             }
           ],
-          "elementDurability": 100.0,
-          "modifierName": "",
           "AIHNJLDFEGJ": 0.0
         }
       },
-      "ANHJPOLNHIG": [
-        "_MAX_HP"
-      ],
-      "abilityMixins": [
-        {
-          "$type": "AttachModifierToHPPercentMixin",
-          "valueSteps": [
-            [
-              1.0,
-              "total_damage_count",
-              "DIV"
-            ]
-          ],
-          "modifierNameSteps": [
-            "Stage1",
-            "Stage2"
-          ]
-        },
-        {
-          "$type": "DoActionByAnimatorStateIDMixin",
-          "JGJMIJEEGBP": [
-            {
-              "$type": "TriggerBullet",
-              "born": {
-                "$type": "BGOLIIIHLMO",
-                "attachPointName": "BulletAttachPoint",
-                "useRotation": true,
-                "direction": {
-                  "$type": "EJFDCELDDNF",
-                  "MJDDIMNCNAL": ""
-                }
-              },
-              "bulletID": 42205005
-            },
-            {
-              "$type": "AddGlobalValue",
-              "key": "Riftstalker_ShockWave_Count",
-              "maxValue": 0.0,
-              "minValue": 0.0,
-              "CBOMLBFIPJM": 1.0
-            },
-            {
-              "$type": "ApplyModifier",
-              "modifierName": "PaimonHint",
-              "predicates": [
-                {
-                  "$type": "EOFDCELPGFO",
-                  "CBOMLBFIPJM": 2.0,
-                  "key": "Riftstalker_ShockWave_Count"
-                },
-                {
-                  "$type": "EOFDCELPGFO",
-                  "CBOMLBFIPJM": 0.0,
-                  "compareType": "NoneOrEqual",
-                  "key": "PLMD_Boss_Mark"
-                }
-              ]
-            }
-          ],
-          "stateIDs": [
-            "ShockWave"
-          ],
-          "LJPPDIGCJMJ": ""
-        },
-        {
-          "$type": "SteerAttackTraceToPosMixin",
-          "globalPosKey": "_STANDBY_POS",
-          "LJPPDIGCJMJ": "",
-          "angularSpeed": 250.0,
-          "IJMBPGKKOJD": 180.0,
-          "endNormalizedTime": 0.5,
-          "AAPNADMFCNO": true,
-          "HDLABDJANFN": [
-            "ResetPos"
-          ],
-          "EOHCONFEGPO": ""
-        },
-        {
-          "$type": "AttachModifierToSelfGlobalValueMixin",
-          "modifierNameSteps": [
-            "UnlockStrikeAttack"
-          ],
-          "valueSteps": [
-            2.5,
-            99.0
-          ],
-          "globalValueKey": "Riftstalker_ShockWave_Count",
-          "defaultGlobalValueOnCreate": 1.0
-        },
-        {
-          "$type": "AttachToAnimatorStateIDMixin",
-          "LJPPDIGCJMJ": "",
-          "stateIDs": [
-            "Strike_Loop_01"
-          ],
-          "modifierName": "LockingTarget"
-        },
-        {
-          "$type": "AttachToAnimatorStateIDMixin",
-          "LJPPDIGCJMJ": "",
-          "stateIDs": [
-            "Strike_Loop_01",
-            "Strike_AS"
-          ],
-          "modifierName": "LockingVFX"
-        },
-        {
-          "$type": "AttachToAnimatorStateIDMixin",
-          "LJPPDIGCJMJ": "",
-          "stateIDs": [
-            "Strike_AS"
-          ],
-          "modifierName": "StrikeAttackControl"
-        },
-        {
-          "$type": "AttachToAnimatorStateIDMixin",
-          "LJPPDIGCJMJ": "",
-          "stateIDs": [
-            "Strike_Loop_01"
-          ],
-          "modifierName": "CameraControl"
-        },
-        {
-          "$type": "AttachToAnimatorStateIDMixin",
-          "LJPPDIGCJMJ": "",
-          "stateIDs": [
-            "ResetPos02",
-            "ResetPos03"
-          ],
-          "modifierName": "ResetPos_Logic"
-        },
-        {
-          "$type": "AttachToStateIDMixin",
-          "LJPPDIGCJMJ": "",
-          "stateIDs": [
-            "BeHitThrow"
-          ],
-          "modifierName": "CloseFly"
-        },
-        {
-          "$type": "AttachModifierToSelfGlobalValueMixin",
-          "modifierNameSteps": [
-            "BodyVFX"
-          ],
-          "valueSteps": [
-            0.5,
-            1.5
-          ],
-          "globalValueKey": "Riftstalker_BodyVFX",
-          "defaultGlobalValueOnCreate": 1.0
-        },
-        {
-          "$type": "DoActionByAnimatorStateIDMixin",
-          "JGJMIJEEGBP": [
-            {
-              "$type": "Predicated",
-              "successActions": [
-                {
-                  "$type": "SetGlobalValueV2",
-                  "minValue": 0.0,
-                  "key": "_STRIKE_MISS_COUNT",
-                  "maxValue": 0.0,
-                  "CBOMLBFIPJM": 0.0
-                },
-                {
-                  "$type": "ShowReminder",
-                  "id": 1003430054
-                }
-              ],
-              "failActions": [
-                {
-                  "$type": "Predicated",
-                  "successActions": [
-                    {
-                      "$type": "ShowReminder",
-                      "id": 1003430050
-                    }
-                  ],
-                  "predicates": [
-                    {
-                      "$type": "GPEMEIHPCCF",
-                      "predicates": [
-                        {
-                          "$type": "EOFDCELPGFO",
-                          "CBOMLBFIPJM": 1.0,
-                          "key": "_STRIKE_MISS_COUNT"
-                        },
-                        {
-                          "$type": "EOFDCELPGFO",
-                          "CBOMLBFIPJM": 3.0,
-                          "key": "_STRIKE_MISS_COUNT"
-                        }
-                      ]
-                    }
-                  ]
-                },
-                {
-                  "$type": "AddGlobalValue",
-                  "key": "_STRIKE_MISS_COUNT",
-                  "maxValue": 0.0,
-                  "minValue": 0.0,
-                  "CBOMLBFIPJM": 1.0
-                }
-              ],
-              "targetPredicates": [
-                {
-                  "$type": "EOFDCELPGFO",
-                  "CBOMLBFIPJM": 4.0,
-                  "compareType": "MoreThanAndEqual",
-                  "key": "_STRIKE_MISS_COUNT"
-                }
-              ]
-            }
-          ],
-          "stateIDs": [
-            "Howl"
-          ],
-          "LJPPDIGCJMJ": ""
-        },
-        {
-          "$type": "DoActionByAnimatorStateIDMixin",
-          "JGJMIJEEGBP": [
-            {
-              "$type": "FixedMonsterRushMove",
-              "overrideMoveCollider": "",
-              "maxRange": 10.0,
-              "animatorStateIDs": [
-                "Biting"
-              ],
-              "toPos": {
-                "$type": "NABPLNFPHCK",
-                "onGround": true,
-                "useRotation": true,
-                "offset": {
-                  "z": 10.0
-                },
-                "DJJOOBHDHEG": 20.0
-              },
-              "isInAir": true,
-              "timeRange": 0.45
-            }
-          ],
-          "stateIDs": [
-            "Biting"
-          ],
-          "LJPPDIGCJMJ": ""
-        },
-        {
-          "$type": "EntityNoPauseMixin"
-        }
-      ],
-      "abilityName": "Monster_Hound_Riftstalker_Institute_StateControl",
       "onAdded": [
         {
           "$type": "SetSkillAnchor",
           "born": {
-            "$type": "AFLOOGFKOGK",
+            "$type": "ConfigBornByActionPoint",
             "actionPointType": "AureaePoint",
-            "IPFHPPFKPGF": {
-              "$type": "EAGANGOJCPO"
+            "selectType": {
+              "$type": "SelectActionPointBySelfPos"
             }
           }
         },
         {
           "$type": "SetGlobalPos",
-          "key": "_STANDBY_POS",
           "born": {
-            "$type": "AFLOOGFKOGK",
+            "$type": "ConfigBornByActionPoint",
             "actionPointType": "AureaePoint",
-            "IPFHPPFKPGF": {
-              "$type": "EAGANGOJCPO"
+            "selectType": {
+              "$type": "SelectActionPointBySelfPos"
             }
-          }
+          },
+          "key": "_STANDBY_POS"
         },
         {
           "$type": "SetPoseBool",
-          "CBOMLBFIPJM": true,
-          "boolID": "Fly"
+          "boolID": "Fly",
+          "value": true
         },
         {
           "$type": "SetGlobalValueListV2",
           "BGGHGEAHCGN": [
             {
-              "maxValue": 0.0,
-              "CBOMLBFIPJM": 1.0,
               "key": "_STRIKE_MISS_COUNT",
-              "minValue": 0.0
+              "maxValue": 0.0,
+              "minValue": 0.0,
+              "value": 1.0
             },
             {
-              "maxValue": 0.0,
-              "CBOMLBFIPJM": 0.0,
               "key": "_PAIMON_HINT_TRIGGERED",
-              "minValue": 0.0
+              "maxValue": 0.0,
+              "minValue": 0.0,
+              "value": 0.0
             }
           ]
         },
         {
           "$type": "GetFightProperty",
-          "globalValueKey": "_MAX_HP",
-          "fightProp": "FIGHT_PROP_MAX_HP"
+          "fightProp": "FIGHT_PROP_MAX_HP",
+          "globalValueKey": "_MAX_HP"
         },
         {
           "$type": "ApplyModifier",
           "modifierName": "BeHitMonitor"
         }
       ],
-      "abilitySpecials": {
-        "total_damage_count": 3.0
-      }
+      "ANHJPOLNHIG": [
+        "_MAX_HP"
+      ]
     }
   },
   {
     "Default": {
+      "abilityName": "Monster_Hound_Riftstalker_Electric_Institute_CreateLightning",
       "onAbilityStart": [
         {
           "$type": "CreateGadget",
-          "gadgetID": 42802133,
-          "FGNHCAEHEJK": true,
           "born": {
-            "$type": "BOJMMDAIGMM",
-            "onGround": true,
-            "useRotation": true,
+            "$type": "ConfigBornByTarget",
             "bornRandom": {
-              "$type": "DBJNGNDCMAH",
-              "minRandomRange": 0.0,
-              "maxRandomRange": 2.0
-            }
+              "$type": "BornRandomFromCenter",
+              "maxRandomRange": 2.0,
+              "minRandomRange": 0.0
+            },
+            "onGround": true,
+            "useRotation": true
           },
-          "target": "SelfAttackActiveTarget"
+          "gadgetID": 42802133,
+          "target": "SelfAttackActiveTarget",
+          "FGNHCAEHEJK": true
         }
-      ],
-      "abilityName": "Monster_Hound_Riftstalker_Electric_Institute_CreateLightning"
+      ]
     }
   },
   {
     "Default": {
+      "abilityMixins": [
+        {
+          "$type": "AttachToPoseIDMixin",
+          "modifierName": "PLMD_Boss_Init",
+          "poseIDs": [
+            102
+          ]
+        }
+      ],
+      "abilityName": "Monster_Hound_Riftstalker_Electric_Institute_ForPLMDBoss",
       "modifiers": {
         "PLMD_Boss_Init": {
+          "elementDurability": 100.0,
+          "modifierName": "",
           "onAdded": [
             {
               "$type": "SetGlobalValueV2",
-              "minValue": 0.0,
               "key": "PLMD_Boss_Mark",
               "maxValue": 0.0,
-              "CBOMLBFIPJM": 1.0
+              "minValue": 0.0,
+              "value": 1.0
             },
             {
               "$type": "SetAISkillCDMultiplier",
               "multiplier": 3.0
             }
           ],
-          "elementDurability": 100.0,
-          "modifierName": "",
           "AIHNJLDFEGJ": 0.0
         }
-      },
-      "abilityMixins": [
-        {
-          "$type": "AttachToPoseIDMixin",
-          "GGOLBNPLGJH": [
-            102
-          ],
-          "modifierName": "PLMD_Boss_Init"
-        }
-      ],
-      "abilityName": "Monster_Hound_Riftstalker_Electric_Institute_ForPLMDBoss"
+      }
     }
   }
 ]

@@ -1,38 +1,61 @@
 [
   {
     "Default": {
-      "modifiers": {
-        "ExtraAttack_StaminaCost": {
-          "onAdded": [
-            {
-              "$type": "AvatarSkillStart",
-              "skillID": 10001,
-              "BGNJBEPEJBO": 1.0,
-              "costStaminaRatio": "ExtraAttack_Sword_Stamina_Cost",
-              "cdRatio": 1.0
-            }
-          ],
-          "elementDurability": 100.0,
-          "modifierName": "",
-          "AIHNJLDFEGJ": 0.0
-        }
-      },
       "abilityMixins": [
         {
           "$type": "ButtonHoldChargeMixin",
-          "skillID": 10741,
-          "OnReleaseCharged": [
+          "chargeStateIDs": [
+            "Attack01",
+            "Attack02",
+            "Attack03",
+            "Run"
+          ],
+          "chargeTime": 0.12,
+          "onBeginCharged": [
             {
               "$type": "SetAnimatorBool",
-              "boolID": "IsCharging"
+              "boolID": "IsCharging",
+              "value": true
+            }
+          ],
+          "onBeginSecondCharged": [
+            {
+              "$type": "SetAnimatorTrigger",
+              "predicates": [
+                {
+                  "$type": "ByLocalAvatarStamina",
+                  "logic": "GreaterOrEqual",
+                  "stamina": [
+                    "ExtraAttack_Sword_Stamina_Cost",
+                    "Flexible_Stamina",
+                    "ADD"
+                  ]
+                }
+              ],
+              "triggerID": "DoSkill"
             },
             {
               "$type": "SetAnimatorInt",
               "intID": "SkillID",
-              "CBOMLBFIPJM": 1.0
+              "predicates": [
+                {
+                  "$type": "ByLocalAvatarStamina",
+                  "logic": "GreaterOrEqual",
+                  "stamina": [
+                    "ExtraAttack_Sword_Stamina_Cost",
+                    "Flexible_Stamina",
+                    "ADD"
+                  ]
+                }
+              ],
+              "value": 6.0
+            },
+            {
+              "$type": "SetAnimatorBool",
+              "boolID": "IsCharging"
             }
           ],
-          "OnBeginUncharged": [
+          "onBeginUncharged": [
             {
               "$type": "SetAnimatorTrigger",
               "triggerID": "DoSkill"
@@ -40,187 +63,91 @@
             {
               "$type": "SetAnimatorInt",
               "intID": "SkillID",
-              "CBOMLBFIPJM": 99.0,
               "predicates": [
                 {
-                  "$type": "GPEMEIHPCCF",
+                  "$type": "ByAny",
                   "predicates": [
                     {
-                      "$type": "LDOPHDHPCHA",
-                      "CBOMLBFIPJM": 0,
+                      "$type": "ByAnimatorInt",
+                      "logic": "Equal",
                       "parameter": "ComboCount",
-                      "logic": "Equal"
+                      "value": 0
                     },
                     {
-                      "$type": "LDOPHDHPCHA",
-                      "CBOMLBFIPJM": 3,
+                      "$type": "ByAnimatorInt",
+                      "logic": "Equal",
                       "parameter": "ComboCount",
-                      "logic": "Equal"
+                      "value": 3
                     }
                   ]
                 }
-              ]
+              ],
+              "value": 99.0
             },
             {
               "$type": "SetAnimatorBool",
               "boolID": "IsCharging"
+            }
+          ],
+          "onReleaseCharged": [
+            {
+              "$type": "SetAnimatorBool",
+              "boolID": "IsCharging"
+            },
+            {
+              "$type": "SetAnimatorInt",
+              "intID": "SkillID",
+              "value": 1.0
+            }
+          ],
+          "onReleaseUncharged": [
+            {
+              "$type": "SetAnimatorInt",
+              "intID": "SkillID",
+              "value": 1.0
             }
           ],
           "secondChargeTime": 0.2,
-          "chargeTime": 0.12,
-          "OnBeginCharged": [
-            {
-              "$type": "SetAnimatorBool",
-              "CBOMLBFIPJM": true,
-              "boolID": "IsCharging"
-            }
-          ],
-          "OnBeginSecondCharged": [
-            {
-              "$type": "SetAnimatorTrigger",
-              "triggerID": "DoSkill",
-              "predicates": [
-                {
-                  "$type": "OPLIAABFJGD",
-                  "stamina": [
-                    "ExtraAttack_Sword_Stamina_Cost",
-                    "Flexible_Stamina",
-                    "ADD"
-                  ],
-                  "logic": "GreaterOrEqual"
-                }
-              ]
-            },
-            {
-              "$type": "SetAnimatorInt",
-              "intID": "SkillID",
-              "CBOMLBFIPJM": 6.0,
-              "predicates": [
-                {
-                  "$type": "OPLIAABFJGD",
-                  "stamina": [
-                    "ExtraAttack_Sword_Stamina_Cost",
-                    "Flexible_Stamina",
-                    "ADD"
-                  ],
-                  "logic": "GreaterOrEqual"
-                }
-              ]
-            },
-            {
-              "$type": "SetAnimatorBool",
-              "boolID": "IsCharging"
-            }
-          ],
-          "chargeStateIDs": [
-            "Attack01",
-            "Attack02",
-            "Attack03",
-            "Run"
-          ],
-          "OnReleaseUncharged": [
-            {
-              "$type": "SetAnimatorInt",
-              "intID": "SkillID",
-              "CBOMLBFIPJM": 1.0
-            }
-          ]
+          "skillID": 10741
         },
         {
           "$type": "AttachToStateIDMixin",
-          "LJPPDIGCJMJ": "",
+          "modifierName": "ExtraAttack_StaminaCost",
           "stateIDs": [
             "ExtraAttack"
           ],
-          "modifierName": "ExtraAttack_StaminaCost"
+          "LJPPDIGCJMJ": ""
         }
       ],
       "abilityName": "Avatar_Layla_ExtraAttack",
       "abilitySpecials": {
         "ExtraAttack_Sword_Stamina_Cost": 0.0,
         "Flexible_Stamina": -2.0
+      },
+      "modifiers": {
+        "ExtraAttack_StaminaCost": {
+          "elementDurability": 100.0,
+          "modifierName": "",
+          "onAdded": [
+            {
+              "$type": "AvatarSkillStart",
+              "cdRatio": 1.0,
+              "costStaminaRatio": "ExtraAttack_Sword_Stamina_Cost",
+              "skillID": 10001,
+              "GIBAINFKPBO": 1.0
+            }
+          ],
+          "AIHNJLDFEGJ": 0.0
+        }
       }
     }
   },
   {
     "Default": {
-      "modifiers": {
-        "Layla_WeaponHider": {
-          "onRemoved": [
-            {
-              "$type": "TriggerHideWeapon",
-              "partNames": [
-                "equip01",
-                "equip02",
-                "sheathPoint"
-              ],
-              "visible": true,
-              "doOffStage": true
-            }
-          ],
-          "onAdded": [
-            {
-              "$type": "TriggerHideWeapon",
-              "partNames": [
-                "equip01",
-                "equip02",
-                "sheathPoint"
-              ],
-              "doOffStage": true
-            }
-          ],
-          "elementDurability": 100.0,
-          "modifierName": "",
-          "AIHNJLDFEGJ": 0.0
-        }
-      },
-      "onAbilityStart": [
-        {
-          "$type": "TriggerAttackEvent",
-          "targetType": "Enemy",
-          "attackEvent": {
-            "attackInfo": {
-              "attackProperty": {
-                "elementType": "Ice",
-                "attackType": "None",
-                "damagePercentageRatio": 0.0,
-                "strikeType": "Default",
-                "damagePercentage": "Damage",
-                "elementDurability": 25.0,
-                "arkheGrade": 0.0
-              },
-              "hitPattern": {
-                "FLFCIDDNMNA": "",
-                "onHitEffectName": "default",
-                "hitHaltTimeScale": 0.01,
-                "hitImpulseType": "LV3"
-              },
-              "attenuationGroup": "default",
-              "attenuationTag": "",
-              "attackTag": "Elemental_Art",
-              "canBeModifiedBy": "OriginOwner"
-            },
-            "attackPattern": {
-              "$type": "DDLDAMKEKJD",
-              "radius": 2.5,
-              "height": 1.5,
-              "triggerType": "TriggerNoRepeat",
-              "born": {
-                "$type": "NABPLNFPHCK",
-                "offset": {
-                  "x": 0.0,
-                  "z": 0.0,
-                  "y": -0.5
-                }
-              }
-            }
-          }
-        }
-      ],
       "abilityMixins": [
         {
           "$type": "AttachToStateIDMixin",
-          "LJPPDIGCJMJ": "",
+          "modifierName": "Layla_WeaponHider",
           "stateIDs": [
             "ElementalArt",
             "ElementalArt_LoopBS",
@@ -229,117 +156,134 @@
             "ElementalBurst",
             "ElementalBurst_AS"
           ],
-          "modifierName": "Layla_WeaponHider"
+          "LJPPDIGCJMJ": ""
         }
       ],
       "abilityName": "Avatar_Layla_ElementalArt",
+      "abilitySpecials": {
+        "Damage": 0.0
+      },
+      "modifiers": {
+        "Layla_WeaponHider": {
+          "elementDurability": 100.0,
+          "modifierName": "",
+          "onAdded": [
+            {
+              "$type": "TriggerHideWeapon",
+              "doOffStage": true,
+              "partNames": [
+                "equip01",
+                "equip02",
+                "sheathPoint"
+              ]
+            }
+          ],
+          "onRemoved": [
+            {
+              "$type": "TriggerHideWeapon",
+              "doOffStage": true,
+              "partNames": [
+                "equip01",
+                "equip02",
+                "sheathPoint"
+              ],
+              "visible": true
+            }
+          ],
+          "AIHNJLDFEGJ": 0.0
+        }
+      },
+      "onAbilityStart": [
+        {
+          "$type": "TriggerAttackEvent",
+          "attackEvent": {
+            "attackInfo": {
+              "attackProperty": {
+                "attackType": "None",
+                "damagePercentage": "Damage",
+                "damagePercentageRatio": 0.0,
+                "elementDurability": 25.0,
+                "elementType": "Ice",
+                "strikeType": "Default",
+                "IIPHCFEONLK": 0.0
+              },
+              "attackTag": "Elemental_Art",
+              "attenuationGroup": "default",
+              "attenuationTag": "",
+              "canBeModifiedBy": "OriginOwner",
+              "hitPattern": {
+                "hitHaltTimeScale": 0.01,
+                "hitImpulseType": "LV3",
+                "onHitEffectName": "default",
+                "FLFCIDDNMNA": ""
+              }
+            },
+            "attackPattern": {
+              "$type": "ConfigAttackCircle",
+              "born": {
+                "$type": "ConfigBornBySelf",
+                "offset": {
+                  "x": 0.0,
+                  "y": -0.5,
+                  "z": 0.0
+                }
+              },
+              "height": 1.5,
+              "radius": 2.5,
+              "triggerType": "TriggerNoRepeat"
+            }
+          },
+          "targetType": "Enemy"
+        }
+      ],
       "onAdded": [
         {
           "$type": "SetGlobalValue",
           "key": "_ABILITY_Avatar_Layla_HasTeamShield",
-          "minValue": 0.0,
           "maxValue": 0.0,
-          "CBOMLBFIPJM": 0.0,
-          "target": "Team"
+          "minValue": 0.0,
+          "target": "Team",
+          "value": 0.0
         }
-      ],
-      "abilitySpecials": {
-        "Damage": 0.0
-      }
+      ]
     }
   },
   {
     "Default": {
+      "abilityName": "Avatar_Layla_ElementalArt_Handler",
+      "abilitySpecials": {
+        "ShieldHPRatio": 0.0,
+        "ShieldHPConst": 0.0,
+        "ShieldHPRatio_Skill": 0.0,
+        "ShieldHPConst_Skill": 0.0,
+        "Dura": 0.0,
+        "Dura_Skill": 0.0,
+        "Dura_Talent": 0.0,
+        "Interval": 1.5,
+        "ShieldCostMinusRatio": 0.0,
+        "Trigger_CD": 0.3,
+        "DropBall_Type": 1.0,
+        "ShieldUp": 1.0,
+        "Talent_Ratio": 0.0
+      },
       "modifiers": {
         "UNIQUE_Layla_ElementalArt_FrozenBuff": {
           "duration": 0.1,
           "elementDurability": 25.0,
           "elementType": "Frozen",
-          "modifierName": "",
           "isUnique": true,
+          "modifierName": "",
           "AIHNJLDFEGJ": 0.0
         },
         "UNIQUE_Layla_ElementalArt_IceShield_Team": {
-          "onReconnect": [
-            {
-              "$type": "SetGlobalValue",
-              "key": "_ABILITY_Avatar_Layla_IceShield_Can_Count",
-              "minValue": 0.0,
-              "maxValue": 0.0,
-              "CBOMLBFIPJM": 1.0,
-              "target": "Team",
-              "doOffStage": true
-            }
-          ],
           "duration": "Dura",
-          "onRemoved": [
-            {
-              "$type": "SetGlobalValue",
-              "key": "_ABILITY_Avatar_Layla_HasTeamShield",
-              "minValue": 0.0,
-              "maxValue": 0.0,
-              "CBOMLBFIPJM": 0.0
-            },
-            {
-              "$type": "SetGlobalValue",
-              "key": "_ABILITY_Avatar_Layla_IceShield_GV_Count",
-              "minValue": 0.0,
-              "maxValue": 0.0,
-              "CBOMLBFIPJM": 0.0
-            },
-            {
-              "$type": "SetGlobalValue",
-              "key": "_ABILITY_Avatar_Layla_ToughShield_Level",
-              "minValue": 0.0,
-              "maxValue": 0.0,
-              "CBOMLBFIPJM": 0.0
-            },
-            {
-              "$type": "SetGlobalValue",
-              "key": "_ABILITY_Avatar_Layla_IceShield_Can_Count",
-              "minValue": 0.0,
-              "maxValue": 0.0,
-              "CBOMLBFIPJM": 0.0
-            },
-            {
-              "$type": "FireEffect",
-              "effectPattern": "Eff_Avatar_Girl_Sword_Layla_IceShield_Die",
-              "scale": 1.0,
-              "ILLLPEOODKP": "",
-              "effectTempleteID": -1.0
-            }
-          ],
-          "onAdded": [
-            {
-              "$type": "SetGlobalValue",
-              "key": "_ABILITY_Avatar_Layla_HasTeamShield",
-              "minValue": 0.0,
-              "maxValue": 0.0,
-              "CBOMLBFIPJM": 1.0
-            },
-            {
-              "$type": "SetGlobalValue",
-              "key": "_ABILITY_Avatar_Layla_IceShield_GV_Count",
-              "minValue": 0.0,
-              "maxValue": 0.0,
-              "CBOMLBFIPJM": 0.0
-            },
-            {
-              "$type": "SetGlobalValue",
-              "key": "_ABILITY_Avatar_Layla_ToughShield_Level",
-              "minValue": 0.0,
-              "maxValue": 0.0,
-              "CBOMLBFIPJM": 0.0
-            }
-          ],
           "elementDurability": 100.0,
+          "isUnique": true,
           "modifierMixins": [
             {
               "$type": "GlobalMainShieldMixin",
               "childShieldModifierName": "UNIQUE_Layla_ElementalArt_IceShield_Child",
-              "shieldHP": "ShieldHPConst",
               "costShieldRatioName": "",
-              "shieldHPRatio": "ShieldHPRatio",
               "effectPattern": "Eff_Avatar_Girl_Sword_Layla_IceShield",
               "onShieldBroken": [
                 {
@@ -347,28 +291,14 @@
                   "modifierName": "UNIQUE_Layla_ElementalArt_IceShield_Team"
                 }
               ],
-              "shieldType": "Avatar_Ice",
               "shieldAngle": 360.0,
+              "shieldHP": "ShieldHPConst",
+              "shieldHPRatio": "ShieldHPRatio",
+              "shieldType": "Avatar_Ice",
               "showDamageText": "INFO_ELITE_DEFENCE"
             },
             {
               "$type": "AttachModifierToGlobalValueMixin",
-              "modifierNameSteps": [
-                "Layla_IceShield_0",
-                "Layla_IceShield_1",
-                "Layla_IceShield_2",
-                "Layla_IceShield_3",
-                "Layla_IceShield_4"
-              ],
-              "globalValueKey": "_ABILITY_Avatar_Layla_IceShield_GV_Count",
-              "valueSteps": [
-                -0.5,
-                0.5,
-                1.5,
-                2.5,
-                3.5,
-                4.5
-              ],
               "actionQueues": [
                 [],
                 [
@@ -419,22 +349,40 @@
                     "modifierName": "Layla_IceShield_Eff4"
                   }
                 ]
+              ],
+              "globalValueKey": "_ABILITY_Avatar_Layla_IceShield_GV_Count",
+              "modifierNameSteps": [
+                "Layla_IceShield_0",
+                "Layla_IceShield_1",
+                "Layla_IceShield_2",
+                "Layla_IceShield_3",
+                "Layla_IceShield_4"
+              ],
+              "valueSteps": [
+                -0.5,
+                0.5,
+                1.5,
+                2.5,
+                3.5,
+                4.5
               ]
             },
             {
               "$type": "AttachModifierToSelfGlobalValueMixin",
+              "defaultGlobalValueOnCreate": 0.0,
+              "globalValueKey": "_ABILITY_Avatar_Layla_IceShield_Can_Count",
               "modifierNameSteps": [
                 "UNIQUE_Layla_ElementalArt_IceShield_Count"
               ],
               "valueSteps": [
                 0.5,
                 1.5
-              ],
-              "globalValueKey": "_ABILITY_Avatar_Layla_IceShield_Can_Count",
-              "defaultGlobalValueOnCreate": 0.0
+              ]
             },
             {
               "$type": "AttachModifierToSelfGlobalValueMixin",
+              "defaultGlobalValueOnCreate": 0.0,
+              "globalValueKey": "_ABILITY_Avatar_Layla_ToughShield_Level",
               "modifierNameSteps": [
                 "Layla_ToughShield_L1_Handler",
                 "Layla_ToughShield_L2_Handler",
@@ -447,25 +395,92 @@
                 2.5,
                 3.5,
                 4.5
-              ],
-              "globalValueKey": "_ABILITY_Avatar_Layla_ToughShield_Level",
-              "defaultGlobalValueOnCreate": 0.0
+              ]
             }
           ],
           "modifierName": "",
-          "isUnique": true,
+          "onAdded": [
+            {
+              "$type": "SetGlobalValue",
+              "key": "_ABILITY_Avatar_Layla_HasTeamShield",
+              "maxValue": 0.0,
+              "minValue": 0.0,
+              "value": 1.0
+            },
+            {
+              "$type": "SetGlobalValue",
+              "key": "_ABILITY_Avatar_Layla_IceShield_GV_Count",
+              "maxValue": 0.0,
+              "minValue": 0.0,
+              "value": 0.0
+            },
+            {
+              "$type": "SetGlobalValue",
+              "key": "_ABILITY_Avatar_Layla_ToughShield_Level",
+              "maxValue": 0.0,
+              "minValue": 0.0,
+              "value": 0.0
+            }
+          ],
+          "onReconnect": [
+            {
+              "$type": "SetGlobalValue",
+              "doOffStage": true,
+              "key": "_ABILITY_Avatar_Layla_IceShield_Can_Count",
+              "maxValue": 0.0,
+              "minValue": 0.0,
+              "target": "Team",
+              "value": 1.0
+            }
+          ],
+          "onRemoved": [
+            {
+              "$type": "SetGlobalValue",
+              "key": "_ABILITY_Avatar_Layla_HasTeamShield",
+              "maxValue": 0.0,
+              "minValue": 0.0,
+              "value": 0.0
+            },
+            {
+              "$type": "SetGlobalValue",
+              "key": "_ABILITY_Avatar_Layla_IceShield_GV_Count",
+              "maxValue": 0.0,
+              "minValue": 0.0,
+              "value": 0.0
+            },
+            {
+              "$type": "SetGlobalValue",
+              "key": "_ABILITY_Avatar_Layla_ToughShield_Level",
+              "maxValue": 0.0,
+              "minValue": 0.0,
+              "value": 0.0
+            },
+            {
+              "$type": "SetGlobalValue",
+              "key": "_ABILITY_Avatar_Layla_IceShield_Can_Count",
+              "maxValue": 0.0,
+              "minValue": 0.0,
+              "value": 0.0
+            },
+            {
+              "$type": "FireEffect",
+              "effectPattern": "Eff_Avatar_Girl_Sword_Layla_IceShield_Die",
+              "effectTempleteID": -1.0,
+              "scale": 1.0,
+              "ILLLPEOODKP": ""
+            }
+          ],
           "AIHNJLDFEGJ": 0.0
         },
         "UNIQUE_Layla_ElementalArt_IceShield_Team_Talent": {
           "duration": "Dura",
           "elementDurability": 100.0,
+          "isUnique": true,
           "modifierMixins": [
             {
               "$type": "GlobalMainShieldMixin",
               "childShieldModifierName": "UNIQUE_Layla_ElementalArt_IceShield_Child_Talent",
-              "shieldHP": "ShieldHPConst",
               "costShieldRatioName": "",
-              "shieldHPRatio": "ShieldHPRatio",
               "effectPattern": "Eff_Avatar_Girl_Sword_Layla_IceShield",
               "onShieldBroken": [
                 {
@@ -473,20 +488,19 @@
                   "modifierName": "UNIQUE_Layla_ElementalArt_IceShield_Team_Talent"
                 }
               ],
-              "shieldType": "Avatar_Ice",
               "shieldAngle": 360.0,
+              "shieldHP": "ShieldHPConst",
+              "shieldHPRatio": "ShieldHPRatio",
+              "shieldType": "Avatar_Ice",
               "showDamageText": "INFO_ELITE_DEFENCE"
             }
           ],
           "modifierName": "",
-          "isUnique": true,
           "AIHNJLDFEGJ": 0.0
         },
         "UNIQUE_Layla_ElementalArt_IceShield_Child_Talent": {
-          "properties": {
-            "Actor_EndureDelta": 0.0
-          },
           "elementDurability": 100.0,
+          "isUnique": true,
           "modifierMixins": [
             {
               "$type": "GlobalSubShieldMixin",
@@ -494,8 +508,6 @@
             }
           ],
           "modifierName": "",
-          "isUnique": true,
-          "AIHNJLDFEGJ": 0.0,
           "onBeingHit": [
             {
               "$type": "Predicated",
@@ -506,30 +518,32 @@
                   "target": "Team"
                 }
               ],
+              "target": "Target",
               "targetPredicates": [
                 {
-                  "$type": "GPEMEIHPCCF",
+                  "$type": "ByAny",
                   "predicates": [
                     {
-                      "$type": "AJJPBBPBCMO",
+                      "$type": "ByHitDamage",
                       "damage": 0.0
                     },
                     {
-                      "$type": "FCLGMLGFNHI",
-                      "hitEnBreak": 0.0
+                      "$type": "ByHitEnBreak",
+                      "enBreak": 0.0
                     }
                   ]
                 }
-              ],
-              "target": "Target"
+              ]
             }
-          ]
-        },
-        "UNIQUE_Layla_ElementalArt_IceShield_Child": {
+          ],
           "properties": {
             "Actor_EndureDelta": 0.0
           },
+          "AIHNJLDFEGJ": 0.0
+        },
+        "UNIQUE_Layla_ElementalArt_IceShield_Child": {
           "elementDurability": 100.0,
+          "isUnique": true,
           "modifierMixins": [
             {
               "$type": "GlobalSubShieldMixin",
@@ -537,27 +551,25 @@
             },
             {
               "$type": "OnAvatarUseSkillMixin",
+              "clearSkillIdDelay": 0.2,
               "onTriggerSkill": [
                 {
                   "$type": "ApplyModifier",
                   "modifierName": "Layla_IceShield_GV_Count_SkillAdd",
-                  "target": "Team",
                   "predicates": [
                     {
-                      "$type": "EOFDCELPGFO",
-                      "CBOMLBFIPJM": 1.0,
+                      "$type": "ByTargetGlobalValue",
                       "key": "_ABILITY_Avatar_Layla_IceShield_Can_Count",
-                      "target": "Team"
+                      "target": "Team",
+                      "value": 1.0
                     }
-                  ]
+                  ],
+                  "target": "Team"
                 }
-              ],
-              "clearSkillIdDelay": 0.2
+              ]
             }
           ],
           "modifierName": "",
-          "isUnique": true,
-          "AIHNJLDFEGJ": 0.0,
           "onBeingHit": [
             {
               "$type": "Predicated",
@@ -568,162 +580,168 @@
                   "target": "Team"
                 }
               ],
+              "target": "Target",
               "targetPredicates": [
                 {
-                  "$type": "GPEMEIHPCCF",
+                  "$type": "ByAny",
                   "predicates": [
                     {
-                      "$type": "AJJPBBPBCMO",
+                      "$type": "ByHitDamage",
                       "damage": 0.0
                     },
                     {
-                      "$type": "FCLGMLGFNHI",
-                      "hitEnBreak": 0.0
+                      "$type": "ByHitEnBreak",
+                      "enBreak": 0.0
                     }
                   ]
-                }
-              ],
-              "target": "Target"
-            }
-          ]
-        },
-        "UNIQUE_Layla_ElementalArt_IceShield_Count": {
-          "thinkInterval": "Interval",
-          "elementDurability": 100.0,
-          "modifierName": "",
-          "isUnique": true,
-          "onThinkInterval": [
-            {
-              "$type": "AddGlobalValue",
-              "useLimitRange": true,
-              "key": "_ABILITY_Avatar_Layla_IceShield_GV_Count",
-              "maxValue": 4.0,
-              "minValue": 0.0,
-              "CBOMLBFIPJM": 1.0
-            },
-            {
-              "$type": "AddGlobalValue",
-              "useLimitRange": true,
-              "key": "_ABILITY_Avatar_Layla_ToughShield_Level",
-              "maxValue": 4.0,
-              "minValue": 0.0,
-              "CBOMLBFIPJM": 1.0,
-              "predicates": [
-                {
-                  "$type": "LCCNMKNDACG",
-                  "talentParam": "Layla_Skill1_Param"
                 }
               ]
             }
           ],
+          "properties": {
+            "Actor_EndureDelta": 0.0
+          },
+          "AIHNJLDFEGJ": 0.0
+        },
+        "UNIQUE_Layla_ElementalArt_IceShield_Count": {
+          "elementDurability": 100.0,
+          "isUnique": true,
+          "modifierName": "",
+          "onThinkInterval": [
+            {
+              "$type": "AddGlobalValue",
+              "key": "_ABILITY_Avatar_Layla_IceShield_GV_Count",
+              "maxValue": 4.0,
+              "minValue": 0.0,
+              "useLimitRange": true,
+              "value": 1.0
+            },
+            {
+              "$type": "AddGlobalValue",
+              "key": "_ABILITY_Avatar_Layla_ToughShield_Level",
+              "maxValue": 4.0,
+              "minValue": 0.0,
+              "predicates": [
+                {
+                  "$type": "ByUnlockTalentParam",
+                  "talentParam": "Layla_Skill1_Param"
+                }
+              ],
+              "useLimitRange": true,
+              "value": 1.0
+            }
+          ],
+          "thinkInterval": "Interval",
           "AIHNJLDFEGJ": 0.0
         },
         "Layla_IceShield_GV_Count_SkillAdd": {
           "duration": "Trigger_CD",
+          "elementDurability": 100.0,
+          "modifierName": "",
           "onAdded": [
             {
               "$type": "AddGlobalValue",
-              "useLimitRange": true,
+              "doOffStage": true,
               "key": "_ABILITY_Avatar_Layla_IceShield_GV_Count",
               "maxValue": 4.0,
               "minValue": 0.0,
-              "CBOMLBFIPJM": 2.0,
-              "doOffStage": true
+              "useLimitRange": true,
+              "value": 2.0
             },
             {
               "$type": "AddGlobalValue",
-              "useLimitRange": true,
               "key": "_ABILITY_Avatar_Layla_ToughShield_Level",
               "maxValue": 4.0,
               "minValue": 0.0,
-              "CBOMLBFIPJM": 2.0,
-              "target": "Team",
               "predicates": [
                 {
-                  "$type": "LCCNMKNDACG",
+                  "$type": "ByUnlockTalentParam",
                   "talentParam": "Layla_Skill1_Param"
                 }
-              ]
+              ],
+              "target": "Team",
+              "useLimitRange": true,
+              "value": 2.0
             }
           ],
           "stacking": "Unique",
-          "elementDurability": 100.0,
-          "modifierName": "",
           "AIHNJLDFEGJ": 0.0
         },
         "UNIQUE_Layla_Shield_Hit_Handler": {
           "duration": 0.5,
+          "elementDurability": 100.0,
+          "isUnique": true,
+          "modifierName": "",
           "onAdded": [
             {
               "$type": "SendEffectTrigger",
-              "parameter": "BeHit",
+              "attachPoint": "",
               "effectPattern": "Eff_Avatar_Girl_Sword_Layla_IceShield",
-              "attachPoint": ""
+              "parameter": "BeHit"
             }
           ],
           "stacking": "Unique",
-          "elementDurability": 100.0,
-          "modifierName": "",
-          "isUnique": true,
           "AIHNJLDFEGJ": 0.0
         },
         "Layla_IceShield_Eff1": {
+          "elementDurability": 100.0,
+          "modifierName": "",
           "onAdded": [
             {
               "$type": "AttachEffect",
-              "ILLLPEOODKP": "",
-              "scale": 1.0,
               "effectPattern": "Eff_Avatar_Girl_Sword_Layla_ElementalArt_StackNum_1",
-              "effectTempleteID": -1.0
+              "effectTempleteID": -1.0,
+              "scale": 1.0,
+              "ILLLPEOODKP": ""
             }
           ],
-          "elementDurability": 100.0,
-          "modifierName": "",
           "AIHNJLDFEGJ": 0.0
         },
         "Layla_IceShield_Eff2": {
+          "elementDurability": 100.0,
+          "modifierName": "",
           "onAdded": [
             {
               "$type": "AttachEffect",
-              "ILLLPEOODKP": "",
-              "scale": 1.0,
               "effectPattern": "Eff_Avatar_Girl_Sword_Layla_ElementalArt_StackNum_2",
-              "effectTempleteID": -1.0
+              "effectTempleteID": -1.0,
+              "scale": 1.0,
+              "ILLLPEOODKP": ""
             }
           ],
-          "elementDurability": 100.0,
-          "modifierName": "",
           "AIHNJLDFEGJ": 0.0
         },
         "Layla_IceShield_Eff3": {
+          "elementDurability": 100.0,
+          "modifierName": "",
           "onAdded": [
             {
               "$type": "AttachEffect",
-              "ILLLPEOODKP": "",
-              "scale": 1.0,
               "effectPattern": "Eff_Avatar_Girl_Sword_Layla_ElementalArt_StackNum_3",
-              "effectTempleteID": -1.0
+              "effectTempleteID": -1.0,
+              "scale": 1.0,
+              "ILLLPEOODKP": ""
             }
           ],
-          "elementDurability": 100.0,
-          "modifierName": "",
           "AIHNJLDFEGJ": 0.0
         },
         "Layla_IceShield_Eff4": {
+          "elementDurability": 100.0,
+          "modifierName": "",
           "onAdded": [
             {
               "$type": "AttachEffect",
-              "ILLLPEOODKP": "",
-              "scale": 1.0,
               "effectPattern": "Eff_Avatar_Girl_Sword_Layla_ElementalArt_StackNum_4",
-              "effectTempleteID": -1.0
+              "effectTempleteID": -1.0,
+              "scale": 1.0,
+              "ILLLPEOODKP": ""
             }
           ],
-          "elementDurability": 100.0,
-          "modifierName": "",
           "AIHNJLDFEGJ": 0.0
         },
         "Layla_IceShield_0": {
+          "elementDurability": 100.0,
+          "modifierName": "",
           "onAdded": [
             {
               "$type": "RemoveModifier",
@@ -742,8 +760,6 @@
               "modifierName": "Layla_IceShield_Eff4"
             }
           ],
-          "elementDurability": 100.0,
-          "modifierName": "",
           "AIHNJLDFEGJ": 0.0
         },
         "Layla_IceShield_1": {
@@ -762,12 +778,38 @@
           "AIHNJLDFEGJ": 0.0
         },
         "Layla_IceShield_4": {
-          "thinkInterval": 0.1,
           "elementDurability": 100.0,
           "modifierName": "",
           "onThinkInterval": [
             {
               "$type": "Predicated",
+              "otherTargets": {
+                "$type": "SelectTargetsByShape",
+                "campBasedOn": "Caster",
+                "campTargetType": "Enemy",
+                "entityTypePriority": [
+                  "Monster",
+                  "Gadget"
+                ],
+                "shapeName": "CircleR10H10",
+                "sizeRatio": 1.0,
+                "topLimit": 1
+              },
+              "predicates": [
+                {
+                  "$type": "ByEntityTypes",
+                  "entityTypes": [
+                    "Monster",
+                    "Gadget"
+                  ]
+                },
+                {
+                  "$type": "ByTargetGlobalValue",
+                  "compareType": "NoneOrEqual",
+                  "key": "_ANIMAL_ENTITY_TYPE",
+                  "value": 0.0
+                }
+              ],
               "successActions": [
                 {
                   "$type": "CreateGadget",
@@ -777,59 +819,32 @@
                 },
                 {
                   "$type": "SetOverrideMapValue",
-                  "CBOMLBFIPJM": [
+                  "abilityName": "",
+                  "maxValue": 0.0,
+                  "minValue": 0.0,
+                  "overrideMapKey": "DropBall_Type",
+                  "target": "Caster",
+                  "value": [
                     0.0,
                     "DropBall_Type",
                     "SUB"
-                  ],
-                  "maxValue": 0.0,
-                  "abilityName": "",
-                  "minValue": 0.0,
-                  "overrideMapKey": "DropBall_Type",
-                  "target": "Caster"
+                  ]
                 },
                 {
                   "$type": "SetGlobalValue",
                   "key": "_ABILITY_Avatar_Layla_IceShield_GV_Count",
-                  "minValue": 0.0,
                   "maxValue": 0.0,
-                  "CBOMLBFIPJM": 0.0,
-                  "target": "Team"
-                }
-              ],
-              "otherTargets": {
-                "$type": "INIACGFCEDH",
-                "campBasedOn": "Caster",
-                "sizeRatio": 1.0,
-                "campTargetType": "Enemy",
-                "shapeName": "CircleR10H10",
-                "topLimit": 1,
-                "entityTypePriority": [
-                  "Monster",
-                  "Gadget"
-                ]
-              },
-              "predicates": [
-                {
-                  "$type": "DEOFBICNFHF",
-                  "entityTypes": [
-                    "Monster",
-                    "Gadget"
-                  ]
-                },
-                {
-                  "$type": "EOFDCELPGFO",
-                  "CBOMLBFIPJM": 0.0,
-                  "compareType": "NoneOrEqual",
-                  "key": "_ANIMAL_ENTITY_TYPE"
+                  "minValue": 0.0,
+                  "target": "Team",
+                  "value": 0.0
                 }
               ]
             }
           ],
+          "thinkInterval": 0.1,
           "AIHNJLDFEGJ": 0.0
         },
         "Layla_ToughShield_L1_Handler": {
-          "stacking": "Unique",
           "elementDurability": 100.0,
           "modifierMixins": [
             {
@@ -838,10 +853,10 @@
             }
           ],
           "modifierName": "",
+          "stacking": "Unique",
           "AIHNJLDFEGJ": 0.0
         },
         "Layla_ToughShield_L2_Handler": {
-          "stacking": "Unique",
           "elementDurability": 100.0,
           "modifierMixins": [
             {
@@ -850,10 +865,10 @@
             }
           ],
           "modifierName": "",
+          "stacking": "Unique",
           "AIHNJLDFEGJ": 0.0
         },
         "Layla_ToughShield_L3_Handler": {
-          "stacking": "Unique",
           "elementDurability": 100.0,
           "modifierMixins": [
             {
@@ -862,10 +877,10 @@
             }
           ],
           "modifierName": "",
+          "stacking": "Unique",
           "AIHNJLDFEGJ": 0.0
         },
         "Layla_ToughShield_L4_Handler": {
-          "stacking": "Unique",
           "elementDurability": 100.0,
           "modifierMixins": [
             {
@@ -874,20 +889,23 @@
             }
           ],
           "modifierName": "",
+          "stacking": "Unique",
           "AIHNJLDFEGJ": 0.0
         },
         "Layla_ToughShield_L1": {
+          "elementDurability": 100.0,
           "isLimitedProperties": true,
+          "modifierName": "",
           "properties": {
             "Actor_ShieldCostMinusRatio": "ShieldCostMinusRatio"
           },
           "stacking": "Unique",
-          "elementDurability": 100.0,
-          "modifierName": "",
           "AIHNJLDFEGJ": 0.0
         },
         "Layla_ToughShield_L2": {
+          "elementDurability": 100.0,
           "isLimitedProperties": true,
+          "modifierName": "",
           "properties": {
             "Actor_ShieldCostMinusRatio": [
               "ShieldCostMinusRatio",
@@ -896,12 +914,12 @@
             ]
           },
           "stacking": "Unique",
-          "elementDurability": 100.0,
-          "modifierName": "",
           "AIHNJLDFEGJ": 0.0
         },
         "Layla_ToughShield_L3": {
+          "elementDurability": 100.0,
           "isLimitedProperties": true,
+          "modifierName": "",
           "properties": {
             "Actor_ShieldCostMinusRatio": [
               "ShieldCostMinusRatio",
@@ -910,12 +928,12 @@
             ]
           },
           "stacking": "Unique",
-          "elementDurability": 100.0,
-          "modifierName": "",
           "AIHNJLDFEGJ": 0.0
         },
         "Layla_ToughShield_L4": {
+          "elementDurability": 100.0,
           "isLimitedProperties": true,
+          "modifierName": "",
           "properties": {
             "Actor_ShieldCostMinusRatio": [
               "ShieldCostMinusRatio",
@@ -924,61 +942,88 @@
             ]
           },
           "stacking": "Unique",
-          "elementDurability": 100.0,
-          "modifierName": "",
           "AIHNJLDFEGJ": 0.0
         }
       },
       "onAbilityStart": [
         {
           "$type": "AvatarSkillStart",
-          "skillID": 10742,
-          "BGNJBEPEJBO": 1.0,
+          "cdRatio": 1.0,
           "costStaminaRatio": 1.0,
-          "cdRatio": 1.0
+          "skillID": 10742,
+          "GIBAINFKPBO": 1.0
         },
         {
           "$type": "SetOverrideMapValue",
-          "CBOMLBFIPJM": [
+          "abilityName": "",
+          "maxValue": 0.0,
+          "minValue": 0.0,
+          "overrideMapKey": "ShieldHPRatio",
+          "value": [
             "ShieldHPRatio_Skill",
             "ShieldUp",
             "MUL"
-          ],
-          "maxValue": 0.0,
-          "abilityName": "",
-          "minValue": 0.0,
-          "overrideMapKey": "ShieldHPRatio"
+          ]
         },
         {
           "$type": "SetOverrideMapValue",
-          "CBOMLBFIPJM": [
+          "abilityName": "",
+          "maxValue": 0.0,
+          "minValue": 0.0,
+          "overrideMapKey": "ShieldHPConst",
+          "value": [
             "ShieldHPConst_Skill",
             "ShieldUp",
             "MUL"
-          ],
-          "maxValue": 0.0,
-          "abilityName": "",
-          "minValue": 0.0,
-          "overrideMapKey": "ShieldHPConst"
+          ]
         },
         {
           "$type": "SetOverrideMapValue",
-          "CBOMLBFIPJM": "Dura_Skill",
-          "maxValue": 0.0,
           "abilityName": "",
+          "maxValue": 0.0,
           "minValue": 0.0,
-          "overrideMapKey": "Dura"
+          "overrideMapKey": "Dura",
+          "value": "Dura_Skill"
         },
         {
           "$type": "Predicated",
+          "failActions": [
+            {
+              "$type": "ChangeShieldValue",
+              "maxShieldByHPRatio": "ShieldHPRatio",
+              "maxShieldHP": "ShieldHPConst",
+              "modifierName": "UNIQUE_Layla_ElementalArt_IceShield_Team",
+              "refreshTime": true,
+              "shieldHP": "ShieldHPConst",
+              "shieldHPRatio": "ShieldHPRatio",
+              "target": "Team"
+            },
+            {
+              "$type": "SetGlobalValue",
+              "key": "_ABILITY_Avatar_Layla_IceShield_Can_Count",
+              "maxValue": 0.0,
+              "minValue": 0.0,
+              "predicates": [
+                {
+                  "$type": "ByHasChildGadget",
+                  "compareType": "NoneOrEqual",
+                  "configIdArray": [
+                    41074001
+                  ]
+                }
+              ],
+              "target": "Team",
+              "value": 1.0
+            }
+          ],
           "successActions": [
             {
               "$type": "SetGlobalValue",
               "key": "_ABILITY_Avatar_Layla_IceShield_Can_Count",
-              "minValue": 0.0,
               "maxValue": 0.0,
-              "CBOMLBFIPJM": 1.0,
-              "target": "Team"
+              "minValue": 0.0,
+              "target": "Team",
+              "value": 1.0
             },
             {
               "$type": "RemoveUniqueModifier",
@@ -991,86 +1036,63 @@
               "target": "Team"
             }
           ],
-          "failActions": [
-            {
-              "$type": "ChangeShieldValue",
-              "shieldHP": "ShieldHPConst",
-              "refreshTime": true,
-              "EJBPPLDBMBN": "ShieldHPConst",
-              "HBFPLLOJLGL": "ShieldHPRatio",
-              "modifierName": "UNIQUE_Layla_ElementalArt_IceShield_Team",
-              "shieldHPRatio": "ShieldHPRatio",
-              "target": "Team"
-            },
-            {
-              "$type": "SetGlobalValue",
-              "key": "_ABILITY_Avatar_Layla_IceShield_Can_Count",
-              "minValue": 0.0,
-              "maxValue": 0.0,
-              "CBOMLBFIPJM": 1.0,
-              "target": "Team",
-              "predicates": [
-                {
-                  "$type": "LEGDBNLCFNC",
-                  "MBGFJOOIMOK": [
-                    41074001
-                  ],
-                  "compareType": "NoneOrEqual"
-                }
-              ]
-            }
-          ],
+          "target": "Team",
           "targetPredicates": [
             {
-              "$type": "EOFDCELPGFO",
-              "CBOMLBFIPJM": 0.0,
+              "$type": "ByTargetGlobalValue",
               "compareType": "NoneOrEqual",
-              "key": "_ABILITY_Avatar_Layla_HasTeamShield"
+              "key": "_ABILITY_Avatar_Layla_HasTeamShield",
+              "value": 0.0
             }
-          ],
-          "target": "Team"
+          ]
         },
         {
           "$type": "Predicated",
           "successActions": [
             {
               "$type": "SetOverrideMapValue",
-              "CBOMLBFIPJM": [
+              "abilityName": "",
+              "maxValue": 0.0,
+              "minValue": 0.0,
+              "overrideMapKey": "ShieldHPRatio",
+              "value": [
                 "ShieldHPRatio_Skill",
                 "ShieldUp",
                 "MUL",
                 "Talent_Ratio",
                 "MUL"
-              ],
-              "maxValue": 0.0,
-              "abilityName": "",
-              "minValue": 0.0,
-              "overrideMapKey": "ShieldHPRatio"
+              ]
             },
             {
               "$type": "SetOverrideMapValue",
-              "CBOMLBFIPJM": [
+              "abilityName": "",
+              "maxValue": 0.0,
+              "minValue": 0.0,
+              "overrideMapKey": "ShieldHPConst",
+              "value": [
                 "ShieldHPConst_Skill",
                 "ShieldUp",
                 "MUL",
                 "Talent_Ratio",
                 "MUL"
-              ],
-              "maxValue": 0.0,
-              "abilityName": "",
-              "minValue": 0.0,
-              "overrideMapKey": "ShieldHPConst"
+              ]
             },
             {
               "$type": "SetOverrideMapValue",
-              "CBOMLBFIPJM": "Dura_Talent",
-              "maxValue": 0.0,
               "abilityName": "",
+              "maxValue": 0.0,
               "minValue": 0.0,
-              "overrideMapKey": "Dura"
+              "overrideMapKey": "Dura",
+              "value": "Dura_Talent"
             },
             {
               "$type": "Predicated",
+              "otherTargets": {
+                "$type": "SelectTargetsByShape",
+                "campTargetType": "Alliance",
+                "shapeName": "CircleR40",
+                "sizeRatio": 1.0
+              },
               "successActions": [
                 {
                   "$type": "RemoveUniqueModifier",
@@ -1085,24 +1107,18 @@
               ],
               "targetPredicates": [
                 {
-                  "$type": "EOFDCELPGFO",
-                  "CBOMLBFIPJM": 0.0,
+                  "$type": "ByTargetGlobalValue",
                   "compareType": "NoneOrEqual",
                   "key": "_ABILITY_Avatar_Layla_HasTeamShield",
-                  "target": "TargetTeam"
+                  "target": "TargetTeam",
+                  "value": 0.0
                 }
-              ],
-              "otherTargets": {
-                "$type": "INIACGFCEDH",
-                "sizeRatio": 1.0,
-                "campTargetType": "Alliance",
-                "shapeName": "CircleR40"
-              }
+              ]
             }
           ],
           "targetPredicates": [
             {
-              "$type": "LCCNMKNDACG",
+              "$type": "ByUnlockTalentParam",
               "talentParam": "Layla_Talent1_Param"
             }
           ]
@@ -1111,526 +1127,14 @@
           "$type": "AttachModifier",
           "modifierName": "UNIQUE_Layla_ElementalArt_FrozenBuff"
         }
-      ],
-      "abilityName": "Avatar_Layla_ElementalArt_Handler",
-      "abilitySpecials": {
-        "ShieldHPRatio": 0.0,
-        "ShieldHPConst": 0.0,
-        "ShieldHPRatio_Skill": 0.0,
-        "ShieldHPConst_Skill": 0.0,
-        "Dura": 0.0,
-        "Dura_Skill": 0.0,
-        "Dura_Talent": 0.0,
-        "Interval": 1.5,
-        "ShieldCostMinusRatio": 0.0,
-        "Trigger_CD": 0.3,
-        "DropBall_Type": 1.0,
-        "ShieldUp": 1.0,
-        "Talent_Ratio": 0.0
-      }
+      ]
     }
   },
   {
     "Default": {
-      "modifiers": {
-        "Blank": {
-          "elementDurability": 100.0,
-          "modifierName": "",
-          "AIHNJLDFEGJ": 0.0
-        },
-        "Find_Delay": {
-          "duration": 0.5,
-          "onRemoved": [
-            {
-              "$type": "ApplyModifier",
-              "modifierName": "Find_And_Shoot"
-            }
-          ],
-          "onAdded": [
-            {
-              "$type": "SetGlobalValue",
-              "key": "_ABILITY_Avatar_Layla_IceShield_Can_Count",
-              "minValue": 0.0,
-              "maxValue": 0.0,
-              "CBOMLBFIPJM": 0.0,
-              "target": "Team"
-            },
-            {
-              "$type": "SetSelfAttackTarget",
-              "otherTargets": {
-                "$type": "INIACGFCEDH",
-                "sizeRatio": 1.0,
-                "campTargetType": "Enemy",
-                "shapeName": "CircleR10H10",
-                "topLimit": 1,
-                "entityTypePriority": [
-                  "Monster",
-                  "Gadget"
-                ],
-                "sortType": "Nearest"
-              },
-              "predicates": [
-                {
-                  "$type": "DEOFBICNFHF",
-                  "entityTypes": [
-                    "Monster",
-                    "Gadget"
-                  ]
-                },
-                {
-                  "$type": "EOFDCELPGFO",
-                  "CBOMLBFIPJM": 0.0,
-                  "compareType": "NoneOrEqual",
-                  "key": "_ANIMAL_ENTITY_TYPE"
-                }
-              ]
-            }
-          ],
-          "stacking": "Unique",
-          "elementDurability": 100.0,
-          "modifierName": "",
-          "AIHNJLDFEGJ": 0.0
-        },
-        "Find_And_Shoot": {
-          "thinkInterval": 0.45,
-          "duration": 2.5,
-          "onRemoved": [
-            {
-              "$type": "SetGlobalValue",
-              "key": "_ABILITY_Avatar_Layla_IceShield_GV_Count",
-              "minValue": 0.0,
-              "maxValue": 0.0,
-              "CBOMLBFIPJM": 0.0,
-              "target": "Team"
-            },
-            {
-              "$type": "SetGlobalValue",
-              "key": "_ABILITY_Avatar_Layla_IceShield_Can_Count",
-              "minValue": 0.0,
-              "maxValue": 0.0,
-              "CBOMLBFIPJM": 1.0,
-              "target": "Team"
-            },
-            {
-              "$type": "KillSelf"
-            }
-          ],
-          "onAdded": [
-            {
-              "$type": "SetGlobalValue",
-              "key": "_ABILITY_Avatar_Layla_IceShield_Can_Count",
-              "minValue": 0.0,
-              "maxValue": 0.0,
-              "CBOMLBFIPJM": 0.0,
-              "target": "Team"
-            },
-            {
-              "$type": "TriggerAbility",
-              "abilityName": "Avatar_Layla_Shoot_TeamBuff",
-              "target": "OriginOwner",
-              "predicates": [
-                {
-                  "$type": "LCCNMKNDACG",
-                  "talentParam": "Layla_Talent4_Param"
-                }
-              ]
-            },
-            {
-              "$type": "SetSelfAttackTarget",
-              "otherTargets": {
-                "$type": "INIACGFCEDH",
-                "sizeRatio": 1.0,
-                "campTargetType": "Enemy",
-                "shapeName": "CircleR10H10",
-                "topLimit": 1,
-                "entityTypePriority": [
-                  "Monster",
-                  "Gadget"
-                ],
-                "sortType": "Nearest"
-              },
-              "predicates": [
-                {
-                  "$type": "DEOFBICNFHF",
-                  "entityTypes": [
-                    "Monster",
-                    "Gadget"
-                  ]
-                },
-                {
-                  "$type": "EOFDCELPGFO",
-                  "CBOMLBFIPJM": 0.0,
-                  "compareType": "NoneOrEqual",
-                  "key": "_ANIMAL_ENTITY_TYPE"
-                }
-              ]
-            },
-            {
-              "$type": "SetRandomOverrideMapValue",
-              "valueRangeMin": 45.0,
-              "overrideMapKey": "RandomAngleY",
-              "valueRangeMax": 90.0
-            },
-            {
-              "$type": "SetRandomOverrideMapValue",
-              "valueRangeMin": 15.0,
-              "overrideMapKey": "RandomAngleX",
-              "valueRangeMax": 30.0
-            },
-            {
-              "$type": "FireEffect",
-              "effectPattern": "Eff_Avatar_Girl_Sword_Layla_ElementalArt_Bullet_Shoot",
-              "scale": 1.0,
-              "born": {
-                "$type": "BGOLIIIHLMO",
-                "attachPointName": "Bullet4",
-                "attachPointTargetType": "Self"
-              },
-              "ILLLPEOODKP": "",
-              "effectTempleteID": -1.0
-            },
-            {
-              "$type": "TriggerBullet",
-              "born": {
-                "$type": "BGOLIIIHLMO",
-                "attachPointName": "Bullet4",
-                "attachPointTargetType": "Self",
-                "direction": {
-                  "$type": "EJFDCELDDNF",
-                  "MJDDIMNCNAL": "",
-                  "OOKIMPBMBCN": {
-                    "x": [
-                      0.0,
-                      "RandomAngleX",
-                      "SUB"
-                    ],
-                    "y": "RandomAngleY"
-                  }
-                }
-              },
-              "bulletID": 41074002,
-              "propOwnerIs": "OriginOwner",
-              "ownerIs": "OriginOwner"
-            },
-            {
-              "$type": "AddGlobalValue",
-              "useLimitRange": true,
-              "key": "_ABILITY_Avatar_Layla_IceShield_GV_Gadget",
-              "maxValue": 4.0,
-              "minValue": 0.0,
-              "CBOMLBFIPJM": -1.0
-            }
-          ],
-          "stacking": "Unique",
-          "elementDurability": 100.0,
-          "modifierName": "",
-          "onThinkInterval": [
-            {
-              "$type": "SetSelfAttackTarget",
-              "otherTargets": {
-                "$type": "INIACGFCEDH",
-                "sizeRatio": 1.0,
-                "campTargetType": "Enemy",
-                "shapeName": "CircleR10H10",
-                "topLimit": 1,
-                "entityTypePriority": [
-                  "Monster",
-                  "Gadget"
-                ],
-                "sortType": "Nearest"
-              },
-              "predicates": [
-                {
-                  "$type": "DEOFBICNFHF",
-                  "entityTypes": [
-                    "Monster",
-                    "Gadget"
-                  ]
-                },
-                {
-                  "$type": "EOFDCELPGFO",
-                  "CBOMLBFIPJM": 0.0,
-                  "compareType": "NoneOrEqual",
-                  "key": "_ANIMAL_ENTITY_TYPE"
-                }
-              ]
-            },
-            {
-              "$type": "SetRandomOverrideMapValue",
-              "valueRangeMin": 45.0,
-              "overrideMapKey": "RandomAngleY",
-              "valueRangeMax": 90.0
-            },
-            {
-              "$type": "SetRandomOverrideMapValue",
-              "valueRangeMin": 15.0,
-              "overrideMapKey": "RandomAngleX",
-              "valueRangeMax": 30.0
-            },
-            {
-              "$type": "FireEffect",
-              "effectPattern": "Eff_Avatar_Girl_Sword_Layla_ElementalArt_Bullet_Shoot",
-              "scale": 1.0,
-              "born": {
-                "$type": "BGOLIIIHLMO",
-                "attachPointName": "Bullet3",
-                "attachPointTargetType": "Self"
-              },
-              "ILLLPEOODKP": "",
-              "effectTempleteID": -1.0,
-              "predicates": [
-                {
-                  "$type": "EOFDCELPGFO",
-                  "CBOMLBFIPJM": 3.0,
-                  "key": "_ABILITY_Avatar_Layla_IceShield_GV_Gadget",
-                  "target": "Self"
-                }
-              ]
-            },
-            {
-              "$type": "TriggerBullet",
-              "born": {
-                "$type": "BGOLIIIHLMO",
-                "attachPointName": "Bullet3",
-                "attachPointTargetType": "Self",
-                "direction": {
-                  "$type": "EJFDCELDDNF",
-                  "MJDDIMNCNAL": "",
-                  "OOKIMPBMBCN": {
-                    "x": [
-                      0.0,
-                      "RandomAngleX",
-                      "SUB"
-                    ],
-                    "y": [
-                      0.0,
-                      "RandomAngleY",
-                      "SUB"
-                    ]
-                  }
-                }
-              },
-              "bulletID": 41074002,
-              "propOwnerIs": "OriginOwner",
-              "ownerIs": "OriginOwner",
-              "predicates": [
-                {
-                  "$type": "EOFDCELPGFO",
-                  "CBOMLBFIPJM": 3.0,
-                  "key": "_ABILITY_Avatar_Layla_IceShield_GV_Gadget",
-                  "target": "Self"
-                }
-              ]
-            },
-            {
-              "$type": "FireEffect",
-              "effectPattern": "Eff_Avatar_Girl_Sword_Layla_ElementalArt_Bullet_Shoot",
-              "scale": 1.0,
-              "born": {
-                "$type": "BGOLIIIHLMO",
-                "attachPointName": "Bullet2",
-                "attachPointTargetType": "Self"
-              },
-              "ILLLPEOODKP": "",
-              "effectTempleteID": -1.0,
-              "predicates": [
-                {
-                  "$type": "EOFDCELPGFO",
-                  "CBOMLBFIPJM": 2.0,
-                  "key": "_ABILITY_Avatar_Layla_IceShield_GV_Gadget",
-                  "target": "Self"
-                }
-              ]
-            },
-            {
-              "$type": "TriggerBullet",
-              "born": {
-                "$type": "BGOLIIIHLMO",
-                "attachPointName": "Bullet2",
-                "attachPointTargetType": "Self",
-                "direction": {
-                  "$type": "EJFDCELDDNF",
-                  "MJDDIMNCNAL": "",
-                  "OOKIMPBMBCN": {
-                    "x": [
-                      0.0,
-                      "RandomAngleX",
-                      "SUB",
-                      15.0,
-                      "SUB"
-                    ],
-                    "y": "RandomAngleY"
-                  }
-                }
-              },
-              "bulletID": 41074002,
-              "propOwnerIs": "OriginOwner",
-              "ownerIs": "OriginOwner",
-              "predicates": [
-                {
-                  "$type": "EOFDCELPGFO",
-                  "CBOMLBFIPJM": 2.0,
-                  "key": "_ABILITY_Avatar_Layla_IceShield_GV_Gadget",
-                  "target": "Self"
-                }
-              ]
-            },
-            {
-              "$type": "FireEffect",
-              "effectPattern": "Eff_Avatar_Girl_Sword_Layla_ElementalArt_Bullet_Shoot",
-              "scale": 1.0,
-              "born": {
-                "$type": "BGOLIIIHLMO",
-                "attachPointName": "Bullet1",
-                "attachPointTargetType": "Self"
-              },
-              "ILLLPEOODKP": "",
-              "effectTempleteID": -1.0,
-              "predicates": [
-                {
-                  "$type": "EOFDCELPGFO",
-                  "CBOMLBFIPJM": 1.0,
-                  "key": "_ABILITY_Avatar_Layla_IceShield_GV_Gadget",
-                  "target": "Self"
-                }
-              ]
-            },
-            {
-              "$type": "TriggerBullet",
-              "born": {
-                "$type": "BGOLIIIHLMO",
-                "attachPointName": "Bullet1",
-                "attachPointTargetType": "Self",
-                "direction": {
-                  "$type": "EJFDCELDDNF",
-                  "MJDDIMNCNAL": "",
-                  "OOKIMPBMBCN": {
-                    "x": [
-                      0.0,
-                      "RandomAngleX",
-                      "SUB",
-                      15.0,
-                      "SUB"
-                    ],
-                    "y": [
-                      0.0,
-                      "RandomAngleY",
-                      "SUB"
-                    ]
-                  }
-                }
-              },
-              "bulletID": 41074002,
-              "propOwnerIs": "OriginOwner",
-              "ownerIs": "OriginOwner",
-              "predicates": [
-                {
-                  "$type": "EOFDCELPGFO",
-                  "CBOMLBFIPJM": 1.0,
-                  "key": "_ABILITY_Avatar_Layla_IceShield_GV_Gadget",
-                  "target": "Self"
-                }
-              ]
-            },
-            {
-              "$type": "AddGlobalValue",
-              "useLimitRange": true,
-              "key": "_ABILITY_Avatar_Layla_IceShield_GV_Gadget",
-              "maxValue": 4.0,
-              "minValue": 0.0,
-              "CBOMLBFIPJM": -1.0
-            },
-            {
-              "$type": "RemoveModifier",
-              "modifierName": "Find_And_Shoot",
-              "predicates": [
-                {
-                  "$type": "EOFDCELPGFO",
-                  "CBOMLBFIPJM": 0.0,
-                  "key": "_ABILITY_Avatar_Layla_IceShield_GV_Gadget",
-                  "target": "Self"
-                }
-              ]
-            }
-          ],
-          "AIHNJLDFEGJ": 0.0
-        },
-        "Layla_ElementalArt_Star_EFF_1": {
-          "onAdded": [
-            {
-              "$type": "AttachEffect",
-              "ILLLPEOODKP": "",
-              "scale": 1.0,
-              "effectPattern": "Eff_Avatar_Girl_Sword_Layla_ElementalArt_StackNum_1",
-              "effectTempleteID": -1.0
-            }
-          ],
-          "elementDurability": 100.0,
-          "modifierName": "",
-          "AIHNJLDFEGJ": 0.0
-        },
-        "Layla_ElementalArt_Star_EFF_2": {
-          "onAdded": [
-            {
-              "$type": "AttachEffect",
-              "ILLLPEOODKP": "",
-              "scale": 1.0,
-              "effectPattern": "Eff_Avatar_Girl_Sword_Layla_ElementalArt_StackNum_2",
-              "effectTempleteID": -1.0
-            }
-          ],
-          "elementDurability": 100.0,
-          "modifierName": "",
-          "AIHNJLDFEGJ": 0.0
-        },
-        "Layla_ElementalArt_Star_EFF_3": {
-          "onAdded": [
-            {
-              "$type": "AttachEffect",
-              "ILLLPEOODKP": "",
-              "scale": 1.0,
-              "effectPattern": "Eff_Avatar_Girl_Sword_Layla_ElementalArt_StackNum_3",
-              "effectTempleteID": -1.0
-            }
-          ],
-          "elementDurability": 100.0,
-          "modifierName": "",
-          "AIHNJLDFEGJ": 0.0
-        },
-        "Layla_ElementalArt_Star_EFF_4": {
-          "onAdded": [
-            {
-              "$type": "AttachEffect",
-              "ILLLPEOODKP": "",
-              "scale": 1.0,
-              "effectPattern": "Eff_Avatar_Girl_Sword_Layla_ElementalArt_StackNum_4",
-              "effectTempleteID": -1.0
-            }
-          ],
-          "elementDurability": 100.0,
-          "modifierName": "",
-          "AIHNJLDFEGJ": 0.0
-        }
-      },
       "abilityMixins": [
         {
           "$type": "AttachModifierToSelfGlobalValueMixin",
-          "modifierNameSteps": [
-            "Blank",
-            "Blank",
-            "Blank",
-            "Blank",
-            "Blank"
-          ],
-          "valueSteps": [
-            -0.5,
-            0.5,
-            1.5,
-            2.5,
-            3.5,
-            4.5
-          ],
-          "globalValueKey": "_ABILITY_Avatar_Layla_IceShield_GV_Gadget",
           "actionQueues": [
             [
               {
@@ -1675,178 +1179,681 @@
               }
             ]
           ],
-          "defaultGlobalValueOnCreate": 4.0
+          "defaultGlobalValueOnCreate": 4.0,
+          "globalValueKey": "_ABILITY_Avatar_Layla_IceShield_GV_Gadget",
+          "modifierNameSteps": [
+            "Blank",
+            "Blank",
+            "Blank",
+            "Blank",
+            "Blank"
+          ],
+          "valueSteps": [
+            -0.5,
+            0.5,
+            1.5,
+            2.5,
+            3.5,
+            4.5
+          ]
         }
       ],
       "abilityName": "Avatar_Layla_ElementalArt_Gadget",
+      "abilitySpecials": {
+        "RandomAngleY": 0.0,
+        "RandomAngleX": 0.0
+      },
+      "modifiers": {
+        "Blank": {
+          "elementDurability": 100.0,
+          "modifierName": "",
+          "AIHNJLDFEGJ": 0.0
+        },
+        "Find_Delay": {
+          "duration": 0.5,
+          "elementDurability": 100.0,
+          "modifierName": "",
+          "onAdded": [
+            {
+              "$type": "SetGlobalValue",
+              "key": "_ABILITY_Avatar_Layla_IceShield_Can_Count",
+              "maxValue": 0.0,
+              "minValue": 0.0,
+              "target": "Team",
+              "value": 0.0
+            },
+            {
+              "$type": "SetSelfAttackTarget",
+              "otherTargets": {
+                "$type": "SelectTargetsByShape",
+                "campTargetType": "Enemy",
+                "entityTypePriority": [
+                  "Monster",
+                  "Gadget"
+                ],
+                "shapeName": "CircleR10H10",
+                "sizeRatio": 1.0,
+                "sortType": "Nearest",
+                "topLimit": 1
+              },
+              "predicates": [
+                {
+                  "$type": "ByEntityTypes",
+                  "entityTypes": [
+                    "Monster",
+                    "Gadget"
+                  ]
+                },
+                {
+                  "$type": "ByTargetGlobalValue",
+                  "compareType": "NoneOrEqual",
+                  "key": "_ANIMAL_ENTITY_TYPE",
+                  "value": 0.0
+                }
+              ]
+            }
+          ],
+          "onRemoved": [
+            {
+              "$type": "ApplyModifier",
+              "modifierName": "Find_And_Shoot"
+            }
+          ],
+          "stacking": "Unique",
+          "AIHNJLDFEGJ": 0.0
+        },
+        "Find_And_Shoot": {
+          "duration": 2.5,
+          "elementDurability": 100.0,
+          "modifierName": "",
+          "onAdded": [
+            {
+              "$type": "SetGlobalValue",
+              "key": "_ABILITY_Avatar_Layla_IceShield_Can_Count",
+              "maxValue": 0.0,
+              "minValue": 0.0,
+              "target": "Team",
+              "value": 0.0
+            },
+            {
+              "$type": "TriggerAbility",
+              "abilityName": "Avatar_Layla_Shoot_TeamBuff",
+              "predicates": [
+                {
+                  "$type": "ByUnlockTalentParam",
+                  "talentParam": "Layla_Talent4_Param"
+                }
+              ],
+              "target": "OriginOwner"
+            },
+            {
+              "$type": "SetSelfAttackTarget",
+              "otherTargets": {
+                "$type": "SelectTargetsByShape",
+                "campTargetType": "Enemy",
+                "entityTypePriority": [
+                  "Monster",
+                  "Gadget"
+                ],
+                "shapeName": "CircleR10H10",
+                "sizeRatio": 1.0,
+                "sortType": "Nearest",
+                "topLimit": 1
+              },
+              "predicates": [
+                {
+                  "$type": "ByEntityTypes",
+                  "entityTypes": [
+                    "Monster",
+                    "Gadget"
+                  ]
+                },
+                {
+                  "$type": "ByTargetGlobalValue",
+                  "compareType": "NoneOrEqual",
+                  "key": "_ANIMAL_ENTITY_TYPE",
+                  "value": 0.0
+                }
+              ]
+            },
+            {
+              "$type": "SetRandomOverrideMapValue",
+              "overrideMapKey": "RandomAngleY",
+              "valueRangeMax": 90.0,
+              "valueRangeMin": 45.0
+            },
+            {
+              "$type": "SetRandomOverrideMapValue",
+              "overrideMapKey": "RandomAngleX",
+              "valueRangeMax": 30.0,
+              "valueRangeMin": 15.0
+            },
+            {
+              "$type": "FireEffect",
+              "born": {
+                "$type": "ConfigBornByAttachPoint",
+                "attachPointName": "Bullet4",
+                "attachPointTargetType": "Self"
+              },
+              "effectPattern": "Eff_Avatar_Girl_Sword_Layla_ElementalArt_Bullet_Shoot",
+              "effectTempleteID": -1.0,
+              "scale": 1.0,
+              "ILLLPEOODKP": ""
+            },
+            {
+              "$type": "TriggerBullet",
+              "born": {
+                "$type": "ConfigBornByAttachPoint",
+                "attachPointName": "Bullet4",
+                "attachPointTargetType": "Self",
+                "direction": {
+                  "$type": "ConfigDirectionByAttackTarget",
+                  "angleOffset": {
+                    "y": "RandomAngleY",
+                    "z": [
+                      0.0,
+                      "RandomAngleX",
+                      "SUB"
+                    ]
+                  },
+                  "startPoint": ""
+                }
+              },
+              "bulletID": 41074002,
+              "ownerIs": "OriginOwner",
+              "propOwnerIs": "OriginOwner"
+            },
+            {
+              "$type": "AddGlobalValue",
+              "key": "_ABILITY_Avatar_Layla_IceShield_GV_Gadget",
+              "maxValue": 4.0,
+              "minValue": 0.0,
+              "useLimitRange": true,
+              "value": -1.0
+            }
+          ],
+          "onRemoved": [
+            {
+              "$type": "SetGlobalValue",
+              "key": "_ABILITY_Avatar_Layla_IceShield_GV_Count",
+              "maxValue": 0.0,
+              "minValue": 0.0,
+              "target": "Team",
+              "value": 0.0
+            },
+            {
+              "$type": "SetGlobalValue",
+              "key": "_ABILITY_Avatar_Layla_IceShield_Can_Count",
+              "maxValue": 0.0,
+              "minValue": 0.0,
+              "target": "Team",
+              "value": 1.0
+            },
+            {
+              "$type": "KillSelf"
+            }
+          ],
+          "onThinkInterval": [
+            {
+              "$type": "SetSelfAttackTarget",
+              "otherTargets": {
+                "$type": "SelectTargetsByShape",
+                "campTargetType": "Enemy",
+                "entityTypePriority": [
+                  "Monster",
+                  "Gadget"
+                ],
+                "shapeName": "CircleR10H10",
+                "sizeRatio": 1.0,
+                "sortType": "Nearest",
+                "topLimit": 1
+              },
+              "predicates": [
+                {
+                  "$type": "ByEntityTypes",
+                  "entityTypes": [
+                    "Monster",
+                    "Gadget"
+                  ]
+                },
+                {
+                  "$type": "ByTargetGlobalValue",
+                  "compareType": "NoneOrEqual",
+                  "key": "_ANIMAL_ENTITY_TYPE",
+                  "value": 0.0
+                }
+              ]
+            },
+            {
+              "$type": "SetRandomOverrideMapValue",
+              "overrideMapKey": "RandomAngleY",
+              "valueRangeMax": 90.0,
+              "valueRangeMin": 45.0
+            },
+            {
+              "$type": "SetRandomOverrideMapValue",
+              "overrideMapKey": "RandomAngleX",
+              "valueRangeMax": 30.0,
+              "valueRangeMin": 15.0
+            },
+            {
+              "$type": "FireEffect",
+              "born": {
+                "$type": "ConfigBornByAttachPoint",
+                "attachPointName": "Bullet3",
+                "attachPointTargetType": "Self"
+              },
+              "effectPattern": "Eff_Avatar_Girl_Sword_Layla_ElementalArt_Bullet_Shoot",
+              "effectTempleteID": -1.0,
+              "predicates": [
+                {
+                  "$type": "ByTargetGlobalValue",
+                  "key": "_ABILITY_Avatar_Layla_IceShield_GV_Gadget",
+                  "target": "Self",
+                  "value": 3.0
+                }
+              ],
+              "scale": 1.0,
+              "ILLLPEOODKP": ""
+            },
+            {
+              "$type": "TriggerBullet",
+              "born": {
+                "$type": "ConfigBornByAttachPoint",
+                "attachPointName": "Bullet3",
+                "attachPointTargetType": "Self",
+                "direction": {
+                  "$type": "ConfigDirectionByAttackTarget",
+                  "angleOffset": {
+                    "y": [
+                      0.0,
+                      "RandomAngleY",
+                      "SUB"
+                    ],
+                    "z": [
+                      0.0,
+                      "RandomAngleX",
+                      "SUB"
+                    ]
+                  },
+                  "startPoint": ""
+                }
+              },
+              "bulletID": 41074002,
+              "ownerIs": "OriginOwner",
+              "predicates": [
+                {
+                  "$type": "ByTargetGlobalValue",
+                  "key": "_ABILITY_Avatar_Layla_IceShield_GV_Gadget",
+                  "target": "Self",
+                  "value": 3.0
+                }
+              ],
+              "propOwnerIs": "OriginOwner"
+            },
+            {
+              "$type": "FireEffect",
+              "born": {
+                "$type": "ConfigBornByAttachPoint",
+                "attachPointName": "Bullet2",
+                "attachPointTargetType": "Self"
+              },
+              "effectPattern": "Eff_Avatar_Girl_Sword_Layla_ElementalArt_Bullet_Shoot",
+              "effectTempleteID": -1.0,
+              "predicates": [
+                {
+                  "$type": "ByTargetGlobalValue",
+                  "key": "_ABILITY_Avatar_Layla_IceShield_GV_Gadget",
+                  "target": "Self",
+                  "value": 2.0
+                }
+              ],
+              "scale": 1.0,
+              "ILLLPEOODKP": ""
+            },
+            {
+              "$type": "TriggerBullet",
+              "born": {
+                "$type": "ConfigBornByAttachPoint",
+                "attachPointName": "Bullet2",
+                "attachPointTargetType": "Self",
+                "direction": {
+                  "$type": "ConfigDirectionByAttackTarget",
+                  "angleOffset": {
+                    "y": "RandomAngleY",
+                    "z": [
+                      0.0,
+                      "RandomAngleX",
+                      "SUB",
+                      15.0,
+                      "SUB"
+                    ]
+                  },
+                  "startPoint": ""
+                }
+              },
+              "bulletID": 41074002,
+              "ownerIs": "OriginOwner",
+              "predicates": [
+                {
+                  "$type": "ByTargetGlobalValue",
+                  "key": "_ABILITY_Avatar_Layla_IceShield_GV_Gadget",
+                  "target": "Self",
+                  "value": 2.0
+                }
+              ],
+              "propOwnerIs": "OriginOwner"
+            },
+            {
+              "$type": "FireEffect",
+              "born": {
+                "$type": "ConfigBornByAttachPoint",
+                "attachPointName": "Bullet1",
+                "attachPointTargetType": "Self"
+              },
+              "effectPattern": "Eff_Avatar_Girl_Sword_Layla_ElementalArt_Bullet_Shoot",
+              "effectTempleteID": -1.0,
+              "predicates": [
+                {
+                  "$type": "ByTargetGlobalValue",
+                  "key": "_ABILITY_Avatar_Layla_IceShield_GV_Gadget",
+                  "target": "Self",
+                  "value": 1.0
+                }
+              ],
+              "scale": 1.0,
+              "ILLLPEOODKP": ""
+            },
+            {
+              "$type": "TriggerBullet",
+              "born": {
+                "$type": "ConfigBornByAttachPoint",
+                "attachPointName": "Bullet1",
+                "attachPointTargetType": "Self",
+                "direction": {
+                  "$type": "ConfigDirectionByAttackTarget",
+                  "angleOffset": {
+                    "y": [
+                      0.0,
+                      "RandomAngleY",
+                      "SUB"
+                    ],
+                    "z": [
+                      0.0,
+                      "RandomAngleX",
+                      "SUB",
+                      15.0,
+                      "SUB"
+                    ]
+                  },
+                  "startPoint": ""
+                }
+              },
+              "bulletID": 41074002,
+              "ownerIs": "OriginOwner",
+              "predicates": [
+                {
+                  "$type": "ByTargetGlobalValue",
+                  "key": "_ABILITY_Avatar_Layla_IceShield_GV_Gadget",
+                  "target": "Self",
+                  "value": 1.0
+                }
+              ],
+              "propOwnerIs": "OriginOwner"
+            },
+            {
+              "$type": "AddGlobalValue",
+              "key": "_ABILITY_Avatar_Layla_IceShield_GV_Gadget",
+              "maxValue": 4.0,
+              "minValue": 0.0,
+              "useLimitRange": true,
+              "value": -1.0
+            },
+            {
+              "$type": "RemoveModifier",
+              "modifierName": "Find_And_Shoot",
+              "predicates": [
+                {
+                  "$type": "ByTargetGlobalValue",
+                  "key": "_ABILITY_Avatar_Layla_IceShield_GV_Gadget",
+                  "target": "Self",
+                  "value": 0.0
+                }
+              ]
+            }
+          ],
+          "stacking": "Unique",
+          "thinkInterval": 0.45,
+          "AIHNJLDFEGJ": 0.0
+        },
+        "Layla_ElementalArt_Star_EFF_1": {
+          "elementDurability": 100.0,
+          "modifierName": "",
+          "onAdded": [
+            {
+              "$type": "AttachEffect",
+              "effectPattern": "Eff_Avatar_Girl_Sword_Layla_ElementalArt_StackNum_1",
+              "effectTempleteID": -1.0,
+              "scale": 1.0,
+              "ILLLPEOODKP": ""
+            }
+          ],
+          "AIHNJLDFEGJ": 0.0
+        },
+        "Layla_ElementalArt_Star_EFF_2": {
+          "elementDurability": 100.0,
+          "modifierName": "",
+          "onAdded": [
+            {
+              "$type": "AttachEffect",
+              "effectPattern": "Eff_Avatar_Girl_Sword_Layla_ElementalArt_StackNum_2",
+              "effectTempleteID": -1.0,
+              "scale": 1.0,
+              "ILLLPEOODKP": ""
+            }
+          ],
+          "AIHNJLDFEGJ": 0.0
+        },
+        "Layla_ElementalArt_Star_EFF_3": {
+          "elementDurability": 100.0,
+          "modifierName": "",
+          "onAdded": [
+            {
+              "$type": "AttachEffect",
+              "effectPattern": "Eff_Avatar_Girl_Sword_Layla_ElementalArt_StackNum_3",
+              "effectTempleteID": -1.0,
+              "scale": 1.0,
+              "ILLLPEOODKP": ""
+            }
+          ],
+          "AIHNJLDFEGJ": 0.0
+        },
+        "Layla_ElementalArt_Star_EFF_4": {
+          "elementDurability": 100.0,
+          "modifierName": "",
+          "onAdded": [
+            {
+              "$type": "AttachEffect",
+              "effectPattern": "Eff_Avatar_Girl_Sword_Layla_ElementalArt_StackNum_4",
+              "effectTempleteID": -1.0,
+              "scale": 1.0,
+              "ILLLPEOODKP": ""
+            }
+          ],
+          "AIHNJLDFEGJ": 0.0
+        }
+      },
       "onAdded": [
         {
           "$type": "AttachModifier",
           "modifierName": "Find_Delay"
         }
-      ],
-      "abilitySpecials": {
-        "RandomAngleY": 0.0,
-        "RandomAngleX": 0.0
-      }
+      ]
     }
   },
   {
     "Default": {
+      "abilityName": "Avatar_Layla_ElementalArt_Bullet_Material",
+      "abilitySpecials": {
+        "Bullet_Damage": 0.0,
+        "HealHPRatio": 0.0,
+        "RandomTime": 0.1,
+        "DropBall_CD": 3.5
+      },
       "modifiers": {
         "Timer": {
           "duration": "RandomTime",
+          "elementDurability": 100.0,
+          "modifierName": "",
           "onRemoved": [
             {
               "$type": "ApplyModifier",
               "modifierName": "AngularVelocityUp"
             }
           ],
-          "elementDurability": 100.0,
-          "modifierName": "",
           "AIHNJLDFEGJ": 0.0
         },
         "Bullet_FX": {
+          "elementDurability": 100.0,
+          "modifierName": "",
           "onAdded": [
             {
               "$type": "AttachEffect",
-              "ILLLPEOODKP": "",
-              "scale": 1.0,
               "effectPattern": "Eff_Avatar_Girl_Sword_Layla_ElementalArt_Bullet",
-              "effectTempleteID": -1.0
+              "effectTempleteID": -1.0,
+              "scale": 1.0,
+              "ILLLPEOODKP": ""
             },
             {
               "$type": "AttachEffect",
-              "ILLLPEOODKP": "",
-              "scale": 1.0,
               "effectPattern": "Eff_Avatar_Girl_Sword_Layla_ElementalArt_Bullet_Trail",
-              "effectTempleteID": -1.0
+              "effectTempleteID": -1.0,
+              "scale": 1.0,
+              "ILLLPEOODKP": ""
             }
           ],
-          "elementDurability": 100.0,
-          "modifierName": "",
           "AIHNJLDFEGJ": 0.0
         },
         "AngularVelocityUp": {
+          "elementDurability": 100.0,
+          "modifierName": "",
           "properties": {
             "Actor_BulletMoveAngularVelocityRatio": 49.0
           },
-          "elementDurability": 100.0,
-          "modifierName": "",
           "AIHNJLDFEGJ": 0.0
         },
         "UNIQUE_Ball_1": {
           "duration": "DropBall_CD",
+          "elementDurability": 100.0,
+          "isUnique": true,
+          "modifierName": "",
           "onAdded": [
             {
               "$type": "Randomed",
               "chance": 1.0,
+              "doOffStage": true,
               "successActions": [
                 {
                   "$type": "GenerateElemBall",
-                  "ratio": 1.0,
+                  "baseEnergy": 3.0,
                   "born": {
-                    "$type": "BOJMMDAIGMM",
+                    "$type": "ConfigBornByTarget",
                     "offset": {
-                      "x": 0.0,
-                      "z": 1.0,
-                      "y": 0.0
+                      "x": 1.0,
+                      "y": 0.0,
+                      "z": 0.0
                     }
                   },
                   "configID": 2022,
-                  "baseEnergy": 3.0,
-                  "target": "Caster",
-                  "doOffStage": true
+                  "doOffStage": true,
+                  "ratio": 1.0,
+                  "target": "Caster"
                 }
-              ],
-              "doOffStage": true
+              ]
             },
             {
               "$type": "Randomed",
               "chance": 0.33,
+              "doOffStage": true,
               "successActions": [
                 {
                   "$type": "GenerateElemBall",
-                  "ratio": 1.0,
+                  "baseEnergy": 3.0,
                   "born": {
-                    "$type": "BOJMMDAIGMM",
+                    "$type": "ConfigBornByTarget",
                     "offset": {
-                      "x": 0.0,
-                      "z": 1.0,
-                      "y": 0.0
+                      "x": 1.0,
+                      "y": 0.0,
+                      "z": 0.0
                     }
                   },
                   "configID": 2022,
-                  "baseEnergy": 3.0,
-                  "target": "Caster",
-                  "doOffStage": true
+                  "doOffStage": true,
+                  "ratio": 1.0,
+                  "target": "Caster"
                 }
-              ],
-              "doOffStage": true
+              ]
             }
           ],
           "stacking": "Unique",
-          "elementDurability": 100.0,
-          "modifierName": "",
           "timeScale": "Level",
-          "isUnique": true,
           "AIHNJLDFEGJ": 0.0
         },
         "UNIQUE_Ball_2": {
           "duration": "DropBall_CD",
+          "elementDurability": 100.0,
+          "isUnique": true,
+          "modifierName": "",
           "onAdded": [
             {
               "$type": "Randomed",
               "chance": 1.0,
+              "doOffStage": true,
               "successActions": [
                 {
                   "$type": "GenerateElemBall",
-                  "ratio": 1.0,
+                  "baseEnergy": 3.0,
                   "born": {
-                    "$type": "BOJMMDAIGMM",
+                    "$type": "ConfigBornByTarget",
                     "offset": {
-                      "x": 0.0,
-                      "z": 1.0,
-                      "y": 0.0
+                      "x": 1.0,
+                      "y": 0.0,
+                      "z": 0.0
                     }
                   },
                   "configID": 2022,
-                  "baseEnergy": 3.0,
-                  "target": "Caster",
-                  "doOffStage": true
+                  "doOffStage": true,
+                  "ratio": 1.0,
+                  "target": "Caster"
                 }
-              ],
-              "doOffStage": true
+              ]
             },
             {
               "$type": "Randomed",
               "chance": 0.33,
+              "doOffStage": true,
               "successActions": [
                 {
                   "$type": "GenerateElemBall",
-                  "ratio": 1.0,
+                  "baseEnergy": 3.0,
                   "born": {
-                    "$type": "BOJMMDAIGMM",
+                    "$type": "ConfigBornByTarget",
                     "offset": {
-                      "x": 0.0,
-                      "z": 1.0,
-                      "y": 0.0
+                      "x": 1.0,
+                      "y": 0.0,
+                      "z": 0.0
                     }
                   },
                   "configID": 2022,
-                  "baseEnergy": 3.0,
-                  "target": "Caster",
-                  "doOffStage": true
+                  "doOffStage": true,
+                  "ratio": 1.0,
+                  "target": "Caster"
                 }
-              ],
-              "doOffStage": true
+              ]
             }
           ],
           "stacking": "Unique",
-          "elementDurability": 100.0,
-          "modifierName": "",
           "timeScale": "Level",
-          "isUnique": true,
           "AIHNJLDFEGJ": 0.0
         }
       },
@@ -1854,41 +1861,23 @@
         {
           "$type": "FireEffect",
           "effectPattern": "Eff_Avatar_Girl_Sword_Layla_ElementalArt_Bullet_Hit",
+          "effectTempleteID": -1.0,
           "scale": 1.0,
-          "ILLLPEOODKP": "",
-          "effectTempleteID": -1.0
+          "ILLLPEOODKP": ""
         },
         {
           "$type": "Predicated",
-          "successActions": [
-            {
-              "$type": "TriggerAbility",
-              "abilityName": "Avatar_Layla_ArtAndBurst_ReviveEnergy",
-              "target": "OriginOwner",
-              "predicates": [
-                {
-                  "$type": "LCCNMKNDACG",
-                  "talentParam": "Layla_Talent2_Param"
-                }
-              ]
-            },
-            {
-              "$type": "ApplyModifier",
-              "modifierName": "UNIQUE_Ball_1",
-              "target": "OriginOwner"
-            }
-          ],
           "failActions": [
             {
               "$type": "TriggerAbility",
               "abilityName": "Avatar_Layla_ArtAndBurst_ReviveEnergy",
-              "target": "OriginOwner",
               "predicates": [
                 {
-                  "$type": "LCCNMKNDACG",
+                  "$type": "ByUnlockTalentParam",
                   "talentParam": "Layla_Talent2_Param"
                 }
-              ]
+              ],
+              "target": "OriginOwner"
             },
             {
               "$type": "ApplyModifier",
@@ -1896,76 +1885,93 @@
               "target": "OriginOwner"
             }
           ],
-          "targetPredicates": [
-            {
-              "$type": "HLBKPONKODA",
-              "JMBICGCILKD": -1.0,
-              "targetAbilityName": "Avatar_Layla_ElementalArt_Handler",
-              "targetKey": "DropBall_Type",
-              "logic": "Equal",
-              "target": "OriginOwner"
-            }
-          ],
-          "target": "Other",
           "predicates": [
             {
-              "$type": "DEOFBICNFHF",
+              "$type": "ByEntityTypes",
               "entityTypes": [
                 "Monster"
               ]
             },
             {
-              "$type": "EOFDCELPGFO",
-              "CBOMLBFIPJM": 0.0,
+              "$type": "ByTargetGlobalValue",
               "compareType": "NoneOrEqual",
-              "key": "_ANIMAL_ENTITY_TYPE"
+              "key": "_ANIMAL_ENTITY_TYPE",
+              "value": 0.0
+            }
+          ],
+          "successActions": [
+            {
+              "$type": "TriggerAbility",
+              "abilityName": "Avatar_Layla_ArtAndBurst_ReviveEnergy",
+              "predicates": [
+                {
+                  "$type": "ByUnlockTalentParam",
+                  "talentParam": "Layla_Talent2_Param"
+                }
+              ],
+              "target": "OriginOwner"
+            },
+            {
+              "$type": "ApplyModifier",
+              "modifierName": "UNIQUE_Ball_1",
+              "target": "OriginOwner"
+            }
+          ],
+          "target": "Other",
+          "targetPredicates": [
+            {
+              "$type": "ByTargetOverrideMapValue",
+              "logic": "Equal",
+              "target": "OriginOwner",
+              "targetAbilityName": "Avatar_Layla_ElementalArt_Handler",
+              "targetKey": "DropBall_Type",
+              "targetValue": -1.0
             }
           ]
         },
         {
           "$type": "TriggerAttackEvent",
-          "targetType": "Enemy",
           "attackEvent": {
             "attackInfo": {
               "attackProperty": {
-                "elementType": "Ice",
-                "damagePercentageRatio": 0.0,
-                "strikeType": "Default",
-                "enBreak": 15.0,
                 "damagePercentage": "Bullet_Damage",
+                "damagePercentageRatio": 0.0,
                 "elementDurability": 25.0,
-                "arkheGrade": 0.0
+                "elementType": "Ice",
+                "enBreak": 15.0,
+                "strikeType": "Default",
+                "IIPHCFEONLK": 0.0
               },
-              "hitPattern": {
-                "FLFCIDDNMNA": "",
-                "onHitEffectName": "",
-                "hitHaltTimeScale": 0.01,
-                "hitImpulseType": "LV2"
-              },
+              "attackTag": "Elemental_Art",
               "attenuationGroup": "Layla_ElementalArt_Bullet",
               "attenuationTag": "Elemental_Art",
-              "attackTag": "Elemental_Art",
-              "canBeModifiedBy": "OriginOwner"
+              "canBeModifiedBy": "OriginOwner",
+              "hitPattern": {
+                "hitHaltTimeScale": 0.01,
+                "hitImpulseType": "LV2",
+                "onHitEffectName": "",
+                "FLFCIDDNMNA": ""
+              }
             },
             "attackPattern": {
-              "$type": "HCAGHMDHEGG",
-              "radius": 0.8,
-              "triggerType": "TriggerNoRepeat",
+              "$type": "ConfigAttackSphere",
               "born": {
-                "$type": "NABPLNFPHCK"
+                "$type": "ConfigBornBySelf"
               },
-              "checkHitLayerType": "Both"
+              "checkHitLayerType": "Both",
+              "radius": 0.8,
+              "triggerType": "TriggerNoRepeat"
             }
-          }
+          },
+          "targetType": "Enemy"
         }
       ],
-      "abilityName": "Avatar_Layla_ElementalArt_Bullet_Material",
       "onAdded": [
         {
           "$type": "SetRandomOverrideMapValue",
-          "valueRangeMin": 0.1,
           "overrideMapKey": "RandomTime",
-          "valueRangeMax": 0.1
+          "valueRangeMax": 0.1,
+          "valueRangeMin": 0.1
         },
         {
           "$type": "AttachModifier",
@@ -1975,20 +1981,84 @@
           "$type": "ApplyModifier",
           "modifierName": "Timer"
         }
-      ],
-      "abilitySpecials": {
-        "Bullet_Damage": 0.0,
-        "HealHPRatio": 0.0,
-        "RandomTime": 0.1,
-        "DropBall_CD": 3.5
-      }
+      ]
     }
   },
   {
     "Default": {
+      "abilityMixins": [
+        {
+          "$type": "AttachToStateIDMixin",
+          "modifierName": "ElementalBurst_Protection",
+          "stateIDs": [
+            "ElementalBurst"
+          ],
+          "LJPPDIGCJMJ": ""
+        },
+        {
+          "$type": "AttachToStateIDMixin",
+          "modifierName": "ElementalBurst_Camera_Handler",
+          "stateIDs": [
+            "ElementalBurst",
+            "ElementalBurst_AS"
+          ],
+          "LJPPDIGCJMJ": ""
+        },
+        {
+          "$type": "AttachToNormalizedTimeMixin",
+          "modifierName": "Layla_ElementalBurst_Gadget_Born&Drop",
+          "normalizeEnd": 0.55,
+          "normalizeStart": 0.05,
+          "stateID": "ElementalBurst",
+          "LJPPDIGCJMJ": ""
+        },
+        {
+          "$type": "AttachToNormalizedTimeMixin",
+          "modifierName": "Layla_ElementalBurst_Camera_On&Recover",
+          "normalizeEnd": 0.55,
+          "stateID": "ElementalBurst",
+          "LJPPDIGCJMJ": ""
+        }
+      ],
+      "abilityName": "Avatar_Layla_ElementalBurst",
       "modifiers": {
         "ElementalBurst_Protection": {
           "duration": 2.0,
+          "elementDurability": 100.0,
+          "modifierMixins": [
+            {
+              "$type": "WindZoneMixin",
+              "attenuation": 2.0,
+              "born": {
+                "$type": "ConfigBornByTarget",
+                "offset": {
+                  "x": 0.0,
+                  "y": 0.0,
+                  "z": 0.0
+                }
+              },
+              "innerRadius": 0.0,
+              "modifierName": "",
+              "predicates": [
+                {
+                  "$type": "ByEntityTypes",
+                  "entityTypes": [
+                    "Monster",
+                    "Grass"
+                  ]
+                },
+                {
+                  "$type": "ByTargetWeight",
+                  "logic": "LesserOrEqual",
+                  "weight": 250.0
+                }
+              ],
+              "shapeName": "CircleR3",
+              "strength": -3.0,
+              "targetType": "Enemy"
+            }
+          ],
+          "modifierName": "",
           "onAdded": [
             {
               "$type": "AttachAbilityStateResistance",
@@ -1996,10 +2066,10 @@
             },
             {
               "$type": "AvatarSkillStart",
-              "skillID": 10745,
-              "BGNJBEPEJBO": 1.0,
+              "cdRatio": 1.0,
               "costStaminaRatio": 1.0,
-              "cdRatio": 1.0
+              "skillID": 10745,
+              "GIBAINFKPBO": 1.0
             },
             {
               "$type": "KillGadget",
@@ -2011,83 +2081,56 @@
             {
               "$type": "FireEffect",
               "effectPattern": "Eff_Avatar_Girl_Sword_Layla_ElementalBurst_Cast",
+              "effectTempleteID": -1.0,
               "scale": 1.0,
-              "ILLLPEOODKP": "",
-              "effectTempleteID": -1.0
-            }
-          ],
-          "elementDurability": 100.0,
-          "modifierMixins": [
-            {
-              "$type": "WindZoneMixin",
-              "targetType": "Enemy",
-              "modifierName": "",
-              "NGFJGIAMCKD": 0.0,
-              "NCIPCJFOKFG": -3.0,
-              "ICPNECKICCJ": 2.0,
-              "born": {
-                "$type": "BOJMMDAIGMM",
-                "offset": {
-                  "x": 0.0,
-                  "z": 0.0,
-                  "y": 0.0
-                }
-              },
-              "shapeName": "CircleR3",
-              "predicates": [
-                {
-                  "$type": "DEOFBICNFHF",
-                  "entityTypes": [
-                    "Monster",
-                    "Grass"
-                  ]
-                },
-                {
-                  "$type": "NDIHGIDCJFH",
-                  "OLIIPBHKFCN": 250.0,
-                  "logic": "LesserOrEqual"
-                }
-              ]
+              "ILLLPEOODKP": ""
             }
           ],
           "state": "Invincible",
-          "modifierName": "",
           "AIHNJLDFEGJ": 0.0
         },
         "ElementalBurst_Camera_Handler": {
-          "onRemoved": [
-            {
-              "$type": "EnableHeadControl",
-              "enable": true,
-              "doOffStage": true
-            }
-          ],
+          "elementDurability": 100.0,
+          "modifierName": "",
           "onAdded": [
             {
               "$type": "EnableHeadControl",
               "blend": false
             }
           ],
-          "elementDurability": 100.0,
-          "modifierName": "",
+          "onRemoved": [
+            {
+              "$type": "EnableHeadControl",
+              "doOffStage": true,
+              "enable": true
+            }
+          ],
           "AIHNJLDFEGJ": 0.0
         },
         "Layla_ElementalBurst_Camera_On&Recover": {
+          "elementDurability": 100.0,
+          "modifierName": "",
+          "onAdded": [
+            {
+              "$type": "AvatarEnterCameraShot",
+              "cameraMoveCfgPath": "Camera_Layla_ElementalBurst_Out"
+            }
+          ],
           "onRemoved": [
             {
               "$type": "ActCameraRadialBlur",
-              "NFBFBAJDMPJ": {
-                "BKICBNIALGL": 0.3,
-                "LCOPJHPGJCO": 0.15,
-                "LFMGJKCOGPI": 0.8
+              "cameraRadialBlur": {
+                "blurTime": 0.3,
+                "fadeTime": 0.15,
+                "power": 0.8
               }
             },
             {
               "$type": "AvatarCameraParam",
               "cameraParam": {
-                "shouldKeepForceRadius": true,
+                "forceRadius": 6.0,
                 "forceRadiusDuration": 1.0,
-                "forceRadius": 6.0
+                "shouldKeepForceRadius": true
               },
               "doOffStage": true
             },
@@ -2101,108 +2144,72 @@
             },
             {
               "$type": "EnableHeadControl",
-              "enable": true,
-              "doOffStage": true
+              "doOffStage": true,
+              "enable": true
             }
           ],
-          "onAdded": [
-            {
-              "$type": "AvatarEnterCameraShot",
-              "cameraMoveCfgPath": "Camera_Layla_ElementalBurst_Out"
-            }
-          ],
-          "elementDurability": 100.0,
-          "modifierName": "",
           "AIHNJLDFEGJ": 0.0
         },
         "Layla_ElementalBurst_Gadget_Born&Drop": {
+          "elementDurability": 100.0,
+          "modifierName": "",
+          "onAdded": [
+            {
+              "$type": "CreateGadget",
+              "born": {
+                "$type": "ConfigBornBySelf",
+                "offset": {
+                  "x": 1.0
+                },
+                "onGround": true
+              },
+              "campID": 1001,
+              "gadgetID": 41074011
+            }
+          ],
           "onRemoved": [
             {
               "$type": "FireEffect",
               "effectPattern": "Eff_Avatar_Girl_Sword_Layla_ElementalBurst_Area",
+              "effectTempleteID": -1.0,
               "scale": 1.0,
-              "ILLLPEOODKP": "",
-              "effectTempleteID": -1.0
+              "ILLLPEOODKP": ""
             }
           ],
-          "onAdded": [
-            {
-              "$type": "CreateGadget",
-              "gadgetID": 41074011,
-              "campID": 1001,
-              "born": {
-                "$type": "NABPLNFPHCK",
-                "onGround": true,
-                "offset": {
-                  "z": 1.0
-                }
-              }
-            }
-          ],
-          "elementDurability": 100.0,
-          "modifierName": "",
           "AIHNJLDFEGJ": 0.0
         }
-      },
-      "abilityMixins": [
-        {
-          "$type": "AttachToStateIDMixin",
-          "LJPPDIGCJMJ": "",
-          "stateIDs": [
-            "ElementalBurst"
-          ],
-          "modifierName": "ElementalBurst_Protection"
-        },
-        {
-          "$type": "AttachToStateIDMixin",
-          "LJPPDIGCJMJ": "",
-          "stateIDs": [
-            "ElementalBurst",
-            "ElementalBurst_AS"
-          ],
-          "modifierName": "ElementalBurst_Camera_Handler"
-        },
-        {
-          "$type": "AttachToNormalizedTimeMixin",
-          "modifierName": "Layla_ElementalBurst_Gadget_Born&Drop",
-          "LJPPDIGCJMJ": "",
-          "normalizeEnd": 0.55,
-          "stateID": "ElementalBurst",
-          "normalizeStart": 0.05
-        },
-        {
-          "$type": "AttachToNormalizedTimeMixin",
-          "modifierName": "Layla_ElementalBurst_Camera_On&Recover",
-          "LJPPDIGCJMJ": "",
-          "normalizeEnd": 0.55,
-          "stateID": "ElementalBurst"
-        }
-      ],
-      "abilityName": "Avatar_Layla_ElementalBurst"
+      }
     }
   },
   {
     "Default": {
+      "abilityName": "Avatar_Layla_ElementalBurst_Gadget",
+      "abilitySpecials": {
+        "RandomAngle": 0.0,
+        "ShootPointNum": 1.0,
+        "Dura": 1.0,
+        "Interval": 1.5
+      },
       "modifiers": {
         "Gadget_Fx": {
+          "elementDurability": 100.0,
+          "modifierName": "",
           "onAdded": [
             {
               "$type": "AttachEffect",
-              "ILLLPEOODKP": "",
-              "scale": 1.0,
               "effectPattern": "Eff_Avatar_Girl_Sword_Layla_ElementalBurst_Gadget_In",
-              "effectTempleteID": -1.0
+              "effectTempleteID": -1.0,
+              "scale": 1.0,
+              "ILLLPEOODKP": ""
             },
             {
               "$type": "AttachEffect",
-              "ILLLPEOODKP": "",
-              "scale": 1.0,
               "effectPattern": "Eff_Avatar_Girl_Sword_Layla_ElementalBurst_Gadget_Alert",
-              "effectTempleteID": -1.0
+              "effectTempleteID": -1.0,
+              "scale": 1.0,
+              "ILLLPEOODKP": ""
             }
           ],
-          "elementDurability": 100.0,
-          "modifierName": "",
           "AIHNJLDFEGJ": 0.0
         },
         "Layla_ElementalBurst_Gadget_Weather": {
@@ -2220,360 +2227,341 @@
           "AIHNJLDFEGJ": 0.0
         },
         "Layla_ElementalBurst_Gadget_BulletTrigger_Modifier": {
-          "thinkInterval": "Interval",
           "duration": "Dura",
+          "elementDurability": 100.0,
+          "modifierName": "",
+          "onAdded": [
+            {
+              "$type": "SetOverrideMapValue",
+              "abilityName": "",
+              "maxValue": 0.0,
+              "minValue": 0.0,
+              "overrideMapKey": "ShootPointNum",
+              "value": 1.0
+            }
+          ],
           "onRemoved": [
             {
               "$type": "SetAnimatorTrigger",
-              "MPTriggerOnRemote": true,
+              "mpTriggerOnRemote": true,
               "triggerID": "End"
             },
             {
               "$type": "FireEffect",
               "effectPattern": "Eff_Avatar_Girl_Sword_Layla_ElementalBurst_Gadget_Die",
+              "effectTempleteID": -1.0,
               "scale": 1.0,
-              "ILLLPEOODKP": "",
-              "effectTempleteID": -1.0
+              "ILLLPEOODKP": ""
             }
           ],
-          "onAdded": [
-            {
-              "$type": "SetOverrideMapValue",
-              "CBOMLBFIPJM": 1.0,
-              "maxValue": 0.0,
-              "abilityName": "",
-              "minValue": 0.0,
-              "overrideMapKey": "ShootPointNum"
-            }
-          ],
-          "elementDurability": 100.0,
-          "modifierName": "",
           "onThinkInterval": [
             {
               "$type": "Predicated",
-              "successActions": [
-                {
-                  "$type": "SetAnimatorTrigger",
-                  "MPTriggerOnRemote": true,
-                  "triggerID": "Attack"
-                },
-                {
-                  "$type": "SetSelfAttackTarget",
-                  "otherTargets": {
-                    "$type": "INIACGFCEDH",
-                    "sizeRatio": 1.0,
-                    "campTargetType": "Enemy",
-                    "shapeName": "CircleR12H10",
-                    "topLimit": 1,
-                    "entityTypePriority": [
-                      "Monster",
-                      "Gadget"
-                    ],
-                    "sortType": "Nearest"
-                  },
-                  "predicates": [
-                    {
-                      "$type": "DEOFBICNFHF",
-                      "entityTypes": [
-                        "Monster",
-                        "Gadget"
-                      ]
-                    },
-                    {
-                      "$type": "EOFDCELPGFO",
-                      "CBOMLBFIPJM": 0.0,
-                      "compareType": "NoneOrEqual",
-                      "key": "_ANIMAL_ENTITY_TYPE"
-                    }
-                  ]
-                },
-                {
-                  "$type": "SetRandomOverrideMapValue",
-                  "valueRangeMin": -100.0,
-                  "overrideMapKey": "RandomAngle",
-                  "valueRangeMax": -80.0
-                },
-                {
-                  "$type": "FireEffect",
-                  "effectPattern": "Eff_Avatar_Girl_Sword_Layla_ElementalBurst_Bullet_ShootEffect",
-                  "scale": 1.0,
-                  "born": {
-                    "$type": "BGOLIIIHLMO",
-                    "attachPointName": "Shoot1",
-                    "offset": {
-                      "x": -0.25
-                    }
-                  },
-                  "ILLLPEOODKP": "",
-                  "effectTempleteID": -1.0,
-                  "predicates": [
-                    {
-                      "$type": "HLBKPONKODA",
-                      "JMBICGCILKD": 1.0,
-                      "targetAbilityName": "",
-                      "targetKey": "ShootPointNum",
-                      "logic": "Equal"
-                    }
-                  ]
-                },
-                {
-                  "$type": "TriggerBullet",
-                  "born": {
-                    "$type": "BGOLIIIHLMO",
-                    "attachPointName": "Shoot1",
-                    "offset": {
-                      "x": -0.25
-                    },
-                    "direction": {
-                      "$type": "EJFDCELDDNF",
-                      "MJDDIMNCNAL": "",
-                      "EJCLJNABJAH": {
-                        "y": "RandomAngle"
-                      }
-                    }
-                  },
-                  "bulletID": 41074012,
-                  "predicates": [
-                    {
-                      "$type": "HLBKPONKODA",
-                      "JMBICGCILKD": 1.0,
-                      "targetAbilityName": "",
-                      "targetKey": "ShootPointNum",
-                      "logic": "Equal"
-                    }
-                  ]
-                },
-                {
-                  "$type": "FireEffect",
-                  "effectPattern": "Eff_Avatar_Girl_Sword_Layla_ElementalBurst_Bullet_ShootEffect",
-                  "scale": 1.0,
-                  "born": {
-                    "$type": "BGOLIIIHLMO",
-                    "attachPointName": "Shoot2",
-                    "offset": {
-                      "x": -0.25
-                    }
-                  },
-                  "ILLLPEOODKP": "",
-                  "effectTempleteID": -1.0,
-                  "predicates": [
-                    {
-                      "$type": "HLBKPONKODA",
-                      "JMBICGCILKD": 2.0,
-                      "targetAbilityName": "",
-                      "targetKey": "ShootPointNum",
-                      "logic": "Equal"
-                    }
-                  ]
-                },
-                {
-                  "$type": "TriggerBullet",
-                  "born": {
-                    "$type": "BGOLIIIHLMO",
-                    "attachPointName": "Shoot2",
-                    "offset": {
-                      "x": -0.25
-                    },
-                    "direction": {
-                      "$type": "EJFDCELDDNF",
-                      "MJDDIMNCNAL": "",
-                      "EJCLJNABJAH": {
-                        "y": "RandomAngle"
-                      }
-                    }
-                  },
-                  "bulletID": 41074012,
-                  "predicates": [
-                    {
-                      "$type": "HLBKPONKODA",
-                      "JMBICGCILKD": 2.0,
-                      "targetAbilityName": "",
-                      "targetKey": "ShootPointNum",
-                      "logic": "Equal"
-                    }
-                  ]
-                },
-                {
-                  "$type": "FireEffect",
-                  "effectPattern": "Eff_Avatar_Girl_Sword_Layla_ElementalBurst_Bullet_ShootEffect",
-                  "scale": 1.0,
-                  "born": {
-                    "$type": "BGOLIIIHLMO",
-                    "attachPointName": "Shoot3",
-                    "offset": {
-                      "x": -0.25
-                    }
-                  },
-                  "ILLLPEOODKP": "",
-                  "effectTempleteID": -1.0,
-                  "predicates": [
-                    {
-                      "$type": "HLBKPONKODA",
-                      "JMBICGCILKD": 3.0,
-                      "targetAbilityName": "",
-                      "targetKey": "ShootPointNum",
-                      "logic": "Equal"
-                    }
-                  ]
-                },
-                {
-                  "$type": "TriggerBullet",
-                  "born": {
-                    "$type": "BGOLIIIHLMO",
-                    "attachPointName": "Shoot3",
-                    "offset": {
-                      "x": -0.25
-                    },
-                    "direction": {
-                      "$type": "EJFDCELDDNF",
-                      "MJDDIMNCNAL": "",
-                      "EJCLJNABJAH": {
-                        "y": "RandomAngle"
-                      }
-                    }
-                  },
-                  "bulletID": 41074012,
-                  "predicates": [
-                    {
-                      "$type": "HLBKPONKODA",
-                      "JMBICGCILKD": 3.0,
-                      "targetAbilityName": "",
-                      "targetKey": "ShootPointNum",
-                      "logic": "Equal"
-                    }
-                  ]
-                },
-                {
-                  "$type": "FireEffect",
-                  "effectPattern": "Eff_Avatar_Girl_Sword_Layla_ElementalBurst_Bullet_ShootEffect",
-                  "scale": 1.0,
-                  "born": {
-                    "$type": "BGOLIIIHLMO",
-                    "attachPointName": "Shoot4",
-                    "offset": {
-                      "x": -0.25
-                    }
-                  },
-                  "ILLLPEOODKP": "",
-                  "effectTempleteID": -1.0,
-                  "predicates": [
-                    {
-                      "$type": "HLBKPONKODA",
-                      "JMBICGCILKD": 4.0,
-                      "targetAbilityName": "",
-                      "targetKey": "ShootPointNum",
-                      "logic": "Equal"
-                    }
-                  ]
-                },
-                {
-                  "$type": "TriggerBullet",
-                  "born": {
-                    "$type": "BGOLIIIHLMO",
-                    "attachPointName": "Shoot4",
-                    "offset": {
-                      "x": -0.25
-                    },
-                    "direction": {
-                      "$type": "EJFDCELDDNF",
-                      "MJDDIMNCNAL": "",
-                      "EJCLJNABJAH": {
-                        "y": "RandomAngle"
-                      }
-                    }
-                  },
-                  "bulletID": 41074012,
-                  "predicates": [
-                    {
-                      "$type": "HLBKPONKODA",
-                      "JMBICGCILKD": 4.0,
-                      "targetAbilityName": "",
-                      "targetKey": "ShootPointNum",
-                      "logic": "Equal"
-                    }
-                  ]
-                },
-                {
-                  "$type": "SetOverrideMapValue",
-                  "CBOMLBFIPJM": [
-                    "ShootPointNum",
-                    1.0,
-                    "ADD"
-                  ],
-                  "maxValue": 0.0,
-                  "abilityName": "",
-                  "minValue": 0.0,
-                  "overrideMapKey": "ShootPointNum"
-                },
-                {
-                  "$type": "SetOverrideMapValue",
-                  "CBOMLBFIPJM": 1.0,
-                  "maxValue": 0.0,
-                  "abilityName": "",
-                  "minValue": 0.0,
-                  "overrideMapKey": "ShootPointNum",
-                  "predicates": [
-                    {
-                      "$type": "HLBKPONKODA",
-                      "JMBICGCILKD": 5.0,
-                      "targetAbilityName": "",
-                      "targetKey": "ShootPointNum",
-                      "logic": "GreaterOrEqual"
-                    }
-                  ]
-                }
-              ],
               "otherTargets": {
-                "$type": "INIACGFCEDH",
-                "sizeRatio": 1.0,
+                "$type": "SelectTargetsByShape",
                 "campTargetType": "Enemy",
-                "shapeName": "CircleR12H10",
-                "topLimit": 1,
                 "entityTypePriority": [
                   "Monster",
                   "Gadget"
                 ],
-                "sortType": "Nearest"
+                "shapeName": "CircleR12H10",
+                "sizeRatio": 1.0,
+                "sortType": "Nearest",
+                "topLimit": 1
               },
               "predicates": [
                 {
-                  "$type": "DEOFBICNFHF",
+                  "$type": "ByEntityTypes",
                   "entityTypes": [
                     "Monster",
                     "Gadget"
                   ]
                 },
                 {
-                  "$type": "EOFDCELPGFO",
-                  "CBOMLBFIPJM": 0.0,
+                  "$type": "ByTargetGlobalValue",
                   "compareType": "NoneOrEqual",
-                  "key": "_ANIMAL_ENTITY_TYPE"
+                  "key": "_ANIMAL_ENTITY_TYPE",
+                  "value": 0.0
+                }
+              ],
+              "successActions": [
+                {
+                  "$type": "SetAnimatorTrigger",
+                  "mpTriggerOnRemote": true,
+                  "triggerID": "Attack"
+                },
+                {
+                  "$type": "SetSelfAttackTarget",
+                  "otherTargets": {
+                    "$type": "SelectTargetsByShape",
+                    "campTargetType": "Enemy",
+                    "entityTypePriority": [
+                      "Monster",
+                      "Gadget"
+                    ],
+                    "shapeName": "CircleR12H10",
+                    "sizeRatio": 1.0,
+                    "sortType": "Nearest",
+                    "topLimit": 1
+                  },
+                  "predicates": [
+                    {
+                      "$type": "ByEntityTypes",
+                      "entityTypes": [
+                        "Monster",
+                        "Gadget"
+                      ]
+                    },
+                    {
+                      "$type": "ByTargetGlobalValue",
+                      "compareType": "NoneOrEqual",
+                      "key": "_ANIMAL_ENTITY_TYPE",
+                      "value": 0.0
+                    }
+                  ]
+                },
+                {
+                  "$type": "SetRandomOverrideMapValue",
+                  "overrideMapKey": "RandomAngle",
+                  "valueRangeMax": -80.0,
+                  "valueRangeMin": -100.0
+                },
+                {
+                  "$type": "FireEffect",
+                  "born": {
+                    "$type": "ConfigBornByAttachPoint",
+                    "attachPointName": "Shoot1",
+                    "offset": {
+                      "z": -0.25
+                    }
+                  },
+                  "effectPattern": "Eff_Avatar_Girl_Sword_Layla_ElementalBurst_Bullet_ShootEffect",
+                  "effectTempleteID": -1.0,
+                  "predicates": [
+                    {
+                      "$type": "ByTargetOverrideMapValue",
+                      "logic": "Equal",
+                      "targetAbilityName": "",
+                      "targetKey": "ShootPointNum",
+                      "targetValue": 1.0
+                    }
+                  ],
+                  "scale": 1.0,
+                  "ILLLPEOODKP": ""
+                },
+                {
+                  "$type": "TriggerBullet",
+                  "born": {
+                    "$type": "ConfigBornByAttachPoint",
+                    "attachPointName": "Shoot1",
+                    "direction": {
+                      "$type": "ConfigDirectionByAttackTarget",
+                      "angleOffsetCorrect": {
+                        "y": "RandomAngle"
+                      },
+                      "startPoint": ""
+                    },
+                    "offset": {
+                      "z": -0.25
+                    }
+                  },
+                  "bulletID": 41074012,
+                  "predicates": [
+                    {
+                      "$type": "ByTargetOverrideMapValue",
+                      "logic": "Equal",
+                      "targetAbilityName": "",
+                      "targetKey": "ShootPointNum",
+                      "targetValue": 1.0
+                    }
+                  ]
+                },
+                {
+                  "$type": "FireEffect",
+                  "born": {
+                    "$type": "ConfigBornByAttachPoint",
+                    "attachPointName": "Shoot2",
+                    "offset": {
+                      "z": -0.25
+                    }
+                  },
+                  "effectPattern": "Eff_Avatar_Girl_Sword_Layla_ElementalBurst_Bullet_ShootEffect",
+                  "effectTempleteID": -1.0,
+                  "predicates": [
+                    {
+                      "$type": "ByTargetOverrideMapValue",
+                      "logic": "Equal",
+                      "targetAbilityName": "",
+                      "targetKey": "ShootPointNum",
+                      "targetValue": 2.0
+                    }
+                  ],
+                  "scale": 1.0,
+                  "ILLLPEOODKP": ""
+                },
+                {
+                  "$type": "TriggerBullet",
+                  "born": {
+                    "$type": "ConfigBornByAttachPoint",
+                    "attachPointName": "Shoot2",
+                    "direction": {
+                      "$type": "ConfigDirectionByAttackTarget",
+                      "angleOffsetCorrect": {
+                        "y": "RandomAngle"
+                      },
+                      "startPoint": ""
+                    },
+                    "offset": {
+                      "z": -0.25
+                    }
+                  },
+                  "bulletID": 41074012,
+                  "predicates": [
+                    {
+                      "$type": "ByTargetOverrideMapValue",
+                      "logic": "Equal",
+                      "targetAbilityName": "",
+                      "targetKey": "ShootPointNum",
+                      "targetValue": 2.0
+                    }
+                  ]
+                },
+                {
+                  "$type": "FireEffect",
+                  "born": {
+                    "$type": "ConfigBornByAttachPoint",
+                    "attachPointName": "Shoot3",
+                    "offset": {
+                      "z": -0.25
+                    }
+                  },
+                  "effectPattern": "Eff_Avatar_Girl_Sword_Layla_ElementalBurst_Bullet_ShootEffect",
+                  "effectTempleteID": -1.0,
+                  "predicates": [
+                    {
+                      "$type": "ByTargetOverrideMapValue",
+                      "logic": "Equal",
+                      "targetAbilityName": "",
+                      "targetKey": "ShootPointNum",
+                      "targetValue": 3.0
+                    }
+                  ],
+                  "scale": 1.0,
+                  "ILLLPEOODKP": ""
+                },
+                {
+                  "$type": "TriggerBullet",
+                  "born": {
+                    "$type": "ConfigBornByAttachPoint",
+                    "attachPointName": "Shoot3",
+                    "direction": {
+                      "$type": "ConfigDirectionByAttackTarget",
+                      "angleOffsetCorrect": {
+                        "y": "RandomAngle"
+                      },
+                      "startPoint": ""
+                    },
+                    "offset": {
+                      "z": -0.25
+                    }
+                  },
+                  "bulletID": 41074012,
+                  "predicates": [
+                    {
+                      "$type": "ByTargetOverrideMapValue",
+                      "logic": "Equal",
+                      "targetAbilityName": "",
+                      "targetKey": "ShootPointNum",
+                      "targetValue": 3.0
+                    }
+                  ]
+                },
+                {
+                  "$type": "FireEffect",
+                  "born": {
+                    "$type": "ConfigBornByAttachPoint",
+                    "attachPointName": "Shoot4",
+                    "offset": {
+                      "z": -0.25
+                    }
+                  },
+                  "effectPattern": "Eff_Avatar_Girl_Sword_Layla_ElementalBurst_Bullet_ShootEffect",
+                  "effectTempleteID": -1.0,
+                  "predicates": [
+                    {
+                      "$type": "ByTargetOverrideMapValue",
+                      "logic": "Equal",
+                      "targetAbilityName": "",
+                      "targetKey": "ShootPointNum",
+                      "targetValue": 4.0
+                    }
+                  ],
+                  "scale": 1.0,
+                  "ILLLPEOODKP": ""
+                },
+                {
+                  "$type": "TriggerBullet",
+                  "born": {
+                    "$type": "ConfigBornByAttachPoint",
+                    "attachPointName": "Shoot4",
+                    "direction": {
+                      "$type": "ConfigDirectionByAttackTarget",
+                      "angleOffsetCorrect": {
+                        "y": "RandomAngle"
+                      },
+                      "startPoint": ""
+                    },
+                    "offset": {
+                      "z": -0.25
+                    }
+                  },
+                  "bulletID": 41074012,
+                  "predicates": [
+                    {
+                      "$type": "ByTargetOverrideMapValue",
+                      "logic": "Equal",
+                      "targetAbilityName": "",
+                      "targetKey": "ShootPointNum",
+                      "targetValue": 4.0
+                    }
+                  ]
+                },
+                {
+                  "$type": "SetOverrideMapValue",
+                  "abilityName": "",
+                  "maxValue": 0.0,
+                  "minValue": 0.0,
+                  "overrideMapKey": "ShootPointNum",
+                  "value": [
+                    "ShootPointNum",
+                    1.0,
+                    "ADD"
+                  ]
+                },
+                {
+                  "$type": "SetOverrideMapValue",
+                  "abilityName": "",
+                  "maxValue": 0.0,
+                  "minValue": 0.0,
+                  "overrideMapKey": "ShootPointNum",
+                  "predicates": [
+                    {
+                      "$type": "ByTargetOverrideMapValue",
+                      "logic": "GreaterOrEqual",
+                      "targetAbilityName": "",
+                      "targetKey": "ShootPointNum",
+                      "targetValue": 5.0
+                    }
+                  ],
+                  "value": 1.0
                 }
               ]
             }
           ],
+          "thinkInterval": "Interval",
           "AIHNJLDFEGJ": 0.0
         }
       },
-      "onKill": [
-        {
-          "$type": "RemoveModifier",
-          "modifierName": "Gadget_Fx"
-        },
-        {
-          "$type": "SetAnimatorTrigger",
-          "MPTriggerOnRemote": true,
-          "triggerID": "End"
-        },
-        {
-          "$type": "FireEffect",
-          "effectPattern": "Eff_Avatar_Girl_Sword_Layla_ElementalBurst_Gadget_Die",
-          "scale": 1.0,
-          "ILLLPEOODKP": "",
-          "effectTempleteID": -1.0
-        }
-      ],
-      "abilityName": "Avatar_Layla_ElementalBurst_Gadget",
       "onAdded": [
         {
           "$type": "AttachModifier",
@@ -2588,104 +2576,122 @@
           "modifierName": "Gadget_Fx"
         }
       ],
-      "abilitySpecials": {
-        "RandomAngle": 0.0,
-        "ShootPointNum": 1.0,
-        "Dura": 1.0,
-        "Interval": 1.5
-      }
+      "onKill": [
+        {
+          "$type": "RemoveModifier",
+          "modifierName": "Gadget_Fx"
+        },
+        {
+          "$type": "SetAnimatorTrigger",
+          "mpTriggerOnRemote": true,
+          "triggerID": "End"
+        },
+        {
+          "$type": "FireEffect",
+          "effectPattern": "Eff_Avatar_Girl_Sword_Layla_ElementalBurst_Gadget_Die",
+          "effectTempleteID": -1.0,
+          "scale": 1.0,
+          "ILLLPEOODKP": ""
+        }
+      ]
     }
   },
   {
     "Default": {
+      "abilityName": "Avatar_Layla_ElementalBurst_Bullet1_Material",
+      "abilitySpecials": {
+        "DamageByHPRatio": 0.0,
+        "Trigger_CD": 0.5,
+        "RandomTime": 0.15
+      },
       "modifiers": {
         "UNIQUE_Layla_AddTeamGlobalvalue": {
           "duration": "Trigger_CD",
+          "elementDurability": 100.0,
+          "isUnique": true,
+          "modifierName": "",
           "onAdded": [
             {
               "$type": "AddGlobalValue",
-              "useLimitRange": true,
               "key": "_ABILITY_Avatar_Layla_IceShield_GV_Count",
               "maxValue": 4.0,
               "minValue": 0.0,
-              "CBOMLBFIPJM": 1.0,
-              "target": "Team",
               "predicates": [
                 {
-                  "$type": "EOFDCELPGFO",
-                  "CBOMLBFIPJM": 1.0,
+                  "$type": "ByTargetGlobalValue",
                   "key": "_ABILITY_Avatar_Layla_IceShield_Can_Count",
-                  "target": "Team"
+                  "target": "Team",
+                  "value": 1.0
                 }
-              ]
+              ],
+              "target": "Team",
+              "useLimitRange": true,
+              "value": 1.0
             },
             {
               "$type": "AddGlobalValue",
-              "useLimitRange": true,
               "key": "_ABILITY_Avatar_Layla_ToughShield_Level",
               "maxValue": 4.0,
               "minValue": 0.0,
-              "CBOMLBFIPJM": 1.0,
-              "target": "Team",
               "predicates": [
                 {
-                  "$type": "EOFDCELPGFO",
-                  "CBOMLBFIPJM": 1.0,
+                  "$type": "ByTargetGlobalValue",
                   "key": "_ABILITY_Avatar_Layla_IceShield_Can_Count",
-                  "target": "Team"
+                  "target": "Team",
+                  "value": 1.0
                 },
                 {
-                  "$type": "LCCNMKNDACG",
+                  "$type": "ByUnlockTalentParam",
                   "talentParam": "Layla_Skill1_Param"
                 }
-              ]
+              ],
+              "target": "Team",
+              "useLimitRange": true,
+              "value": 1.0
             }
           ],
           "stacking": "Unique",
-          "elementDurability": 100.0,
-          "modifierName": "",
-          "isUnique": true,
           "AIHNJLDFEGJ": 0.0
         },
         "Timer": {
           "duration": "RandomTime",
+          "elementDurability": 100.0,
+          "modifierName": "",
           "onRemoved": [
             {
               "$type": "ApplyModifier",
               "modifierName": "AngularVelocityUp"
             }
           ],
-          "elementDurability": 100.0,
-          "modifierName": "",
           "AIHNJLDFEGJ": 0.0
         },
         "Bullet_Fx": {
+          "elementDurability": 100.0,
+          "modifierName": "",
           "onAdded": [
             {
               "$type": "AttachEffect",
-              "ILLLPEOODKP": "",
-              "scale": 1.0,
               "effectPattern": "Eff_Avatar_Girl_Sword_Layla_ElementalBurst_Bullet",
-              "effectTempleteID": -1.0
+              "effectTempleteID": -1.0,
+              "scale": 1.0,
+              "ILLLPEOODKP": ""
             },
             {
               "$type": "AttachEffect",
-              "ILLLPEOODKP": "",
-              "scale": 1.0,
               "effectPattern": "Eff_Avatar_Girl_Sword_Layla_ElementalBurst_Bullet_Trail",
-              "effectTempleteID": -1.0
+              "effectTempleteID": -1.0,
+              "scale": 1.0,
+              "ILLLPEOODKP": ""
             }
           ],
-          "elementDurability": 100.0,
-          "modifierName": "",
           "AIHNJLDFEGJ": 0.0
         },
         "AngularVelocityUp": {
+          "elementDurability": 100.0,
+          "modifierName": "",
           "properties": {
             "Actor_BulletMoveAngularVelocityRatio": 49.0
           },
-          "elementDurability": 100.0,
-          "modifierName": "",
           "AIHNJLDFEGJ": 0.0
         }
       },
@@ -2694,14 +2700,14 @@
           "$type": "ApplyModifier",
           "modifierName": "UNIQUE_Layla_AddTeamGlobalvalue",
           "otherTargets": {
-            "$type": "INIACGFCEDH",
-            "sizeRatio": 1.0,
+            "$type": "SelectTargetsByShape",
             "campTargetType": "SelfCamp",
-            "shapeName": "CircleR40"
+            "shapeName": "CircleR40",
+            "sizeRatio": 1.0
           },
           "predicates": [
             {
-              "$type": "DEOFBICNFHF",
+              "$type": "ByEntityTypes",
               "entityTypes": [
                 "Avatar"
               ]
@@ -2711,58 +2717,57 @@
         {
           "$type": "FireEffect",
           "effectPattern": "Eff_Avatar_Girl_Sword_Layla_ElementalBurst_Bullet_Hit",
+          "effectTempleteID": -1.0,
           "scale": 1.0,
-          "ILLLPEOODKP": "",
-          "effectTempleteID": -1.0
+          "ILLLPEOODKP": ""
         },
         {
           "$type": "TriggerAttackEvent",
-          "targetType": "Enemy",
           "attackEvent": {
             "attackInfo": {
               "attackProperty": {
-                "elementType": "Ice",
-                "damagePercentageRatio": 0.0,
-                "strikeType": "Default",
-                "enBreak": 20.0,
                 "damageExtra": [
                   "DamageByHPRatio",
                   "FIGHT_PROP_MAX_HP",
                   "MUL"
                 ],
+                "damagePercentageRatio": 0.0,
                 "elementDurability": 25.0,
-                "arkheGrade": 0.0
+                "elementType": "Ice",
+                "enBreak": 20.0,
+                "strikeType": "Default",
+                "IIPHCFEONLK": 0.0
               },
-              "hitPattern": {
-                "FLFCIDDNMNA": "",
-                "onHitEffectName": "",
-                "hitHaltTimeScale": 0.01,
-                "hitImpulseType": "LV2"
-              },
+              "attackTag": "Elemental_Burst",
               "attenuationGroup": "default",
               "attenuationTag": "Elemental_Burst",
-              "attackTag": "Elemental_Burst",
-              "canBeModifiedBy": "OriginOwner"
+              "canBeModifiedBy": "OriginOwner",
+              "hitPattern": {
+                "hitHaltTimeScale": 0.01,
+                "hitImpulseType": "LV2",
+                "onHitEffectName": "",
+                "FLFCIDDNMNA": ""
+              }
             },
             "attackPattern": {
-              "$type": "HCAGHMDHEGG",
-              "radius": 1.5,
-              "triggerType": "TriggerNoRepeat",
+              "$type": "ConfigAttackSphere",
               "born": {
-                "$type": "NABPLNFPHCK"
+                "$type": "ConfigBornBySelf"
               },
-              "checkHitLayerType": "Both"
+              "checkHitLayerType": "Both",
+              "radius": 1.5,
+              "triggerType": "TriggerNoRepeat"
             }
-          }
+          },
+          "targetType": "Enemy"
         }
       ],
-      "abilityName": "Avatar_Layla_ElementalBurst_Bullet1_Material",
       "onAdded": [
         {
           "$type": "SetRandomOverrideMapValue",
-          "valueRangeMin": 0.15,
           "overrideMapKey": "RandomTime",
-          "valueRangeMax": 0.15
+          "valueRangeMax": 0.15,
+          "valueRangeMin": 0.15
         },
         {
           "$type": "AttachModifier",
@@ -2772,12 +2777,7 @@
           "$type": "ApplyModifier",
           "modifierName": "Timer"
         }
-      ],
-      "abilitySpecials": {
-        "DamageByHPRatio": 0.0,
-        "Trigger_CD": 0.5,
-        "RandomTime": 0.15
-      }
+      ]
     }
   },
   {
@@ -2785,43 +2785,43 @@
       "abilityMixins": [
         {
           "$type": "ModifyDamageMixin",
-          "damagePercentageRatio": 0.0,
-          "damagePercentage": "Attack_01",
           "animEventNames": [
             "ATK01"
-          ]
+          ],
+          "damagePercentage": "Attack_01",
+          "damagePercentageRatio": 0.0
         },
         {
           "$type": "ModifyDamageMixin",
-          "damagePercentageRatio": 0.0,
-          "damagePercentage": "Attack_02",
           "animEventNames": [
             "ATK02"
-          ]
+          ],
+          "damagePercentage": "Attack_02",
+          "damagePercentageRatio": 0.0
         },
         {
           "$type": "ModifyDamageMixin",
-          "damagePercentageRatio": 0.0,
-          "damagePercentage": "Attack_03",
           "animEventNames": [
             "ATK03"
-          ]
+          ],
+          "damagePercentage": "Attack_03",
+          "damagePercentageRatio": 0.0
         },
         {
           "$type": "ModifyDamageMixin",
-          "damagePercentageRatio": 0.0,
-          "damagePercentage": "ExtraAttack1",
           "animEventNames": [
             "ExtraAttack_1"
-          ]
+          ],
+          "damagePercentage": "ExtraAttack1",
+          "damagePercentageRatio": 0.0
         },
         {
           "$type": "ModifyDamageMixin",
-          "damagePercentageRatio": 0.0,
-          "damagePercentage": "ExtraAttack2",
           "animEventNames": [
             "ExtraAttack_2"
-          ]
+          ],
+          "damagePercentage": "ExtraAttack2",
+          "damagePercentageRatio": 0.0
         }
       ],
       "abilityName": "Avatar_Layla_NormalAttack_DamageHandler",
@@ -2839,76 +2839,108 @@
       "abilityMixins": [
         {
           "$type": "ModifyDamageMixin",
-          "damagePercentageRatio": 0.0,
+          "attackTags": [
+            "Elemental_Art"
+          ],
           "damageExtra": [
             "FIGHT_PROP_MAX_HP",
             "Ratio",
             "MUL"
           ],
-          "attackTags": [
-            "Elemental_Art"
-          ],
+          "damagePercentageRatio": 0.0,
           "predicates": [
             {
-              "$type": "PPKMHGEGLHG",
+              "$type": "ByAttackType",
               "attackType": "Default"
             }
           ]
         }
       ],
       "abilityName": "Avatar_Layla_ArtAndBurst_DamageExtra",
-      "isDynamicAbility": true,
       "abilitySpecials": {
         "Ratio": 0.0
-      }
+      },
+      "isDynamicAbility": true
     }
   },
   {
     "Default": {
+      "abilityName": "Avatar_Layla_ArtAndBurst_ReviveEnergy",
+      "abilitySpecials": {
+        "Energy": 0.0
+      },
+      "isDynamicAbility": true,
       "onAbilityStart": [
         {
           "$type": "ReviveElemEnergy",
-          "CBOMLBFIPJM": "Energy",
-          "doOffStage": true
+          "doOffStage": true,
+          "value": "Energy"
         }
-      ],
-      "abilityName": "Avatar_Layla_ArtAndBurst_ReviveEnergy",
-      "isDynamicAbility": true,
-      "abilitySpecials": {
-        "Energy": 0.0
-      }
+      ]
     }
   },
   {
     "Default": {
+      "abilityName": "Avatar_Layla_Shoot_TeamBuff",
+      "abilitySpecials": {
+        "HP2ExtraRatio": 0.0,
+        "Dura": 0.0,
+        "Keep_Time": 0.0
+      },
+      "isDynamicAbility": true,
       "modifiers": {
         "UNIQUE_Avatar_Layla_Talent4_Buff": {
           "duration": "Dura",
+          "elementDurability": 100.0,
+          "isUnique": true,
+          "modifierMixins": [
+            {
+              "$type": "ModifyDamageMixin",
+              "attackTags": [
+                "NormalAttack_01",
+                "NormalAttack_02",
+                "NormalAttack_03",
+                "NormalAttack_04",
+                "NormalAttack_05",
+                "NormalAttack_06",
+                "ExtraAttack"
+              ],
+              "damageExtra": [
+                "HP2ExtraRatio",
+                "FIGHT_PROP_MAX_HP",
+                "MUL"
+              ],
+              "damagePercentageRatio": 0.0
+            }
+          ],
+          "modifierName": "",
           "onAttackLanded": [
             {
               "$type": "Predicated",
+              "doOffStage": true,
               "successActions": [
                 {
                   "$type": "AttachModifier",
-                  "modifierName": "UNIQUE_Avatar_Layla_Talent4_MixinCountDown",
-                  "doOffStage": true
+                  "doOffStage": true,
+                  "modifierName": "UNIQUE_Avatar_Layla_Talent4_MixinCountDown"
                 }
               ],
+              "target": "Other",
               "targetPredicates": [
                 {
-                  "$type": "DEOFBICNFHF",
+                  "$type": "ByEntityTypes",
                   "entityTypes": [
                     "Monster"
                   ]
                 },
                 {
-                  "$type": "EOFDCELPGFO",
-                  "CBOMLBFIPJM": 0.0,
+                  "$type": "ByTargetGlobalValue",
                   "compareType": "NoneOrEqual",
-                  "key": "_ANIMAL_ENTITY_TYPE"
+                  "key": "_ANIMAL_ENTITY_TYPE",
+                  "value": 0.0
                 },
                 {
-                  "$type": "CCHPEOBKOBO",
+                  "$type": "ByAttackTags",
                   "attackTags": [
                     "NormalAttack_01",
                     "NormalAttack_02",
@@ -2920,96 +2952,64 @@
                   ]
                 },
                 {
-                  "$type": "AJJPBBPBCMO",
+                  "$type": "ByHitDamage",
                   "damage": 0.0
                 }
-              ],
-              "target": "Other",
-              "doOffStage": true
-            }
-          ],
-          "elementDurability": 100.0,
-          "modifierMixins": [
-            {
-              "$type": "ModifyDamageMixin",
-              "damagePercentageRatio": 0.0,
-              "damageExtra": [
-                "HP2ExtraRatio",
-                "FIGHT_PROP_MAX_HP",
-                "MUL"
-              ],
-              "attackTags": [
-                "NormalAttack_01",
-                "NormalAttack_02",
-                "NormalAttack_03",
-                "NormalAttack_04",
-                "NormalAttack_05",
-                "NormalAttack_06",
-                "ExtraAttack"
               ]
             }
           ],
           "state": "AttackUp",
-          "modifierName": "",
-          "isUnique": true,
           "AIHNJLDFEGJ": 0.0
         },
         "UNIQUE_Avatar_Layla_Talent4_MixinCountDown": {
           "duration": "Keep_Time",
+          "elementDurability": 100.0,
+          "isUnique": true,
+          "modifierName": "",
           "onRemoved": [
             {
               "$type": "RemoveUniqueModifier",
-              "modifierName": "UNIQUE_Avatar_Layla_Talent4_Buff",
-              "doOffStage": true
+              "doOffStage": true,
+              "modifierName": "UNIQUE_Avatar_Layla_Talent4_Buff"
             }
           ],
           "stacking": "Unique",
-          "elementDurability": 100.0,
-          "modifierName": "",
           "timeScale": "Level",
-          "isUnique": true,
           "AIHNJLDFEGJ": 0.0
         }
       },
       "onAbilityStart": [
         {
           "$type": "RemoveUniqueModifier",
-          "modifierName": "UNIQUE_Avatar_Layla_Talent4_Buff",
-          "target": "AllPlayerAvatars",
           "doOffStage": true,
+          "modifierName": "UNIQUE_Avatar_Layla_Talent4_Buff",
           "predicates": [
             {
-              "$type": "CNFMGJJEOPM",
-              "NJICAELBCCB": "",
+              "$type": "ByTargetPositionToSelfPosition",
+              "logic": "LesserOrEqual",
+              "value": 40.0,
               "JBOGOHPICML": "",
-              "CBOMLBFIPJM": 40.0,
-              "logic": "LesserOrEqual"
+              "NJICAELBCCB": ""
             }
-          ]
+          ],
+          "target": "AllPlayerAvatars"
         },
         {
           "$type": "AttachModifier",
-          "modifierName": "UNIQUE_Avatar_Layla_Talent4_Buff",
-          "target": "AllPlayerAvatars",
           "doOffStage": true,
+          "modifierName": "UNIQUE_Avatar_Layla_Talent4_Buff",
           "predicates": [
             {
-              "$type": "CNFMGJJEOPM",
-              "NJICAELBCCB": "",
+              "$type": "ByTargetPositionToSelfPosition",
+              "logic": "LesserOrEqual",
+              "value": 40.0,
               "JBOGOHPICML": "",
-              "CBOMLBFIPJM": 40.0,
-              "logic": "LesserOrEqual"
+              "NJICAELBCCB": ""
             }
-          ]
+          ],
+          "target": "AllPlayerAvatars"
         }
-      ],
-      "abilityName": "Avatar_Layla_Shoot_TeamBuff",
-      "isDynamicAbility": true,
-      "abilitySpecials": {
-        "HP2ExtraRatio": 0.0,
-        "Dura": 0.0,
-        "Keep_Time": 0.0
-      }
+      ]
     }
   },
   {
@@ -3017,763 +3017,143 @@
       "abilityMixins": [
         {
           "$type": "ModifyDamageMixin",
-          "damagePercentageRatio": "DamageUp",
           "attackTags": [
             "Elemental_Art",
             "Elemental_Burst"
           ],
+          "damagePercentageRatio": "DamageUp",
           "predicates": [
             {
-              "$type": "PPKMHGEGLHG",
+              "$type": "ByAttackType",
               "attackType": "Default"
             }
           ]
         }
       ],
       "abilityName": "Avatar_Layla_ArtAndBurst_DamageUp",
-      "isDynamicAbility": true,
       "abilitySpecials": {
         "DamageUp": 0.0
-      }
+      },
+      "isDynamicAbility": true
     }
   },
   {
     "Default": {
-      "modifiers": {
-        "FallingAnthem_AttachWeaponEffect": {
-          "onAdded": [
-            {
-              "$type": "AttachEffect",
-              "ILLLPEOODKP": "",
-              "scale": 1.0,
-              "effectPattern": "Eff_Avatar_Sword_FallAnthem_Self_01",
-              "effectTempleteID": -1.0
-            }
-          ],
-          "elementDurability": 100.0,
-          "modifierName": "",
-          "AIHNJLDFEGJ": 0.0
-        },
-        "FallingAnthem_CameraRadialBlur": {
-          "duration": 0.23,
-          "elementDurability": 100.0,
-          "modifierMixins": [
-            {
-              "$type": "CameraBlurMixin",
-              "NFBFBAJDMPJ": {
-                "LCOPJHPGJCO": 0.15,
-                "LFMGJKCOGPI": 0.3
-              }
-            }
-          ],
-          "modifierName": "",
-          "AIHNJLDFEGJ": 0.0
-        },
-        "FallingAnthem_BS_Material": {
-          "onAdded": [
-            {
-              "$type": "FireEffect",
-              "effectPattern": "Eff_Avatar_Sword_FallAnthem_BS",
-              "scale": 1.0,
-              "ILLLPEOODKP": "",
-              "effectTempleteID": -1.0
-            }
-          ],
-          "elementDurability": 100.0,
-          "modifierName": "",
-          "AIHNJLDFEGJ": 0.0
-        },
-        "FallingAnthem_BS_VelocityForce_Initialize": {
-          "onAdded": [
-            {
-              "$type": "RemoveVelocityForce",
-              "HALNPNMJJAN": [
-                "RushMoveType"
-              ]
-            }
-          ],
-          "properties": {
-            "Actor_AddGravityScale": -2.0
-          },
-          "elementDurability": 100.0,
-          "modifierName": "",
-          "AIHNJLDFEGJ": 0.0
-        },
-        "FallingAnthem_LoopDamage": {
-          "thinkInterval": 0.3,
-          "elementDurability": 100.0,
-          "modifierName": "",
-          "onThinkInterval": [
-            {
-              "$type": "TriggerAttackEvent",
-              "targetType": "Enemy",
-              "attackEvent": {
-                "attackInfo": {
-                  "attackProperty": {
-                    "attackType": "Melee",
-                    "damagePercentageRatio": 0.0,
-                    "strikeType": "Slash",
-                    "enBreak": 25.0,
-                    "damagePercentage": "FallingAnthem_Normal_Loop_Damage",
-                    "elementDurability": 0.0,
-                    "overrideByWeapon": true,
-                    "arkheGrade": 0.0
-                  },
-                  "hitPattern": {
-                    "FLFCIDDNMNA": "",
-                    "onHitEffectName": "default",
-                    "hitHaltTimeScale": 0.02,
-                    "hitImpulseType": "LV2"
-                  },
-                  "attenuationGroup": "default",
-                  "attenuationTag": "",
-                  "attackTag": "FallingAttack"
-                },
-                "attackPattern": {
-                  "$type": "HCAGHMDHEGG",
-                  "radius": 1.0,
-                  "triggerType": "TriggerNoRepeat",
-                  "born": {
-                    "$type": "NABPLNFPHCK",
-                    "offset": {
-                      "x": 0.0,
-                      "z": 1.0,
-                      "y": 0.0
-                    }
-                  }
-                }
-              }
-            }
-          ],
-          "AIHNJLDFEGJ": 0.0
-        },
-        "FallingAnthem_FallingDamageImmune_01": {
-          "onAdded": [
-            {
-              "$type": "ClearGlobalValue",
-              "key": "_ABILITY_FallingAttack_Altitude"
-            },
-            {
-              "$type": "AddGlobalValue",
-              "useLimitRange": true,
-              "key": "_ABILITY_FallingAttack_Altitude",
-              "maxValue": "FallingAnthem_FallingDamageRatio_Lv0",
-              "minValue": "FallingAnthem_FallingDamageRatio_Lv0",
-              "CBOMLBFIPJM": "FallingAnthem_FallingDamageRatio_Lv0",
-              "predicates": [
-                {
-                  "$type": "AKINJGNEPNO",
-                  "CBOMLBFIPJM": "FallingAnthem_Altitude_Lv0",
-                  "logic": "LesserOrEqual"
-                }
-              ]
-            },
-            {
-              "$type": "AddGlobalValue",
-              "useLimitRange": true,
-              "key": "_ABILITY_FallingAttack_Altitude",
-              "maxValue": "FallingAnthem_FallingDamageRatio_Lv1",
-              "minValue": "FallingAnthem_FallingDamageRatio_Lv1",
-              "CBOMLBFIPJM": "FallingAnthem_FallingDamageRatio_Lv1",
-              "predicates": [
-                {
-                  "$type": "AKINJGNEPNO",
-                  "CBOMLBFIPJM": "FallingAnthem_Altitude_Lv1",
-                  "logic": "LesserOrEqual"
-                },
-                {
-                  "$type": "AKINJGNEPNO",
-                  "CBOMLBFIPJM": "FallingAnthem_Altitude_Lv0"
-                }
-              ]
-            },
-            {
-              "$type": "AddGlobalValue",
-              "useLimitRange": true,
-              "key": "_ABILITY_FallingAttack_Altitude",
-              "maxValue": "FallingAnthem_FallingDamageRatio_Lv2",
-              "minValue": "FallingAnthem_FallingDamageRatio_Lv2",
-              "CBOMLBFIPJM": "FallingAnthem_FallingDamageRatio_Lv2",
-              "predicates": [
-                {
-                  "$type": "AKINJGNEPNO",
-                  "CBOMLBFIPJM": "FallingAnthem_Altitude_Lv2",
-                  "logic": "LesserOrEqual"
-                },
-                {
-                  "$type": "AKINJGNEPNO",
-                  "CBOMLBFIPJM": "FallingAnthem_Altitude_Lv1"
-                }
-              ]
-            },
-            {
-              "$type": "AddGlobalValue",
-              "useLimitRange": true,
-              "key": "_ABILITY_FallingAttack_Altitude",
-              "maxValue": "FallingAnthem_FallingDamageRatio_Lv3",
-              "minValue": "FallingAnthem_FallingDamageRatio_Lv3",
-              "CBOMLBFIPJM": "FallingAnthem_FallingDamageRatio_Lv3",
-              "predicates": [
-                {
-                  "$type": "AKINJGNEPNO",
-                  "CBOMLBFIPJM": "FallingAnthem_Altitude_Lv3",
-                  "logic": "LesserOrEqual"
-                },
-                {
-                  "$type": "AKINJGNEPNO",
-                  "CBOMLBFIPJM": "FallingAnthem_Altitude_Lv2"
-                }
-              ]
-            },
-            {
-              "$type": "AddGlobalValue",
-              "useLimitRange": true,
-              "key": "_ABILITY_FallingAttack_Altitude",
-              "maxValue": "FallingAnthem_FallingDamageRatio_Lv4",
-              "minValue": "FallingAnthem_FallingDamageRatio_Lv4",
-              "CBOMLBFIPJM": "FallingAnthem_FallingDamageRatio_Lv4",
-              "predicates": [
-                {
-                  "$type": "AKINJGNEPNO",
-                  "CBOMLBFIPJM": "FallingAnthem_Altitude_Lv3"
-                }
-              ]
-            },
-            {
-              "$type": "AttachModifier",
-              "modifierName": "FallingAnthem_FallingDamageImmune_02"
-            }
-          ],
-          "elementDurability": 100.0,
-          "modifierName": "",
-          "AIHNJLDFEGJ": 0.0
-        },
-        "FallingAnthem_FallingDamageImmune_02": {
-          "onAdded": [
-            {
-              "$type": "SetGlobalValueToOverrideMap",
-              "globalValueKey": "_ABILITY_FallingAttack_Altitude",
-              "abilityName": "",
-              "overrideMapKey": "FallingAnthem_FallingDamageRatio"
-            },
-            {
-              "$type": "AttachModifier",
-              "modifierName": "FallingAnthem_FallingDamageImmune_03"
-            }
-          ],
-          "elementDurability": 100.0,
-          "modifierName": "",
-          "AIHNJLDFEGJ": 0.0
-        },
-        "FallingAnthem_FallingDamageImmune_03": {
-          "properties": {
-            "Actor_FallingDamageRatio": "FallingAnthem_FallingDamageRatio"
-          },
-          "elementDurability": 100.0,
-          "modifierName": "",
-          "AIHNJLDFEGJ": 0.0
-        },
-        "FallingAnthem_Loop_Normal": {
-          "elementDurability": 100.0,
-          "modifierMixins": [
-            {
-              "$type": "AttachModifierToSelfGlobalValueMixin",
-              "modifierNameSteps": [
-                "FallingAnthem_Loop_Normal_Rank_1",
-                "FallingAnthem_Loop_Normal_Rank_2"
-              ],
-              "valueSteps": [
-                -1.0,
-                0.5,
-                1.5
-              ],
-              "globalValueKey": "_ABILITY_FallingAnthem_UseCamera",
-              "defaultGlobalValueOnCreate": 0.0
-            }
-          ],
-          "modifierName": "",
-          "AIHNJLDFEGJ": 0.0
-        },
-        "FallingAnthem_Loop_Normal_Rank_1": {
-          "onAdded": [
-            {
-              "$type": "AttachEffect",
-              "ILLLPEOODKP": "",
-              "scale": 1.0,
-              "effectPattern": "Eff_Avatar_Sword_FallAnthem_Loop_01",
-              "effectTempleteID": -1.0
-            }
-          ],
-          "elementDurability": 100.0,
-          "modifierName": "",
-          "AIHNJLDFEGJ": 0.0
-        },
-        "FallingAnthem_Loop_Normal_Rank_2": {
-          "onAdded": [
-            {
-              "$type": "AttachEffect",
-              "ILLLPEOODKP": "",
-              "scale": 1.0,
-              "effectPattern": "Eff_Avatar_Sword_FallAnthem_Loop_02",
-              "effectTempleteID": -1.0
-            }
-          ],
-          "elementDurability": 100.0,
-          "modifierName": "",
-          "AIHNJLDFEGJ": 0.0
-        },
-        "Inertia": {
-          "elementDurability": 100.0,
-          "modifierMixins": [
-            {
-              "$type": "ApplyInertiaVelocityMixin",
-              "JOHELJNOOBE": false,
-              "useY": false
-            }
-          ],
-          "modifierName": "",
-          "AIHNJLDFEGJ": 0.0
-        },
-        "FallingAnthem_Height_Detect": {
-          "onRemoved": [
-            {
-              "$type": "SetAnimatorFloat",
-              "floatID": "FallingAnthem_UseCamera",
-              "CBOMLBFIPJM": 0.0
-            },
-            {
-              "$type": "AddGlobalValue",
-              "useLimitRange": true,
-              "key": "_ABILITY_FallingAnthem_UseCamera",
-              "maxValue": 0.0,
-              "minValue": 0.0,
-              "CBOMLBFIPJM": 0.0
-            }
-          ],
-          "onAdded": [
-            {
-              "$type": "AddGlobalValue",
-              "useLimitRange": true,
-              "key": "_ABILITY_FallingAnthem_UseCamera",
-              "maxValue": 0.0,
-              "minValue": 0.0,
-              "CBOMLBFIPJM": 0.0,
-              "predicates": [
-                {
-                  "$type": "AKINJGNEPNO",
-                  "CBOMLBFIPJM": 2.4,
-                  "logic": "LesserOrEqual"
-                }
-              ]
-            },
-            {
-              "$type": "AddGlobalValue",
-              "useLimitRange": true,
-              "key": "_ABILITY_FallingAnthem_UseCamera",
-              "maxValue": 1.0,
-              "minValue": 0.0,
-              "CBOMLBFIPJM": 5.0,
-              "predicates": [
-                {
-                  "$type": "AKINJGNEPNO",
-                  "CBOMLBFIPJM": 2.4
-                }
-              ]
-            },
-            {
-              "$type": "SetAnimatorFloat",
-              "floatID": "FallingAnthem_UseCamera",
-              "CBOMLBFIPJM": 0.0,
-              "predicates": [
-                {
-                  "$type": "AKINJGNEPNO",
-                  "CBOMLBFIPJM": 2.4,
-                  "logic": "LesserOrEqual"
-                }
-              ]
-            },
-            {
-              "$type": "SetAnimatorFloat",
-              "floatID": "FallingAnthem_UseCamera",
-              "CBOMLBFIPJM": 1.0,
-              "predicates": [
-                {
-                  "$type": "AKINJGNEPNO",
-                  "CBOMLBFIPJM": 2.4
-                }
-              ]
-            }
-          ],
-          "elementDurability": 100.0,
-          "modifierName": "",
-          "AIHNJLDFEGJ": 0.0
-        },
-        "FallingAnthem_OverHead_Camera": {
-          "onAdded": [
-            {
-              "$type": "AvatarCameraParam",
-              "cameraParam": {
-                "shouldKeepForceRadius": true,
-                "forceRadiusDuration": 0.2,
-                "forceRadius": 4.5
-              },
-              "predicates": [
-                {
-                  "$type": "GCFOJENHAMH",
-                  "parameter": "FallingAnthem_UseCamera",
-                  "CBOMLBFIPJM": 1.0,
-                  "logic": "Equal"
-                }
-              ]
-            }
-          ],
-          "elementDurability": 100.0,
-          "modifierName": "",
-          "AIHNJLDFEGJ": 0.0
-        },
-        "FallingAnthem_OverHead_Camera_Remover": {
-          "onAdded": [
-            {
-              "$type": "AvatarExitCameraShot",
-              "doOffStage": true
-            }
-          ],
-          "elementDurability": 100.0,
-          "modifierName": "",
-          "AIHNJLDFEGJ": 0.0
-        },
-        "FallingAnthem_Landed_Camera": {
-          "onAdded": [
-            {
-              "$type": "AvatarCameraParam",
-              "cameraParam": {
-                "shouldKeepForceRadius": true,
-                "forceRadiusDuration": 0.1,
-                "forceRadius": 6.0
-              },
-              "predicates": [
-                {
-                  "$type": "GCFOJENHAMH",
-                  "parameter": "FallingAnthem_UseCamera",
-                  "CBOMLBFIPJM": 1.0,
-                  "logic": "Equal"
-                }
-              ]
-            }
-          ],
-          "elementDurability": 100.0,
-          "modifierName": "",
-          "AIHNJLDFEGJ": 0.0
-        },
-        "FallingAnthem_ClearVelocityForce": {
-          "onAdded": [
-            {
-              "$type": "RemoveVelocityForce",
-              "HALNPNMJJAN": [
-                "RushMoveType",
-                "InertiaType"
-              ]
-            }
-          ],
-          "elementDurability": 100.0,
-          "modifierName": "",
-          "AIHNJLDFEGJ": 0.0
-        },
-        "FallingAnthem_ClearVelocityForce_AS": {
-          "onAdded": [
-            {
-              "$type": "RemoveVelocityForce",
-              "HALNPNMJJAN": [
-                "RushMoveType",
-                "InertiaType"
-              ]
-            }
-          ],
-          "elementDurability": 100.0,
-          "modifierName": "",
-          "AIHNJLDFEGJ": 0.0
-        }
-      },
-      "onAbilityStart": [
-        {
-          "$type": "TriggerAttackEvent",
-          "targetType": "Enemy",
-          "attackEvent": {
-            "attackInfo": {
-              "attackProperty": {
-                "attackType": "Melee",
-                "damagePercentageRatio": 0.0,
-                "strikeType": "Blunt",
-                "enBreak": 100.0,
-                "damagePercentage": "FallingAnthem_Normal_Rank_1_Damage",
-                "elementDurability": 25.0,
-                "overrideByWeapon": true,
-                "arkheGrade": 0.0
-              },
-              "cameraShake": {
-                "extension": {
-                  "rangeAttenuation": 0.3,
-                  "baseCycle": 0.24,
-                  "cycleDamping": 0.0
-                },
-                "shakeDir": {
-                  "y": 1.0
-                },
-                "shakeTime": 0.12,
-                "shakeType": "CustomVector",
-                "shakeDistance": 30.0,
-                "MNKFEFOKFKP": "",
-                "shakeRange": 0.24
-              },
-              "hitPattern": {
-                "FLFCIDDNMNA": "",
-                "onHitEffectName": "none",
-                "hitHaltTimeScale": 0.1,
-                "hitImpulseType": "LV4"
-              },
-              "forceCameraShake": true,
-              "attenuationGroup": "default",
-              "attenuationTag": "",
-              "attackTag": "FallingAttack"
-            },
-            "attackPattern": {
-              "$type": "DDLDAMKEKJD",
-              "radius": 3.0,
-              "height": 2.0,
-              "triggerType": "TriggerNoRepeat",
-              "born": {
-                "$type": "BOJMMDAIGMM",
-                "offset": {
-                  "x": 0.0,
-                  "z": 1.0,
-                  "y": -0.5
-                }
-              }
-            }
-          },
-          "predicates": [
-            {
-              "$type": "EOFDCELPGFO",
-              "CBOMLBFIPJM": 0.0,
-              "compareType": "NoneOrEqual",
-              "key": "_ABILITY_FallingAnthem_UseCamera",
-              "value": true
-            }
-          ]
-        },
-        {
-          "$type": "TriggerAttackEvent",
-          "targetType": "Enemy",
-          "attackEvent": {
-            "attackInfo": {
-              "attackProperty": {
-                "attackType": "Melee",
-                "damagePercentageRatio": 0.0,
-                "strikeType": "Blunt",
-                "enBreak": 150.0,
-                "damagePercentage": "FallingAnthem_Normal_Rank_2_Damage",
-                "elementDurability": 25.0,
-                "overrideByWeapon": true,
-                "arkheGrade": 0.0
-              },
-              "cameraShake": {
-                "extension": {
-                  "rangeAttenuation": 0.3,
-                  "baseCycle": 0.4,
-                  "cycleDamping": 0.0
-                },
-                "shakeDir": {
-                  "y": 1.0,
-                  "z": 1.0
-                },
-                "shakeTime": 0.2,
-                "shakeType": "CustomVector",
-                "shakeDistance": 30.0,
-                "MNKFEFOKFKP": "",
-                "shakeRange": 0.5
-              },
-              "hitPattern": {
-                "FLFCIDDNMNA": "",
-                "onHitEffectName": "none",
-                "hitHaltTimeScale": 0.1,
-                "hitImpulseType": "LV7"
-              },
-              "forceCameraShake": true,
-              "attenuationGroup": "default",
-              "attenuationTag": "",
-              "attackTag": "FallingAttack"
-            },
-            "attackPattern": {
-              "$type": "DDLDAMKEKJD",
-              "radius": 5.0,
-              "height": 2.0,
-              "triggerType": "TriggerNoRepeat",
-              "born": {
-                "$type": "BOJMMDAIGMM",
-                "offset": {
-                  "x": 0.0,
-                  "z": 1.0,
-                  "y": -0.5
-                }
-              }
-            }
-          },
-          "predicates": [
-            {
-              "$type": "EOFDCELPGFO",
-              "CBOMLBFIPJM": 1.0,
-              "key": "_ABILITY_FallingAnthem_UseCamera",
-              "value": true
-            }
-          ]
-        },
-        {
-          "$type": "FireEffect",
-          "effectPattern": "Eff_Avatar_Sword_FallAnthem_Strike_01",
-          "scale": 1.0,
-          "ILLLPEOODKP": "",
-          "effectTempleteID": -1.0,
-          "predicates": [
-            {
-              "$type": "EOFDCELPGFO",
-              "CBOMLBFIPJM": 0.0,
-              "compareType": "NoneOrEqual",
-              "key": "_ABILITY_FallingAnthem_UseCamera",
-              "value": true
-            }
-          ]
-        },
-        {
-          "$type": "FireEffect",
-          "effectPattern": "Eff_Avatar_Sword_FallAnthem_Strike_02",
-          "scale": 1.0,
-          "ILLLPEOODKP": "",
-          "effectTempleteID": -1.0,
-          "predicates": [
-            {
-              "$type": "EOFDCELPGFO",
-              "CBOMLBFIPJM": 1.0,
-              "key": "_ABILITY_FallingAnthem_UseCamera",
-              "value": true
-            }
-          ]
-        }
-      ],
       "abilityMixins": [
         {
           "$type": "AvatarChangeSkillMixin",
-          "OLDBNEGFONF": 5074010,
-          "flySkillID": 5074010
+          "flySkillID": 5074010,
+          "OLDBNEGFONF": 5074010
         },
         {
           "$type": "AttachToStateIDMixin",
-          "LJPPDIGCJMJ": "",
+          "modifierName": "FallingAnthem_BS_Material",
           "stateIDs": [
             "FallingAnthem_BS"
           ],
-          "modifierName": "FallingAnthem_BS_Material"
+          "LJPPDIGCJMJ": ""
         },
         {
           "$type": "AttachToStateIDMixin",
-          "LJPPDIGCJMJ": "",
+          "modifierName": "FallingAnthem_Loop_Normal",
           "stateIDs": [
             "FallingAnthem_BS"
           ],
-          "modifierName": "FallingAnthem_Loop_Normal"
+          "LJPPDIGCJMJ": ""
         },
         {
           "$type": "AttachToAnimatorStateIDMixin",
-          "LJPPDIGCJMJ": "",
+          "modifierName": "FallingAnthem_LoopDamage",
           "stateIDs": [
             "FallingAnthem_BS_2",
             "FallingAnthem_Loop",
             "FallingAnthem_Loop_Low"
           ],
-          "modifierName": "FallingAnthem_LoopDamage"
+          "LJPPDIGCJMJ": ""
         },
         {
           "$type": "AttachToStateIDMixin",
-          "LJPPDIGCJMJ": "",
+          "modifierName": "FallingAnthem_BS_VelocityForce_Initialize",
           "stateIDs": [
             "FallingAnthem_BS"
           ],
-          "modifierName": "FallingAnthem_BS_VelocityForce_Initialize"
+          "LJPPDIGCJMJ": ""
         },
         {
           "$type": "AttachToStateIDMixin",
-          "LJPPDIGCJMJ": "",
+          "modifierName": "FallingAnthem_Height_Detect",
           "stateIDs": [
             "FallingAnthem_BS",
             "FallingAnthem_Loop",
             "FallingAnthem_AS_1",
             "FallingAnthem_AS_2"
           ],
-          "modifierName": "FallingAnthem_Height_Detect"
+          "LJPPDIGCJMJ": ""
         },
         {
           "$type": "AttachToStateIDMixin",
-          "LJPPDIGCJMJ": "",
+          "modifierName": "FallingAnthem_FallingDamageImmune_01",
           "stateIDs": [
             "FallingAnthem_BS",
             "FallingAnthem_Loop",
             "FallingAnthem_AS_1",
             "FallingAnthem_AS_2"
           ],
-          "modifierName": "FallingAnthem_FallingDamageImmune_01"
+          "LJPPDIGCJMJ": ""
         },
         {
           "$type": "AttachToStateIDMixin",
-          "LJPPDIGCJMJ": "",
+          "modifierName": "Inertia",
           "stateIDs": [
             "FallingAnthem_BS",
             "FallingAnthem_Loop"
           ],
-          "modifierName": "Inertia"
+          "LJPPDIGCJMJ": ""
         },
         {
           "$type": "AttachToStateIDMixin",
-          "LJPPDIGCJMJ": "",
+          "modifierName": "FallingAnthem_OverHead_Camera",
           "stateIDs": [
             "FallingAnthem_BS",
             "FallingAnthem_Loop",
             "FallingAnthem_AS_1",
             "FallingAnthem_AS_2"
           ],
-          "modifierName": "FallingAnthem_OverHead_Camera"
+          "LJPPDIGCJMJ": ""
         },
         {
           "$type": "AttachToStateIDMixin",
-          "LJPPDIGCJMJ": "",
+          "modifierName": "FallingAnthem_ClearVelocityForce",
           "stateIDs": [
             "FallingAnthem_BS"
           ],
-          "modifierName": "FallingAnthem_ClearVelocityForce"
+          "LJPPDIGCJMJ": ""
         },
         {
           "$type": "AttachToStateIDMixin",
-          "LJPPDIGCJMJ": "",
+          "modifierName": "FallingAnthem_ClearVelocityForce_AS",
           "stateIDs": [
             "FallingAnthem_AS_1",
             "FallingAnthem_AS_2"
           ],
-          "modifierName": "FallingAnthem_ClearVelocityForce_AS"
+          "LJPPDIGCJMJ": ""
         },
         {
           "$type": "AttachToStateIDMixin",
-          "LJPPDIGCJMJ": "",
+          "modifierName": "FallingAnthem_AttachWeaponEffect",
           "stateIDs": [
             "FallingAnthem_BS",
             "FallingAnthem_Loop"
           ],
-          "modifierName": "FallingAnthem_AttachWeaponEffect"
+          "LJPPDIGCJMJ": ""
         },
         {
           "$type": "AttachToAnimatorStateIDMixin",
-          "LJPPDIGCJMJ": "",
+          "modifierName": "FallingAnthem_CameraRadialBlur",
           "stateIDs": [
             "FallingAnthem_BS_2"
           ],
-          "modifierName": "FallingAnthem_CameraRadialBlur"
+          "LJPPDIGCJMJ": ""
         }
       ],
       "abilityName": "Avatar_Layla_FallingAnthem",
@@ -3792,7 +3172,627 @@
         "FallingAnthem_FallingDamageRatio_Lv3": -0.8,
         "FallingAnthem_FallingDamageRatio_Lv4": -0.6,
         "FallingAnthem_FallingDamageRatio": 0.0
-      }
+      },
+      "modifiers": {
+        "FallingAnthem_AttachWeaponEffect": {
+          "elementDurability": 100.0,
+          "modifierName": "",
+          "onAdded": [
+            {
+              "$type": "AttachEffect",
+              "effectPattern": "Eff_Avatar_Sword_FallAnthem_Self_01",
+              "effectTempleteID": -1.0,
+              "scale": 1.0,
+              "ILLLPEOODKP": ""
+            }
+          ],
+          "AIHNJLDFEGJ": 0.0
+        },
+        "FallingAnthem_CameraRadialBlur": {
+          "duration": 0.23,
+          "elementDurability": 100.0,
+          "modifierMixins": [
+            {
+              "$type": "CameraBlurMixin",
+              "cameraRadialBlur": {
+                "fadeTime": 0.15,
+                "power": 0.3
+              }
+            }
+          ],
+          "modifierName": "",
+          "AIHNJLDFEGJ": 0.0
+        },
+        "FallingAnthem_BS_Material": {
+          "elementDurability": 100.0,
+          "modifierName": "",
+          "onAdded": [
+            {
+              "$type": "FireEffect",
+              "effectPattern": "Eff_Avatar_Sword_FallAnthem_BS",
+              "effectTempleteID": -1.0,
+              "scale": 1.0,
+              "ILLLPEOODKP": ""
+            }
+          ],
+          "AIHNJLDFEGJ": 0.0
+        },
+        "FallingAnthem_BS_VelocityForce_Initialize": {
+          "elementDurability": 100.0,
+          "modifierName": "",
+          "onAdded": [
+            {
+              "$type": "RemoveVelocityForce",
+              "forces": [
+                "RushMoveType"
+              ]
+            }
+          ],
+          "properties": {
+            "Actor_AddGravityScale": -2.0
+          },
+          "AIHNJLDFEGJ": 0.0
+        },
+        "FallingAnthem_LoopDamage": {
+          "elementDurability": 100.0,
+          "modifierName": "",
+          "onThinkInterval": [
+            {
+              "$type": "TriggerAttackEvent",
+              "attackEvent": {
+                "attackInfo": {
+                  "attackProperty": {
+                    "attackType": "Melee",
+                    "damagePercentage": "FallingAnthem_Normal_Loop_Damage",
+                    "damagePercentageRatio": 0.0,
+                    "elementDurability": 0.0,
+                    "enBreak": 25.0,
+                    "overrideByWeapon": true,
+                    "strikeType": "Slash",
+                    "IIPHCFEONLK": 0.0
+                  },
+                  "attackTag": "FallingAttack",
+                  "attenuationGroup": "default",
+                  "attenuationTag": "",
+                  "hitPattern": {
+                    "hitHaltTimeScale": 0.02,
+                    "hitImpulseType": "LV2",
+                    "onHitEffectName": "default",
+                    "FLFCIDDNMNA": ""
+                  }
+                },
+                "attackPattern": {
+                  "$type": "ConfigAttackSphere",
+                  "born": {
+                    "$type": "ConfigBornBySelf",
+                    "offset": {
+                      "x": 1.0,
+                      "y": 0.0,
+                      "z": 0.0
+                    }
+                  },
+                  "radius": 1.0,
+                  "triggerType": "TriggerNoRepeat"
+                }
+              },
+              "targetType": "Enemy"
+            }
+          ],
+          "thinkInterval": 0.3,
+          "AIHNJLDFEGJ": 0.0
+        },
+        "FallingAnthem_FallingDamageImmune_01": {
+          "elementDurability": 100.0,
+          "modifierName": "",
+          "onAdded": [
+            {
+              "$type": "ClearGlobalValue",
+              "key": "_ABILITY_FallingAttack_Altitude"
+            },
+            {
+              "$type": "AddGlobalValue",
+              "key": "_ABILITY_FallingAttack_Altitude",
+              "maxValue": "FallingAnthem_FallingDamageRatio_Lv0",
+              "minValue": "FallingAnthem_FallingDamageRatio_Lv0",
+              "predicates": [
+                {
+                  "$type": "ByTargetAltitude",
+                  "logic": "LesserOrEqual",
+                  "value": "FallingAnthem_Altitude_Lv0"
+                }
+              ],
+              "useLimitRange": true,
+              "value": "FallingAnthem_FallingDamageRatio_Lv0"
+            },
+            {
+              "$type": "AddGlobalValue",
+              "key": "_ABILITY_FallingAttack_Altitude",
+              "maxValue": "FallingAnthem_FallingDamageRatio_Lv1",
+              "minValue": "FallingAnthem_FallingDamageRatio_Lv1",
+              "predicates": [
+                {
+                  "$type": "ByTargetAltitude",
+                  "logic": "LesserOrEqual",
+                  "value": "FallingAnthem_Altitude_Lv1"
+                },
+                {
+                  "$type": "ByTargetAltitude",
+                  "value": "FallingAnthem_Altitude_Lv0"
+                }
+              ],
+              "useLimitRange": true,
+              "value": "FallingAnthem_FallingDamageRatio_Lv1"
+            },
+            {
+              "$type": "AddGlobalValue",
+              "key": "_ABILITY_FallingAttack_Altitude",
+              "maxValue": "FallingAnthem_FallingDamageRatio_Lv2",
+              "minValue": "FallingAnthem_FallingDamageRatio_Lv2",
+              "predicates": [
+                {
+                  "$type": "ByTargetAltitude",
+                  "logic": "LesserOrEqual",
+                  "value": "FallingAnthem_Altitude_Lv2"
+                },
+                {
+                  "$type": "ByTargetAltitude",
+                  "value": "FallingAnthem_Altitude_Lv1"
+                }
+              ],
+              "useLimitRange": true,
+              "value": "FallingAnthem_FallingDamageRatio_Lv2"
+            },
+            {
+              "$type": "AddGlobalValue",
+              "key": "_ABILITY_FallingAttack_Altitude",
+              "maxValue": "FallingAnthem_FallingDamageRatio_Lv3",
+              "minValue": "FallingAnthem_FallingDamageRatio_Lv3",
+              "predicates": [
+                {
+                  "$type": "ByTargetAltitude",
+                  "logic": "LesserOrEqual",
+                  "value": "FallingAnthem_Altitude_Lv3"
+                },
+                {
+                  "$type": "ByTargetAltitude",
+                  "value": "FallingAnthem_Altitude_Lv2"
+                }
+              ],
+              "useLimitRange": true,
+              "value": "FallingAnthem_FallingDamageRatio_Lv3"
+            },
+            {
+              "$type": "AddGlobalValue",
+              "key": "_ABILITY_FallingAttack_Altitude",
+              "maxValue": "FallingAnthem_FallingDamageRatio_Lv4",
+              "minValue": "FallingAnthem_FallingDamageRatio_Lv4",
+              "predicates": [
+                {
+                  "$type": "ByTargetAltitude",
+                  "value": "FallingAnthem_Altitude_Lv3"
+                }
+              ],
+              "useLimitRange": true,
+              "value": "FallingAnthem_FallingDamageRatio_Lv4"
+            },
+            {
+              "$type": "AttachModifier",
+              "modifierName": "FallingAnthem_FallingDamageImmune_02"
+            }
+          ],
+          "AIHNJLDFEGJ": 0.0
+        },
+        "FallingAnthem_FallingDamageImmune_02": {
+          "elementDurability": 100.0,
+          "modifierName": "",
+          "onAdded": [
+            {
+              "$type": "SetGlobalValueToOverrideMap",
+              "abilityName": "",
+              "globalValueKey": "_ABILITY_FallingAttack_Altitude",
+              "overrideMapKey": "FallingAnthem_FallingDamageRatio"
+            },
+            {
+              "$type": "AttachModifier",
+              "modifierName": "FallingAnthem_FallingDamageImmune_03"
+            }
+          ],
+          "AIHNJLDFEGJ": 0.0
+        },
+        "FallingAnthem_FallingDamageImmune_03": {
+          "elementDurability": 100.0,
+          "modifierName": "",
+          "properties": {
+            "Actor_FallingDamageRatio": "FallingAnthem_FallingDamageRatio"
+          },
+          "AIHNJLDFEGJ": 0.0
+        },
+        "FallingAnthem_Loop_Normal": {
+          "elementDurability": 100.0,
+          "modifierMixins": [
+            {
+              "$type": "AttachModifierToSelfGlobalValueMixin",
+              "defaultGlobalValueOnCreate": 0.0,
+              "globalValueKey": "_ABILITY_FallingAnthem_UseCamera",
+              "modifierNameSteps": [
+                "FallingAnthem_Loop_Normal_Rank_1",
+                "FallingAnthem_Loop_Normal_Rank_2"
+              ],
+              "valueSteps": [
+                -1.0,
+                0.5,
+                1.5
+              ]
+            }
+          ],
+          "modifierName": "",
+          "AIHNJLDFEGJ": 0.0
+        },
+        "FallingAnthem_Loop_Normal_Rank_1": {
+          "elementDurability": 100.0,
+          "modifierName": "",
+          "onAdded": [
+            {
+              "$type": "AttachEffect",
+              "effectPattern": "Eff_Avatar_Sword_FallAnthem_Loop_01",
+              "effectTempleteID": -1.0,
+              "scale": 1.0,
+              "ILLLPEOODKP": ""
+            }
+          ],
+          "AIHNJLDFEGJ": 0.0
+        },
+        "FallingAnthem_Loop_Normal_Rank_2": {
+          "elementDurability": 100.0,
+          "modifierName": "",
+          "onAdded": [
+            {
+              "$type": "AttachEffect",
+              "effectPattern": "Eff_Avatar_Sword_FallAnthem_Loop_02",
+              "effectTempleteID": -1.0,
+              "scale": 1.0,
+              "ILLLPEOODKP": ""
+            }
+          ],
+          "AIHNJLDFEGJ": 0.0
+        },
+        "Inertia": {
+          "elementDurability": 100.0,
+          "modifierMixins": [
+            {
+              "$type": "ApplyInertiaVelocityMixin",
+              "JOHELJNOOBE": false,
+              "LBKNDHDOIIG": false
+            }
+          ],
+          "modifierName": "",
+          "AIHNJLDFEGJ": 0.0
+        },
+        "FallingAnthem_Height_Detect": {
+          "elementDurability": 100.0,
+          "modifierName": "",
+          "onAdded": [
+            {
+              "$type": "AddGlobalValue",
+              "key": "_ABILITY_FallingAnthem_UseCamera",
+              "maxValue": 0.0,
+              "minValue": 0.0,
+              "predicates": [
+                {
+                  "$type": "ByTargetAltitude",
+                  "logic": "LesserOrEqual",
+                  "value": 2.4
+                }
+              ],
+              "useLimitRange": true,
+              "value": 0.0
+            },
+            {
+              "$type": "AddGlobalValue",
+              "key": "_ABILITY_FallingAnthem_UseCamera",
+              "maxValue": 1.0,
+              "minValue": 0.0,
+              "predicates": [
+                {
+                  "$type": "ByTargetAltitude",
+                  "value": 2.4
+                }
+              ],
+              "useLimitRange": true,
+              "value": 5.0
+            },
+            {
+              "$type": "SetAnimatorFloat",
+              "floatID": "FallingAnthem_UseCamera",
+              "predicates": [
+                {
+                  "$type": "ByTargetAltitude",
+                  "logic": "LesserOrEqual",
+                  "value": 2.4
+                }
+              ],
+              "value": 0.0
+            },
+            {
+              "$type": "SetAnimatorFloat",
+              "floatID": "FallingAnthem_UseCamera",
+              "predicates": [
+                {
+                  "$type": "ByTargetAltitude",
+                  "value": 2.4
+                }
+              ],
+              "value": 1.0
+            }
+          ],
+          "onRemoved": [
+            {
+              "$type": "SetAnimatorFloat",
+              "floatID": "FallingAnthem_UseCamera",
+              "value": 0.0
+            },
+            {
+              "$type": "AddGlobalValue",
+              "key": "_ABILITY_FallingAnthem_UseCamera",
+              "maxValue": 0.0,
+              "minValue": 0.0,
+              "useLimitRange": true,
+              "value": 0.0
+            }
+          ],
+          "AIHNJLDFEGJ": 0.0
+        },
+        "FallingAnthem_OverHead_Camera": {
+          "elementDurability": 100.0,
+          "modifierName": "",
+          "onAdded": [
+            {
+              "$type": "AvatarCameraParam",
+              "cameraParam": {
+                "forceRadius": 4.5,
+                "forceRadiusDuration": 0.2,
+                "shouldKeepForceRadius": true
+              },
+              "predicates": [
+                {
+                  "$type": "ByAnimatorFloat",
+                  "logic": "Equal",
+                  "parameter": "FallingAnthem_UseCamera",
+                  "value": 1.0
+                }
+              ]
+            }
+          ],
+          "AIHNJLDFEGJ": 0.0
+        },
+        "FallingAnthem_OverHead_Camera_Remover": {
+          "elementDurability": 100.0,
+          "modifierName": "",
+          "onAdded": [
+            {
+              "$type": "AvatarExitCameraShot",
+              "doOffStage": true
+            }
+          ],
+          "AIHNJLDFEGJ": 0.0
+        },
+        "FallingAnthem_Landed_Camera": {
+          "elementDurability": 100.0,
+          "modifierName": "",
+          "onAdded": [
+            {
+              "$type": "AvatarCameraParam",
+              "cameraParam": {
+                "forceRadius": 6.0,
+                "forceRadiusDuration": 0.1,
+                "shouldKeepForceRadius": true
+              },
+              "predicates": [
+                {
+                  "$type": "ByAnimatorFloat",
+                  "logic": "Equal",
+                  "parameter": "FallingAnthem_UseCamera",
+                  "value": 1.0
+                }
+              ]
+            }
+          ],
+          "AIHNJLDFEGJ": 0.0
+        },
+        "FallingAnthem_ClearVelocityForce": {
+          "elementDurability": 100.0,
+          "modifierName": "",
+          "onAdded": [
+            {
+              "$type": "RemoveVelocityForce",
+              "forces": [
+                "RushMoveType",
+                "InertiaType"
+              ]
+            }
+          ],
+          "AIHNJLDFEGJ": 0.0
+        },
+        "FallingAnthem_ClearVelocityForce_AS": {
+          "elementDurability": 100.0,
+          "modifierName": "",
+          "onAdded": [
+            {
+              "$type": "RemoveVelocityForce",
+              "forces": [
+                "RushMoveType",
+                "InertiaType"
+              ]
+            }
+          ],
+          "AIHNJLDFEGJ": 0.0
+        }
+      },
+      "onAbilityStart": [
+        {
+          "$type": "TriggerAttackEvent",
+          "attackEvent": {
+            "attackInfo": {
+              "attackProperty": {
+                "attackType": "Melee",
+                "damagePercentage": "FallingAnthem_Normal_Rank_1_Damage",
+                "damagePercentageRatio": 0.0,
+                "elementDurability": 25.0,
+                "enBreak": 100.0,
+                "overrideByWeapon": true,
+                "strikeType": "Blunt",
+                "IIPHCFEONLK": 0.0
+              },
+              "attackTag": "FallingAttack",
+              "attenuationGroup": "default",
+              "attenuationTag": "",
+              "cameraShake": {
+                "extension": {
+                  "baseCycle": 0.24,
+                  "cycleDamping": 0.0,
+                  "rangeAttenuation": 0.3
+                },
+                "shakeDir": {
+                  "y": 1.0
+                },
+                "shakeDistance": 30.0,
+                "shakeRange": 0.24,
+                "shakeTime": 0.12,
+                "shakeType": "CustomVector",
+                "MNKFEFOKFKP": ""
+              },
+              "forceCameraShake": true,
+              "hitPattern": {
+                "hitHaltTimeScale": 0.1,
+                "hitImpulseType": "LV4",
+                "onHitEffectName": "none",
+                "FLFCIDDNMNA": ""
+              }
+            },
+            "attackPattern": {
+              "$type": "ConfigAttackCircle",
+              "born": {
+                "$type": "ConfigBornByTarget",
+                "offset": {
+                  "x": 1.0,
+                  "y": -0.5,
+                  "z": 0.0
+                }
+              },
+              "height": 2.0,
+              "radius": 3.0,
+              "triggerType": "TriggerNoRepeat"
+            }
+          },
+          "predicates": [
+            {
+              "$type": "ByTargetGlobalValue",
+              "compareType": "NoneOrEqual",
+              "forceByCaster": true,
+              "key": "_ABILITY_FallingAnthem_UseCamera",
+              "value": 0.0
+            }
+          ],
+          "targetType": "Enemy"
+        },
+        {
+          "$type": "TriggerAttackEvent",
+          "attackEvent": {
+            "attackInfo": {
+              "attackProperty": {
+                "attackType": "Melee",
+                "damagePercentage": "FallingAnthem_Normal_Rank_2_Damage",
+                "damagePercentageRatio": 0.0,
+                "elementDurability": 25.0,
+                "enBreak": 150.0,
+                "overrideByWeapon": true,
+                "strikeType": "Blunt",
+                "IIPHCFEONLK": 0.0
+              },
+              "attackTag": "FallingAttack",
+              "attenuationGroup": "default",
+              "attenuationTag": "",
+              "cameraShake": {
+                "extension": {
+                  "baseCycle": 0.4,
+                  "cycleDamping": 0.0,
+                  "rangeAttenuation": 0.3
+                },
+                "shakeDir": {
+                  "y": 1.0,
+                  "z": 1.0
+                },
+                "shakeDistance": 30.0,
+                "shakeRange": 0.5,
+                "shakeTime": 0.2,
+                "shakeType": "CustomVector",
+                "MNKFEFOKFKP": ""
+              },
+              "forceCameraShake": true,
+              "hitPattern": {
+                "hitHaltTimeScale": 0.1,
+                "hitImpulseType": "LV7",
+                "onHitEffectName": "none",
+                "FLFCIDDNMNA": ""
+              }
+            },
+            "attackPattern": {
+              "$type": "ConfigAttackCircle",
+              "born": {
+                "$type": "ConfigBornByTarget",
+                "offset": {
+                  "x": 1.0,
+                  "y": -0.5,
+                  "z": 0.0
+                }
+              },
+              "height": 2.0,
+              "radius": 5.0,
+              "triggerType": "TriggerNoRepeat"
+            }
+          },
+          "predicates": [
+            {
+              "$type": "ByTargetGlobalValue",
+              "forceByCaster": true,
+              "key": "_ABILITY_FallingAnthem_UseCamera",
+              "value": 1.0
+            }
+          ],
+          "targetType": "Enemy"
+        },
+        {
+          "$type": "FireEffect",
+          "effectPattern": "Eff_Avatar_Sword_FallAnthem_Strike_01",
+          "effectTempleteID": -1.0,
+          "predicates": [
+            {
+              "$type": "ByTargetGlobalValue",
+              "compareType": "NoneOrEqual",
+              "forceByCaster": true,
+              "key": "_ABILITY_FallingAnthem_UseCamera",
+              "value": 0.0
+            }
+          ],
+          "scale": 1.0,
+          "ILLLPEOODKP": ""
+        },
+        {
+          "$type": "FireEffect",
+          "effectPattern": "Eff_Avatar_Sword_FallAnthem_Strike_02",
+          "effectTempleteID": -1.0,
+          "predicates": [
+            {
+              "$type": "ByTargetGlobalValue",
+              "forceByCaster": true,
+              "key": "_ABILITY_FallingAnthem_UseCamera",
+              "value": 1.0
+            }
+          ],
+          "scale": 1.0,
+          "ILLLPEOODKP": ""
+        }
+      ]
     }
   }
 ]

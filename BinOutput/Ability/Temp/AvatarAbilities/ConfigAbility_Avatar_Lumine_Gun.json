@@ -1,8 +1,140 @@
 [
   {
     "Default": {
+      "abilityMixins": [
+        {
+          "$type": "ButtonHoldChargeMixin",
+          "chargeStateIDs": [
+            "ShootBS",
+            "Shoot",
+            "FastAim",
+            "FastAimShoot"
+          ],
+          "chargeTime": 0.2,
+          "onBeginCharged": [
+            {
+              "$type": "SetAnimatorTrigger",
+              "triggerID": "DoSkill"
+            },
+            {
+              "$type": "SetAnimatorInt",
+              "intID": "SkillID",
+              "value": 101.0
+            }
+          ],
+          "onBeginUncharged": [
+            {
+              "$type": "SetAnimatorTrigger",
+              "triggerID": "DoSkill"
+            },
+            {
+              "$type": "SetAnimatorInt",
+              "intID": "SkillID",
+              "value": 100.0
+            }
+          ],
+          "onReleaseCharged": [
+            {
+              "$type": "SetAnimatorTrigger",
+              "triggerID": "DoSkill"
+            },
+            {
+              "$type": "SetAnimatorInt",
+              "intID": "SkillID",
+              "value": 1.0
+            }
+          ],
+          "onReleaseUncharged": [
+            {
+              "$type": "SetCameraLockTime",
+              "lockTime": 0.3
+            },
+            {
+              "$type": "SetAnimatorTrigger",
+              "triggerID": "DoSkill"
+            },
+            {
+              "$type": "SetAnimatorInt",
+              "intID": "SkillID",
+              "value": 1.0
+            }
+          ],
+          "secondChargeTime": 999999.0,
+          "skillID": 10371
+        },
+        {
+          "$type": "AttachToStateIDMixin",
+          "modifierName": "KeepFastAiming",
+          "stateIDs": [
+            "FastAim",
+            "FastAimShoot"
+          ],
+          "LJPPDIGCJMJ": ""
+        },
+        {
+          "$type": "AttachToStateIDMixin",
+          "modifierName": "SetFastAimShooting",
+          "stateIDs": [
+            "FastAimShoot"
+          ],
+          "LJPPDIGCJMJ": ""
+        },
+        {
+          "$type": "AttachToStateIDMixin",
+          "modifierName": "SetNeedAimEndStates",
+          "stateIDs": [
+            "ShootBS",
+            "FastAim",
+            "FastAimShoot"
+          ],
+          "LJPPDIGCJMJ": ""
+        }
+      ],
+      "abilityName": "Avatar_TPS_PlayerGirl_Ability",
       "modifiers": {
         "KeepFastAiming": {
+          "elementDurability": 100.0,
+          "modifierName": "",
+          "onAdded": [
+            {
+              "$type": "SetAnimatorBool",
+              "boolID": "FastAiming",
+              "value": true
+            },
+            {
+              "$type": "AvatarEnterFocus",
+              "assistance": {
+                "other": {
+                  "useFocusSticky": true,
+                  "useGyro": true
+                },
+                "ps4": {
+                  "useFocusSticky": true
+                },
+                "IJDKCJGBBII": {
+                  "useFocusSticky": true
+                }
+              },
+              "cameraFastFocusMode": true,
+              "cameraFollowLower": {
+                "x": 0.755,
+                "y": 0.17,
+                "z": -1.9
+              },
+              "cameraFollowUpper": {
+                "x": 0.755,
+                "y": 0.37,
+                "z": -1.6
+              },
+              "dragButtonName": "Skill1",
+              "faceToTarget": true,
+              "faceToTargetAngleThreshold": 360.0,
+              "vcamFov": 30.0,
+              "FDEONAODDDM": "",
+              "GPNAODGIDCF": "",
+              "OINODICCCCO": ""
+            }
+          ],
           "onRemoved": [
             {
               "$type": "SetAnimatorBool",
@@ -13,51 +145,18 @@
               "keepRotation": true
             }
           ],
-          "onAdded": [
-            {
-              "$type": "SetAnimatorBool",
-              "CBOMLBFIPJM": true,
-              "boolID": "FastAiming"
-            },
-            {
-              "$type": "AvatarEnterFocus",
-              "dragButtonName": "Skill1",
-              "cameraFastFocusMode": true,
-              "DDBIFFPGNGN": {
-                "BFMJIOFDCLF": {
-                  "HEADPMGMDJA": true
-                },
-                "KFIOILLKPCF": {
-                  "GMHNBMJHEGP": true,
-                  "HEADPMGMDJA": true
-                },
-                "IJDKCJGBBII": {
-                  "HEADPMGMDJA": true
-                }
-              },
-              "CJLPHHDCNDI": {
-                "y": 0.37,
-                "z": -1.6,
-                "x": 0.755
-              },
-              "OINODICCCCO": "",
-              "GPNAODGIDCF": "",
-              "vcam_fov": 30.0,
-              "IILDDEANKCL": true,
-              "FDEONAODDDM": "",
-              "faceToTargetAngleThreshold": 360.0,
-              "assistance": {
-                "y": 0.17,
-                "z": -1.9,
-                "x": 0.755
-              }
-            }
-          ],
-          "elementDurability": 100.0,
-          "modifierName": "",
           "AIHNJLDFEGJ": 0.0
         },
         "SetFastAimShooting": {
+          "elementDurability": 100.0,
+          "modifierName": "",
+          "onAdded": [
+            {
+              "$type": "SetAnimatorBool",
+              "boolID": "FastAimShooting",
+              "value": true
+            }
+          ],
           "onRemoved": [
             {
               "$type": "SetAnimatorBool",
@@ -65,136 +164,37 @@
             },
             {
               "$type": "SetAnimatorTrigger",
-              "triggerID": "AimEnd",
               "predicates": [
                 {
-                  "$type": "PIAMGDADOFD",
-                  "CBOMLBFIPJM": true,
-                  "parameter": "FastAiming"
+                  "$type": "ByAnimatorBool",
+                  "parameter": "FastAiming",
+                  "value": true
                 }
-              ]
+              ],
+              "triggerID": "AimEnd"
             }
           ],
-          "onAdded": [
-            {
-              "$type": "SetAnimatorBool",
-              "CBOMLBFIPJM": true,
-              "boolID": "FastAimShooting"
-            }
-          ],
-          "elementDurability": 100.0,
-          "modifierName": "",
           "AIHNJLDFEGJ": 0.0
         },
         "SetNeedAimEndStates": {
+          "elementDurability": 100.0,
+          "modifierName": "",
+          "onAdded": [
+            {
+              "$type": "SetAnimatorBool",
+              "boolID": "InStatesNeedAimEnd",
+              "value": true
+            }
+          ],
           "onRemoved": [
             {
               "$type": "SetAnimatorBool",
               "boolID": "InStatesNeedAimEnd"
             }
           ],
-          "onAdded": [
-            {
-              "$type": "SetAnimatorBool",
-              "CBOMLBFIPJM": true,
-              "boolID": "InStatesNeedAimEnd"
-            }
-          ],
-          "elementDurability": 100.0,
-          "modifierName": "",
           "AIHNJLDFEGJ": 0.0
         }
-      },
-      "abilityMixins": [
-        {
-          "$type": "ButtonHoldChargeMixin",
-          "skillID": 10371,
-          "OnReleaseCharged": [
-            {
-              "$type": "SetAnimatorTrigger",
-              "triggerID": "DoSkill"
-            },
-            {
-              "$type": "SetAnimatorInt",
-              "intID": "SkillID",
-              "CBOMLBFIPJM": 1.0
-            }
-          ],
-          "OnBeginUncharged": [
-            {
-              "$type": "SetAnimatorTrigger",
-              "triggerID": "DoSkill"
-            },
-            {
-              "$type": "SetAnimatorInt",
-              "intID": "SkillID",
-              "CBOMLBFIPJM": 100.0
-            }
-          ],
-          "secondChargeTime": 999999.0,
-          "chargeTime": 0.2,
-          "OnBeginCharged": [
-            {
-              "$type": "SetAnimatorTrigger",
-              "triggerID": "DoSkill"
-            },
-            {
-              "$type": "SetAnimatorInt",
-              "intID": "SkillID",
-              "CBOMLBFIPJM": 101.0
-            }
-          ],
-          "chargeStateIDs": [
-            "ShootBS",
-            "Shoot",
-            "FastAim",
-            "FastAimShoot"
-          ],
-          "OnReleaseUncharged": [
-            {
-              "$type": "SetCameraLockTime",
-              "MNBMDNBEBPP": 0.3
-            },
-            {
-              "$type": "SetAnimatorTrigger",
-              "triggerID": "DoSkill"
-            },
-            {
-              "$type": "SetAnimatorInt",
-              "intID": "SkillID",
-              "CBOMLBFIPJM": 1.0
-            }
-          ]
-        },
-        {
-          "$type": "AttachToStateIDMixin",
-          "LJPPDIGCJMJ": "",
-          "stateIDs": [
-            "FastAim",
-            "FastAimShoot"
-          ],
-          "modifierName": "KeepFastAiming"
-        },
-        {
-          "$type": "AttachToStateIDMixin",
-          "LJPPDIGCJMJ": "",
-          "stateIDs": [
-            "FastAimShoot"
-          ],
-          "modifierName": "SetFastAimShooting"
-        },
-        {
-          "$type": "AttachToStateIDMixin",
-          "LJPPDIGCJMJ": "",
-          "stateIDs": [
-            "ShootBS",
-            "FastAim",
-            "FastAimShoot"
-          ],
-          "modifierName": "SetNeedAimEndStates"
-        }
-      ],
-      "abilityName": "Avatar_TPS_PlayerGirl_Ability"
+      }
     }
   }
 ]

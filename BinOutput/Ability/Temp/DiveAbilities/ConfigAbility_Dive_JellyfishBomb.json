@@ -1,36 +1,38 @@
 [
   {
     "Default": {
+      "abilityName": "Ability_Avatar_Dive_JellyfishBomb",
+      "isDynamicAbility": true,
       "modifiers": {
         "Avatar_Dive_JellyfishBomb_AddSkillInfo": {
-          "onRemoved": [
-            {
-              "$type": "RemoveAvatarSkillInfo",
-              "skillID": 20060,
-              "IOEKFKNMBMH": true,
-              "doOffStage": true
-            },
-            {
-              "$type": "RemoveAvatarSkillInfo",
-              "skillID": 20061,
-              "IOEKFKNMBMH": true,
-              "doOffStage": true
-            }
-          ],
+          "elementDurability": 100.0,
+          "modifierName": "",
           "onAdded": [
             {
               "$type": "AddAvatarSkillInfo",
-              "skillID": 20060,
-              "doOffStage": true
+              "doOffStage": true,
+              "skillID": 20060
             },
             {
               "$type": "AddAvatarSkillInfo",
-              "skillID": 20061,
-              "doOffStage": true
+              "doOffStage": true,
+              "skillID": 20061
             }
           ],
-          "elementDurability": 100.0,
-          "modifierName": "",
+          "onRemoved": [
+            {
+              "$type": "RemoveAvatarSkillInfo",
+              "doOffStage": true,
+              "refreshAfterRemove": true,
+              "skillID": 20060
+            },
+            {
+              "$type": "RemoveAvatarSkillInfo",
+              "doOffStage": true,
+              "refreshAfterRemove": true,
+              "skillID": 20061
+            }
+          ],
           "AIHNJLDFEGJ": 0.0
         },
         "Avatar_Dive_JellyfishBomb_Hold_Handler": {
@@ -38,36 +40,15 @@
           "modifierMixins": [
             {
               "$type": "ButtonHoldChargeMixin",
-              "skillID": 20060,
-              "OnReleaseCharged": [
-                {
-                  "$type": "RemoveUniqueModifier",
-                  "modifierName": "UNIQUE_Dive_JellyfishBomb_SwitchToTrigger",
-                  "doOffStage": true
-                },
-                {
-                  "$type": "ApplyModifier",
-                  "modifierName": "JellyFish_Short",
-                  "doOffStage": true
-                },
-                {
-                  "$type": "AttachModifier",
-                  "modifierName": "UNIQUE_Dive_JellyfishBomb_SwitchToTrigger",
-                  "doOffStage": true
-                }
+              "chargeStateIDs": [
+                "DiveCast_BS",
+                "DiveCast_Loop"
               ],
-              "secondChargeTime": 0.25,
-              "OnReleaseSecondCharged": [
-                {
-                  "$type": "SetAnimatorTrigger",
-                  "triggerID": "EndDiveCastTrigger"
-                }
-              ],
-              "OnBeginSecondCharged": [
+              "onBeginSecondCharged": [
                 {
                   "$type": "RemoveModifier",
-                  "modifierName": "Focus_Father",
-                  "doOffStage": true
+                  "doOffStage": true,
+                  "modifierName": "Focus_Father"
                 },
                 {
                   "$type": "SetAnimatorTrigger",
@@ -82,16 +63,16 @@
                   "modifierName": "Focus_Father",
                   "predicates": [
                     {
-                      "$type": "EOFDCELPGFO",
-                      "CBOMLBFIPJM": 0.0,
+                      "$type": "ByTargetGlobalValue",
                       "compareType": "NoneOrEqual",
                       "key": "_ABILITY_Diving_Skill_In_Focus_Skill_Mark",
-                      "target": "Self"
+                      "target": "Self",
+                      "value": 0.0
                     }
                   ]
                 }
               ],
-              "LGCNONHNMIH": [
+              "onCancelCharged": [
                 {
                   "$type": "SetAnimatorTrigger",
                   "triggerID": "EndDiveCastTrigger"
@@ -101,26 +82,47 @@
                   "modifierName": "Focus_Remove_Delay",
                   "predicates": [
                     {
-                      "$type": "EOFDCELPGFO",
-                      "CBOMLBFIPJM": 2.0,
+                      "$type": "ByTargetGlobalValue",
                       "key": "_ABILITY_Diving_Skill_In_Focus_Skill_Mark",
-                      "target": "Self"
+                      "target": "Self",
+                      "value": 2.0
                     }
                   ]
                 }
               ],
-              "chargeStateIDs": [
-                "DiveCast_BS",
-                "DiveCast_Loop"
-              ]
+              "onReleaseCharged": [
+                {
+                  "$type": "RemoveUniqueModifier",
+                  "doOffStage": true,
+                  "modifierName": "UNIQUE_Dive_JellyfishBomb_SwitchToTrigger"
+                },
+                {
+                  "$type": "ApplyModifier",
+                  "doOffStage": true,
+                  "modifierName": "JellyFish_Short"
+                },
+                {
+                  "$type": "AttachModifier",
+                  "doOffStage": true,
+                  "modifierName": "UNIQUE_Dive_JellyfishBomb_SwitchToTrigger"
+                }
+              ],
+              "onReleaseSecondCharged": [
+                {
+                  "$type": "SetAnimatorTrigger",
+                  "triggerID": "EndDiveCastTrigger"
+                }
+              ],
+              "secondChargeTime": 0.25,
+              "skillID": 20060
             },
             {
               "$type": "AttachModifierToGlobalValueMixin",
+              "globalValueKey": "_ABILITY_Dive_isInFondanieWater",
+              "globalValueTarget": "Team",
               "modifierNameSteps": [
                 "Clear_Focus_Father"
               ],
-              "globalValueTarget": "Team",
-              "globalValueKey": "_ABILITY_Dive_isInFondanieWater",
               "valueSteps": [
                 -0.5,
                 0.5
@@ -132,45 +134,24 @@
         },
         "Clear_Focus_Father": {
           "duration": 0.2,
+          "elementDurability": 100.0,
+          "modifierName": "",
           "onAdded": [
             {
               "$type": "RemoveModifier",
-              "modifierName": "Focus_Father",
-              "doOffStage": true
+              "doOffStage": true,
+              "modifierName": "Focus_Father"
             }
           ],
           "stacking": "Multiple",
-          "elementDurability": 100.0,
-          "modifierName": "",
           "AIHNJLDFEGJ": 0.0
         },
         "Focus_Father": {
-          "onRemoved": [
-            {
-              "$type": "SetGlobalValue",
-              "key": "_ABILITY_Diving_Skill_In_Focus_Skill_Mark",
-              "minValue": 0.0,
-              "maxValue": 0.0,
-              "CBOMLBFIPJM": 0.0,
-              "doOffStage": true
-            }
-          ],
-          "onAdded": [
-            {
-              "$type": "SetGlobalValue",
-              "key": "_ABILITY_Diving_Skill_In_Focus_Skill_Mark",
-              "minValue": 0.0,
-              "maxValue": 0.0,
-              "CBOMLBFIPJM": 2.0,
-              "doOffStage": true
-            }
-          ],
           "elementDurability": 100.0,
           "modifierMixins": [
             {
               "$type": "AttachToMultiNormalizedTimeMixin",
               "modifierName": "Focus",
-              "LJPPDIGCJMJ": "",
               "normalizedStateIDList": [
                 {
                   "stateID": "DiveCast_BS"
@@ -179,27 +160,50 @@
                   "stateID": "DiveCast_Loop"
                 },
                 {
-                  "stateID": "DiveCast_AS",
-                  "normalizeEnd": 0.145
+                  "normalizeEnd": 0.145,
+                  "stateID": "DiveCast_AS"
                 }
-              ]
+              ],
+              "LJPPDIGCJMJ": ""
             },
             {
               "$type": "AttachToStateIDMixin",
               "isCheckOnAttach": true,
-              "LJPPDIGCJMJ": "",
+              "modifierName": "Focus_Remove_Delay_Trigger",
               "stateIDs": [
                 "DiveCast_BS",
                 "DiveCast_Loop"
               ],
-              "modifierName": "Focus_Remove_Delay_Trigger"
+              "LJPPDIGCJMJ": ""
             }
           ],
           "modifierName": "",
+          "onAdded": [
+            {
+              "$type": "SetGlobalValue",
+              "doOffStage": true,
+              "key": "_ABILITY_Diving_Skill_In_Focus_Skill_Mark",
+              "maxValue": 0.0,
+              "minValue": 0.0,
+              "value": 2.0
+            }
+          ],
+          "onRemoved": [
+            {
+              "$type": "SetGlobalValue",
+              "doOffStage": true,
+              "key": "_ABILITY_Diving_Skill_In_Focus_Skill_Mark",
+              "maxValue": 0.0,
+              "minValue": 0.0,
+              "value": 0.0
+            }
+          ],
           "AIHNJLDFEGJ": 0.0
         },
         "Focus_Remove_Delay_Trigger": {
           "duration": 10.0,
+          "elementDurability": 100.0,
+          "modifierName": "",
           "onRemoved": [
             {
               "$type": "SetAnimatorTrigger",
@@ -210,81 +214,99 @@
               "modifierName": "Focus_Remove_Delay",
               "predicates": [
                 {
-                  "$type": "EOFDCELPGFO",
-                  "CBOMLBFIPJM": 2.0,
+                  "$type": "ByTargetGlobalValue",
                   "key": "_ABILITY_Diving_Skill_In_Focus_Skill_Mark",
-                  "target": "Self"
+                  "target": "Self",
+                  "value": 2.0
                 }
               ]
             }
           ],
-          "elementDurability": 100.0,
-          "modifierName": "",
           "AIHNJLDFEGJ": 0.0
         },
         "Focus_Remove_Delay": {
-          "thinkInterval": 0.13,
           "duration": 0.5,
-          "onRemoved": [
-            {
-              "$type": "RemoveModifier",
-              "modifierName": "Focus",
-              "doOffStage": true
-            }
-          ],
+          "elementDurability": 100.0,
+          "modifierName": "",
           "onAdded": [
             {
               "$type": "SendDungeonFogEffectTrigger",
               "cameraFogEffectName": "Eff_SkillObj_Absorb_Avatar_Aim",
-              "parameter": "Aim_Close",
-              "BDPFBBFKKAH": true
+              "muteRemoteAction": true,
+              "parameter": "Aim_Close"
             }
           ],
           "onAvatarOut": [
             {
               "$type": "RemoveModifier",
-              "modifierName": "Focus",
-              "doOffStage": true
+              "doOffStage": true,
+              "modifierName": "Focus"
             }
           ],
-          "stacking": "Unique",
-          "elementDurability": 100.0,
-          "modifierName": "",
-          "onThinkIntervalIsFixedUpdate": true,
+          "onRemoved": [
+            {
+              "$type": "RemoveModifier",
+              "doOffStage": true,
+              "modifierName": "Focus"
+            }
+          ],
           "onThinkInterval": [
             {
               "$type": "ApplyModifier",
-              "modifierName": "JellyFish_Long",
-              "doOffStage": true
+              "doOffStage": true,
+              "modifierName": "JellyFish_Long"
             }
           ],
+          "onThinkIntervalIsFixedUpdate": true,
+          "stacking": "Unique",
+          "thinkInterval": 0.13,
           "AIHNJLDFEGJ": 0.0
         },
         "Focus": {
-          "onRemoved": [
+          "elementDurability": 100.0,
+          "modifierMixins": [
             {
-              "$type": "AvatarExitFocus",
-              "doOffStage": true
+              "$type": "UseShootingConfigMixin",
+              "shootingConfig": {
+                "aimingShoot": {
+                  "autoFocusMaxRange": 25.0,
+                  "autoFocusMinRange": 2.0,
+                  "bulletBornAttachPoint": "FocusAnchor",
+                  "detectRadiusFromViewport": 0.15,
+                  "detectRangeFromViewport": 100.0,
+                  "CFIPGPJHJHG": ""
+                },
+                "normalShoot": {
+                  "autoFocusMaxRange": 7.0,
+                  "autoFocusMinRange": 2.0,
+                  "bulletBornAttachPoint": "FocusAnchor",
+                  "detectRangeFromViewport": 100.0,
+                  "CFIPGPJHJHG": ""
+                }
+              }
             },
             {
-              "$type": "SetAnimatorBool",
-              "boolID": "LockMotionFlagExitChannel",
-              "doOffStage": true
+              "$type": "DisableMotionBlurMixin"
             },
             {
-              "$type": "SetGlobalValue",
-              "key": "_ABILITY_Common_IsChannelState",
-              "minValue": 0.0,
-              "maxValue": 0.0,
-              "CBOMLBFIPJM": 0.0,
-              "doOffStage": true
+              "$type": "EffectChangeAlphaMixin",
+              "endDuration": 0.3,
+              "startDuration": 0.2,
+              "syncToRemote": 0.0,
+              "target": "Team",
+              "EPJMODHHJFD": true,
+              "JCBNNDNGDNN": "GV_EffectChangeAlphaMixin_Team"
             },
             {
-              "$type": "RemoveModifier",
-              "modifierName": "Focus_Father",
-              "doOffStage": true
+              "$type": "EffectChangeAlphaMixin",
+              "endDuration": 0.3,
+              "startDuration": 0.2,
+              "syncToRemote": 0.0,
+              "EPJMODHHJFD": true,
+              "JCBNNDNGDNN": "GV_EffectChangeAlphaMixin_Team"
             }
           ],
+          "modifierName": "",
           "onAdded": [
             {
               "$type": "AttachModifier",
@@ -300,37 +322,37 @@
               "successActions": [
                 {
                   "$type": "AvatarEnterFocus",
-                  "dragButtonName": "Skill2",
-                  "cameraFastFocusMode": true,
-                  "canMove": false,
-                  "DDBIFFPGNGN": {
-                    "BFMJIOFDCLF": {},
-                    "KFIOILLKPCF": {
-                      "GMHNBMJHEGP": true
+                  "assistance": {
+                    "other": {
+                      "useGyro": true
                     },
-                    "IKEDPKIGLON": {},
+                    "ps4": {},
+                    "ps5": {},
                     "IJDKCJGBBII": {}
                   },
-                  "showCrosshair": false,
-                  "CJLPHHDCNDI": {
+                  "cameraFastFocusMode": true,
+                  "cameraFollowLower": {
+                    "x": 1.0,
                     "y": -0.05,
-                    "z": -1.2,
-                    "x": 1.0
+                    "z": -1.5
                   },
-                  "OINODICCCCO": "",
-                  "GPNAODGIDCF": "",
-                  "FDEONAODDDM": "",
-                  "assistance": {
+                  "cameraFollowUpper": {
+                    "x": 1.0,
                     "y": -0.05,
-                    "z": -1.5,
-                    "x": 1.0
-                  }
+                    "z": -1.2
+                  },
+                  "canMove": false,
+                  "dragButtonName": "Skill2",
+                  "showCrosshair": false,
+                  "FDEONAODDDM": "",
+                  "GPNAODGIDCF": "",
+                  "OINODICCCCO": ""
                 }
               ],
               "targetPredicates": [
                 {
-                  "$type": "AJPLICCNACO",
-                  "BFLILDJLGHP": [
+                  "$type": "ByHasFeatureTag",
+                  "featureTagIDs": [
                     1044
                   ]
                 }
@@ -341,36 +363,36 @@
               "successActions": [
                 {
                   "$type": "AvatarEnterFocus",
-                  "dragButtonName": "Skill2",
-                  "cameraFastFocusMode": true,
-                  "canMove": false,
-                  "DDBIFFPGNGN": {
-                    "BFMJIOFDCLF": {},
-                    "KFIOILLKPCF": {
-                      "GMHNBMJHEGP": true
+                  "assistance": {
+                    "other": {
+                      "useGyro": true
                     },
+                    "ps4": {},
                     "IJDKCJGBBII": {}
                   },
-                  "showCrosshair": false,
-                  "CJLPHHDCNDI": {
+                  "cameraFastFocusMode": true,
+                  "cameraFollowLower": {
+                    "x": 0.8,
                     "y": 0.1,
-                    "z": -1.2,
-                    "x": 0.8
+                    "z": -1.6
                   },
-                  "OINODICCCCO": "",
-                  "GPNAODGIDCF": "",
-                  "FDEONAODDDM": "",
-                  "assistance": {
+                  "cameraFollowUpper": {
+                    "x": 0.8,
                     "y": 0.1,
-                    "z": -1.6,
-                    "x": 0.8
-                  }
+                    "z": -1.2
+                  },
+                  "canMove": false,
+                  "dragButtonName": "Skill2",
+                  "showCrosshair": false,
+                  "FDEONAODDDM": "",
+                  "GPNAODGIDCF": "",
+                  "OINODICCCCO": ""
                 }
               ],
               "targetPredicates": [
                 {
-                  "$type": "AJPLICCNACO",
-                  "BFLILDJLGHP": [
+                  "$type": "ByHasFeatureTag",
+                  "featureTagIDs": [
                     1043
                   ]
                 }
@@ -381,36 +403,36 @@
               "successActions": [
                 {
                   "$type": "AvatarEnterFocus",
-                  "dragButtonName": "Skill2",
-                  "cameraFastFocusMode": true,
-                  "canMove": false,
-                  "DDBIFFPGNGN": {
-                    "BFMJIOFDCLF": {},
-                    "KFIOILLKPCF": {
-                      "GMHNBMJHEGP": true
+                  "assistance": {
+                    "other": {
+                      "useGyro": true
                     },
+                    "ps4": {},
                     "IJDKCJGBBII": {}
                   },
-                  "showCrosshair": false,
-                  "CJLPHHDCNDI": {
+                  "cameraFastFocusMode": true,
+                  "cameraFollowLower": {
+                    "x": 1.1,
                     "y": 0.15,
-                    "z": -1.1,
-                    "x": 1.1
+                    "z": -1.5
                   },
-                  "OINODICCCCO": "",
-                  "GPNAODGIDCF": "",
-                  "FDEONAODDDM": "",
-                  "assistance": {
+                  "cameraFollowUpper": {
+                    "x": 1.1,
                     "y": 0.15,
-                    "z": -1.5,
-                    "x": 1.1
-                  }
+                    "z": -1.1
+                  },
+                  "canMove": false,
+                  "dragButtonName": "Skill2",
+                  "showCrosshair": false,
+                  "FDEONAODDDM": "",
+                  "GPNAODGIDCF": "",
+                  "OINODICCCCO": ""
                 }
               ],
               "targetPredicates": [
                 {
-                  "$type": "AJPLICCNACO",
-                  "BFLILDJLGHP": [
+                  "$type": "ByHasFeatureTag",
+                  "featureTagIDs": [
                     1042
                   ]
                 }
@@ -421,36 +443,36 @@
               "successActions": [
                 {
                   "$type": "AvatarEnterFocus",
-                  "dragButtonName": "Skill2",
-                  "cameraFastFocusMode": true,
-                  "canMove": false,
-                  "DDBIFFPGNGN": {
-                    "BFMJIOFDCLF": {},
-                    "KFIOILLKPCF": {
-                      "GMHNBMJHEGP": true
+                  "assistance": {
+                    "other": {
+                      "useGyro": true
                     },
+                    "ps4": {},
                     "IJDKCJGBBII": {}
                   },
-                  "showCrosshair": false,
-                  "CJLPHHDCNDI": {
+                  "cameraFastFocusMode": true,
+                  "cameraFollowLower": {
+                    "x": 0.9,
                     "y": 0.3,
-                    "z": -1.2,
-                    "x": 0.9
+                    "z": -1.6
                   },
-                  "OINODICCCCO": "",
-                  "GPNAODGIDCF": "",
-                  "FDEONAODDDM": "",
-                  "assistance": {
+                  "cameraFollowUpper": {
+                    "x": 0.9,
                     "y": 0.3,
-                    "z": -1.6,
-                    "x": 0.9
-                  }
+                    "z": -1.2
+                  },
+                  "canMove": false,
+                  "dragButtonName": "Skill2",
+                  "showCrosshair": false,
+                  "FDEONAODDDM": "",
+                  "GPNAODGIDCF": "",
+                  "OINODICCCCO": ""
                 }
               ],
               "targetPredicates": [
                 {
-                  "$type": "AJPLICCNACO",
-                  "BFLILDJLGHP": [
+                  "$type": "ByHasFeatureTag",
+                  "featureTagIDs": [
                     1041
                   ]
                 }
@@ -461,36 +483,36 @@
               "successActions": [
                 {
                   "$type": "AvatarEnterFocus",
-                  "dragButtonName": "Skill2",
-                  "cameraFastFocusMode": true,
-                  "canMove": false,
-                  "DDBIFFPGNGN": {
-                    "BFMJIOFDCLF": {},
-                    "KFIOILLKPCF": {
-                      "GMHNBMJHEGP": true
+                  "assistance": {
+                    "other": {
+                      "useGyro": true
                     },
+                    "ps4": {},
                     "IJDKCJGBBII": {}
                   },
-                  "showCrosshair": false,
-                  "CJLPHHDCNDI": {
+                  "cameraFastFocusMode": true,
+                  "cameraFollowLower": {
+                    "x": 1.1,
                     "y": -0.3,
-                    "z": -1.2,
-                    "x": 1.1
+                    "z": -1.6
                   },
-                  "OINODICCCCO": "",
-                  "GPNAODGIDCF": "",
-                  "FDEONAODDDM": "",
-                  "assistance": {
+                  "cameraFollowUpper": {
+                    "x": 1.1,
                     "y": -0.3,
-                    "z": -1.6,
-                    "x": 1.1
-                  }
+                    "z": -1.2
+                  },
+                  "canMove": false,
+                  "dragButtonName": "Skill2",
+                  "showCrosshair": false,
+                  "FDEONAODDDM": "",
+                  "GPNAODGIDCF": "",
+                  "OINODICCCCO": ""
                 }
               ],
               "targetPredicates": [
                 {
-                  "$type": "AJPLICCNACO",
-                  "BFLILDJLGHP": [
+                  "$type": "ByHasFeatureTag",
+                  "featureTagIDs": [
                     1045
                   ]
                 }
@@ -502,86 +524,66 @@
             },
             {
               "$type": "SetAnimatorBool",
-              "CBOMLBFIPJM": true,
-              "boolID": "LockMotionFlagExitChannel"
+              "boolID": "LockMotionFlagExitChannel",
+              "value": true
             },
             {
               "$type": "SetGlobalValue",
               "key": "_ABILITY_Common_IsChannelState",
-              "minValue": 0.0,
               "maxValue": 0.0,
-              "CBOMLBFIPJM": 1.0
+              "minValue": 0.0,
+              "value": 1.0
             }
           ],
-          "elementDurability": 100.0,
-          "modifierMixins": [
+          "onRemoved": [
             {
-              "$type": "UseShootingConfigMixin",
-              "BIKKAEIFILI": {
-                "NNBKMKKKHGA": {
-                  "CFIPGPJHJHG": "",
-                  "EDJKKPBCMGK": "FocusAnchor",
-                  "CICGIKAHEPD": 7.0,
-                  "GCIJCJFJKBD": 2.0,
-                  "AAJENCJGBME": 100.0
-                },
-                "CHALKFNFBIN": {
-                  "CFIPGPJHJHG": "",
-                  "EDJKKPBCMGK": "FocusAnchor",
-                  "CICGIKAHEPD": 25.0,
-                  "GCIJCJFJKBD": 2.0,
-                  "GGNJGDHEBAO": 0.15,
-                  "AAJENCJGBME": 100.0
-                }
-              }
+              "$type": "AvatarExitFocus",
+              "doOffStage": true
             },
             {
-              "$type": "DisableMotionBlurMixin"
+              "$type": "SetAnimatorBool",
+              "boolID": "LockMotionFlagExitChannel",
+              "doOffStage": true
             },
             {
-              "$type": "EffectChangeAlphaMixin",
-              "target": "Team",
-              "endDuration": 0.3,
-              "startDuration": 0.2,
-              "EPJMODHHJFD": true,
-              "OICKODAIFCA": 0.0,
-              "JCBNNDNGDNN": "GV_EffectChangeAlphaMixin_Team"
+              "$type": "SetGlobalValue",
+              "doOffStage": true,
+              "key": "_ABILITY_Common_IsChannelState",
+              "maxValue": 0.0,
+              "minValue": 0.0,
+              "value": 0.0
             },
             {
-              "$type": "EffectChangeAlphaMixin",
-              "endDuration": 0.3,
-              "startDuration": 0.2,
-              "EPJMODHHJFD": true,
-              "OICKODAIFCA": 0.0,
-              "JCBNNDNGDNN": "GV_EffectChangeAlphaMixin_Team"
+              "$type": "RemoveModifier",
+              "doOffStage": true,
+              "modifierName": "Focus_Father"
             }
           ],
-          "modifierName": "",
           "AIHNJLDFEGJ": 0.0
         },
         "Gadget_Loop": {
-          "onRemoved": [
-            {
-              "$type": "SetGlobalValue",
-              "key": "_ABILITY_WhiteBox_Dive_Team_Trigger",
-              "minValue": 0.0,
-              "maxValue": 0.0,
-              "CBOMLBFIPJM": 3.0,
-              "target": "Team"
-            }
-          ],
+          "elementDurability": 100.0,
+          "modifierName": "",
           "onAdded": [
             {
               "$type": "SetGlobalValue",
               "key": "_ABILITY_WhiteBox_Dive_Team_Trigger",
-              "minValue": 0.0,
               "maxValue": 0.0,
-              "CBOMLBFIPJM": 2.0,
-              "target": "Team"
+              "minValue": 0.0,
+              "target": "Team",
+              "value": 2.0
             }
           ],
-          "elementDurability": 100.0,
-          "modifierName": "",
+          "onRemoved": [
+            {
+              "$type": "SetGlobalValue",
+              "key": "_ABILITY_WhiteBox_Dive_Team_Trigger",
+              "maxValue": 0.0,
+              "minValue": 0.0,
+              "target": "Team",
+              "value": 3.0
+            }
+          ],
           "AIHNJLDFEGJ": 0.0
         },
         "Aim_Camera_Eff": {
@@ -592,21 +594,21 @@
               "onAdded": [
                 {
                   "$type": "DungeonFogEffects",
-                  "enable": true,
-                  "playerFogEffectName": "",
                   "cameraFogEffectName": "Eff_SkillObj_Absorb_Avatar_Aim",
                   "canBeHandledOnRecover": true,
-                  "BDPFBBFKKAH": true
+                  "enable": true,
+                  "muteRemoteAction": true,
+                  "playerFogEffectName": ""
                 }
               ],
               "onRemoved": [
                 {
                   "$type": "DungeonFogEffects",
-                  "playerFogEffectName": "",
                   "cameraFogEffectName": "Eff_SkillObj_Absorb_Avatar_Aim",
                   "canBeHandledOnRecover": true,
                   "doOffStage": true,
-                  "BDPFBBFKKAH": true
+                  "muteRemoteAction": true,
+                  "playerFogEffectName": ""
                 }
               ]
             }
@@ -616,72 +618,74 @@
         },
         "VFX_Trigger": {
           "duration": 0.5,
+          "elementDurability": 100.0,
+          "modifierName": "",
           "onAdded": [
             {
               "$type": "FireEffect",
               "effectPattern": "Eff_Avatar_Diving_Gadget_Loop_Attack",
-              "scale": 1.0,
-              "ILLLPEOODKP": "",
               "effectTempleteID": -1.0,
               "predicates": [
                 {
-                  "$type": "GPEMEIHPCCF",
+                  "$type": "ByAny",
                   "predicates": [
                     {
-                      "$type": "AJPLICCNACO",
-                      "BFLILDJLGHP": [
+                      "$type": "ByHasFeatureTag",
+                      "featureTagIDs": [
                         1044
                       ]
                     },
                     {
-                      "$type": "AJPLICCNACO",
-                      "BFLILDJLGHP": [
+                      "$type": "ByHasFeatureTag",
+                      "featureTagIDs": [
                         1042
                       ]
                     }
                   ]
                 }
-              ]
+              ],
+              "scale": 1.0,
+              "ILLLPEOODKP": ""
             },
             {
               "$type": "FireEffect",
               "effectPattern": "Eff_Avatar_Diving_Gadget_Loop_2_Attack",
-              "scale": 1.0,
-              "ILLLPEOODKP": "",
               "effectTempleteID": -1.0,
               "predicates": [
                 {
-                  "$type": "GPEMEIHPCCF",
+                  "$type": "ByAny",
                   "predicates": [
                     {
-                      "$type": "AJPLICCNACO",
-                      "BFLILDJLGHP": [
+                      "$type": "ByHasFeatureTag",
+                      "featureTagIDs": [
                         1043
                       ]
                     },
                     {
-                      "$type": "AJPLICCNACO",
-                      "BFLILDJLGHP": [
+                      "$type": "ByHasFeatureTag",
+                      "featureTagIDs": [
                         1041
                       ]
                     },
                     {
-                      "$type": "AJPLICCNACO",
-                      "BFLILDJLGHP": [
+                      "$type": "ByHasFeatureTag",
+                      "featureTagIDs": [
                         1045
                       ]
                     }
                   ]
                 }
-              ]
+              ],
+              "scale": 1.0,
+              "ILLLPEOODKP": ""
             }
           ],
           "stacking": "Multiple",
-          "elementDurability": 100.0,
-          "modifierName": "",
           "AIHNJLDFEGJ": 0.0
         },
         "VFX": {
+          "elementDurability": 100.0,
+          "modifierName": "",
           "onAdded": [
             {
               "$type": "Predicated",
@@ -693,8 +697,8 @@
               ],
               "targetPredicates": [
                 {
-                  "$type": "AJPLICCNACO",
-                  "BFLILDJLGHP": [
+                  "$type": "ByHasFeatureTag",
+                  "featureTagIDs": [
                     1044
                   ]
                 }
@@ -710,8 +714,8 @@
               ],
               "targetPredicates": [
                 {
-                  "$type": "AJPLICCNACO",
-                  "BFLILDJLGHP": [
+                  "$type": "ByHasFeatureTag",
+                  "featureTagIDs": [
                     1042
                   ]
                 }
@@ -727,8 +731,8 @@
               ],
               "targetPredicates": [
                 {
-                  "$type": "AJPLICCNACO",
-                  "BFLILDJLGHP": [
+                  "$type": "ByHasFeatureTag",
+                  "featureTagIDs": [
                     1043
                   ]
                 }
@@ -744,8 +748,8 @@
               ],
               "targetPredicates": [
                 {
-                  "$type": "AJPLICCNACO",
-                  "BFLILDJLGHP": [
+                  "$type": "ByHasFeatureTag",
+                  "featureTagIDs": [
                     1041
                   ]
                 }
@@ -761,113 +765,113 @@
               ],
               "targetPredicates": [
                 {
-                  "$type": "AJPLICCNACO",
-                  "BFLILDJLGHP": [
+                  "$type": "ByHasFeatureTag",
+                  "featureTagIDs": [
                     1045
                   ]
                 }
               ]
             }
           ],
-          "elementDurability": 100.0,
-          "modifierName": "",
           "AIHNJLDFEGJ": 0.0
         },
         "VFX_L": {
+          "elementDurability": 100.0,
+          "modifierName": "",
           "onAdded": [
             {
               "$type": "AttachEffect",
-              "ILLLPEOODKP": "",
-              "scale": 1.0,
               "effectPattern": "Eff_Avatar_Diving_Gadget_Loop",
-              "effectTempleteID": -1.0
+              "effectTempleteID": -1.0,
+              "scale": 1.0,
+              "ILLLPEOODKP": ""
             }
           ],
-          "elementDurability": 100.0,
-          "modifierName": "",
           "AIHNJLDFEGJ": 0.0
         },
         "VFX_R": {
+          "elementDurability": 100.0,
+          "modifierName": "",
           "onAdded": [
             {
               "$type": "AttachEffect",
-              "ILLLPEOODKP": "",
-              "scale": 1.0,
               "effectPattern": "Eff_Avatar_Diving_Gadget_Loop_2",
-              "effectTempleteID": -1.0
+              "effectTempleteID": -1.0,
+              "scale": 1.0,
+              "ILLLPEOODKP": ""
             }
           ],
-          "elementDurability": 100.0,
-          "modifierName": "",
           "AIHNJLDFEGJ": 0.0
         },
         "JellyFish_Short": {
           "duration": 0.5,
+          "elementDurability": 100.0,
+          "modifierName": "",
           "onAdded": [
             {
               "$type": "SetGlobalValue",
               "key": "_ABILITY_WhiteBox_Dive_Team_Trigger",
-              "minValue": 0.0,
               "maxValue": 0.0,
-              "CBOMLBFIPJM": 1.0,
-              "target": "Team"
+              "minValue": 0.0,
+              "target": "Team",
+              "value": 1.0
             },
             {
               "$type": "SetGlobalValue",
-              "key": "_ABILITY_Jellyfish_Bomb_Kill_Mark",
-              "minValue": 0.0,
-              "maxValue": 0.0,
-              "CBOMLBFIPJM": 1.0,
               "doOffStage": true,
+              "key": "_ABILITY_Jellyfish_Bomb_Kill_Mark",
+              "maxValue": 0.0,
+              "minValue": 0.0,
               "otherTargets": {
-                "$type": "HMFKEDOMDMA",
+                "$type": "SelectTargetsByChildren",
                 "configID": 40034107
-              }
+              },
+              "value": 1.0
             },
             {
               "$type": "SetGlobalValue",
-              "key": "_ABILITY_Jellyfish_Bomb_Kill_Mark",
-              "minValue": 0.0,
-              "maxValue": 0.0,
-              "CBOMLBFIPJM": 1.0,
               "doOffStage": true,
+              "key": "_ABILITY_Jellyfish_Bomb_Kill_Mark",
+              "maxValue": 0.0,
+              "minValue": 0.0,
               "otherTargets": {
-                "$type": "HMFKEDOMDMA",
+                "$type": "SelectTargetsByChildren",
                 "configID": 40034108
-              }
+              },
+              "value": 1.0
             },
             {
               "$type": "CreateGadget",
-              "gadgetID": 40034107,
               "born": {
-                "$type": "NABPLNFPHCK",
-                "useRotation": true,
+                "$type": "ConfigBornBySelf",
                 "offset": {
-                  "x": 0.0,
-                  "z": 1.1,
-                  "y": 0.75
-                }
+                  "x": 1.1,
+                  "y": 0.75,
+                  "z": 0.0
+                },
+                "useRotation": true
               },
-              "doOffStage": true
+              "doOffStage": true,
+              "gadgetID": 40034107
             }
           ],
           "stacking": "Multiple",
-          "elementDurability": 100.0,
-          "modifierName": "",
           "AIHNJLDFEGJ": 0.0
         },
         "JellyFish_Long": {
           "duration": 0.5,
+          "elementDurability": 100.0,
+          "modifierName": "",
           "onAdded": [
             {
               "$type": "RemoveUniqueModifier",
-              "modifierName": "UNIQUE_Dive_JellyfishBomb_SwitchToTrigger",
-              "doOffStage": true
+              "doOffStage": true,
+              "modifierName": "UNIQUE_Dive_JellyfishBomb_SwitchToTrigger"
             },
             {
               "$type": "ApplyModifier",
-              "modifierName": "UNIQUE_Dive_JellyfishBomb_SwitchToTrigger",
-              "doOffStage": true
+              "doOffStage": true,
+              "modifierName": "UNIQUE_Dive_JellyfishBomb_SwitchToTrigger"
             },
             {
               "$type": "ApplyModifier",
@@ -875,161 +879,150 @@
             },
             {
               "$type": "SetGlobalValue",
-              "key": "_ABILITY_Jellyfish_Bomb_Kill_Mark",
-              "minValue": 0.0,
-              "maxValue": 0.0,
-              "CBOMLBFIPJM": 1.0,
               "doOffStage": true,
+              "key": "_ABILITY_Jellyfish_Bomb_Kill_Mark",
+              "maxValue": 0.0,
+              "minValue": 0.0,
               "otherTargets": {
-                "$type": "HMFKEDOMDMA",
+                "$type": "SelectTargetsByChildren",
                 "configID": 40034107
-              }
+              },
+              "value": 1.0
             },
             {
               "$type": "SetGlobalValue",
-              "key": "_ABILITY_Jellyfish_Bomb_Kill_Mark",
-              "minValue": 0.0,
-              "maxValue": 0.0,
-              "CBOMLBFIPJM": 1.0,
               "doOffStage": true,
+              "key": "_ABILITY_Jellyfish_Bomb_Kill_Mark",
+              "maxValue": 0.0,
+              "minValue": 0.0,
               "otherTargets": {
-                "$type": "HMFKEDOMDMA",
+                "$type": "SelectTargetsByChildren",
                 "configID": 40034108
-              }
+              },
+              "value": 1.0
             },
             {
               "$type": "TriggerBullet",
               "born": {
-                "$type": "BGOLIIIHLMO",
+                "$type": "ConfigBornByAttachPoint",
                 "attachPointName": "FocusAnchor",
                 "attachPointTargetType": "Self",
-                "useRotation": true,
-                "offset": {
-                  "x": 0.0,
-                  "z": 0.8,
-                  "y": -0.3
-                },
                 "direction": {
-                  "$type": "INAGPEEFHGG",
-                  "attachPointName": "FocusAnchor",
-                  "attachPointTargetType": "Self",
-                  "OOKIMPBMBCN": {
+                  "$type": "ConfigDirectionByAttachPoint",
+                  "angleOffset": {
                     "x": 0.0,
-                    "z": 0.0,
-                    "y": 0.0
-                  }
-                }
+                    "y": 0.0,
+                    "z": 0.0
+                  },
+                  "attachPointName": "FocusAnchor",
+                  "attachPointTargetType": "Self"
+                },
+                "offset": {
+                  "x": 0.8,
+                  "y": -0.3,
+                  "z": 0.0
+                },
+                "useRotation": true
               },
               "bulletID": 40034108
             },
             {
               "$type": "SetAnimatorTrigger",
-              "triggerID": "EndDiveCastTrigger",
-              "doOffStage": true
+              "doOffStage": true,
+              "triggerID": "EndDiveCastTrigger"
             }
           ],
           "stacking": "Unique",
-          "elementDurability": 100.0,
-          "modifierName": "",
           "AIHNJLDFEGJ": 0.0
         },
         "UNIQUE_Dive_JellyfishBomb_SwitchToTrigger": {
           "duration": 60.0,
-          "onRemoved": [
-            {
-              "$type": "Predicated",
-              "successActions": [
-                {
-                  "$type": "AvatarShareCDSkillStart",
-                  "ABLJLEAMAGL": 1,
-                  "skillID": 20060,
-                  "doOffStage": true
-                }
-              ],
-              "failActions": [
-                {
-                  "$type": "AvatarShareCDSkillStart",
-                  "skillID": 20060,
-                  "doOffStage": true
-                }
-              ],
-              "targetPredicates": [
-                {
-                  "$type": "EOFDCELPGFO",
-                  "CBOMLBFIPJM": 1.0,
-                  "key": "_ABILITY_Diving_SkillCDReduction"
-                }
-              ],
-              "target": "CurLocalAvatar",
-              "doOffStage": true
-            },
-            {
-              "$type": "SetGlobalValue",
-              "key": "_ABILITY_WhiteBox_Dive_Team_Trigger",
-              "minValue": 0.0,
-              "maxValue": 0.0,
-              "CBOMLBFIPJM": 1.0,
-              "target": "Team",
-              "doOffStage": true
-            },
-            {
-              "$type": "SetGlobalValue",
-              "key": "_ABILITY_Jellyfish_Bomb_Kill_Mark",
-              "minValue": 0.0,
-              "maxValue": 0.0,
-              "CBOMLBFIPJM": 1.0,
-              "doOffStage": true,
-              "otherTargets": {
-                "$type": "HMFKEDOMDMA",
-                "configID": 40034107
-              }
-            },
-            {
-              "$type": "SetGlobalValue",
-              "key": "_ABILITY_Jellyfish_Bomb_Kill_Mark",
-              "minValue": 0.0,
-              "maxValue": 0.0,
-              "CBOMLBFIPJM": 1.0,
-              "doOffStage": true,
-              "otherTargets": {
-                "$type": "HMFKEDOMDMA",
-                "configID": 40034108
-              }
-            }
-          ],
-          "onAdded": [
-            {
-              "$type": "AvatarSkillStart",
-              "skillID": 20061,
-              "BGNJBEPEJBO": 0.03,
-              "costStaminaRatio": 1.0,
-              "cdRatio": 1.0
-            }
-          ],
           "elementDurability": 100.0,
+          "isUnique": true,
           "modifierMixins": [
             {
               "$type": "SwitchSkillIDMixin",
-              "skillIndex": 1,
-              "MPIKIJDMPDB": true,
               "priority": "PlaymodeExtra1",
-              "skillID": 20061
+              "skillID": 20061,
+              "skillIndex": 1,
+              "MPIKIJDMPDB": true
             }
           ],
           "modifierName": "",
-          "isUnique": true,
+          "onAdded": [
+            {
+              "$type": "AvatarSkillStart",
+              "cdRatio": 0.03,
+              "costStaminaRatio": 1.0,
+              "skillID": 20061,
+              "GIBAINFKPBO": 1.0
+            }
+          ],
+          "onRemoved": [
+            {
+              "$type": "Predicated",
+              "doOffStage": true,
+              "failActions": [
+                {
+                  "$type": "AvatarShareCDSkillStart",
+                  "doOffStage": true,
+                  "skillID": 20060
+                }
+              ],
+              "successActions": [
+                {
+                  "$type": "AvatarShareCDSkillStart",
+                  "doOffStage": true,
+                  "shareCDType": 1,
+                  "skillID": 20060
+                }
+              ],
+              "target": "CurLocalAvatar",
+              "targetPredicates": [
+                {
+                  "$type": "ByTargetGlobalValue",
+                  "key": "_ABILITY_Diving_SkillCDReduction",
+                  "value": 1.0
+                }
+              ]
+            },
+            {
+              "$type": "SetGlobalValue",
+              "doOffStage": true,
+              "key": "_ABILITY_WhiteBox_Dive_Team_Trigger",
+              "maxValue": 0.0,
+              "minValue": 0.0,
+              "target": "Team",
+              "value": 1.0
+            },
+            {
+              "$type": "SetGlobalValue",
+              "doOffStage": true,
+              "key": "_ABILITY_Jellyfish_Bomb_Kill_Mark",
+              "maxValue": 0.0,
+              "minValue": 0.0,
+              "otherTargets": {
+                "$type": "SelectTargetsByChildren",
+                "configID": 40034107
+              },
+              "value": 1.0
+            },
+            {
+              "$type": "SetGlobalValue",
+              "doOffStage": true,
+              "key": "_ABILITY_Jellyfish_Bomb_Kill_Mark",
+              "maxValue": 0.0,
+              "minValue": 0.0,
+              "otherTargets": {
+                "$type": "SelectTargetsByChildren",
+                "configID": 40034108
+              },
+              "value": 1.0
+            }
+          ],
           "AIHNJLDFEGJ": 0.0
         }
       },
-      "GEDGKKAPHKP": true,
-      "onRemoved": [
-        {
-          "$type": "RemoveUniqueModifier",
-          "modifierName": "UNIQUE_Dive_JellyfishBomb_SwitchToTrigger"
-        }
-      ],
-      "abilityName": "Ability_Avatar_Dive_JellyfishBomb",
-      "isDynamicAbility": true,
       "onAdded": [
         {
           "$type": "AttachModifier",
@@ -1039,11 +1032,20 @@
           "$type": "AttachModifier",
           "modifierName": "Avatar_Dive_JellyfishBomb_Hold_Handler"
         }
-      ]
+      ],
+      "onRemoved": [
+        {
+          "$type": "RemoveUniqueModifier",
+          "modifierName": "UNIQUE_Dive_JellyfishBomb_SwitchToTrigger"
+        }
+      ],
+      "GEDGKKAPHKP": true
     }
   },
   {
     "Default": {
+      "abilityName": "Ability_Avatar_Dive_JellyfishBomb_Trigger",
+      "isDynamicAbility": true,
       "onAbilityStart": [
         {
           "$type": "ForceUseSkillSuccess",
@@ -1052,101 +1054,30 @@
         },
         {
           "$type": "RemoveUniqueModifier",
-          "modifierName": "UNIQUE_Dive_JellyfishBomb_SwitchToTrigger",
-          "doOffStage": true
+          "doOffStage": true,
+          "modifierName": "UNIQUE_Dive_JellyfishBomb_SwitchToTrigger"
         }
       ],
-      "GEDGKKAPHKP": true,
-      "abilityName": "Ability_Avatar_Dive_JellyfishBomb_Trigger",
-      "isDynamicAbility": true
+      "GEDGKKAPHKP": true
     }
   },
   {
     "Default": {
+      "abilityName": "Ability_Absorb_JellyfishBomb_Short",
+      "abilitySpecials": {
+        "DamageSystemValue": 0.0,
+        "DamageRatio": 0.0
+      },
       "modifiers": {
         "JellyfishBomb": {
-          "thinkInterval": 0.5,
-          "onAdded": [
-            {
-              "$type": "AttachEffect",
-              "ILLLPEOODKP": "",
-              "scale": 1.0,
-              "effectPattern": "Eff_Avatar_Diving_Jellyfish_Boom_Short",
-              "effectTempleteID": -1.0
-            }
-          ],
-          "onKill": [
-            {
-              "$type": "FireEffect",
-              "effectPattern": "Eff_Avatar_Diving_Jellyfish_Boom_Short_Explode",
-              "scale": 1.0,
-              "ILLLPEOODKP": "",
-              "effectTempleteID": -1.0
-            },
-            {
-              "$type": "SetSystemValueToOverrideMap",
-              "OAEJNDBEDPO": -1.0,
-              "key": "DamageSystemValue",
-              "type": "ElementLevelCo",
-              "doOffStage": true
-            },
-            {
-              "$type": "TriggerAttackEvent",
-              "targetType": "Enemy",
-              "attackEvent": {
-                "attackInfo": {
-                  "attackProperty": {
-                    "damagePercentageRatio": 0.0,
-                    "ignoreAttackerProperty": true,
-                    "strikeType": "Blunt",
-                    "enBreak": 90.0,
-                    "trueDamage": true,
-                    "damagePercentage": 0.0,
-                    "damageExtra": [
-                      "DamageRatio",
-                      "DamageSystemValue",
-                      "MUL"
-                    ],
-                    "elementDurability": 0.0,
-                    "arkheGrade": 0.0
-                  },
-                  "hitPattern": {
-                    "FLFCIDDNMNA": "",
-                    "onHitEffectName": "",
-                    "hitHaltTimeScale": 0.05,
-                    "hitImpulseType": "LV5"
-                  },
-                  "attenuationGroup": "default",
-                  "attenuationTag": "",
-                  "attackTag": "JellyFish_Bomb",
-                  "canBeModifiedBy": "OriginOwner"
-                },
-                "attackPattern": {
-                  "$type": "HCAGHMDHEGG",
-                  "radius": 4.0,
-                  "triggerType": "TriggerNoRepeat",
-                  "AFHLALNAEEJ": true,
-                  "MBNGDEHILDC": 3.0,
-                  "born": {
-                    "$type": "NABPLNFPHCK",
-                    "useRotation": true
-                  }
-                }
-              }
-            },
-            {
-              "$type": "RemoveModifier",
-              "modifierName": "JellyfishBomb"
-            }
-          ],
           "elementDurability": 100.0,
           "modifierMixins": [
             {
               "$type": "AttachModifierToGlobalValueMixin",
+              "globalValueKey": "_ABILITY_Jellyfish_Bomb_Kill_Mark",
               "modifierNameSteps": [
                 "ExplodeDelay"
               ],
-              "globalValueKey": "_ABILITY_Jellyfish_Bomb_Kill_Mark",
               "valueSteps": [
                 0.5,
                 1.5
@@ -1154,52 +1085,136 @@
             }
           ],
           "modifierName": "",
+          "onAdded": [
+            {
+              "$type": "AttachEffect",
+              "effectPattern": "Eff_Avatar_Diving_Jellyfish_Boom_Short",
+              "effectTempleteID": -1.0,
+              "scale": 1.0,
+              "ILLLPEOODKP": ""
+            }
+          ],
+          "onKill": [
+            {
+              "$type": "FireEffect",
+              "effectPattern": "Eff_Avatar_Diving_Jellyfish_Boom_Short_Explode",
+              "effectTempleteID": -1.0,
+              "scale": 1.0,
+              "ILLLPEOODKP": ""
+            },
+            {
+              "$type": "SetSystemValueToOverrideMap",
+              "doOffStage": true,
+              "key": "DamageSystemValue",
+              "type": "ElementLevelCo",
+              "OAEJNDBEDPO": -1.0
+            },
+            {
+              "$type": "TriggerAttackEvent",
+              "attackEvent": {
+                "attackInfo": {
+                  "attackProperty": {
+                    "damageExtra": [
+                      "DamageRatio",
+                      "DamageSystemValue",
+                      "MUL"
+                    ],
+                    "damagePercentage": 0.0,
+                    "damagePercentageRatio": 0.0,
+                    "elementDurability": 0.0,
+                    "enBreak": 90.0,
+                    "ignoreAttackerProperty": true,
+                    "strikeType": "Blunt",
+                    "trueDamage": true,
+                    "IIPHCFEONLK": 0.0
+                  },
+                  "attackTag": "JellyFish_Bomb",
+                  "attenuationGroup": "default",
+                  "attenuationTag": "",
+                  "canBeModifiedBy": "OriginOwner",
+                  "hitPattern": {
+                    "hitHaltTimeScale": 0.05,
+                    "hitImpulseType": "LV5",
+                    "onHitEffectName": "",
+                    "FLFCIDDNMNA": ""
+                  }
+                },
+                "attackPattern": {
+                  "$type": "ConfigAttackSphere",
+                  "born": {
+                    "$type": "ConfigBornBySelf",
+                    "useRotation": true
+                  },
+                  "radius": 4.0,
+                  "triggerType": "TriggerNoRepeat",
+                  "MBNGDEHILDC": 3.0,
+                  "AFHLALNAEEJ": true
+                }
+              },
+              "targetType": "Enemy"
+            },
+            {
+              "$type": "RemoveModifier",
+              "modifierName": "JellyfishBomb"
+            }
+          ],
           "onThinkInterval": [
             {
               "$type": "SetGlobalPos",
-              "key": "_ABILITY_JellyFishBomb_Owner_Pos",
               "born": {
-                "$type": "JFCMOMMEDHL",
+                "$type": "ConfigBornBySelfOwner",
                 "useRotation": true
-              }
+              },
+              "key": "_ABILITY_JellyFishBomb_Owner_Pos"
             },
             {
               "$type": "RemoveUniqueModifier",
               "modifierName": "UNIQUE_Dive_JellyfishBomb_SwitchToTrigger",
-              "target": "OriginOwner",
               "predicates": [
                 {
-                  "$type": "HPANBNKJCMI",
+                  "$type": "ByTargetPosToGlobalPosDistance",
                   "compareType": "XYZ",
-                  "CBOMLBFIPJM": 65.0,
                   "positionKey": "_ABILITY_JellyFishBomb_Owner_Pos",
-                  "target": "Self"
+                  "target": "Self",
+                  "value": 65.0
                 }
-              ]
+              ],
+              "target": "OriginOwner"
             },
             {
               "$type": "SetGlobalValue",
               "key": "_ABILITY_Jellyfish_Bomb_Kill_Mark",
-              "minValue": 0.0,
               "maxValue": 0.0,
-              "CBOMLBFIPJM": 1.0,
+              "minValue": 0.0,
               "predicates": [
                 {
-                  "$type": "HPANBNKJCMI",
+                  "$type": "ByTargetPosToGlobalPosDistance",
                   "compareType": "XYZ",
-                  "CBOMLBFIPJM": 65.0,
                   "positionKey": "_ABILITY_JellyFishBomb_Owner_Pos",
-                  "target": "Self"
+                  "target": "Self",
+                  "value": 65.0
                 }
-              ]
+              ],
+              "value": 1.0
             }
           ],
+          "thinkInterval": 0.5,
           "AIHNJLDFEGJ": 0.0
         },
         "JellyfishBomb_Gadget_Checker": {
+          "elementDurability": 100.0,
+          "modifierName": "",
           "onHittingOther": [
             {
               "$type": "Predicated",
+              "predicates": [
+                {
+                  "$type": "ByEntityTypes",
+                  "entityTypes": [
+                    "Gadget"
+                  ]
+                }
+              ],
               "successActions": [
                 {
                   "$type": "ApplyModifier",
@@ -1207,36 +1222,36 @@
                   "target": "Other"
                 }
               ],
+              "target": "Other",
               "targetPredicates": [
                 {
-                  "$type": "EOFDCELPGFO",
-                  "CBOMLBFIPJM": 1.0,
-                  "key": "_IS_InUnderseaBacDoor"
+                  "$type": "ByTargetGlobalValue",
+                  "key": "_IS_InUnderseaBacDoor",
+                  "value": 1.0
                 },
                 {
-                  "$type": "CNEGOECCOKB",
-                  "CBOMLBFIPJM": 90.0,
-                  "logic": "LesserOrEqual"
+                  "$type": "ByTargetForwardAndSelfPosition",
+                  "logic": "LesserOrEqual",
+                  "value": 90.0
                 },
                 {
-                  "$type": "CCHPEOBKOBO",
+                  "$type": "ByAttackTags",
                   "attackTags": [
                     "JellyFish_Bomb"
-                  ]
-                }
-              ],
-              "target": "Other",
-              "predicates": [
-                {
-                  "$type": "DEOFBICNFHF",
-                  "entityTypes": [
-                    "Gadget"
                   ]
                 }
               ]
             },
             {
               "$type": "Predicated",
+              "predicates": [
+                {
+                  "$type": "ByEntityTypes",
+                  "entityTypes": [
+                    "Platform"
+                  ]
+                }
+              ],
               "successActions": [
                 {
                   "$type": "ApplyModifier",
@@ -1244,104 +1259,93 @@
                   "target": "Other"
                 }
               ],
+              "target": "Other",
               "targetPredicates": [
                 {
-                  "$type": "EOFDCELPGFO",
-                  "CBOMLBFIPJM": 1.0,
-                  "key": "_IS_InUnderseaBacRes"
+                  "$type": "ByTargetGlobalValue",
+                  "key": "_IS_InUnderseaBacRes",
+                  "value": 1.0
                 },
                 {
-                  "$type": "CNEGOECCOKB",
-                  "CBOMLBFIPJM": 75.0,
-                  "logic": "LesserOrEqual"
+                  "$type": "ByTargetForwardAndSelfPosition",
+                  "logic": "LesserOrEqual",
+                  "value": 75.0
                 },
                 {
-                  "$type": "CCHPEOBKOBO",
+                  "$type": "ByAttackTags",
                   "attackTags": [
                     "JellyFish_Bomb"
-                  ]
-                }
-              ],
-              "target": "Other",
-              "predicates": [
-                {
-                  "$type": "DEOFBICNFHF",
-                  "entityTypes": [
-                    "Platform"
                   ]
                 }
               ]
             }
           ],
-          "elementDurability": 100.0,
-          "modifierName": "",
           "AIHNJLDFEGJ": 0.0
         },
         "ExplodeDelay": {
           "duration": 0.2,
+          "elementDurability": 100.0,
+          "modifierName": "",
+          "onAdded": [
+            {
+              "$type": "SendEffectTrigger",
+              "attachPoint": "",
+              "effectPattern": "Eff_Avatar_Diving_Jellyfish_Boom_Short",
+              "parameter": "Trigger",
+              "type": "Int",
+              "value": 2
+            }
+          ],
           "onRemoved": [
             {
               "$type": "KillSelf"
             }
           ],
-          "onAdded": [
-            {
-              "$type": "SendEffectTrigger",
-              "parameter": "Trigger",
-              "GGKIEIJLCJJ": 2,
-              "effectPattern": "Eff_Avatar_Diving_Jellyfish_Boom_Short",
-              "type": "Int",
-              "attachPoint": ""
-            }
-          ],
-          "elementDurability": 100.0,
-          "modifierName": "",
           "AIHNJLDFEGJ": 0.0
         },
         "JellyFish_Bomb_Special_Tag_On_Gadget": {
           "duration": 1.0,
+          "elementDurability": 100.0,
+          "modifierName": "",
           "onAdded": [
             {
               "$type": "DamageByAttackValue",
               "attackInfo": {
                 "attackProperty": {
-                  "elementType": "Water",
                   "attackType": "Melee",
-                  "damagePercentageRatio": 0.0,
-                  "strikeType": "Slash",
-                  "enBreak": 150.0,
-                  "damagePercentage": 0.0,
                   "damageExtra": 0.0,
+                  "damagePercentage": 0.0,
+                  "damagePercentageRatio": 0.0,
                   "elementDurability": 25.0,
-                  "arkheGrade": 0.0
+                  "elementType": "Water",
+                  "enBreak": 150.0,
+                  "strikeType": "Slash",
+                  "IIPHCFEONLK": 0.0
                 },
-                "hitPattern": {
-                  "FLFCIDDNMNA": "",
-                  "onHitEffectName": "none",
-                  "hitHaltTimeScale": 0.01,
-                  "muteHitText": true,
-                  "hitImpulseType": "LV0"
-                },
+                "attackTag": "JellyFish_Bomb_Special",
                 "attenuationGroup": "default",
                 "attenuationTag": "",
-                "attackTag": "JellyFish_Bomb_Special"
+                "hitPattern": {
+                  "hitHaltTimeScale": 0.01,
+                  "hitImpulseType": "LV0",
+                  "muteHitText": true,
+                  "onHitEffectName": "none",
+                  "FLFCIDDNMNA": ""
+                }
               }
             }
           ],
           "stacking": "Multiple",
-          "elementDurability": 100.0,
-          "modifierName": "",
           "AIHNJLDFEGJ": 0.0
         }
       },
-      "abilityName": "Ability_Absorb_JellyfishBomb_Short",
       "onAdded": [
         {
           "$type": "SetGlobalValue",
           "key": "_ABILITY_Jellyfish_Bomb_Kill_Mark",
-          "minValue": 0.0,
           "maxValue": 0.0,
-          "CBOMLBFIPJM": 0.0
+          "minValue": 0.0,
+          "value": 0.0
         },
         {
           "$type": "AttachModifier",
@@ -1353,113 +1357,31 @@
         },
         {
           "$type": "SetSystemValueToOverrideMap",
-          "OAEJNDBEDPO": -1.0,
+          "doOffStage": true,
           "key": "DamageSystemValue",
           "type": "ElementLevelCo",
-          "doOffStage": true
+          "OAEJNDBEDPO": -1.0
         }
-      ],
-      "abilitySpecials": {
-        "DamageSystemValue": 0.0,
-        "DamageRatio": 0.0
-      }
+      ]
     }
   },
   {
     "Default": {
+      "abilityName": "Ability_Absorb_JellyfishBomb_Hold",
+      "abilitySpecials": {
+        "DamageSystemValue": 0.0,
+        "DamageRatio": 0.0
+      },
       "modifiers": {
         "JellyfishBomb": {
-          "thinkInterval": 0.5,
-          "onAdded": [
-            {
-              "$type": "AttachEffect",
-              "ILLLPEOODKP": "",
-              "born": {
-                "$type": "BGOLIIIHLMO",
-                "attachPointName": "RootNode",
-                "useRotation": true,
-                "direction": {
-                  "$type": "KMEAEFMPHKB",
-                  "directionKey": "_ABILITY_JellyfishBomb_Hold_Initial_Dir"
-                }
-              },
-              "scale": 1.0,
-              "effectPattern": "Eff_Avatar_Diving_Jellyfish_Boom_Hold",
-              "effectTempleteID": -1.0
-            }
-          ],
-          "onKill": [
-            {
-              "$type": "FireEffect",
-              "effectPattern": "Eff_Avatar_Diving_Jellyfish_Boom_Hold_Explode",
-              "scale": 1.0,
-              "ILLLPEOODKP": "",
-              "effectTempleteID": -1.0
-            },
-            {
-              "$type": "SetSystemValueToOverrideMap",
-              "OAEJNDBEDPO": -1.0,
-              "key": "DamageSystemValue",
-              "type": "ElementLevelCo",
-              "doOffStage": true
-            },
-            {
-              "$type": "TriggerAttackEvent",
-              "targetType": "Enemy",
-              "attackEvent": {
-                "attackInfo": {
-                  "attackProperty": {
-                    "damagePercentageRatio": 0.0,
-                    "ignoreAttackerProperty": true,
-                    "strikeType": "Blunt",
-                    "enBreak": 90.0,
-                    "trueDamage": true,
-                    "damagePercentage": 0.0,
-                    "damageExtra": [
-                      "DamageRatio",
-                      "DamageSystemValue",
-                      "MUL"
-                    ],
-                    "elementDurability": 0.0,
-                    "arkheGrade": 0.0
-                  },
-                  "hitPattern": {
-                    "FLFCIDDNMNA": "",
-                    "onHitEffectName": "None",
-                    "hitHaltTimeScale": 0.05,
-                    "hitImpulseType": "LV5"
-                  },
-                  "attenuationGroup": "default",
-                  "attenuationTag": "",
-                  "attackTag": "JellyFish_Bomb",
-                  "canBeModifiedBy": "OriginOwner"
-                },
-                "attackPattern": {
-                  "$type": "HCAGHMDHEGG",
-                  "radius": 10.0,
-                  "triggerType": "TriggerNoRepeat",
-                  "AFHLALNAEEJ": true,
-                  "MBNGDEHILDC": 8.0,
-                  "born": {
-                    "$type": "NABPLNFPHCK",
-                    "useRotation": true
-                  }
-                }
-              }
-            },
-            {
-              "$type": "RemoveModifier",
-              "modifierName": "JellyfishBomb"
-            }
-          ],
           "elementDurability": 100.0,
           "modifierMixins": [
             {
               "$type": "AttachModifierToGlobalValueMixin",
+              "globalValueKey": "_ABILITY_Jellyfish_Bomb_Kill_Mark",
               "modifierNameSteps": [
                 "ExplodeDelay"
               ],
-              "globalValueKey": "_ABILITY_Jellyfish_Bomb_Kill_Mark",
               "valueSteps": [
                 0.5,
                 1.5
@@ -1467,80 +1389,163 @@
             }
           ],
           "modifierName": "",
+          "onAdded": [
+            {
+              "$type": "AttachEffect",
+              "born": {
+                "$type": "ConfigBornByAttachPoint",
+                "attachPointName": "RootNode",
+                "direction": {
+                  "$type": "ConfigDirectionByGlobalValue",
+                  "directionKey": "_ABILITY_JellyfishBomb_Hold_Initial_Dir"
+                },
+                "useRotation": true
+              },
+              "effectPattern": "Eff_Avatar_Diving_Jellyfish_Boom_Hold",
+              "effectTempleteID": -1.0,
+              "scale": 1.0,
+              "ILLLPEOODKP": ""
+            }
+          ],
+          "onKill": [
+            {
+              "$type": "FireEffect",
+              "effectPattern": "Eff_Avatar_Diving_Jellyfish_Boom_Hold_Explode",
+              "effectTempleteID": -1.0,
+              "scale": 1.0,
+              "ILLLPEOODKP": ""
+            },
+            {
+              "$type": "SetSystemValueToOverrideMap",
+              "doOffStage": true,
+              "key": "DamageSystemValue",
+              "type": "ElementLevelCo",
+              "OAEJNDBEDPO": -1.0
+            },
+            {
+              "$type": "TriggerAttackEvent",
+              "attackEvent": {
+                "attackInfo": {
+                  "attackProperty": {
+                    "damageExtra": [
+                      "DamageRatio",
+                      "DamageSystemValue",
+                      "MUL"
+                    ],
+                    "damagePercentage": 0.0,
+                    "damagePercentageRatio": 0.0,
+                    "elementDurability": 0.0,
+                    "enBreak": 90.0,
+                    "ignoreAttackerProperty": true,
+                    "strikeType": "Blunt",
+                    "trueDamage": true,
+                    "IIPHCFEONLK": 0.0
+                  },
+                  "attackTag": "JellyFish_Bomb",
+                  "attenuationGroup": "default",
+                  "attenuationTag": "",
+                  "canBeModifiedBy": "OriginOwner",
+                  "hitPattern": {
+                    "hitHaltTimeScale": 0.05,
+                    "hitImpulseType": "LV5",
+                    "onHitEffectName": "None",
+                    "FLFCIDDNMNA": ""
+                  }
+                },
+                "attackPattern": {
+                  "$type": "ConfigAttackSphere",
+                  "born": {
+                    "$type": "ConfigBornBySelf",
+                    "useRotation": true
+                  },
+                  "radius": 10.0,
+                  "triggerType": "TriggerNoRepeat",
+                  "MBNGDEHILDC": 8.0,
+                  "AFHLALNAEEJ": true
+                }
+              },
+              "targetType": "Enemy"
+            },
+            {
+              "$type": "RemoveModifier",
+              "modifierName": "JellyfishBomb"
+            }
+          ],
           "onThinkInterval": [
             {
               "$type": "SetGlobalPos",
-              "key": "_ABILITY_JellyFishBomb_Owner_Pos",
               "born": {
-                "$type": "JFCMOMMEDHL",
+                "$type": "ConfigBornBySelfOwner",
                 "useRotation": true
-              }
+              },
+              "key": "_ABILITY_JellyFishBomb_Owner_Pos"
             },
             {
               "$type": "RemoveUniqueModifier",
               "modifierName": "UNIQUE_Dive_JellyfishBomb_SwitchToTrigger",
-              "target": "OriginOwner",
               "predicates": [
                 {
-                  "$type": "HPANBNKJCMI",
+                  "$type": "ByTargetPosToGlobalPosDistance",
                   "compareType": "XYZ",
-                  "CBOMLBFIPJM": 65.0,
                   "positionKey": "_ABILITY_JellyFishBomb_Owner_Pos",
-                  "target": "Self"
+                  "target": "Self",
+                  "value": 65.0
                 }
-              ]
+              ],
+              "target": "OriginOwner"
             },
             {
               "$type": "SetGlobalValue",
               "key": "_ABILITY_Jellyfish_Bomb_Kill_Mark",
-              "minValue": 0.0,
               "maxValue": 0.0,
-              "CBOMLBFIPJM": 1.0,
+              "minValue": 0.0,
               "predicates": [
                 {
-                  "$type": "HPANBNKJCMI",
+                  "$type": "ByTargetPosToGlobalPosDistance",
                   "compareType": "XYZ",
-                  "CBOMLBFIPJM": 65.0,
                   "positionKey": "_ABILITY_JellyFishBomb_Owner_Pos",
-                  "target": "Self"
+                  "target": "Self",
+                  "value": 65.0
                 }
-              ]
+              ],
+              "value": 1.0
             },
             {
               "$type": "ApplyModifier",
               "modifierName": "Hit_Scene_Stop",
               "predicates": [
                 {
-                  "$type": "HPANBNKJCMI",
+                  "$type": "ByTargetPosToGlobalPosDistance",
                   "compareType": "XYZ",
-                  "CBOMLBFIPJM": 40.0,
                   "positionKey": "_ABILITY_JellyFishBomb_Owner_Pos",
-                  "target": "Self"
+                  "target": "Self",
+                  "value": 40.0
                 }
               ]
             }
           ],
+          "thinkInterval": 0.5,
           "AIHNJLDFEGJ": 0.0
         },
         "ExplodeDelay": {
           "duration": 0.2,
+          "elementDurability": 100.0,
+          "modifierName": "",
+          "onAdded": [
+            {
+              "$type": "SendEffectTrigger",
+              "attachPoint": "",
+              "effectPattern": "Eff_Avatar_Diving_Jellyfish_Boom_Hold",
+              "parameter": "Trigger",
+              "type": "Int",
+              "value": 2
+            }
+          ],
           "onRemoved": [
             {
               "$type": "KillSelf"
             }
           ],
-          "onAdded": [
-            {
-              "$type": "SendEffectTrigger",
-              "parameter": "Trigger",
-              "GGKIEIJLCJJ": 2,
-              "effectPattern": "Eff_Avatar_Diving_Jellyfish_Boom_Hold",
-              "type": "Int",
-              "attachPoint": ""
-            }
-          ],
-          "elementDurability": 100.0,
-          "modifierName": "",
           "AIHNJLDFEGJ": 0.0
         },
         "JellyfishBomb_Entity_Checker": {
@@ -1549,9 +1554,19 @@
           "AIHNJLDFEGJ": 0.0
         },
         "JellyfishBomb_Gadget_Checker": {
+          "elementDurability": 100.0,
+          "modifierName": "",
           "onHittingOther": [
             {
               "$type": "Predicated",
+              "predicates": [
+                {
+                  "$type": "ByEntityTypes",
+                  "entityTypes": [
+                    "Gadget"
+                  ]
+                }
+              ],
               "successActions": [
                 {
                   "$type": "ApplyModifier",
@@ -1559,36 +1574,36 @@
                   "target": "Other"
                 }
               ],
+              "target": "Other",
               "targetPredicates": [
                 {
-                  "$type": "EOFDCELPGFO",
-                  "CBOMLBFIPJM": 1.0,
-                  "key": "_IS_InUnderseaBacDoor"
+                  "$type": "ByTargetGlobalValue",
+                  "key": "_IS_InUnderseaBacDoor",
+                  "value": 1.0
                 },
                 {
-                  "$type": "CNEGOECCOKB",
-                  "CBOMLBFIPJM": 90.0,
-                  "logic": "LesserOrEqual"
+                  "$type": "ByTargetForwardAndSelfPosition",
+                  "logic": "LesserOrEqual",
+                  "value": 90.0
                 },
                 {
-                  "$type": "CCHPEOBKOBO",
+                  "$type": "ByAttackTags",
                   "attackTags": [
                     "JellyFish_Bomb"
-                  ]
-                }
-              ],
-              "target": "Other",
-              "predicates": [
-                {
-                  "$type": "DEOFBICNFHF",
-                  "entityTypes": [
-                    "Gadget"
                   ]
                 }
               ]
             },
             {
               "$type": "Predicated",
+              "predicates": [
+                {
+                  "$type": "ByEntityTypes",
+                  "entityTypes": [
+                    "Platform"
+                  ]
+                }
+              ],
               "successActions": [
                 {
                   "$type": "ApplyModifier",
@@ -1596,91 +1611,81 @@
                   "target": "Other"
                 }
               ],
+              "target": "Other",
               "targetPredicates": [
                 {
-                  "$type": "EOFDCELPGFO",
-                  "CBOMLBFIPJM": 1.0,
-                  "key": "_IS_InUnderseaBacRes"
+                  "$type": "ByTargetGlobalValue",
+                  "key": "_IS_InUnderseaBacRes",
+                  "value": 1.0
                 },
                 {
-                  "$type": "CNEGOECCOKB",
-                  "CBOMLBFIPJM": 75.0,
-                  "logic": "LesserOrEqual"
+                  "$type": "ByTargetForwardAndSelfPosition",
+                  "logic": "LesserOrEqual",
+                  "value": 75.0
                 },
                 {
-                  "$type": "CCHPEOBKOBO",
+                  "$type": "ByAttackTags",
                   "attackTags": [
                     "JellyFish_Bomb"
-                  ]
-                }
-              ],
-              "target": "Other",
-              "predicates": [
-                {
-                  "$type": "DEOFBICNFHF",
-                  "entityTypes": [
-                    "Platform"
                   ]
                 }
               ]
             }
           ],
-          "elementDurability": 100.0,
-          "modifierName": "",
           "AIHNJLDFEGJ": 0.0
         },
         "JellyFish_Bomb_Special_Tag_On_Gadget": {
           "duration": 1.0,
+          "elementDurability": 100.0,
+          "modifierName": "",
           "onAdded": [
             {
               "$type": "DamageByAttackValue",
               "attackInfo": {
                 "attackProperty": {
-                  "elementType": "Water",
                   "attackType": "Melee",
-                  "damagePercentageRatio": 0.0,
-                  "strikeType": "Slash",
-                  "enBreak": 150.0,
-                  "damagePercentage": 0.0,
                   "damageExtra": 0.0,
+                  "damagePercentage": 0.0,
+                  "damagePercentageRatio": 0.0,
                   "elementDurability": 25.0,
-                  "arkheGrade": 0.0
+                  "elementType": "Water",
+                  "enBreak": 150.0,
+                  "strikeType": "Slash",
+                  "IIPHCFEONLK": 0.0
                 },
-                "hitPattern": {
-                  "FLFCIDDNMNA": "",
-                  "onHitEffectName": "none",
-                  "hitHaltTimeScale": 0.01,
-                  "muteHitText": true,
-                  "hitImpulseType": "LV0"
-                },
+                "attackTag": "JellyFish_Bomb_Special",
                 "attenuationGroup": "default",
                 "attenuationTag": "",
-                "attackTag": "JellyFish_Bomb_Special"
+                "hitPattern": {
+                  "hitHaltTimeScale": 0.01,
+                  "hitImpulseType": "LV0",
+                  "muteHitText": true,
+                  "onHitEffectName": "none",
+                  "FLFCIDDNMNA": ""
+                }
               }
             }
           ],
           "stacking": "Multiple",
-          "elementDurability": 100.0,
-          "modifierName": "",
           "AIHNJLDFEGJ": 0.0
         },
         "Hit_Scene_Stop": {
+          "elementDurability": 100.0,
+          "modifierName": "",
           "onAdded": [
             {
               "$type": "SendEffectTrigger",
-              "parameter": "Trigger",
-              "GGKIEIJLCJJ": 1,
+              "attachPoint": "",
               "effectPattern": "Eff_Avatar_Diving_Jellyfish_Boom_Hold",
+              "parameter": "Trigger",
               "type": "Int",
-              "attachPoint": ""
+              "value": 1
             }
           ],
           "properties": {
             "Actor_BulletMoveSpeedRatio": -1.0
           },
           "stacking": "Unique",
-          "elementDurability": 100.0,
-          "modifierName": "",
           "AIHNJLDFEGJ": 0.0
         }
       },
@@ -1693,22 +1698,21 @@
           "$type": "EnableBulletCollisionPluginTrigger"
         }
       ],
-      "abilityName": "Ability_Absorb_JellyfishBomb_Hold",
       "onAdded": [
         {
           "$type": "SetGlobalValue",
           "key": "_ABILITY_Jellyfish_Bomb_Kill_Mark",
-          "minValue": 0.0,
           "maxValue": 0.0,
-          "CBOMLBFIPJM": 0.0
+          "minValue": 0.0,
+          "value": 0.0
         },
         {
           "$type": "SetGlobalDir",
-          "key": "_ABILITY_JellyfishBomb_Hold_Initial_Dir",
           "born": {
-            "$type": "JFCMOMMEDHL",
+            "$type": "ConfigBornBySelfOwner",
             "useRotation": true
-          }
+          },
+          "key": "_ABILITY_JellyfishBomb_Hold_Initial_Dir"
         },
         {
           "$type": "AttachModifier",
@@ -1720,16 +1724,12 @@
         },
         {
           "$type": "SetSystemValueToOverrideMap",
-          "OAEJNDBEDPO": -1.0,
+          "doOffStage": true,
           "key": "DamageSystemValue",
           "type": "ElementLevelCo",
-          "doOffStage": true
+          "OAEJNDBEDPO": -1.0
         }
-      ],
-      "abilitySpecials": {
-        "DamageSystemValue": 0.0,
-        "DamageRatio": 0.0
-      }
+      ]
     }
   }
 ]

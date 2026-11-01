@@ -1,6 +1,77 @@
 [
   {
     "Default": {
+      "abilityMixins": [
+        {
+          "$type": "AttachModifierToSelfGlobalValueMixin",
+          "defaultGlobalValueOnCreate": 0.0,
+          "globalValueKey": "SGV_MONSTER_PLANELURKER_ABYSS_STATE",
+          "modifierNameSteps": [
+            "Planelurker_Abyss_State1",
+            "Planelurker_Abyss_State2"
+          ],
+          "valueSteps": [
+            -0.5,
+            0.5,
+            1.5
+          ],
+          "DEFOFMOIAAI": true
+        },
+        {
+          "$type": "AttachModifierToSelfGlobalValueMixin",
+          "defaultGlobalValueOnCreate": 0.0,
+          "globalValueKey": "_MONSTER_PLANELURKER_ABYSS_ISCENTER",
+          "modifierNameSteps": [
+            "Planelurker_Abyss_IsCenterFalse",
+            "Planelurker_Abyss_IsCenterTrue"
+          ],
+          "valueSteps": [
+            -0.5,
+            0.5,
+            1.5
+          ]
+        },
+        {
+          "$type": "AttachToStateIDMixin",
+          "modifierName": "Planelurker_Abyss_Alert",
+          "stateIDs": [
+            "Alert"
+          ],
+          "LJPPDIGCJMJ": ""
+        },
+        {
+          "$type": "AttachToNormalizedTimeMixin",
+          "modifierName": "Planelurker_Abyss_AlertEffect",
+          "normalizeEnd": 0.7,
+          "stateID": "Alert",
+          "LJPPDIGCJMJ": ""
+        },
+        {
+          "$type": "AttachToNormalizedTimeMixin",
+          "modifierName": "Planelurker_Abyss_Born_CameraLock",
+          "normalizeEnd": 0.2,
+          "stateID": "Alert",
+          "LJPPDIGCJMJ": ""
+        },
+        {
+          "$type": "AttachToMultiNormalizedTimeMixin",
+          "modifierName": "Planelurker_Abyss_AIFree",
+          "normalizedStateIDList": [
+            {
+              "stateID": "Born"
+            },
+            {
+              "stateID": "Standby_Free"
+            },
+            {
+              "normalizeEnd": 0.02,
+              "stateID": "Alert"
+            }
+          ],
+          "LJPPDIGCJMJ": ""
+        }
+      ],
+      "abilityName": "Monster_Hound_Planelurker_Abyss_StateControl",
       "modifiers": {
         "Planelurker_Abyss_AIFree": {
           "elementDurability": 100.0,
@@ -14,7 +85,7 @@
               "onAdded": [
                 {
                   "$type": "EnableHitBoxByName",
-                  "MPHBGGFPBII": [
+                  "hitBoxNames": [
                     "HitBox_01",
                     "HitBox_02",
                     "HitBox_03",
@@ -28,7 +99,7 @@
               "onRemoved": [
                 {
                   "$type": "EnableHitBoxByName",
-                  "MPHBGGFPBII": [
+                  "hitBoxNames": [
                     "HitBox_01",
                     "HitBox_02",
                     "HitBox_03",
@@ -42,11 +113,13 @@
               ]
             }
           ],
-          "state": "IsGhostToEnemy",
           "modifierName": "",
+          "state": "IsGhostToEnemy",
           "AIHNJLDFEGJ": 0.0
         },
         "Planelurker_Abyss_Alert": {
+          "elementDurability": 100.0,
+          "modifierName": "",
           "onAdded": [
             {
               "$type": "ApplyModifier",
@@ -63,45 +136,43 @@
             "Actor_IceSubHurtDelta": 2.0,
             "Actor_RockSubHurtDelta": 2.0
           },
-          "elementDurability": 100.0,
-          "modifierName": "",
           "AIHNJLDFEGJ": 0.0
         },
         "Monster_Planelurker_Abyss_Alert_ShaderCut": {
           "duration": 0.05,
+          "elementDurability": 100.0,
+          "modifierName": "",
           "onRemoved": [
             {
               "$type": "FireEffect",
-              "effectPattern": "Eff_Monster_Hound_Planelurker_BornTeleport_BS_Abyss",
-              "scale": 1.0,
               "born": {
-                "$type": "NABPLNFPHCK",
-                "useRotation": true,
+                "$type": "ConfigBornBySelf",
+                "direction": {
+                  "$type": "ConfigDirectionByAttachPoint",
+                  "angleOffset": {
+                    "x": 0.0,
+                    "y": 0.0,
+                    "z": 0.0
+                  },
+                  "attachPointName": "ForwardAttachPoint"
+                },
                 "offset": {
                   "x": 0.0,
-                  "z": 0.0,
-                  "y": 0.0
+                  "y": 0.0,
+                  "z": 0.0
                 },
-                "direction": {
-                  "$type": "INAGPEEFHGG",
-                  "attachPointName": "ForwardAttachPoint",
-                  "OOKIMPBMBCN": {
-                    "x": 0.0,
-                    "z": 0.0,
-                    "y": 0.0
-                  }
-                }
+                "useRotation": true
               },
-              "ILLLPEOODKP": "",
-              "effectTempleteID": -1.0
+              "effectPattern": "Eff_Monster_Hound_Planelurker_BornTeleport_BS_Abyss",
+              "effectTempleteID": -1.0,
+              "scale": 1.0,
+              "ILLLPEOODKP": ""
             },
             {
               "$type": "ApplyModifier",
               "modifierName": "Monster_Planelurker_Abyss_Alert_ShaderCutHandle"
             }
           ],
-          "elementDurability": 100.0,
-          "modifierName": "",
           "AIHNJLDFEGJ": 0.0
         },
         "Monster_Planelurker_Abyss_Alert_ShaderCutHandle": {
@@ -110,181 +181,169 @@
           "modifierMixins": [
             {
               "$type": "SendPostionToShaderCutMixin",
-              "GIKPFMHMCOM": "",
+              "namedTransform": "",
               "offset": {
-                "z": -22.98,
-                "x": 19.28
+                "x": 19.28,
+                "z": -22.98
               },
               "scale": {
+                "x": 30.0,
                 "y": 30.0,
-                "z": 30.0,
-                "x": 30.0
+                "z": 30.0
               },
-              "FKDFPLPKJEP": "",
+              "sendRadius": 50.0,
               "ALNANMBLOBH": "",
-              "KIBJBLDPIBH": "",
-              "KFAOLPBMANI": "",
-              "sendRadius": 50.0
+              "FKDFPLPKJEP": "",
+              "GIKPFMHMCOM": "",
+              "KIBJBLDPIBH": ""
             }
           ],
           "modifierName": "",
           "AIHNJLDFEGJ": 0.0
         },
         "Planelurker_Abyss_AlertEffect": {
-          "onRemoved": [
-            {
-              "$type": "FireEffect",
-              "effectPattern": "Eff_Monster_Hound_Planelurker_BornTeleport_AS_Abyss",
-              "scale": 1.0,
-              "ILLLPEOODKP": "",
-              "effectTempleteID": -1.0
-            },
-            {
-              "$type": "RemoveModifier",
-              "modifierName": "Planelurker_Abyss_AlertEffectLoop"
-            }
-          ],
+          "elementDurability": 100.0,
+          "modifierName": "",
           "onAdded": [
             {
               "$type": "ApplyModifier",
               "modifierName": "Planelurker_Abyss_AlertEffectLoopTimer"
             }
           ],
-          "elementDurability": 100.0,
-          "modifierName": "",
+          "onRemoved": [
+            {
+              "$type": "FireEffect",
+              "effectPattern": "Eff_Monster_Hound_Planelurker_BornTeleport_AS_Abyss",
+              "effectTempleteID": -1.0,
+              "scale": 1.0,
+              "ILLLPEOODKP": ""
+            },
+            {
+              "$type": "RemoveModifier",
+              "modifierName": "Planelurker_Abyss_AlertEffectLoop"
+            }
+          ],
           "AIHNJLDFEGJ": 0.0
         },
         "Planelurker_Abyss_AlertEffectLoopTimer": {
           "duration": 0.6,
+          "elementDurability": 100.0,
+          "modifierName": "",
           "onRemoved": [
             {
               "$type": "ApplyModifier",
               "modifierName": "Planelurker_Abyss_AlertEffectLoop"
             }
           ],
-          "elementDurability": 100.0,
-          "modifierName": "",
           "AIHNJLDFEGJ": 0.0
         },
         "Planelurker_Abyss_AlertEffectLoop": {
           "duration": 7.5,
+          "elementDurability": 100.0,
+          "modifierName": "",
           "onAdded": [
             {
               "$type": "AttachEffect",
-              "ILLLPEOODKP": "",
-              "scale": 1.0,
               "effectPattern": "Eff_Monster_Hound_Planelurker_BornTeleport_Loop_Abyss",
-              "effectTempleteID": -1.0
+              "effectTempleteID": -1.0,
+              "scale": 1.0,
+              "ILLLPEOODKP": ""
             }
           ],
-          "elementDurability": 100.0,
-          "modifierName": "",
           "AIHNJLDFEGJ": 0.0
         },
         "Planelurker_Abyss_Born_CameraLock": {
+          "elementDurability": 100.0,
+          "modifierName": "",
+          "onAdded": [
+            {
+              "$type": "SetLockingV3Config",
+              "checkInCamera": true,
+              "enable": true,
+              "frameDelay": 1,
+              "lockTrans": "LockPointCenter",
+              "radius": 3.0,
+              "specialCameraName": "Lock_Born"
+            }
+          ],
           "onRemoved": [
             {
               "$type": "SetLockingV3Config",
               "enable": true,
+              "frameDelay": 1,
               "lockTrans": "",
-              "specialCameraName": "default",
-              "GHOJECGJGML": 1
+              "specialCameraName": "default"
             }
           ],
-          "onAdded": [
-            {
-              "$type": "SetLockingV3Config",
-              "enable": true,
-              "radius": 3.0,
-              "GBINFPFKLHL": true,
-              "lockTrans": "LockPointCenter",
-              "specialCameraName": "Lock_Born",
-              "GHOJECGJGML": 1
-            }
-          ],
-          "elementDurability": 100.0,
-          "modifierName": "",
           "AIHNJLDFEGJ": 0.0
         },
         "Planelurker_Abyss_CommonState": {
+          "elementDurability": 100.0,
+          "modifierName": "",
           "onAdded": [
             {
               "$type": "AttachEffect",
-              "ILLLPEOODKP": "",
-              "scale": 1.0,
               "effectPattern": "Eff_Monster_Hound_Planelurker_BeforeBattleWalk_Abyss",
-              "effectTempleteID": -1.0
+              "effectTempleteID": -1.0,
+              "scale": 1.0,
+              "ILLLPEOODKP": ""
             }
           ],
-          "elementDurability": 100.0,
-          "modifierName": "",
           "AIHNJLDFEGJ": 0.0
         },
         "Planelurker_Abyss_State1": {
+          "elementDurability": 100.0,
+          "modifierName": "",
           "onAdded": [
             {
               "$type": "SetPoseBool",
-              "CBOMLBFIPJM": true,
-              "boolID": "Stage1"
+              "boolID": "Stage1",
+              "value": true
             }
           ],
-          "elementDurability": 100.0,
           "state": "Invincible",
-          "modifierName": "",
           "AIHNJLDFEGJ": 0.0
         },
         "Planelurker_Abyss_State2": {
-          "onAdded": [
-            {
-              "$type": "SetPoseBool",
-              "CBOMLBFIPJM": true,
-              "boolID": "Stage2"
-            }
-          ],
           "elementDurability": 100.0,
           "modifierMixins": [
             {
               "$type": "AttachModifierToHPPercentMixin",
-              "valueSteps": [
-                0.7
-              ],
               "modifierNameSteps": [
                 "Planelurker_Abyss_State2_Limbo",
                 "Planelurker_Abyss_State3"
+              ],
+              "valueSteps": [
+                0.7
               ]
             }
           ],
           "modifierName": "",
-          "AIHNJLDFEGJ": 0.0
-        },
-        "Planelurker_Abyss_State2_Limbo": {
-          "properties": {
-            "Actor_HpThresholdRatio": 0.65
-          },
-          "elementDurability": 100.0,
-          "state": "Limbo",
-          "modifierName": "",
-          "AIHNJLDFEGJ": 0.0
-        },
-        "Planelurker_Abyss_State3": {
           "onAdded": [
             {
               "$type": "SetPoseBool",
-              "CBOMLBFIPJM": true,
-              "boolID": "Stage3"
-            },
-            {
-              "$type": "SetGlobalValue",
-              "key": "_MONSTER_PLANELURKER_ABYSS_ISLOCKHP",
-              "minValue": 0.0,
-              "maxValue": 0.0,
-              "CBOMLBFIPJM": 1.0
+              "boolID": "Stage2",
+              "value": true
             }
           ],
+          "AIHNJLDFEGJ": 0.0
+        },
+        "Planelurker_Abyss_State2_Limbo": {
+          "elementDurability": 100.0,
+          "modifierName": "",
+          "properties": {
+            "Actor_HpThresholdRatio": 0.65
+          },
+          "state": "Limbo",
+          "AIHNJLDFEGJ": 0.0
+        },
+        "Planelurker_Abyss_State3": {
           "elementDurability": 100.0,
           "modifierMixins": [
             {
               "$type": "AttachModifierToSelfGlobalValueMixin",
+              "defaultGlobalValueOnCreate": 0.0,
+              "globalValueKey": "_MONSTER_PLANELURKER_ABYSS_ISLOCKHP",
               "modifierNameSteps": [
                 "Planelurker_Abyss_Empty",
                 "Planelurker_Abyss_IsLockHP"
@@ -293,69 +352,81 @@
                 -0.5,
                 0.5,
                 1.5
-              ],
-              "globalValueKey": "_MONSTER_PLANELURKER_ABYSS_ISLOCKHP",
-              "defaultGlobalValueOnCreate": 0.0
+              ]
             }
           ],
           "modifierName": "",
+          "onAdded": [
+            {
+              "$type": "SetPoseBool",
+              "boolID": "Stage3",
+              "value": true
+            },
+            {
+              "$type": "SetGlobalValue",
+              "key": "_MONSTER_PLANELURKER_ABYSS_ISLOCKHP",
+              "maxValue": 0.0,
+              "minValue": 0.0,
+              "value": 1.0
+            }
+          ],
           "AIHNJLDFEGJ": 0.0
         },
         "Planelurker_Abyss_IsLockHP": {
+          "elementDurability": 100.0,
+          "modifierName": "",
           "onAdded": [
             {
               "$type": "MPAttachUIEffect",
-              "effectSlot": "UICombatBar",
-              "effectPattern": "Eff_UI_HPBar_Planelurker_Abyss_LockHP"
+              "effectPattern": "Eff_UI_HPBar_Planelurker_Abyss_LockHP",
+              "effectSlot": "UICombatBar"
             },
             {
               "$type": "SetAnimatorBool",
-              "CBOMLBFIPJM": true,
-              "boolID": "IsLockHP"
+              "boolID": "IsLockHP",
+              "value": true
             },
             {
               "$type": "ShowReminder",
               "id": 1001840097
             }
           ],
-          "elementDurability": 100.0,
           "state": "LockHP",
-          "modifierName": "",
           "AIHNJLDFEGJ": 0.0
         },
         "Planelurker_Abyss_Empty": {
+          "elementDurability": 100.0,
+          "modifierName": "",
           "onAdded": [
             {
               "$type": "SetAnimatorBool",
               "boolID": "IsLockHP"
             }
           ],
-          "elementDurability": 100.0,
-          "modifierName": "",
           "AIHNJLDFEGJ": 0.0
         },
         "Planelurker_Abyss_IsCenterFalse": {
-          "onAdded": [
-            {
-              "$type": "SetPoseBool",
-              "boolID": "IsCenter"
-            }
-          ],
           "elementDurability": 100.0,
           "modifierMixins": [
             {
               "$type": "AttachToStateIDMixin",
-              "LJPPDIGCJMJ": "",
+              "modifierName": "Planelurker_Abyss_IsCenterFalse_POSRevise",
               "stateIDs": [
                 "Born",
                 "NormalIdle_StandbyFree",
                 "NormalIdle_NotDoSkill",
                 "NormalIdle_DoSkill"
               ],
-              "modifierName": "Planelurker_Abyss_IsCenterFalse_POSRevise"
+              "LJPPDIGCJMJ": ""
             }
           ],
           "modifierName": "",
+          "onAdded": [
+            {
+              "$type": "SetPoseBool",
+              "boolID": "IsCenter"
+            }
+          ],
           "AIHNJLDFEGJ": 0.0
         },
         "Planelurker_Abyss_IsCenterFalse_POSRevise": {
@@ -363,52 +434,52 @@
           "modifierMixins": [
             {
               "$type": "SpacialFloatMixin",
-              "MJFFLCEMGFC": 0.02,
-              "MOJCHNNILFM": "Y",
+              "speed": 3.0,
               "toPos": {
-                "$type": "LKIBKKFEOLJ",
-                "positionKey": "_MONSTER_PLANELURKER_ABYSS_BORNPOS",
-                "directionKey": ""
+                "$type": "ConfigBornByGlobalValue",
+                "directionKey": "",
+                "positionKey": "_MONSTER_PLANELURKER_ABYSS_BORNPOS"
               },
-              "speed": 3.0
+              "MJFFLCEMGFC": 0.02,
+              "MOJCHNNILFM": "Y"
             }
           ],
           "modifierName": "",
           "AIHNJLDFEGJ": 0.0
         },
         "Planelurker_Abyss_IsCenterTrue": {
-          "onAdded": [
-            {
-              "$type": "SetPoseBool",
-              "CBOMLBFIPJM": true,
-              "boolID": "IsCenter"
-            },
-            {
-              "$type": "SetGlobalValue",
-              "key": "_MONSTER_PLANELURKER_ABYSS_SERVANT_EFFECT",
-              "minValue": 0.0,
-              "maxValue": 0.0,
-              "CBOMLBFIPJM": 1.0,
-              "otherTargets": {
-                "$type": "BILHLNFHEDG",
-                "GGKIEIJLCJJ": 3
-              }
-            }
-          ],
           "elementDurability": 100.0,
           "modifierMixins": [
             {
               "$type": "AttachToStateIDMixin",
-              "LJPPDIGCJMJ": "",
+              "modifierName": "Planelurker_Abyss_IsCenterTrue_POSRevise",
               "stateIDs": [
                 "NormalIdle_NotDoSkill",
                 "NormalIdle_DoSkill",
                 "Weak"
               ],
-              "modifierName": "Planelurker_Abyss_IsCenterTrue_POSRevise"
+              "LJPPDIGCJMJ": ""
             }
           ],
           "modifierName": "",
+          "onAdded": [
+            {
+              "$type": "SetPoseBool",
+              "boolID": "IsCenter",
+              "value": true
+            },
+            {
+              "$type": "SetGlobalValue",
+              "key": "_MONSTER_PLANELURKER_ABYSS_SERVANT_EFFECT",
+              "maxValue": 0.0,
+              "minValue": 0.0,
+              "otherTargets": {
+                "$type": "SelectTargetsBySelfGroup",
+                "value": 3
+              },
+              "value": 1.0
+            }
+          ],
           "AIHNJLDFEGJ": 0.0
         },
         "Planelurker_Abyss_IsCenterTrue_POSRevise": {
@@ -416,115 +487,44 @@
           "modifierMixins": [
             {
               "$type": "SpacialFloatMixin",
-              "MJFFLCEMGFC": 0.02,
-              "MOJCHNNILFM": "Y",
+              "speed": 3.0,
               "toPos": {
-                "$type": "LKIBKKFEOLJ",
-                "positionKey": "_MONSTER_PLANELURKER_ABYSS_CENTERPOS",
-                "directionKey": ""
+                "$type": "ConfigBornByGlobalValue",
+                "directionKey": "",
+                "positionKey": "_MONSTER_PLANELURKER_ABYSS_CENTERPOS"
               },
-              "speed": 3.0
+              "MJFFLCEMGFC": 0.02,
+              "MOJCHNNILFM": "Y"
             }
           ],
           "modifierName": "",
           "AIHNJLDFEGJ": 0.0
         }
       },
-      "abilityMixins": [
-        {
-          "$type": "AttachModifierToSelfGlobalValueMixin",
-          "modifierNameSteps": [
-            "Planelurker_Abyss_State1",
-            "Planelurker_Abyss_State2"
-          ],
-          "DEFOFMOIAAI": true,
-          "valueSteps": [
-            -0.5,
-            0.5,
-            1.5
-          ],
-          "globalValueKey": "SGV_MONSTER_PLANELURKER_ABYSS_STATE",
-          "defaultGlobalValueOnCreate": 0.0
-        },
-        {
-          "$type": "AttachModifierToSelfGlobalValueMixin",
-          "modifierNameSteps": [
-            "Planelurker_Abyss_IsCenterFalse",
-            "Planelurker_Abyss_IsCenterTrue"
-          ],
-          "valueSteps": [
-            -0.5,
-            0.5,
-            1.5
-          ],
-          "globalValueKey": "_MONSTER_PLANELURKER_ABYSS_ISCENTER",
-          "defaultGlobalValueOnCreate": 0.0
-        },
-        {
-          "$type": "AttachToStateIDMixin",
-          "LJPPDIGCJMJ": "",
-          "stateIDs": [
-            "Alert"
-          ],
-          "modifierName": "Planelurker_Abyss_Alert"
-        },
-        {
-          "$type": "AttachToNormalizedTimeMixin",
-          "modifierName": "Planelurker_Abyss_AlertEffect",
-          "LJPPDIGCJMJ": "",
-          "normalizeEnd": 0.7,
-          "stateID": "Alert"
-        },
-        {
-          "$type": "AttachToNormalizedTimeMixin",
-          "modifierName": "Planelurker_Abyss_Born_CameraLock",
-          "LJPPDIGCJMJ": "",
-          "normalizeEnd": 0.2,
-          "stateID": "Alert"
-        },
-        {
-          "$type": "AttachToMultiNormalizedTimeMixin",
-          "modifierName": "Planelurker_Abyss_AIFree",
-          "LJPPDIGCJMJ": "",
-          "normalizedStateIDList": [
-            {
-              "stateID": "Born"
-            },
-            {
-              "stateID": "Standby_Free"
-            },
-            {
-              "stateID": "Alert",
-              "normalizeEnd": 0.02
-            }
-          ]
-        }
-      ],
-      "abilityName": "Monster_Hound_Planelurker_Abyss_StateControl",
       "onAdded": [
         {
           "$type": "AttachAbilityStateResistance",
-          "resistanceListID": 13002,
-          "doOffStage": true
+          "doOffStage": true,
+          "resistanceListID": 13002
         },
         {
           "$type": "SetGlobalPos",
-          "key": "_MONSTER_PLANELURKER_ABYSS_BORNPOS",
           "born": {
-            "$type": "NABPLNFPHCK",
+            "$type": "ConfigBornBySelf",
             "useRotation": true
-          }
+          },
+          "key": "_MONSTER_PLANELURKER_ABYSS_BORNPOS"
         },
         {
           "$type": "SetGlobalDir",
-          "key": "_MONSTER_PLANELURKER_ABYSS_BORNDIR",
           "born": {
-            "$type": "NABPLNFPHCK",
-            "useRotation": true,
+            "$type": "ConfigBornBySelf",
             "direction": {
-              "$type": "FPLAJGOAOHH"
-            }
-          }
+              "$type": "ConfigDirectionByEntity"
+            },
+            "useRotation": true
+          },
+          "key": "_MONSTER_PLANELURKER_ABYSS_BORNDIR"
         },
         {
           "$type": "ApplyModifier",
@@ -535,6 +535,24 @@
   },
   {
     "Default": {
+      "abilityMixins": [
+        {
+          "$type": "AttachModifierToSelfGlobalValueMixin",
+          "defaultGlobalValueOnCreate": 0.0,
+          "globalValueKey": "SGV_MONSTER_PLANELURKER_ABYSS_SERVANT",
+          "modifierNameSteps": [
+            "Empty",
+            "Servant_Effect"
+          ],
+          "valueSteps": [
+            -0.5,
+            0.5,
+            1.5
+          ],
+          "DEFOFMOIAAI": true
+        }
+      ],
+      "abilityName": "Monster_Hound_Planelurker_Abyss_ServantControl",
       "modifiers": {
         "Empty": {
           "elementDurability": 100.0,
@@ -542,19 +560,12 @@
           "AIHNJLDFEGJ": 0.0
         },
         "Servant_Effect": {
-          "onAdded": [
-            {
-              "$type": "AttachEffect",
-              "ILLLPEOODKP": "",
-              "scale": 1.0,
-              "effectPattern": "Eff_Monster_Hound_Planelurker_Servant_Abyss",
-              "effectTempleteID": -1.0
-            }
-          ],
           "elementDurability": 100.0,
           "modifierMixins": [
             {
               "$type": "AttachModifierToSelfGlobalValueMixin",
+              "defaultGlobalValueOnCreate": 0.0,
+              "globalValueKey": "_MONSTER_PLANELURKER_ABYSS_SERVANT_EFFECT",
               "modifierNameSteps": [
                 "Empty",
                 "Servant_Effect_More",
@@ -565,86 +576,75 @@
                 0.5,
                 1.5,
                 2.5
-              ],
-              "globalValueKey": "_MONSTER_PLANELURKER_ABYSS_SERVANT_EFFECT",
-              "defaultGlobalValueOnCreate": 0.0
+              ]
             }
           ],
           "modifierName": "",
+          "onAdded": [
+            {
+              "$type": "AttachEffect",
+              "effectPattern": "Eff_Monster_Hound_Planelurker_Servant_Abyss",
+              "effectTempleteID": -1.0,
+              "scale": 1.0,
+              "ILLLPEOODKP": ""
+            }
+          ],
           "AIHNJLDFEGJ": 0.0
         },
         "Servant_Effect_More": {
+          "elementDurability": 100.0,
+          "modifierName": "",
           "onAdded": [
             {
               "$type": "SendEffectTrigger",
-              "parameter": "StateMore",
-              "GGKIEIJLCJJ": 1,
-              "effectPattern": "Eff_Monster_Hound_Planelurker_Servant_Abyss",
-              "type": "Bool",
               "attachPoint": "",
-              "canBeHandledOnRecover": true
+              "canBeHandledOnRecover": true,
+              "effectPattern": "Eff_Monster_Hound_Planelurker_Servant_Abyss",
+              "parameter": "StateMore",
+              "type": "Bool",
+              "value": 1
             }
           ],
-          "elementDurability": 100.0,
-          "modifierName": "",
           "AIHNJLDFEGJ": 0.0
         },
         "Servant_Effect_AS": {
+          "elementDurability": 100.0,
+          "modifierName": "",
           "onAdded": [
             {
               "$type": "SendEffectTrigger",
-              "parameter": "StateAS",
-              "GGKIEIJLCJJ": 1,
-              "effectPattern": "Eff_Monster_Hound_Planelurker_Servant_Abyss",
-              "type": "Bool",
               "attachPoint": "",
-              "canBeHandledOnRecover": true
+              "canBeHandledOnRecover": true,
+              "effectPattern": "Eff_Monster_Hound_Planelurker_Servant_Abyss",
+              "parameter": "StateAS",
+              "type": "Bool",
+              "value": 1
             }
           ],
-          "elementDurability": 100.0,
-          "modifierName": "",
           "AIHNJLDFEGJ": 0.0
         }
-      },
-      "abilityMixins": [
-        {
-          "$type": "AttachModifierToSelfGlobalValueMixin",
-          "modifierNameSteps": [
-            "Empty",
-            "Servant_Effect"
-          ],
-          "DEFOFMOIAAI": true,
-          "valueSteps": [
-            -0.5,
-            0.5,
-            1.5
-          ],
-          "globalValueKey": "SGV_MONSTER_PLANELURKER_ABYSS_SERVANT",
-          "defaultGlobalValueOnCreate": 0.0
-        }
-      ],
-      "abilityName": "Monster_Hound_Planelurker_Abyss_ServantControl"
+      }
     }
   },
   {
     "Default": {
+      "abilityName": "Monster_Hound_Kanis_Rock_Abyss",
       "modifiers": {
         "Kanis_Rock_Abyss_CommonState": {
+          "elementDurability": 100.0,
+          "modifierName": "",
           "onAdded": [
             {
               "$type": "AttachEffect",
-              "ILLLPEOODKP": "",
-              "scale": 1.0,
               "effectPattern": "Eff_Monster_Kanis_Rock_Idle_Abyss",
-              "effectTempleteID": -1.0
+              "effectTempleteID": -1.0,
+              "scale": 1.0,
+              "ILLLPEOODKP": ""
             }
           ],
-          "elementDurability": 100.0,
-          "modifierName": "",
           "AIHNJLDFEGJ": 0.0
         }
       },
-      "abilityName": "Monster_Hound_Kanis_Rock_Abyss",
       "onAdded": [
         {
           "$type": "ApplyModifier",
@@ -658,57 +658,57 @@
       "abilityMixins": [
         {
           "$type": "SteerAttackMixin",
-          "LJPPDIGCJMJ": "",
           "angularSpeed": 15.0,
           "attackDistance": 1.5,
-          "HDLABDJANFN": [
+          "attackTrigger": "",
+          "steerStateIDs": [
             "NormalIdle_NotDoSkill"
           ],
-          "EOHCONFEGPO": ""
+          "LJPPDIGCJMJ": ""
         },
         {
           "$type": "SteerAttackMixin",
-          "LJPPDIGCJMJ": "",
           "angularSpeed": 15.0,
           "attackDistance": 1.5,
-          "HDLABDJANFN": [
+          "attackTrigger": "",
+          "steerStateIDs": [
             "NormalIdle_DoSkill"
           ],
-          "EOHCONFEGPO": ""
+          "LJPPDIGCJMJ": ""
         },
         {
           "$type": "SteerAttackMixin",
-          "LJPPDIGCJMJ": "",
           "angularSpeed": 60.0,
-          "endNormalizedTime": 0.9,
           "attackDistance": 1.5,
-          "HDLABDJANFN": [
+          "attackTrigger": "",
+          "endNormalizedTime": 0.9,
+          "startNormalizedTime": 0.3,
+          "steerStateIDs": [
             "ToSkill"
           ],
-          "startNormalizedTime": 0.3,
-          "EOHCONFEGPO": ""
+          "LJPPDIGCJMJ": ""
         },
         {
           "$type": "SteerAttackMixin",
-          "LJPPDIGCJMJ": "",
           "angularSpeed": 150.0,
-          "endNormalizedTime": 0.16,
           "attackDistance": 1.5,
-          "HDLABDJANFN": [
+          "attackTrigger": "",
+          "endNormalizedTime": 0.16,
+          "steerStateIDs": [
             "RockBreath"
           ],
-          "EOHCONFEGPO": ""
+          "LJPPDIGCJMJ": ""
         },
         {
           "$type": "SteerAttackMixin",
-          "LJPPDIGCJMJ": "",
           "angularSpeed": 150.0,
-          "endNormalizedTime": 0.1,
           "attackDistance": 1.5,
-          "HDLABDJANFN": [
+          "attackTrigger": "",
+          "endNormalizedTime": 0.1,
+          "steerStateIDs": [
             "FireEnergy"
           ],
-          "EOHCONFEGPO": ""
+          "LJPPDIGCJMJ": ""
         }
       ],
       "abilityName": "Monster_Hound_Planelurker_Abyss_Steer"
@@ -716,8 +716,59 @@
   },
   {
     "Default": {
+      "abilityMixins": [
+        {
+          "$type": "AttachToStateIDMixin",
+          "modifierName": "Planelurker_RockBreathBS_ToSkill",
+          "predicates": [
+            {
+              "$type": "ByAnimatorInt",
+              "parameter": "SkillID",
+              "value": 200
+            },
+            {
+              "$type": "ByAnimatorInt",
+              "logic": "Lesser",
+              "parameter": "SkillID",
+              "value": 300
+            }
+          ],
+          "stateIDs": [
+            "ToSkill"
+          ],
+          "LJPPDIGCJMJ": ""
+        },
+        {
+          "$type": "AttachToStateIDMixin",
+          "modifierName": "Planelurker_RockBreathBS_Effect",
+          "stateIDs": [
+            "RockBreath"
+          ],
+          "LJPPDIGCJMJ": ""
+        },
+        {
+          "$type": "AttachToMultiNormalizedTimeMixin",
+          "modifierName": "Planelurker_RockBreathAS_ResetPos",
+          "normalizedStateIDList": [
+            {
+              "normalizeEnd": 0.946,
+              "normalizeStart": 0.865,
+              "stateID": "RockBreathLeft"
+            },
+            {
+              "normalizeEnd": 0.946,
+              "normalizeStart": 0.865,
+              "stateID": "RockBreathRight"
+            }
+          ],
+          "LJPPDIGCJMJ": ""
+        }
+      ],
+      "abilityName": "Monster_Hound_Planelurker_Abyss_RockBreath",
       "modifiers": {
         "Planelurker_RockBreathBS_ToSkill": {
+          "elementDurability": 100.0,
+          "modifierName": "",
           "onAdded": [
             {
               "$type": "SetAnimatorBool",
@@ -725,190 +776,188 @@
             },
             {
               "$type": "FixedMonsterRushMove",
-              "overrideMoveCollider": "",
-              "maxRange": -1.0,
               "animatorStateIDs": [
                 "ToSkill01",
                 "ToSkill02"
               ],
+              "checkAnimatorStateOnExitOnly": true,
+              "exactArrive": true,
+              "isInAir": true,
+              "maxRange": -1.0,
+              "overrideMoveCollider": "",
+              "timeRange": 1.0,
               "toPos": {
-                "$type": "LKIBKKFEOLJ",
-                "positionKey": "_MONSTER_PLANELURKER_ABYSS_BORNPOS",
+                "$type": "ConfigBornByGlobalValue",
                 "directionKey": "",
                 "offset": {
-                  "x": 0.0,
-                  "z": 12.0,
-                  "y": -2.0
-                }
-              },
-              "OHPJIHKPEMD": true,
-              "isInAir": true,
-              "exactArrive": true,
-              "timeRange": 1.0
+                  "x": 12.0,
+                  "y": -2.0,
+                  "z": 0.0
+                },
+                "positionKey": "_MONSTER_PLANELURKER_ABYSS_BORNPOS"
+              }
             }
           ],
-          "elementDurability": 100.0,
-          "modifierName": "",
           "AIHNJLDFEGJ": 0.0
         },
         "Planelurker_RockBreathAS_ResetPos": {
+          "elementDurability": 100.0,
+          "modifierName": "",
           "onAdded": [
             {
               "$type": "FixedMonsterRushMove",
-              "overrideMoveCollider": "",
-              "maxRange": -1.0,
               "animatorStateIDs": [
                 "RockBreathLeft",
                 "RockBreathRight"
               ],
-              "toPos": {
-                "$type": "NABPLNFPHCK",
-                "useRotation": true,
-                "offset": {
-                  "x": 0.0,
-                  "z": -25.0,
-                  "y": 2.0
-                }
-              },
-              "OHPJIHKPEMD": true,
-              "isInAir": true,
+              "checkAnimatorStateOnExitOnly": true,
               "exactArrive": true,
-              "timeRange": 1.0
+              "isInAir": true,
+              "maxRange": -1.0,
+              "overrideMoveCollider": "",
+              "timeRange": 1.0,
+              "toPos": {
+                "$type": "ConfigBornBySelf",
+                "offset": {
+                  "x": -25.0,
+                  "y": 2.0,
+                  "z": 0.0
+                },
+                "useRotation": true
+              }
             }
           ],
-          "elementDurability": 100.0,
-          "modifierName": "",
           "AIHNJLDFEGJ": 0.0
         },
         "Planelurker_RockBreathBS_Effect": {
+          "elementDurability": 100.0,
+          "modifierName": "",
+          "onAdded": [
+            {
+              "$type": "AttachEffect",
+              "effectPattern": "Eff_Monster_Hound_Planelurker_RockBreathLeft_BS_Abyss",
+              "effectTempleteID": -1.0,
+              "scale": 1.0,
+              "ILLLPEOODKP": ""
+            },
+            {
+              "$type": "SetGlobalValue",
+              "key": "_MONSTER_PLANELURKER_ABYSS_ROCKBREATH_COUNT",
+              "maxValue": 0.0,
+              "minValue": 0.0,
+              "value": 0.0
+            }
+          ],
           "onRemoved": [
             {
               "$type": "RemoveModifier",
               "modifierName": "Planelurker_RockBreath"
             }
           ],
-          "onAdded": [
-            {
-              "$type": "AttachEffect",
-              "ILLLPEOODKP": "",
-              "scale": 1.0,
-              "effectPattern": "Eff_Monster_Hound_Planelurker_RockBreathLeft_BS_Abyss",
-              "effectTempleteID": -1.0
-            },
-            {
-              "$type": "SetGlobalValue",
-              "key": "_MONSTER_PLANELURKER_ABYSS_ROCKBREATH_COUNT",
-              "minValue": 0.0,
-              "maxValue": 0.0,
-              "CBOMLBFIPJM": 0.0
-            }
-          ],
-          "elementDurability": 100.0,
-          "modifierName": "",
           "AIHNJLDFEGJ": 0.0
         },
         "Planelurker_RockBreath": {
-          "thinkInterval": 0.1,
           "duration": 4.2,
+          "elementDurability": 100.0,
+          "modifierName": "",
           "onAdded": [
             {
               "$type": "AttachEffect",
-              "ILLLPEOODKP": "",
-              "scale": 1.0,
               "effectPattern": "Eff_Monster_Hound_Planelurker_RockBreathLeft_EnergyLine_Abyss",
-              "effectTempleteID": -1.0
+              "effectTempleteID": -1.0,
+              "scale": 1.0,
+              "ILLLPEOODKP": ""
             },
             {
               "$type": "AddGlobalValue",
               "key": "_MONSTER_PLANELURKER_ABYSS_ROCKBREATH_COUNT",
               "maxValue": 0.0,
               "minValue": 0.0,
-              "CBOMLBFIPJM": 1.0
+              "value": 1.0
             },
             {
               "$type": "Predicated",
-              "successActions": [
-                {
-                  "$type": "SetAnimatorBool",
-                  "CBOMLBFIPJM": true,
-                  "boolID": "RockBreathCombo"
-                }
-              ],
               "failActions": [
                 {
                   "$type": "SetAnimatorBool",
                   "boolID": "RockBreathCombo"
                 }
               ],
+              "successActions": [
+                {
+                  "$type": "SetAnimatorBool",
+                  "boolID": "RockBreathCombo",
+                  "value": true
+                }
+              ],
               "targetPredicates": [
                 {
-                  "$type": "EOFDCELPGFO",
-                  "CBOMLBFIPJM": 1.0,
+                  "$type": "ByTargetGlobalValue",
                   "compareType": "LessAndEqual",
-                  "key": "_MONSTER_PLANELURKER_ABYSS_ROCKBREATH_COUNT"
+                  "key": "_MONSTER_PLANELURKER_ABYSS_ROCKBREATH_COUNT",
+                  "value": 1.0
                 }
               ]
             }
           ],
-          "elementDurability": 100.0,
-          "modifierName": "",
           "onThinkInterval": [
             {
               "$type": "TriggerAttackEvent",
-              "targetType": "Enemy",
               "attackEvent": {
                 "attackInfo": {
                   "attackProperty": {
-                    "elementType": "Rock",
-                    "damagePercentageRatio": 0.0,
-                    "strikeType": "Blunt",
-                    "enBreak": 1.0,
                     "damagePercentage": 0.5,
+                    "damagePercentageRatio": 0.0,
                     "elementDurability": 10.0,
-                    "arkheGrade": 0.0
+                    "elementType": "Rock",
+                    "enBreak": 1.0,
+                    "strikeType": "Blunt",
+                    "IIPHCFEONLK": 0.0
                   },
-                  "hitPattern": {
-                    "FLFCIDDNMNA": "",
-                    "onHitEffectName": "Eff_Monster_Hound_Planelurker_RockBreath_EnergyLineEnd_Hit",
-                    "hitHaltTimeScale": 0.01,
-                    "hitImpulseType": "LV1"
-                  },
+                  "attackTag": "Hound_PlaneLurker_Corruption_Tag",
                   "attenuationGroup": "Monster_Shougun_ElectricEye",
                   "attenuationTag": "Monster_Shougun_ElectricEye",
-                  "attackTag": "Hound_PlaneLurker_Corruption_Tag"
+                  "hitPattern": {
+                    "hitHaltTimeScale": 0.01,
+                    "hitImpulseType": "LV1",
+                    "onHitEffectName": "Eff_Monster_Hound_Planelurker_RockBreath_EnergyLineEnd_Hit",
+                    "FLFCIDDNMNA": ""
+                  }
                 },
                 "attackPattern": {
-                  "$type": "CBACJBPBPOL",
-                  "size": {
-                    "x": 2.0,
-                    "z": 75.0,
-                    "y": 2.0
-                  },
-                  "triggerType": "TriggerNoRepeat",
-                  "ignoreMassive": true,
+                  "$type": "ConfigAttackBox",
                   "born": {
-                    "$type": "BGOLIIIHLMO",
+                    "$type": "ConfigBornByAttachPoint",
                     "attachPointName": "MouthEffectAttachPoint",
-                    "useRotation": true,
-                    "offset": {
-                      "x": 0.0,
-                      "z": 1.5,
-                      "y": 0.0
-                    },
                     "direction": {
-                      "$type": "INAGPEEFHGG",
-                      "attachPointName": "MouthEffectAttachPoint",
-                      "OOKIMPBMBCN": {
-                        "x": -1.0,
-                        "z": 0.0,
-                        "y": 0.0
-                      }
-                    }
-                  }
+                      "$type": "ConfigDirectionByAttachPoint",
+                      "angleOffset": {
+                        "x": 0.0,
+                        "y": 0.0,
+                        "z": -1.0
+                      },
+                      "attachPointName": "MouthEffectAttachPoint"
+                    },
+                    "offset": {
+                      "x": 1.5,
+                      "y": 0.0,
+                      "z": 0.0
+                    },
+                    "useRotation": true
+                  },
+                  "ignoreMassive": true,
+                  "size": {
+                    "x": 75.0,
+                    "y": 2.0,
+                    "z": 2.0
+                  },
+                  "triggerType": "TriggerNoRepeat"
                 }
-              }
+              },
+              "targetType": "Enemy"
             }
           ],
+          "thinkInterval": 0.1,
           "AIHNJLDFEGJ": 0.0
         }
       },
@@ -917,193 +966,164 @@
           "$type": "ApplyModifier",
           "modifierName": "Planelurker_RockBreath"
         }
-      ],
-      "abilityMixins": [
-        {
-          "$type": "AttachToStateIDMixin",
-          "LJPPDIGCJMJ": "",
-          "predicates": [
-            {
-              "$type": "LDOPHDHPCHA",
-              "CBOMLBFIPJM": 200,
-              "parameter": "SkillID"
-            },
-            {
-              "$type": "LDOPHDHPCHA",
-              "CBOMLBFIPJM": 300,
-              "parameter": "SkillID",
-              "logic": "Lesser"
-            }
-          ],
-          "stateIDs": [
-            "ToSkill"
-          ],
-          "modifierName": "Planelurker_RockBreathBS_ToSkill"
-        },
-        {
-          "$type": "AttachToStateIDMixin",
-          "LJPPDIGCJMJ": "",
-          "stateIDs": [
-            "RockBreath"
-          ],
-          "modifierName": "Planelurker_RockBreathBS_Effect"
-        },
-        {
-          "$type": "AttachToMultiNormalizedTimeMixin",
-          "modifierName": "Planelurker_RockBreathAS_ResetPos",
-          "LJPPDIGCJMJ": "",
-          "normalizedStateIDList": [
-            {
-              "stateID": "RockBreathLeft",
-              "normalizeStart": 0.865,
-              "normalizeEnd": 0.946
-            },
-            {
-              "stateID": "RockBreathRight",
-              "normalizeStart": 0.865,
-              "normalizeEnd": 0.946
-            }
-          ]
-        }
-      ],
-      "abilityName": "Monster_Hound_Planelurker_Abyss_RockBreath"
+      ]
     }
   },
   {
     "Default": {
+      "abilityMixins": [
+        {
+          "$type": "AttachToStateIDMixin",
+          "modifierName": "Monster_Planelurker_OnGroundChargeState",
+          "stateIDs": [
+            "OnGroundChargeBS",
+            "OnGroundChargeLoop",
+            "OnGroundChargeTurn",
+            "OnGroundChargeAS"
+          ],
+          "LJPPDIGCJMJ": ""
+        },
+        {
+          "$type": "AttachToNormalizedTimeMixin",
+          "modifierName": "Monster_Planelurker_OnGroundChargeAttack",
+          "stateID": "OnGroundCharge_Loop",
+          "LJPPDIGCJMJ": ""
+        },
+        {
+          "$type": "AttachToNormalizedTimeMixin",
+          "modifierName": "Monster_Planelurker_OnGroundCharge_RestPos",
+          "normalizeEnd": 0.072,
+          "stateID": "OnGroundCharge_AS",
+          "LJPPDIGCJMJ": ""
+        }
+      ],
+      "abilityName": "Monster_Hound_Planelurker_Abyss_OnGroundCharge",
       "modifiers": {
         "Monster_Planelurker_OnGroundChargeState": {
+          "elementDurability": 100.0,
+          "modifierName": "",
           "onAdded": [
             {
               "$type": "SetGlobalValue",
               "key": "_MONSTER_PLANELURKER_ABYSS_ONGROUNDCHARGE_COUNT",
-              "minValue": 0.0,
               "maxValue": 0.0,
-              "CBOMLBFIPJM": 0.0
+              "minValue": 0.0,
+              "value": 0.0
             },
             {
               "$type": "SetGlobalValue",
               "key": "_MONSTER_PLANELURKER_ABYSS_ISCENTER",
-              "minValue": 0.0,
               "maxValue": 0.0,
-              "CBOMLBFIPJM": 1.0
+              "minValue": 0.0,
+              "value": 1.0
             },
             {
               "$type": "AttachEffect",
-              "ILLLPEOODKP": "",
-              "scale": 1.0,
               "effectPattern": "Eff_Monster_Hound_Planelurker_OnGroundCharge_BS_Abyss",
-              "effectTempleteID": -1.0
+              "effectTempleteID": -1.0,
+              "scale": 1.0,
+              "ILLLPEOODKP": ""
             },
             {
               "$type": "SetGlobalPos",
-              "setTarget": false,
-              "key": "_MONSTER_PLANELURKER_ABYSS_CENTERPOS",
               "born": {
-                "$type": "BOJMMDAIGMM"
+                "$type": "ConfigBornByTarget"
               },
+              "key": "_MONSTER_PLANELURKER_ABYSS_CENTERPOS",
               "otherTargets": {
-                "$type": "BILHLNFHEDG",
-                "GGKIEIJLCJJ": 3
-              }
+                "$type": "SelectTargetsBySelfGroup",
+                "value": 3
+              },
+              "setTarget": false
             }
           ],
-          "elementDurability": 100.0,
-          "modifierName": "",
           "AIHNJLDFEGJ": 0.0
         },
         "Monster_Planelurker_OnGroundCharge_RestPos": {
+          "elementDurability": 100.0,
+          "modifierName": "",
           "onAdded": [
             {
               "$type": "FixedMonsterRushMove",
-              "overrideMoveCollider": "",
-              "PGLJIHAEIAD": 0.8,
-              "maxRange": -1.0,
               "animatorStateIDs": [
                 "OnGroundCharge"
               ],
-              "toPos": {
-                "$type": "LKIBKKFEOLJ",
-                "positionKey": "_MONSTER_PLANELURKER_ABYSS_CENTERPOS",
-                "directionKey": ""
-              },
-              "OHPJIHKPEMD": true,
-              "isInAir": true,
+              "checkAnimatorStateOnExitOnly": true,
               "exactArrive": true,
-              "timeRange": 1.0
+              "isInAir": true,
+              "maxRange": -1.0,
+              "overrideMoveCollider": "",
+              "timeRange": 1.0,
+              "toPos": {
+                "$type": "ConfigBornByGlobalValue",
+                "directionKey": "",
+                "positionKey": "_MONSTER_PLANELURKER_ABYSS_CENTERPOS"
+              },
+              "PGLJIHAEIAD": 0.8
             }
           ],
-          "elementDurability": 100.0,
-          "modifierName": "",
           "AIHNJLDFEGJ": 0.0
         },
         "Monster_Planelurker_OnGroundChargeAttack": {
-          "onRemoved": [
-            {
-              "$type": "KillSelf",
-              "otherTargets": {
-                "$type": "HMFKEDOMDMA",
-                "configID": 42206014
-              }
-            }
-          ],
+          "elementDurability": 100.0,
+          "modifierName": "",
           "onAdded": [
             {
               "$type": "AddGlobalValue",
               "key": "_MONSTER_PLANELURKER_ABYSS_ONGROUNDCHARGE_COUNT",
               "maxValue": 0.0,
               "minValue": 0.0,
-              "CBOMLBFIPJM": 1.0
+              "value": 1.0
             },
             {
               "$type": "Predicated",
-              "successActions": [
-                {
-                  "$type": "SetAnimatorBool",
-                  "CBOMLBFIPJM": true,
-                  "boolID": "OnGroundChargeCombo"
-                }
-              ],
               "failActions": [
                 {
                   "$type": "SetAnimatorBool",
                   "boolID": "OnGroundChargeCombo"
                 }
               ],
+              "successActions": [
+                {
+                  "$type": "SetAnimatorBool",
+                  "boolID": "OnGroundChargeCombo",
+                  "value": true
+                }
+              ],
               "targetPredicates": [
                 {
-                  "$type": "EOFDCELPGFO",
-                  "CBOMLBFIPJM": 1.0,
+                  "$type": "ByTargetGlobalValue",
                   "compareType": "LessAndEqual",
-                  "key": "_MONSTER_PLANELURKER_ABYSS_ONGROUNDCHARGE_COUNT"
+                  "key": "_MONSTER_PLANELURKER_ABYSS_ONGROUNDCHARGE_COUNT",
+                  "value": 1.0
                 }
               ]
             },
             {
               "$type": "FixedMonsterRushMove",
-              "overrideMoveCollider": "",
-              "maxRange": -1.0,
               "animatorStateIDs": [
                 "OnGroundCharge_Loop"
               ],
-              "toPos": {
-                "$type": "NABPLNFPHCK",
-                "useRotation": true,
-                "offset": {
-                  "x": 0.0,
-                  "z": 80.0,
-                  "y": 0.0
-                }
-              },
-              "OHPJIHKPEMD": true,
-              "isInAir": true,
+              "checkAnimatorStateOnExitOnly": true,
               "exactArrive": true,
-              "timeRange": 0.667
+              "isInAir": true,
+              "maxRange": -1.0,
+              "overrideMoveCollider": "",
+              "timeRange": 0.667,
+              "toPos": {
+                "$type": "ConfigBornBySelf",
+                "offset": {
+                  "x": 80.0,
+                  "y": 0.0,
+                  "z": 0.0
+                },
+                "useRotation": true
+              }
             },
             {
               "$type": "TriggerBullet",
               "born": {
-                "$type": "BGOLIIIHLMO",
+                "$type": "ConfigBornByAttachPoint",
                 "attachPointName": "RootNode",
                 "attachPointTargetType": "Self",
                 "useRotation": true
@@ -1113,89 +1133,110 @@
             },
             {
               "$type": "AttachEffect",
-              "ILLLPEOODKP": "",
-              "scale": 1.0,
               "effectPattern": "Eff_Monster_Hound_Planelurker_OnGroundCharge_Loop_Abyss",
-              "effectTempleteID": -1.0
+              "effectTempleteID": -1.0,
+              "scale": 1.0,
+              "ILLLPEOODKP": ""
             }
           ],
-          "elementDurability": 100.0,
-          "modifierName": "",
+          "onRemoved": [
+            {
+              "$type": "KillSelf",
+              "otherTargets": {
+                "$type": "SelectTargetsByChildren",
+                "configID": 42206014
+              }
+            }
+          ],
           "AIHNJLDFEGJ": 0.0
         }
-      },
-      "abilityMixins": [
-        {
-          "$type": "AttachToStateIDMixin",
-          "LJPPDIGCJMJ": "",
-          "stateIDs": [
-            "OnGroundChargeBS",
-            "OnGroundChargeLoop",
-            "OnGroundChargeTurn",
-            "OnGroundChargeAS"
-          ],
-          "modifierName": "Monster_Planelurker_OnGroundChargeState"
-        },
-        {
-          "$type": "AttachToNormalizedTimeMixin",
-          "modifierName": "Monster_Planelurker_OnGroundChargeAttack",
-          "LJPPDIGCJMJ": "",
-          "stateID": "OnGroundCharge_Loop"
-        },
-        {
-          "$type": "AttachToNormalizedTimeMixin",
-          "modifierName": "Monster_Planelurker_OnGroundCharge_RestPos",
-          "LJPPDIGCJMJ": "",
-          "normalizeEnd": 0.072,
-          "stateID": "OnGroundCharge_AS"
-        }
-      ],
-      "abilityName": "Monster_Hound_Planelurker_Abyss_OnGroundCharge"
+      }
     }
   },
   {
     "Default": {
+      "abilityName": "Hound_Planelurker_Abyss_ChargeAttack",
       "onAbilityStart": [
         {
           "$type": "TriggerAttackEvent",
-          "targetType": "Enemy",
           "attackEvent": {
             "attackInfo": {
               "attackProperty": {
-                "elementType": "Rock",
-                "damagePercentageRatio": 0.0,
-                "strikeType": "Blunt",
-                "enBreak": 999999.0,
                 "damagePercentage": 0.5,
+                "damagePercentageRatio": 0.0,
                 "elementDurability": 25.0,
-                "arkheGrade": 0.0
+                "elementType": "Rock",
+                "enBreak": 999999.0,
+                "strikeType": "Blunt",
+                "IIPHCFEONLK": 0.0
               },
-              "hitPattern": {
-                "FLFCIDDNMNA": "",
-                "onHitEffectName": "default",
-                "hitHaltTimeScale": 0.05,
-                "hitImpulseType": "LV5"
-              },
+              "attackTag": "Hound_PlaneLurker_Corruption_Tag",
               "attenuationGroup": "default",
               "attenuationTag": "",
-              "attackTag": "Hound_PlaneLurker_Corruption_Tag"
+              "hitPattern": {
+                "hitHaltTimeScale": 0.05,
+                "hitImpulseType": "LV5",
+                "onHitEffectName": "default",
+                "FLFCIDDNMNA": ""
+              }
             },
             "attackPattern": {
-              "$type": "HCAGHMDHEGG",
-              "radius": 0.5,
-              "triggerType": "TriggerNoRepeat",
+              "$type": "ConfigAttackSphere",
               "born": {
-                "$type": "NHPKNMOMIFH"
-              }
+                "$type": "ConfigBornByCollisionPoint"
+              },
+              "radius": 0.5,
+              "triggerType": "TriggerNoRepeat"
             }
-          }
+          },
+          "targetType": "Enemy"
         }
-      ],
-      "abilityName": "Hound_Planelurker_Abyss_ChargeAttack"
+      ]
     }
   },
   {
     "Default": {
+      "abilityMixins": [
+        {
+          "$type": "AttachToStateIDMixin",
+          "modifierName": "Planelurker_SwapBS_ToSkill",
+          "predicates": [
+            {
+              "$type": "ByAnimatorInt",
+              "parameter": "SkillID",
+              "value": 400
+            },
+            {
+              "$type": "ByAnimatorInt",
+              "logic": "Lesser",
+              "parameter": "SkillID",
+              "value": 500
+            }
+          ],
+          "stateIDs": [
+            "ToSkill"
+          ],
+          "LJPPDIGCJMJ": ""
+        },
+        {
+          "$type": "AttachToMultiNormalizedTimeMixin",
+          "modifierName": "Planelurker_Swap_PushCollider",
+          "normalizedStateIDList": [
+            {
+              "normalizeEnd": 0.235,
+              "normalizeStart": 0.196,
+              "stateID": "Swap"
+            },
+            {
+              "normalizeEnd": 0.41,
+              "normalizeStart": 0.36,
+              "stateID": "Swap"
+            }
+          ],
+          "LJPPDIGCJMJ": ""
+        }
+      ],
+      "abilityName": "Monster_Hound_Planelurker_Abyss_Swap_Attack01",
       "modifiers": {
         "Planelurker_Swap_PushCollider": {
           "elementDurability": 100.0,
@@ -1205,7 +1246,7 @@
               "onAdded": [
                 {
                   "$type": "EnablePushColliderName",
-                  "EFOJFJDLLMK": [
+                  "pushColliderNames": [
                     "PushCollider_03",
                     "PushCollider_03_Extra",
                     "PushCollider_04",
@@ -1217,14 +1258,14 @@
               "onRemoved": [
                 {
                   "$type": "EnablePushColliderName",
-                  "setEnable": true,
-                  "EFOJFJDLLMK": [
+                  "pushColliderNames": [
                     "PushCollider_03",
                     "PushCollider_03_Extra",
                     "PushCollider_04",
                     "PushCollider_05",
                     "PushCollider_06"
-                  ]
+                  ],
+                  "setEnable": true
                 }
               ]
             }
@@ -1233,219 +1274,202 @@
           "AIHNJLDFEGJ": 0.0
         },
         "Planelurker_SwapBS_ToSkill": {
+          "elementDurability": 100.0,
+          "modifierName": "",
           "onAdded": [
             {
               "$type": "FixedMonsterRushMove",
-              "overrideMoveCollider": "",
-              "maxRange": -1.0,
               "animatorStateIDs": [
                 "ToSkill01",
                 "ToSkill02"
               ],
-              "toPos": {
-                "$type": "CICHINDLMOC",
-                "ODCKAFGNLOM": "",
-                "BMDIJKEHDJB": 0.0,
-                "DBNLPKKAPHJ": "",
-                "IPIGLPMONAD": -5.0,
-                "FGENBFBPMPJ": 15.0
-              },
-              "OHPJIHKPEMD": true,
-              "isInAir": true,
+              "checkAnimatorStateOnExitOnly": true,
               "exactArrive": true,
+              "isInAir": true,
+              "maxRange": -1.0,
+              "overrideMoveCollider": "",
+              "target": "SelfAttackTarget",
               "timeRange": 1.0,
-              "target": "SelfAttackTarget"
+              "toPos": {
+                "$type": "ConfigBornByTargetLinearPoint",
+                "linearMax": 15.0,
+                "linearMin": 0.0,
+                "linearOffset": -5.0,
+                "DBNLPKKAPHJ": "",
+                "ODCKAFGNLOM": ""
+              }
             }
           ],
-          "elementDurability": 100.0,
-          "modifierName": "",
           "AIHNJLDFEGJ": 0.0
         }
       },
       "onAbilityStart": [
         {
           "$type": "FireEffect",
-          "effectPattern": "Eff_Monster_Hound_Planelurker_Swap_Attack01_Abyss",
-          "scale": 1.0,
           "born": {
-            "$type": "NABPLNFPHCK",
+            "$type": "ConfigBornBySelf",
             "onGround": true,
-            "useRotation": true,
-            "onGroundRaycastUpDist": 0.5
+            "onGroundRaycastUpDist": 0.5,
+            "useRotation": true
           },
-          "ILLLPEOODKP": "",
-          "effectTempleteID": -1.0
+          "effectPattern": "Eff_Monster_Hound_Planelurker_Swap_Attack01_Abyss",
+          "effectTempleteID": -1.0,
+          "scale": 1.0,
+          "ILLLPEOODKP": ""
         },
         {
           "$type": "TriggerAttackEvent",
-          "targetType": "Enemy",
           "attackEvent": {
             "attackInfo": {
               "attackProperty": {
-                "elementType": "Rock",
-                "damagePercentageRatio": 0.0,
-                "strikeType": "Blunt",
-                "enBreak": 999999.0,
                 "damagePercentage": 0.5,
+                "damagePercentageRatio": 0.0,
                 "elementDurability": 50.0,
-                "arkheGrade": 0.0
+                "elementType": "Rock",
+                "enBreak": 999999.0,
+                "strikeType": "Blunt",
+                "IIPHCFEONLK": 0.0
               },
-              "hitPattern": {
-                "FLFCIDDNMNA": "",
-                "onHitEffectName": "default",
-                "hitHaltTimeScale": 0.01,
-                "hitImpulseType": "LV5"
-              },
+              "attackTag": "Hound_PlaneLurker_Corruption_Tag",
               "attenuationGroup": "default",
               "attenuationTag": "",
-              "attackTag": "Hound_PlaneLurker_Corruption_Tag"
+              "hitPattern": {
+                "hitHaltTimeScale": 0.01,
+                "hitImpulseType": "LV5",
+                "onHitEffectName": "default",
+                "FLFCIDDNMNA": ""
+              }
             },
             "attackPattern": {
-              "$type": "DDLDAMKEKJD",
-              "radius": 18.0,
-              "height": 5.0,
-              "triggerType": "TriggerNoRepeat",
+              "$type": "ConfigAttackCircle",
               "born": {
-                "$type": "NABPLNFPHCK",
+                "$type": "ConfigBornBySelf",
                 "onGround": true,
-                "useRotation": true,
-                "onGroundRaycastUpDist": 0.5
-              }
+                "onGroundRaycastUpDist": 0.5,
+                "useRotation": true
+              },
+              "height": 5.0,
+              "radius": 18.0,
+              "triggerType": "TriggerNoRepeat"
             }
-          }
+          },
+          "targetType": "Enemy"
         }
-      ],
+      ]
+    }
+  },
+  {
+    "Default": {
+      "abilityName": "Monster_Hound_Planelurker_Abyss_Swap_Attack02",
+      "onAbilityStart": [
+        {
+          "$type": "FireEffect",
+          "born": {
+            "$type": "ConfigBornBySelf",
+            "onGround": true,
+            "onGroundRaycastUpDist": 0.5,
+            "useRotation": true
+          },
+          "effectPattern": "Eff_Monster_Hound_Planelurker_Swap_Attack02_Abyss",
+          "effectTempleteID": -1.0,
+          "scale": 1.0,
+          "ILLLPEOODKP": ""
+        },
+        {
+          "$type": "TriggerAttackEvent",
+          "attackEvent": {
+            "attackInfo": {
+              "attackProperty": {
+                "damagePercentage": 0.5,
+                "damagePercentageRatio": 0.0,
+                "elementDurability": 50.0,
+                "elementType": "Rock",
+                "enBreak": 999999.0,
+                "strikeType": "Blunt",
+                "IIPHCFEONLK": 0.0
+              },
+              "attackTag": "Hound_PlaneLurker_Corruption_Tag",
+              "attenuationGroup": "default",
+              "attenuationTag": "",
+              "hitPattern": {
+                "hitHaltTimeScale": 0.01,
+                "hitImpulseType": "LV5",
+                "onHitEffectName": "default",
+                "FLFCIDDNMNA": ""
+              }
+            },
+            "attackPattern": {
+              "$type": "ConfigAttackCircle",
+              "born": {
+                "$type": "ConfigBornBySelf",
+                "onGround": true,
+                "onGroundRaycastUpDist": 0.5,
+                "useRotation": true
+              },
+              "height": 5.0,
+              "radius": 18.0,
+              "triggerType": "TriggerNoRepeat"
+            }
+          },
+          "targetType": "Enemy"
+        }
+      ]
+    }
+  },
+  {
+    "Default": {
       "abilityMixins": [
         {
           "$type": "AttachToStateIDMixin",
-          "LJPPDIGCJMJ": "",
+          "modifierName": "Planelurker_SummonHoundBS_ToSkill",
           "predicates": [
             {
-              "$type": "LDOPHDHPCHA",
-              "CBOMLBFIPJM": 400,
-              "parameter": "SkillID"
+              "$type": "ByAnimatorInt",
+              "parameter": "SkillID",
+              "value": 500
             },
             {
-              "$type": "LDOPHDHPCHA",
-              "CBOMLBFIPJM": 500,
+              "$type": "ByAnimatorInt",
+              "logic": "Lesser",
               "parameter": "SkillID",
-              "logic": "Lesser"
+              "value": 600
             }
           ],
           "stateIDs": [
             "ToSkill"
           ],
-          "modifierName": "Planelurker_SwapBS_ToSkill"
-        },
-        {
-          "$type": "AttachToMultiNormalizedTimeMixin",
-          "modifierName": "Planelurker_Swap_PushCollider",
-          "LJPPDIGCJMJ": "",
-          "normalizedStateIDList": [
-            {
-              "stateID": "Swap",
-              "normalizeStart": 0.196,
-              "normalizeEnd": 0.235
-            },
-            {
-              "stateID": "Swap",
-              "normalizeStart": 0.36,
-              "normalizeEnd": 0.41
-            }
-          ]
+          "LJPPDIGCJMJ": ""
         }
       ],
-      "abilityName": "Monster_Hound_Planelurker_Abyss_Swap_Attack01"
-    }
-  },
-  {
-    "Default": {
-      "onAbilityStart": [
-        {
-          "$type": "FireEffect",
-          "effectPattern": "Eff_Monster_Hound_Planelurker_Swap_Attack02_Abyss",
-          "scale": 1.0,
-          "born": {
-            "$type": "NABPLNFPHCK",
-            "onGround": true,
-            "useRotation": true,
-            "onGroundRaycastUpDist": 0.5
-          },
-          "ILLLPEOODKP": "",
-          "effectTempleteID": -1.0
-        },
-        {
-          "$type": "TriggerAttackEvent",
-          "targetType": "Enemy",
-          "attackEvent": {
-            "attackInfo": {
-              "attackProperty": {
-                "elementType": "Rock",
-                "damagePercentageRatio": 0.0,
-                "strikeType": "Blunt",
-                "enBreak": 999999.0,
-                "damagePercentage": 0.5,
-                "elementDurability": 50.0,
-                "arkheGrade": 0.0
-              },
-              "hitPattern": {
-                "FLFCIDDNMNA": "",
-                "onHitEffectName": "default",
-                "hitHaltTimeScale": 0.01,
-                "hitImpulseType": "LV5"
-              },
-              "attenuationGroup": "default",
-              "attenuationTag": "",
-              "attackTag": "Hound_PlaneLurker_Corruption_Tag"
-            },
-            "attackPattern": {
-              "$type": "DDLDAMKEKJD",
-              "radius": 18.0,
-              "height": 5.0,
-              "triggerType": "TriggerNoRepeat",
-              "born": {
-                "$type": "NABPLNFPHCK",
-                "onGround": true,
-                "useRotation": true,
-                "onGroundRaycastUpDist": 0.5
-              }
-            }
-          }
-        }
-      ],
-      "abilityName": "Monster_Hound_Planelurker_Abyss_Swap_Attack02"
-    }
-  },
-  {
-    "Default": {
+      "abilityName": "Monster_Hound_Planelurker_Abyss_SummonHound",
       "modifiers": {
         "Planelurker_SummonHoundBS_ToSkill": {
+          "elementDurability": 100.0,
+          "modifierName": "",
           "onAdded": [
             {
               "$type": "FixedMonsterRushMove",
-              "overrideMoveCollider": "",
-              "maxRange": -1.0,
               "animatorStateIDs": [
                 "ToSkill01",
                 "ToSkill02"
               ],
-              "toPos": {
-                "$type": "CICHINDLMOC",
-                "ODCKAFGNLOM": "",
-                "BMDIJKEHDJB": 0.0,
-                "DBNLPKKAPHJ": "",
-                "IPIGLPMONAD": -5.0,
-                "FGENBFBPMPJ": 35.0
-              },
-              "OHPJIHKPEMD": true,
-              "isInAir": true,
+              "checkAnimatorStateOnExitOnly": true,
               "exactArrive": true,
+              "isInAir": true,
+              "maxRange": -1.0,
+              "overrideMoveCollider": "",
+              "target": "SelfAttackTarget",
               "timeRange": 1.5,
-              "target": "SelfAttackTarget"
+              "toPos": {
+                "$type": "ConfigBornByTargetLinearPoint",
+                "linearMax": 35.0,
+                "linearMin": 0.0,
+                "linearOffset": -5.0,
+                "DBNLPKKAPHJ": "",
+                "ODCKAFGNLOM": ""
+              }
             }
           ],
-          "elementDurability": 100.0,
-          "modifierName": "",
           "AIHNJLDFEGJ": 0.0
         }
       },
@@ -1453,175 +1477,152 @@
         {
           "$type": "TriggerBullet",
           "born": {
-            "$type": "BGOLIIIHLMO",
+            "$type": "ConfigBornByAttachPoint",
             "attachPointName": "MouthEffectAttachPoint",
             "useRotation": true
           },
           "bulletID": 42206015
         }
-      ],
-      "abilityMixins": [
-        {
-          "$type": "AttachToStateIDMixin",
-          "LJPPDIGCJMJ": "",
-          "predicates": [
-            {
-              "$type": "LDOPHDHPCHA",
-              "CBOMLBFIPJM": 500,
-              "parameter": "SkillID"
-            },
-            {
-              "$type": "LDOPHDHPCHA",
-              "CBOMLBFIPJM": 600,
-              "parameter": "SkillID",
-              "logic": "Lesser"
-            }
-          ],
-          "stateIDs": [
-            "ToSkill"
-          ],
-          "modifierName": "Planelurker_SummonHoundBS_ToSkill"
-        }
-      ],
-      "abilityName": "Monster_Hound_Planelurker_Abyss_SummonHound"
+      ]
     }
   },
   {
     "Default": {
+      "abilityName": "Monster_Hound_Planelurker_Abyss_SummonHoundBullet",
       "onAbilityStart": [
         {
           "$type": "TriggerAttackEvent",
-          "targetType": "Enemy",
           "attackEvent": {
             "attackInfo": {
               "attackProperty": {
-                "elementType": "Rock",
-                "damagePercentageRatio": 0.0,
-                "strikeType": "Default",
-                "enBreak": 50.0,
                 "damagePercentage": 0.25,
+                "damagePercentageRatio": 0.0,
                 "elementDurability": 10.0,
-                "arkheGrade": 0.0
+                "elementType": "Rock",
+                "enBreak": 50.0,
+                "strikeType": "Default",
+                "IIPHCFEONLK": 0.0
               },
-              "hitPattern": {
-                "FLFCIDDNMNA": "",
-                "onHitEffectName": "default",
-                "hitHaltTimeScale": 0.01,
-                "hitImpulseType": "LV2"
-              },
+              "attackTag": "Hound_PlaneLurker_Corruption_Tag",
               "attenuationGroup": "FungusFightV3_Seq3",
               "attenuationTag": "FungusFightV3_Seq3",
-              "attackTag": "Hound_PlaneLurker_Corruption_Tag"
+              "hitPattern": {
+                "hitHaltTimeScale": 0.01,
+                "hitImpulseType": "LV2",
+                "onHitEffectName": "default",
+                "FLFCIDDNMNA": ""
+              }
             },
             "attackPattern": {
-              "$type": "HCAGHMDHEGG",
-              "radius": 2.5,
-              "triggerType": "TriggerNoRepeat",
+              "$type": "ConfigAttackSphere",
               "born": {
-                "$type": "NHPKNMOMIFH"
-              }
+                "$type": "ConfigBornByCollisionPoint"
+              },
+              "radius": 2.5,
+              "triggerType": "TriggerNoRepeat"
             }
-          }
+          },
+          "targetType": "Enemy"
         },
         {
           "$type": "FireSubEmitterEffect",
           "born": {
-            "$type": "NHPKNMOMIFH"
+            "$type": "ConfigBornByCollisionPoint"
           },
           "effectPattern": "Eff_Monster_Hound_Planelurker_SummonHound_BulletAS_Abyss"
         }
-      ],
-      "abilityName": "Monster_Hound_Planelurker_Abyss_SummonHoundBullet"
+      ]
     }
   },
   {
     "Default": {
+      "abilityMixins": [
+        {
+          "$type": "AttachToAnimatorStateIDMixin",
+          "modifierName": "Planelurker_ElementBurstBS_Effect",
+          "stateIDs": [
+            "ElementalBurst_BS"
+          ],
+          "LJPPDIGCJMJ": ""
+        },
+        {
+          "$type": "AttachToAnimatorStateIDMixin",
+          "modifierName": "Planelurker_ElementBurst_Disappear",
+          "stateIDs": [
+            "ElementalBurst_Air"
+          ],
+          "LJPPDIGCJMJ": ""
+        },
+        {
+          "$type": "AttachToAnimatorStateIDMixin",
+          "modifierName": "Planelurker_ElementBurst_CreateBurstArea",
+          "stateIDs": [
+            "ElementalBurst_UnderGround"
+          ],
+          "LJPPDIGCJMJ": ""
+        }
+      ],
+      "abilityName": "Monster_Hound_Planelurker_Abyss_ElementBurst",
+      "abilitySpecials": {
+        "RandomTimer1": 0.0,
+        "RandomTimer2": 0.0,
+        "RandomTimer3": 0.0,
+        "RandomTimer4": 0.0,
+        "RandomTimer5": 0.0,
+        "RandomTimer6": 0.0,
+        "RandomTimer7": 0.0,
+        "RandomTimer8": 0.0,
+        "RandomTimer9": 0.0
+      },
       "modifiers": {
         "Planelurker_ElementBurstBS_Effect": {
-          "onRemoved": [
-            {
-              "$type": "TryFindBlinkPointByBorn",
-              "hitSceneTest": false,
-              "DMDGAFINHPO": 2.5,
-              "born": {
-                "$type": "LKIBKKFEOLJ",
-                "positionKey": "_MONSTER_PLANELURKER_ABYSS_CENTERPOS",
-                "directionKey": ""
-              }
-            }
-          ],
+          "elementDurability": 100.0,
+          "modifierName": "",
           "onAdded": [
             {
               "$type": "SetGlobalPos",
-              "setTarget": false,
-              "key": "_MONSTER_PLANELURKER_ABYSS_CENTERPOS",
               "born": {
-                "$type": "BOJMMDAIGMM"
+                "$type": "ConfigBornByTarget"
               },
+              "key": "_MONSTER_PLANELURKER_ABYSS_CENTERPOS",
               "otherTargets": {
-                "$type": "BILHLNFHEDG",
-                "GGKIEIJLCJJ": 3
-              }
+                "$type": "SelectTargetsBySelfGroup",
+                "value": 3
+              },
+              "setTarget": false
             },
             {
               "$type": "AttachEffect",
-              "ILLLPEOODKP": "",
-              "scale": 1.0,
               "effectPattern": "Eff_Monster_Hound_Planelurker_ElementalBurst_BS",
-              "effectTempleteID": -1.0
+              "effectTempleteID": -1.0,
+              "scale": 1.0,
+              "ILLLPEOODKP": ""
             },
             {
               "$type": "AttachEffect",
-              "ILLLPEOODKP": "",
-              "scale": 1.0,
               "effectPattern": "Eff_Monster_Hound_Planelurker_ElementalBurst_BS_Around",
-              "effectTempleteID": -1.0
+              "effectTempleteID": -1.0,
+              "scale": 1.0,
+              "ILLLPEOODKP": ""
             }
           ],
-          "elementDurability": 100.0,
-          "modifierName": "",
+          "onRemoved": [
+            {
+              "$type": "TryFindBlinkPointByBorn",
+              "born": {
+                "$type": "ConfigBornByGlobalValue",
+                "directionKey": "",
+                "positionKey": "_MONSTER_PLANELURKER_ABYSS_CENTERPOS"
+              },
+              "hitSceneTest": false,
+              "limitY": 2.5
+            }
+          ],
           "AIHNJLDFEGJ": 0.0
         },
         "Planelurker_ElementBurst_Disappear": {
-          "onRemoved": [
-            {
-              "$type": "TriggerSetVisible",
-              "visible": true
-            },
-            {
-              "$type": "EnableHitBoxByName",
-              "MPHBGGFPBII": [
-                "HitBox_01",
-                "HitBox_02",
-                "HitBox_03",
-                "HitBox_04",
-                "HitBox_05",
-                "HitBox_06",
-                "HitBox_07"
-              ],
-              "setEnable": true
-            },
-            {
-              "$type": "EnablePushColliderName",
-              "setEnable": true,
-              "EFOJFJDLLMK": [
-                "PushCollider_01",
-                "PushCollider_01_Extra",
-                "PushCollider_02",
-                "PushCollider_02_Extra",
-                "PushCollider_03",
-                "PushCollider_03_Extra",
-                "PushCollider_04",
-                "PushCollider_04_Extra",
-                "PushCollider_05",
-                "PushCollider_05_Extra",
-                "PushCollider_06",
-                "PushCollider_06_Extra",
-                "PushCollider_07",
-                "PushCollider_07_Extra"
-              ]
-            }
-          ],
+          "elementDurability": 100.0,
+          "modifierName": "",
           "onAdded": [
             {
               "$type": "AttachModifier",
@@ -1636,7 +1637,7 @@
             },
             {
               "$type": "EnableHitBoxByName",
-              "MPHBGGFPBII": [
+              "hitBoxNames": [
                 "HitBox_01",
                 "HitBox_02",
                 "HitBox_03",
@@ -1648,7 +1649,7 @@
             },
             {
               "$type": "EnablePushColliderName",
-              "EFOJFJDLLMK": [
+              "pushColliderNames": [
                 "PushCollider_01",
                 "PushCollider_01_Extra",
                 "PushCollider_02",
@@ -1667,16 +1668,16 @@
             },
             {
               "$type": "FireEffect",
-              "effectPattern": "Eff_Monster_Hound_Planelurker_ElementalBurst_ExplodeAlert",
-              "scale": 1.0,
               "born": {
-                "$type": "LKIBKKFEOLJ",
-                "positionKey": "_MONSTER_PLANELURKER_ABYSS_CENTERPOS",
+                "$type": "ConfigBornByGlobalValue",
                 "directionKey": "",
-                "onGround": true
+                "onGround": true,
+                "positionKey": "_MONSTER_PLANELURKER_ABYSS_CENTERPOS"
               },
-              "ILLLPEOODKP": "",
-              "effectTempleteID": -1.0
+              "effectPattern": "Eff_Monster_Hound_Planelurker_ElementalBurst_ExplodeAlert",
+              "effectTempleteID": -1.0,
+              "scale": 1.0,
+              "ILLLPEOODKP": ""
             },
             {
               "$type": "DoBlink"
@@ -1684,334 +1685,373 @@
             {
               "$type": "SetGlobalValue",
               "key": "_MONSTER_PLANELURKER_ABYSS_ISCENTER",
-              "minValue": 0.0,
               "maxValue": 0.0,
-              "CBOMLBFIPJM": 1.0
+              "minValue": 0.0,
+              "value": 1.0
             }
           ],
-          "elementDurability": 100.0,
-          "modifierName": "",
+          "onRemoved": [
+            {
+              "$type": "TriggerSetVisible",
+              "visible": true
+            },
+            {
+              "$type": "EnableHitBoxByName",
+              "hitBoxNames": [
+                "HitBox_01",
+                "HitBox_02",
+                "HitBox_03",
+                "HitBox_04",
+                "HitBox_05",
+                "HitBox_06",
+                "HitBox_07"
+              ],
+              "setEnable": true
+            },
+            {
+              "$type": "EnablePushColliderName",
+              "pushColliderNames": [
+                "PushCollider_01",
+                "PushCollider_01_Extra",
+                "PushCollider_02",
+                "PushCollider_02_Extra",
+                "PushCollider_03",
+                "PushCollider_03_Extra",
+                "PushCollider_04",
+                "PushCollider_04_Extra",
+                "PushCollider_05",
+                "PushCollider_05_Extra",
+                "PushCollider_06",
+                "PushCollider_06_Extra",
+                "PushCollider_07",
+                "PushCollider_07_Extra"
+              ],
+              "setEnable": true
+            }
+          ],
           "AIHNJLDFEGJ": 0.0
         },
         "Monster_Hound_Planelurker_Invincible": {
           "elementDurability": 100.0,
-          "state": "Invincible",
           "modifierName": "",
+          "state": "Invincible",
           "AIHNJLDFEGJ": 0.0
         },
         "Monster_Hound_Planelurker_DenyLockOn": {
           "elementDurability": 100.0,
-          "state": "DenyLockOn",
           "modifierName": "",
+          "state": "DenyLockOn",
           "AIHNJLDFEGJ": 0.0
         },
         "Planelurker_ElementBurst_CreateBurstArea": {
+          "elementDurability": 100.0,
+          "modifierName": "",
           "onAdded": [
             {
               "$type": "SetGlobalPos",
-              "key": "ElementBurst_BurstAreaPos1",
               "born": {
-                "$type": "LKIBKKFEOLJ",
-                "positionKey": "_MONSTER_PLANELURKER_ABYSS_CENTERPOS",
-                "directionKey": "",
-                "onGround": true,
-                "offset": {
-                  "x": 0.0,
-                  "z": 0.0,
-                  "y": 0.0
+                "$type": "ConfigBornByGlobalValue",
+                "bornRandom": {
+                  "$type": "BornRandomFromCenter",
+                  "maxRandomRange": 7.5,
+                  "minRandomRange": 0.0
                 },
                 "direction": {
-                  "$type": "INIJNNEABNP",
-                  "OOKIMPBMBCN": {
+                  "$type": "ConfigDirectionByDefault",
+                  "angleOffset": {
                     "x": 0.0,
-                    "z": 0.0,
-                    "y": 0.0
+                    "y": 0.0,
+                    "z": 0.0
                   }
                 },
-                "bornRandom": {
-                  "$type": "DBJNGNDCMAH",
-                  "minRandomRange": 0.0,
-                  "maxRandomRange": 7.5
-                }
-              }
+                "directionKey": "",
+                "offset": {
+                  "x": 0.0,
+                  "y": 0.0,
+                  "z": 0.0
+                },
+                "onGround": true,
+                "positionKey": "_MONSTER_PLANELURKER_ABYSS_CENTERPOS"
+              },
+              "key": "ElementBurst_BurstAreaPos1"
             },
             {
               "$type": "SetGlobalPos",
-              "key": "ElementBurst_BurstAreaPos2",
               "born": {
-                "$type": "LKIBKKFEOLJ",
-                "positionKey": "_MONSTER_PLANELURKER_ABYSS_CENTERPOS",
-                "directionKey": "",
-                "onGround": true,
-                "offset": {
-                  "x": 0.0,
-                  "z": 17.5,
-                  "y": 0.0
+                "$type": "ConfigBornByGlobalValue",
+                "bornRandom": {
+                  "$type": "BornRandomFromCenter",
+                  "maxRandomRange": 7.5,
+                  "minRandomRange": 0.0
                 },
                 "direction": {
-                  "$type": "INIJNNEABNP",
-                  "OOKIMPBMBCN": {
+                  "$type": "ConfigDirectionByDefault",
+                  "angleOffset": {
                     "x": 0.0,
-                    "z": 0.0,
-                    "y": 0.0
+                    "y": 0.0,
+                    "z": 0.0
                   }
                 },
-                "bornRandom": {
-                  "$type": "DBJNGNDCMAH",
-                  "minRandomRange": 0.0,
-                  "maxRandomRange": 7.5
-                }
-              }
-            },
-            {
-              "$type": "SetGlobalPos",
-              "key": "ElementBurst_BurstAreaPos3",
-              "born": {
-                "$type": "LKIBKKFEOLJ",
-                "positionKey": "_MONSTER_PLANELURKER_ABYSS_CENTERPOS",
                 "directionKey": "",
-                "onGround": true,
-                "offset": {
-                  "x": 0.0,
-                  "z": -17.5,
-                  "y": 0.0
-                },
-                "direction": {
-                  "$type": "INIJNNEABNP",
-                  "OOKIMPBMBCN": {
-                    "x": 0.0,
-                    "z": 0.0,
-                    "y": 0.0
-                  }
-                },
-                "bornRandom": {
-                  "$type": "DBJNGNDCMAH",
-                  "minRandomRange": 0.0,
-                  "maxRandomRange": 7.5
-                }
-              }
-            },
-            {
-              "$type": "SetGlobalPos",
-              "key": "ElementBurst_BurstAreaPos4",
-              "born": {
-                "$type": "LKIBKKFEOLJ",
-                "positionKey": "_MONSTER_PLANELURKER_ABYSS_CENTERPOS",
-                "directionKey": "",
-                "onGround": true,
                 "offset": {
                   "x": 17.5,
-                  "z": 0.0,
-                  "y": 0.0
+                  "y": 0.0,
+                  "z": 0.0
                 },
-                "direction": {
-                  "$type": "INIJNNEABNP",
-                  "OOKIMPBMBCN": {
-                    "x": 0.0,
-                    "z": 0.0,
-                    "y": 0.0
-                  }
-                },
-                "bornRandom": {
-                  "$type": "DBJNGNDCMAH",
-                  "minRandomRange": 0.0,
-                  "maxRandomRange": 7.5
-                }
-              }
+                "onGround": true,
+                "positionKey": "_MONSTER_PLANELURKER_ABYSS_CENTERPOS"
+              },
+              "key": "ElementBurst_BurstAreaPos2"
             },
             {
               "$type": "SetGlobalPos",
-              "key": "ElementBurst_BurstAreaPos5",
               "born": {
-                "$type": "LKIBKKFEOLJ",
-                "positionKey": "_MONSTER_PLANELURKER_ABYSS_CENTERPOS",
+                "$type": "ConfigBornByGlobalValue",
+                "bornRandom": {
+                  "$type": "BornRandomFromCenter",
+                  "maxRandomRange": 7.5,
+                  "minRandomRange": 0.0
+                },
+                "direction": {
+                  "$type": "ConfigDirectionByDefault",
+                  "angleOffset": {
+                    "x": 0.0,
+                    "y": 0.0,
+                    "z": 0.0
+                  }
+                },
                 "directionKey": "",
-                "onGround": true,
                 "offset": {
                   "x": -17.5,
-                  "z": 0.0,
-                  "y": 0.0
+                  "y": 0.0,
+                  "z": 0.0
                 },
-                "direction": {
-                  "$type": "INIJNNEABNP",
-                  "OOKIMPBMBCN": {
-                    "x": 0.0,
-                    "z": 0.0,
-                    "y": 0.0
-                  }
-                },
-                "bornRandom": {
-                  "$type": "DBJNGNDCMAH",
-                  "minRandomRange": 0.0,
-                  "maxRandomRange": 7.5
-                }
-              }
+                "onGround": true,
+                "positionKey": "_MONSTER_PLANELURKER_ABYSS_CENTERPOS"
+              },
+              "key": "ElementBurst_BurstAreaPos3"
             },
             {
               "$type": "SetGlobalPos",
-              "key": "ElementBurst_BurstAreaPos6",
               "born": {
-                "$type": "LKIBKKFEOLJ",
-                "positionKey": "_MONSTER_PLANELURKER_ABYSS_CENTERPOS",
+                "$type": "ConfigBornByGlobalValue",
+                "bornRandom": {
+                  "$type": "BornRandomFromCenter",
+                  "maxRandomRange": 7.5,
+                  "minRandomRange": 0.0
+                },
+                "direction": {
+                  "$type": "ConfigDirectionByDefault",
+                  "angleOffset": {
+                    "x": 0.0,
+                    "y": 0.0,
+                    "z": 0.0
+                  }
+                },
                 "directionKey": "",
+                "offset": {
+                  "x": 0.0,
+                  "y": 0.0,
+                  "z": 17.5
+                },
                 "onGround": true,
+                "positionKey": "_MONSTER_PLANELURKER_ABYSS_CENTERPOS"
+              },
+              "key": "ElementBurst_BurstAreaPos4"
+            },
+            {
+              "$type": "SetGlobalPos",
+              "born": {
+                "$type": "ConfigBornByGlobalValue",
+                "bornRandom": {
+                  "$type": "BornRandomFromCenter",
+                  "maxRandomRange": 7.5,
+                  "minRandomRange": 0.0
+                },
+                "direction": {
+                  "$type": "ConfigDirectionByDefault",
+                  "angleOffset": {
+                    "x": 0.0,
+                    "y": 0.0,
+                    "z": 0.0
+                  }
+                },
+                "directionKey": "",
+                "offset": {
+                  "x": 0.0,
+                  "y": 0.0,
+                  "z": -17.5
+                },
+                "onGround": true,
+                "positionKey": "_MONSTER_PLANELURKER_ABYSS_CENTERPOS"
+              },
+              "key": "ElementBurst_BurstAreaPos5"
+            },
+            {
+              "$type": "SetGlobalPos",
+              "born": {
+                "$type": "ConfigBornByGlobalValue",
+                "bornRandom": {
+                  "$type": "BornRandomFromCenter",
+                  "maxRandomRange": 7.5,
+                  "minRandomRange": 0.0
+                },
+                "direction": {
+                  "$type": "ConfigDirectionByDefault",
+                  "angleOffset": {
+                    "x": 0.0,
+                    "y": 0.0,
+                    "z": 0.0
+                  }
+                },
+                "directionKey": "",
                 "offset": {
                   "x": 12.5,
-                  "z": 12.5,
-                  "y": 0.0
+                  "y": 0.0,
+                  "z": 12.5
                 },
-                "direction": {
-                  "$type": "INIJNNEABNP",
-                  "OOKIMPBMBCN": {
-                    "x": 0.0,
-                    "z": 0.0,
-                    "y": 0.0
-                  }
-                },
-                "bornRandom": {
-                  "$type": "DBJNGNDCMAH",
-                  "minRandomRange": 0.0,
-                  "maxRandomRange": 7.5
-                }
-              }
+                "onGround": true,
+                "positionKey": "_MONSTER_PLANELURKER_ABYSS_CENTERPOS"
+              },
+              "key": "ElementBurst_BurstAreaPos6"
             },
             {
               "$type": "SetGlobalPos",
-              "key": "ElementBurst_BurstAreaPos7",
               "born": {
-                "$type": "LKIBKKFEOLJ",
-                "positionKey": "_MONSTER_PLANELURKER_ABYSS_CENTERPOS",
-                "directionKey": "",
-                "onGround": true,
-                "offset": {
-                  "x": -12.5,
-                  "z": 12.5,
-                  "y": 0.0
+                "$type": "ConfigBornByGlobalValue",
+                "bornRandom": {
+                  "$type": "BornRandomFromCenter",
+                  "maxRandomRange": 7.5,
+                  "minRandomRange": 0.0
                 },
                 "direction": {
-                  "$type": "INIJNNEABNP",
-                  "OOKIMPBMBCN": {
+                  "$type": "ConfigDirectionByDefault",
+                  "angleOffset": {
                     "x": 0.0,
-                    "z": 0.0,
-                    "y": 0.0
+                    "y": 0.0,
+                    "z": 0.0
                   }
                 },
-                "bornRandom": {
-                  "$type": "DBJNGNDCMAH",
-                  "minRandomRange": 0.0,
-                  "maxRandomRange": 7.5
-                }
-              }
-            },
-            {
-              "$type": "SetGlobalPos",
-              "key": "ElementBurst_BurstAreaPos8",
-              "born": {
-                "$type": "LKIBKKFEOLJ",
-                "positionKey": "_MONSTER_PLANELURKER_ABYSS_CENTERPOS",
                 "directionKey": "",
-                "onGround": true,
                 "offset": {
                   "x": 12.5,
-                  "z": -12.5,
-                  "y": 0.0
+                  "y": 0.0,
+                  "z": -12.5
                 },
-                "direction": {
-                  "$type": "INIJNNEABNP",
-                  "OOKIMPBMBCN": {
-                    "x": 0.0,
-                    "z": 0.0,
-                    "y": 0.0
-                  }
-                },
-                "bornRandom": {
-                  "$type": "DBJNGNDCMAH",
-                  "minRandomRange": 0.0,
-                  "maxRandomRange": 7.5
-                }
-              }
+                "onGround": true,
+                "positionKey": "_MONSTER_PLANELURKER_ABYSS_CENTERPOS"
+              },
+              "key": "ElementBurst_BurstAreaPos7"
             },
             {
               "$type": "SetGlobalPos",
-              "key": "ElementBurst_BurstAreaPos9",
               "born": {
-                "$type": "LKIBKKFEOLJ",
-                "positionKey": "_MONSTER_PLANELURKER_ABYSS_CENTERPOS",
-                "directionKey": "",
-                "onGround": true,
-                "offset": {
-                  "x": -12.5,
-                  "z": -12.5,
-                  "y": 0.0
+                "$type": "ConfigBornByGlobalValue",
+                "bornRandom": {
+                  "$type": "BornRandomFromCenter",
+                  "maxRandomRange": 7.5,
+                  "minRandomRange": 0.0
                 },
                 "direction": {
-                  "$type": "INIJNNEABNP",
-                  "OOKIMPBMBCN": {
+                  "$type": "ConfigDirectionByDefault",
+                  "angleOffset": {
                     "x": 0.0,
-                    "z": 0.0,
-                    "y": 0.0
+                    "y": 0.0,
+                    "z": 0.0
                   }
                 },
+                "directionKey": "",
+                "offset": {
+                  "x": -12.5,
+                  "y": 0.0,
+                  "z": 12.5
+                },
+                "onGround": true,
+                "positionKey": "_MONSTER_PLANELURKER_ABYSS_CENTERPOS"
+              },
+              "key": "ElementBurst_BurstAreaPos8"
+            },
+            {
+              "$type": "SetGlobalPos",
+              "born": {
+                "$type": "ConfigBornByGlobalValue",
                 "bornRandom": {
-                  "$type": "DBJNGNDCMAH",
-                  "minRandomRange": 0.0,
-                  "maxRandomRange": 7.5
-                }
-              }
+                  "$type": "BornRandomFromCenter",
+                  "maxRandomRange": 7.5,
+                  "minRandomRange": 0.0
+                },
+                "direction": {
+                  "$type": "ConfigDirectionByDefault",
+                  "angleOffset": {
+                    "x": 0.0,
+                    "y": 0.0,
+                    "z": 0.0
+                  }
+                },
+                "directionKey": "",
+                "offset": {
+                  "x": -12.5,
+                  "y": 0.0,
+                  "z": -12.5
+                },
+                "onGround": true,
+                "positionKey": "_MONSTER_PLANELURKER_ABYSS_CENTERPOS"
+              },
+              "key": "ElementBurst_BurstAreaPos9"
             },
             {
               "$type": "SetRandomOverrideMapValue",
-              "valueRangeMin": 0.1,
               "overrideMapKey": "RandomTimer1",
-              "valueRangeMax": 0.75
+              "valueRangeMax": 0.75,
+              "valueRangeMin": 0.1
             },
             {
               "$type": "SetRandomOverrideMapValue",
-              "valueRangeMin": 0.1,
               "overrideMapKey": "RandomTimer2",
-              "valueRangeMax": 0.75
+              "valueRangeMax": 0.75,
+              "valueRangeMin": 0.1
             },
             {
               "$type": "SetRandomOverrideMapValue",
-              "valueRangeMin": 0.1,
               "overrideMapKey": "RandomTimer3",
-              "valueRangeMax": 0.75
+              "valueRangeMax": 0.75,
+              "valueRangeMin": 0.1
             },
             {
               "$type": "SetRandomOverrideMapValue",
-              "valueRangeMin": 0.1,
               "overrideMapKey": "RandomTimer4",
-              "valueRangeMax": 0.75
+              "valueRangeMax": 0.75,
+              "valueRangeMin": 0.1
             },
             {
               "$type": "SetRandomOverrideMapValue",
-              "valueRangeMin": 0.1,
               "overrideMapKey": "RandomTimer5",
-              "valueRangeMax": 0.75
+              "valueRangeMax": 0.75,
+              "valueRangeMin": 0.1
             },
             {
               "$type": "SetRandomOverrideMapValue",
-              "valueRangeMin": 0.1,
               "overrideMapKey": "RandomTimer6",
-              "valueRangeMax": 0.75
+              "valueRangeMax": 0.75,
+              "valueRangeMin": 0.1
             },
             {
               "$type": "SetRandomOverrideMapValue",
-              "valueRangeMin": 0.1,
               "overrideMapKey": "RandomTimer7",
-              "valueRangeMax": 0.75
+              "valueRangeMax": 0.75,
+              "valueRangeMin": 0.1
             },
             {
               "$type": "SetRandomOverrideMapValue",
-              "valueRangeMin": 0.1,
               "overrideMapKey": "RandomTimer8",
-              "valueRangeMax": 0.75
+              "valueRangeMax": 0.75,
+              "valueRangeMin": 0.1
             },
             {
               "$type": "SetRandomOverrideMapValue",
-              "valueRangeMin": 0.1,
               "overrideMapKey": "RandomTimer9",
-              "valueRangeMax": 0.75
+              "valueRangeMax": 0.75,
+              "valueRangeMin": 0.1
             },
             {
               "$type": "ApplyModifier",
@@ -2050,809 +2090,773 @@
               "modifierName": "BurstArea_DamageTimer9"
             }
           ],
-          "elementDurability": 100.0,
-          "modifierName": "",
           "AIHNJLDFEGJ": 0.0
         },
         "BurstArea_DamageTimer1": {
           "duration": "RandomTimer1",
+          "elementDurability": 100.0,
+          "modifierName": "",
           "onRemoved": [
             {
               "$type": "ApplyModifier",
               "modifierName": "BurstArea_Damage1"
             }
           ],
-          "elementDurability": 100.0,
-          "modifierName": "",
           "AIHNJLDFEGJ": 0.0
         },
         "BurstArea_DamageTimer2": {
           "duration": "RandomTimer2",
+          "elementDurability": 100.0,
+          "modifierName": "",
           "onRemoved": [
             {
               "$type": "ApplyModifier",
               "modifierName": "BurstArea_Damage2"
             }
           ],
-          "elementDurability": 100.0,
-          "modifierName": "",
           "AIHNJLDFEGJ": 0.0
         },
         "BurstArea_DamageTimer3": {
           "duration": "RandomTimer3",
+          "elementDurability": 100.0,
+          "modifierName": "",
           "onRemoved": [
             {
               "$type": "ApplyModifier",
               "modifierName": "BurstArea_Damage3"
             }
           ],
-          "elementDurability": 100.0,
-          "modifierName": "",
           "AIHNJLDFEGJ": 0.0
         },
         "BurstArea_DamageTimer4": {
           "duration": "RandomTimer4",
+          "elementDurability": 100.0,
+          "modifierName": "",
           "onRemoved": [
             {
               "$type": "ApplyModifier",
               "modifierName": "BurstArea_Damage4"
             }
           ],
-          "elementDurability": 100.0,
-          "modifierName": "",
           "AIHNJLDFEGJ": 0.0
         },
         "BurstArea_DamageTimer5": {
           "duration": "RandomTimer5",
+          "elementDurability": 100.0,
+          "modifierName": "",
           "onRemoved": [
             {
               "$type": "ApplyModifier",
               "modifierName": "BurstArea_Damage5"
             }
           ],
-          "elementDurability": 100.0,
-          "modifierName": "",
           "AIHNJLDFEGJ": 0.0
         },
         "BurstArea_DamageTimer6": {
           "duration": "RandomTimer6",
+          "elementDurability": 100.0,
+          "modifierName": "",
           "onRemoved": [
             {
               "$type": "ApplyModifier",
               "modifierName": "BurstArea_Damage6"
             }
           ],
-          "elementDurability": 100.0,
-          "modifierName": "",
           "AIHNJLDFEGJ": 0.0
         },
         "BurstArea_DamageTimer7": {
           "duration": "RandomTimer7",
+          "elementDurability": 100.0,
+          "modifierName": "",
           "onRemoved": [
             {
               "$type": "ApplyModifier",
               "modifierName": "BurstArea_Damage7"
             }
           ],
-          "elementDurability": 100.0,
-          "modifierName": "",
           "AIHNJLDFEGJ": 0.0
         },
         "BurstArea_DamageTimer8": {
           "duration": "RandomTimer8",
+          "elementDurability": 100.0,
+          "modifierName": "",
           "onRemoved": [
             {
               "$type": "ApplyModifier",
               "modifierName": "BurstArea_Damage8"
             }
           ],
-          "elementDurability": 100.0,
-          "modifierName": "",
           "AIHNJLDFEGJ": 0.0
         },
         "BurstArea_DamageTimer9": {
           "duration": "RandomTimer9",
+          "elementDurability": 100.0,
+          "modifierName": "",
           "onRemoved": [
             {
               "$type": "ApplyModifier",
               "modifierName": "BurstArea_Damage9"
             }
           ],
-          "elementDurability": 100.0,
-          "modifierName": "",
           "AIHNJLDFEGJ": 0.0
         },
         "BurstArea_Damage1": {
           "duration": 2.35,
+          "elementDurability": 100.0,
+          "modifierName": "",
+          "onAdded": [
+            {
+              "$type": "FireSubEmitterEffect",
+              "born": {
+                "$type": "ConfigBornByGlobalValue",
+                "directionKey": "",
+                "positionKey": "ElementBurst_BurstAreaPos1"
+              },
+              "effectPattern": "Eff_Monster_Hound_Planelurker_ElementalBurst_BurstAreaAlert"
+            }
+          ],
           "onRemoved": [
             {
               "$type": "FireSubEmitterEffect",
               "born": {
-                "$type": "LKIBKKFEOLJ",
-                "positionKey": "ElementBurst_BurstAreaPos1",
-                "directionKey": ""
+                "$type": "ConfigBornByGlobalValue",
+                "directionKey": "",
+                "positionKey": "ElementBurst_BurstAreaPos1"
               },
               "effectPattern": "Eff_Monster_Hound_Planelurker_ElementalBurst_BurstArea"
             },
             {
               "$type": "TriggerAttackEvent",
-              "targetType": "Enemy",
               "attackEvent": {
                 "attackInfo": {
                   "attackProperty": {
-                    "elementType": "Rock",
-                    "damagePercentageRatio": 0.0,
-                    "strikeType": "Blunt",
-                    "enBreak": 999999.0,
                     "damagePercentage": 0.25,
+                    "damagePercentageRatio": 0.0,
                     "elementDurability": 10.0,
-                    "arkheGrade": 0.0
+                    "elementType": "Rock",
+                    "enBreak": 999999.0,
+                    "strikeType": "Blunt",
+                    "IIPHCFEONLK": 0.0
                   },
-                  "cameraShake": {
-                    "shakeTime": 0.2,
-                    "shakeType": "CustomVector",
-                    "MNKFEFOKFKP": "",
-                    "shakeRange": 0.4
-                  },
-                  "hitPattern": {
-                    "FLFCIDDNMNA": "",
-                    "onHitEffectName": "default",
-                    "hitHaltTimeScale": 0.05,
-                    "hitImpulseType": "LV5"
-                  },
-                  "forceCameraShake": true,
+                  "attackTag": "Hound_PlaneLurker_Corruption_Tag",
                   "attenuationGroup": "default",
                   "attenuationTag": "",
-                  "attackTag": "Hound_PlaneLurker_Corruption_Tag"
+                  "cameraShake": {
+                    "shakeRange": 0.4,
+                    "shakeTime": 0.2,
+                    "shakeType": "CustomVector",
+                    "MNKFEFOKFKP": ""
+                  },
+                  "forceCameraShake": true,
+                  "hitPattern": {
+                    "hitHaltTimeScale": 0.05,
+                    "hitImpulseType": "LV5",
+                    "onHitEffectName": "default",
+                    "FLFCIDDNMNA": ""
+                  }
                 },
                 "attackPattern": {
-                  "$type": "DDLDAMKEKJD",
-                  "radius": 7.5,
-                  "height": 3.0,
-                  "triggerType": "TriggerNoRepeat",
+                  "$type": "ConfigAttackCircle",
                   "born": {
-                    "$type": "LKIBKKFEOLJ",
-                    "positionKey": "ElementBurst_BurstAreaPos1",
-                    "directionKey": ""
-                  }
+                    "$type": "ConfigBornByGlobalValue",
+                    "directionKey": "",
+                    "positionKey": "ElementBurst_BurstAreaPos1"
+                  },
+                  "height": 3.0,
+                  "radius": 7.5,
+                  "triggerType": "TriggerNoRepeat"
                 }
-              }
-            }
-          ],
-          "onAdded": [
-            {
-              "$type": "FireSubEmitterEffect",
-              "born": {
-                "$type": "LKIBKKFEOLJ",
-                "positionKey": "ElementBurst_BurstAreaPos1",
-                "directionKey": ""
               },
-              "effectPattern": "Eff_Monster_Hound_Planelurker_ElementalBurst_BurstAreaAlert"
+              "targetType": "Enemy"
             }
           ],
-          "elementDurability": 100.0,
-          "modifierName": "",
           "AIHNJLDFEGJ": 0.0
         },
         "BurstArea_Damage2": {
           "duration": 2.35,
+          "elementDurability": 100.0,
+          "modifierName": "",
+          "onAdded": [
+            {
+              "$type": "FireSubEmitterEffect",
+              "born": {
+                "$type": "ConfigBornByGlobalValue",
+                "directionKey": "",
+                "positionKey": "ElementBurst_BurstAreaPos2"
+              },
+              "effectPattern": "Eff_Monster_Hound_Planelurker_ElementalBurst_BurstAreaAlert"
+            }
+          ],
           "onRemoved": [
             {
               "$type": "FireSubEmitterEffect",
               "born": {
-                "$type": "LKIBKKFEOLJ",
-                "positionKey": "ElementBurst_BurstAreaPos2",
-                "directionKey": ""
+                "$type": "ConfigBornByGlobalValue",
+                "directionKey": "",
+                "positionKey": "ElementBurst_BurstAreaPos2"
               },
               "effectPattern": "Eff_Monster_Hound_Planelurker_ElementalBurst_BurstArea"
             },
             {
               "$type": "TriggerAttackEvent",
-              "targetType": "Enemy",
               "attackEvent": {
                 "attackInfo": {
                   "attackProperty": {
-                    "elementType": "Rock",
-                    "damagePercentageRatio": 0.0,
-                    "strikeType": "Blunt",
-                    "enBreak": 999999.0,
                     "damagePercentage": 0.25,
+                    "damagePercentageRatio": 0.0,
                     "elementDurability": 10.0,
-                    "arkheGrade": 0.0
+                    "elementType": "Rock",
+                    "enBreak": 999999.0,
+                    "strikeType": "Blunt",
+                    "IIPHCFEONLK": 0.0
                   },
-                  "cameraShake": {
-                    "shakeTime": 0.2,
-                    "shakeType": "CustomVector",
-                    "MNKFEFOKFKP": "",
-                    "shakeRange": 0.4
-                  },
-                  "hitPattern": {
-                    "FLFCIDDNMNA": "",
-                    "onHitEffectName": "default",
-                    "hitHaltTimeScale": 0.05,
-                    "hitImpulseType": "LV5"
-                  },
-                  "forceCameraShake": true,
+                  "attackTag": "Hound_PlaneLurker_Corruption_Tag",
                   "attenuationGroup": "default",
                   "attenuationTag": "",
-                  "attackTag": "Hound_PlaneLurker_Corruption_Tag"
+                  "cameraShake": {
+                    "shakeRange": 0.4,
+                    "shakeTime": 0.2,
+                    "shakeType": "CustomVector",
+                    "MNKFEFOKFKP": ""
+                  },
+                  "forceCameraShake": true,
+                  "hitPattern": {
+                    "hitHaltTimeScale": 0.05,
+                    "hitImpulseType": "LV5",
+                    "onHitEffectName": "default",
+                    "FLFCIDDNMNA": ""
+                  }
                 },
                 "attackPattern": {
-                  "$type": "DDLDAMKEKJD",
-                  "radius": 7.5,
-                  "height": 3.0,
-                  "triggerType": "TriggerNoRepeat",
+                  "$type": "ConfigAttackCircle",
                   "born": {
-                    "$type": "LKIBKKFEOLJ",
-                    "positionKey": "ElementBurst_BurstAreaPos2",
-                    "directionKey": ""
-                  }
+                    "$type": "ConfigBornByGlobalValue",
+                    "directionKey": "",
+                    "positionKey": "ElementBurst_BurstAreaPos2"
+                  },
+                  "height": 3.0,
+                  "radius": 7.5,
+                  "triggerType": "TriggerNoRepeat"
                 }
-              }
-            }
-          ],
-          "onAdded": [
-            {
-              "$type": "FireSubEmitterEffect",
-              "born": {
-                "$type": "LKIBKKFEOLJ",
-                "positionKey": "ElementBurst_BurstAreaPos2",
-                "directionKey": ""
               },
-              "effectPattern": "Eff_Monster_Hound_Planelurker_ElementalBurst_BurstAreaAlert"
+              "targetType": "Enemy"
             }
           ],
-          "elementDurability": 100.0,
-          "modifierName": "",
           "AIHNJLDFEGJ": 0.0
         },
         "BurstArea_Damage3": {
           "duration": 2.35,
+          "elementDurability": 100.0,
+          "modifierName": "",
+          "onAdded": [
+            {
+              "$type": "FireSubEmitterEffect",
+              "born": {
+                "$type": "ConfigBornByGlobalValue",
+                "directionKey": "",
+                "positionKey": "ElementBurst_BurstAreaPos3"
+              },
+              "effectPattern": "Eff_Monster_Hound_Planelurker_ElementalBurst_BurstAreaAlert"
+            }
+          ],
           "onRemoved": [
             {
               "$type": "FireSubEmitterEffect",
               "born": {
-                "$type": "LKIBKKFEOLJ",
-                "positionKey": "ElementBurst_BurstAreaPos3",
-                "directionKey": ""
+                "$type": "ConfigBornByGlobalValue",
+                "directionKey": "",
+                "positionKey": "ElementBurst_BurstAreaPos3"
               },
               "effectPattern": "Eff_Monster_Hound_Planelurker_ElementalBurst_BurstArea"
             },
             {
               "$type": "TriggerAttackEvent",
-              "targetType": "Enemy",
               "attackEvent": {
                 "attackInfo": {
                   "attackProperty": {
-                    "elementType": "Rock",
-                    "damagePercentageRatio": 0.0,
-                    "strikeType": "Blunt",
-                    "enBreak": 999999.0,
                     "damagePercentage": 0.25,
+                    "damagePercentageRatio": 0.0,
                     "elementDurability": 10.0,
-                    "arkheGrade": 0.0
+                    "elementType": "Rock",
+                    "enBreak": 999999.0,
+                    "strikeType": "Blunt",
+                    "IIPHCFEONLK": 0.0
                   },
-                  "cameraShake": {
-                    "shakeTime": 0.2,
-                    "shakeType": "CustomVector",
-                    "MNKFEFOKFKP": "",
-                    "shakeRange": 0.4
-                  },
-                  "hitPattern": {
-                    "FLFCIDDNMNA": "",
-                    "onHitEffectName": "default",
-                    "hitHaltTimeScale": 0.05,
-                    "hitImpulseType": "LV5"
-                  },
-                  "forceCameraShake": true,
+                  "attackTag": "Hound_PlaneLurker_Corruption_Tag",
                   "attenuationGroup": "default",
                   "attenuationTag": "",
-                  "attackTag": "Hound_PlaneLurker_Corruption_Tag"
+                  "cameraShake": {
+                    "shakeRange": 0.4,
+                    "shakeTime": 0.2,
+                    "shakeType": "CustomVector",
+                    "MNKFEFOKFKP": ""
+                  },
+                  "forceCameraShake": true,
+                  "hitPattern": {
+                    "hitHaltTimeScale": 0.05,
+                    "hitImpulseType": "LV5",
+                    "onHitEffectName": "default",
+                    "FLFCIDDNMNA": ""
+                  }
                 },
                 "attackPattern": {
-                  "$type": "DDLDAMKEKJD",
-                  "radius": 7.5,
-                  "height": 3.0,
-                  "triggerType": "TriggerNoRepeat",
+                  "$type": "ConfigAttackCircle",
                   "born": {
-                    "$type": "LKIBKKFEOLJ",
-                    "positionKey": "ElementBurst_BurstAreaPos3",
-                    "directionKey": ""
-                  }
+                    "$type": "ConfigBornByGlobalValue",
+                    "directionKey": "",
+                    "positionKey": "ElementBurst_BurstAreaPos3"
+                  },
+                  "height": 3.0,
+                  "radius": 7.5,
+                  "triggerType": "TriggerNoRepeat"
                 }
-              }
-            }
-          ],
-          "onAdded": [
-            {
-              "$type": "FireSubEmitterEffect",
-              "born": {
-                "$type": "LKIBKKFEOLJ",
-                "positionKey": "ElementBurst_BurstAreaPos3",
-                "directionKey": ""
               },
-              "effectPattern": "Eff_Monster_Hound_Planelurker_ElementalBurst_BurstAreaAlert"
+              "targetType": "Enemy"
             }
           ],
-          "elementDurability": 100.0,
-          "modifierName": "",
           "AIHNJLDFEGJ": 0.0
         },
         "BurstArea_Damage4": {
           "duration": 2.35,
+          "elementDurability": 100.0,
+          "modifierName": "",
+          "onAdded": [
+            {
+              "$type": "FireSubEmitterEffect",
+              "born": {
+                "$type": "ConfigBornByGlobalValue",
+                "directionKey": "",
+                "positionKey": "ElementBurst_BurstAreaPos4"
+              },
+              "effectPattern": "Eff_Monster_Hound_Planelurker_ElementalBurst_BurstAreaAlert"
+            }
+          ],
           "onRemoved": [
             {
               "$type": "FireSubEmitterEffect",
               "born": {
-                "$type": "LKIBKKFEOLJ",
-                "positionKey": "ElementBurst_BurstAreaPos4",
-                "directionKey": ""
+                "$type": "ConfigBornByGlobalValue",
+                "directionKey": "",
+                "positionKey": "ElementBurst_BurstAreaPos4"
               },
               "effectPattern": "Eff_Monster_Hound_Planelurker_ElementalBurst_BurstArea"
             },
             {
               "$type": "TriggerAttackEvent",
-              "targetType": "Enemy",
               "attackEvent": {
                 "attackInfo": {
                   "attackProperty": {
-                    "elementType": "Rock",
-                    "damagePercentageRatio": 0.0,
-                    "strikeType": "Blunt",
-                    "enBreak": 999999.0,
                     "damagePercentage": 0.25,
+                    "damagePercentageRatio": 0.0,
                     "elementDurability": 10.0,
-                    "arkheGrade": 0.0
+                    "elementType": "Rock",
+                    "enBreak": 999999.0,
+                    "strikeType": "Blunt",
+                    "IIPHCFEONLK": 0.0
                   },
-                  "cameraShake": {
-                    "shakeTime": 0.2,
-                    "shakeType": "CustomVector",
-                    "MNKFEFOKFKP": "",
-                    "shakeRange": 0.4
-                  },
-                  "hitPattern": {
-                    "FLFCIDDNMNA": "",
-                    "onHitEffectName": "default",
-                    "hitHaltTimeScale": 0.05,
-                    "hitImpulseType": "LV5"
-                  },
-                  "forceCameraShake": true,
+                  "attackTag": "Hound_PlaneLurker_Corruption_Tag",
                   "attenuationGroup": "default",
                   "attenuationTag": "",
-                  "attackTag": "Hound_PlaneLurker_Corruption_Tag"
+                  "cameraShake": {
+                    "shakeRange": 0.4,
+                    "shakeTime": 0.2,
+                    "shakeType": "CustomVector",
+                    "MNKFEFOKFKP": ""
+                  },
+                  "forceCameraShake": true,
+                  "hitPattern": {
+                    "hitHaltTimeScale": 0.05,
+                    "hitImpulseType": "LV5",
+                    "onHitEffectName": "default",
+                    "FLFCIDDNMNA": ""
+                  }
                 },
                 "attackPattern": {
-                  "$type": "DDLDAMKEKJD",
-                  "radius": 7.5,
-                  "height": 3.0,
-                  "triggerType": "TriggerNoRepeat",
+                  "$type": "ConfigAttackCircle",
                   "born": {
-                    "$type": "LKIBKKFEOLJ",
-                    "positionKey": "ElementBurst_BurstAreaPos4",
-                    "directionKey": ""
-                  }
+                    "$type": "ConfigBornByGlobalValue",
+                    "directionKey": "",
+                    "positionKey": "ElementBurst_BurstAreaPos4"
+                  },
+                  "height": 3.0,
+                  "radius": 7.5,
+                  "triggerType": "TriggerNoRepeat"
                 }
-              }
-            }
-          ],
-          "onAdded": [
-            {
-              "$type": "FireSubEmitterEffect",
-              "born": {
-                "$type": "LKIBKKFEOLJ",
-                "positionKey": "ElementBurst_BurstAreaPos4",
-                "directionKey": ""
               },
-              "effectPattern": "Eff_Monster_Hound_Planelurker_ElementalBurst_BurstAreaAlert"
+              "targetType": "Enemy"
             }
           ],
-          "elementDurability": 100.0,
-          "modifierName": "",
           "AIHNJLDFEGJ": 0.0
         },
         "BurstArea_Damage5": {
           "duration": 2.35,
+          "elementDurability": 100.0,
+          "modifierName": "",
+          "onAdded": [
+            {
+              "$type": "FireSubEmitterEffect",
+              "born": {
+                "$type": "ConfigBornByGlobalValue",
+                "directionKey": "",
+                "positionKey": "ElementBurst_BurstAreaPos5"
+              },
+              "effectPattern": "Eff_Monster_Hound_Planelurker_ElementalBurst_BurstAreaAlert"
+            }
+          ],
           "onRemoved": [
             {
               "$type": "FireSubEmitterEffect",
               "born": {
-                "$type": "LKIBKKFEOLJ",
-                "positionKey": "ElementBurst_BurstAreaPos5",
-                "directionKey": ""
+                "$type": "ConfigBornByGlobalValue",
+                "directionKey": "",
+                "positionKey": "ElementBurst_BurstAreaPos5"
               },
               "effectPattern": "Eff_Monster_Hound_Planelurker_ElementalBurst_BurstArea"
             },
             {
               "$type": "TriggerAttackEvent",
-              "targetType": "Enemy",
               "attackEvent": {
                 "attackInfo": {
                   "attackProperty": {
-                    "elementType": "Rock",
-                    "damagePercentageRatio": 0.0,
-                    "strikeType": "Blunt",
-                    "enBreak": 999999.0,
                     "damagePercentage": 0.25,
+                    "damagePercentageRatio": 0.0,
                     "elementDurability": 10.0,
-                    "arkheGrade": 0.0
+                    "elementType": "Rock",
+                    "enBreak": 999999.0,
+                    "strikeType": "Blunt",
+                    "IIPHCFEONLK": 0.0
                   },
-                  "cameraShake": {
-                    "shakeTime": 0.2,
-                    "shakeType": "CustomVector",
-                    "MNKFEFOKFKP": "",
-                    "shakeRange": 0.4
-                  },
-                  "hitPattern": {
-                    "FLFCIDDNMNA": "",
-                    "onHitEffectName": "default",
-                    "hitHaltTimeScale": 0.05,
-                    "hitImpulseType": "LV5"
-                  },
-                  "forceCameraShake": true,
+                  "attackTag": "Hound_PlaneLurker_Corruption_Tag",
                   "attenuationGroup": "default",
                   "attenuationTag": "",
-                  "attackTag": "Hound_PlaneLurker_Corruption_Tag"
+                  "cameraShake": {
+                    "shakeRange": 0.4,
+                    "shakeTime": 0.2,
+                    "shakeType": "CustomVector",
+                    "MNKFEFOKFKP": ""
+                  },
+                  "forceCameraShake": true,
+                  "hitPattern": {
+                    "hitHaltTimeScale": 0.05,
+                    "hitImpulseType": "LV5",
+                    "onHitEffectName": "default",
+                    "FLFCIDDNMNA": ""
+                  }
                 },
                 "attackPattern": {
-                  "$type": "DDLDAMKEKJD",
-                  "radius": 7.5,
-                  "height": 3.0,
-                  "triggerType": "TriggerNoRepeat",
+                  "$type": "ConfigAttackCircle",
                   "born": {
-                    "$type": "LKIBKKFEOLJ",
-                    "positionKey": "ElementBurst_BurstAreaPos5",
-                    "directionKey": ""
-                  }
+                    "$type": "ConfigBornByGlobalValue",
+                    "directionKey": "",
+                    "positionKey": "ElementBurst_BurstAreaPos5"
+                  },
+                  "height": 3.0,
+                  "radius": 7.5,
+                  "triggerType": "TriggerNoRepeat"
                 }
-              }
-            }
-          ],
-          "onAdded": [
-            {
-              "$type": "FireSubEmitterEffect",
-              "born": {
-                "$type": "LKIBKKFEOLJ",
-                "positionKey": "ElementBurst_BurstAreaPos5",
-                "directionKey": ""
               },
-              "effectPattern": "Eff_Monster_Hound_Planelurker_ElementalBurst_BurstAreaAlert"
+              "targetType": "Enemy"
             }
           ],
-          "elementDurability": 100.0,
-          "modifierName": "",
           "AIHNJLDFEGJ": 0.0
         },
         "BurstArea_Damage6": {
           "duration": 2.35,
+          "elementDurability": 100.0,
+          "modifierName": "",
+          "onAdded": [
+            {
+              "$type": "FireSubEmitterEffect",
+              "born": {
+                "$type": "ConfigBornByGlobalValue",
+                "directionKey": "",
+                "positionKey": "ElementBurst_BurstAreaPos6"
+              },
+              "effectPattern": "Eff_Monster_Hound_Planelurker_ElementalBurst_BurstAreaAlert"
+            }
+          ],
           "onRemoved": [
             {
               "$type": "FireSubEmitterEffect",
               "born": {
-                "$type": "LKIBKKFEOLJ",
-                "positionKey": "ElementBurst_BurstAreaPos6",
-                "directionKey": ""
+                "$type": "ConfigBornByGlobalValue",
+                "directionKey": "",
+                "positionKey": "ElementBurst_BurstAreaPos6"
               },
               "effectPattern": "Eff_Monster_Hound_Planelurker_ElementalBurst_BurstArea"
             },
             {
               "$type": "TriggerAttackEvent",
-              "targetType": "Enemy",
               "attackEvent": {
                 "attackInfo": {
                   "attackProperty": {
-                    "elementType": "Rock",
-                    "damagePercentageRatio": 0.0,
-                    "strikeType": "Blunt",
-                    "enBreak": 999999.0,
                     "damagePercentage": 0.25,
+                    "damagePercentageRatio": 0.0,
                     "elementDurability": 10.0,
-                    "arkheGrade": 0.0
+                    "elementType": "Rock",
+                    "enBreak": 999999.0,
+                    "strikeType": "Blunt",
+                    "IIPHCFEONLK": 0.0
                   },
-                  "cameraShake": {
-                    "shakeTime": 0.2,
-                    "shakeType": "CustomVector",
-                    "MNKFEFOKFKP": "",
-                    "shakeRange": 0.4
-                  },
-                  "hitPattern": {
-                    "FLFCIDDNMNA": "",
-                    "onHitEffectName": "default",
-                    "hitHaltTimeScale": 0.05,
-                    "hitImpulseType": "LV5"
-                  },
-                  "forceCameraShake": true,
+                  "attackTag": "Hound_PlaneLurker_Corruption_Tag",
                   "attenuationGroup": "default",
                   "attenuationTag": "",
-                  "attackTag": "Hound_PlaneLurker_Corruption_Tag"
+                  "cameraShake": {
+                    "shakeRange": 0.4,
+                    "shakeTime": 0.2,
+                    "shakeType": "CustomVector",
+                    "MNKFEFOKFKP": ""
+                  },
+                  "forceCameraShake": true,
+                  "hitPattern": {
+                    "hitHaltTimeScale": 0.05,
+                    "hitImpulseType": "LV5",
+                    "onHitEffectName": "default",
+                    "FLFCIDDNMNA": ""
+                  }
                 },
                 "attackPattern": {
-                  "$type": "DDLDAMKEKJD",
-                  "radius": 7.5,
-                  "height": 3.0,
-                  "triggerType": "TriggerNoRepeat",
+                  "$type": "ConfigAttackCircle",
                   "born": {
-                    "$type": "LKIBKKFEOLJ",
-                    "positionKey": "ElementBurst_BurstAreaPos6",
-                    "directionKey": ""
-                  }
+                    "$type": "ConfigBornByGlobalValue",
+                    "directionKey": "",
+                    "positionKey": "ElementBurst_BurstAreaPos6"
+                  },
+                  "height": 3.0,
+                  "radius": 7.5,
+                  "triggerType": "TriggerNoRepeat"
                 }
-              }
-            }
-          ],
-          "onAdded": [
-            {
-              "$type": "FireSubEmitterEffect",
-              "born": {
-                "$type": "LKIBKKFEOLJ",
-                "positionKey": "ElementBurst_BurstAreaPos6",
-                "directionKey": ""
               },
-              "effectPattern": "Eff_Monster_Hound_Planelurker_ElementalBurst_BurstAreaAlert"
+              "targetType": "Enemy"
             }
           ],
-          "elementDurability": 100.0,
-          "modifierName": "",
           "AIHNJLDFEGJ": 0.0
         },
         "BurstArea_Damage7": {
           "duration": 2.35,
+          "elementDurability": 100.0,
+          "modifierName": "",
+          "onAdded": [
+            {
+              "$type": "FireSubEmitterEffect",
+              "born": {
+                "$type": "ConfigBornByGlobalValue",
+                "directionKey": "",
+                "positionKey": "ElementBurst_BurstAreaPos7"
+              },
+              "effectPattern": "Eff_Monster_Hound_Planelurker_ElementalBurst_BurstAreaAlert"
+            }
+          ],
           "onRemoved": [
             {
               "$type": "FireSubEmitterEffect",
               "born": {
-                "$type": "LKIBKKFEOLJ",
-                "positionKey": "ElementBurst_BurstAreaPos7",
-                "directionKey": ""
+                "$type": "ConfigBornByGlobalValue",
+                "directionKey": "",
+                "positionKey": "ElementBurst_BurstAreaPos7"
               },
               "effectPattern": "Eff_Monster_Hound_Planelurker_ElementalBurst_BurstArea"
             },
             {
               "$type": "TriggerAttackEvent",
-              "targetType": "Enemy",
               "attackEvent": {
                 "attackInfo": {
                   "attackProperty": {
-                    "elementType": "Rock",
-                    "damagePercentageRatio": 0.0,
-                    "strikeType": "Blunt",
-                    "enBreak": 999999.0,
                     "damagePercentage": 0.25,
+                    "damagePercentageRatio": 0.0,
                     "elementDurability": 10.0,
-                    "arkheGrade": 0.0
+                    "elementType": "Rock",
+                    "enBreak": 999999.0,
+                    "strikeType": "Blunt",
+                    "IIPHCFEONLK": 0.0
                   },
-                  "cameraShake": {
-                    "shakeTime": 0.2,
-                    "shakeType": "CustomVector",
-                    "MNKFEFOKFKP": "",
-                    "shakeRange": 0.4
-                  },
-                  "hitPattern": {
-                    "FLFCIDDNMNA": "",
-                    "onHitEffectName": "default",
-                    "hitHaltTimeScale": 0.05,
-                    "hitImpulseType": "LV5"
-                  },
-                  "forceCameraShake": true,
+                  "attackTag": "Hound_PlaneLurker_Corruption_Tag",
                   "attenuationGroup": "default",
                   "attenuationTag": "",
-                  "attackTag": "Hound_PlaneLurker_Corruption_Tag"
+                  "cameraShake": {
+                    "shakeRange": 0.4,
+                    "shakeTime": 0.2,
+                    "shakeType": "CustomVector",
+                    "MNKFEFOKFKP": ""
+                  },
+                  "forceCameraShake": true,
+                  "hitPattern": {
+                    "hitHaltTimeScale": 0.05,
+                    "hitImpulseType": "LV5",
+                    "onHitEffectName": "default",
+                    "FLFCIDDNMNA": ""
+                  }
                 },
                 "attackPattern": {
-                  "$type": "DDLDAMKEKJD",
-                  "radius": 7.5,
-                  "height": 3.0,
-                  "triggerType": "TriggerNoRepeat",
+                  "$type": "ConfigAttackCircle",
                   "born": {
-                    "$type": "LKIBKKFEOLJ",
-                    "positionKey": "ElementBurst_BurstAreaPos7",
-                    "directionKey": ""
-                  }
+                    "$type": "ConfigBornByGlobalValue",
+                    "directionKey": "",
+                    "positionKey": "ElementBurst_BurstAreaPos7"
+                  },
+                  "height": 3.0,
+                  "radius": 7.5,
+                  "triggerType": "TriggerNoRepeat"
                 }
-              }
-            }
-          ],
-          "onAdded": [
-            {
-              "$type": "FireSubEmitterEffect",
-              "born": {
-                "$type": "LKIBKKFEOLJ",
-                "positionKey": "ElementBurst_BurstAreaPos7",
-                "directionKey": ""
               },
-              "effectPattern": "Eff_Monster_Hound_Planelurker_ElementalBurst_BurstAreaAlert"
+              "targetType": "Enemy"
             }
           ],
-          "elementDurability": 100.0,
-          "modifierName": "",
           "AIHNJLDFEGJ": 0.0
         },
         "BurstArea_Damage8": {
           "duration": 2.35,
+          "elementDurability": 100.0,
+          "modifierName": "",
+          "onAdded": [
+            {
+              "$type": "FireSubEmitterEffect",
+              "born": {
+                "$type": "ConfigBornByGlobalValue",
+                "directionKey": "",
+                "positionKey": "ElementBurst_BurstAreaPos8"
+              },
+              "effectPattern": "Eff_Monster_Hound_Planelurker_ElementalBurst_BurstAreaAlert"
+            }
+          ],
           "onRemoved": [
             {
               "$type": "FireSubEmitterEffect",
               "born": {
-                "$type": "LKIBKKFEOLJ",
-                "positionKey": "ElementBurst_BurstAreaPos8",
-                "directionKey": ""
+                "$type": "ConfigBornByGlobalValue",
+                "directionKey": "",
+                "positionKey": "ElementBurst_BurstAreaPos8"
               },
               "effectPattern": "Eff_Monster_Hound_Planelurker_ElementalBurst_BurstArea"
             },
             {
               "$type": "TriggerAttackEvent",
-              "targetType": "Enemy",
               "attackEvent": {
                 "attackInfo": {
                   "attackProperty": {
-                    "elementType": "Rock",
-                    "damagePercentageRatio": 0.0,
-                    "strikeType": "Blunt",
-                    "enBreak": 999999.0,
                     "damagePercentage": 0.25,
+                    "damagePercentageRatio": 0.0,
                     "elementDurability": 10.0,
-                    "arkheGrade": 0.0
+                    "elementType": "Rock",
+                    "enBreak": 999999.0,
+                    "strikeType": "Blunt",
+                    "IIPHCFEONLK": 0.0
                   },
-                  "cameraShake": {
-                    "shakeTime": 0.2,
-                    "shakeType": "CustomVector",
-                    "MNKFEFOKFKP": "",
-                    "shakeRange": 0.4
-                  },
-                  "hitPattern": {
-                    "FLFCIDDNMNA": "",
-                    "onHitEffectName": "default",
-                    "hitHaltTimeScale": 0.05,
-                    "hitImpulseType": "LV5"
-                  },
-                  "forceCameraShake": true,
+                  "attackTag": "Hound_PlaneLurker_Corruption_Tag",
                   "attenuationGroup": "default",
                   "attenuationTag": "",
-                  "attackTag": "Hound_PlaneLurker_Corruption_Tag"
+                  "cameraShake": {
+                    "shakeRange": 0.4,
+                    "shakeTime": 0.2,
+                    "shakeType": "CustomVector",
+                    "MNKFEFOKFKP": ""
+                  },
+                  "forceCameraShake": true,
+                  "hitPattern": {
+                    "hitHaltTimeScale": 0.05,
+                    "hitImpulseType": "LV5",
+                    "onHitEffectName": "default",
+                    "FLFCIDDNMNA": ""
+                  }
                 },
                 "attackPattern": {
-                  "$type": "DDLDAMKEKJD",
-                  "radius": 7.5,
-                  "height": 3.0,
-                  "triggerType": "TriggerNoRepeat",
+                  "$type": "ConfigAttackCircle",
                   "born": {
-                    "$type": "LKIBKKFEOLJ",
-                    "positionKey": "ElementBurst_BurstAreaPos8",
-                    "directionKey": ""
-                  }
+                    "$type": "ConfigBornByGlobalValue",
+                    "directionKey": "",
+                    "positionKey": "ElementBurst_BurstAreaPos8"
+                  },
+                  "height": 3.0,
+                  "radius": 7.5,
+                  "triggerType": "TriggerNoRepeat"
                 }
-              }
-            }
-          ],
-          "onAdded": [
-            {
-              "$type": "FireSubEmitterEffect",
-              "born": {
-                "$type": "LKIBKKFEOLJ",
-                "positionKey": "ElementBurst_BurstAreaPos8",
-                "directionKey": ""
               },
-              "effectPattern": "Eff_Monster_Hound_Planelurker_ElementalBurst_BurstAreaAlert"
+              "targetType": "Enemy"
             }
           ],
-          "elementDurability": 100.0,
-          "modifierName": "",
           "AIHNJLDFEGJ": 0.0
         },
         "BurstArea_Damage9": {
           "duration": 2.35,
+          "elementDurability": 100.0,
+          "modifierName": "",
+          "onAdded": [
+            {
+              "$type": "FireSubEmitterEffect",
+              "born": {
+                "$type": "ConfigBornByGlobalValue",
+                "directionKey": "",
+                "positionKey": "ElementBurst_BurstAreaPos9"
+              },
+              "effectPattern": "Eff_Monster_Hound_Planelurker_ElementalBurst_BurstAreaAlert"
+            }
+          ],
           "onRemoved": [
             {
               "$type": "FireSubEmitterEffect",
               "born": {
-                "$type": "LKIBKKFEOLJ",
-                "positionKey": "ElementBurst_BurstAreaPos9",
-                "directionKey": ""
+                "$type": "ConfigBornByGlobalValue",
+                "directionKey": "",
+                "positionKey": "ElementBurst_BurstAreaPos9"
               },
               "effectPattern": "Eff_Monster_Hound_Planelurker_ElementalBurst_BurstArea"
             },
             {
               "$type": "TriggerAttackEvent",
-              "targetType": "Enemy",
               "attackEvent": {
                 "attackInfo": {
                   "attackProperty": {
-                    "elementType": "Rock",
-                    "damagePercentageRatio": 0.0,
-                    "strikeType": "Blunt",
-                    "enBreak": 999999.0,
                     "damagePercentage": 0.25,
+                    "damagePercentageRatio": 0.0,
                     "elementDurability": 10.0,
-                    "arkheGrade": 0.0
+                    "elementType": "Rock",
+                    "enBreak": 999999.0,
+                    "strikeType": "Blunt",
+                    "IIPHCFEONLK": 0.0
                   },
-                  "cameraShake": {
-                    "shakeTime": 0.2,
-                    "shakeType": "CustomVector",
-                    "MNKFEFOKFKP": "",
-                    "shakeRange": 0.4
-                  },
-                  "hitPattern": {
-                    "FLFCIDDNMNA": "",
-                    "onHitEffectName": "default",
-                    "hitHaltTimeScale": 0.05,
-                    "hitImpulseType": "LV5"
-                  },
-                  "forceCameraShake": true,
+                  "attackTag": "Hound_PlaneLurker_Corruption_Tag",
                   "attenuationGroup": "default",
                   "attenuationTag": "",
-                  "attackTag": "Hound_PlaneLurker_Corruption_Tag"
+                  "cameraShake": {
+                    "shakeRange": 0.4,
+                    "shakeTime": 0.2,
+                    "shakeType": "CustomVector",
+                    "MNKFEFOKFKP": ""
+                  },
+                  "forceCameraShake": true,
+                  "hitPattern": {
+                    "hitHaltTimeScale": 0.05,
+                    "hitImpulseType": "LV5",
+                    "onHitEffectName": "default",
+                    "FLFCIDDNMNA": ""
+                  }
                 },
                 "attackPattern": {
-                  "$type": "DDLDAMKEKJD",
-                  "radius": 7.5,
-                  "height": 3.0,
-                  "triggerType": "TriggerNoRepeat",
+                  "$type": "ConfigAttackCircle",
                   "born": {
-                    "$type": "LKIBKKFEOLJ",
-                    "positionKey": "ElementBurst_BurstAreaPos9",
-                    "directionKey": ""
-                  }
+                    "$type": "ConfigBornByGlobalValue",
+                    "directionKey": "",
+                    "positionKey": "ElementBurst_BurstAreaPos9"
+                  },
+                  "height": 3.0,
+                  "radius": 7.5,
+                  "triggerType": "TriggerNoRepeat"
                 }
-              }
-            }
-          ],
-          "onAdded": [
-            {
-              "$type": "FireSubEmitterEffect",
-              "born": {
-                "$type": "LKIBKKFEOLJ",
-                "positionKey": "ElementBurst_BurstAreaPos9",
-                "directionKey": ""
               },
-              "effectPattern": "Eff_Monster_Hound_Planelurker_ElementalBurst_BurstAreaAlert"
+              "targetType": "Enemy"
             }
           ],
-          "elementDurability": 100.0,
-          "modifierName": "",
           "AIHNJLDFEGJ": 0.0
         }
-      },
-      "abilityMixins": [
-        {
-          "$type": "AttachToAnimatorStateIDMixin",
-          "LJPPDIGCJMJ": "",
-          "stateIDs": [
-            "ElementalBurst_BS"
-          ],
-          "modifierName": "Planelurker_ElementBurstBS_Effect"
-        },
-        {
-          "$type": "AttachToAnimatorStateIDMixin",
-          "LJPPDIGCJMJ": "",
-          "stateIDs": [
-            "ElementalBurst_Air"
-          ],
-          "modifierName": "Planelurker_ElementBurst_Disappear"
-        },
-        {
-          "$type": "AttachToAnimatorStateIDMixin",
-          "LJPPDIGCJMJ": "",
-          "stateIDs": [
-            "ElementalBurst_UnderGround"
-          ],
-          "modifierName": "Planelurker_ElementBurst_CreateBurstArea"
-        }
-      ],
-      "abilityName": "Monster_Hound_Planelurker_Abyss_ElementBurst",
-      "abilitySpecials": {
-        "RandomTimer1": 0.0,
-        "RandomTimer2": 0.0,
-        "RandomTimer3": 0.0,
-        "RandomTimer4": 0.0,
-        "RandomTimer5": 0.0,
-        "RandomTimer6": 0.0,
-        "RandomTimer7": 0.0,
-        "RandomTimer8": 0.0,
-        "RandomTimer9": 0.0
       }
     }
   },
   {
     "Default": {
+      "abilityName": "Hound_Planelurker_ElementBurst_Abyss_BurstArea",
+      "abilitySpecials": {
+        "RandomTimer": 0.0
+      },
       "modifiers": {
         "BurstArea_DamageTimer": {
           "duration": [
@@ -2860,65 +2864,64 @@
             "RandomTimer",
             "ADD"
           ],
+          "elementDurability": 100.0,
+          "modifierName": "",
+          "onAdded": [
+            {
+              "$type": "AttachEffect",
+              "effectPattern": "Eff_Monster_Hound_Planelurker_ElementalBurst_BurstAreaAlert",
+              "effectTempleteID": -1.0,
+              "scale": 1.0,
+              "ILLLPEOODKP": ""
+            }
+          ],
           "onRemoved": [
             {
               "$type": "FireEffect",
               "effectPattern": "Eff_Monster_Hound_Planelurker_ElementalBurst_BurstArea",
+              "effectTempleteID": -1.0,
               "scale": 1.0,
-              "ILLLPEOODKP": "",
-              "effectTempleteID": -1.0
+              "ILLLPEOODKP": ""
             },
             {
               "$type": "DamageByAttackValue",
+              "attacker": "Self",
               "attackInfo": {
                 "attackProperty": {
-                  "elementType": "Rock",
-                  "damagePercentageRatio": 0.0,
-                  "strikeType": "Blunt",
-                  "enBreak": 999999.0,
                   "damagePercentage": 0.25,
+                  "damagePercentageRatio": 0.0,
                   "elementDurability": 10.0,
-                  "arkheGrade": 0.0
+                  "elementType": "Rock",
+                  "enBreak": 999999.0,
+                  "strikeType": "Blunt",
+                  "IIPHCFEONLK": 0.0
                 },
-                "hitPattern": {
-                  "FLFCIDDNMNA": "",
-                  "onHitEffectName": "default",
-                  "hitHaltTimeScale": 0.05,
-                  "hitImpulseType": "LV5"
-                },
+                "attackTag": "Hound_PlaneLurker_Corruption_Tag",
                 "attenuationGroup": "default",
                 "attenuationTag": "",
-                "attackTag": "Hound_PlaneLurker_Corruption_Tag"
+                "hitPattern": {
+                  "hitHaltTimeScale": 0.05,
+                  "hitImpulseType": "LV5",
+                  "onHitEffectName": "default",
+                  "FLFCIDDNMNA": ""
+                }
               },
-              "attacker": "Self",
               "born": {
-                "$type": "BGOLIIIHLMO",
+                "$type": "ConfigBornByAttachPoint",
                 "attachPointName": "RootNode",
                 "useRotation": true
               },
               "otherTargets": {
-                "$type": "INIACGFCEDH",
-                "sizeRatio": 1.0,
+                "$type": "SelectTargetsByShape",
                 "campTargetType": "Enemy",
-                "shapeName": "CircleR7_5"
+                "shapeName": "CircleR7_5",
+                "sizeRatio": 1.0
               }
             }
           ],
-          "onAdded": [
-            {
-              "$type": "AttachEffect",
-              "ILLLPEOODKP": "",
-              "scale": 1.0,
-              "effectPattern": "Eff_Monster_Hound_Planelurker_ElementalBurst_BurstAreaAlert",
-              "effectTempleteID": -1.0
-            }
-          ],
-          "elementDurability": 100.0,
-          "modifierName": "",
           "AIHNJLDFEGJ": 0.0
         }
       },
-      "abilityName": "Hound_Planelurker_ElementBurst_Abyss_BurstArea",
       "onAdded": [
         {
           "$type": "SetRandomOverrideMapValue",
@@ -2929,117 +2932,115 @@
           "$type": "ApplyModifier",
           "modifierName": "BurstArea_DamageTimer"
         }
-      ],
-      "abilitySpecials": {
-        "RandomTimer": 0.0
-      }
+      ]
     }
   },
   {
     "Default": {
+      "abilityName": "Monster_Hound_Planelurker_Abyss_ElementBurstExplode",
       "onAbilityStart": [
         {
           "$type": "FireEffect",
-          "effectPattern": "Eff_Monster_Hound_Planelurker_ElementalBurst_Explode",
-          "scale": 1.0,
           "born": {
-            "$type": "LKIBKKFEOLJ",
-            "positionKey": "_MONSTER_PLANELURKER_ABYSS_CENTERPOS",
+            "$type": "ConfigBornByGlobalValue",
             "directionKey": "",
-            "onGround": true,
             "offset": {
               "x": 0.0,
-              "z": 0.0,
-              "y": 0.0
-            }
+              "y": 0.0,
+              "z": 0.0
+            },
+            "onGround": true,
+            "positionKey": "_MONSTER_PLANELURKER_ABYSS_CENTERPOS"
           },
-          "ILLLPEOODKP": "",
-          "effectTempleteID": -1.0
+          "effectPattern": "Eff_Monster_Hound_Planelurker_ElementalBurst_Explode",
+          "effectTempleteID": -1.0,
+          "scale": 1.0,
+          "ILLLPEOODKP": ""
         },
         {
           "$type": "DamageByAttackValue",
+          "attacker": "Self",
           "attackInfo": {
             "attackProperty": {
-              "elementType": "Rock",
-              "damagePercentageRatio": 0.0,
-              "strikeType": "Blunt",
-              "enBreak": 999999.0,
               "damagePercentage": 1.0,
+              "damagePercentageRatio": 0.0,
               "elementDurability": 25.0,
-              "arkheGrade": 0.0
+              "elementType": "Rock",
+              "enBreak": 999999.0,
+              "strikeType": "Blunt",
+              "IIPHCFEONLK": 0.0
             },
-            "hitPattern": {
-              "FLFCIDDNMNA": "",
-              "onHitEffectName": "default",
-              "hitHaltTimeScale": 0.05,
-              "hitImpulseType": "LV5"
-            },
+            "attackTag": "Hound_PlaneLurker_Corruption_Tag",
             "attenuationGroup": "default",
             "attenuationTag": "",
-            "attackTag": "Hound_PlaneLurker_Corruption_Tag"
+            "hitPattern": {
+              "hitHaltTimeScale": 0.05,
+              "hitImpulseType": "LV5",
+              "onHitEffectName": "default",
+              "FLFCIDDNMNA": ""
+            }
           },
-          "attacker": "Self",
           "born": {
-            "$type": "BGOLIIIHLMO",
+            "$type": "ConfigBornByAttachPoint",
             "attachPointName": "RootNode",
             "useRotation": true
           },
           "otherTargets": {
-            "$type": "INIACGFCEDH",
-            "sizeRatio": 1.0,
+            "$type": "SelectTargetsByShape",
             "campTargetType": "Enemy",
-            "shapeName": "CircleR20H5"
+            "shapeName": "CircleR20H5",
+            "sizeRatio": 1.0
           }
         },
         {
           "$type": "TriggerAttackEvent",
-          "targetType": "Enemy",
           "attackEvent": {
             "attackInfo": {
               "attackProperty": {
-                "damagePercentageRatio": 0.0,
-                "strikeType": "Blunt",
-                "enBreak": 999999.0,
                 "damagePercentage": 0.0,
+                "damagePercentageRatio": 0.0,
                 "elementDurability": 100.0,
-                "arkheGrade": 0.0
+                "enBreak": 999999.0,
+                "strikeType": "Blunt",
+                "IIPHCFEONLK": 0.0
               },
-              "cameraShake": {
-                "shakeTime": 0.5,
-                "shakeType": "CustomVector",
-                "shakeDistance": 100.0,
-                "MNKFEFOKFKP": "",
-                "shakeRange": 2.0
-              },
-              "hitPattern": {
-                "FLFCIDDNMNA": "",
-                "onHitEffectName": "none",
-                "hitHaltTimeScale": 0.05,
-                "hitImpulseType": "LV0"
-              },
-              "forceCameraShake": true,
+              "attackTag": "",
               "attenuationGroup": "default",
               "attenuationTag": "",
-              "attackTag": ""
+              "cameraShake": {
+                "shakeDistance": 100.0,
+                "shakeRange": 2.0,
+                "shakeTime": 0.5,
+                "shakeType": "CustomVector",
+                "MNKFEFOKFKP": ""
+              },
+              "forceCameraShake": true,
+              "hitPattern": {
+                "hitHaltTimeScale": 0.05,
+                "hitImpulseType": "LV0",
+                "onHitEffectName": "none",
+                "FLFCIDDNMNA": ""
+              }
             },
             "attackPattern": {
-              "$type": "DDLDAMKEKJD",
-              "radius": 20.0,
-              "height": 3.0,
-              "triggerType": "TriggerNoRepeat",
+              "$type": "ConfigAttackCircle",
               "born": {
-                "$type": "NABPLNFPHCK",
+                "$type": "ConfigBornBySelf",
                 "useRotation": true
-              }
+              },
+              "height": 3.0,
+              "radius": 20.0,
+              "triggerType": "TriggerNoRepeat"
             }
-          }
+          },
+          "targetType": "Enemy"
         }
-      ],
-      "abilityName": "Monster_Hound_Planelurker_Abyss_ElementBurstExplode"
+      ]
     }
   },
   {
     "Default": {
+      "abilityName": "Monster_Hound_Planelurker_Abyss_ElementBurstAS",
       "modifiers": {
         "Planelurker_ElementBurst_Appear_WindZone": {
           "duration": 1.0,
@@ -3047,30 +3048,30 @@
           "modifierMixins": [
             {
               "$type": "WindZoneMixin",
-              "targetType": "Enemy",
-              "modifierName": "",
-              "NGFJGIAMCKD": 0.0,
-              "NCIPCJFOKFG": -7.5,
-              "ICPNECKICCJ": 0.0,
+              "attenuation": 0.0,
               "born": {
-                "$type": "NABPLNFPHCK",
-                "useRotation": true,
+                "$type": "ConfigBornBySelf",
                 "offset": {
                   "x": 0.0,
-                  "z": 0.0,
-                  "y": 0.0
-                }
+                  "y": 0.0,
+                  "z": 0.0
+                },
+                "useRotation": true
               },
-              "shapeName": "CircleR7_5",
+              "innerRadius": 0.0,
+              "modifierName": "",
               "predicates": [
                 {
-                  "$type": "DEOFBICNFHF",
+                  "$type": "ByEntityTypes",
                   "entityTypes": [
                     "Avatar",
                     "Partner"
                   ]
                 }
-              ]
+              ],
+              "shapeName": "CircleR7_5",
+              "strength": -7.5,
+              "targetType": "Enemy"
             }
           ],
           "modifierName": "",
@@ -3080,21 +3081,21 @@
       "onAbilityStart": [
         {
           "$type": "FireEffect",
-          "effectPattern": "Eff_Monster_Hound_Planelurker_ElementalBurst_Dust",
-          "scale": 1.0,
           "born": {
-            "$type": "LKIBKKFEOLJ",
-            "positionKey": "_MONSTER_PLANELURKER_ABYSS_CENTERPOS",
+            "$type": "ConfigBornByGlobalValue",
             "directionKey": "",
-            "onGround": true,
             "offset": {
               "x": 0.0,
-              "z": 0.0,
-              "y": 0.0
-            }
+              "y": 0.0,
+              "z": 0.0
+            },
+            "onGround": true,
+            "positionKey": "_MONSTER_PLANELURKER_ABYSS_CENTERPOS"
           },
-          "ILLLPEOODKP": "",
-          "effectTempleteID": -1.0
+          "effectPattern": "Eff_Monster_Hound_Planelurker_ElementalBurst_Dust",
+          "effectTempleteID": -1.0,
+          "scale": 1.0,
+          "ILLLPEOODKP": ""
         },
         {
           "$type": "ApplyModifier",
@@ -3102,120 +3103,168 @@
         },
         {
           "$type": "DamageByAttackValue",
+          "attacker": "Self",
           "attackInfo": {
             "attackProperty": {
-              "elementType": "Rock",
-              "damagePercentageRatio": 0.0,
-              "strikeType": "Blunt",
-              "enBreak": 999999.0,
               "damagePercentage": 0.25,
+              "damagePercentageRatio": 0.0,
               "elementDurability": 50.0,
-              "arkheGrade": 0.0
+              "elementType": "Rock",
+              "enBreak": 999999.0,
+              "strikeType": "Blunt",
+              "IIPHCFEONLK": 0.0
             },
-            "hitPattern": {
-              "FLFCIDDNMNA": "",
-              "onHitEffectName": "default",
-              "hitHaltTimeScale": 0.05,
-              "hitImpulseType": "LV5"
-            },
+            "attackTag": "",
             "attenuationGroup": "default",
             "attenuationTag": "",
-            "attackTag": ""
+            "hitPattern": {
+              "hitHaltTimeScale": 0.05,
+              "hitImpulseType": "LV5",
+              "onHitEffectName": "default",
+              "FLFCIDDNMNA": ""
+            }
           },
-          "attacker": "Self",
           "born": {
-            "$type": "BGOLIIIHLMO",
+            "$type": "ConfigBornByAttachPoint",
             "attachPointName": "RootNode",
             "useRotation": true
           },
           "otherTargets": {
-            "$type": "INIACGFCEDH",
-            "sizeRatio": 1.0,
+            "$type": "SelectTargetsByShape",
             "campTargetType": "Enemy",
-            "shapeName": "CircleR7_5"
+            "shapeName": "CircleR7_5",
+            "sizeRatio": 1.0
           }
         },
         {
           "$type": "TriggerAttackEvent",
-          "targetType": "Enemy",
           "attackEvent": {
             "attackInfo": {
               "attackProperty": {
-                "damagePercentageRatio": 0.0,
-                "strikeType": "Blunt",
-                "enBreak": 999999.0,
                 "damagePercentage": 0.0,
+                "damagePercentageRatio": 0.0,
                 "elementDurability": 100.0,
-                "arkheGrade": 0.0
+                "enBreak": 999999.0,
+                "strikeType": "Blunt",
+                "IIPHCFEONLK": 0.0
               },
-              "cameraShake": {
-                "shakeTime": 0.5,
-                "shakeType": "CustomVector",
-                "shakeDistance": 100.0,
-                "MNKFEFOKFKP": "",
-                "shakeRange": 2.0
-              },
-              "hitPattern": {
-                "FLFCIDDNMNA": "",
-                "onHitEffectName": "none",
-                "hitHaltTimeScale": 0.05,
-                "hitImpulseType": "LV0"
-              },
-              "forceCameraShake": true,
+              "attackTag": "",
               "attenuationGroup": "default",
               "attenuationTag": "",
-              "attackTag": ""
+              "cameraShake": {
+                "shakeDistance": 100.0,
+                "shakeRange": 2.0,
+                "shakeTime": 0.5,
+                "shakeType": "CustomVector",
+                "MNKFEFOKFKP": ""
+              },
+              "forceCameraShake": true,
+              "hitPattern": {
+                "hitHaltTimeScale": 0.05,
+                "hitImpulseType": "LV0",
+                "onHitEffectName": "none",
+                "FLFCIDDNMNA": ""
+              }
             },
             "attackPattern": {
-              "$type": "DDLDAMKEKJD",
-              "radius": 7.5,
-              "height": 3.0,
-              "triggerType": "TriggerNoRepeat",
+              "$type": "ConfigAttackCircle",
               "born": {
-                "$type": "NABPLNFPHCK",
+                "$type": "ConfigBornBySelf",
                 "useRotation": true
-              }
+              },
+              "height": 3.0,
+              "radius": 7.5,
+              "triggerType": "TriggerNoRepeat"
             }
-          }
+          },
+          "targetType": "Enemy"
         }
-      ],
-      "abilityName": "Monster_Hound_Planelurker_Abyss_ElementBurstAS"
+      ]
     }
   },
   {
     "Default": {
+      "abilityName": "Monster_Hound_Planelurker_Abyss_FindBlinkPoint_ElementBurstStart",
       "onAbilityStart": [
         {
           "$type": "TryFindBlinkPointByBorn",
-          "hitSceneTest": false,
-          "DMDGAFINHPO": 2.5,
           "born": {
-            "$type": "LKIBKKFEOLJ",
-            "positionKey": "_MONSTER_PLANELURKER_ABYSS_CENTERPOS",
+            "$type": "ConfigBornByGlobalValue",
             "directionKey": "",
             "offset": {
               "x": 0.0,
-              "z": 0.0,
-              "y": 0.0
-            }
-          }
+              "y": 0.0,
+              "z": 0.0
+            },
+            "positionKey": "_MONSTER_PLANELURKER_ABYSS_CENTERPOS"
+          },
+          "hitSceneTest": false,
+          "limitY": 2.5
         }
-      ],
-      "abilityName": "Monster_Hound_Planelurker_Abyss_FindBlinkPoint_ElementBurstStart"
+      ]
     }
   },
   {
     "Default": {
+      "abilityName": "Monster_Hound_Planelurker_Abyss_Blink",
       "onAbilityStart": [
         {
           "$type": "DoBlink"
         }
-      ],
-      "abilityName": "Monster_Hound_Planelurker_Abyss_Blink"
+      ]
     }
   },
   {
     "Default": {
+      "abilityMixins": [
+        {
+          "$type": "AttachToStateIDMixin",
+          "modifierName": "Planelurker_Abyss_DeathTornado_State",
+          "stateIDs": [
+            "DeathTornadoStay"
+          ],
+          "LJPPDIGCJMJ": ""
+        },
+        {
+          "$type": "AttachToMultiNormalizedTimeMixin",
+          "modifierName": "Planelurker_Abyss_DeathTornado_Effect",
+          "normalizedStateIDList": [
+            {
+              "normalizeStart": 0.809,
+              "stateID": "DeathTornado_StayBS"
+            },
+            {
+              "stateID": "DeathTornado_Stay"
+            },
+            {
+              "stateID": "DeathTornado_StayAS"
+            },
+            {
+              "normalizeEnd": 0.374,
+              "stateID": "DeathTornado_AS"
+            }
+          ],
+          "LJPPDIGCJMJ": ""
+        },
+        {
+          "$type": "AttachModifierToSelfGlobalValueMixin",
+          "defaultGlobalValueOnCreate": 0.0,
+          "globalValueKey": "_MONSTER_PLANELURKER_ABYSS_LOCKPOINT_STATE",
+          "modifierNameSteps": [
+            "Planelurker_Abyss_LockPoint_Default",
+            "Planelurker_Abyss_LockPoint_DeathTornado"
+          ],
+          "valueSteps": [
+            -0.5,
+            0.5,
+            1.5
+          ]
+        }
+      ],
+      "abilityName": "Monster_Hound_Planelurker_Abyss_DeathTornado",
+      "abilitySpecials": {
+        "Planelurker_Abyss_MaxHP": 0.0
+      },
       "modifiers": {
         "Planelurker_Abyss_LockPoint_Default": {
           "elementDurability": 100.0,
@@ -3254,71 +3303,24 @@
           "AIHNJLDFEGJ": 0.0
         },
         "Planelurker_Abyss_DeathTornado_Effect": {
+          "elementDurability": 100.0,
+          "modifierName": "",
           "onAdded": [
             {
               "$type": "AttachEffect",
-              "ILLLPEOODKP": "",
-              "scale": 1.0,
               "effectPattern": "Eff_Monster_Hound_Planelurker_DeathTornado_Loop_Abyss",
-              "effectTempleteID": -1.0
+              "effectTempleteID": -1.0,
+              "scale": 1.0,
+              "ILLLPEOODKP": ""
             },
             {
               "$type": "ShowReminder",
               "id": 1001840094
             }
           ],
-          "elementDurability": 100.0,
-          "modifierName": "",
           "AIHNJLDFEGJ": 0.0
         },
         "Planelurker_Abyss_DeathTornado_State": {
-          "onRemoved": [
-            {
-              "$type": "SetGlobalValue",
-              "key": "_MONSTER_PLANELURKER_ABYSS_LOCKPOINT_STATE",
-              "minValue": 0.0,
-              "maxValue": 0.0,
-              "CBOMLBFIPJM": 0.0
-            }
-          ],
-          "onAdded": [
-            {
-              "$type": "SetGlobalValue",
-              "key": "_MONSTER_PLANELURKER_ABYSS_ISLOCKHP",
-              "minValue": 0.0,
-              "maxValue": 0.0,
-              "CBOMLBFIPJM": 0.0
-            },
-            {
-              "$type": "SetGlobalValue",
-              "key": "_MONSTER_PLANELURKER_ABYSS_LOCKPOINT_STATE",
-              "minValue": 0.0,
-              "maxValue": 0.0,
-              "CBOMLBFIPJM": 1.0
-            },
-            {
-              "$type": "SetGlobalValue",
-              "key": "GV_Manager_Natsaurus_Command",
-              "minValue": 0.0,
-              "maxValue": 0.0,
-              "CBOMLBFIPJM": 1.0,
-              "otherTargets": {
-                "$type": "BILHLNFHEDG",
-                "GGKIEIJLCJJ": 5
-              }
-            },
-            {
-              "$type": "GetFightProperty",
-              "globalValueKey": "_MONSTER_PLANELURKER_ABYSS_MAXHP",
-              "fightProp": "FIGHT_PROP_MAX_HP"
-            },
-            {
-              "$type": "SetGlobalValueToOverrideMap",
-              "globalValueKey": "_MONSTER_PLANELURKER_ABYSS_MAXHP",
-              "abilityName": "",
-              "overrideMapKey": "Planelurker_Abyss_MaxHP"
-            }
-          ],
           "elementDurability": 100.0,
           "modifierMixins": [
             {
@@ -3326,87 +3328,87 @@
             },
             {
               "$type": "FrequencyShieldBarMixin",
-              "DNBPEBDAAEL": 1,
               "maxValue": 200.0,
-              "useMutiPlayerFixData": true,
-              "JGDBCAHIKHJ": [
-                {
-                  "OBNBLOBMNLD": 3,
-                  "attackTag": "NyxAttack"
-                },
-                {
-                  "OBNBLOBMNLD": 80,
-                  "attackTag": "DrillheadSpecialAttack"
-                }
-              ],
-              "GPIBKOHGEIJ": "",
               "onShieldBroken": [
                 {
                   "$type": "ActCameraShake",
                   "cameraShake": {
-                    "shakeTime": 0.36,
                     "shakeDistance": 50.0,
-                    "MNKFEFOKFKP": "",
-                    "shakeRange": 3.0
+                    "shakeRange": 3.0,
+                    "shakeTime": 0.36,
+                    "MNKFEFOKFKP": ""
                   }
                 },
                 {
                   "$type": "FireEffect",
                   "effectPattern": "Eff_Monster_Hound_Planelurker_Weak_Abyss",
+                  "effectTempleteID": -1.0,
                   "scale": 1.0,
-                  "ILLLPEOODKP": "",
-                  "effectTempleteID": -1.0
+                  "ILLLPEOODKP": ""
                 },
                 {
                   "$type": "SetAnimatorTrigger",
-                  "MPTriggerOnRemote": true,
+                  "mpTriggerOnRemote": true,
                   "triggerID": "WeakStart"
                 },
                 {
                   "$type": "DamageByAttackValue",
+                  "attacker": "Self",
                   "attackInfo": {
                     "attackProperty": {
-                      "damagePercentageRatio": 0.0,
-                      "strikeType": "Blunt",
-                      "enBreak": 999999.0,
-                      "trueDamage": true,
-                      "damagePercentage": 0.0,
                       "damageExtra": [
                         "Planelurker_Abyss_MaxHP",
                         0.35,
                         "MUL"
                       ],
+                      "damagePercentage": 0.0,
+                      "damagePercentageRatio": 0.0,
                       "elementDurability": 50.0,
-                      "arkheGrade": 0.0
+                      "enBreak": 999999.0,
+                      "strikeType": "Blunt",
+                      "trueDamage": true,
+                      "IIPHCFEONLK": 0.0
                     },
-                    "hitPattern": {
-                      "FLFCIDDNMNA": "",
-                      "onHitEffectName": "default",
-                      "hitHaltTimeScale": 0.05,
-                      "hitImpulseType": "LV5"
-                    },
+                    "attackTag": "",
                     "attenuationGroup": "default",
                     "attenuationTag": "",
-                    "attackTag": ""
+                    "hitPattern": {
+                      "hitHaltTimeScale": 0.05,
+                      "hitImpulseType": "LV5",
+                      "onHitEffectName": "default",
+                      "FLFCIDDNMNA": ""
+                    }
                   },
-                  "attacker": "Self",
                   "born": {
-                    "$type": "BGOLIIIHLMO",
+                    "$type": "ConfigBornByAttachPoint",
                     "attachPointName": "RootNode",
                     "useRotation": true
                   }
                 }
               ],
-              "KEAKICENFDB": -1.0,
               "showDamageText": "",
-              "NDPMJBNPJLJ": true
+              "useMutiPlayerFixData": true,
+              "KEAKICENFDB": -1.0,
+              "DNBPEBDAAEL": 1,
+              "NDPMJBNPJLJ": true,
+              "GPIBKOHGEIJ": "",
+              "JGDBCAHIKHJ": [
+                {
+                  "attackTag": "NyxAttack",
+                  "OBNBLOBMNLD": 3
+                },
+                {
+                  "attackTag": "DrillheadSpecialAttack",
+                  "OBNBLOBMNLD": 80
+                }
+              ]
             },
             {
               "$type": "AttachActionToModifierMixin",
               "onAdded": [
                 {
                   "$type": "EnableHitBoxByName",
-                  "MPHBGGFPBII": [
+                  "hitBoxNames": [
                     "HitBox_01",
                     "HitBox_02",
                     "HitBox_03",
@@ -3418,7 +3420,7 @@
                 },
                 {
                   "$type": "EnablePushColliderName",
-                  "EFOJFJDLLMK": [
+                  "pushColliderNames": [
                     "PushCollider_01",
                     "PushCollider_01_Extra",
                     "PushCollider_02",
@@ -3437,25 +3439,25 @@
                 },
                 {
                   "$type": "EnableHitBoxByName",
-                  "MPHBGGFPBII": [
+                  "hitBoxNames": [
                     "HitBox_Center"
                   ],
                   "setEnable": true
                 },
                 {
                   "$type": "EnablePushColliderName",
-                  "setEnable": true,
-                  "EFOJFJDLLMK": [
+                  "pushColliderNames": [
                     "PushCollider_Center",
                     "PushCollider_Center_Extra",
                     "PushCollider_Center_Occluder"
-                  ]
+                  ],
+                  "setEnable": true
                 }
               ],
               "onRemoved": [
                 {
                   "$type": "EnableHitBoxByName",
-                  "MPHBGGFPBII": [
+                  "hitBoxNames": [
                     "HitBox_01",
                     "HitBox_02",
                     "HitBox_03",
@@ -3468,8 +3470,7 @@
                 },
                 {
                   "$type": "EnablePushColliderName",
-                  "setEnable": true,
-                  "EFOJFJDLLMK": [
+                  "pushColliderNames": [
                     "PushCollider_01",
                     "PushCollider_01_Extra",
                     "PushCollider_02",
@@ -3484,17 +3485,18 @@
                     "PushCollider_06_Extra",
                     "PushCollider_07",
                     "PushCollider_07_Extra"
-                  ]
+                  ],
+                  "setEnable": true
                 },
                 {
                   "$type": "EnableHitBoxByName",
-                  "MPHBGGFPBII": [
+                  "hitBoxNames": [
                     "HitBox_Center"
                   ]
                 },
                 {
                   "$type": "EnablePushColliderName",
-                  "EFOJFJDLLMK": [
+                  "pushColliderNames": [
                     "PushCollider_Center",
                     "PushCollider_Center_Extra",
                     "PushCollider_Center_Occluder"
@@ -3504,183 +3506,194 @@
             }
           ],
           "modifierName": "",
-          "AIHNJLDFEGJ": 0.0,
+          "onAdded": [
+            {
+              "$type": "SetGlobalValue",
+              "key": "_MONSTER_PLANELURKER_ABYSS_ISLOCKHP",
+              "maxValue": 0.0,
+              "minValue": 0.0,
+              "value": 0.0
+            },
+            {
+              "$type": "SetGlobalValue",
+              "key": "_MONSTER_PLANELURKER_ABYSS_LOCKPOINT_STATE",
+              "maxValue": 0.0,
+              "minValue": 0.0,
+              "value": 1.0
+            },
+            {
+              "$type": "SetGlobalValue",
+              "key": "GV_Manager_Natsaurus_Command",
+              "maxValue": 0.0,
+              "minValue": 0.0,
+              "otherTargets": {
+                "$type": "SelectTargetsBySelfGroup",
+                "value": 5
+              },
+              "value": 1.0
+            },
+            {
+              "$type": "GetFightProperty",
+              "fightProp": "FIGHT_PROP_MAX_HP",
+              "globalValueKey": "_MONSTER_PLANELURKER_ABYSS_MAXHP"
+            },
+            {
+              "$type": "SetGlobalValueToOverrideMap",
+              "abilityName": "",
+              "globalValueKey": "_MONSTER_PLANELURKER_ABYSS_MAXHP",
+              "overrideMapKey": "Planelurker_Abyss_MaxHP"
+            }
+          ],
           "onBeingHit": [
             {
               "$type": "FireEffect",
-              "effectPattern": "Eff_Monster_TheAbyss_FrequencyShield_NyxHit",
-              "scale": 1.0,
               "born": {
-                "$type": "MBOEKFDLCGB"
+                "$type": "ConfigBornByHitPoint"
               },
-              "ILLLPEOODKP": "",
+              "effectPattern": "Eff_Monster_TheAbyss_FrequencyShield_NyxHit",
               "effectTempleteID": -1.0,
               "predicates": [
                 {
-                  "$type": "CCHPEOBKOBO",
+                  "$type": "ByAttackTags",
                   "attackTags": [
                     "NyxAttack"
                   ]
                 },
                 {
-                  "$type": "GPEMEIHPCCF",
+                  "$type": "ByAny",
                   "predicates": [
                     {
-                      "$type": "ICMKHKKAALL",
+                      "$type": "ByHitElement",
                       "element": "Fire"
                     },
                     {
-                      "$type": "ICMKHKKAALL",
+                      "$type": "ByHitElement",
                       "element": "Wind"
                     },
                     {
-                      "$type": "ICMKHKKAALL",
+                      "$type": "ByHitElement",
                       "element": "Water"
                     },
                     {
-                      "$type": "ICMKHKKAALL",
+                      "$type": "ByHitElement",
                       "element": "Ice"
                     },
                     {
-                      "$type": "ICMKHKKAALL",
+                      "$type": "ByHitElement",
                       "element": "Electric"
                     },
                     {
-                      "$type": "ICMKHKKAALL",
+                      "$type": "ByHitElement",
                       "element": "Grass"
                     },
                     {
-                      "$type": "ICMKHKKAALL",
+                      "$type": "ByHitElement",
                       "element": "Rock"
                     }
                   ]
                 },
                 {
-                  "$type": "AJJPBBPBCMO",
+                  "$type": "ByHitDamage",
                   "damage": 0.0,
                   "useOriginDamage": true
                 }
-              ]
+              ],
+              "scale": 1.0,
+              "ILLLPEOODKP": ""
             }
-          ]
+          ],
+          "onRemoved": [
+            {
+              "$type": "SetGlobalValue",
+              "key": "_MONSTER_PLANELURKER_ABYSS_LOCKPOINT_STATE",
+              "maxValue": 0.0,
+              "minValue": 0.0,
+              "value": 0.0
+            }
+          ],
+          "AIHNJLDFEGJ": 0.0
         }
       },
       "onAbilityStart": [
         {
           "$type": "SetGlobalValue",
           "key": "_MONSTER_PLANELURKER_ABYSS_SERVANT_EFFECT",
-          "minValue": 0.0,
           "maxValue": 0.0,
-          "CBOMLBFIPJM": 2.0,
+          "minValue": 0.0,
           "otherTargets": {
-            "$type": "BILHLNFHEDG",
-            "GGKIEIJLCJJ": 3
-          }
+            "$type": "SelectTargetsBySelfGroup",
+            "value": 3
+          },
+          "value": 2.0
         }
-      ],
-      "abilityMixins": [
-        {
-          "$type": "AttachToStateIDMixin",
-          "LJPPDIGCJMJ": "",
-          "stateIDs": [
-            "DeathTornadoStay"
-          ],
-          "modifierName": "Planelurker_Abyss_DeathTornado_State"
-        },
-        {
-          "$type": "AttachToMultiNormalizedTimeMixin",
-          "modifierName": "Planelurker_Abyss_DeathTornado_Effect",
-          "LJPPDIGCJMJ": "",
-          "normalizedStateIDList": [
-            {
-              "stateID": "DeathTornado_StayBS",
-              "normalizeStart": 0.809
-            },
-            {
-              "stateID": "DeathTornado_Stay"
-            },
-            {
-              "stateID": "DeathTornado_StayAS"
-            },
-            {
-              "stateID": "DeathTornado_AS",
-              "normalizeEnd": 0.374
-            }
-          ]
-        },
-        {
-          "$type": "AttachModifierToSelfGlobalValueMixin",
-          "modifierNameSteps": [
-            "Planelurker_Abyss_LockPoint_Default",
-            "Planelurker_Abyss_LockPoint_DeathTornado"
-          ],
-          "valueSteps": [
-            -0.5,
-            0.5,
-            1.5
-          ],
-          "globalValueKey": "_MONSTER_PLANELURKER_ABYSS_LOCKPOINT_STATE",
-          "defaultGlobalValueOnCreate": 0.0
-        }
-      ],
-      "abilityName": "Monster_Hound_Planelurker_Abyss_DeathTornado",
-      "abilitySpecials": {
-        "Planelurker_Abyss_MaxHP": 0.0
-      }
+      ]
     }
   },
   {
     "Default": {
+      "abilityName": "Monster_Hound_Planelurker_Abyss_DeathTornadoAS",
       "onAbilityStart": [
         {
           "$type": "FireEffect",
           "effectPattern": "Eff_Monster_Hound_Planelurker_DeathTornado_AS_Abyss",
+          "effectTempleteID": -1.0,
           "scale": 1.0,
-          "ILLLPEOODKP": "",
-          "effectTempleteID": -1.0
+          "ILLLPEOODKP": ""
         },
         {
           "$type": "DamageByAttackValue",
+          "attacker": "Self",
           "attackInfo": {
             "attackProperty": {
-              "elementType": "Rock",
-              "damagePercentageRatio": 0.0,
-              "strikeType": "Blunt",
-              "enBreak": 999999.0,
               "damagePercentage": 5.0,
+              "damagePercentageRatio": 0.0,
               "elementDurability": 100.0,
-              "arkheGrade": 0.0
+              "elementType": "Rock",
+              "enBreak": 999999.0,
+              "strikeType": "Blunt",
+              "IIPHCFEONLK": 0.0
             },
-            "hitPattern": {
-              "FLFCIDDNMNA": "",
-              "onHitEffectName": "default",
-              "hitHaltTimeScale": 0.05,
-              "hitImpulseType": "LV5"
-            },
+            "attackTag": "Hound_PlaneLurker_Corruption_Tag",
             "attenuationGroup": "default",
             "attenuationTag": "",
-            "attackTag": "Hound_PlaneLurker_Corruption_Tag"
+            "hitPattern": {
+              "hitHaltTimeScale": 0.05,
+              "hitImpulseType": "LV5",
+              "onHitEffectName": "default",
+              "FLFCIDDNMNA": ""
+            }
           },
-          "attacker": "Self",
           "born": {
-            "$type": "NABPLNFPHCK",
+            "$type": "ConfigBornBySelf",
             "useRotation": true
           },
           "otherTargets": {
-            "$type": "INIACGFCEDH",
-            "sizeRatio": 1.0,
+            "$type": "SelectTargetsByShape",
             "campTargetType": "Enemy",
-            "shapeName": "CircleR35H5"
+            "shapeName": "CircleR35H5",
+            "sizeRatio": 1.0
           }
         }
-      ],
-      "abilityName": "Monster_Hound_Planelurker_Abyss_DeathTornadoAS"
+      ]
     }
   },
   {
     "Default": {
+      "abilityMixins": [
+        {
+          "$type": "AttachToAnimatorStateIDMixin",
+          "modifierName": "Planelurker_Abyss_WeakStart",
+          "stateIDs": [
+            "Weak_BS"
+          ],
+          "LJPPDIGCJMJ": ""
+        }
+      ],
+      "abilityName": "Monster_Hound_Planelurker_Abyss_Weak",
       "modifiers": {
         "Planelurker_Abyss_WeakStart": {
+          "elementDurability": 100.0,
+          "modifierName": "",
           "onAdded": [
             {
               "$type": "ApplyModifier",
@@ -3691,19 +3704,33 @@
               "modifierName": "UNIQUE_Planelurker_Abyss_Weak_DefenceDown"
             }
           ],
-          "elementDurability": 100.0,
-          "modifierName": "",
           "AIHNJLDFEGJ": 0.0
         },
         "UNIQUE_Monster_Planelurker_Abyss_WeakStateTimer": {
+          "duration": 23.6,
+          "elementDurability": 100.0,
+          "isUnique": true,
+          "modifierName": "",
+          "onAdded": [
+            {
+              "$type": "SetGlobalValue",
+              "key": "GV_Manager_Natsaurus_Command",
+              "maxValue": 0.0,
+              "minValue": 0.0,
+              "otherTargets": {
+                "$type": "SelectTargetsBySelfGroup",
+                "value": 5
+              },
+              "value": 2.0
+            }
+          ],
           "onReconnect": [
             {
               "$type": "SetAnimatorBool",
-              "CBOMLBFIPJM": true,
-              "boolID": "WeakState"
+              "boolID": "WeakState",
+              "value": true
             }
           ],
-          "duration": 23.6,
           "onRemoved": [
             {
               "$type": "SetAnimatorBool",
@@ -3711,62 +3738,36 @@
             },
             {
               "$type": "SetAnimatorTrigger",
-              "MPTriggerOnRemote": true,
+              "mpTriggerOnRemote": true,
               "triggerID": "WeakEnd"
             }
           ],
-          "onAdded": [
-            {
-              "$type": "SetGlobalValue",
-              "key": "GV_Manager_Natsaurus_Command",
-              "minValue": 0.0,
-              "maxValue": 0.0,
-              "CBOMLBFIPJM": 2.0,
-              "otherTargets": {
-                "$type": "BILHLNFHEDG",
-                "GGKIEIJLCJJ": 5
-              }
-            }
-          ],
           "stacking": "Unique",
-          "elementDurability": 100.0,
-          "modifierName": "",
-          "isUnique": true,
           "AIHNJLDFEGJ": 0.0
         },
         "UNIQUE_Planelurker_Abyss_Weak_DefenceDown": {
+          "elementDurability": 100.0,
+          "isUnique": true,
+          "modifierName": "",
           "properties": {
             "Actor_RockSubHurtDelta": -0.45
           },
           "stacking": "Unique",
-          "elementDurability": 100.0,
-          "modifierName": "",
-          "isUnique": true,
           "AIHNJLDFEGJ": 0.0
         }
-      },
-      "abilityMixins": [
-        {
-          "$type": "AttachToAnimatorStateIDMixin",
-          "LJPPDIGCJMJ": "",
-          "stateIDs": [
-            "Weak_BS"
-          ],
-          "modifierName": "Planelurker_Abyss_WeakStart"
-        }
-      ],
-      "abilityName": "Monster_Hound_Planelurker_Abyss_Weak"
+      }
     }
   },
   {
     "Default": {
+      "abilityName": "Monster_Hound_Planelurker_Abyss_WeakBS",
       "onAbilityStart": [
         {
           "$type": "FireEffect",
           "effectPattern": "Eff_Monster_Hound_Planelurker_Weak_DropOnGround_Abyss",
+          "effectTempleteID": -1.0,
           "scale": 1.0,
-          "ILLLPEOODKP": "",
-          "effectTempleteID": -1.0
+          "ILLLPEOODKP": ""
         },
         {
           "$type": "ActCameraShake",
@@ -3774,113 +3775,112 @@
             "shakeDir": {
               "y": -1.0
             },
+            "shakeDistance": 30.0,
+            "shakeRange": 1.5,
             "shakeTime": 0.3,
             "shakeType": "CustomVector",
-            "shakeDistance": 30.0,
-            "MNKFEFOKFKP": "",
-            "shakeRange": 1.5
+            "MNKFEFOKFKP": ""
           }
         },
         {
           "$type": "TriggerAttackEvent",
-          "targetType": "Enemy",
           "attackEvent": {
             "attackInfo": {
               "attackProperty": {
-                "damagePercentageRatio": 0.0,
-                "strikeType": "Blunt",
-                "enBreak": 999999.0,
                 "damagePercentage": 0.0,
+                "damagePercentageRatio": 0.0,
                 "elementDurability": 100.0,
-                "arkheGrade": 0.0
+                "enBreak": 999999.0,
+                "strikeType": "Blunt",
+                "IIPHCFEONLK": 0.0
               },
-              "cameraShake": {
-                "shakeTime": 0.3,
-                "shakeType": "CustomVector",
-                "shakeDistance": 50.0,
-                "MNKFEFOKFKP": "",
-                "shakeRange": 1.5
-              },
-              "hitPattern": {
-                "FLFCIDDNMNA": "",
-                "onHitEffectName": "none",
-                "hitHaltTimeScale": 0.01,
-                "hitImpulseType": "LV4"
-              },
-              "forceCameraShake": true,
+              "attackTag": "",
               "attenuationGroup": "default",
               "attenuationTag": "",
-              "attackTag": ""
+              "cameraShake": {
+                "shakeDistance": 50.0,
+                "shakeRange": 1.5,
+                "shakeTime": 0.3,
+                "shakeType": "CustomVector",
+                "MNKFEFOKFKP": ""
+              },
+              "forceCameraShake": true,
+              "hitPattern": {
+                "hitHaltTimeScale": 0.01,
+                "hitImpulseType": "LV4",
+                "onHitEffectName": "none",
+                "FLFCIDDNMNA": ""
+              }
             },
             "attackPattern": {
-              "$type": "DDLDAMKEKJD",
-              "radius": 6.5,
-              "height": 3.0,
-              "triggerType": "TriggerNoRepeat",
+              "$type": "ConfigAttackCircle",
               "born": {
-                "$type": "NABPLNFPHCK",
-                "useRotation": true,
+                "$type": "ConfigBornBySelf",
                 "offset": {
-                  "x": 0.0,
-                  "z": 1.5,
-                  "y": 0.0
-                }
-              }
+                  "x": 1.5,
+                  "y": 0.0,
+                  "z": 0.0
+                },
+                "useRotation": true
+              },
+              "height": 3.0,
+              "radius": 6.5,
+              "triggerType": "TriggerNoRepeat"
             }
-          }
+          },
+          "targetType": "Enemy"
         }
-      ],
-      "abilityName": "Monster_Hound_Planelurker_Abyss_WeakBS"
+      ]
     }
   },
   {
     "Default": {
+      "abilityName": "Monster_Hound_Planelurker_Abyss_WeakDestroyRockGadget",
       "onAbilityStart": [
         {
           "$type": "TriggerAttackEvent",
-          "targetType": "Enemy",
           "attackEvent": {
             "attackInfo": {
               "attackProperty": {
-                "damagePercentageRatio": 0.0,
-                "strikeType": "Blunt",
-                "enBreak": 999999.0,
                 "damagePercentage": 0.0,
+                "damagePercentageRatio": 0.0,
                 "elementDurability": 100.0,
-                "arkheGrade": 0.0
+                "enBreak": 999999.0,
+                "strikeType": "Blunt",
+                "IIPHCFEONLK": 0.0
               },
-              "hitPattern": {
-                "FLFCIDDNMNA": "",
-                "onHitEffectName": "none",
-                "hitHaltTimeScale": 0.01,
-                "hitImpulseType": "LV0"
-              },
+              "attackTag": "",
               "attenuationGroup": "default",
               "attenuationTag": "",
-              "attackTag": ""
+              "hitPattern": {
+                "hitHaltTimeScale": 0.01,
+                "hitImpulseType": "LV0",
+                "onHitEffectName": "none",
+                "FLFCIDDNMNA": ""
+              }
             },
             "attackPattern": {
-              "$type": "CBACJBPBPOL",
-              "size": {
-                "x": 10.0,
-                "z": 20.0,
-                "y": 10.0
-              },
-              "triggerType": "TriggerNoRepeat",
+              "$type": "ConfigAttackBox",
               "born": {
-                "$type": "NABPLNFPHCK",
-                "useRotation": true,
+                "$type": "ConfigBornBySelf",
                 "offset": {
-                  "x": -2.0,
-                  "z": -10.0,
-                  "y": 5.0
-                }
-              }
+                  "x": -10.0,
+                  "y": 5.0,
+                  "z": -2.0
+                },
+                "useRotation": true
+              },
+              "size": {
+                "x": 20.0,
+                "y": 10.0,
+                "z": 10.0
+              },
+              "triggerType": "TriggerNoRepeat"
             }
-          }
+          },
+          "targetType": "Enemy"
         }
-      ],
-      "abilityName": "Monster_Hound_Planelurker_Abyss_WeakDestroyRockGadget"
+      ]
     }
   }
 ]

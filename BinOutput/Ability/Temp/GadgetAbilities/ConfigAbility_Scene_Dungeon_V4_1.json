@@ -1,6 +1,28 @@
 [
   {
     "Default": {
+      "abilityMixins": [
+        {
+          "$type": "AttachModifierToSelfGlobalValueNoInitMixin",
+          "globalValueKey": "SGV_Limiter_Count",
+          "modifierNameSteps": [
+            "Blank",
+            "Limiter_Effect_Lv1_Team",
+            "Limiter_Effect_Lv2_Team",
+            "Limiter_Effect_Lv3_Team"
+          ],
+          "valueSteps": [
+            -1.0,
+            0.5,
+            1.5,
+            2.5,
+            3.5
+          ],
+          "DEFOFMOIAAI": true
+        }
+      ],
+      "abilityName": "DynamicAbility_Wriothesley_Dungeon_TeamAbility",
+      "isDynamicAbility": true,
       "modifiers": {
         "Blank": {
           "elementDurability": 100.0,
@@ -41,189 +63,331 @@
           "AIHNJLDFEGJ": 0.0
         },
         "Limiter_Effect_Lv1": {
+          "elementDurability": 100.0,
+          "modifierName": "",
           "onAdded": [
             {
               "$type": "AttachEffect",
-              "ILLLPEOODKP": "",
-              "scale": 1.0,
               "effectPattern": "Eff_SceneObj_EnergyStation_01_Follow_01",
-              "effectTempleteID": -1.0
+              "effectTempleteID": -1.0,
+              "scale": 1.0,
+              "ILLLPEOODKP": ""
             }
           ],
-          "elementDurability": 100.0,
-          "modifierName": "",
           "AIHNJLDFEGJ": 0.0
         },
         "Limiter_Effect_Lv2": {
+          "elementDurability": 100.0,
+          "modifierName": "",
           "onAdded": [
             {
               "$type": "AttachEffect",
-              "ILLLPEOODKP": "",
-              "scale": 1.0,
               "effectPattern": "Eff_SceneObj_EnergyStation_01_Follow_02",
-              "effectTempleteID": -1.0
+              "effectTempleteID": -1.0,
+              "scale": 1.0,
+              "ILLLPEOODKP": ""
             }
           ],
-          "elementDurability": 100.0,
-          "modifierName": "",
           "AIHNJLDFEGJ": 0.0
         },
         "Limiter_Effect_Lv3": {
+          "elementDurability": 100.0,
+          "modifierName": "",
           "onAdded": [
             {
               "$type": "AttachEffect",
-              "ILLLPEOODKP": "",
-              "scale": 1.0,
               "effectPattern": "Eff_SceneObj_EnergyStation_01_Follow_03",
-              "effectTempleteID": -1.0
+              "effectTempleteID": -1.0,
+              "scale": 1.0,
+              "ILLLPEOODKP": ""
             }
           ],
-          "elementDurability": 100.0,
-          "modifierName": "",
           "AIHNJLDFEGJ": 0.0
         }
-      },
-      "abilityMixins": [
-        {
-          "$type": "AttachModifierToSelfGlobalValueNoInitMixin",
-          "modifierNameSteps": [
-            "Blank",
-            "Limiter_Effect_Lv1_Team",
-            "Limiter_Effect_Lv2_Team",
-            "Limiter_Effect_Lv3_Team"
-          ],
-          "DEFOFMOIAAI": true,
-          "valueSteps": [
-            -1.0,
-            0.5,
-            1.5,
-            2.5,
-            3.5
-          ],
-          "globalValueKey": "SGV_Limiter_Count"
-        }
-      ],
-      "abilityName": "DynamicAbility_Wriothesley_Dungeon_TeamAbility",
-      "isDynamicAbility": true
+      }
     }
   },
   {
     "Default": {
-      "modifiers": {
-        "ZeroDegree": {
-          "onRemoved": [
+      "abilityMixins": [
+        {
+          "$type": "AttachModifierToSelfGlobalValueNoInitMixin",
+          "globalValueKey": "SGV_Is_Block",
+          "modifierNameSteps": [
+            "None",
+            "Block_Station"
+          ],
+          "valueSteps": [
+            -0.5,
+            0.5,
+            1.5
+          ],
+          "DEFOFMOIAAI": true
+        },
+        {
+          "$type": "AttachModifierToSelfGlobalValueNoInitMixin",
+          "globalValueKey": "Is_ReceiveEnergy",
+          "modifierNameSteps": [
+            "None_Receive",
+            "Is_Receive"
+          ],
+          "valueSteps": [
+            -0.5,
+            0.5,
+            1.5
+          ],
+          "DEFOFMOIAAI": true
+        },
+        {
+          "$type": "AttachToStateIDMixin",
+          "isCheckOnAttach": true,
+          "modifierName": "RotateFinish",
+          "stateIDs": [
+            "Stay0",
+            "Stay90",
+            "Stay180",
+            "Stay270"
+          ],
+          "LJPPDIGCJMJ": ""
+        },
+        {
+          "$type": "DoActionOnGlobalValueChangeMixin",
+          "actions": [
             {
-              "$type": "SendEffectTrigger",
-              "parameter": "State",
-              "GGKIEIJLCJJ": 201,
-              "effectPattern": "Eff_SceneObj_EnergyStation_01_Laser",
-              "type": "Int",
-              "attachPoint": ""
+              "$type": "Predicated",
+              "failActions": [
+                {
+                  "$type": "SetGlobalValue",
+                  "key": "Can_Emission",
+                  "maxValue": 0.0,
+                  "minValue": 0.0,
+                  "value": 0.0
+                }
+              ],
+              "successActions": [
+                {
+                  "$type": "SetGlobalValue",
+                  "key": "Can_Emission",
+                  "maxValue": 0.0,
+                  "minValue": 0.0,
+                  "value": 1.0
+                }
+              ],
+              "targetPredicates": [
+                {
+                  "$type": "ByTargetGlobalValue",
+                  "key": "Is_ReceiveEnergy",
+                  "value": 1.0
+                },
+                {
+                  "$type": "ByTargetGlobalValue",
+                  "key": "SGV_RightPosition",
+                  "value": 1.0
+                },
+                {
+                  "$type": "ByTargetGlobalValue",
+                  "key": "Is_RoFinish",
+                  "value": 1.0
+                }
+              ]
             }
           ],
+          "globalValueKey": "Is_ReceiveEnergy"
+        },
+        {
+          "$type": "DoActionOnGlobalValueChangeMixin",
+          "actions": [
+            {
+              "$type": "Predicated",
+              "failActions": [
+                {
+                  "$type": "SetGlobalValue",
+                  "key": "Can_Emission",
+                  "maxValue": 0.0,
+                  "minValue": 0.0,
+                  "value": 0.0
+                }
+              ],
+              "successActions": [
+                {
+                  "$type": "SetGlobalValue",
+                  "key": "Can_Emission",
+                  "maxValue": 0.0,
+                  "minValue": 0.0,
+                  "value": 1.0
+                }
+              ],
+              "targetPredicates": [
+                {
+                  "$type": "ByTargetGlobalValue",
+                  "key": "Is_ReceiveEnergy",
+                  "value": 1.0
+                },
+                {
+                  "$type": "ByTargetGlobalValue",
+                  "key": "Is_RoFinish",
+                  "value": 1.0
+                },
+                {
+                  "$type": "ByTargetGlobalValue",
+                  "key": "SGV_RightPosition",
+                  "value": 1.0
+                }
+              ]
+            }
+          ],
+          "globalValueKey": "Is_RoFinish"
+        },
+        {
+          "$type": "AttachModifierToSelfGlobalValueNoInitMixin",
+          "globalValueKey": "Can_Emission",
+          "modifierNameSteps": [
+            "Fade",
+            "Emission"
+          ],
+          "valueSteps": [
+            -0.5,
+            0.5,
+            1.5
+          ],
+          "DEFOFMOIAAI": true
+        },
+        {
+          "$type": "AttachToGadgetStateMixin",
+          "modifierName": "ZeroDegree"
+        },
+        {
+          "$type": "AttachToGadgetStateMixin",
+          "gadgetState": 1,
+          "modifierName": "NinetyDegree"
+        },
+        {
+          "$type": "AttachToGadgetStateMixin",
+          "gadgetState": 2,
+          "modifierName": "OneHundredAndEightyDegree"
+        },
+        {
+          "$type": "AttachToGadgetStateMixin",
+          "gadgetState": 3,
+          "modifierName": "TwoHundredAndSeventyDegree"
+        }
+      ],
+      "abilityName": "SceneObj_Area_Fd_Property_Ani_Tree_EnergyStation_01",
+      "modifiers": {
+        "ZeroDegree": {
+          "elementDurability": 100.0,
+          "modifierName": "",
           "onAdded": [
             {
               "$type": "SetAnimatorInt",
               "intID": "GadgetState",
-              "CBOMLBFIPJM": 0.0
+              "value": 0.0
             },
             {
               "$type": "SendEffectTrigger",
-              "parameter": "State",
+              "attachPoint": "",
               "effectPattern": "Eff_SceneObj_EnergyStation_01_Laser",
-              "type": "Int",
-              "attachPoint": ""
+              "parameter": "State",
+              "type": "Int"
             }
           ],
-          "elementDurability": 100.0,
-          "modifierName": "",
+          "onRemoved": [
+            {
+              "$type": "SendEffectTrigger",
+              "attachPoint": "",
+              "effectPattern": "Eff_SceneObj_EnergyStation_01_Laser",
+              "parameter": "State",
+              "type": "Int",
+              "value": 201
+            }
+          ],
           "AIHNJLDFEGJ": 0.0
         },
         "NinetyDegree": {
-          "onRemoved": [
-            {
-              "$type": "SendEffectTrigger",
-              "parameter": "State",
-              "GGKIEIJLCJJ": 201,
-              "effectPattern": "Eff_SceneObj_EnergyStation_01_Laser",
-              "type": "Int",
-              "attachPoint": ""
-            }
-          ],
+          "elementDurability": 100.0,
+          "modifierName": "",
           "onAdded": [
             {
               "$type": "SetAnimatorInt",
               "intID": "GadgetState",
-              "CBOMLBFIPJM": 1.0
+              "value": 1.0
             },
             {
               "$type": "SendEffectTrigger",
-              "parameter": "State",
+              "attachPoint": "",
               "effectPattern": "Eff_SceneObj_EnergyStation_01_Laser",
-              "type": "Int",
-              "attachPoint": ""
+              "parameter": "State",
+              "type": "Int"
             }
           ],
-          "elementDurability": 100.0,
-          "modifierName": "",
+          "onRemoved": [
+            {
+              "$type": "SendEffectTrigger",
+              "attachPoint": "",
+              "effectPattern": "Eff_SceneObj_EnergyStation_01_Laser",
+              "parameter": "State",
+              "type": "Int",
+              "value": 201
+            }
+          ],
           "AIHNJLDFEGJ": 0.0
         },
         "OneHundredAndEightyDegree": {
-          "onRemoved": [
-            {
-              "$type": "SendEffectTrigger",
-              "parameter": "State",
-              "GGKIEIJLCJJ": 201,
-              "effectPattern": "Eff_SceneObj_EnergyStation_01_Laser",
-              "type": "Int",
-              "attachPoint": ""
-            }
-          ],
+          "elementDurability": 100.0,
+          "modifierName": "",
           "onAdded": [
             {
               "$type": "SetAnimatorInt",
               "intID": "GadgetState",
-              "CBOMLBFIPJM": 2.0
+              "value": 2.0
             },
             {
               "$type": "SendEffectTrigger",
-              "parameter": "State",
+              "attachPoint": "",
               "effectPattern": "Eff_SceneObj_EnergyStation_01_Laser",
-              "type": "Int",
-              "attachPoint": ""
+              "parameter": "State",
+              "type": "Int"
             }
           ],
-          "elementDurability": 100.0,
-          "modifierName": "",
+          "onRemoved": [
+            {
+              "$type": "SendEffectTrigger",
+              "attachPoint": "",
+              "effectPattern": "Eff_SceneObj_EnergyStation_01_Laser",
+              "parameter": "State",
+              "type": "Int",
+              "value": 201
+            }
+          ],
           "AIHNJLDFEGJ": 0.0
         },
         "TwoHundredAndSeventyDegree": {
-          "onRemoved": [
-            {
-              "$type": "SendEffectTrigger",
-              "parameter": "State",
-              "GGKIEIJLCJJ": 201,
-              "effectPattern": "Eff_SceneObj_EnergyStation_01_Laser",
-              "type": "Int",
-              "attachPoint": ""
-            }
-          ],
+          "elementDurability": 100.0,
+          "modifierName": "",
           "onAdded": [
             {
               "$type": "SetAnimatorInt",
               "intID": "GadgetState",
-              "CBOMLBFIPJM": 3.0
+              "value": 3.0
             },
             {
               "$type": "SendEffectTrigger",
-              "parameter": "State",
+              "attachPoint": "",
               "effectPattern": "Eff_SceneObj_EnergyStation_01_Laser",
-              "type": "Int",
-              "attachPoint": ""
+              "parameter": "State",
+              "type": "Int"
             }
           ],
-          "elementDurability": 100.0,
-          "modifierName": "",
+          "onRemoved": [
+            {
+              "$type": "SendEffectTrigger",
+              "attachPoint": "",
+              "effectPattern": "Eff_SceneObj_EnergyStation_01_Laser",
+              "parameter": "State",
+              "type": "Int",
+              "value": 201
+            }
+          ],
           "AIHNJLDFEGJ": 0.0
         },
         "None": {
@@ -232,36 +396,36 @@
           "AIHNJLDFEGJ": 0.0
         },
         "Block_Station": {
-          "onRemoved": [
-            {
-              "$type": "FireEffect",
-              "effectPattern": "Eff_SceneObj_EnergyStation_01_LockDis",
-              "scale": 1.0,
-              "born": {
-                "$type": "BGOLIIIHLMO",
-                "attachPointName": "AttachPoint",
-                "useRotation": true
-              },
-              "ILLLPEOODKP": "",
-              "effectTempleteID": -1.0
-            }
-          ],
+          "elementDurability": 100.0,
+          "modifierName": "",
           "onAdded": [
             {
               "$type": "AttachEffect",
-              "ILLLPEOODKP": "",
               "born": {
-                "$type": "BGOLIIIHLMO",
+                "$type": "ConfigBornByAttachPoint",
                 "attachPointName": "AttachPoint",
                 "useRotation": true
               },
-              "scale": 1.0,
               "effectPattern": "Eff_SceneObj_EnergyStation_01_Lock",
-              "effectTempleteID": -1.0
+              "effectTempleteID": -1.0,
+              "scale": 1.0,
+              "ILLLPEOODKP": ""
             }
           ],
-          "elementDurability": 100.0,
-          "modifierName": "",
+          "onRemoved": [
+            {
+              "$type": "FireEffect",
+              "born": {
+                "$type": "ConfigBornByAttachPoint",
+                "attachPointName": "AttachPoint",
+                "useRotation": true
+              },
+              "effectPattern": "Eff_SceneObj_EnergyStation_01_LockDis",
+              "effectTempleteID": -1.0,
+              "scale": 1.0,
+              "ILLLPEOODKP": ""
+            }
+          ],
           "AIHNJLDFEGJ": 0.0
         },
         "None_Receive": {
@@ -269,9 +433,9 @@
           "modifierMixins": [
             {
               "$type": "ShaderStateMachineSwitchMixin",
-              "MGLMGICCHHK": "",
+              "IKJPMDJLPLP": 1,
               "HIJJCMPHDLA": true,
-              "IKJPMDJLPLP": 1
+              "MGLMGICCHHK": ""
             }
           ],
           "modifierName": "",
@@ -282,34 +446,34 @@
           "modifierMixins": [
             {
               "$type": "ShaderStateMachineSwitchMixin",
-              "MGLMGICCHHK": "",
-              "HIJJCMPHDLA": true
+              "HIJJCMPHDLA": true,
+              "MGLMGICCHHK": ""
             }
           ],
           "modifierName": "",
           "AIHNJLDFEGJ": 0.0
         },
         "RotateFinish": {
-          "onRemoved": [
-            {
-              "$type": "SetGlobalValue",
-              "key": "Is_RoFinish",
-              "minValue": 0.0,
-              "maxValue": 0.0,
-              "CBOMLBFIPJM": 0.0
-            }
-          ],
+          "elementDurability": 100.0,
+          "modifierName": "",
           "onAdded": [
             {
               "$type": "SetGlobalValue",
               "key": "Is_RoFinish",
-              "minValue": 0.0,
               "maxValue": 0.0,
-              "CBOMLBFIPJM": 1.0
+              "minValue": 0.0,
+              "value": 1.0
             }
           ],
-          "elementDurability": 100.0,
-          "modifierName": "",
+          "onRemoved": [
+            {
+              "$type": "SetGlobalValue",
+              "key": "Is_RoFinish",
+              "maxValue": 0.0,
+              "minValue": 0.0,
+              "value": 0.0
+            }
+          ],
           "AIHNJLDFEGJ": 0.0
         },
         "Fade": {
@@ -318,42 +482,29 @@
           "AIHNJLDFEGJ": 0.0
         },
         "Emission": {
-          "onRemoved": [
-            {
-              "$type": "RemoveModifier",
-              "modifierName": "LaserManager"
-            }
-          ],
+          "elementDurability": 100.0,
+          "modifierName": "",
           "onAdded": [
             {
               "$type": "ApplyModifier",
               "modifierName": "LaserManager"
             }
           ],
-          "elementDurability": 100.0,
-          "modifierName": "",
+          "onRemoved": [
+            {
+              "$type": "RemoveModifier",
+              "modifierName": "LaserManager"
+            }
+          ],
           "AIHNJLDFEGJ": 0.0
         },
         "LaserManager": {
-          "onAdded": [
-            {
-              "$type": "AttachEffect",
-              "ILLLPEOODKP": "",
-              "born": {
-                "$type": "BGOLIIIHLMO",
-                "attachPointName": "ShootPoint",
-                "useRotation": true
-              },
-              "scale": 1.0,
-              "effectPattern": "Eff_SceneObj_EnergyStation_01_Laser",
-              "effectTempleteID": -1.0
-            }
-          ],
           "elementDurability": 100.0,
           "modifierMixins": [
             {
               "$type": "LaserMixin",
-              "IHMEDEHIDKJ": [
+              "effectPattern": "Eff_SceneObj_EnergyStation_01_Laser",
+              "onLaserHit": [
                 {
                   "$type": "Predicated",
                   "successActions": [
@@ -363,17 +514,17 @@
                       "target": "Target"
                     }
                   ],
+                  "target": "Target",
                   "targetPredicates": [
                     {
-                      "$type": "EOFDCELPGFO",
-                      "CBOMLBFIPJM": 1.0,
-                      "key": "_IS_ENERGYSTATION"
+                      "$type": "ByTargetGlobalValue",
+                      "key": "_IS_ENERGYSTATION",
+                      "value": 1.0
                     }
-                  ],
-                  "target": "Target"
+                  ]
                 }
               ],
-              "GFBOOPIGHFK": [
+              "onLaserLeave": [
                 {
                   "$type": "Predicated",
                   "successActions": [
@@ -383,260 +534,107 @@
                       "target": "Target"
                     }
                   ],
+                  "target": "Target",
                   "targetPredicates": [
                     {
-                      "$type": "EOFDCELPGFO",
-                      "CBOMLBFIPJM": 1.0,
-                      "key": "_IS_ENERGYSTATION"
+                      "$type": "ByTargetGlobalValue",
+                      "key": "_IS_ENERGYSTATION",
+                      "value": 1.0
                     }
-                  ],
-                  "target": "Target"
+                  ]
                 }
-              ],
-              "effectPattern": "Eff_SceneObj_EnergyStation_01_Laser"
+              ]
             }
           ],
           "modifierName": "",
+          "onAdded": [
+            {
+              "$type": "AttachEffect",
+              "born": {
+                "$type": "ConfigBornByAttachPoint",
+                "attachPointName": "ShootPoint",
+                "useRotation": true
+              },
+              "effectPattern": "Eff_SceneObj_EnergyStation_01_Laser",
+              "effectTempleteID": -1.0,
+              "scale": 1.0,
+              "ILLLPEOODKP": ""
+            }
+          ],
           "AIHNJLDFEGJ": 0.0
         },
         "SetReceiveSGV_EnergyStation": {
-          "onRemoved": [
-            {
-              "$type": "SetGlobalValue",
-              "key": "Is_ReceiveEnergy",
-              "minValue": 0.0,
-              "maxValue": 0.0,
-              "CBOMLBFIPJM": 0.0
-            }
-          ],
+          "elementDurability": 100.0,
+          "modifierName": "",
           "onAdded": [
             {
               "$type": "SetGlobalValue",
               "key": "Is_ReceiveEnergy",
-              "minValue": 0.0,
               "maxValue": 0.0,
-              "CBOMLBFIPJM": 1.0
+              "minValue": 0.0,
+              "value": 1.0
             }
           ],
-          "elementDurability": 100.0,
-          "modifierName": "",
+          "onRemoved": [
+            {
+              "$type": "SetGlobalValue",
+              "key": "Is_ReceiveEnergy",
+              "maxValue": 0.0,
+              "minValue": 0.0,
+              "value": 0.0
+            }
+          ],
           "AIHNJLDFEGJ": 0.0
         }
       },
-      "abilityMixins": [
-        {
-          "$type": "AttachModifierToSelfGlobalValueNoInitMixin",
-          "modifierNameSteps": [
-            "None",
-            "Block_Station"
-          ],
-          "DEFOFMOIAAI": true,
-          "valueSteps": [
-            -0.5,
-            0.5,
-            1.5
-          ],
-          "globalValueKey": "SGV_Is_Block"
-        },
-        {
-          "$type": "AttachModifierToSelfGlobalValueNoInitMixin",
-          "modifierNameSteps": [
-            "None_Receive",
-            "Is_Receive"
-          ],
-          "DEFOFMOIAAI": true,
-          "valueSteps": [
-            -0.5,
-            0.5,
-            1.5
-          ],
-          "globalValueKey": "Is_ReceiveEnergy"
-        },
-        {
-          "$type": "AttachToStateIDMixin",
-          "isCheckOnAttach": true,
-          "LJPPDIGCJMJ": "",
-          "stateIDs": [
-            "Stay0",
-            "Stay90",
-            "Stay180",
-            "Stay270"
-          ],
-          "modifierName": "RotateFinish"
-        },
-        {
-          "$type": "DoActionOnGlobalValueChangeMixin",
-          "actions": [
-            {
-              "$type": "Predicated",
-              "successActions": [
-                {
-                  "$type": "SetGlobalValue",
-                  "key": "Can_Emission",
-                  "minValue": 0.0,
-                  "maxValue": 0.0,
-                  "CBOMLBFIPJM": 1.0
-                }
-              ],
-              "failActions": [
-                {
-                  "$type": "SetGlobalValue",
-                  "key": "Can_Emission",
-                  "minValue": 0.0,
-                  "maxValue": 0.0,
-                  "CBOMLBFIPJM": 0.0
-                }
-              ],
-              "targetPredicates": [
-                {
-                  "$type": "EOFDCELPGFO",
-                  "CBOMLBFIPJM": 1.0,
-                  "key": "Is_ReceiveEnergy"
-                },
-                {
-                  "$type": "EOFDCELPGFO",
-                  "CBOMLBFIPJM": 1.0,
-                  "key": "SGV_RightPosition"
-                },
-                {
-                  "$type": "EOFDCELPGFO",
-                  "CBOMLBFIPJM": 1.0,
-                  "key": "Is_RoFinish"
-                }
-              ]
-            }
-          ],
-          "globalValueKey": "Is_ReceiveEnergy"
-        },
-        {
-          "$type": "DoActionOnGlobalValueChangeMixin",
-          "actions": [
-            {
-              "$type": "Predicated",
-              "successActions": [
-                {
-                  "$type": "SetGlobalValue",
-                  "key": "Can_Emission",
-                  "minValue": 0.0,
-                  "maxValue": 0.0,
-                  "CBOMLBFIPJM": 1.0
-                }
-              ],
-              "failActions": [
-                {
-                  "$type": "SetGlobalValue",
-                  "key": "Can_Emission",
-                  "minValue": 0.0,
-                  "maxValue": 0.0,
-                  "CBOMLBFIPJM": 0.0
-                }
-              ],
-              "targetPredicates": [
-                {
-                  "$type": "EOFDCELPGFO",
-                  "CBOMLBFIPJM": 1.0,
-                  "key": "Is_ReceiveEnergy"
-                },
-                {
-                  "$type": "EOFDCELPGFO",
-                  "CBOMLBFIPJM": 1.0,
-                  "key": "Is_RoFinish"
-                },
-                {
-                  "$type": "EOFDCELPGFO",
-                  "CBOMLBFIPJM": 1.0,
-                  "key": "SGV_RightPosition"
-                }
-              ]
-            }
-          ],
-          "globalValueKey": "Is_RoFinish"
-        },
-        {
-          "$type": "AttachModifierToSelfGlobalValueNoInitMixin",
-          "modifierNameSteps": [
-            "Fade",
-            "Emission"
-          ],
-          "DEFOFMOIAAI": true,
-          "valueSteps": [
-            -0.5,
-            0.5,
-            1.5
-          ],
-          "globalValueKey": "Can_Emission"
-        },
-        {
-          "$type": "AttachToGadgetStateMixin",
-          "modifierName": "ZeroDegree"
-        },
-        {
-          "$type": "AttachToGadgetStateMixin",
-          "modifierName": "NinetyDegree",
-          "gadgetState": 1
-        },
-        {
-          "$type": "AttachToGadgetStateMixin",
-          "modifierName": "OneHundredAndEightyDegree",
-          "gadgetState": 2
-        },
-        {
-          "$type": "AttachToGadgetStateMixin",
-          "modifierName": "TwoHundredAndSeventyDegree",
-          "gadgetState": 3
-        }
-      ],
-      "abilityName": "SceneObj_Area_Fd_Property_Ani_Tree_EnergyStation_01",
       "onAdded": [
         {
           "$type": "SetGlobalValue",
           "key": "_IS_ENERGYSTATION",
-          "minValue": 0.0,
           "maxValue": 0.0,
-          "CBOMLBFIPJM": 1.0
+          "minValue": 0.0,
+          "value": 1.0
         },
         {
           "$type": "SetGlobalValue",
           "key": "Can_Emission",
-          "minValue": 0.0,
           "maxValue": 0.0,
-          "CBOMLBFIPJM": 0.0
+          "minValue": 0.0,
+          "value": 0.0
         },
         {
           "$type": "SetGlobalValue",
           "key": "Is_ReceiveEnergy",
-          "minValue": 0.0,
           "maxValue": 0.0,
-          "CBOMLBFIPJM": 0.0
+          "minValue": 0.0,
+          "value": 0.0
         },
         {
           "$type": "SetGlobalValue",
           "key": "Is_RoFinish",
-          "minValue": 0.0,
           "maxValue": 0.0,
-          "CBOMLBFIPJM": 1.0
+          "minValue": 0.0,
+          "value": 1.0
         }
       ]
     }
   },
   {
     "Default": {
+      "abilityMixins": [
+        {
+          "$type": "AttachToGadgetStateMixin",
+          "modifierName": "NormalState"
+        },
+        {
+          "$type": "AttachToGadgetStateMixin",
+          "gadgetState": 201,
+          "modifierName": "DeactiveState"
+        }
+      ],
+      "abilityName": "SceneObj_Area_Fd_Property_Ani_Tree_EnergyTerminal_01",
       "modifiers": {
         "NormalState": {
-          "onAdded": [
-            {
-              "$type": "AttachEffect",
-              "ILLLPEOODKP": "",
-              "born": {
-                "$type": "BGOLIIIHLMO",
-                "attachPointName": "ShootPoint",
-                "useRotation": true
-              },
-              "scale": 1.0,
-              "effectPattern": "Eff_SceneObj_EnergyStation_01_Laser",
-              "effectTempleteID": -1.0
-            }
-          ],
           "elementDurability": 100.0,
           "modifierMixins": [
             {
@@ -645,7 +643,8 @@
             },
             {
               "$type": "LaserMixin",
-              "IHMEDEHIDKJ": [
+              "effectPattern": "Eff_SceneObj_EnergyStation_01_Laser",
+              "onLaserHit": [
                 {
                   "$type": "Predicated",
                   "successActions": [
@@ -655,17 +654,17 @@
                       "target": "Target"
                     }
                   ],
+                  "target": "Target",
                   "targetPredicates": [
                     {
-                      "$type": "EOFDCELPGFO",
-                      "CBOMLBFIPJM": 1.0,
-                      "key": "_IS_ENERGYSTATION"
+                      "$type": "ByTargetGlobalValue",
+                      "key": "_IS_ENERGYSTATION",
+                      "value": 1.0
                     }
-                  ],
-                  "target": "Target"
+                  ]
                 }
               ],
-              "GFBOOPIGHFK": [
+              "onLaserLeave": [
                 {
                   "$type": "Predicated",
                   "successActions": [
@@ -675,20 +674,33 @@
                       "target": "Target"
                     }
                   ],
+                  "target": "Target",
                   "targetPredicates": [
                     {
-                      "$type": "EOFDCELPGFO",
-                      "CBOMLBFIPJM": 1.0,
-                      "key": "_IS_ENERGYSTATION"
+                      "$type": "ByTargetGlobalValue",
+                      "key": "_IS_ENERGYSTATION",
+                      "value": 1.0
                     }
-                  ],
-                  "target": "Target"
+                  ]
                 }
-              ],
-              "effectPattern": "Eff_SceneObj_EnergyStation_01_Laser"
+              ]
             }
           ],
           "modifierName": "",
+          "onAdded": [
+            {
+              "$type": "AttachEffect",
+              "born": {
+                "$type": "ConfigBornByAttachPoint",
+                "attachPointName": "ShootPoint",
+                "useRotation": true
+              },
+              "effectPattern": "Eff_SceneObj_EnergyStation_01_Laser",
+              "effectTempleteID": -1.0,
+              "scale": 1.0,
+              "ILLLPEOODKP": ""
+            }
+          ],
           "AIHNJLDFEGJ": 0.0
         },
         "DeactiveState": {
@@ -696,92 +708,41 @@
           "modifierMixins": [
             {
               "$type": "ShaderStateMachineSwitchMixin",
-              "MGLMGICCHHK": "",
-              "IKJPMDJLPLP": 1
+              "IKJPMDJLPLP": 1,
+              "MGLMGICCHHK": ""
             }
           ],
           "modifierName": "",
           "AIHNJLDFEGJ": 0.0
         },
         "SetReceiveSGV_EnergyStation": {
+          "elementDurability": 100.0,
+          "modifierName": "",
+          "onAdded": [
+            {
+              "$type": "SetGlobalValue",
+              "key": "Is_ReceiveEnergy",
+              "maxValue": 0.0,
+              "minValue": 0.0,
+              "value": 1.0
+            }
+          ],
           "onRemoved": [
             {
               "$type": "SetGlobalValue",
               "key": "Is_ReceiveEnergy",
-              "minValue": 0.0,
               "maxValue": 0.0,
-              "CBOMLBFIPJM": 0.0
+              "minValue": 0.0,
+              "value": 0.0
             }
           ],
-          "onAdded": [
-            {
-              "$type": "SetGlobalValue",
-              "key": "Is_ReceiveEnergy",
-              "minValue": 0.0,
-              "maxValue": 0.0,
-              "CBOMLBFIPJM": 1.0
-            }
-          ],
-          "elementDurability": 100.0,
-          "modifierName": "",
           "AIHNJLDFEGJ": 0.0
         }
-      },
-      "abilityMixins": [
-        {
-          "$type": "AttachToGadgetStateMixin",
-          "modifierName": "NormalState"
-        },
-        {
-          "$type": "AttachToGadgetStateMixin",
-          "modifierName": "DeactiveState",
-          "gadgetState": 201
-        }
-      ],
-      "abilityName": "SceneObj_Area_Fd_Property_Ani_Tree_EnergyTerminal_01"
+      }
     }
   },
   {
     "Default": {
-      "modifiers": {
-        "NoEnergy": {
-          "elementDurability": 100.0,
-          "modifierMixins": [
-            {
-              "$type": "ShaderStateMachineSwitchMixin",
-              "MGLMGICCHHK": "",
-              "IKJPMDJLPLP": 1
-            }
-          ],
-          "modifierName": "",
-          "AIHNJLDFEGJ": 0.0
-        },
-        "FullEnergy": {
-          "onAdded": [
-            {
-              "$type": "AttachEffect",
-              "ILLLPEOODKP": "",
-              "born": {
-                "$type": "BGOLIIIHLMO",
-                "attachPointName": "AttachPoint",
-                "useRotation": true
-              },
-              "scale": 1.0,
-              "effectPattern": "Eff_SceneObj_EnergyTerminal_01_Active",
-              "effectTempleteID": -1.0
-            }
-          ],
-          "elementDurability": 100.0,
-          "modifierMixins": [
-            {
-              "$type": "ShaderStateMachineSwitchMixin",
-              "MGLMGICCHHK": ""
-            }
-          ],
-          "modifierName": "",
-          "AIHNJLDFEGJ": 0.0
-        }
-      },
       "abilityMixins": [
         {
           "$type": "AttachToGadgetStateMixin",
@@ -789,8 +750,8 @@
         },
         {
           "$type": "AttachToGadgetStateMixin",
-          "modifierName": "FullEnergy",
-          "gadgetState": 201
+          "gadgetState": 201,
+          "modifierName": "FullEnergy"
         },
         {
           "$type": "DoActionOnGlobalValueChangeMixin",
@@ -800,14 +761,14 @@
               "successActions": [
                 {
                   "$type": "ChangeGadgetState",
-                  "ANIHOKMEKHK": 201
+                  "state": 201
                 }
               ],
               "targetPredicates": [
                 {
-                  "$type": "EOFDCELPGFO",
-                  "CBOMLBFIPJM": 1.0,
-                  "key": "Is_ReceiveEnergy"
+                  "$type": "ByTargetGlobalValue",
+                  "key": "Is_ReceiveEnergy",
+                  "value": 1.0
                 }
               ]
             }
@@ -816,45 +777,106 @@
         }
       ],
       "abilityName": "SceneObj_Area_Fd_Property_Ani_Tree_EnergyTerminal_02",
+      "modifiers": {
+        "NoEnergy": {
+          "elementDurability": 100.0,
+          "modifierMixins": [
+            {
+              "$type": "ShaderStateMachineSwitchMixin",
+              "IKJPMDJLPLP": 1,
+              "MGLMGICCHHK": ""
+            }
+          ],
+          "modifierName": "",
+          "AIHNJLDFEGJ": 0.0
+        },
+        "FullEnergy": {
+          "elementDurability": 100.0,
+          "modifierMixins": [
+            {
+              "$type": "ShaderStateMachineSwitchMixin",
+              "MGLMGICCHHK": ""
+            }
+          ],
+          "modifierName": "",
+          "onAdded": [
+            {
+              "$type": "AttachEffect",
+              "born": {
+                "$type": "ConfigBornByAttachPoint",
+                "attachPointName": "AttachPoint",
+                "useRotation": true
+              },
+              "effectPattern": "Eff_SceneObj_EnergyTerminal_01_Active",
+              "effectTempleteID": -1.0,
+              "scale": 1.0,
+              "ILLLPEOODKP": ""
+            }
+          ],
+          "AIHNJLDFEGJ": 0.0
+        }
+      },
       "onAdded": [
         {
           "$type": "SetGlobalValue",
           "key": "Is_ReceiveEnergy",
-          "minValue": 0.0,
           "maxValue": 0.0,
-          "CBOMLBFIPJM": 0.0
+          "minValue": 0.0,
+          "value": 0.0
         },
         {
           "$type": "SetGlobalValue",
           "key": "_IS_ENERGYSTATION",
-          "minValue": 0.0,
           "maxValue": 0.0,
-          "CBOMLBFIPJM": 1.0
+          "minValue": 0.0,
+          "value": 1.0
         }
       ]
     }
   },
   {
     "Default": {
+      "abilityMixins": [
+        {
+          "$type": "AttachToGadgetStateMixin",
+          "modifierName": "0Degree"
+        },
+        {
+          "$type": "AttachToGadgetStateMixin",
+          "gadgetState": 201,
+          "modifierName": "90Degree"
+        },
+        {
+          "$type": "AttachToGadgetStateMixin",
+          "gadgetState": 202,
+          "modifierName": "180Degree"
+        },
+        {
+          "$type": "AttachToGadgetStateMixin",
+          "gadgetState": 203,
+          "modifierName": "270Degree"
+        }
+      ],
+      "abilityName": "SceneObj_Level_Fd_Property_Ani_Prop_GearTurntable_01",
       "modifiers": {
         "LightManager": {
+          "elementDurability": 100.0,
+          "modifierName": "",
           "onAdded": [
             {
               "$type": "AttachEffect",
-              "ILLLPEOODKP": "",
               "born": {
-                "$type": "BGOLIIIHLMO",
+                "$type": "ConfigBornByAttachPoint",
                 "attachPointName": "RootNode",
                 "useRotation": true
               },
+              "effectPattern": "Eff_Level_FD_Freminet_Light_01",
+              "effectTempleteID": -1.0,
               "isPlatformDependent": true,
               "scale": 1.0,
-              "effectPattern": "Eff_Level_FD_Freminet_Light_01",
-              "effectTempleteID": -1.0
+              "ILLLPEOODKP": ""
             }
           ],
-          "elementDurability": 100.0,
-          "modifierName": "",
           "AIHNJLDFEGJ": 0.0
         },
         "UpManager": {
@@ -862,17 +884,17 @@
           "modifierMixins": [
             {
               "$type": "AttachModifierToSelfGlobalValueNoInitMixin",
+              "globalValueKey": "SGV_ArriveRoute",
               "modifierNameSteps": [
                 "None",
                 "UpEffect"
               ],
-              "DEFOFMOIAAI": true,
               "valueSteps": [
                 -0.5,
                 0.5,
                 1.5
               ],
-              "globalValueKey": "SGV_ArriveRoute"
+              "DEFOFMOIAAI": true
             }
           ],
           "modifierName": "",
@@ -883,116 +905,116 @@
           "modifierMixins": [
             {
               "$type": "AttachModifierToSelfGlobalValueNoInitMixin",
+              "globalValueKey": "SGV_Is_Lock",
               "modifierNameSteps": [
                 "NotLock",
                 "Lock"
               ],
-              "DEFOFMOIAAI": true,
               "valueSteps": [
                 -0.5,
                 0.5,
                 1.5
               ],
-              "globalValueKey": "SGV_Is_Lock"
+              "DEFOFMOIAAI": true
             }
           ],
           "modifierName": "",
           "AIHNJLDFEGJ": 0.0
         },
         "0Degree": {
+          "elementDurability": 100.0,
+          "modifierName": "",
           "onAdded": [
             {
               "$type": "SetAnimatorInt",
               "intID": "GadgetState",
-              "CBOMLBFIPJM": 0.0
+              "value": 0.0
             },
             {
               "$type": "FireEffect",
-              "effectPattern": "Eff_SceneObj_GearTurntable_01_Smoke_02",
-              "scale": 1.0,
               "born": {
-                "$type": "BGOLIIIHLMO",
+                "$type": "ConfigBornByAttachPoint",
                 "attachPointName": "RootNode",
                 "useRotation": true
               },
-              "ILLLPEOODKP": "",
-              "effectTempleteID": -1.0
+              "effectPattern": "Eff_SceneObj_GearTurntable_01_Smoke_02",
+              "effectTempleteID": -1.0,
+              "scale": 1.0,
+              "ILLLPEOODKP": ""
             }
           ],
-          "elementDurability": 100.0,
-          "modifierName": "",
           "AIHNJLDFEGJ": 0.0
         },
         "90Degree": {
+          "elementDurability": 100.0,
+          "modifierName": "",
           "onAdded": [
             {
               "$type": "SetAnimatorInt",
               "intID": "GadgetState",
-              "CBOMLBFIPJM": 201.0
+              "value": 201.0
             },
             {
               "$type": "FireEffect",
-              "effectPattern": "Eff_SceneObj_GearTurntable_01_Smoke_02",
-              "scale": 1.0,
               "born": {
-                "$type": "BGOLIIIHLMO",
+                "$type": "ConfigBornByAttachPoint",
                 "attachPointName": "RootNode",
                 "useRotation": true
               },
-              "ILLLPEOODKP": "",
-              "effectTempleteID": -1.0
+              "effectPattern": "Eff_SceneObj_GearTurntable_01_Smoke_02",
+              "effectTempleteID": -1.0,
+              "scale": 1.0,
+              "ILLLPEOODKP": ""
             }
           ],
-          "elementDurability": 100.0,
-          "modifierName": "",
           "AIHNJLDFEGJ": 0.0
         },
         "180Degree": {
+          "elementDurability": 100.0,
+          "modifierName": "",
           "onAdded": [
             {
               "$type": "SetAnimatorInt",
               "intID": "GadgetState",
-              "CBOMLBFIPJM": 202.0
+              "value": 202.0
             },
             {
               "$type": "FireEffect",
-              "effectPattern": "Eff_SceneObj_GearTurntable_01_Smoke_02",
-              "scale": 1.0,
               "born": {
-                "$type": "BGOLIIIHLMO",
+                "$type": "ConfigBornByAttachPoint",
                 "attachPointName": "RootNode",
                 "useRotation": true
               },
-              "ILLLPEOODKP": "",
-              "effectTempleteID": -1.0
+              "effectPattern": "Eff_SceneObj_GearTurntable_01_Smoke_02",
+              "effectTempleteID": -1.0,
+              "scale": 1.0,
+              "ILLLPEOODKP": ""
             }
           ],
-          "elementDurability": 100.0,
-          "modifierName": "",
           "AIHNJLDFEGJ": 0.0
         },
         "270Degree": {
+          "elementDurability": 100.0,
+          "modifierName": "",
           "onAdded": [
             {
               "$type": "SetAnimatorInt",
               "intID": "GadgetState",
-              "CBOMLBFIPJM": 203.0
+              "value": 203.0
             },
             {
               "$type": "FireEffect",
-              "effectPattern": "Eff_SceneObj_GearTurntable_01_Smoke_02",
-              "scale": 1.0,
               "born": {
-                "$type": "BGOLIIIHLMO",
+                "$type": "ConfigBornByAttachPoint",
                 "attachPointName": "RootNode",
                 "useRotation": true
               },
-              "ILLLPEOODKP": "",
-              "effectTempleteID": -1.0
+              "effectPattern": "Eff_SceneObj_GearTurntable_01_Smoke_02",
+              "effectTempleteID": -1.0,
+              "scale": 1.0,
+              "ILLLPEOODKP": ""
             }
           ],
-          "elementDurability": 100.0,
-          "modifierName": "",
           "AIHNJLDFEGJ": 0.0
         },
         "None": {
@@ -1001,22 +1023,22 @@
           "AIHNJLDFEGJ": 0.0
         },
         "UpEffect": {
+          "elementDurability": 100.0,
+          "modifierName": "",
           "onAdded": [
             {
               "$type": "AttachEffect",
-              "ILLLPEOODKP": "",
               "born": {
-                "$type": "BGOLIIIHLMO",
+                "$type": "ConfigBornByAttachPoint",
                 "attachPointName": "RootNode",
                 "useRotation": true
               },
-              "scale": 1.0,
               "effectPattern": "Eff_SceneObj_GearTurntable_01_Smoke_01",
-              "effectTempleteID": -1.0
+              "effectTempleteID": -1.0,
+              "scale": 1.0,
+              "ILLLPEOODKP": ""
             }
           ],
-          "elementDurability": 100.0,
-          "modifierName": "",
           "AIHNJLDFEGJ": 0.0
         },
         "NotLock": {
@@ -1025,39 +1047,17 @@
           "AIHNJLDFEGJ": 0.0
         },
         "Lock": {
+          "elementDurability": 100.0,
+          "modifierName": "",
           "onAdded": [
             {
               "$type": "SetAnimatorTrigger",
               "triggerID": "Struck"
             }
           ],
-          "elementDurability": 100.0,
-          "modifierName": "",
           "AIHNJLDFEGJ": 0.0
         }
       },
-      "abilityMixins": [
-        {
-          "$type": "AttachToGadgetStateMixin",
-          "modifierName": "0Degree"
-        },
-        {
-          "$type": "AttachToGadgetStateMixin",
-          "modifierName": "90Degree",
-          "gadgetState": 201
-        },
-        {
-          "$type": "AttachToGadgetStateMixin",
-          "modifierName": "180Degree",
-          "gadgetState": 202
-        },
-        {
-          "$type": "AttachToGadgetStateMixin",
-          "modifierName": "270Degree",
-          "gadgetState": 203
-        }
-      ],
-      "abilityName": "SceneObj_Level_Fd_Property_Ani_Prop_GearTurntable_01",
       "onAdded": [
         {
           "$type": "ApplyModifier",
@@ -1076,32 +1076,6 @@
   },
   {
     "Default": {
-      "modifiers": {
-        "Close": {
-          "onAdded": [
-            {
-              "$type": "SetAnimatorInt",
-              "intID": "GadgetState",
-              "CBOMLBFIPJM": 0.0
-            }
-          ],
-          "elementDurability": 100.0,
-          "modifierName": "",
-          "AIHNJLDFEGJ": 0.0
-        },
-        "Open": {
-          "onAdded": [
-            {
-              "$type": "SetAnimatorInt",
-              "intID": "GadgetState",
-              "CBOMLBFIPJM": 201.0
-            }
-          ],
-          "elementDurability": 100.0,
-          "modifierName": "",
-          "AIHNJLDFEGJ": 0.0
-        }
-      },
       "abilityMixins": [
         {
           "$type": "AttachToGadgetStateMixin",
@@ -1109,41 +1083,41 @@
         },
         {
           "$type": "AttachToGadgetStateMixin",
-          "modifierName": "Open",
-          "gadgetState": 201
+          "gadgetState": 201,
+          "modifierName": "Open"
         }
       ],
-      "abilityName": "SceneObj_Level_Fd_Property_Ani_Prop_BarrierGate_01"
+      "abilityName": "SceneObj_Level_Fd_Property_Ani_Prop_BarrierGate_01",
+      "modifiers": {
+        "Close": {
+          "elementDurability": 100.0,
+          "modifierName": "",
+          "onAdded": [
+            {
+              "$type": "SetAnimatorInt",
+              "intID": "GadgetState",
+              "value": 0.0
+            }
+          ],
+          "AIHNJLDFEGJ": 0.0
+        },
+        "Open": {
+          "elementDurability": 100.0,
+          "modifierName": "",
+          "onAdded": [
+            {
+              "$type": "SetAnimatorInt",
+              "intID": "GadgetState",
+              "value": 201.0
+            }
+          ],
+          "AIHNJLDFEGJ": 0.0
+        }
+      }
     }
   },
   {
     "Default": {
-      "modifiers": {
-        "Close": {
-          "onAdded": [
-            {
-              "$type": "SetAnimatorInt",
-              "intID": "GadgetState",
-              "CBOMLBFIPJM": 0.0
-            }
-          ],
-          "elementDurability": 100.0,
-          "modifierName": "",
-          "AIHNJLDFEGJ": 0.0
-        },
-        "Open": {
-          "onAdded": [
-            {
-              "$type": "SetAnimatorInt",
-              "intID": "GadgetState",
-              "CBOMLBFIPJM": 201.0
-            }
-          ],
-          "elementDurability": 100.0,
-          "modifierName": "",
-          "AIHNJLDFEGJ": 0.0
-        }
-      },
       "abilityMixins": [
         {
           "$type": "AttachToGadgetStateMixin",
@@ -1151,37 +1125,63 @@
         },
         {
           "$type": "AttachToGadgetStateMixin",
-          "modifierName": "Open",
-          "gadgetState": 201
+          "gadgetState": 201,
+          "modifierName": "Open"
         }
       ],
-      "abilityName": "SceneObj_Level_Fd_Property_Ani_Prop_BarrierGate_02"
+      "abilityName": "SceneObj_Level_Fd_Property_Ani_Prop_BarrierGate_02",
+      "modifiers": {
+        "Close": {
+          "elementDurability": 100.0,
+          "modifierName": "",
+          "onAdded": [
+            {
+              "$type": "SetAnimatorInt",
+              "intID": "GadgetState",
+              "value": 0.0
+            }
+          ],
+          "AIHNJLDFEGJ": 0.0
+        },
+        "Open": {
+          "elementDurability": 100.0,
+          "modifierName": "",
+          "onAdded": [
+            {
+              "$type": "SetAnimatorInt",
+              "intID": "GadgetState",
+              "value": 201.0
+            }
+          ],
+          "AIHNJLDFEGJ": 0.0
+        }
+      }
     }
   },
   {
     "Default": {
+      "abilityName": "SceneObj_Level_Fd_Property_Ani_Prop_EnergyOverlookCamera_01",
       "modifiers": {
         "EnableCamera": {
+          "elementDurability": 100.0,
+          "modifierName": "",
+          "onAdded": [
+            {
+              "$type": "EnableGadgetSpecialCamera",
+              "canBeHandledOnRecover": true,
+              "enable": true
+            }
+          ],
           "onReconnect": [
             {
               "$type": "EnableGadgetSpecialCamera",
-              "enable": true,
-              "canBeHandledOnRecover": true
+              "canBeHandledOnRecover": true,
+              "enable": true
             }
           ],
-          "onAdded": [
-            {
-              "$type": "EnableGadgetSpecialCamera",
-              "enable": true,
-              "canBeHandledOnRecover": true
-            }
-          ],
-          "elementDurability": 100.0,
-          "modifierName": "",
           "AIHNJLDFEGJ": 0.0
         }
       },
-      "abilityName": "SceneObj_Level_Fd_Property_Ani_Prop_EnergyOverlookCamera_01",
       "onAdded": [
         {
           "$type": "ApplyModifier",
@@ -1192,6 +1192,33 @@
   },
   {
     "Default": {
+      "abilityMixins": [
+        {
+          "$type": "AttachToGadgetStateMixin",
+          "modifierName": "Normal"
+        },
+        {
+          "$type": "AttachToGadgetStateMixin",
+          "gadgetState": 201,
+          "modifierName": "ValveOpen"
+        },
+        {
+          "$type": "AttachToGadgetStateMixin",
+          "gadgetState": 202,
+          "modifierName": "Active"
+        },
+        {
+          "$type": "AttachToGadgetStateMixin",
+          "gadgetState": 203,
+          "modifierName": "Lock"
+        },
+        {
+          "$type": "AttachToGadgetStateMixin",
+          "gadgetState": 204,
+          "modifierName": "Struck"
+        }
+      ],
+      "abilityName": "SceneObj_Level_Fd_Property_Ani_Prop_SealValveSwitch_02",
       "modifiers": {
         "Normal": {
           "elementDurability": 100.0,
@@ -1205,78 +1232,50 @@
           "AIHNJLDFEGJ": 0.0
         },
         "ValveOpen": {
-          "onAdded": [
-            {
-              "$type": "SetAnimatorTrigger",
-              "MPTriggerOnRemote": true,
-              "triggerID": "Attack"
-            }
-          ],
           "elementDurability": 100.0,
           "modifierMixins": [
             {
               "$type": "ShaderStateMachineSwitchMixin",
-              "MGLMGICCHHK": "",
-              "IKJPMDJLPLP": 1
+              "IKJPMDJLPLP": 1,
+              "MGLMGICCHHK": ""
             }
           ],
           "modifierName": "",
+          "onAdded": [
+            {
+              "$type": "SetAnimatorTrigger",
+              "mpTriggerOnRemote": true,
+              "triggerID": "Attack"
+            }
+          ],
           "AIHNJLDFEGJ": 0.0
         },
         "Active": {
           "duration": 3.6,
+          "elementDurability": 100.0,
+          "modifierMixins": [
+            {
+              "$type": "ShaderStateMachineSwitchMixin",
+              "IKJPMDJLPLP": 1,
+              "MGLMGICCHHK": ""
+            }
+          ],
+          "modifierName": "",
+          "onAdded": [
+            {
+              "$type": "SetAnimatorTrigger",
+              "mpTriggerOnRemote": true,
+              "triggerID": "Attack"
+            }
+          ],
           "onRemoved": [
             {
               "$type": "ChangeGadgetState"
             }
           ],
-          "onAdded": [
-            {
-              "$type": "SetAnimatorTrigger",
-              "MPTriggerOnRemote": true,
-              "triggerID": "Attack"
-            }
-          ],
-          "elementDurability": 100.0,
-          "modifierMixins": [
-            {
-              "$type": "ShaderStateMachineSwitchMixin",
-              "MGLMGICCHHK": "",
-              "IKJPMDJLPLP": 1
-            }
-          ],
-          "modifierName": "",
           "AIHNJLDFEGJ": 0.0
         },
         "Lock": {
-          "onRemoved": [
-            {
-              "$type": "FireEffect",
-              "effectPattern": "Eff_Item_SpecialTreasureBox_Unlock",
-              "scale": 1.0,
-              "born": {
-                "$type": "BGOLIIIHLMO",
-                "attachPointName": "AttachPoint",
-                "useRotation": true
-              },
-              "ILLLPEOODKP": "",
-              "effectTempleteID": -1.0
-            }
-          ],
-          "onAdded": [
-            {
-              "$type": "AttachEffect",
-              "ILLLPEOODKP": "",
-              "born": {
-                "$type": "BGOLIIIHLMO",
-                "attachPointName": "AttachPoint",
-                "useRotation": true
-              },
-              "scale": 1.0,
-              "effectPattern": "Eff_Item_SpecialTreasureBox_LockIdle",
-              "effectTempleteID": -1.0
-            }
-          ],
           "elementDurability": 100.0,
           "modifierMixins": [
             {
@@ -1285,27 +1284,342 @@
             }
           ],
           "modifierName": "",
+          "onAdded": [
+            {
+              "$type": "AttachEffect",
+              "born": {
+                "$type": "ConfigBornByAttachPoint",
+                "attachPointName": "AttachPoint",
+                "useRotation": true
+              },
+              "effectPattern": "Eff_Item_SpecialTreasureBox_LockIdle",
+              "effectTempleteID": -1.0,
+              "scale": 1.0,
+              "ILLLPEOODKP": ""
+            }
+          ],
+          "onRemoved": [
+            {
+              "$type": "FireEffect",
+              "born": {
+                "$type": "ConfigBornByAttachPoint",
+                "attachPointName": "AttachPoint",
+                "useRotation": true
+              },
+              "effectPattern": "Eff_Item_SpecialTreasureBox_Unlock",
+              "effectTempleteID": -1.0,
+              "scale": 1.0,
+              "ILLLPEOODKP": ""
+            }
+          ],
           "AIHNJLDFEGJ": 0.0
         },
         "Struck": {
           "duration": 1.5,
+          "elementDurability": 100.0,
+          "modifierMixins": [
+            {
+              "$type": "ShaderStateMachineSwitchMixin",
+              "IKJPMDJLPLP": 1,
+              "MGLMGICCHHK": ""
+            }
+          ],
+          "modifierName": "",
           "onRemoved": [
             {
               "$type": "ChangeGadgetState"
             }
           ],
+          "AIHNJLDFEGJ": 0.0
+        }
+      }
+    }
+  },
+  {
+    "Default": {
+      "abilityMixins": [
+        {
+          "$type": "AttachToGadgetStateMixin",
+          "modifierName": "Close"
+        },
+        {
+          "$type": "AttachToGadgetStateMixin",
+          "gadgetState": 201,
+          "modifierName": "Open"
+        },
+        {
+          "$type": "AttachToGadgetStateMixin",
+          "gadgetState": 202,
+          "modifierName": "AnimatorOpen"
+        }
+      ],
+      "abilityName": "SceneObj_Level_Common_Property_Ani_Prop_FDPipeDoorLargeWriothesley_01",
+      "modifiers": {
+        "Close": {
           "elementDurability": 100.0,
           "modifierMixins": [
             {
               "$type": "ShaderStateMachineSwitchMixin",
-              "MGLMGICCHHK": "",
-              "IKJPMDJLPLP": 1
+              "IKJPMDJLPLP": 2,
+              "MGLMGICCHHK": ""
             }
           ],
           "modifierName": "",
+          "onAdded": [
+            {
+              "$type": "SetAnimatorInt",
+              "intID": "GadgetState",
+              "value": 0.0
+            }
+          ],
+          "AIHNJLDFEGJ": 0.0
+        },
+        "Open": {
+          "duration": 2.0,
+          "elementDurability": 100.0,
+          "modifierMixins": [
+            {
+              "$type": "ShaderStateMachineSwitchMixin",
+              "IKJPMDJLPLP": 1,
+              "MGLMGICCHHK": ""
+            }
+          ],
+          "modifierName": "",
+          "onAdded": [
+            {
+              "$type": "AttachEffect",
+              "born": {
+                "$type": "ConfigBornByAttachPoint",
+                "attachPointName": "RootNode",
+                "useRotation": true
+              },
+              "effectPattern": "Eff_SceneObj_FDPipeDoorLarge_01_Unlcok",
+              "effectTempleteID": -1.0,
+              "scale": 1.0,
+              "ILLLPEOODKP": ""
+            }
+          ],
+          "onRemoved": [
+            {
+              "$type": "ChangeGadgetState",
+              "state": 202
+            },
+            {
+              "$type": "FireEffect",
+              "born": {
+                "$type": "ConfigBornByAttachPoint",
+                "attachPointName": "RootNode",
+                "useRotation": true
+              },
+              "effectPattern": "Eff_SceneObj_FDPipeDoorLarge_01_Open",
+              "effectTempleteID": -1.0,
+              "scale": 1.0,
+              "ILLLPEOODKP": ""
+            }
+          ],
+          "AIHNJLDFEGJ": 0.0
+        },
+        "AnimatorOpen": {
+          "elementDurability": 100.0,
+          "modifierMixins": [
+            {
+              "$type": "ShaderStateMachineSwitchMixin",
+              "IKJPMDJLPLP": 1,
+              "MGLMGICCHHK": ""
+            }
+          ],
+          "modifierName": "",
+          "onAdded": [
+            {
+              "$type": "SetAnimatorInt",
+              "intID": "GadgetState",
+              "value": 201.0
+            },
+            {
+              "$type": "AttachEffect",
+              "born": {
+                "$type": "ConfigBornByAttachPoint",
+                "attachPointName": "AttachPoint",
+                "useRotation": true
+              },
+              "effectPattern": "Eff_SceneObj_POI_LaiousiliDungeon_Steam_01",
+              "effectTempleteID": -1.0,
+              "scale": 1.0,
+              "ILLLPEOODKP": ""
+            }
+          ],
           "AIHNJLDFEGJ": 0.0
         }
-      },
+      }
+    }
+  },
+  {
+    "Default": {
+      "abilityMixins": [
+        {
+          "$type": "AttachToGadgetStateMixin",
+          "modifierName": "Close"
+        },
+        {
+          "$type": "AttachToGadgetStateMixin",
+          "gadgetState": 201,
+          "modifierName": "Open"
+        },
+        {
+          "$type": "AttachToGadgetStateMixin",
+          "gadgetState": 202,
+          "modifierName": "AnimatorOpen"
+        }
+      ],
+      "abilityName": "SceneObj_Level_Common_Property_Ani_Prop_FDPipeDoorSmallWriothesley_01",
+      "modifiers": {
+        "Close": {
+          "elementDurability": 100.0,
+          "modifierMixins": [
+            {
+              "$type": "ShaderStateMachineSwitchMixin",
+              "IKJPMDJLPLP": 2,
+              "MGLMGICCHHK": ""
+            }
+          ],
+          "modifierName": "",
+          "onAdded": [
+            {
+              "$type": "SetAnimatorInt",
+              "intID": "GadgetState",
+              "value": 0.0
+            },
+            {
+              "$type": "SetLightColorIntensity",
+              "lerpTime": 1.0,
+              "lightName": "Light1",
+              "targetIntensity": 1.2,
+              "BIHOOPCJJOI": true,
+              "BJFAJCAGNCG": true,
+              "LPECEHACPGM": true,
+              "CPLBJJALIIF": {
+                "a": 1.0,
+                "b": 1.0,
+                "g": 0.9141,
+                "r": 0.3088
+              }
+            },
+            {
+              "$type": "SetLightColorIntensity",
+              "lerpTime": 1.0,
+              "lightName": "Light2",
+              "targetIntensity": 1.2,
+              "BIHOOPCJJOI": true,
+              "BJFAJCAGNCG": true,
+              "LPECEHACPGM": true,
+              "CPLBJJALIIF": {
+                "a": 1.0,
+                "b": 1.0,
+                "g": 0.9141,
+                "r": 0.3088
+              }
+            }
+          ],
+          "AIHNJLDFEGJ": 0.0
+        },
+        "Open": {
+          "duration": 2.0,
+          "elementDurability": 100.0,
+          "modifierMixins": [
+            {
+              "$type": "ShaderStateMachineSwitchMixin",
+              "IKJPMDJLPLP": 1,
+              "MGLMGICCHHK": ""
+            }
+          ],
+          "modifierName": "",
+          "onAdded": [
+            {
+              "$type": "AttachEffect",
+              "born": {
+                "$type": "ConfigBornByAttachPoint",
+                "attachPointName": "RootNode",
+                "useRotation": true
+              },
+              "effectPattern": "Eff_SceneObj_FDPipeDoorSmall_01_Unlcok",
+              "effectTempleteID": -1.0,
+              "scale": 1.0,
+              "ILLLPEOODKP": ""
+            },
+            {
+              "$type": "SetLightColorIntensity",
+              "lerpTime": 1.0,
+              "lightName": "Light1",
+              "targetIntensity": 0.6,
+              "BIHOOPCJJOI": true,
+              "BJFAJCAGNCG": true,
+              "LPECEHACPGM": true,
+              "CPLBJJALIIF": {
+                "a": 1.0,
+                "b": 0.2194,
+                "g": 0.2761,
+                "r": 0.9044
+              }
+            },
+            {
+              "$type": "SetLightColorIntensity",
+              "lerpTime": 1.0,
+              "lightName": "Light2",
+              "BIHOOPCJJOI": true,
+              "BJFAJCAGNCG": true,
+              "LPECEHACPGM": true,
+              "CPLBJJALIIF": {
+                "a": 1.0,
+                "b": 1.0,
+                "g": 0.9141,
+                "r": 0.3088
+              }
+            }
+          ],
+          "onRemoved": [
+            {
+              "$type": "ChangeGadgetState",
+              "state": 202
+            },
+            {
+              "$type": "FireEffect",
+              "born": {
+                "$type": "ConfigBornByAttachPoint",
+                "attachPointName": "RootNode",
+                "useRotation": true
+              },
+              "effectPattern": "Eff_SceneObj_FDPipeDoorSmall_01_Open",
+              "effectTempleteID": -1.0,
+              "scale": 1.0,
+              "ILLLPEOODKP": ""
+            }
+          ],
+          "AIHNJLDFEGJ": 0.0
+        },
+        "AnimatorOpen": {
+          "elementDurability": 100.0,
+          "modifierMixins": [
+            {
+              "$type": "ShaderStateMachineSwitchMixin",
+              "IKJPMDJLPLP": 1,
+              "MGLMGICCHHK": ""
+            }
+          ],
+          "modifierName": "",
+          "onAdded": [
+            {
+              "$type": "SetAnimatorInt",
+              "intID": "GadgetState",
+              "value": 201.0
+            }
+          ],
+          "AIHNJLDFEGJ": 0.0
+        }
+      }
+    }
+  },
+  {
+    "Default": {
       "abilityMixins": [
         {
           "$type": "AttachToGadgetStateMixin",
@@ -1313,313 +1627,11 @@
         },
         {
           "$type": "AttachToGadgetStateMixin",
-          "modifierName": "ValveOpen",
-          "gadgetState": 201
-        },
-        {
-          "$type": "AttachToGadgetStateMixin",
-          "modifierName": "Active",
-          "gadgetState": 202
-        },
-        {
-          "$type": "AttachToGadgetStateMixin",
-          "modifierName": "Lock",
-          "gadgetState": 203
-        },
-        {
-          "$type": "AttachToGadgetStateMixin",
-          "modifierName": "Struck",
-          "gadgetState": 204
+          "gadgetState": 201,
+          "modifierName": "ValveOpen"
         }
       ],
-      "abilityName": "SceneObj_Level_Fd_Property_Ani_Prop_SealValveSwitch_02"
-    }
-  },
-  {
-    "Default": {
-      "modifiers": {
-        "Close": {
-          "onAdded": [
-            {
-              "$type": "SetAnimatorInt",
-              "intID": "GadgetState",
-              "CBOMLBFIPJM": 0.0
-            }
-          ],
-          "elementDurability": 100.0,
-          "modifierMixins": [
-            {
-              "$type": "ShaderStateMachineSwitchMixin",
-              "MGLMGICCHHK": "",
-              "IKJPMDJLPLP": 2
-            }
-          ],
-          "modifierName": "",
-          "AIHNJLDFEGJ": 0.0
-        },
-        "Open": {
-          "duration": 2.0,
-          "onRemoved": [
-            {
-              "$type": "ChangeGadgetState",
-              "ANIHOKMEKHK": 202
-            },
-            {
-              "$type": "FireEffect",
-              "effectPattern": "Eff_SceneObj_FDPipeDoorLarge_01_Open",
-              "scale": 1.0,
-              "born": {
-                "$type": "BGOLIIIHLMO",
-                "attachPointName": "RootNode",
-                "useRotation": true
-              },
-              "ILLLPEOODKP": "",
-              "effectTempleteID": -1.0
-            }
-          ],
-          "onAdded": [
-            {
-              "$type": "AttachEffect",
-              "ILLLPEOODKP": "",
-              "born": {
-                "$type": "BGOLIIIHLMO",
-                "attachPointName": "RootNode",
-                "useRotation": true
-              },
-              "scale": 1.0,
-              "effectPattern": "Eff_SceneObj_FDPipeDoorLarge_01_Unlcok",
-              "effectTempleteID": -1.0
-            }
-          ],
-          "elementDurability": 100.0,
-          "modifierMixins": [
-            {
-              "$type": "ShaderStateMachineSwitchMixin",
-              "MGLMGICCHHK": "",
-              "IKJPMDJLPLP": 1
-            }
-          ],
-          "modifierName": "",
-          "AIHNJLDFEGJ": 0.0
-        },
-        "AnimatorOpen": {
-          "onAdded": [
-            {
-              "$type": "SetAnimatorInt",
-              "intID": "GadgetState",
-              "CBOMLBFIPJM": 201.0
-            },
-            {
-              "$type": "AttachEffect",
-              "ILLLPEOODKP": "",
-              "born": {
-                "$type": "BGOLIIIHLMO",
-                "attachPointName": "AttachPoint",
-                "useRotation": true
-              },
-              "scale": 1.0,
-              "effectPattern": "Eff_SceneObj_POI_LaiousiliDungeon_Steam_01",
-              "effectTempleteID": -1.0
-            }
-          ],
-          "elementDurability": 100.0,
-          "modifierMixins": [
-            {
-              "$type": "ShaderStateMachineSwitchMixin",
-              "MGLMGICCHHK": "",
-              "IKJPMDJLPLP": 1
-            }
-          ],
-          "modifierName": "",
-          "AIHNJLDFEGJ": 0.0
-        }
-      },
-      "abilityMixins": [
-        {
-          "$type": "AttachToGadgetStateMixin",
-          "modifierName": "Close"
-        },
-        {
-          "$type": "AttachToGadgetStateMixin",
-          "modifierName": "Open",
-          "gadgetState": 201
-        },
-        {
-          "$type": "AttachToGadgetStateMixin",
-          "modifierName": "AnimatorOpen",
-          "gadgetState": 202
-        }
-      ],
-      "abilityName": "SceneObj_Level_Common_Property_Ani_Prop_FDPipeDoorLargeWriothesley_01"
-    }
-  },
-  {
-    "Default": {
-      "modifiers": {
-        "Close": {
-          "onAdded": [
-            {
-              "$type": "SetAnimatorInt",
-              "intID": "GadgetState",
-              "CBOMLBFIPJM": 0.0
-            },
-            {
-              "$type": "SetLightColorIntensity",
-              "BJFAJCAGNCG": true,
-              "lerpTime": 1.0,
-              "BIHOOPCJJOI": true,
-              "LPECEHACPGM": true,
-              "MMMCBCFNAEI": "Light1",
-              "CPLBJJALIIF": {
-                "OKJGNHOENEE": 0.9141,
-                "GLHEHBKLPPI": 1.0,
-                "CGCONJDLPFL": 0.3088,
-                "GBNLJAFOMPA": 1.0
-              },
-              "KKCLJMHJNLG": 1.2
-            },
-            {
-              "$type": "SetLightColorIntensity",
-              "BJFAJCAGNCG": true,
-              "lerpTime": 1.0,
-              "BIHOOPCJJOI": true,
-              "LPECEHACPGM": true,
-              "MMMCBCFNAEI": "Light2",
-              "CPLBJJALIIF": {
-                "OKJGNHOENEE": 0.9141,
-                "GLHEHBKLPPI": 1.0,
-                "CGCONJDLPFL": 0.3088,
-                "GBNLJAFOMPA": 1.0
-              },
-              "KKCLJMHJNLG": 1.2
-            }
-          ],
-          "elementDurability": 100.0,
-          "modifierMixins": [
-            {
-              "$type": "ShaderStateMachineSwitchMixin",
-              "MGLMGICCHHK": "",
-              "IKJPMDJLPLP": 2
-            }
-          ],
-          "modifierName": "",
-          "AIHNJLDFEGJ": 0.0
-        },
-        "Open": {
-          "duration": 2.0,
-          "onRemoved": [
-            {
-              "$type": "ChangeGadgetState",
-              "ANIHOKMEKHK": 202
-            },
-            {
-              "$type": "FireEffect",
-              "effectPattern": "Eff_SceneObj_FDPipeDoorSmall_01_Open",
-              "scale": 1.0,
-              "born": {
-                "$type": "BGOLIIIHLMO",
-                "attachPointName": "RootNode",
-                "useRotation": true
-              },
-              "ILLLPEOODKP": "",
-              "effectTempleteID": -1.0
-            }
-          ],
-          "onAdded": [
-            {
-              "$type": "AttachEffect",
-              "ILLLPEOODKP": "",
-              "born": {
-                "$type": "BGOLIIIHLMO",
-                "attachPointName": "RootNode",
-                "useRotation": true
-              },
-              "scale": 1.0,
-              "effectPattern": "Eff_SceneObj_FDPipeDoorSmall_01_Unlcok",
-              "effectTempleteID": -1.0
-            },
-            {
-              "$type": "SetLightColorIntensity",
-              "BJFAJCAGNCG": true,
-              "lerpTime": 1.0,
-              "BIHOOPCJJOI": true,
-              "LPECEHACPGM": true,
-              "MMMCBCFNAEI": "Light1",
-              "CPLBJJALIIF": {
-                "OKJGNHOENEE": 0.2761,
-                "GLHEHBKLPPI": 1.0,
-                "CGCONJDLPFL": 0.9044,
-                "GBNLJAFOMPA": 0.2194
-              },
-              "KKCLJMHJNLG": 0.6
-            },
-            {
-              "$type": "SetLightColorIntensity",
-              "BJFAJCAGNCG": true,
-              "lerpTime": 1.0,
-              "BIHOOPCJJOI": true,
-              "LPECEHACPGM": true,
-              "MMMCBCFNAEI": "Light2",
-              "CPLBJJALIIF": {
-                "OKJGNHOENEE": 0.9141,
-                "GLHEHBKLPPI": 1.0,
-                "CGCONJDLPFL": 0.3088,
-                "GBNLJAFOMPA": 1.0
-              }
-            }
-          ],
-          "elementDurability": 100.0,
-          "modifierMixins": [
-            {
-              "$type": "ShaderStateMachineSwitchMixin",
-              "MGLMGICCHHK": "",
-              "IKJPMDJLPLP": 1
-            }
-          ],
-          "modifierName": "",
-          "AIHNJLDFEGJ": 0.0
-        },
-        "AnimatorOpen": {
-          "onAdded": [
-            {
-              "$type": "SetAnimatorInt",
-              "intID": "GadgetState",
-              "CBOMLBFIPJM": 201.0
-            }
-          ],
-          "elementDurability": 100.0,
-          "modifierMixins": [
-            {
-              "$type": "ShaderStateMachineSwitchMixin",
-              "MGLMGICCHHK": "",
-              "IKJPMDJLPLP": 1
-            }
-          ],
-          "modifierName": "",
-          "AIHNJLDFEGJ": 0.0
-        }
-      },
-      "abilityMixins": [
-        {
-          "$type": "AttachToGadgetStateMixin",
-          "modifierName": "Close"
-        },
-        {
-          "$type": "AttachToGadgetStateMixin",
-          "modifierName": "Open",
-          "gadgetState": 201
-        },
-        {
-          "$type": "AttachToGadgetStateMixin",
-          "modifierName": "AnimatorOpen",
-          "gadgetState": 202
-        }
-      ],
-      "abilityName": "SceneObj_Level_Common_Property_Ani_Prop_FDPipeDoorSmallWriothesley_01"
-    }
-  },
-  {
-    "Default": {
+      "abilityName": "SceneObj_Level_Fd_Property_Ani_Prop_SealValveSwitch_03",
       "modifiers": {
         "Normal": {
           "elementDurability": 100.0,
@@ -1640,7 +1652,7 @@
               "actions": [
                 {
                   "$type": "SetAnimatorTrigger",
-                  "MPTriggerOnRemote": true,
+                  "mpTriggerOnRemote": true,
                   "triggerID": "Attack"
                 }
               ],
@@ -1648,26 +1660,14 @@
             },
             {
               "$type": "ShaderStateMachineSwitchMixin",
-              "MGLMGICCHHK": "",
-              "IKJPMDJLPLP": 1
+              "IKJPMDJLPLP": 1,
+              "MGLMGICCHHK": ""
             }
           ],
           "modifierName": "",
           "AIHNJLDFEGJ": 0.0
         }
-      },
-      "abilityMixins": [
-        {
-          "$type": "AttachToGadgetStateMixin",
-          "modifierName": "Normal"
-        },
-        {
-          "$type": "AttachToGadgetStateMixin",
-          "modifierName": "ValveOpen",
-          "gadgetState": 201
-        }
-      ],
-      "abilityName": "SceneObj_Level_Fd_Property_Ani_Prop_SealValveSwitch_03"
+      }
     }
   }
 ]

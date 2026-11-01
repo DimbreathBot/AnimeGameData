@@ -1,132 +1,9 @@
 [
   {
     "Default": {
-      "modifiers": {
-        "ExtraAttack_StaminaCost": {
-          "onAdded": [
-            {
-              "$type": "AvatarSkillStart",
-              "skillID": 10001,
-              "BGNJBEPEJBO": 1.0,
-              "costStaminaRatio": "ExtraAttack_Sword_Stamina_Cost",
-              "cdRatio": 1.0
-            }
-          ],
-          "elementDurability": 100.0,
-          "modifierName": "",
-          "AIHNJLDFEGJ": 0.0
-        },
-        "ExtraAttack_AS_Effect": {
-          "onAdded": [
-            {
-              "$type": "AttachEffect",
-              "ILLLPEOODKP": "",
-              "scale": 1.0,
-              "effectPattern": "Eff_Avatar_Male_Sword_Kaeya_ExtraAttack_SwordAS",
-              "effectTempleteID": -1.0
-            }
-          ],
-          "stacking": "Unique",
-          "elementDurability": 100.0,
-          "modifierName": "",
-          "AIHNJLDFEGJ": 0.0
-        }
-      },
       "abilityMixins": [
         {
           "$type": "ButtonHoldChargeMixin",
-          "skillID": 10073,
-          "OnReleaseCharged": [
-            {
-              "$type": "SetAnimatorBool",
-              "boolID": "IsCharging"
-            },
-            {
-              "$type": "SetAnimatorInt",
-              "intID": "SkillID",
-              "CBOMLBFIPJM": 1.0
-            }
-          ],
-          "OnBeginUncharged": [
-            {
-              "$type": "SetAnimatorTrigger",
-              "triggerID": "DoSkill"
-            },
-            {
-              "$type": "SetAnimatorInt",
-              "intID": "SkillID",
-              "CBOMLBFIPJM": 99.0,
-              "predicates": [
-                {
-                  "$type": "GPEMEIHPCCF",
-                  "predicates": [
-                    {
-                      "$type": "LDOPHDHPCHA",
-                      "CBOMLBFIPJM": 0,
-                      "parameter": "ComboCount",
-                      "logic": "Equal"
-                    },
-                    {
-                      "$type": "LDOPHDHPCHA",
-                      "CBOMLBFIPJM": 5,
-                      "parameter": "ComboCount",
-                      "logic": "Equal"
-                    }
-                  ]
-                }
-              ]
-            },
-            {
-              "$type": "SetAnimatorBool",
-              "boolID": "IsCharging"
-            }
-          ],
-          "secondChargeTime": 0.2,
-          "chargeTime": 0.12,
-          "OnBeginCharged": [
-            {
-              "$type": "SetAnimatorBool",
-              "CBOMLBFIPJM": true,
-              "boolID": "IsCharging"
-            }
-          ],
-          "OnBeginSecondCharged": [
-            {
-              "$type": "SetAnimatorTrigger",
-              "triggerID": "DoSkill",
-              "predicates": [
-                {
-                  "$type": "OPLIAABFJGD",
-                  "stamina": [
-                    "ExtraAttack_Sword_Stamina_Cost",
-                    "Flexible_Stamina",
-                    "ADD"
-                  ],
-                  "logic": "GreaterOrEqual"
-                }
-              ]
-            },
-            {
-              "$type": "SetAnimatorInt",
-              "intID": "SkillID",
-              "CBOMLBFIPJM": 6.0,
-              "predicates": [
-                {
-                  "$type": "OPLIAABFJGD",
-                  "stamina": [
-                    "ExtraAttack_Sword_Stamina_Cost",
-                    "Flexible_Stamina",
-                    "ADD"
-                  ],
-                  "logic": "GreaterOrEqual"
-                }
-              ]
-            },
-            {
-              "$type": "SetAnimatorBool",
-              "boolID": "IsCharging"
-            }
-          ],
           "chargeStateIDs": [
             "Attack01",
             "Attack02",
@@ -134,64 +11,203 @@
             "Attack04",
             "Run"
           ],
-          "OnReleaseUncharged": [
+          "chargeTime": 0.12,
+          "onBeginCharged": [
+            {
+              "$type": "SetAnimatorBool",
+              "boolID": "IsCharging",
+              "value": true
+            }
+          ],
+          "onBeginSecondCharged": [
+            {
+              "$type": "SetAnimatorTrigger",
+              "predicates": [
+                {
+                  "$type": "ByLocalAvatarStamina",
+                  "logic": "GreaterOrEqual",
+                  "stamina": [
+                    "ExtraAttack_Sword_Stamina_Cost",
+                    "Flexible_Stamina",
+                    "ADD"
+                  ]
+                }
+              ],
+              "triggerID": "DoSkill"
+            },
             {
               "$type": "SetAnimatorInt",
               "intID": "SkillID",
-              "CBOMLBFIPJM": 1.0
+              "predicates": [
+                {
+                  "$type": "ByLocalAvatarStamina",
+                  "logic": "GreaterOrEqual",
+                  "stamina": [
+                    "ExtraAttack_Sword_Stamina_Cost",
+                    "Flexible_Stamina",
+                    "ADD"
+                  ]
+                }
+              ],
+              "value": 6.0
+            },
+            {
+              "$type": "SetAnimatorBool",
+              "boolID": "IsCharging"
             }
-          ]
+          ],
+          "onBeginUncharged": [
+            {
+              "$type": "SetAnimatorTrigger",
+              "triggerID": "DoSkill"
+            },
+            {
+              "$type": "SetAnimatorInt",
+              "intID": "SkillID",
+              "predicates": [
+                {
+                  "$type": "ByAny",
+                  "predicates": [
+                    {
+                      "$type": "ByAnimatorInt",
+                      "logic": "Equal",
+                      "parameter": "ComboCount",
+                      "value": 0
+                    },
+                    {
+                      "$type": "ByAnimatorInt",
+                      "logic": "Equal",
+                      "parameter": "ComboCount",
+                      "value": 5
+                    }
+                  ]
+                }
+              ],
+              "value": 99.0
+            },
+            {
+              "$type": "SetAnimatorBool",
+              "boolID": "IsCharging"
+            }
+          ],
+          "onReleaseCharged": [
+            {
+              "$type": "SetAnimatorBool",
+              "boolID": "IsCharging"
+            },
+            {
+              "$type": "SetAnimatorInt",
+              "intID": "SkillID",
+              "value": 1.0
+            }
+          ],
+          "onReleaseUncharged": [
+            {
+              "$type": "SetAnimatorInt",
+              "intID": "SkillID",
+              "value": 1.0
+            }
+          ],
+          "secondChargeTime": 0.2,
+          "skillID": 10073
         },
         {
           "$type": "AttachToNormalizedTimeMixin",
           "modifierName": "ExtraAttack_AS_Effect",
-          "LJPPDIGCJMJ": "",
+          "normalizeStart": 0.21,
           "stateID": "ExtraAttack_AS",
-          "normalizeStart": 0.21
+          "LJPPDIGCJMJ": ""
         },
         {
           "$type": "AttachToStateIDMixin",
-          "LJPPDIGCJMJ": "",
+          "modifierName": "ExtraAttack_StaminaCost",
           "stateIDs": [
             "ExtraAttack"
           ],
-          "modifierName": "ExtraAttack_StaminaCost"
+          "LJPPDIGCJMJ": ""
         }
       ],
       "abilityName": "Avatar_Kaeya_ExtraAttack",
       "abilitySpecials": {
         "ExtraAttack_Sword_Stamina_Cost": 0.0,
         "Flexible_Stamina": -2.0
+      },
+      "modifiers": {
+        "ExtraAttack_StaminaCost": {
+          "elementDurability": 100.0,
+          "modifierName": "",
+          "onAdded": [
+            {
+              "$type": "AvatarSkillStart",
+              "cdRatio": 1.0,
+              "costStaminaRatio": "ExtraAttack_Sword_Stamina_Cost",
+              "skillID": 10001,
+              "GIBAINFKPBO": 1.0
+            }
+          ],
+          "AIHNJLDFEGJ": 0.0
+        },
+        "ExtraAttack_AS_Effect": {
+          "elementDurability": 100.0,
+          "modifierName": "",
+          "onAdded": [
+            {
+              "$type": "AttachEffect",
+              "effectPattern": "Eff_Avatar_Male_Sword_Kaeya_ExtraAttack_SwordAS",
+              "effectTempleteID": -1.0,
+              "scale": 1.0,
+              "ILLLPEOODKP": ""
+            }
+          ],
+          "stacking": "Unique",
+          "AIHNJLDFEGJ": 0.0
+        }
       }
     }
   },
   {
     "Default": {
+      "abilityMixins": [
+        {
+          "$type": "AttachToNormalizedTimeMixin",
+          "modifierName": "IceShield_AS_Effect",
+          "normalizeStart": 0.14,
+          "stateID": "IceShield_AS",
+          "LJPPDIGCJMJ": ""
+        }
+      ],
+      "abilityName": "Avatar_Keaya_IceShield_Impact",
+      "abilitySpecials": {
+        "damage": 0.0,
+        "GetElementRatio": 1.0,
+        "TasteOfCold": 0.15
+      },
       "modifiers": {
         "IceShield_AS_Effect": {
+          "elementDurability": 100.0,
+          "modifierName": "",
           "onAdded": [
             {
               "$type": "AttachEffect",
-              "ILLLPEOODKP": "",
-              "scale": 1.0,
               "effectPattern": "Eff_Kaeya_IceShield_Impact_SwordAS",
-              "effectTempleteID": -1.0
+              "effectTempleteID": -1.0,
+              "scale": 1.0,
+              "ILLLPEOODKP": ""
             },
             {
               "$type": "AttachEffect",
-              "ILLLPEOODKP": "",
-              "scale": 1.0,
               "effectPattern": "Eff_Kaeya_IceShield_Impact_SwordAS1",
-              "effectTempleteID": -1.0
+              "effectTempleteID": -1.0,
+              "scale": 1.0,
+              "ILLLPEOODKP": ""
             }
           ],
           "stacking": "Unique",
-          "elementDurability": 100.0,
-          "modifierName": "",
           "AIHNJLDFEGJ": 0.0
         },
         "IceShield_Impact_ElemBall_Handler": {
-          "stacking": "Unique",
+          "elementDurability": 100.0,
+          "modifierName": "",
           "onAttackLanded": [
             {
               "$type": "Predicated",
@@ -203,36 +219,36 @@
                 {
                   "$type": "HealHP",
                   "amountByCasterAttackRatio": "TasteOfCold",
-                  "FFNEJGGNAFF": "",
                   "predicates": [
                     {
-                      "$type": "LCCNMKNDACG",
+                      "$type": "ByUnlockTalentParam",
                       "talentParam": "TasteOfCold"
                     }
-                  ]
+                  ],
+                  "FFNEJGGNAFF": ""
                 }
               ],
+              "target": "Target",
               "targetPredicates": [
                 {
-                  "$type": "CCHPEOBKOBO",
+                  "$type": "ByAttackTags",
                   "attackTags": [
                     "Elemental_Art"
                   ]
                 },
                 {
-                  "$type": "DEOFBICNFHF",
+                  "$type": "ByEntityTypes",
                   "entityTypes": [
                     "Monster"
                   ]
                 },
                 {
-                  "$type": "EOFDCELPGFO",
-                  "CBOMLBFIPJM": 0.0,
+                  "$type": "ByTargetGlobalValue",
                   "compareType": "NoneOrEqual",
-                  "key": "_ANIMAL_ENTITY_TYPE"
+                  "key": "_ANIMAL_ENTITY_TYPE",
+                  "value": 0.0
                 }
-              ],
-              "target": "Target"
+              ]
             },
             {
               "$type": "Predicated",
@@ -242,86 +258,87 @@
                   "modifierName": "FrozenStar_ElementBall",
                   "predicates": [
                     {
-                      "$type": "LCCNMKNDACG",
+                      "$type": "ByUnlockTalentParam",
                       "talentParam": "FrozenStar"
                     }
                   ]
                 }
               ],
+              "target": "Target",
               "targetPredicates": [
                 {
-                  "$type": "CCHPEOBKOBO",
+                  "$type": "ByAttackTags",
                   "attackTags": [
                     "Elemental_Art"
                   ]
                 },
                 {
-                  "$type": "DEOFBICNFHF",
+                  "$type": "ByEntityTypes",
                   "entityTypes": [
                     "Monster"
                   ]
                 },
                 {
-                  "$type": "EOFDCELPGFO",
-                  "CBOMLBFIPJM": 0.0,
+                  "$type": "ByTargetGlobalValue",
                   "compareType": "NoneOrEqual",
-                  "key": "_ANIMAL_ENTITY_TYPE"
+                  "key": "_ANIMAL_ENTITY_TYPE",
+                  "value": 0.0
                 },
                 {
-                  "$type": "BPJIAOAPBHL",
+                  "$type": "ByHasAbilityState",
                   "abilityState": "ElementFreeze"
                 }
-              ],
-              "target": "Target"
+              ]
             }
           ],
-          "elementDurability": 100.0,
-          "modifierName": "",
+          "stacking": "Unique",
           "AIHNJLDFEGJ": 0.0
         },
         "FrozenStar_ElementBall": {
           "duration": 0.3,
+          "elementDurability": 100.0,
+          "modifierName": "",
           "onAdded": [
             {
               "$type": "GenerateElemBall",
-              "ratio": 1.0,
+              "baseEnergy": 3.0,
               "born": {
-                "$type": "BOJMMDAIGMM",
+                "$type": "ConfigBornByTarget",
                 "offset": {
-                  "x": 0.0,
-                  "z": 1.0,
-                  "y": 0.0
+                  "x": 1.0,
+                  "y": 0.0,
+                  "z": 0.0
                 }
               },
               "configID": 2022,
-              "baseEnergy": 3.0
+              "ratio": 1.0
             }
           ],
           "stacking": "Multiple",
-          "GMGIAGMCGLF": {
-            "PFEHHABPHDB": "",
-            "KAANKELFPLA": 2.0
+          "stackingOption": {
+            "abilitySpecialName": "",
+            "maxModifierNumForMultipleType": 2.0
           },
-          "elementDurability": 100.0,
-          "modifierName": "",
           "AIHNJLDFEGJ": 0.0
         },
         "IceShield_Impact_ElemBall": {
           "duration": 0.3,
+          "elementDurability": 100.0,
+          "modifierName": "",
           "onAdded": [
             {
               "$type": "GenerateElemBall",
-              "ratio": "GetElementRatio",
+              "baseEnergy": 6.0,
               "born": {
-                "$type": "BOJMMDAIGMM",
+                "$type": "ConfigBornByTarget",
                 "offset": {
-                  "x": 0.0,
-                  "z": 1.0,
-                  "y": 0.0
+                  "x": 1.0,
+                  "y": 0.0,
+                  "z": 0.0
                 }
               },
               "configID": 2022,
-              "baseEnergy": 6.0
+              "ratio": "GetElementRatio"
             },
             {
               "$type": "Randomed",
@@ -329,249 +346,241 @@
               "successActions": [
                 {
                   "$type": "GenerateElemBall",
-                  "ratio": "GetElementRatio",
+                  "baseEnergy": 3.0,
                   "born": {
-                    "$type": "BOJMMDAIGMM",
+                    "$type": "ConfigBornByTarget",
                     "offset": {
-                      "x": 0.0,
-                      "z": 1.0,
-                      "y": 0.0
+                      "x": 1.0,
+                      "y": 0.0,
+                      "z": 0.0
                     }
                   },
                   "configID": 2022,
-                  "baseEnergy": 3.0
+                  "ratio": "GetElementRatio"
                 }
               ]
             }
           ],
           "stacking": "Unique",
-          "elementDurability": 100.0,
-          "modifierName": "",
           "AIHNJLDFEGJ": 0.0
         }
       },
       "onAbilityStart": [
         {
           "$type": "AvatarSkillStart",
-          "skillID": 10074,
-          "BGNJBEPEJBO": 1.0,
-          "costStaminaRatio": 1.0,
           "cdRatio": 1.0,
+          "costStaminaRatio": 1.0,
           "predicates": [
             {
-              "$type": "BAEGOCNMDPJ",
+              "$type": "BySkillReady",
               "skillID": 10074
             }
-          ]
+          ],
+          "skillID": 10074,
+          "GIBAINFKPBO": 1.0
         },
         {
           "$type": "FireEffect",
           "effectPattern": "Eff_Kaeya_IceShield_Impact_Breath",
+          "effectTempleteID": -1.0,
           "scale": 1.0,
-          "ILLLPEOODKP": "",
-          "effectTempleteID": -1.0
+          "ILLLPEOODKP": ""
         },
         {
           "$type": "TriggerAttackEvent",
-          "targetType": "Enemy",
           "attackEvent": {
             "attackInfo": {
               "attackProperty": {
-                "elementType": "Ice",
                 "attackType": "Melee",
-                "damagePercentageRatio": 0.0,
-                "strikeType": "Default",
-                "enBreak": 140.0,
                 "damagePercentage": "damage",
+                "damagePercentageRatio": 0.0,
                 "elementDurability": 50.0,
                 "elementRank": 1.5,
-                "arkheGrade": 0.0
+                "elementType": "Ice",
+                "enBreak": 140.0,
+                "strikeType": "Default",
+                "IIPHCFEONLK": 0.0
               },
+              "attackTag": "Elemental_Art",
+              "attenuationGroup": "default",
+              "attenuationTag": "",
               "cameraShake": {
-                "shakeTime": 0.12,
                 "shakeDistance": 30.0,
-                "MNKFEFOKFKP": "",
-                "shakeRange": 0.36
+                "shakeRange": 0.36,
+                "shakeTime": 0.12,
+                "MNKFEFOKFKP": ""
               },
               "hitPattern": {
-                "FLFCIDDNMNA": "",
-                "onHitEffectName": "default",
                 "hitHaltTimeScale": 0.02,
-                "hitImpulseType": "LV4"
-              },
-              "attenuationGroup": "default",
-              "attenuationTag": "",
-              "attackTag": "Elemental_Art"
+                "hitImpulseType": "LV4",
+                "onHitEffectName": "default",
+                "FLFCIDDNMNA": ""
+              }
             },
             "attackPattern": {
-              "$type": "CBACJBPBPOL",
-              "size": {
-                "x": 4.0,
-                "z": 8.0,
-                "y": 2.2
+              "$type": "ConfigAttackBox",
+              "born": {
+                "$type": "ConfigBornBySelf",
+                "offset": {
+                  "x": -0.2,
+                  "y": 1.0,
+                  "z": 0.0
+                }
               },
-              "triggerType": "TriggerNoRepeat",
               "ignoreMassive": true,
-              "born": {
-                "$type": "NABPLNFPHCK",
-                "offset": {
-                  "x": 0.0,
-                  "z": -0.2,
-                  "y": 1.0
-                }
-              }
+              "size": {
+                "x": 8.0,
+                "y": 2.2,
+                "z": 4.0
+              },
+              "triggerType": "TriggerNoRepeat"
             }
-          }
+          },
+          "targetType": "Enemy"
         },
         {
           "$type": "TriggerAttackEvent",
-          "targetType": "Enemy",
           "attackEvent": {
             "attackInfo": {
               "attackProperty": {
-                "elementType": "Ice",
                 "attackType": "Melee",
-                "damagePercentageRatio": 0.0,
-                "strikeType": "Default",
-                "enBreak": 0.0,
                 "damagePercentage": 0.0,
+                "damagePercentageRatio": 0.0,
                 "elementDurability": 100.0,
-                "arkheGrade": 0.0
+                "elementType": "Ice",
+                "enBreak": 0.0,
+                "strikeType": "Default",
+                "IIPHCFEONLK": 0.0
               },
-              "hitPattern": {
-                "FLFCIDDNMNA": "",
-                "onHitEffectName": "",
-                "hitImpulseType": "Default"
-              },
+              "attackTag": "",
               "attenuationGroup": "default",
               "attenuationTag": "",
-              "attackTag": ""
+              "hitPattern": {
+                "hitImpulseType": "Default",
+                "onHitEffectName": "",
+                "FLFCIDDNMNA": ""
+              }
             },
             "attackPattern": {
-              "$type": "CBACJBPBPOL",
-              "size": {
-                "x": 4.0,
-                "z": 8.0,
-                "y": 2.2
-              },
-              "triggerType": "TriggerNoRepeat",
-              "entityAttackFilter": "OnlyWater",
+              "$type": "ConfigAttackBox",
               "born": {
-                "$type": "NABPLNFPHCK",
+                "$type": "ConfigBornBySelf",
                 "offset": {
-                  "x": 0.0,
-                  "z": -0.2,
-                  "y": 1.0
+                  "x": -0.2,
+                  "y": 1.0,
+                  "z": 0.0
                 }
-              }
+              },
+              "entityAttackFilter": "OnlyWater",
+              "size": {
+                "x": 8.0,
+                "y": 2.2,
+                "z": 4.0
+              },
+              "triggerType": "TriggerNoRepeat"
             }
-          }
+          },
+          "targetType": "Enemy"
         },
         {
           "$type": "TriggerAttackEvent",
-          "targetType": "Enemy",
           "attackEvent": {
             "attackInfo": {
               "attackProperty": {
-                "elementType": "Ice",
                 "attackType": "Melee",
-                "damagePercentageRatio": 0.0,
-                "strikeType": "Default",
-                "enBreak": 0.0,
                 "damagePercentage": 0.0,
+                "damagePercentageRatio": 0.0,
                 "elementDurability": 50.0,
-                "arkheGrade": 0.0
+                "elementType": "Ice",
+                "enBreak": 0.0,
+                "strikeType": "Default",
+                "IIPHCFEONLK": 0.0
               },
-              "hitPattern": {
-                "FLFCIDDNMNA": "",
-                "onHitEffectName": "",
-                "hitImpulseType": "Default"
-              },
+              "attackTag": "",
               "attenuationGroup": "default",
               "attenuationTag": "",
-              "attackTag": ""
+              "hitPattern": {
+                "hitImpulseType": "Default",
+                "onHitEffectName": "",
+                "FLFCIDDNMNA": ""
+              }
             },
             "attackPattern": {
-              "$type": "CBACJBPBPOL",
-              "size": {
-                "x": 4.0,
-                "z": 8.0,
-                "y": 2.2
-              },
-              "triggerType": "TriggerNoRepeat",
-              "entityAttackFilter": "OnlyGrass",
+              "$type": "ConfigAttackBox",
               "born": {
-                "$type": "NABPLNFPHCK",
+                "$type": "ConfigBornBySelf",
                 "offset": {
-                  "x": 0.0,
-                  "z": -0.2,
-                  "y": 1.0
+                  "x": -0.2,
+                  "y": 1.0,
+                  "z": 0.0
                 }
-              }
+              },
+              "entityAttackFilter": "OnlyGrass",
+              "size": {
+                "x": 8.0,
+                "y": 2.2,
+                "z": 4.0
+              },
+              "triggerType": "TriggerNoRepeat"
             }
-          }
+          },
+          "targetType": "Enemy"
         }
       ],
-      "abilityMixins": [
-        {
-          "$type": "AttachToNormalizedTimeMixin",
-          "modifierName": "IceShield_AS_Effect",
-          "LJPPDIGCJMJ": "",
-          "stateID": "IceShield_AS",
-          "normalizeStart": 0.14
-        }
-      ],
-      "abilityName": "Avatar_Keaya_IceShield_Impact",
       "onAdded": [
         {
           "$type": "ApplyModifier",
           "modifierName": "IceShield_Impact_ElemBall_Handler"
         }
-      ],
-      "abilitySpecials": {
-        "damage": 0.0,
-        "GetElementRatio": 1.0,
-        "TasteOfCold": 0.15
-      }
+      ]
     }
   },
   {
     "Default": {
+      "abilityMixins": [
+        {
+          "$type": "AttachToStateIDMixin",
+          "modifierName": "FrozenTrap_State",
+          "stateIDs": [
+            "FrozenTrap",
+            "FrozenTrap_AS"
+          ],
+          "LJPPDIGCJMJ": ""
+        },
+        {
+          "$type": "AttachToStateIDMixin",
+          "modifierName": "FrozenTrap_Camera_Remover_Handler",
+          "stateIDs": [
+            "FrozenTrap",
+            "FrozenTrap_AS"
+          ],
+          "LJPPDIGCJMJ": ""
+        }
+      ],
+      "abilityName": "Avatar_Keaya_FrozenTrap_BS",
       "modifiers": {
         "FrozenTrap_State": {
-          "onRemoved": [
-            {
-              "$type": "EnableHeadControl",
-              "enable": true,
-              "doOffStage": true
-            }
-          ],
+          "elementDurability": 100.0,
+          "modifierName": "",
           "onAdded": [
             {
               "$type": "AttachAbilityStateResistance",
               "resistanceListID": 11002
             }
           ],
-          "elementDurability": 100.0,
+          "onRemoved": [
+            {
+              "$type": "EnableHeadControl",
+              "doOffStage": true,
+              "enable": true
+            }
+          ],
           "state": "Invincible",
-          "modifierName": "",
           "AIHNJLDFEGJ": 0.0
         },
         "FrozenTrap_Camera_Remover_Handler": {
-          "onRemoved": [
-            {
-              "$type": "AvatarCameraParam",
-              "cameraParam": {
-                "shouldKeepForceRadius": true,
-                "forceRadiusDuration": 0.0,
-                "forceRadius": 6.0
-              }
-            },
-            {
-              "$type": "AvatarExitCameraShot",
-              "doOffStage": true
-            }
-          ],
+          "elementDurability": 100.0,
+          "modifierName": "",
           "onAdded": [
             {
               "$type": "EnableHeadControl",
@@ -582,9 +591,9 @@
             {
               "$type": "AvatarCameraParam",
               "cameraParam": {
-                "shouldKeepForceRadius": true,
+                "forceRadius": 6.0,
                 "forceRadiusDuration": 0.0,
-                "forceRadius": 6.0
+                "shouldKeepForceRadius": true
               },
               "doOffStage": true
             },
@@ -593,13 +602,26 @@
               "doOffStage": true
             }
           ],
-          "elementDurability": 100.0,
-          "modifierName": "",
+          "onRemoved": [
+            {
+              "$type": "AvatarCameraParam",
+              "cameraParam": {
+                "forceRadius": 6.0,
+                "forceRadiusDuration": 0.0,
+                "shouldKeepForceRadius": true
+              }
+            },
+            {
+              "$type": "AvatarExitCameraShot",
+              "doOffStage": true
+            }
+          ],
           "AIHNJLDFEGJ": 0.0
         },
         "UNIQUE_FrozenTrap_Weather_Controller": {
           "duration": 1.0,
           "elementDurability": 100.0,
+          "isUnique": true,
           "modifierMixins": [
             {
               "$type": "TriggerWeatherMixin",
@@ -610,286 +632,265 @@
             }
           ],
           "modifierName": "",
-          "isUnique": true,
           "AIHNJLDFEGJ": 0.0
         }
       },
       "onAbilityStart": [
         {
           "$type": "ActCameraRadialBlur",
-          "NFBFBAJDMPJ": {
-            "BKICBNIALGL": 0.4,
-            "LCOPJHPGJCO": 0.2,
-            "LFMGJKCOGPI": 1.0
+          "cameraRadialBlur": {
+            "blurTime": 0.4,
+            "fadeTime": 0.2,
+            "power": 1.0
           }
         },
         {
           "$type": "AvatarSkillStart",
-          "skillID": 10075,
-          "BGNJBEPEJBO": 1.0,
+          "cdRatio": 1.0,
           "costStaminaRatio": 1.0,
-          "cdRatio": 1.0
+          "skillID": 10075,
+          "GIBAINFKPBO": 1.0
         },
         {
           "$type": "TriggerAttackEvent",
-          "targetType": "Enemy",
           "attackEvent": {
             "attackInfo": {
               "attackProperty": {
-                "damagePercentageRatio": 0.0,
-                "enBreak": 400.0,
                 "damagePercentage": 0.0,
+                "damagePercentageRatio": 0.0,
                 "elementDurability": 100.0,
-                "arkheGrade": 0.0
+                "enBreak": 400.0,
+                "IIPHCFEONLK": 0.0
               },
-              "hitPattern": {
-                "FLFCIDDNMNA": "",
-                "retreatType": "ByHitDirection",
-                "onHitEffectName": "none",
-                "hitHaltTimeScale": 0.05,
-                "muteHitText": true,
-                "hitImpulseType": "LV4"
-              },
+              "attackTag": "",
               "attenuationGroup": "default",
               "attenuationTag": "",
-              "attackTag": ""
+              "hitPattern": {
+                "hitHaltTimeScale": 0.05,
+                "hitImpulseType": "LV4",
+                "muteHitText": true,
+                "onHitEffectName": "none",
+                "retreatType": "ByHitDirection",
+                "FLFCIDDNMNA": ""
+              }
             },
             "attackPattern": {
-              "$type": "DDLDAMKEKJD",
-              "radius": 3.0,
-              "height": 4.0,
-              "triggerType": "TriggerNoRepeat",
+              "$type": "ConfigAttackCircle",
               "born": {
-                "$type": "NABPLNFPHCK",
+                "$type": "ConfigBornBySelf",
+                "direction": {
+                  "$type": "ConfigDirectionByDefault",
+                  "angleOffset": {
+                    "x": 0.0,
+                    "y": 0.0,
+                    "z": 0.0
+                  }
+                },
                 "offset": {
                   "x": 0.0,
-                  "z": 0.0,
-                  "y": -2.0
-                },
-                "direction": {
-                  "$type": "INIJNNEABNP",
-                  "OOKIMPBMBCN": {
-                    "x": 0.0,
-                    "z": 0.0,
-                    "y": 0.0
-                  }
+                  "y": -2.0,
+                  "z": 0.0
                 }
-              }
+              },
+              "height": 4.0,
+              "radius": 3.0,
+              "triggerType": "TriggerNoRepeat"
             }
-          }
+          },
+          "targetType": "Enemy"
         },
         {
           "$type": "Predicated",
-          "successActions": [
-            {
-              "$type": "CreateGadget",
-              "gadgetID": 41015001,
-              "campID": 1001,
-              "campTargetType": "Enemy",
-              "born": {
-                "$type": "BGOLIIIHLMO",
-                "attachPointName": "RootNode",
-                "attachPointTargetType": "Caster",
-                "offset": {
-                  "x": 0.0,
-                  "z": 0.0,
-                  "y": 0.0
-                },
-                "direction": {
-                  "$type": "FPLAJGOAOHH",
-                  "OOKIMPBMBCN": {
-                    "x": 0.0,
-                    "z": 0.0,
-                    "y": 45.0
-                  }
-                }
-              }
-            },
-            {
-              "$type": "CreateGadget",
-              "gadgetID": 41015001,
-              "campID": 1001,
-              "campTargetType": "Enemy",
-              "born": {
-                "$type": "BGOLIIIHLMO",
-                "attachPointName": "RootNode",
-                "attachPointTargetType": "Caster",
-                "offset": {
-                  "x": 0.0,
-                  "z": 0.0,
-                  "y": 0.0
-                },
-                "direction": {
-                  "$type": "FPLAJGOAOHH",
-                  "OOKIMPBMBCN": {
-                    "x": 0.0,
-                    "z": 0.0,
-                    "y": 135.0
-                  }
-                }
-              }
-            },
-            {
-              "$type": "CreateGadget",
-              "gadgetID": 41015001,
-              "campID": 1001,
-              "campTargetType": "Enemy",
-              "born": {
-                "$type": "BGOLIIIHLMO",
-                "attachPointName": "RootNode",
-                "attachPointTargetType": "Caster",
-                "offset": {
-                  "x": 0.0,
-                  "z": 0.0,
-                  "y": 0.0
-                },
-                "direction": {
-                  "$type": "FPLAJGOAOHH",
-                  "OOKIMPBMBCN": {
-                    "x": 0.0,
-                    "z": 0.0,
-                    "y": 225.0
-                  }
-                }
-              }
-            },
-            {
-              "$type": "CreateGadget",
-              "gadgetID": 41015001,
-              "campID": 1001,
-              "campTargetType": "Enemy",
-              "born": {
-                "$type": "BGOLIIIHLMO",
-                "attachPointName": "RootNode",
-                "attachPointTargetType": "Caster",
-                "offset": {
-                  "x": 0.0,
-                  "z": 0.0,
-                  "y": 0.0
-                },
-                "direction": {
-                  "$type": "FPLAJGOAOHH",
-                  "OOKIMPBMBCN": {
-                    "x": 0.0,
-                    "z": 0.0,
-                    "y": 315.0
-                  }
-                }
-              }
-            },
-            {
-              "$type": "ReviveElemEnergy",
-              "CBOMLBFIPJM": 15.0,
-              "doOffStage": true
-            }
-          ],
           "failActions": [
             {
               "$type": "CreateGadget",
-              "gadgetID": 41015001,
-              "campID": 1001,
-              "campTargetType": "Enemy",
               "born": {
-                "$type": "BGOLIIIHLMO",
+                "$type": "ConfigBornByAttachPoint",
                 "attachPointName": "RootNode",
                 "attachPointTargetType": "Caster",
+                "direction": {
+                  "$type": "ConfigDirectionByEntity",
+                  "angleOffset": {
+                    "x": 0.0,
+                    "y": 60.0,
+                    "z": 0.0
+                  }
+                },
                 "offset": {
                   "x": 0.0,
-                  "z": 0.0,
-                  "y": 0.0
-                },
-                "direction": {
-                  "$type": "FPLAJGOAOHH",
-                  "OOKIMPBMBCN": {
-                    "x": 0.0,
-                    "z": 0.0,
-                    "y": 60.0
-                  }
+                  "y": 0.0,
+                  "z": 0.0
                 }
-              }
+              },
+              "campID": 1001,
+              "campTargetType": "Enemy",
+              "gadgetID": 41015001
             },
             {
               "$type": "CreateGadget",
-              "gadgetID": 41015001,
-              "campID": 1001,
-              "campTargetType": "Enemy",
               "born": {
-                "$type": "BGOLIIIHLMO",
+                "$type": "ConfigBornByAttachPoint",
                 "attachPointName": "RootNode",
                 "attachPointTargetType": "Caster",
+                "direction": {
+                  "$type": "ConfigDirectionByEntity",
+                  "angleOffset": {
+                    "x": 0.0,
+                    "y": 180.0,
+                    "z": 0.0
+                  }
+                },
                 "offset": {
                   "x": 0.0,
-                  "z": 0.0,
-                  "y": 0.0
-                },
-                "direction": {
-                  "$type": "FPLAJGOAOHH",
-                  "OOKIMPBMBCN": {
-                    "x": 0.0,
-                    "z": 0.0,
-                    "y": 180.0
-                  }
+                  "y": 0.0,
+                  "z": 0.0
                 }
-              }
+              },
+              "campID": 1001,
+              "campTargetType": "Enemy",
+              "gadgetID": 41015001
             },
             {
               "$type": "CreateGadget",
-              "gadgetID": 41015001,
-              "campID": 1001,
-              "campTargetType": "Enemy",
               "born": {
-                "$type": "BGOLIIIHLMO",
+                "$type": "ConfigBornByAttachPoint",
                 "attachPointName": "RootNode",
                 "attachPointTargetType": "Caster",
+                "direction": {
+                  "$type": "ConfigDirectionByEntity",
+                  "angleOffset": {
+                    "x": 0.0,
+                    "y": 300.0,
+                    "z": 0.0
+                  }
+                },
                 "offset": {
                   "x": 0.0,
-                  "z": 0.0,
-                  "y": 0.0
-                },
-                "direction": {
-                  "$type": "FPLAJGOAOHH",
-                  "OOKIMPBMBCN": {
-                    "x": 0.0,
-                    "z": 0.0,
-                    "y": 300.0
-                  }
+                  "y": 0.0,
+                  "z": 0.0
                 }
-              }
+              },
+              "campID": 1001,
+              "campTargetType": "Enemy",
+              "gadgetID": 41015001
+            }
+          ],
+          "successActions": [
+            {
+              "$type": "CreateGadget",
+              "born": {
+                "$type": "ConfigBornByAttachPoint",
+                "attachPointName": "RootNode",
+                "attachPointTargetType": "Caster",
+                "direction": {
+                  "$type": "ConfigDirectionByEntity",
+                  "angleOffset": {
+                    "x": 0.0,
+                    "y": 45.0,
+                    "z": 0.0
+                  }
+                },
+                "offset": {
+                  "x": 0.0,
+                  "y": 0.0,
+                  "z": 0.0
+                }
+              },
+              "campID": 1001,
+              "campTargetType": "Enemy",
+              "gadgetID": 41015001
+            },
+            {
+              "$type": "CreateGadget",
+              "born": {
+                "$type": "ConfigBornByAttachPoint",
+                "attachPointName": "RootNode",
+                "attachPointTargetType": "Caster",
+                "direction": {
+                  "$type": "ConfigDirectionByEntity",
+                  "angleOffset": {
+                    "x": 0.0,
+                    "y": 135.0,
+                    "z": 0.0
+                  }
+                },
+                "offset": {
+                  "x": 0.0,
+                  "y": 0.0,
+                  "z": 0.0
+                }
+              },
+              "campID": 1001,
+              "campTargetType": "Enemy",
+              "gadgetID": 41015001
+            },
+            {
+              "$type": "CreateGadget",
+              "born": {
+                "$type": "ConfigBornByAttachPoint",
+                "attachPointName": "RootNode",
+                "attachPointTargetType": "Caster",
+                "direction": {
+                  "$type": "ConfigDirectionByEntity",
+                  "angleOffset": {
+                    "x": 0.0,
+                    "y": 225.0,
+                    "z": 0.0
+                  }
+                },
+                "offset": {
+                  "x": 0.0,
+                  "y": 0.0,
+                  "z": 0.0
+                }
+              },
+              "campID": 1001,
+              "campTargetType": "Enemy",
+              "gadgetID": 41015001
+            },
+            {
+              "$type": "CreateGadget",
+              "born": {
+                "$type": "ConfigBornByAttachPoint",
+                "attachPointName": "RootNode",
+                "attachPointTargetType": "Caster",
+                "direction": {
+                  "$type": "ConfigDirectionByEntity",
+                  "angleOffset": {
+                    "x": 0.0,
+                    "y": 315.0,
+                    "z": 0.0
+                  }
+                },
+                "offset": {
+                  "x": 0.0,
+                  "y": 0.0,
+                  "z": 0.0
+                }
+              },
+              "campID": 1001,
+              "campTargetType": "Enemy",
+              "gadgetID": 41015001
+            },
+            {
+              "$type": "ReviveElemEnergy",
+              "doOffStage": true,
+              "value": 15.0
             }
           ],
           "targetPredicates": [
             {
-              "$type": "LCCNMKNDACG",
+              "$type": "ByUnlockTalentParam",
               "talentParam": "ATField"
             }
           ]
         }
-      ],
-      "abilityMixins": [
-        {
-          "$type": "AttachToStateIDMixin",
-          "LJPPDIGCJMJ": "",
-          "stateIDs": [
-            "FrozenTrap",
-            "FrozenTrap_AS"
-          ],
-          "modifierName": "FrozenTrap_State"
-        },
-        {
-          "$type": "AttachToStateIDMixin",
-          "LJPPDIGCJMJ": "",
-          "stateIDs": [
-            "FrozenTrap",
-            "FrozenTrap_AS"
-          ],
-          "modifierName": "FrozenTrap_Camera_Remover_Handler"
-        }
-      ],
-      "abilityName": "Avatar_Keaya_FrozenTrap_BS"
+      ]
     }
   },
   {
     "Default": {
+      "abilityName": "Avatar_Keaya_FrozenTrap_Clear",
       "onAbilityStart": [
         {
           "$type": "KillGadget",
@@ -897,12 +898,16 @@
             "configID": 41015001
           }
         }
-      ],
-      "abilityName": "Avatar_Keaya_FrozenTrap_Clear"
+      ]
     }
   },
   {
     "Default": {
+      "abilityName": "Avatar_Keaya_FrozenTrap",
+      "abilitySpecials": {
+        "duration": 8.0,
+        "Damage": 0.0
+      },
       "modifiers": {
         "Blank": {
           "elementDurability": 100.0,
@@ -911,370 +916,370 @@
         },
         "UNIQUE_FrozenTrap_Boom": {
           "duration": 1.2,
+          "elementDurability": 100.0,
+          "isUnique": true,
+          "modifierName": "",
           "onAdded": [
             {
               "$type": "TriggerAttackEvent",
-              "targetType": "Enemy",
               "attackEvent": {
                 "attackInfo": {
                   "attackProperty": {
-                    "elementType": "Ice",
                     "attackType": "Melee",
-                    "damagePercentageRatio": 0.0,
-                    "strikeType": "Default",
-                    "enBreak": 25.0,
                     "damagePercentage": "Damage",
+                    "damagePercentageRatio": 0.0,
                     "elementDurability": 25.0,
-                    "arkheGrade": 0.0
+                    "elementType": "Ice",
+                    "enBreak": 25.0,
+                    "strikeType": "Default",
+                    "IIPHCFEONLK": 0.0
                   },
-                  "hitPattern": {
-                    "FLFCIDDNMNA": "",
-                    "onHitEffectName": "none",
-                    "hitHaltTimeScale": 0.02,
-                    "hitImpulseType": "LV2"
-                  },
+                  "attackTag": "Elemental_Burst",
                   "attenuationGroup": "default",
                   "attenuationTag": "Elemental_Burst",
-                  "attackTag": "Elemental_Burst",
-                  "canBeModifiedBy": "OriginOwner"
+                  "canBeModifiedBy": "OriginOwner",
+                  "hitPattern": {
+                    "hitHaltTimeScale": 0.02,
+                    "hitImpulseType": "LV2",
+                    "onHitEffectName": "none",
+                    "FLFCIDDNMNA": ""
+                  }
                 },
                 "attackPattern": {
-                  "$type": "HCAGHMDHEGG",
-                  "radius": 2.0,
-                  "triggerType": "TriggerNoRepeat",
-                  "filterByFrame": true,
+                  "$type": "ConfigAttackSphere",
                   "born": {
-                    "$type": "NHPKNMOMIFH",
+                    "$type": "ConfigBornByCollisionPoint",
+                    "direction": {
+                      "$type": "ConfigDirectionByEntity",
+                      "angleOffset": {
+                        "x": 0.0,
+                        "y": 0.0,
+                        "z": 0.0
+                      }
+                    },
                     "offset": {
                       "x": 0.0,
-                      "z": 0.0,
-                      "y": 0.0
-                    },
-                    "direction": {
-                      "$type": "FPLAJGOAOHH",
-                      "OOKIMPBMBCN": {
-                        "x": 0.0,
-                        "z": 0.0,
-                        "y": 0.0
-                      }
+                      "y": 0.0,
+                      "z": 0.0
                     }
-                  }
+                  },
+                  "filterByFrame": true,
+                  "radius": 2.0,
+                  "triggerType": "TriggerNoRepeat"
                 }
-              }
+              },
+              "targetType": "Enemy"
             },
             {
               "$type": "FireEffect",
-              "effectPattern": "Eff_Kaeya_FrozenTrap_AS_Icicle",
-              "scale": 1.0,
               "born": {
-                "$type": "NHPKNMOMIFH",
+                "$type": "ConfigBornByCollisionPoint",
+                "direction": {
+                  "$type": "ConfigDirectionByEntity",
+                  "angleOffset": {
+                    "x": 0.0,
+                    "y": 0.0,
+                    "z": 0.0
+                  }
+                },
                 "offset": {
                   "x": 0.0,
-                  "z": 0.0,
-                  "y": 0.0
-                },
-                "direction": {
-                  "$type": "FPLAJGOAOHH",
-                  "OOKIMPBMBCN": {
-                    "x": 0.0,
-                    "z": 0.0,
-                    "y": 0.0
-                  }
+                  "y": 0.0,
+                  "z": 0.0
                 }
               },
-              "ILLLPEOODKP": "",
-              "effectTempleteID": -1.0
+              "effectPattern": "Eff_Kaeya_FrozenTrap_AS_Icicle",
+              "effectTempleteID": -1.0,
+              "scale": 1.0,
+              "ILLLPEOODKP": ""
             }
           ],
           "stacking": "Unique",
-          "elementDurability": 100.0,
-          "modifierName": "",
-          "isUnique": true,
           "AIHNJLDFEGJ": 0.0
         },
         "FrozenTrap_IceReact": {
-          "thinkInterval": 1.0,
           "duration": "duration",
-          "onRemoved": [
-            {
-              "$type": "TriggerAttackEvent",
-              "targetType": "Enemy",
-              "attackEvent": {
-                "attackInfo": {
-                  "attackProperty": {
-                    "elementType": "Ice",
-                    "attackType": "Melee",
-                    "damagePercentageRatio": 0.0,
-                    "strikeType": "Default",
-                    "enBreak": 25.0,
-                    "damagePercentage": "Damage",
-                    "elementDurability": 25.0,
-                    "arkheGrade": 0.0
-                  },
-                  "hitPattern": {
-                    "FLFCIDDNMNA": "",
-                    "onHitEffectName": "none",
-                    "hitHaltTimeScale": 0.02,
-                    "hitImpulseType": "LV2"
-                  },
-                  "attenuationGroup": "default",
-                  "attenuationTag": "Elemental_Burst",
-                  "attackTag": "Elemental_Burst",
-                  "canBeModifiedBy": "OriginOwner"
-                },
-                "attackPattern": {
-                  "$type": "HCAGHMDHEGG",
-                  "radius": 2.0,
-                  "triggerType": "TriggerNoRepeat",
-                  "filterByFrame": true,
-                  "born": {
-                    "$type": "BGOLIIIHLMO",
-                    "attachPointName": "BulletPos",
-                    "offset": {
-                      "x": 0.0,
-                      "z": 0.0,
-                      "y": 0.0
-                    },
-                    "direction": {
-                      "$type": "FPLAJGOAOHH",
-                      "OOKIMPBMBCN": {
-                        "x": 0.0,
-                        "z": 0.0,
-                        "y": 0.0
-                      }
-                    }
-                  }
-                }
-              }
-            },
-            {
-              "$type": "FireEffect",
-              "effectPattern": "Eff_Kaeya_FrozenTrap_AS",
-              "scale": 1.0,
-              "born": {
-                "$type": "BGOLIIIHLMO",
-                "attachPointName": "BulletPos",
-                "offset": {
-                  "x": 0.0,
-                  "z": 0.0,
-                  "y": 0.0
-                },
-                "direction": {
-                  "$type": "FPLAJGOAOHH",
-                  "OOKIMPBMBCN": {
-                    "x": 0.0,
-                    "z": 0.0,
-                    "y": 0.0
-                  }
-                }
-              },
-              "ILLLPEOODKP": "",
-              "effectTempleteID": -1.0
-            },
-            {
-              "$type": "KillSelf"
-            }
-          ],
+          "elementDurability": "duration",
+          "modifierName": "",
           "onAdded": [
             {
               "$type": "AttachModifier",
               "modifierName": "FrozenTrap_IceReact_ForGrass"
             }
           ],
-          "stacking": "Unique",
-          "elementDurability": "duration",
-          "modifierName": "",
-          "onThinkInterval": [
+          "onRemoved": [
             {
               "$type": "TriggerAttackEvent",
-              "targetType": "Enemy",
               "attackEvent": {
                 "attackInfo": {
                   "attackProperty": {
-                    "elementType": "Ice",
+                    "attackType": "Melee",
+                    "damagePercentage": "Damage",
                     "damagePercentageRatio": 0.0,
-                    "strikeType": "Default",
-                    "enBreak": 0.0,
-                    "damagePercentage": 0.0,
                     "elementDurability": 25.0,
-                    "arkheGrade": 0.0
+                    "elementType": "Ice",
+                    "enBreak": 25.0,
+                    "strikeType": "Default",
+                    "IIPHCFEONLK": 0.0
                   },
-                  "hitPattern": {
-                    "FLFCIDDNMNA": "",
-                    "onHitEffectName": "none",
-                    "hitHaltTimeScale": 0.02,
-                    "hitImpulseType": "LV0"
-                  },
+                  "attackTag": "Elemental_Burst",
                   "attenuationGroup": "default",
-                  "attenuationTag": "",
-                  "attackTag": "FrozenTrap_IceReact",
-                  "canBeModifiedBy": "OriginOwner"
+                  "attenuationTag": "Elemental_Burst",
+                  "canBeModifiedBy": "OriginOwner",
+                  "hitPattern": {
+                    "hitHaltTimeScale": 0.02,
+                    "hitImpulseType": "LV2",
+                    "onHitEffectName": "none",
+                    "FLFCIDDNMNA": ""
+                  }
                 },
                 "attackPattern": {
-                  "$type": "DDLDAMKEKJD",
-                  "radius": 0.6,
-                  "height": 0.6,
-                  "triggerType": "TriggerNoRepeat",
-                  "entityAttackFilter": "OnlyWater",
+                  "$type": "ConfigAttackSphere",
                   "born": {
-                    "$type": "BGOLIIIHLMO",
+                    "$type": "ConfigBornByAttachPoint",
                     "attachPointName": "BulletPos",
+                    "direction": {
+                      "$type": "ConfigDirectionByEntity",
+                      "angleOffset": {
+                        "x": 0.0,
+                        "y": 0.0,
+                        "z": 0.0
+                      }
+                    },
                     "offset": {
                       "x": 0.0,
-                      "z": 0.0,
-                      "y": -0.3
-                    },
-                    "direction": {
-                      "$type": "FPLAJGOAOHH",
-                      "OOKIMPBMBCN": {
-                        "x": 0.0,
-                        "z": 0.0,
-                        "y": 0.0
-                      }
+                      "y": 0.0,
+                      "z": 0.0
                     }
-                  }
+                  },
+                  "filterByFrame": true,
+                  "radius": 2.0,
+                  "triggerType": "TriggerNoRepeat"
                 }
-              }
+              },
+              "targetType": "Enemy"
+            },
+            {
+              "$type": "FireEffect",
+              "born": {
+                "$type": "ConfigBornByAttachPoint",
+                "attachPointName": "BulletPos",
+                "direction": {
+                  "$type": "ConfigDirectionByEntity",
+                  "angleOffset": {
+                    "x": 0.0,
+                    "y": 0.0,
+                    "z": 0.0
+                  }
+                },
+                "offset": {
+                  "x": 0.0,
+                  "y": 0.0,
+                  "z": 0.0
+                }
+              },
+              "effectPattern": "Eff_Kaeya_FrozenTrap_AS",
+              "effectTempleteID": -1.0,
+              "scale": 1.0,
+              "ILLLPEOODKP": ""
+            },
+            {
+              "$type": "KillSelf"
             }
           ],
+          "onThinkInterval": [
+            {
+              "$type": "TriggerAttackEvent",
+              "attackEvent": {
+                "attackInfo": {
+                  "attackProperty": {
+                    "damagePercentage": 0.0,
+                    "damagePercentageRatio": 0.0,
+                    "elementDurability": 25.0,
+                    "elementType": "Ice",
+                    "enBreak": 0.0,
+                    "strikeType": "Default",
+                    "IIPHCFEONLK": 0.0
+                  },
+                  "attackTag": "FrozenTrap_IceReact",
+                  "attenuationGroup": "default",
+                  "attenuationTag": "",
+                  "canBeModifiedBy": "OriginOwner",
+                  "hitPattern": {
+                    "hitHaltTimeScale": 0.02,
+                    "hitImpulseType": "LV0",
+                    "onHitEffectName": "none",
+                    "FLFCIDDNMNA": ""
+                  }
+                },
+                "attackPattern": {
+                  "$type": "ConfigAttackCircle",
+                  "born": {
+                    "$type": "ConfigBornByAttachPoint",
+                    "attachPointName": "BulletPos",
+                    "direction": {
+                      "$type": "ConfigDirectionByEntity",
+                      "angleOffset": {
+                        "x": 0.0,
+                        "y": 0.0,
+                        "z": 0.0
+                      }
+                    },
+                    "offset": {
+                      "x": 0.0,
+                      "y": -0.3,
+                      "z": 0.0
+                    }
+                  },
+                  "entityAttackFilter": "OnlyWater",
+                  "height": 0.6,
+                  "radius": 0.6,
+                  "triggerType": "TriggerNoRepeat"
+                }
+              },
+              "targetType": "Enemy"
+            }
+          ],
+          "stacking": "Unique",
+          "thinkInterval": 1.0,
           "AIHNJLDFEGJ": 0.0
         },
         "FrozenTrap_IceReact_ForGrass": {
-          "thinkInterval": 0.3,
-          "stacking": "Unique",
           "elementDurability": 100.0,
           "modifierName": "",
           "onThinkInterval": [
             {
               "$type": "TriggerAttackEvent",
-              "targetType": "Enemy",
               "attackEvent": {
                 "attackInfo": {
                   "attackProperty": {
-                    "elementType": "Ice",
-                    "damagePercentageRatio": 0.0,
-                    "strikeType": "Default",
-                    "enBreak": 0.0,
                     "damagePercentage": 0.0,
+                    "damagePercentageRatio": 0.0,
                     "elementDurability": 25.0,
-                    "arkheGrade": 0.0
+                    "elementType": "Ice",
+                    "enBreak": 0.0,
+                    "strikeType": "Default",
+                    "IIPHCFEONLK": 0.0
                   },
-                  "hitPattern": {
-                    "FLFCIDDNMNA": "",
-                    "onHitEffectName": "none",
-                    "hitHaltTimeScale": 0.02,
-                    "hitImpulseType": "LV0"
-                  },
+                  "attackTag": "FrozenTrap_IceReact",
                   "attenuationGroup": "default",
                   "attenuationTag": "",
-                  "attackTag": "FrozenTrap_IceReact",
-                  "canBeModifiedBy": "OriginOwner"
+                  "canBeModifiedBy": "OriginOwner",
+                  "hitPattern": {
+                    "hitHaltTimeScale": 0.02,
+                    "hitImpulseType": "LV0",
+                    "onHitEffectName": "none",
+                    "FLFCIDDNMNA": ""
+                  }
                 },
                 "attackPattern": {
-                  "$type": "HCAGHMDHEGG",
-                  "radius": 1.0,
-                  "triggerType": "TriggerNoRepeat",
-                  "filterByFrame": true,
-                  "entityAttackFilter": "OnlyGrass",
+                  "$type": "ConfigAttackSphere",
                   "born": {
-                    "$type": "BGOLIIIHLMO",
+                    "$type": "ConfigBornByAttachPoint",
                     "attachPointName": "BulletPos",
+                    "direction": {
+                      "$type": "ConfigDirectionByEntity",
+                      "angleOffset": {
+                        "x": 0.0,
+                        "y": 0.0,
+                        "z": 0.0
+                      }
+                    },
                     "offset": {
                       "x": 0.0,
-                      "z": 0.0,
-                      "y": 0.0
-                    },
-                    "direction": {
-                      "$type": "FPLAJGOAOHH",
-                      "OOKIMPBMBCN": {
-                        "x": 0.0,
-                        "z": 0.0,
-                        "y": 0.0
-                      }
+                      "y": 0.0,
+                      "z": 0.0
                     }
-                  }
+                  },
+                  "entityAttackFilter": "OnlyGrass",
+                  "filterByFrame": true,
+                  "radius": 1.0,
+                  "triggerType": "TriggerNoRepeat"
                 }
-              }
+              },
+              "targetType": "Enemy"
             }
           ],
+          "stacking": "Unique",
+          "thinkInterval": 0.3,
           "AIHNJLDFEGJ": 0.0
         },
         "FrozenTrap_HoldOnPlease_GrandHandler": {
-          "thinkInterval": 1.5,
-          "onRemoved": [
-            {
-              "$type": "SetGlobalValue",
-              "key": "_ABILITY_Kaeya_FrozenTrap_HoldOnPlease",
-              "minValue": 0.0,
-              "maxValue": 0.0,
-              "CBOMLBFIPJM": 0.0,
-              "target": "OriginOwner"
-            }
-          ],
+          "elementDurability": 100.0,
+          "modifierName": "",
           "onAdded": [
             {
               "$type": "SetGlobalValue",
               "key": "_ABILITY_Kaeya_FrozenTrap_HoldOnPlease",
-              "minValue": 0.0,
               "maxValue": 0.0,
-              "CBOMLBFIPJM": 0.0,
+              "minValue": 0.0,
+              "target": "OriginOwner",
+              "value": 0.0
+            },
+            {
+              "$type": "AttachModifier",
+              "modifierName": "UNIQUE_HoldOnPlease_OwnerHandler",
+              "predicates": [
+                {
+                  "$type": "ByUnlockTalentParam",
+                  "talentParam": "HoldOnPlease"
+                }
+              ],
               "target": "OriginOwner"
             },
             {
               "$type": "AttachModifier",
-              "modifierName": "UNIQUE_HoldOnPlease_OwnerHandler",
-              "target": "OriginOwner",
-              "predicates": [
-                {
-                  "$type": "LCCNMKNDACG",
-                  "talentParam": "HoldOnPlease"
-                }
-              ]
-            },
-            {
-              "$type": "AttachModifier",
               "modifierName": "UNIQUE_HoldOnPlease_TeamHandler",
-              "target": "CurTeamAvatars",
               "predicates": [
                 {
-                  "$type": "LCCNMKNDACG",
+                  "$type": "ByUnlockTalentParam",
                   "talentParam": "HoldOnPlease"
                 }
-              ]
+              ],
+              "target": "CurTeamAvatars"
             }
           ],
-          "stacking": "Unique",
-          "elementDurability": 100.0,
-          "modifierName": "",
+          "onRemoved": [
+            {
+              "$type": "SetGlobalValue",
+              "key": "_ABILITY_Kaeya_FrozenTrap_HoldOnPlease",
+              "maxValue": 0.0,
+              "minValue": 0.0,
+              "target": "OriginOwner",
+              "value": 0.0
+            }
+          ],
           "onThinkInterval": [
             {
               "$type": "AttachModifier",
               "modifierName": "UNIQUE_HoldOnPlease_OwnerHandler",
-              "target": "OriginOwner",
               "predicates": [
                 {
-                  "$type": "LCCNMKNDACG",
+                  "$type": "ByUnlockTalentParam",
                   "talentParam": "HoldOnPlease"
                 }
-              ]
+              ],
+              "target": "OriginOwner"
             },
             {
               "$type": "AttachModifier",
               "modifierName": "UNIQUE_HoldOnPlease_TeamHandler",
-              "target": "CurTeamAvatars",
               "predicates": [
                 {
-                  "$type": "LCCNMKNDACG",
+                  "$type": "ByUnlockTalentParam",
                   "talentParam": "HoldOnPlease"
                 }
-              ]
+              ],
+              "target": "CurTeamAvatars"
             }
           ],
+          "stacking": "Unique",
+          "thinkInterval": 1.5,
           "AIHNJLDFEGJ": 0.0
         },
         "UNIQUE_HoldOnPlease_TeamHandler": {
-          "stacking": "Unique",
           "elementDurability": 100.0,
+          "isUnique": true,
           "modifierMixins": [
             {
               "$type": "DoActionByKillingMixin",
@@ -1282,48 +1287,86 @@
               "onKill": [
                 {
                   "$type": "Predicated",
+                  "doOffStage": true,
                   "successActions": [
                     {
                       "$type": "AddGlobalValue",
-                      "useLimitRange": true,
+                      "doOffStage": true,
                       "key": "_ABILITY_Kaeya_FrozenTrap_HoldOnPlease",
                       "maxValue": 3.0,
                       "minValue": 0.0,
-                      "CBOMLBFIPJM": 1.0,
                       "target": "CasterOriginOwner",
-                      "doOffStage": true
+                      "useLimitRange": true,
+                      "value": 1.0
                     }
                   ],
+                  "target": "Other",
                   "targetPredicates": [
                     {
-                      "$type": "DEOFBICNFHF",
+                      "$type": "ByEntityTypes",
                       "entityTypes": [
                         "Monster"
                       ]
                     },
                     {
-                      "$type": "EOFDCELPGFO",
-                      "CBOMLBFIPJM": 0.0,
+                      "$type": "ByTargetGlobalValue",
                       "compareType": "NoneOrEqual",
-                      "key": "_ANIMAL_ENTITY_TYPE"
+                      "key": "_ANIMAL_ENTITY_TYPE",
+                      "value": 0.0
                     }
-                  ],
-                  "target": "Other",
-                  "doOffStage": true
+                  ]
                 }
               ]
             }
           ],
           "modifierName": "",
-          "isUnique": true,
+          "stacking": "Unique",
           "AIHNJLDFEGJ": 0.0
         },
         "UNIQUE_HoldOnPlease_OwnerHandler": {
-          "stacking": "Unique",
           "elementDurability": 100.0,
+          "isUnique": true,
           "modifierMixins": [
             {
               "$type": "AttachModifierToSelfGlobalValueMixin",
+              "actionQueues": [
+                [],
+                [
+                  {
+                    "$type": "AttachModifier",
+                    "doOffStage": true,
+                    "modifierName": "HoldOnPlease",
+                    "otherTargets": {
+                      "$type": "SelectTargetsByChildren",
+                      "configID": 41015001
+                    }
+                  }
+                ],
+                [
+                  {
+                    "$type": "AttachModifier",
+                    "doOffStage": true,
+                    "modifierName": "HoldOnPlease",
+                    "otherTargets": {
+                      "$type": "SelectTargetsByChildren",
+                      "configID": 41015001
+                    }
+                  }
+                ],
+                [
+                  {
+                    "$type": "AttachModifier",
+                    "doOffStage": true,
+                    "modifierName": "HoldOnPlease",
+                    "otherTargets": {
+                      "$type": "SelectTargetsByChildren",
+                      "configID": 41015001
+                    }
+                  }
+                ]
+              ],
+              "defaultGlobalValueOnCreate": 0.0,
+              "globalValueKey": "_ABILITY_Kaeya_FrozenTrap_HoldOnPlease",
               "modifierNameSteps": [
                 "Blank",
                 "Blank",
@@ -1336,69 +1379,31 @@
                 1.5,
                 2.5,
                 3.5
-              ],
-              "globalValueKey": "_ABILITY_Kaeya_FrozenTrap_HoldOnPlease",
-              "actionQueues": [
-                [],
-                [
-                  {
-                    "$type": "AttachModifier",
-                    "modifierName": "HoldOnPlease",
-                    "doOffStage": true,
-                    "otherTargets": {
-                      "$type": "HMFKEDOMDMA",
-                      "configID": 41015001
-                    }
-                  }
-                ],
-                [
-                  {
-                    "$type": "AttachModifier",
-                    "modifierName": "HoldOnPlease",
-                    "doOffStage": true,
-                    "otherTargets": {
-                      "$type": "HMFKEDOMDMA",
-                      "configID": 41015001
-                    }
-                  }
-                ],
-                [
-                  {
-                    "$type": "AttachModifier",
-                    "modifierName": "HoldOnPlease",
-                    "doOffStage": true,
-                    "otherTargets": {
-                      "$type": "HMFKEDOMDMA",
-                      "configID": 41015001
-                    }
-                  }
-                ]
-              ],
-              "defaultGlobalValueOnCreate": 0.0
+              ]
             }
           ],
           "modifierName": "",
-          "isUnique": true,
+          "stacking": "Unique",
           "AIHNJLDFEGJ": 0.0
         },
         "HoldOnPlease": {
+          "elementDurability": 100.0,
+          "modifierName": "",
           "onAdded": [
             {
               "$type": "AddElementDurability",
-              "CBOMLBFIPJM": 2.5,
-              "useLimitRange": true,
-              "minValue": 0.0,
               "maxValue": 15.0,
-              "modifierName": "FrozenTrap_IceReact"
+              "minValue": 0.0,
+              "modifierName": "FrozenTrap_IceReact",
+              "useLimitRange": true,
+              "value": 2.5
             }
           ],
           "stacking": "Multiple",
-          "GMGIAGMCGLF": {
-            "PFEHHABPHDB": "",
-            "KAANKELFPLA": 3.0
+          "stackingOption": {
+            "abilitySpecialName": "",
+            "maxModifierNumForMultipleType": 3.0
           },
-          "elementDurability": 100.0,
-          "modifierName": "",
           "AIHNJLDFEGJ": 0.0
         }
       },
@@ -1411,9 +1416,10 @@
               "modifierName": "UNIQUE_FrozenTrap_Boom"
             }
           ],
+          "target": "Target",
           "targetPredicates": [
             {
-              "$type": "DEOFBICNFHF",
+              "$type": "ByEntityTypes",
               "entityTypes": [
                 "Monster",
                 "MonsterEquip",
@@ -1423,18 +1429,16 @@
                 "Gear"
               ]
             }
-          ],
-          "target": "Target"
+          ]
         }
       ],
-      "abilityName": "Avatar_Keaya_FrozenTrap",
       "onAdded": [
         {
           "$type": "AttachEffect",
-          "ILLLPEOODKP": "",
-          "scale": 1.0,
           "effectPattern": "Eff_Kaeya_FrozenTrap",
-          "effectTempleteID": -1.0
+          "effectTempleteID": -1.0,
+          "scale": 1.0,
+          "ILLLPEOODKP": ""
         },
         {
           "$type": "AttachModifier",
@@ -1444,40 +1448,36 @@
           "$type": "AttachModifier",
           "modifierName": "FrozenTrap_HoldOnPlease_GrandHandler"
         }
-      ],
-      "abilitySpecials": {
-        "duration": 8.0,
-        "Damage": 0.0
-      }
+      ]
     }
   },
   {
     "Default": {
-      "modifiers": {
-        "StaminaReduce": {
-          "isLimitedProperties": true,
-          "properties": {
-            "Actor_CostStaminaRatio": "StaminaReduce"
-          },
-          "elementDurability": 100.0,
-          "modifierName": "",
-          "AIHNJLDFEGJ": 0.0
-        }
-      },
       "abilityMixins": [
         {
           "$type": "AttachToStateIDMixin",
-          "LJPPDIGCJMJ": "",
+          "modifierName": "StaminaReduce",
           "stateIDs": [
             "SprintBS",
             "Sprint"
           ],
-          "modifierName": "StaminaReduce"
+          "LJPPDIGCJMJ": ""
         }
       ],
       "abilityName": "Avatar_Keaya_StrongBody",
       "abilitySpecials": {
         "StaminaReduce": 0.0
+      },
+      "modifiers": {
+        "StaminaReduce": {
+          "elementDurability": 100.0,
+          "isLimitedProperties": true,
+          "modifierName": "",
+          "properties": {
+            "Actor_CostStaminaRatio": "StaminaReduce"
+          },
+          "AIHNJLDFEGJ": 0.0
+        }
       }
     }
   },
@@ -1486,67 +1486,67 @@
       "abilityMixins": [
         {
           "$type": "ModifyDamageMixin",
-          "damagePercentageRatio": 0.0,
-          "damagePercentage": "damage1",
           "attackTags": [
             "NormalAttack_01"
-          ]
+          ],
+          "damagePercentage": "damage1",
+          "damagePercentageRatio": 0.0
         },
         {
           "$type": "ModifyDamageMixin",
-          "damagePercentageRatio": 0.0,
-          "damagePercentage": "damage2",
           "attackTags": [
             "NormalAttack_02"
-          ]
+          ],
+          "damagePercentage": "damage2",
+          "damagePercentageRatio": 0.0
         },
         {
           "$type": "ModifyDamageMixin",
-          "damagePercentageRatio": 0.0,
-          "damagePercentage": "damage3",
           "attackTags": [
             "NormalAttack_03"
-          ]
+          ],
+          "damagePercentage": "damage3",
+          "damagePercentageRatio": 0.0
         },
         {
           "$type": "ModifyDamageMixin",
-          "damagePercentageRatio": 0.0,
-          "damagePercentage": "damage4",
           "attackTags": [
             "NormalAttack_04"
-          ]
+          ],
+          "damagePercentage": "damage4",
+          "damagePercentageRatio": 0.0
         },
         {
           "$type": "ModifyDamageMixin",
-          "damagePercentageRatio": 0.0,
-          "damagePercentage": "damage5",
           "attackTags": [
             "NormalAttack_05"
-          ]
+          ],
+          "damagePercentage": "damage5",
+          "damagePercentageRatio": 0.0
         },
         {
           "$type": "ModifyDamageMixin",
-          "damagePercentageRatio": 0.0,
-          "damagePercentage": "damage6",
           "animEventNames": [
             "ExtraAttack_1"
-          ]
+          ],
+          "damagePercentage": "damage6",
+          "damagePercentageRatio": 0.0
         },
         {
           "$type": "ModifyDamageMixin",
-          "damagePercentageRatio": 0.0,
-          "damagePercentage": "damage7",
           "animEventNames": [
             "ExtraAttack_2"
-          ]
+          ],
+          "damagePercentage": "damage7",
+          "damagePercentageRatio": 0.0
         },
         {
           "$type": "ModifyDamageMixin",
-          "damagePercentageRatio": 0.0,
-          "damagePercentage": "Elemental_Burst_Damage",
           "attackTags": [
             "Elemental_Burst"
-          ]
+          ],
+          "damagePercentage": "Elemental_Burst_Damage",
+          "damagePercentageRatio": 0.0
         }
       ],
       "abilityName": "Avatar_Kaeya_DamageHandler",
@@ -1564,14 +1564,17 @@
   },
   {
     "Default": {
+      "abilityName": "Kaeya_FrozenCritic",
+      "abilitySpecials": {
+        "FrozenCritic": 0.15
+      },
+      "isDynamicAbility": true,
       "modifiers": {
         "FrozenCritic_Handler": {
           "elementDurability": 100.0,
           "modifierMixins": [
             {
               "$type": "ModifyDamageMixin",
-              "damagePercentageRatio": 0.0,
-              "EJDDDMMFFLG": "FrozenCritic",
               "attackTags": [
                 "NormalAttack_01",
                 "NormalAttack_02",
@@ -1580,16 +1583,18 @@
                 "NormalAttack_05",
                 "ExtraAttack"
               ],
+              "bonusCritical": "FrozenCritic",
+              "damagePercentageRatio": 0.0,
               "predicates": [
                 {
-                  "$type": "GPEMEIHPCCF",
+                  "$type": "ByAny",
                   "predicates": [
                     {
-                      "$type": "DHJDIBHFDKB",
+                      "$type": "ByHasElement",
                       "element": "Ice"
                     },
                     {
-                      "$type": "DHJDIBHFDKB",
+                      "$type": "ByHasElement",
                       "element": "Frozen"
                     }
                   ]
@@ -1601,57 +1606,52 @@
           "AIHNJLDFEGJ": 0.0
         }
       },
-      "abilityName": "Kaeya_FrozenCritic",
-      "isDynamicAbility": true,
       "onAdded": [
         {
           "$type": "ApplyModifier",
-          "modifierName": "FrozenCritic_Handler",
-          "doOffStage": true
+          "doOffStage": true,
+          "modifierName": "FrozenCritic_Handler"
         }
-      ],
-      "abilitySpecials": {
-        "FrozenCritic": 0.15
-      }
+      ]
     }
   },
   {
     "Default": {
+      "abilityName": "Avatar_Keaya_IceHeartTrigger",
+      "isDynamicAbility": true,
       "modifiers": {
         "IceHeartTrigger_Handler": {
           "elementDurability": 100.0,
           "modifierMixins": [
             {
               "$type": "DoActionByEventMixin",
-              "onEvent": "HPDown",
               "actions": [
                 {
                   "$type": "TriggerAbility",
                   "abilityName": "Avatar_Keaya_IceShield",
                   "predicates": [
                     {
-                      "$type": "HGKCHJOOMCH",
-                      "KIKIBABLEMA": 0.2,
+                      "$type": "ByTargetHPRatio",
+                      "hpRatio": 0.2,
                       "logic": "Lesser",
                       "target": "Self"
                     },
                     {
-                      "$type": "BAEGOCNMDPJ",
+                      "$type": "BySkillReady",
                       "skillID": 10081
                     }
                   ]
                 }
               ],
-              "type": "Current",
-              "costEnergyDeltaName": ""
+              "costEnergyDeltaName": "",
+              "onEvent": "HPDown",
+              "type": "Current"
             }
           ],
           "modifierName": "",
           "AIHNJLDFEGJ": 0.0
         }
       },
-      "abilityName": "Avatar_Keaya_IceHeartTrigger",
-      "isDynamicAbility": true,
       "onAdded": [
         {
           "$type": "ApplyModifier",
@@ -1662,89 +1662,82 @@
   },
   {
     "Default": {
+      "abilityName": "Avatar_Keaya_IceShield",
+      "abilitySpecials": {
+        "shieldHP": 0.3,
+        "IceShield_HitDir": 0.0,
+        "IceShield_HitDir_FixParam": -1.0
+      },
       "modifiers": {
         "UNIQUE_Kaeya_IceShield": {
           "duration": 20.0,
-          "onRemoved": [
-            {
-              "$type": "FireEffect",
-              "effectPattern": "Eff_Kaeya_IceShield_AS",
-              "scale": 1.0,
-              "ILLLPEOODKP": "",
-              "effectTempleteID": -1.0
-            }
-          ],
-          "onAdded": [
-            {
-              "$type": "AttachEffect",
-              "ILLLPEOODKP": "",
-              "scale": 1.0,
-              "effectPattern": "Eff_Kaeya_IceShield",
-              "effectTempleteID": -1.0
-            },
-            {
-              "$type": "SendEffectTrigger",
-              "parameter": "ShieldBorn",
-              "effectPattern": "Eff_Kaeya_IceShield",
-              "attachPoint": ""
-            }
-          ],
-          "properties": {
-            "Actor_EndureDelta": 0.0
-          },
           "elementDurability": 100.0,
+          "isUnique": true,
           "modifierMixins": [
             {
               "$type": "EliteShieldMixin",
-              "showDamageText": "INFO_ELITE_DEFENCE",
               "costShieldRatioName": "",
-              "shieldType": "Avatar_Ice",
+              "shieldAngle": 360.0,
               "shieldHPRatio": "shieldHP",
-              "shieldAngle": 360.0
+              "shieldType": "Avatar_Ice",
+              "showDamageText": "INFO_ELITE_DEFENCE"
             }
           ],
           "modifierName": "",
-          "isUnique": true,
-          "AIHNJLDFEGJ": 0.0,
+          "onAdded": [
+            {
+              "$type": "AttachEffect",
+              "effectPattern": "Eff_Kaeya_IceShield",
+              "effectTempleteID": -1.0,
+              "scale": 1.0,
+              "ILLLPEOODKP": ""
+            },
+            {
+              "$type": "SendEffectTrigger",
+              "attachPoint": "",
+              "effectPattern": "Eff_Kaeya_IceShield",
+              "parameter": "ShieldBorn"
+            }
+          ],
           "onBeingHit": [
             {
               "$type": "Predicated",
               "successActions": [
                 {
                   "$type": "SetGlobalDir",
-                  "key": "_ABILITY_KAEYA_ICESHIELD_HIT",
                   "born": {
-                    "$type": "MBOEKFDLCGB"
+                    "$type": "ConfigBornByHitPoint"
                   },
+                  "key": "_ABILITY_KAEYA_ICESHIELD_HIT",
                   "setTarget": false,
                   "target": "Target"
                 },
                 {
                   "$type": "SetGlobalValue",
                   "key": "_ABILITY_KAEYA_ICESHIELD_HIT_0",
-                  "minValue": 0.0,
                   "maxValue": 0.0,
-                  "CBOMLBFIPJM": 0.0
+                  "minValue": 0.0,
+                  "value": 0.0
                 },
                 {
                   "$type": "SetGlobalValue",
                   "key": "_ABILITY_KAEYA_ICESHIELD_HIT_1",
-                  "minValue": 0.0,
                   "maxValue": 0.0,
-                  "CBOMLBFIPJM": 0.0
+                  "minValue": 0.0,
+                  "value": 0.0
                 },
                 {
                   "$type": "SetGlobalValueToOverrideMap",
-                  "globalValueKey": "_ABILITY_KAEYA_ICESHIELD_HIT_2",
                   "abilityName": "",
+                  "globalValueKey": "_ABILITY_KAEYA_ICESHIELD_HIT_2",
                   "overrideMapKey": "IceShield_HitDir"
                 },
                 {
                   "$type": "SetGlobalValue",
                   "key": "_ABILITY_KAEYA_ICESHIELD_HIT_2",
-                  "minValue": 0.0,
                   "maxValue": 0.0,
-                  "CBOMLBFIPJM": [
+                  "minValue": 0.0,
+                  "value": [
                     "IceShield_HitDir",
                     "IceShield_HitDir_FixParam",
                     "MUL"
@@ -1752,23 +1745,23 @@
                 },
                 {
                   "$type": "FireEffect",
-                  "effectPattern": "Eff_Kaeya_IceShield_Hit",
-                  "scale": 1.0,
                   "born": {
-                    "$type": "NABPLNFPHCK",
+                    "$type": "ConfigBornBySelf",
                     "direction": {
-                      "$type": "KMEAEFMPHKB",
+                      "$type": "ConfigDirectionByGlobalValue",
                       "directionKey": "_ABILITY_KAEYA_ICESHIELD_HIT"
                     }
                   },
-                  "ILLLPEOODKP": "",
-                  "effectTempleteID": -1.0
+                  "effectPattern": "Eff_Kaeya_IceShield_Hit",
+                  "effectTempleteID": -1.0,
+                  "scale": 1.0,
+                  "ILLLPEOODKP": ""
                 },
                 {
                   "$type": "SendEffectTrigger",
-                  "parameter": "ShieldHit",
+                  "attachPoint": "",
                   "effectPattern": "Eff_Kaeya_IceShield",
-                  "attachPoint": ""
+                  "parameter": "ShieldHit"
                 },
                 {
                   "$type": "ApplyModifier",
@@ -1777,52 +1770,65 @@
               ],
               "targetPredicates": [
                 {
-                  "$type": "GPEMEIHPCCF",
+                  "$type": "ByAny",
                   "predicates": [
                     {
-                      "$type": "AJJPBBPBCMO",
+                      "$type": "ByHitDamage",
                       "damage": 0.0
                     },
                     {
-                      "$type": "FCLGMLGFNHI",
-                      "hitEnBreak": 0.0
+                      "$type": "ByHitEnBreak",
+                      "enBreak": 0.0
                     }
                   ]
                 },
                 {
-                  "$type": "EOFDCELPGFO",
-                  "CBOMLBFIPJM": 0.0,
+                  "$type": "ByTargetGlobalValue",
                   "compareType": "NoneOrEqual",
-                  "key": "_ABILITY_Kaeya_IceShield_BeHit_CD"
+                  "key": "_ABILITY_Kaeya_IceShield_BeHit_CD",
+                  "value": 0.0
                 }
               ]
             }
-          ]
+          ],
+          "onRemoved": [
+            {
+              "$type": "FireEffect",
+              "effectPattern": "Eff_Kaeya_IceShield_AS",
+              "effectTempleteID": -1.0,
+              "scale": 1.0,
+              "ILLLPEOODKP": ""
+            }
+          ],
+          "properties": {
+            "Actor_EndureDelta": 0.0
+          },
+          "AIHNJLDFEGJ": 0.0
         },
         "Kaeya_IceShield_BeHit_CD": {
           "duration": 0.5,
-          "onRemoved": [
-            {
-              "$type": "SetGlobalValue",
-              "key": "_ABILITY_Kaeya_IceShield_BeHit_CD",
-              "minValue": 0.0,
-              "maxValue": 0.0,
-              "CBOMLBFIPJM": 0.0,
-              "doOffStage": true
-            }
-          ],
+          "elementDurability": 100.0,
+          "modifierName": "",
           "onAdded": [
             {
               "$type": "SetGlobalValue",
               "key": "_ABILITY_Kaeya_IceShield_BeHit_CD",
-              "minValue": 0.0,
               "maxValue": 0.0,
-              "CBOMLBFIPJM": 1.0
+              "minValue": 0.0,
+              "value": 1.0
+            }
+          ],
+          "onRemoved": [
+            {
+              "$type": "SetGlobalValue",
+              "doOffStage": true,
+              "key": "_ABILITY_Kaeya_IceShield_BeHit_CD",
+              "maxValue": 0.0,
+              "minValue": 0.0,
+              "value": 0.0
             }
           ],
           "stacking": "Unique",
-          "elementDurability": 100.0,
-          "modifierName": "",
           "AIHNJLDFEGJ": 0.0
         }
       },
@@ -1833,30 +1839,41 @@
         },
         {
           "$type": "AvatarSkillStart",
-          "skillID": 10081,
-          "BGNJBEPEJBO": 1.0,
+          "cdRatio": 1.0,
           "costStaminaRatio": 1.0,
-          "cdRatio": 1.0
+          "skillID": 10081,
+          "GIBAINFKPBO": 1.0
         }
-      ],
-      "abilityName": "Avatar_Keaya_IceShield",
-      "abilitySpecials": {
-        "shieldHP": 0.3,
-        "IceShield_HitDir": 0.0,
-        "IceShield_HitDir_FixParam": -1.0
-      }
+      ]
     }
   },
   {
     "Default": {
+      "abilityName": "Avatar_KeayaAttack_Blink",
       "modifiers": {
         "Blink": {
           "duration": 0.35,
+          "elementDurability": 100.0,
+          "modifierName": "",
+          "onAdded": [
+            {
+              "$type": "TriggerSetVisible"
+            },
+            {
+              "$type": "TriggerSetPassThrough",
+              "doOffStage": true,
+              "passThrough": true
+            },
+            {
+              "$type": "EnableHDMesh",
+              "hdMeshKey": "Default"
+            }
+          ],
           "onRemoved": [
             {
               "$type": "TriggerSetVisible",
-              "visible": true,
-              "doOffStage": true
+              "doOffStage": true,
+              "visible": true
             },
             {
               "$type": "TriggerSetPassThrough",
@@ -1865,27 +1882,11 @@
             },
             {
               "$type": "EnableHDMesh",
+              "canBeHandledOnRecover": true,
               "enable": true,
-              "hdMeshKey": "Default",
-              "canBeHandledOnRecover": true
-            }
-          ],
-          "onAdded": [
-            {
-              "$type": "TriggerSetVisible"
-            },
-            {
-              "$type": "TriggerSetPassThrough",
-              "GMPACBDHKMB": true,
-              "doOffStage": true
-            },
-            {
-              "$type": "EnableHDMesh",
               "hdMeshKey": "Default"
             }
           ],
-          "elementDurability": 100.0,
-          "modifierName": "",
           "AIHNJLDFEGJ": 0.0
         }
       },
@@ -1894,807 +1895,186 @@
           "$type": "ApplyModifier",
           "modifierName": "Blink"
         }
-      ],
-      "abilityName": "Avatar_KeayaAttack_Blink"
+      ]
     }
   },
   {
     "Default": {
+      "abilityName": "Avatar_Kaeya_DashStamina_Reduction",
+      "isDynamicAbility": true,
       "modifiers": {
         "Kaeya_DashStaminaReduction_Handler": {
-          "thinkInterval": 5.0,
           "elementDurability": 100.0,
           "modifierName": "",
           "onThinkInterval": [
             {
               "$type": "AttachModifier",
+              "doOffStage": true,
               "modifierName": "UNIQUE_DashStaminaReduction",
-              "target": "CurTeamAvatars",
-              "doOffStage": true
+              "target": "CurTeamAvatars"
             }
           ],
+          "thinkInterval": 5.0,
           "AIHNJLDFEGJ": 0.0
         },
         "UNIQUE_DashStaminaReduction": {
           "elementDurability": 100.0,
+          "isUnique": true,
           "modifierMixins": [
             {
               "$type": "AttachToStateIDMixin",
-              "LJPPDIGCJMJ": "",
+              "modifierName": "DashStamina_Reduction",
               "stateIDs": [
                 "Sprint",
                 "SprintBS"
               ],
-              "modifierName": "DashStamina_Reduction"
+              "LJPPDIGCJMJ": ""
             }
           ],
           "modifierName": "",
-          "isUnique": true,
           "AIHNJLDFEGJ": 0.0
         },
         "DashStamina_Reduction": {
+          "elementDurability": 100.0,
+          "modifierName": "",
           "properties": {
             "Actor_CostStaminaRatio": -0.2
           },
-          "elementDurability": 100.0,
-          "modifierName": "",
           "AIHNJLDFEGJ": 0.0
         }
       },
-      "abilityName": "Avatar_Kaeya_DashStamina_Reduction",
-      "isDynamicAbility": true,
       "onAdded": [
         {
           "$type": "AttachModifier",
+          "doOffStage": true,
           "modifierName": "UNIQUE_DashStaminaReduction",
-          "target": "CurTeamAvatars",
-          "doOffStage": true
+          "target": "CurTeamAvatars"
         },
         {
           "$type": "AttachModifier",
-          "modifierName": "Kaeya_DashStaminaReduction_Handler",
-          "doOffStage": true
+          "doOffStage": true,
+          "modifierName": "Kaeya_DashStaminaReduction_Handler"
         }
       ]
     }
   },
   {
     "Default": {
-      "modifiers": {
-        "FallingAnthem_AttachWeaponEffect": {
-          "onAdded": [
-            {
-              "$type": "AttachEffect",
-              "ILLLPEOODKP": "",
-              "scale": 1.0,
-              "effectPattern": "Eff_Avatar_Sword_FallAnthem_Self_01",
-              "effectTempleteID": -1.0
-            }
-          ],
-          "elementDurability": 100.0,
-          "modifierName": "",
-          "AIHNJLDFEGJ": 0.0
-        },
-        "FallingAnthem_CameraRadialBlur": {
-          "duration": 0.23,
-          "elementDurability": 100.0,
-          "modifierMixins": [
-            {
-              "$type": "CameraBlurMixin",
-              "NFBFBAJDMPJ": {
-                "LCOPJHPGJCO": 0.15,
-                "LFMGJKCOGPI": 0.3
-              }
-            }
-          ],
-          "modifierName": "",
-          "AIHNJLDFEGJ": 0.0
-        },
-        "FallingAnthem_BS_Material": {
-          "onAdded": [
-            {
-              "$type": "FireEffect",
-              "effectPattern": "Eff_Avatar_Sword_FallAnthem_BS",
-              "scale": 1.0,
-              "ILLLPEOODKP": "",
-              "effectTempleteID": -1.0
-            }
-          ],
-          "elementDurability": 100.0,
-          "modifierName": "",
-          "AIHNJLDFEGJ": 0.0
-        },
-        "FallingAnthem_BS_VelocityForce_Initialize": {
-          "onAdded": [
-            {
-              "$type": "RemoveVelocityForce",
-              "HALNPNMJJAN": [
-                "RushMoveType"
-              ]
-            }
-          ],
-          "properties": {
-            "Actor_AddGravityScale": -2.0
-          },
-          "elementDurability": 100.0,
-          "modifierName": "",
-          "AIHNJLDFEGJ": 0.0
-        },
-        "FallingAnthem_LoopDamage": {
-          "thinkInterval": 0.3,
-          "elementDurability": 100.0,
-          "modifierName": "",
-          "onThinkInterval": [
-            {
-              "$type": "TriggerAttackEvent",
-              "targetType": "Enemy",
-              "attackEvent": {
-                "attackInfo": {
-                  "attackProperty": {
-                    "attackType": "Melee",
-                    "damagePercentageRatio": 0.0,
-                    "strikeType": "Slash",
-                    "enBreak": 25.0,
-                    "damagePercentage": "FallingAnthem_Normal_Loop_Damage",
-                    "elementDurability": 0.0,
-                    "overrideByWeapon": true,
-                    "arkheGrade": 0.0
-                  },
-                  "hitPattern": {
-                    "FLFCIDDNMNA": "",
-                    "onHitEffectName": "default",
-                    "hitHaltTimeScale": 0.02,
-                    "hitImpulseType": "LV2"
-                  },
-                  "attenuationGroup": "default",
-                  "attenuationTag": "",
-                  "attackTag": "FallingAttack"
-                },
-                "attackPattern": {
-                  "$type": "HCAGHMDHEGG",
-                  "radius": 1.0,
-                  "triggerType": "TriggerNoRepeat",
-                  "born": {
-                    "$type": "NABPLNFPHCK",
-                    "offset": {
-                      "x": 0.0,
-                      "z": 1.0,
-                      "y": 0.0
-                    }
-                  }
-                }
-              }
-            }
-          ],
-          "AIHNJLDFEGJ": 0.0
-        },
-        "FallingAnthem_FallingDamageImmune_01": {
-          "onAdded": [
-            {
-              "$type": "ClearGlobalValue",
-              "key": "_ABILITY_FallingAttack_Altitude"
-            },
-            {
-              "$type": "AddGlobalValue",
-              "useLimitRange": true,
-              "key": "_ABILITY_FallingAttack_Altitude",
-              "maxValue": "FallingAnthem_FallingDamageRatio_Lv0",
-              "minValue": "FallingAnthem_FallingDamageRatio_Lv0",
-              "CBOMLBFIPJM": "FallingAnthem_FallingDamageRatio_Lv0",
-              "predicates": [
-                {
-                  "$type": "AKINJGNEPNO",
-                  "CBOMLBFIPJM": "FallingAnthem_Altitude_Lv0",
-                  "logic": "LesserOrEqual"
-                }
-              ]
-            },
-            {
-              "$type": "AddGlobalValue",
-              "useLimitRange": true,
-              "key": "_ABILITY_FallingAttack_Altitude",
-              "maxValue": "FallingAnthem_FallingDamageRatio_Lv1",
-              "minValue": "FallingAnthem_FallingDamageRatio_Lv1",
-              "CBOMLBFIPJM": "FallingAnthem_FallingDamageRatio_Lv1",
-              "predicates": [
-                {
-                  "$type": "AKINJGNEPNO",
-                  "CBOMLBFIPJM": "FallingAnthem_Altitude_Lv1",
-                  "logic": "LesserOrEqual"
-                },
-                {
-                  "$type": "AKINJGNEPNO",
-                  "CBOMLBFIPJM": "FallingAnthem_Altitude_Lv0"
-                }
-              ]
-            },
-            {
-              "$type": "AddGlobalValue",
-              "useLimitRange": true,
-              "key": "_ABILITY_FallingAttack_Altitude",
-              "maxValue": "FallingAnthem_FallingDamageRatio_Lv2",
-              "minValue": "FallingAnthem_FallingDamageRatio_Lv2",
-              "CBOMLBFIPJM": "FallingAnthem_FallingDamageRatio_Lv2",
-              "predicates": [
-                {
-                  "$type": "AKINJGNEPNO",
-                  "CBOMLBFIPJM": "FallingAnthem_Altitude_Lv2",
-                  "logic": "LesserOrEqual"
-                },
-                {
-                  "$type": "AKINJGNEPNO",
-                  "CBOMLBFIPJM": "FallingAnthem_Altitude_Lv1"
-                }
-              ]
-            },
-            {
-              "$type": "AddGlobalValue",
-              "useLimitRange": true,
-              "key": "_ABILITY_FallingAttack_Altitude",
-              "maxValue": "FallingAnthem_FallingDamageRatio_Lv3",
-              "minValue": "FallingAnthem_FallingDamageRatio_Lv3",
-              "CBOMLBFIPJM": "FallingAnthem_FallingDamageRatio_Lv3",
-              "predicates": [
-                {
-                  "$type": "AKINJGNEPNO",
-                  "CBOMLBFIPJM": "FallingAnthem_Altitude_Lv3",
-                  "logic": "LesserOrEqual"
-                },
-                {
-                  "$type": "AKINJGNEPNO",
-                  "CBOMLBFIPJM": "FallingAnthem_Altitude_Lv2"
-                }
-              ]
-            },
-            {
-              "$type": "AddGlobalValue",
-              "useLimitRange": true,
-              "key": "_ABILITY_FallingAttack_Altitude",
-              "maxValue": "FallingAnthem_FallingDamageRatio_Lv4",
-              "minValue": "FallingAnthem_FallingDamageRatio_Lv4",
-              "CBOMLBFIPJM": "FallingAnthem_FallingDamageRatio_Lv4",
-              "predicates": [
-                {
-                  "$type": "AKINJGNEPNO",
-                  "CBOMLBFIPJM": "FallingAnthem_Altitude_Lv3"
-                }
-              ]
-            },
-            {
-              "$type": "AttachModifier",
-              "modifierName": "FallingAnthem_FallingDamageImmune_02"
-            }
-          ],
-          "elementDurability": 100.0,
-          "modifierName": "",
-          "AIHNJLDFEGJ": 0.0
-        },
-        "FallingAnthem_FallingDamageImmune_02": {
-          "onAdded": [
-            {
-              "$type": "SetGlobalValueToOverrideMap",
-              "globalValueKey": "_ABILITY_FallingAttack_Altitude",
-              "abilityName": "",
-              "overrideMapKey": "FallingAnthem_FallingDamageRatio"
-            },
-            {
-              "$type": "AttachModifier",
-              "modifierName": "FallingAnthem_FallingDamageImmune_03"
-            }
-          ],
-          "elementDurability": 100.0,
-          "modifierName": "",
-          "AIHNJLDFEGJ": 0.0
-        },
-        "FallingAnthem_FallingDamageImmune_03": {
-          "properties": {
-            "Actor_FallingDamageRatio": "FallingAnthem_FallingDamageRatio"
-          },
-          "elementDurability": 100.0,
-          "modifierName": "",
-          "AIHNJLDFEGJ": 0.0
-        },
-        "FallingAnthem_Loop_Normal": {
-          "elementDurability": 100.0,
-          "modifierMixins": [
-            {
-              "$type": "AttachModifierToSelfGlobalValueMixin",
-              "modifierNameSteps": [
-                "FallingAnthem_Loop_Normal_Rank_1",
-                "FallingAnthem_Loop_Normal_Rank_2"
-              ],
-              "valueSteps": [
-                -1.0,
-                0.5,
-                1.5
-              ],
-              "globalValueKey": "_ABILITY_FallingAnthem_UseCamera",
-              "defaultGlobalValueOnCreate": 0.0
-            }
-          ],
-          "modifierName": "",
-          "AIHNJLDFEGJ": 0.0
-        },
-        "FallingAnthem_Loop_Normal_Rank_1": {
-          "onAdded": [
-            {
-              "$type": "AttachEffect",
-              "ILLLPEOODKP": "",
-              "scale": 1.0,
-              "effectPattern": "Eff_Avatar_Sword_FallAnthem_Loop_01",
-              "effectTempleteID": -1.0
-            }
-          ],
-          "elementDurability": 100.0,
-          "modifierName": "",
-          "AIHNJLDFEGJ": 0.0
-        },
-        "FallingAnthem_Loop_Normal_Rank_2": {
-          "onAdded": [
-            {
-              "$type": "AttachEffect",
-              "ILLLPEOODKP": "",
-              "scale": 1.0,
-              "effectPattern": "Eff_Avatar_Sword_FallAnthem_Loop_02",
-              "effectTempleteID": -1.0
-            }
-          ],
-          "elementDurability": 100.0,
-          "modifierName": "",
-          "AIHNJLDFEGJ": 0.0
-        },
-        "Inertia": {
-          "elementDurability": 100.0,
-          "modifierMixins": [
-            {
-              "$type": "ApplyInertiaVelocityMixin",
-              "JOHELJNOOBE": false,
-              "useY": false
-            }
-          ],
-          "modifierName": "",
-          "AIHNJLDFEGJ": 0.0
-        },
-        "FallingAnthem_Height_Detect": {
-          "onRemoved": [
-            {
-              "$type": "SetAnimatorFloat",
-              "floatID": "FallingAnthem_UseCamera",
-              "CBOMLBFIPJM": 0.0
-            },
-            {
-              "$type": "AddGlobalValue",
-              "useLimitRange": true,
-              "key": "_ABILITY_FallingAnthem_UseCamera",
-              "maxValue": 0.0,
-              "minValue": 0.0,
-              "CBOMLBFIPJM": 0.0
-            }
-          ],
-          "onAdded": [
-            {
-              "$type": "AddGlobalValue",
-              "useLimitRange": true,
-              "key": "_ABILITY_FallingAnthem_UseCamera",
-              "maxValue": 0.0,
-              "minValue": 0.0,
-              "CBOMLBFIPJM": 0.0,
-              "predicates": [
-                {
-                  "$type": "AKINJGNEPNO",
-                  "CBOMLBFIPJM": 2.4,
-                  "logic": "LesserOrEqual"
-                }
-              ]
-            },
-            {
-              "$type": "AddGlobalValue",
-              "useLimitRange": true,
-              "key": "_ABILITY_FallingAnthem_UseCamera",
-              "maxValue": 1.0,
-              "minValue": 0.0,
-              "CBOMLBFIPJM": 5.0,
-              "predicates": [
-                {
-                  "$type": "AKINJGNEPNO",
-                  "CBOMLBFIPJM": 2.4
-                }
-              ]
-            },
-            {
-              "$type": "SetAnimatorFloat",
-              "floatID": "FallingAnthem_UseCamera",
-              "CBOMLBFIPJM": 0.0,
-              "predicates": [
-                {
-                  "$type": "AKINJGNEPNO",
-                  "CBOMLBFIPJM": 2.4,
-                  "logic": "LesserOrEqual"
-                }
-              ]
-            },
-            {
-              "$type": "SetAnimatorFloat",
-              "floatID": "FallingAnthem_UseCamera",
-              "CBOMLBFIPJM": 1.0,
-              "predicates": [
-                {
-                  "$type": "AKINJGNEPNO",
-                  "CBOMLBFIPJM": 2.4
-                }
-              ]
-            }
-          ],
-          "elementDurability": 100.0,
-          "modifierName": "",
-          "AIHNJLDFEGJ": 0.0
-        },
-        "FallingAnthem_OverHead_Camera": {
-          "onAdded": [
-            {
-              "$type": "AvatarCameraParam",
-              "cameraParam": {
-                "shouldKeepForceRadius": true,
-                "forceRadiusDuration": 0.2,
-                "forceRadius": 4.5
-              },
-              "predicates": [
-                {
-                  "$type": "GCFOJENHAMH",
-                  "parameter": "FallingAnthem_UseCamera",
-                  "CBOMLBFIPJM": 1.0,
-                  "logic": "Equal"
-                }
-              ]
-            }
-          ],
-          "elementDurability": 100.0,
-          "modifierName": "",
-          "AIHNJLDFEGJ": 0.0
-        },
-        "FallingAnthem_OverHead_Camera_Remover": {
-          "onAdded": [
-            {
-              "$type": "AvatarExitCameraShot",
-              "doOffStage": true
-            }
-          ],
-          "elementDurability": 100.0,
-          "modifierName": "",
-          "AIHNJLDFEGJ": 0.0
-        },
-        "FallingAnthem_Landed_Camera": {
-          "onAdded": [
-            {
-              "$type": "AvatarCameraParam",
-              "cameraParam": {
-                "shouldKeepForceRadius": true,
-                "forceRadiusDuration": 0.1,
-                "forceRadius": 6.0
-              },
-              "predicates": [
-                {
-                  "$type": "GCFOJENHAMH",
-                  "parameter": "FallingAnthem_UseCamera",
-                  "CBOMLBFIPJM": 1.0,
-                  "logic": "Equal"
-                }
-              ]
-            }
-          ],
-          "elementDurability": 100.0,
-          "modifierName": "",
-          "AIHNJLDFEGJ": 0.0
-        },
-        "FallingAnthem_ClearVelocityForce": {
-          "onAdded": [
-            {
-              "$type": "RemoveVelocityForce",
-              "HALNPNMJJAN": [
-                "RushMoveType",
-                "InertiaType"
-              ]
-            }
-          ],
-          "elementDurability": 100.0,
-          "modifierName": "",
-          "AIHNJLDFEGJ": 0.0
-        },
-        "FallingAnthem_ClearVelocityForce_AS": {
-          "onAdded": [
-            {
-              "$type": "RemoveVelocityForce",
-              "HALNPNMJJAN": [
-                "RushMoveType",
-                "InertiaType"
-              ]
-            }
-          ],
-          "elementDurability": 100.0,
-          "modifierName": "",
-          "AIHNJLDFEGJ": 0.0
-        }
-      },
-      "onAbilityStart": [
-        {
-          "$type": "TriggerAttackEvent",
-          "targetType": "Enemy",
-          "attackEvent": {
-            "attackInfo": {
-              "attackProperty": {
-                "attackType": "Melee",
-                "damagePercentageRatio": 0.0,
-                "strikeType": "Blunt",
-                "enBreak": 100.0,
-                "damagePercentage": "FallingAnthem_Normal_Rank_1_Damage",
-                "elementDurability": 25.0,
-                "overrideByWeapon": true,
-                "arkheGrade": 0.0
-              },
-              "cameraShake": {
-                "extension": {
-                  "rangeAttenuation": 0.3,
-                  "baseCycle": 0.24,
-                  "cycleDamping": 0.0
-                },
-                "shakeDir": {
-                  "y": 1.0
-                },
-                "shakeTime": 0.12,
-                "shakeType": "CustomVector",
-                "shakeDistance": 30.0,
-                "MNKFEFOKFKP": "",
-                "shakeRange": 0.24
-              },
-              "hitPattern": {
-                "FLFCIDDNMNA": "",
-                "onHitEffectName": "none",
-                "hitHaltTimeScale": 0.1,
-                "hitImpulseType": "LV4"
-              },
-              "forceCameraShake": true,
-              "attenuationGroup": "default",
-              "attenuationTag": "",
-              "attackTag": "FallingAttack"
-            },
-            "attackPattern": {
-              "$type": "DDLDAMKEKJD",
-              "radius": 3.0,
-              "height": 2.0,
-              "triggerType": "TriggerNoRepeat",
-              "born": {
-                "$type": "BOJMMDAIGMM",
-                "offset": {
-                  "x": 0.0,
-                  "z": 1.0,
-                  "y": -0.5
-                }
-              }
-            }
-          },
-          "predicates": [
-            {
-              "$type": "EOFDCELPGFO",
-              "CBOMLBFIPJM": 0.0,
-              "compareType": "NoneOrEqual",
-              "key": "_ABILITY_FallingAnthem_UseCamera",
-              "value": true
-            }
-          ]
-        },
-        {
-          "$type": "TriggerAttackEvent",
-          "targetType": "Enemy",
-          "attackEvent": {
-            "attackInfo": {
-              "attackProperty": {
-                "attackType": "Melee",
-                "damagePercentageRatio": 0.0,
-                "strikeType": "Blunt",
-                "enBreak": 150.0,
-                "damagePercentage": "FallingAnthem_Normal_Rank_2_Damage",
-                "elementDurability": 25.0,
-                "overrideByWeapon": true,
-                "arkheGrade": 0.0
-              },
-              "cameraShake": {
-                "extension": {
-                  "rangeAttenuation": 0.3,
-                  "baseCycle": 0.4,
-                  "cycleDamping": 0.0
-                },
-                "shakeDir": {
-                  "y": 1.0,
-                  "z": 1.0
-                },
-                "shakeTime": 0.2,
-                "shakeType": "CustomVector",
-                "shakeDistance": 30.0,
-                "MNKFEFOKFKP": "",
-                "shakeRange": 0.5
-              },
-              "hitPattern": {
-                "FLFCIDDNMNA": "",
-                "onHitEffectName": "none",
-                "hitHaltTimeScale": 0.1,
-                "hitImpulseType": "LV7"
-              },
-              "forceCameraShake": true,
-              "attenuationGroup": "default",
-              "attenuationTag": "",
-              "attackTag": "FallingAttack"
-            },
-            "attackPattern": {
-              "$type": "DDLDAMKEKJD",
-              "radius": 5.0,
-              "height": 2.0,
-              "triggerType": "TriggerNoRepeat",
-              "born": {
-                "$type": "BOJMMDAIGMM",
-                "offset": {
-                  "x": 0.0,
-                  "z": 1.0,
-                  "y": -0.5
-                }
-              }
-            }
-          },
-          "predicates": [
-            {
-              "$type": "EOFDCELPGFO",
-              "CBOMLBFIPJM": 1.0,
-              "key": "_ABILITY_FallingAnthem_UseCamera",
-              "value": true
-            }
-          ]
-        },
-        {
-          "$type": "FireEffect",
-          "effectPattern": "Eff_Avatar_Sword_FallAnthem_Strike_01",
-          "scale": 1.0,
-          "ILLLPEOODKP": "",
-          "effectTempleteID": -1.0,
-          "predicates": [
-            {
-              "$type": "EOFDCELPGFO",
-              "CBOMLBFIPJM": 0.0,
-              "compareType": "NoneOrEqual",
-              "key": "_ABILITY_FallingAnthem_UseCamera",
-              "value": true
-            }
-          ]
-        },
-        {
-          "$type": "FireEffect",
-          "effectPattern": "Eff_Avatar_Sword_FallAnthem_Strike_02",
-          "scale": 1.0,
-          "ILLLPEOODKP": "",
-          "effectTempleteID": -1.0,
-          "predicates": [
-            {
-              "$type": "EOFDCELPGFO",
-              "CBOMLBFIPJM": 1.0,
-              "key": "_ABILITY_FallingAnthem_UseCamera",
-              "value": true
-            }
-          ]
-        }
-      ],
       "abilityMixins": [
         {
           "$type": "AvatarChangeSkillMixin",
-          "OLDBNEGFONF": 5015010,
-          "flySkillID": 5015010
+          "flySkillID": 5015010,
+          "OLDBNEGFONF": 5015010
         },
         {
           "$type": "AttachToStateIDMixin",
-          "LJPPDIGCJMJ": "",
+          "modifierName": "FallingAnthem_BS_Material",
           "stateIDs": [
             "FallingAnthem_BS"
           ],
-          "modifierName": "FallingAnthem_BS_Material"
+          "LJPPDIGCJMJ": ""
         },
         {
           "$type": "AttachToStateIDMixin",
-          "LJPPDIGCJMJ": "",
+          "modifierName": "FallingAnthem_Loop_Normal",
           "stateIDs": [
             "FallingAnthem_BS"
           ],
-          "modifierName": "FallingAnthem_Loop_Normal"
+          "LJPPDIGCJMJ": ""
         },
         {
           "$type": "AttachToAnimatorStateIDMixin",
-          "LJPPDIGCJMJ": "",
+          "modifierName": "FallingAnthem_LoopDamage",
           "stateIDs": [
             "FallingAnthem_BS_2",
             "FallingAnthem_Loop",
             "FallingAnthem_Loop_Low"
           ],
-          "modifierName": "FallingAnthem_LoopDamage"
+          "LJPPDIGCJMJ": ""
         },
         {
           "$type": "AttachToStateIDMixin",
-          "LJPPDIGCJMJ": "",
+          "modifierName": "FallingAnthem_BS_VelocityForce_Initialize",
           "stateIDs": [
             "FallingAnthem_BS"
           ],
-          "modifierName": "FallingAnthem_BS_VelocityForce_Initialize"
+          "LJPPDIGCJMJ": ""
         },
         {
           "$type": "AttachToStateIDMixin",
-          "LJPPDIGCJMJ": "",
+          "modifierName": "FallingAnthem_Height_Detect",
           "stateIDs": [
             "FallingAnthem_BS",
             "FallingAnthem_Loop",
             "FallingAnthem_AS_1",
             "FallingAnthem_AS_2"
           ],
-          "modifierName": "FallingAnthem_Height_Detect"
+          "LJPPDIGCJMJ": ""
         },
         {
           "$type": "AttachToStateIDMixin",
-          "LJPPDIGCJMJ": "",
+          "modifierName": "FallingAnthem_FallingDamageImmune_01",
           "stateIDs": [
             "FallingAnthem_BS",
             "FallingAnthem_Loop",
             "FallingAnthem_AS_1",
             "FallingAnthem_AS_2"
           ],
-          "modifierName": "FallingAnthem_FallingDamageImmune_01"
+          "LJPPDIGCJMJ": ""
         },
         {
           "$type": "AttachToStateIDMixin",
-          "LJPPDIGCJMJ": "",
+          "modifierName": "Inertia",
           "stateIDs": [
             "FallingAnthem_BS",
             "FallingAnthem_Loop"
           ],
-          "modifierName": "Inertia"
+          "LJPPDIGCJMJ": ""
         },
         {
           "$type": "AttachToStateIDMixin",
-          "LJPPDIGCJMJ": "",
+          "modifierName": "FallingAnthem_OverHead_Camera",
           "stateIDs": [
             "FallingAnthem_BS",
             "FallingAnthem_Loop",
             "FallingAnthem_AS_1",
             "FallingAnthem_AS_2"
           ],
-          "modifierName": "FallingAnthem_OverHead_Camera"
+          "LJPPDIGCJMJ": ""
         },
         {
           "$type": "AttachToStateIDMixin",
-          "LJPPDIGCJMJ": "",
+          "modifierName": "FallingAnthem_ClearVelocityForce",
           "stateIDs": [
             "FallingAnthem_BS"
           ],
-          "modifierName": "FallingAnthem_ClearVelocityForce"
+          "LJPPDIGCJMJ": ""
         },
         {
           "$type": "AttachToStateIDMixin",
-          "LJPPDIGCJMJ": "",
+          "modifierName": "FallingAnthem_ClearVelocityForce_AS",
           "stateIDs": [
             "FallingAnthem_AS_1",
             "FallingAnthem_AS_2"
           ],
-          "modifierName": "FallingAnthem_ClearVelocityForce_AS"
+          "LJPPDIGCJMJ": ""
         },
         {
           "$type": "AttachToStateIDMixin",
-          "LJPPDIGCJMJ": "",
+          "modifierName": "FallingAnthem_AttachWeaponEffect",
           "stateIDs": [
             "FallingAnthem_BS",
             "FallingAnthem_Loop"
           ],
-          "modifierName": "FallingAnthem_AttachWeaponEffect"
+          "LJPPDIGCJMJ": ""
         },
         {
           "$type": "AttachToAnimatorStateIDMixin",
-          "LJPPDIGCJMJ": "",
+          "modifierName": "FallingAnthem_CameraRadialBlur",
           "stateIDs": [
             "FallingAnthem_BS_2"
           ],
-          "modifierName": "FallingAnthem_CameraRadialBlur"
+          "LJPPDIGCJMJ": ""
         }
       ],
       "abilityName": "Avatar_Kaeya_FallingAnthem",
@@ -2713,7 +2093,627 @@
         "FallingAnthem_FallingDamageRatio_Lv3": -0.8,
         "FallingAnthem_FallingDamageRatio_Lv4": -0.6,
         "FallingAnthem_FallingDamageRatio": 0.0
-      }
+      },
+      "modifiers": {
+        "FallingAnthem_AttachWeaponEffect": {
+          "elementDurability": 100.0,
+          "modifierName": "",
+          "onAdded": [
+            {
+              "$type": "AttachEffect",
+              "effectPattern": "Eff_Avatar_Sword_FallAnthem_Self_01",
+              "effectTempleteID": -1.0,
+              "scale": 1.0,
+              "ILLLPEOODKP": ""
+            }
+          ],
+          "AIHNJLDFEGJ": 0.0
+        },
+        "FallingAnthem_CameraRadialBlur": {
+          "duration": 0.23,
+          "elementDurability": 100.0,
+          "modifierMixins": [
+            {
+              "$type": "CameraBlurMixin",
+              "cameraRadialBlur": {
+                "fadeTime": 0.15,
+                "power": 0.3
+              }
+            }
+          ],
+          "modifierName": "",
+          "AIHNJLDFEGJ": 0.0
+        },
+        "FallingAnthem_BS_Material": {
+          "elementDurability": 100.0,
+          "modifierName": "",
+          "onAdded": [
+            {
+              "$type": "FireEffect",
+              "effectPattern": "Eff_Avatar_Sword_FallAnthem_BS",
+              "effectTempleteID": -1.0,
+              "scale": 1.0,
+              "ILLLPEOODKP": ""
+            }
+          ],
+          "AIHNJLDFEGJ": 0.0
+        },
+        "FallingAnthem_BS_VelocityForce_Initialize": {
+          "elementDurability": 100.0,
+          "modifierName": "",
+          "onAdded": [
+            {
+              "$type": "RemoveVelocityForce",
+              "forces": [
+                "RushMoveType"
+              ]
+            }
+          ],
+          "properties": {
+            "Actor_AddGravityScale": -2.0
+          },
+          "AIHNJLDFEGJ": 0.0
+        },
+        "FallingAnthem_LoopDamage": {
+          "elementDurability": 100.0,
+          "modifierName": "",
+          "onThinkInterval": [
+            {
+              "$type": "TriggerAttackEvent",
+              "attackEvent": {
+                "attackInfo": {
+                  "attackProperty": {
+                    "attackType": "Melee",
+                    "damagePercentage": "FallingAnthem_Normal_Loop_Damage",
+                    "damagePercentageRatio": 0.0,
+                    "elementDurability": 0.0,
+                    "enBreak": 25.0,
+                    "overrideByWeapon": true,
+                    "strikeType": "Slash",
+                    "IIPHCFEONLK": 0.0
+                  },
+                  "attackTag": "FallingAttack",
+                  "attenuationGroup": "default",
+                  "attenuationTag": "",
+                  "hitPattern": {
+                    "hitHaltTimeScale": 0.02,
+                    "hitImpulseType": "LV2",
+                    "onHitEffectName": "default",
+                    "FLFCIDDNMNA": ""
+                  }
+                },
+                "attackPattern": {
+                  "$type": "ConfigAttackSphere",
+                  "born": {
+                    "$type": "ConfigBornBySelf",
+                    "offset": {
+                      "x": 1.0,
+                      "y": 0.0,
+                      "z": 0.0
+                    }
+                  },
+                  "radius": 1.0,
+                  "triggerType": "TriggerNoRepeat"
+                }
+              },
+              "targetType": "Enemy"
+            }
+          ],
+          "thinkInterval": 0.3,
+          "AIHNJLDFEGJ": 0.0
+        },
+        "FallingAnthem_FallingDamageImmune_01": {
+          "elementDurability": 100.0,
+          "modifierName": "",
+          "onAdded": [
+            {
+              "$type": "ClearGlobalValue",
+              "key": "_ABILITY_FallingAttack_Altitude"
+            },
+            {
+              "$type": "AddGlobalValue",
+              "key": "_ABILITY_FallingAttack_Altitude",
+              "maxValue": "FallingAnthem_FallingDamageRatio_Lv0",
+              "minValue": "FallingAnthem_FallingDamageRatio_Lv0",
+              "predicates": [
+                {
+                  "$type": "ByTargetAltitude",
+                  "logic": "LesserOrEqual",
+                  "value": "FallingAnthem_Altitude_Lv0"
+                }
+              ],
+              "useLimitRange": true,
+              "value": "FallingAnthem_FallingDamageRatio_Lv0"
+            },
+            {
+              "$type": "AddGlobalValue",
+              "key": "_ABILITY_FallingAttack_Altitude",
+              "maxValue": "FallingAnthem_FallingDamageRatio_Lv1",
+              "minValue": "FallingAnthem_FallingDamageRatio_Lv1",
+              "predicates": [
+                {
+                  "$type": "ByTargetAltitude",
+                  "logic": "LesserOrEqual",
+                  "value": "FallingAnthem_Altitude_Lv1"
+                },
+                {
+                  "$type": "ByTargetAltitude",
+                  "value": "FallingAnthem_Altitude_Lv0"
+                }
+              ],
+              "useLimitRange": true,
+              "value": "FallingAnthem_FallingDamageRatio_Lv1"
+            },
+            {
+              "$type": "AddGlobalValue",
+              "key": "_ABILITY_FallingAttack_Altitude",
+              "maxValue": "FallingAnthem_FallingDamageRatio_Lv2",
+              "minValue": "FallingAnthem_FallingDamageRatio_Lv2",
+              "predicates": [
+                {
+                  "$type": "ByTargetAltitude",
+                  "logic": "LesserOrEqual",
+                  "value": "FallingAnthem_Altitude_Lv2"
+                },
+                {
+                  "$type": "ByTargetAltitude",
+                  "value": "FallingAnthem_Altitude_Lv1"
+                }
+              ],
+              "useLimitRange": true,
+              "value": "FallingAnthem_FallingDamageRatio_Lv2"
+            },
+            {
+              "$type": "AddGlobalValue",
+              "key": "_ABILITY_FallingAttack_Altitude",
+              "maxValue": "FallingAnthem_FallingDamageRatio_Lv3",
+              "minValue": "FallingAnthem_FallingDamageRatio_Lv3",
+              "predicates": [
+                {
+                  "$type": "ByTargetAltitude",
+                  "logic": "LesserOrEqual",
+                  "value": "FallingAnthem_Altitude_Lv3"
+                },
+                {
+                  "$type": "ByTargetAltitude",
+                  "value": "FallingAnthem_Altitude_Lv2"
+                }
+              ],
+              "useLimitRange": true,
+              "value": "FallingAnthem_FallingDamageRatio_Lv3"
+            },
+            {
+              "$type": "AddGlobalValue",
+              "key": "_ABILITY_FallingAttack_Altitude",
+              "maxValue": "FallingAnthem_FallingDamageRatio_Lv4",
+              "minValue": "FallingAnthem_FallingDamageRatio_Lv4",
+              "predicates": [
+                {
+                  "$type": "ByTargetAltitude",
+                  "value": "FallingAnthem_Altitude_Lv3"
+                }
+              ],
+              "useLimitRange": true,
+              "value": "FallingAnthem_FallingDamageRatio_Lv4"
+            },
+            {
+              "$type": "AttachModifier",
+              "modifierName": "FallingAnthem_FallingDamageImmune_02"
+            }
+          ],
+          "AIHNJLDFEGJ": 0.0
+        },
+        "FallingAnthem_FallingDamageImmune_02": {
+          "elementDurability": 100.0,
+          "modifierName": "",
+          "onAdded": [
+            {
+              "$type": "SetGlobalValueToOverrideMap",
+              "abilityName": "",
+              "globalValueKey": "_ABILITY_FallingAttack_Altitude",
+              "overrideMapKey": "FallingAnthem_FallingDamageRatio"
+            },
+            {
+              "$type": "AttachModifier",
+              "modifierName": "FallingAnthem_FallingDamageImmune_03"
+            }
+          ],
+          "AIHNJLDFEGJ": 0.0
+        },
+        "FallingAnthem_FallingDamageImmune_03": {
+          "elementDurability": 100.0,
+          "modifierName": "",
+          "properties": {
+            "Actor_FallingDamageRatio": "FallingAnthem_FallingDamageRatio"
+          },
+          "AIHNJLDFEGJ": 0.0
+        },
+        "FallingAnthem_Loop_Normal": {
+          "elementDurability": 100.0,
+          "modifierMixins": [
+            {
+              "$type": "AttachModifierToSelfGlobalValueMixin",
+              "defaultGlobalValueOnCreate": 0.0,
+              "globalValueKey": "_ABILITY_FallingAnthem_UseCamera",
+              "modifierNameSteps": [
+                "FallingAnthem_Loop_Normal_Rank_1",
+                "FallingAnthem_Loop_Normal_Rank_2"
+              ],
+              "valueSteps": [
+                -1.0,
+                0.5,
+                1.5
+              ]
+            }
+          ],
+          "modifierName": "",
+          "AIHNJLDFEGJ": 0.0
+        },
+        "FallingAnthem_Loop_Normal_Rank_1": {
+          "elementDurability": 100.0,
+          "modifierName": "",
+          "onAdded": [
+            {
+              "$type": "AttachEffect",
+              "effectPattern": "Eff_Avatar_Sword_FallAnthem_Loop_01",
+              "effectTempleteID": -1.0,
+              "scale": 1.0,
+              "ILLLPEOODKP": ""
+            }
+          ],
+          "AIHNJLDFEGJ": 0.0
+        },
+        "FallingAnthem_Loop_Normal_Rank_2": {
+          "elementDurability": 100.0,
+          "modifierName": "",
+          "onAdded": [
+            {
+              "$type": "AttachEffect",
+              "effectPattern": "Eff_Avatar_Sword_FallAnthem_Loop_02",
+              "effectTempleteID": -1.0,
+              "scale": 1.0,
+              "ILLLPEOODKP": ""
+            }
+          ],
+          "AIHNJLDFEGJ": 0.0
+        },
+        "Inertia": {
+          "elementDurability": 100.0,
+          "modifierMixins": [
+            {
+              "$type": "ApplyInertiaVelocityMixin",
+              "JOHELJNOOBE": false,
+              "LBKNDHDOIIG": false
+            }
+          ],
+          "modifierName": "",
+          "AIHNJLDFEGJ": 0.0
+        },
+        "FallingAnthem_Height_Detect": {
+          "elementDurability": 100.0,
+          "modifierName": "",
+          "onAdded": [
+            {
+              "$type": "AddGlobalValue",
+              "key": "_ABILITY_FallingAnthem_UseCamera",
+              "maxValue": 0.0,
+              "minValue": 0.0,
+              "predicates": [
+                {
+                  "$type": "ByTargetAltitude",
+                  "logic": "LesserOrEqual",
+                  "value": 2.4
+                }
+              ],
+              "useLimitRange": true,
+              "value": 0.0
+            },
+            {
+              "$type": "AddGlobalValue",
+              "key": "_ABILITY_FallingAnthem_UseCamera",
+              "maxValue": 1.0,
+              "minValue": 0.0,
+              "predicates": [
+                {
+                  "$type": "ByTargetAltitude",
+                  "value": 2.4
+                }
+              ],
+              "useLimitRange": true,
+              "value": 5.0
+            },
+            {
+              "$type": "SetAnimatorFloat",
+              "floatID": "FallingAnthem_UseCamera",
+              "predicates": [
+                {
+                  "$type": "ByTargetAltitude",
+                  "logic": "LesserOrEqual",
+                  "value": 2.4
+                }
+              ],
+              "value": 0.0
+            },
+            {
+              "$type": "SetAnimatorFloat",
+              "floatID": "FallingAnthem_UseCamera",
+              "predicates": [
+                {
+                  "$type": "ByTargetAltitude",
+                  "value": 2.4
+                }
+              ],
+              "value": 1.0
+            }
+          ],
+          "onRemoved": [
+            {
+              "$type": "SetAnimatorFloat",
+              "floatID": "FallingAnthem_UseCamera",
+              "value": 0.0
+            },
+            {
+              "$type": "AddGlobalValue",
+              "key": "_ABILITY_FallingAnthem_UseCamera",
+              "maxValue": 0.0,
+              "minValue": 0.0,
+              "useLimitRange": true,
+              "value": 0.0
+            }
+          ],
+          "AIHNJLDFEGJ": 0.0
+        },
+        "FallingAnthem_OverHead_Camera": {
+          "elementDurability": 100.0,
+          "modifierName": "",
+          "onAdded": [
+            {
+              "$type": "AvatarCameraParam",
+              "cameraParam": {
+                "forceRadius": 4.5,
+                "forceRadiusDuration": 0.2,
+                "shouldKeepForceRadius": true
+              },
+              "predicates": [
+                {
+                  "$type": "ByAnimatorFloat",
+                  "logic": "Equal",
+                  "parameter": "FallingAnthem_UseCamera",
+                  "value": 1.0
+                }
+              ]
+            }
+          ],
+          "AIHNJLDFEGJ": 0.0
+        },
+        "FallingAnthem_OverHead_Camera_Remover": {
+          "elementDurability": 100.0,
+          "modifierName": "",
+          "onAdded": [
+            {
+              "$type": "AvatarExitCameraShot",
+              "doOffStage": true
+            }
+          ],
+          "AIHNJLDFEGJ": 0.0
+        },
+        "FallingAnthem_Landed_Camera": {
+          "elementDurability": 100.0,
+          "modifierName": "",
+          "onAdded": [
+            {
+              "$type": "AvatarCameraParam",
+              "cameraParam": {
+                "forceRadius": 6.0,
+                "forceRadiusDuration": 0.1,
+                "shouldKeepForceRadius": true
+              },
+              "predicates": [
+                {
+                  "$type": "ByAnimatorFloat",
+                  "logic": "Equal",
+                  "parameter": "FallingAnthem_UseCamera",
+                  "value": 1.0
+                }
+              ]
+            }
+          ],
+          "AIHNJLDFEGJ": 0.0
+        },
+        "FallingAnthem_ClearVelocityForce": {
+          "elementDurability": 100.0,
+          "modifierName": "",
+          "onAdded": [
+            {
+              "$type": "RemoveVelocityForce",
+              "forces": [
+                "RushMoveType",
+                "InertiaType"
+              ]
+            }
+          ],
+          "AIHNJLDFEGJ": 0.0
+        },
+        "FallingAnthem_ClearVelocityForce_AS": {
+          "elementDurability": 100.0,
+          "modifierName": "",
+          "onAdded": [
+            {
+              "$type": "RemoveVelocityForce",
+              "forces": [
+                "RushMoveType",
+                "InertiaType"
+              ]
+            }
+          ],
+          "AIHNJLDFEGJ": 0.0
+        }
+      },
+      "onAbilityStart": [
+        {
+          "$type": "TriggerAttackEvent",
+          "attackEvent": {
+            "attackInfo": {
+              "attackProperty": {
+                "attackType": "Melee",
+                "damagePercentage": "FallingAnthem_Normal_Rank_1_Damage",
+                "damagePercentageRatio": 0.0,
+                "elementDurability": 25.0,
+                "enBreak": 100.0,
+                "overrideByWeapon": true,
+                "strikeType": "Blunt",
+                "IIPHCFEONLK": 0.0
+              },
+              "attackTag": "FallingAttack",
+              "attenuationGroup": "default",
+              "attenuationTag": "",
+              "cameraShake": {
+                "extension": {
+                  "baseCycle": 0.24,
+                  "cycleDamping": 0.0,
+                  "rangeAttenuation": 0.3
+                },
+                "shakeDir": {
+                  "y": 1.0
+                },
+                "shakeDistance": 30.0,
+                "shakeRange": 0.24,
+                "shakeTime": 0.12,
+                "shakeType": "CustomVector",
+                "MNKFEFOKFKP": ""
+              },
+              "forceCameraShake": true,
+              "hitPattern": {
+                "hitHaltTimeScale": 0.1,
+                "hitImpulseType": "LV4",
+                "onHitEffectName": "none",
+                "FLFCIDDNMNA": ""
+              }
+            },
+            "attackPattern": {
+              "$type": "ConfigAttackCircle",
+              "born": {
+                "$type": "ConfigBornByTarget",
+                "offset": {
+                  "x": 1.0,
+                  "y": -0.5,
+                  "z": 0.0
+                }
+              },
+              "height": 2.0,
+              "radius": 3.0,
+              "triggerType": "TriggerNoRepeat"
+            }
+          },
+          "predicates": [
+            {
+              "$type": "ByTargetGlobalValue",
+              "compareType": "NoneOrEqual",
+              "forceByCaster": true,
+              "key": "_ABILITY_FallingAnthem_UseCamera",
+              "value": 0.0
+            }
+          ],
+          "targetType": "Enemy"
+        },
+        {
+          "$type": "TriggerAttackEvent",
+          "attackEvent": {
+            "attackInfo": {
+              "attackProperty": {
+                "attackType": "Melee",
+                "damagePercentage": "FallingAnthem_Normal_Rank_2_Damage",
+                "damagePercentageRatio": 0.0,
+                "elementDurability": 25.0,
+                "enBreak": 150.0,
+                "overrideByWeapon": true,
+                "strikeType": "Blunt",
+                "IIPHCFEONLK": 0.0
+              },
+              "attackTag": "FallingAttack",
+              "attenuationGroup": "default",
+              "attenuationTag": "",
+              "cameraShake": {
+                "extension": {
+                  "baseCycle": 0.4,
+                  "cycleDamping": 0.0,
+                  "rangeAttenuation": 0.3
+                },
+                "shakeDir": {
+                  "y": 1.0,
+                  "z": 1.0
+                },
+                "shakeDistance": 30.0,
+                "shakeRange": 0.5,
+                "shakeTime": 0.2,
+                "shakeType": "CustomVector",
+                "MNKFEFOKFKP": ""
+              },
+              "forceCameraShake": true,
+              "hitPattern": {
+                "hitHaltTimeScale": 0.1,
+                "hitImpulseType": "LV7",
+                "onHitEffectName": "none",
+                "FLFCIDDNMNA": ""
+              }
+            },
+            "attackPattern": {
+              "$type": "ConfigAttackCircle",
+              "born": {
+                "$type": "ConfigBornByTarget",
+                "offset": {
+                  "x": 1.0,
+                  "y": -0.5,
+                  "z": 0.0
+                }
+              },
+              "height": 2.0,
+              "radius": 5.0,
+              "triggerType": "TriggerNoRepeat"
+            }
+          },
+          "predicates": [
+            {
+              "$type": "ByTargetGlobalValue",
+              "forceByCaster": true,
+              "key": "_ABILITY_FallingAnthem_UseCamera",
+              "value": 1.0
+            }
+          ],
+          "targetType": "Enemy"
+        },
+        {
+          "$type": "FireEffect",
+          "effectPattern": "Eff_Avatar_Sword_FallAnthem_Strike_01",
+          "effectTempleteID": -1.0,
+          "predicates": [
+            {
+              "$type": "ByTargetGlobalValue",
+              "compareType": "NoneOrEqual",
+              "forceByCaster": true,
+              "key": "_ABILITY_FallingAnthem_UseCamera",
+              "value": 0.0
+            }
+          ],
+          "scale": 1.0,
+          "ILLLPEOODKP": ""
+        },
+        {
+          "$type": "FireEffect",
+          "effectPattern": "Eff_Avatar_Sword_FallAnthem_Strike_02",
+          "effectTempleteID": -1.0,
+          "predicates": [
+            {
+              "$type": "ByTargetGlobalValue",
+              "forceByCaster": true,
+              "key": "_ABILITY_FallingAnthem_UseCamera",
+              "value": 1.0
+            }
+          ],
+          "scale": 1.0,
+          "ILLLPEOODKP": ""
+        }
+      ]
     }
   }
 ]

@@ -1,36 +1,193 @@
 [
   {
     "Default": {
+      "abilityMixins": [
+        {
+          "$type": "AttachModifierToSelfGlobalValueMixin",
+          "defaultGlobalValueOnCreate": 0.0,
+          "globalValueKey": "_SHAMAN_STATE",
+          "modifierNameSteps": [
+            "NormalStage",
+            "ChargeingState",
+            "AngryStage",
+            "HardStage",
+            "Weak",
+            "Flee"
+          ],
+          "valueSteps": [
+            -0.5,
+            0.5,
+            1.5,
+            2.5,
+            3.5,
+            4.5,
+            5.5
+          ],
+          "DEFOFMOIAAI": true
+        },
+        {
+          "$type": "AttachToAIAlertnessMixin",
+          "alertness": [
+            2,
+            3
+          ],
+          "modifierName": "Monster_Shaman_None_EnterCookingState"
+        },
+        {
+          "$type": "AttachToPoseIDMixin",
+          "modifierName": "Monster_Shaman_None_OutOfBattle",
+          "poseIDs": [
+            901
+          ]
+        },
+        {
+          "$type": "ServerFinishWatcherMixin",
+          "predicates": [
+            {
+              "$type": "AKHMLAJHPCC",
+              "logic": "GreaterOrEqual",
+              "target": "Self",
+              "value": 93.0
+            },
+            {
+              "$type": "ByTargetGlobalValue",
+              "key": "_LocalLegendTag_",
+              "target": "Self",
+              "value": 1.0
+            }
+          ],
+          "watcherId": 100101071
+        },
+        {
+          "$type": "ServerFinishWatcherMixin",
+          "predicates": [
+            {
+              "$type": "AKHMLAJHPCC",
+              "logic": "GreaterOrEqual",
+              "target": "Self",
+              "value": 93.0
+            },
+            {
+              "$type": "ByTargetGlobalValue",
+              "key": "_LocalLegendTag_",
+              "target": "Self",
+              "value": 1.0
+            },
+            {
+              "$type": "ByTargetGlobalValue",
+              "key": "_MONSTER_POT_HAS_BROKENED",
+              "target": "Self",
+              "value": 1.0
+            }
+          ],
+          "watcherId": 100101072
+        },
+        {
+          "$type": "ServerFinishWatcherMixin",
+          "predicates": [
+            {
+              "$type": "AKHMLAJHPCC",
+              "logic": "GreaterOrEqual",
+              "target": "Self",
+              "value": 103.0
+            },
+            {
+              "$type": "ByTargetGlobalValue",
+              "key": "_LocalLegendTag_",
+              "target": "Self",
+              "value": 1.0
+            },
+            {
+              "$type": "ByTargetGlobalValue",
+              "compareType": "NoneOrEqual",
+              "key": "_SHAMAN_COOK_SUCCESSED",
+              "target": "Self",
+              "value": 0.0
+            }
+          ],
+          "watcherId": 100101073
+        }
+      ],
+      "abilityName": "Monster_Shaman_None_StageControl",
+      "abilitySpecials": {
+        "SubHurtDeltaWeak": -0.6,
+        "SubHurtDeltaHigh": 1.1,
+        "SubHurtCookFail": 0.0
+      },
       "modifiers": {
         "Monster_Shaman_None_OutOfBattle": {
+          "elementDurability": 100.0,
+          "modifierName": "",
           "onAdded": [
             {
               "$type": "SetGlobalValue",
               "key": "_SHAMAN_STATE",
-              "minValue": 0.0,
               "maxValue": 0.0,
-              "CBOMLBFIPJM": 0.0
+              "minValue": 0.0,
+              "value": 0.0
             },
             {
               "$type": "SetGlobalValue",
               "key": "_POT_LIFE_BEGIN",
-              "minValue": 0.0,
               "maxValue": 0.0,
-              "CBOMLBFIPJM": 0.0
+              "minValue": 0.0,
+              "value": 0.0
             }
           ],
-          "elementDurability": 100.0,
-          "modifierName": "",
           "AIHNJLDFEGJ": 0.0
         },
         "Monster_Shaman_None_EnterCookingState": {
+          "elementDurability": 100.0,
+          "modifierName": "",
+          "onAdded": [
+            {
+              "$type": "SetGlobalValue",
+              "key": "_SHAMAN_IN_BATTLE",
+              "maxValue": 0.0,
+              "minValue": 0.0,
+              "value": 1.0
+            },
+            {
+              "$type": "SetGlobalValue",
+              "key": "_SHAMAN_STATE",
+              "maxValue": 0.0,
+              "minValue": 0.0,
+              "value": 0.0
+            },
+            {
+              "$type": "Predicated",
+              "failActions": [
+                {
+                  "$type": "SetGlobalValue",
+                  "key": "_SHAMAN_STATE",
+                  "maxValue": 0.0,
+                  "minValue": 0.0,
+                  "value": 1.0
+                }
+              ],
+              "successActions": [
+                {
+                  "$type": "AttachModifier",
+                  "modifierName": "Monster_Shaman_None_CookingPoseDelay"
+                }
+              ],
+              "targetPredicates": [
+                {
+                  "$type": "ByTargetGlobalValue",
+                  "compareType": "NoneOrEqual",
+                  "key": "_SHAMAN_IN_ABYSS",
+                  "value": 0.0
+                }
+              ]
+            }
+          ],
           "onRemoved": [
             {
               "$type": "SetGlobalValue",
               "key": "_SHAMAN_IN_BATTLE",
-              "minValue": 0.0,
               "maxValue": 0.0,
-              "CBOMLBFIPJM": 0.0
+              "minValue": 0.0,
+              "value": 0.0
             },
             {
               "$type": "RemoveModifier",
@@ -41,81 +198,38 @@
               "modifierName": "Monster_Shaman_None_WeakRecoverCooking_NextTimer"
             }
           ],
-          "onAdded": [
-            {
-              "$type": "SetGlobalValue",
-              "key": "_SHAMAN_IN_BATTLE",
-              "minValue": 0.0,
-              "maxValue": 0.0,
-              "CBOMLBFIPJM": 1.0
-            },
-            {
-              "$type": "SetGlobalValue",
-              "key": "_SHAMAN_STATE",
-              "minValue": 0.0,
-              "maxValue": 0.0,
-              "CBOMLBFIPJM": 0.0
-            },
-            {
-              "$type": "Predicated",
-              "successActions": [
-                {
-                  "$type": "AttachModifier",
-                  "modifierName": "Monster_Shaman_None_CookingPoseDelay"
-                }
-              ],
-              "failActions": [
-                {
-                  "$type": "SetGlobalValue",
-                  "key": "_SHAMAN_STATE",
-                  "minValue": 0.0,
-                  "maxValue": 0.0,
-                  "CBOMLBFIPJM": 1.0
-                }
-              ],
-              "targetPredicates": [
-                {
-                  "$type": "EOFDCELPGFO",
-                  "CBOMLBFIPJM": 0.0,
-                  "compareType": "NoneOrEqual",
-                  "key": "_SHAMAN_IN_ABYSS"
-                }
-              ]
-            }
-          ],
-          "elementDurability": 100.0,
-          "modifierName": "",
           "AIHNJLDFEGJ": 0.0
         },
         "Monster_Shaman_None_CookingPoseDelay": {
           "duration": 30.0,
+          "elementDurability": 100.0,
+          "modifierName": "",
           "onRemoved": [
             {
               "$type": "SetGlobalValue",
               "key": "_SHAMAN_STATE",
-              "minValue": 0.0,
               "maxValue": 0.0,
-              "CBOMLBFIPJM": 1.0
+              "minValue": 0.0,
+              "value": 1.0
             }
           ],
-          "elementDurability": 100.0,
-          "modifierName": "",
           "AIHNJLDFEGJ": 0.0
         },
         "Monster_Shaman_None_StageControl_ResistFreeze": {
+          "elementDurability": 100.0,
+          "modifierName": "",
           "onAdded": [
             {
               "$type": "AttachAbilityStateResistance",
-              "resistanceListID": 14002,
-              "durationRatio": 0.9
+              "durationRatio": 0.9,
+              "resistanceListID": 14002
             }
           ],
-          "elementDurability": 100.0,
-          "modifierName": "",
           "AIHNJLDFEGJ": 0.0
         },
         "NormalStage": {
-          "thinkInterval": 2.0,
+          "elementDurability": 100.0,
+          "modifierName": "",
           "onAdded": [
             {
               "$type": "SetPoseInt",
@@ -130,8 +244,6 @@
               "boolID": "AngryShaderOn"
             }
           ],
-          "elementDurability": 100.0,
-          "modifierName": "",
           "onThinkInterval": [
             {
               "$type": "SetAnimatorBool",
@@ -142,17 +254,20 @@
               "boolID": "AngryShaderOn"
             }
           ],
+          "thinkInterval": 2.0,
           "AIHNJLDFEGJ": 0.0
         },
         "ChargeingState": {
+          "elementDurability": 100.0,
+          "modifierName": "",
           "onAdded": [
             {
               "$type": "ClearEndura"
             },
             {
               "$type": "SetPoseInt",
-              "GGKIEIJLCJJ": 1,
-              "intID": "Stage"
+              "intID": "Stage",
+              "value": 1
             },
             {
               "$type": "SetAnimatorBool",
@@ -166,35 +281,41 @@
           "properties": {
             "Actor_EndureDelta": 0.001
           },
-          "elementDurability": 100.0,
-          "modifierName": "",
           "AIHNJLDFEGJ": 0.0
         },
         "AngryStage": {
-          "onReconnect": [
-            {
-              "$type": "SetAnimatorBool",
-              "CBOMLBFIPJM": true,
-              "boolID": "AngryShaderOn"
-            }
-          ],
-          "thinkInterval": 3.0,
+          "elementDurability": 100.0,
+          "modifierName": "",
           "onAdded": [
             {
               "$type": "SetPoseInt",
-              "GGKIEIJLCJJ": 2,
-              "intID": "Stage"
+              "intID": "Stage",
+              "value": 2
             },
             {
               "$type": "SetAISkillGCD",
-              "GGKIEIJLCJJ": 0.1,
-              "canBeHandledOnRecover": true
+              "canBeHandledOnRecover": true,
+              "value": 0.1
             },
             {
               "$type": "ServerMonsterLog",
               "paramList": [
                 2
               ]
+            }
+          ],
+          "onReconnect": [
+            {
+              "$type": "SetAnimatorBool",
+              "boolID": "AngryShaderOn",
+              "value": true
+            }
+          ],
+          "onThinkInterval": [
+            {
+              "$type": "SetAnimatorBool",
+              "boolID": "AngryShaderOn",
+              "value": true
             }
           ],
           "properties": {
@@ -209,37 +330,37 @@
             "Actor_IceSubHurtDelta": "SubHurtCookFail",
             "Actor_RockSubHurtDelta": "SubHurtCookFail"
           },
-          "elementDurability": 100.0,
-          "modifierName": "",
-          "onThinkInterval": [
-            {
-              "$type": "SetAnimatorBool",
-              "CBOMLBFIPJM": true,
-              "boolID": "AngryShaderOn"
-            }
-          ],
+          "thinkInterval": 3.0,
           "AIHNJLDFEGJ": 0.0
         },
         "HardStage": {
-          "onReconnect": [
-            {
-              "$type": "SetAnimatorBool",
-              "CBOMLBFIPJM": true,
-              "boolID": "HardShaderOn"
-            }
-          ],
-          "thinkInterval": 3.0,
+          "elementDurability": 100.0,
+          "modifierName": "",
           "onAdded": [
             {
               "$type": "SetPoseInt",
-              "GGKIEIJLCJJ": 3,
-              "intID": "Stage"
+              "intID": "Stage",
+              "value": 3
             },
             {
               "$type": "ServerMonsterLog",
               "paramList": [
                 3
               ]
+            }
+          ],
+          "onReconnect": [
+            {
+              "$type": "SetAnimatorBool",
+              "boolID": "HardShaderOn",
+              "value": true
+            }
+          ],
+          "onThinkInterval": [
+            {
+              "$type": "SetAnimatorBool",
+              "boolID": "HardShaderOn",
+              "value": true
             }
           ],
           "properties": {
@@ -253,41 +374,29 @@
             "Actor_IceSubHurtDelta": "SubHurtDeltaHigh",
             "Actor_RockSubHurtDelta": "SubHurtDeltaHigh"
           },
-          "elementDurability": 100.0,
-          "modifierName": "",
-          "onThinkInterval": [
-            {
-              "$type": "SetAnimatorBool",
-              "CBOMLBFIPJM": true,
-              "boolID": "HardShaderOn"
-            }
-          ],
+          "thinkInterval": 3.0,
           "AIHNJLDFEGJ": 0.0
         },
         "Flee": {
+          "elementDurability": 100.0,
+          "modifierName": "",
           "onAdded": [
             {
               "$type": "SetPoseInt",
-              "GGKIEIJLCJJ": 5,
-              "intID": "Stage"
+              "intID": "Stage",
+              "value": 5
             }
           ],
-          "elementDurability": 100.0,
-          "modifierName": "",
           "AIHNJLDFEGJ": 0.0
         },
         "Weak": {
-          "onReconnect": [
-            {
-              "$type": "SetAnimatorTrigger",
-              "triggerID": "WeakReconnect"
-            }
-          ],
+          "elementDurability": 100.0,
+          "modifierName": "",
           "onAdded": [
             {
               "$type": "SetPoseInt",
-              "GGKIEIJLCJJ": 4,
-              "intID": "Stage"
+              "intID": "Stage",
+              "value": 4
             },
             {
               "$type": "ApplyModifier",
@@ -303,6 +412,12 @@
               ]
             }
           ],
+          "onReconnect": [
+            {
+              "$type": "SetAnimatorTrigger",
+              "triggerID": "WeakReconnect"
+            }
+          ],
           "properties": {
             "Actor_PhysicalSubHurtDelta": "SubHurtDeltaWeak",
             "Actor_FireSubHurtDelta": "SubHurtDeltaWeak",
@@ -313,19 +428,19 @@
             "Actor_IceSubHurtDelta": "SubHurtDeltaWeak",
             "Actor_RockSubHurtDelta": "SubHurtDeltaWeak"
           },
-          "elementDurability": 100.0,
-          "modifierName": "",
           "AIHNJLDFEGJ": 0.0
         },
         "Monster_Shaman_None_Weak_Timer": {
           "duration": 10.0,
+          "elementDurability": 100.0,
+          "modifierName": "",
           "onRemoved": [
             {
               "$type": "SetGlobalValue",
               "key": "_SHAMAN_STATE",
-              "minValue": 0.0,
               "maxValue": 0.0,
-              "CBOMLBFIPJM": 0.0
+              "minValue": 0.0,
+              "value": 0.0
             },
             {
               "$type": "SetAnimatorTrigger",
@@ -336,156 +451,46 @@
               "modifierName": "Monster_Shaman_None_WeakRecoverCooking_NextTimer",
               "predicates": [
                 {
-                  "$type": "EOFDCELPGFO",
-                  "CBOMLBFIPJM": 1.0,
-                  "key": "_SHAMAN_IN_BATTLE"
+                  "$type": "ByTargetGlobalValue",
+                  "key": "_SHAMAN_IN_BATTLE",
+                  "value": 1.0
                 }
               ]
             }
           ],
-          "elementDurability": 100.0,
-          "modifierName": "",
           "AIHNJLDFEGJ": 0.0
         },
         "Monster_Shaman_None_WeakRecoverCooking_NextTimer": {
           "duration": 20.0,
+          "elementDurability": 100.0,
+          "modifierName": "",
           "onRemoved": [
             {
               "$type": "SetGlobalValue",
               "key": "_SHAMAN_STATE",
-              "minValue": 0.0,
               "maxValue": 0.0,
-              "CBOMLBFIPJM": 1.0
+              "minValue": 0.0,
+              "value": 1.0
             }
           ],
-          "elementDurability": 100.0,
-          "modifierName": "",
           "AIHNJLDFEGJ": 0.0
         }
       },
-      "abilityMixins": [
-        {
-          "$type": "AttachModifierToSelfGlobalValueMixin",
-          "modifierNameSteps": [
-            "NormalStage",
-            "ChargeingState",
-            "AngryStage",
-            "HardStage",
-            "Weak",
-            "Flee"
-          ],
-          "DEFOFMOIAAI": true,
-          "valueSteps": [
-            -0.5,
-            0.5,
-            1.5,
-            2.5,
-            3.5,
-            4.5,
-            5.5
-          ],
-          "globalValueKey": "_SHAMAN_STATE",
-          "defaultGlobalValueOnCreate": 0.0
-        },
-        {
-          "$type": "AttachToAIAlertnessMixin",
-          "MKDABMCENDB": [
-            2,
-            3
-          ],
-          "modifierName": "Monster_Shaman_None_EnterCookingState"
-        },
-        {
-          "$type": "AttachToPoseIDMixin",
-          "GGOLBNPLGJH": [
-            901
-          ],
-          "modifierName": "Monster_Shaman_None_OutOfBattle"
-        },
-        {
-          "$type": "ServerFinishWatcherMixin",
-          "predicates": [
-            {
-              "$type": "AKHMLAJHPCC",
-              "CBOMLBFIPJM": 93.0,
-              "logic": "GreaterOrEqual",
-              "target": "Self"
-            },
-            {
-              "$type": "EOFDCELPGFO",
-              "CBOMLBFIPJM": 1.0,
-              "key": "_LocalLegendTag_",
-              "target": "Self"
-            }
-          ],
-          "watcherId": 100101071
-        },
-        {
-          "$type": "ServerFinishWatcherMixin",
-          "predicates": [
-            {
-              "$type": "AKHMLAJHPCC",
-              "CBOMLBFIPJM": 93.0,
-              "logic": "GreaterOrEqual",
-              "target": "Self"
-            },
-            {
-              "$type": "EOFDCELPGFO",
-              "CBOMLBFIPJM": 1.0,
-              "key": "_LocalLegendTag_",
-              "target": "Self"
-            },
-            {
-              "$type": "EOFDCELPGFO",
-              "CBOMLBFIPJM": 1.0,
-              "key": "_MONSTER_POT_HAS_BROKENED",
-              "target": "Self"
-            }
-          ],
-          "watcherId": 100101072
-        },
-        {
-          "$type": "ServerFinishWatcherMixin",
-          "predicates": [
-            {
-              "$type": "AKHMLAJHPCC",
-              "CBOMLBFIPJM": 103.0,
-              "logic": "GreaterOrEqual",
-              "target": "Self"
-            },
-            {
-              "$type": "EOFDCELPGFO",
-              "CBOMLBFIPJM": 1.0,
-              "key": "_LocalLegendTag_",
-              "target": "Self"
-            },
-            {
-              "$type": "EOFDCELPGFO",
-              "CBOMLBFIPJM": 0.0,
-              "compareType": "NoneOrEqual",
-              "key": "_SHAMAN_COOK_SUCCESSED",
-              "target": "Self"
-            }
-          ],
-          "watcherId": 100101073
-        }
-      ],
-      "abilityName": "Monster_Shaman_None_StageControl",
       "onAdded": [
         {
           "$type": "SetGlobalPos",
-          "key": "_SHAMAN_BORN_POS",
           "born": {
-            "$type": "NABPLNFPHCK",
+            "$type": "ConfigBornBySelf",
             "useRotation": true
-          }
+          },
+          "key": "_SHAMAN_BORN_POS"
         },
         {
           "$type": "SetSkillAnchor",
           "born": {
-            "$type": "LKIBKKFEOLJ",
-            "positionKey": "_SHAMAN_BORN_POS",
-            "directionKey": ""
+            "$type": "ConfigBornByGlobalValue",
+            "directionKey": "",
+            "positionKey": "_SHAMAN_BORN_POS"
           }
         },
         {
@@ -497,34 +502,121 @@
           "successActions": [
             {
               "$type": "SetOverrideMapValue",
-              "CBOMLBFIPJM": 2.9,
-              "maxValue": 0.0,
               "abilityName": "",
+              "maxValue": 0.0,
               "minValue": 0.0,
-              "overrideMapKey": "SubHurtDeltaHigh"
+              "overrideMapKey": "SubHurtDeltaHigh",
+              "value": 2.9
             }
           ],
           "targetPredicates": [
             {
-              "$type": "EOFDCELPGFO",
-              "CBOMLBFIPJM": 1.0,
-              "key": "_SHAMAN_IN_ABYSS"
+              "$type": "ByTargetGlobalValue",
+              "key": "_SHAMAN_IN_ABYSS",
+              "value": 1.0
             }
           ]
         }
-      ],
-      "abilitySpecials": {
-        "SubHurtDeltaWeak": -0.6,
-        "SubHurtDeltaHigh": 1.1,
-        "SubHurtCookFail": 0.0
-      }
+      ]
     }
   },
   {
     "Default": {
+      "abilityMixins": [
+        {
+          "$type": "AttachToStateIDMixin",
+          "modifierName": "Monster_Shaman_None_Cooking_DisturbAtkHandler",
+          "stateIDs": [
+            "SummonPot_Loop"
+          ],
+          "LJPPDIGCJMJ": ""
+        },
+        {
+          "$type": "AttachToStateIDMixin",
+          "modifierName": "Monster_Shaman_None_PotLifeControl",
+          "stateIDs": [
+            "SummonPot_BS",
+            "SummonPot_Loop",
+            "SummonPot_Check",
+            "SummonPot_Success",
+            "SummonPot_Fail",
+            "Weak_BS",
+            "Weak_Loop",
+            "Weak_AS"
+          ],
+          "LJPPDIGCJMJ": ""
+        },
+        {
+          "$type": "AttachToNormalizedTimeMixin",
+          "modifierName": "Monster_Shaman_None_Cooking_Begin",
+          "normalizeStart": 0.9,
+          "stateID": "SummonPot_BS",
+          "LJPPDIGCJMJ": ""
+        },
+        {
+          "$type": "AttachToStateIDMixin",
+          "modifierName": "Monster_Shaman_None_Weak_RemoveCooking",
+          "stateIDs": [
+            "Weak_BS"
+          ],
+          "LJPPDIGCJMJ": ""
+        },
+        {
+          "$type": "AttachToStateIDMixin",
+          "modifierName": "Monster_Shaman_None_Cooking_SubHurtDecrease",
+          "stateIDs": [
+            "SummonPot_BS",
+            "SummonPot_Loop"
+          ],
+          "LJPPDIGCJMJ": ""
+        },
+        {
+          "$type": "AttachModifierToSelfGlobalValueMixin",
+          "defaultGlobalValueOnCreate": 0.0,
+          "globalValueKey": "_POT_LIFE_BEGIN",
+          "modifierNameSteps": [
+            "Monster_Shaman_None_PotClose",
+            "Monster_Shaman_None_PotOn"
+          ],
+          "valueSteps": [
+            -0.5,
+            0.5,
+            1.5
+          ],
+          "DEFOFMOIAAI": true
+        },
+        {
+          "$type": "AttachToNormalizedTimeMixin",
+          "modifierName": "Monster_Shaman_None_Cooking_GoAngryShow",
+          "normalizeEnd": 0.4,
+          "normalizeStart": 0.06,
+          "stateID": "SummonPot_Fail",
+          "LJPPDIGCJMJ": ""
+        },
+        {
+          "$type": "AttachToNormalizedTimeMixin",
+          "modifierName": "Monster_Shaman_None_Cooking_GoHardShow",
+          "normalizeEnd": 0.7,
+          "normalizeStart": 0.01,
+          "stateID": "SummonPot_Success",
+          "LJPPDIGCJMJ": ""
+        },
+        {
+          "$type": "AttachToAIAlertnessMixin",
+          "alertness": [
+            0
+          ],
+          "modifierName": "Monster_Shaman_None_Cooking_RemoveState"
+        }
+      ],
+      "abilityName": "Monster_Shaman_None_Cooking",
+      "abilitySpecials": {
+        "Cooking_SubHurtDelta": 1.1
+      },
       "modifiers": {
         "Monster_Shaman_None_Cooking_RemoveState": {
-          "thinkInterval": 0.5,
+          "elementDurability": 100.0,
+          "modifierName": "",
           "onAdded": [
             {
               "$type": "RemoveModifier",
@@ -541,43 +633,44 @@
             {
               "$type": "SetGlobalValue",
               "key": "_SHAMAN_COOK_SUCCESSED",
-              "minValue": 0.0,
               "maxValue": 0.0,
-              "CBOMLBFIPJM": 0.0
+              "minValue": 0.0,
+              "value": 0.0
             },
             {
               "$type": "SetGlobalValue",
               "key": "_BE_HITH_TIMES",
-              "minValue": 0.0,
               "maxValue": 0.0,
-              "CBOMLBFIPJM": 0.0
+              "minValue": 0.0,
+              "value": 0.0
             },
             {
               "$type": "SetGlobalValue",
               "key": "_MONSTER_POT_HAS_BROKENED",
-              "minValue": 0.0,
               "maxValue": 0.0,
-              "CBOMLBFIPJM": 0.0
+              "minValue": 0.0,
+              "value": 0.0
             }
           ],
-          "elementDurability": 100.0,
-          "modifierName": "",
           "onThinkInterval": [
             {
               "$type": "SetGlobalValue",
               "key": "_SHAMAN_STATE",
-              "minValue": 0.0,
               "maxValue": 0.0,
-              "CBOMLBFIPJM": 0.0
+              "minValue": 0.0,
+              "value": 0.0
             }
           ],
+          "thinkInterval": 0.5,
           "AIHNJLDFEGJ": 0.0
         },
         "Monster_Shaman_None_Cooking_SubHurtDecrease": {
+          "elementDurability": 100.0,
+          "modifierName": "",
           "onAdded": [
             {
               "$type": "AttachAbilityStateResistance",
-              "LOJOPMOGIGH": [
+              "resistanceBuffDebuffs": [
                 "ElementFreeze",
                 "ElementPetrifaction"
               ]
@@ -593,8 +686,6 @@
             "Actor_IceSubHurtDelta": "Cooking_SubHurtDelta",
             "Actor_RockSubHurtDelta": "Cooking_SubHurtDelta"
           },
-          "elementDurability": 100.0,
-          "modifierName": "",
           "AIHNJLDFEGJ": 0.0
         },
         "Monster_Shaman_None_Cooking_CheckResult": {
@@ -603,6 +694,8 @@
           "AIHNJLDFEGJ": 0.0
         },
         "Monster_Shaman_None_PotClose": {
+          "elementDurability": 100.0,
+          "modifierName": "",
           "onAdded": [
             {
               "$type": "KillGadgetV2",
@@ -617,123 +710,121 @@
               }
             }
           ],
-          "elementDurability": 100.0,
-          "modifierName": "",
           "AIHNJLDFEGJ": 0.0
         },
         "Monster_Shaman_None_PotOn": {
+          "elementDurability": 100.0,
+          "modifierName": "",
           "onAdded": [
             {
               "$type": "SetGlobalPos",
-              "key": "_POT_POS",
               "born": {
-                "$type": "NABPLNFPHCK",
-                "onGround": true,
-                "useRotation": true,
-                "offset": {
-                  "x": 0.0,
-                  "z": 2.5,
-                  "y": 0.0
-                },
+                "$type": "ConfigBornBySelf",
                 "direction": {
-                  "$type": "INIJNNEABNP",
+                  "$type": "ConfigDirectionByDefault",
                   "NLFOCCICIEB": 0.0
-                }
-              }
+                },
+                "offset": {
+                  "x": 2.5,
+                  "y": 0.0,
+                  "z": 0.0
+                },
+                "onGround": true,
+                "useRotation": true
+              },
+              "key": "_POT_POS"
             },
             {
               "$type": "CreateGadget",
-              "gadgetID": 42103045,
-              "FGNHCAEHEJK": true,
               "born": {
-                "$type": "LKIBKKFEOLJ",
-                "positionKey": "_POT_POS",
-                "directionKey": ""
-              }
+                "$type": "ConfigBornByGlobalValue",
+                "directionKey": "",
+                "positionKey": "_POT_POS"
+              },
+              "gadgetID": 42103045,
+              "FGNHCAEHEJK": true
             },
             {
               "$type": "ShowReminder",
               "id": 31030701
             }
           ],
-          "elementDurability": 100.0,
-          "modifierName": "",
           "AIHNJLDFEGJ": 0.0
         },
         "Monster_Shaman_None_PotLifeControl": {
+          "elementDurability": 100.0,
+          "modifierName": "",
+          "onAdded": [
+            {
+              "$type": "SetGlobalValue",
+              "key": "_POT_LIFE_BEGIN",
+              "maxValue": 0.0,
+              "minValue": 0.0,
+              "value": 0.0
+            }
+          ],
           "onRemoved": [
             {
               "$type": "SetGlobalValue",
               "key": "_POT_LIFE_BEGIN",
-              "minValue": 0.0,
               "maxValue": 0.0,
-              "CBOMLBFIPJM": 0.0
+              "minValue": 0.0,
+              "value": 0.0
             },
             {
               "$type": "RemoveModifier",
               "modifierName": "Monster_Shaman_None_Cooking_Timing"
             }
           ],
-          "onAdded": [
-            {
-              "$type": "SetGlobalValue",
-              "key": "_POT_LIFE_BEGIN",
-              "minValue": 0.0,
-              "maxValue": 0.0,
-              "CBOMLBFIPJM": 0.0
-            }
-          ],
-          "elementDurability": 100.0,
-          "modifierName": "",
           "AIHNJLDFEGJ": 0.0
         },
         "Monster_Shaman_None_Cooking_Begin": {
+          "elementDurability": 100.0,
+          "modifierName": "",
           "onAdded": [
             {
               "$type": "SetGlobalValue",
               "key": "_POT_LIFE_BEGIN",
-              "minValue": 0.0,
               "maxValue": 0.0,
-              "CBOMLBFIPJM": 1.0
+              "minValue": 0.0,
+              "value": 1.0
             },
             {
               "$type": "AddChargeBarValue",
-              "CBOMLBFIPJM": -100.0,
+              "maxValue": 0.0,
               "minValue": 0.0,
-              "maxValue": 0.0
+              "value": -100.0
             },
             {
               "$type": "SetGlobalValue",
               "key": "_COOKING_CONTINUE_TIME",
-              "minValue": 0.0,
               "maxValue": 0.0,
-              "CBOMLBFIPJM": 0.0
+              "minValue": 0.0,
+              "value": 0.0
             },
             {
               "$type": "SetGlobalValue",
               "key": "_COOKING_TRUE_TIME",
-              "minValue": 0.0,
               "maxValue": 0.0,
-              "CBOMLBFIPJM": 0.0
+              "minValue": 0.0,
+              "value": 0.0
             },
             {
               "$type": "ApplyModifier",
               "modifierName": "Monster_Shaman_None_Cooking_Timing"
             }
           ],
-          "elementDurability": 100.0,
-          "modifierName": "",
           "AIHNJLDFEGJ": 0.0
         },
         "Monster_Shaman_None_Weak_RemoveCooking": {
+          "elementDurability": 100.0,
+          "modifierName": "",
           "onAdded": [
             {
               "$type": "RemoveModifier",
               "modifierName": "Monster_Shaman_None_Cooking_Timing"
             }
           ],
-          "elementDurability": 100.0,
-          "modifierName": "",
           "AIHNJLDFEGJ": 0.0
         },
         "Monster_Shaman_None_InCooking": {
@@ -742,46 +833,79 @@
           "AIHNJLDFEGJ": 0.0
         },
         "Monster_Shaman_None_CookOverNow": {
+          "elementDurability": 100.0,
+          "modifierName": "",
           "onAdded": [
             {
               "$type": "ApplyModifier",
               "modifierName": "Remove_CookingDelay"
             }
           ],
-          "elementDurability": 100.0,
-          "modifierName": "",
           "AIHNJLDFEGJ": 0.0
         },
         "Remove_CookingDelay": {
           "duration": 0.5,
+          "elementDurability": 100.0,
+          "modifierName": "",
           "onRemoved": [
             {
               "$type": "RemoveModifier",
               "modifierName": "Monster_Shaman_None_Cooking_Timing"
             }
           ],
-          "elementDurability": 100.0,
-          "modifierName": "",
           "AIHNJLDFEGJ": 0.0
         },
         "Monster_Shaman_None_CookingFireEnd_Timer": {
           "duration": 2.0,
+          "elementDurability": 100.0,
+          "modifierName": "",
           "onRemoved": [
             {
               "$type": "SetGlobalValue",
               "key": "_COOKING_CONTINUE_TIME",
-              "minValue": 0.0,
               "maxValue": 0.0,
-              "CBOMLBFIPJM": 0.0
+              "minValue": 0.0,
+              "value": 0.0
             }
           ],
-          "elementDurability": 100.0,
-          "modifierName": "",
           "AIHNJLDFEGJ": 0.0
         },
         "Monster_Shaman_None_Cooking_Timing": {
-          "thinkInterval": 0.5,
           "duration": 16.0,
+          "elementDurability": 100.0,
+          "modifierMixins": [
+            {
+              "$type": "ChargeBarMixin",
+              "chargeBarIconID": 16,
+              "initialValue": 0.0,
+              "maxValue": 100.0
+            },
+            {
+              "$type": "AttachModifierToSelfGlobalValueMixin",
+              "defaultGlobalValueOnCreate": 0.0,
+              "globalValueKey": "_CHARGEBAR_VALUE",
+              "modifierNameSteps": [
+                "Monster_Shaman_None_InCooking",
+                "Monster_Shaman_None_CookOverNow"
+              ],
+              "valueSteps": [
+                -0.5,
+                99.5,
+                101.0
+              ],
+              "DEFOFMOIAAI": true
+            }
+          ],
+          "modifierName": "",
+          "onAdded": [
+            {
+              "$type": "AttachEffect",
+              "effectPattern": "Eff_Monster_Shaman_None_SummonPot",
+              "effectTempleteID": -1.0,
+              "scale": 1.0,
+              "ILLLPEOODKP": ""
+            }
+          ],
           "onRemoved": [
             {
               "$type": "Predicated",
@@ -795,43 +919,6 @@
                     },
                     {
                       "$type": "Predicated",
-                      "successActions": [
-                        {
-                          "$type": "SetGlobalValue",
-                          "key": "_SHAMAN_COOK_SUCCESSED",
-                          "minValue": 0.0,
-                          "maxValue": 0.0,
-                          "CBOMLBFIPJM": 1.0
-                        },
-                        {
-                          "$type": "SetAnimatorBool",
-                          "CBOMLBFIPJM": true,
-                          "boolID": "CookSuccess"
-                        },
-                        {
-                          "$type": "ApplyModifier",
-                          "modifierName": "Monster_Shaman_None_HardState_Timer"
-                        },
-                        {
-                          "$type": "SetGlobalValue",
-                          "key": "_POT_LIFE_BEGIN",
-                          "minValue": 0.0,
-                          "maxValue": 0.0,
-                          "CBOMLBFIPJM": 0.0
-                        },
-                        {
-                          "$type": "FireEffect",
-                          "effectPattern": "Eff_Monster_Shaman_None_RockPotCookingSuccess",
-                          "scale": 1.0,
-                          "born": {
-                            "$type": "LKIBKKFEOLJ",
-                            "positionKey": "_POT_POS",
-                            "directionKey": ""
-                          },
-                          "ILLLPEOODKP": "",
-                          "effectTempleteID": -1.0
-                        }
-                      ],
                       "failActions": [
                         {
                           "$type": "SetAnimatorBool",
@@ -844,536 +931,500 @@
                         {
                           "$type": "SetGlobalValue",
                           "key": "_POT_LIFE_BEGIN",
-                          "minValue": 0.0,
                           "maxValue": 0.0,
-                          "CBOMLBFIPJM": 0.0
+                          "minValue": 0.0,
+                          "value": 0.0
                         },
                         {
                           "$type": "FireEffect",
-                          "effectPattern": "Eff_Monster_Shaman_None_RockPotCookingFail",
-                          "scale": 1.0,
                           "born": {
-                            "$type": "LKIBKKFEOLJ",
-                            "positionKey": "_POT_POS",
-                            "directionKey": ""
+                            "$type": "ConfigBornByGlobalValue",
+                            "directionKey": "",
+                            "positionKey": "_POT_POS"
                           },
-                          "ILLLPEOODKP": "",
-                          "effectTempleteID": -1.0
+                          "effectPattern": "Eff_Monster_Shaman_None_RockPotCookingFail",
+                          "effectTempleteID": -1.0,
+                          "scale": 1.0,
+                          "ILLLPEOODKP": ""
+                        }
+                      ],
+                      "successActions": [
+                        {
+                          "$type": "SetGlobalValue",
+                          "key": "_SHAMAN_COOK_SUCCESSED",
+                          "maxValue": 0.0,
+                          "minValue": 0.0,
+                          "value": 1.0
+                        },
+                        {
+                          "$type": "SetAnimatorBool",
+                          "boolID": "CookSuccess",
+                          "value": true
+                        },
+                        {
+                          "$type": "ApplyModifier",
+                          "modifierName": "Monster_Shaman_None_HardState_Timer"
+                        },
+                        {
+                          "$type": "SetGlobalValue",
+                          "key": "_POT_LIFE_BEGIN",
+                          "maxValue": 0.0,
+                          "minValue": 0.0,
+                          "value": 0.0
+                        },
+                        {
+                          "$type": "FireEffect",
+                          "born": {
+                            "$type": "ConfigBornByGlobalValue",
+                            "directionKey": "",
+                            "positionKey": "_POT_POS"
+                          },
+                          "effectPattern": "Eff_Monster_Shaman_None_RockPotCookingSuccess",
+                          "effectTempleteID": -1.0,
+                          "scale": 1.0,
+                          "ILLLPEOODKP": ""
                         }
                       ],
                       "targetPredicates": [
                         {
-                          "$type": "EOFDCELPGFO",
-                          "CBOMLBFIPJM": 100.0,
-                          "key": "_CHARGEBAR_VALUE"
+                          "$type": "ByTargetGlobalValue",
+                          "key": "_CHARGEBAR_VALUE",
+                          "value": 100.0
                         }
                       ]
                     }
                   ],
                   "targetPredicates": [
                     {
-                      "$type": "EOFDCELPGFO",
-                      "CBOMLBFIPJM": 3.0,
+                      "$type": "ByTargetGlobalValue",
                       "compareType": "LessAndEqual",
-                      "key": "_SHAMAN_STATE"
+                      "key": "_SHAMAN_STATE",
+                      "value": 3.0
                     }
                   ]
                 }
               ],
               "targetPredicates": [
                 {
-                  "$type": "GPEMEIHPCCF",
+                  "$type": "ByAny",
                   "predicates": [
                     {
-                      "$type": "EOFDCELPGFO",
-                      "CBOMLBFIPJM": 12.0,
+                      "$type": "ByTargetGlobalValue",
                       "compareType": "MoreThan",
-                      "key": "_COOKING_TRUE_TIME"
+                      "key": "_COOKING_TRUE_TIME",
+                      "value": 12.0
                     },
                     {
-                      "$type": "EOFDCELPGFO",
-                      "CBOMLBFIPJM": 95.0,
+                      "$type": "ByTargetGlobalValue",
                       "compareType": "MoreThan",
-                      "key": "_CHARGEBAR_VALUE"
+                      "key": "_CHARGEBAR_VALUE",
+                      "value": 95.0
                     }
                   ]
                 }
               ]
             }
           ],
-          "onAdded": [
-            {
-              "$type": "AttachEffect",
-              "ILLLPEOODKP": "",
-              "scale": 1.0,
-              "effectPattern": "Eff_Monster_Shaman_None_SummonPot",
-              "effectTempleteID": -1.0
-            }
-          ],
-          "elementDurability": 100.0,
-          "modifierMixins": [
-            {
-              "$type": "ChargeBarMixin",
-              "DFOLBCDILPA": 0.0,
-              "maxValue": 100.0,
-              "chargeBarIconID": 16
-            },
-            {
-              "$type": "AttachModifierToSelfGlobalValueMixin",
-              "modifierNameSteps": [
-                "Monster_Shaman_None_InCooking",
-                "Monster_Shaman_None_CookOverNow"
-              ],
-              "DEFOFMOIAAI": true,
-              "valueSteps": [
-                -0.5,
-                99.5,
-                101.0
-              ],
-              "globalValueKey": "_CHARGEBAR_VALUE",
-              "defaultGlobalValueOnCreate": 0.0
-            }
-          ],
-          "modifierName": "",
-          "onThinkIntervalIsFixedUpdate": true,
           "onThinkInterval": [
             {
               "$type": "AddChargeBarValue",
-              "CBOMLBFIPJM": 2.5,
-              "minValue": 0.0,
               "maxValue": 0.0,
+              "minValue": 0.0,
               "predicates": [
                 {
-                  "$type": "EOFDCELPGFO",
-                  "CBOMLBFIPJM": 1.0,
-                  "key": "_FIRE_ON"
+                  "$type": "ByTargetGlobalValue",
+                  "key": "_FIRE_ON",
+                  "value": 1.0
                 },
                 {
-                  "$type": "EOFDCELPGFO",
-                  "CBOMLBFIPJM": 4.0,
+                  "$type": "ByTargetGlobalValue",
                   "compareType": "LessAndEqual",
-                  "key": "_COOKING_CONTINUE_TIME"
+                  "key": "_COOKING_CONTINUE_TIME",
+                  "value": 4.0
                 }
-              ]
+              ],
+              "value": 2.5
             },
             {
               "$type": "AddChargeBarValue",
-              "CBOMLBFIPJM": 7.5,
-              "minValue": 0.0,
               "maxValue": 0.0,
+              "minValue": 0.0,
               "predicates": [
                 {
-                  "$type": "EOFDCELPGFO",
-                  "CBOMLBFIPJM": 1.0,
-                  "key": "_FIRE_ON"
+                  "$type": "ByTargetGlobalValue",
+                  "key": "_FIRE_ON",
+                  "value": 1.0
                 },
                 {
-                  "$type": "EOFDCELPGFO",
-                  "CBOMLBFIPJM": 4.0,
+                  "$type": "ByTargetGlobalValue",
                   "compareType": "MoreThan",
-                  "key": "_COOKING_CONTINUE_TIME"
+                  "key": "_COOKING_CONTINUE_TIME",
+                  "value": 4.0
                 }
-              ]
+              ],
+              "value": 7.5
             },
             {
               "$type": "AddGlobalValue",
-              "useLimitRange": true,
               "key": "_COOKING_CONTINUE_TIME",
               "maxValue": 5.0,
               "minValue": 0.0,
-              "CBOMLBFIPJM": 0.5
+              "useLimitRange": true,
+              "value": 0.5
             },
             {
               "$type": "AddGlobalValue",
-              "useLimitRange": true,
               "key": "_COOKING_TRUE_TIME",
               "maxValue": 17.0,
               "minValue": 0.0,
-              "CBOMLBFIPJM": 0.5
+              "useLimitRange": true,
+              "value": 0.5
             },
             {
               "$type": "ApplyModifier",
               "modifierName": "Monster_Shaman_None_CookingFireEnd_Timer",
               "predicates": [
                 {
-                  "$type": "EOFDCELPGFO",
-                  "CBOMLBFIPJM": 1.0,
-                  "key": "_FIRE_ON"
+                  "$type": "ByTargetGlobalValue",
+                  "key": "_FIRE_ON",
+                  "value": 1.0
                 }
               ]
             }
           ],
+          "onThinkIntervalIsFixedUpdate": true,
+          "thinkInterval": 0.5,
           "AIHNJLDFEGJ": 0.0
         },
         "Monster_Shaman_None_Cooking_GoAngryShow": {
+          "elementDurability": 100.0,
+          "modifierName": "",
           "onAdded": [
             {
               "$type": "SetAnimatorBool",
-              "CBOMLBFIPJM": true,
-              "boolID": "AngryShaderOn"
+              "boolID": "AngryShaderOn",
+              "value": true
             }
           ],
-          "elementDurability": 100.0,
-          "modifierName": "",
           "AIHNJLDFEGJ": 0.0
         },
         "Monster_Shaman_None_Cooking_GoHardShow": {
+          "elementDurability": 100.0,
+          "modifierName": "",
           "onAdded": [
             {
               "$type": "SetAnimatorBool",
-              "CBOMLBFIPJM": true,
-              "boolID": "HardShaderOn"
+              "boolID": "HardShaderOn",
+              "value": true
             },
             {
               "$type": "HealHP",
-              "GJBFAJMJFOP": 0.2,
+              "amountByCasterMaxHPRatio": 0.2,
               "FFNEJGGNAFF": ""
             },
             {
               "$type": "FireEffect",
               "effectPattern": "Eff_Monster_GeneralSkill_Sovereign_Master_Heal",
+              "effectTempleteID": -1.0,
               "scale": 1.0,
-              "ILLLPEOODKP": "",
-              "effectTempleteID": -1.0
+              "ILLLPEOODKP": ""
             },
             {
               "$type": "AttachEffect",
-              "ILLLPEOODKP": "",
-              "scale": 1.0,
               "effectPattern": "Eff_Monster_Shaman_None_PowerBuff",
-              "effectTempleteID": -1.0
+              "effectTempleteID": -1.0,
+              "scale": 1.0,
+              "ILLLPEOODKP": ""
             }
           ],
-          "elementDurability": 100.0,
-          "modifierName": "",
           "AIHNJLDFEGJ": 0.0
         },
         "Monster_Shaman_None_HardState_Timer": {
           "duration": 30.0,
-          "onRemoved": [
-            {
-              "$type": "SetGlobalValue",
-              "key": "_SHAMAN_STATE",
-              "minValue": 0.0,
-              "maxValue": 0.0,
-              "CBOMLBFIPJM": 1.0
-            }
-          ],
+          "elementDurability": 100.0,
+          "modifierName": "",
           "onAdded": [
             {
               "$type": "SetGlobalValue",
               "key": "_SHAMAN_STATE",
-              "minValue": 0.0,
               "maxValue": 0.0,
-              "CBOMLBFIPJM": 3.0
+              "minValue": 0.0,
+              "value": 3.0
             }
           ],
-          "elementDurability": 100.0,
-          "modifierName": "",
+          "onRemoved": [
+            {
+              "$type": "SetGlobalValue",
+              "key": "_SHAMAN_STATE",
+              "maxValue": 0.0,
+              "minValue": 0.0,
+              "value": 1.0
+            }
+          ],
           "AIHNJLDFEGJ": 0.0
         },
         "Monster_Shaman_None_AngryState_Timer": {
           "duration": 30.0,
-          "onRemoved": [
-            {
-              "$type": "SetGlobalValue",
-              "key": "_SHAMAN_STATE",
-              "minValue": 0.0,
-              "maxValue": 0.0,
-              "CBOMLBFIPJM": 1.0
-            }
-          ],
+          "elementDurability": 100.0,
+          "modifierName": "",
           "onAdded": [
             {
               "$type": "SetGlobalValue",
               "key": "_SHAMAN_STATE",
-              "minValue": 0.0,
               "maxValue": 0.0,
-              "CBOMLBFIPJM": 2.0
+              "minValue": 0.0,
+              "value": 2.0
             }
           ],
-          "elementDurability": 100.0,
-          "modifierName": "",
+          "onRemoved": [
+            {
+              "$type": "SetGlobalValue",
+              "key": "_SHAMAN_STATE",
+              "maxValue": 0.0,
+              "minValue": 0.0,
+              "value": 1.0
+            }
+          ],
           "AIHNJLDFEGJ": 0.0
         },
         "Monster_Shaman_None_Cooking_DisturbAtkTrackAvatar": {
-          "thinkInterval": 4.0,
           "elementDurability": 100.0,
           "modifierName": "",
           "onThinkInterval": [
             {
               "$type": "Predicated",
+              "otherTargets": {
+                "$type": "SelectTargetsByShape",
+                "campTargetType": "Enemy",
+                "shapeName": "CircleR25H3",
+                "sizeRatio": 1.0,
+                "NLNIBNNOOCK": {
+                  "$type": "ConfigBornByGlobalValue",
+                  "directionKey": "",
+                  "positionKey": "_SHAMAN_BORN_POS"
+                }
+              },
               "successActions": [
                 {
                   "$type": "SetGlobalPos",
-                  "setTarget": false,
-                  "key": "_SHAMAN_FIRECIRCLE_POS",
                   "born": {
-                    "$type": "BOJMMDAIGMM",
-                    "onGround": true,
+                    "$type": "ConfigBornByTarget",
                     "direction": {
-                      "$type": "INIJNNEABNP",
+                      "$type": "ConfigDirectionByDefault",
                       "NLFOCCICIEB": 0.0
-                    }
+                    },
+                    "onGround": true
                   },
+                  "key": "_SHAMAN_FIRECIRCLE_POS",
+                  "setTarget": false,
                   "target": "Target"
                 },
                 {
                   "$type": "Predicated",
-                  "successActions": [
-                    {
-                      "$type": "CreateGadget",
-                      "gadgetID": 42103047,
-                      "FGNHCAEHEJK": true,
-                      "born": {
-                        "$type": "LKIBKKFEOLJ",
-                        "positionKey": "_SHAMAN_FIRECIRCLE_POS",
-                        "directionKey": ""
-                      }
-                    }
-                  ],
                   "failActions": [
                     {
                       "$type": "CreateGadget",
-                      "gadgetID": 42103047,
-                      "FGNHCAEHEJK": true,
                       "born": {
-                        "$type": "LKIBKKFEOLJ",
-                        "positionKey": "_POT_POS",
-                        "directionKey": "",
+                        "$type": "ConfigBornByGlobalValue",
                         "bornRandom": {
-                          "$type": "DBJNGNDCMAH",
-                          "minRandomRange": 0.0,
-                          "maxRandomRange": 3.0
-                        }
-                      }
+                          "$type": "BornRandomFromCenter",
+                          "maxRandomRange": 3.0,
+                          "minRandomRange": 0.0
+                        },
+                        "directionKey": "",
+                        "positionKey": "_POT_POS"
+                      },
+                      "gadgetID": 42103047,
+                      "FGNHCAEHEJK": true
+                    }
+                  ],
+                  "successActions": [
+                    {
+                      "$type": "CreateGadget",
+                      "born": {
+                        "$type": "ConfigBornByGlobalValue",
+                        "directionKey": "",
+                        "positionKey": "_SHAMAN_FIRECIRCLE_POS"
+                      },
+                      "gadgetID": 42103047,
+                      "FGNHCAEHEJK": true
                     }
                   ],
                   "targetPredicates": [
                     {
-                      "$type": "EDCKDFJGHFN",
-                      "CDJEMNEGFMP": "_SHAMAN_FIRECIRCLE_POS",
-                      "BLAJKPCKAFG": "_POT_POS",
-                      "CBOMLBFIPJM": 3.0,
-                      "logic": "Lesser"
+                      "$type": "ByGlobalPosToGlobalPosDistance",
+                      "logic": "Lesser",
+                      "positionKey1": "_SHAMAN_FIRECIRCLE_POS",
+                      "positionKey2": "_POT_POS",
+                      "value": 3.0
                     }
                   ]
                 }
               ],
               "targetPredicates": [
                 {
-                  "$type": "DEOFBICNFHF",
+                  "$type": "ByEntityTypes",
                   "entityTypes": [
                     "Avatar",
                     "Partner",
                     "Vehicle"
                   ]
                 }
-              ],
-              "otherTargets": {
-                "$type": "INIACGFCEDH",
-                "sizeRatio": 1.0,
-                "campTargetType": "Enemy",
-                "NLNIBNNOOCK": {
-                  "$type": "LKIBKKFEOLJ",
-                  "positionKey": "_SHAMAN_BORN_POS",
-                  "directionKey": ""
-                },
-                "shapeName": "CircleR25H3"
-              }
+              ]
             }
           ],
+          "thinkInterval": 4.0,
           "AIHNJLDFEGJ": 0.0
         },
         "Monster_Shaman_None_Cooking_DisturbAtkHandler": {
-          "thinkInterval": 3.0,
+          "elementDurability": 100.0,
+          "modifierName": "",
           "onAdded": [
             {
               "$type": "AttachModifier",
               "modifierName": "Monster_Shaman_None_Cooking_DisturbAtkTrackAvatar"
             }
           ],
-          "elementDurability": 100.0,
-          "modifierName": "",
           "onThinkInterval": [
             {
               "$type": "CreateGadget",
-              "gadgetID": 42103047,
-              "FGNHCAEHEJK": true,
               "born": {
-                "$type": "NABPLNFPHCK",
-                "onGround": true,
-                "useRotation": true,
+                "$type": "ConfigBornBySelf",
+                "bornRandom": {
+                  "$type": "BornRandomFromCenter",
+                  "maxRandomRange": 7.0,
+                  "minRandomRange": 5.0
+                },
                 "direction": {
-                  "$type": "INIJNNEABNP",
+                  "$type": "ConfigDirectionByDefault",
                   "NLFOCCICIEB": 0.0
                 },
-                "bornRandom": {
-                  "$type": "DBJNGNDCMAH",
-                  "minRandomRange": 5.0,
-                  "maxRandomRange": 7.0
-                }
-              }
+                "onGround": true,
+                "useRotation": true
+              },
+              "gadgetID": 42103047,
+              "FGNHCAEHEJK": true
             },
             {
               "$type": "CreateGadget",
-              "gadgetID": 42103047,
-              "FGNHCAEHEJK": true,
               "born": {
-                "$type": "NABPLNFPHCK",
-                "onGround": true,
-                "useRotation": true,
+                "$type": "ConfigBornBySelf",
+                "bornRandom": {
+                  "$type": "BornRandomFromCenter",
+                  "maxRandomRange": 10.0,
+                  "minRandomRange": 7.0
+                },
                 "direction": {
-                  "$type": "INIJNNEABNP",
+                  "$type": "ConfigDirectionByDefault",
                   "NLFOCCICIEB": 0.0
                 },
-                "bornRandom": {
-                  "$type": "DBJNGNDCMAH",
-                  "minRandomRange": 7.0,
-                  "maxRandomRange": 10.0
-                }
-              }
+                "onGround": true,
+                "useRotation": true
+              },
+              "gadgetID": 42103047,
+              "FGNHCAEHEJK": true
             }
           ],
+          "thinkInterval": 3.0,
           "AIHNJLDFEGJ": 0.0
         }
       },
-      "onKill": [
-        {
-          "$type": "RemoveModifier",
-          "modifierName": "Monster_Shaman_None_Cooking_Timing"
-        }
-      ],
-      "abilityMixins": [
-        {
-          "$type": "AttachToStateIDMixin",
-          "LJPPDIGCJMJ": "",
-          "stateIDs": [
-            "SummonPot_Loop"
-          ],
-          "modifierName": "Monster_Shaman_None_Cooking_DisturbAtkHandler"
-        },
-        {
-          "$type": "AttachToStateIDMixin",
-          "LJPPDIGCJMJ": "",
-          "stateIDs": [
-            "SummonPot_BS",
-            "SummonPot_Loop",
-            "SummonPot_Check",
-            "SummonPot_Success",
-            "SummonPot_Fail",
-            "Weak_BS",
-            "Weak_Loop",
-            "Weak_AS"
-          ],
-          "modifierName": "Monster_Shaman_None_PotLifeControl"
-        },
-        {
-          "$type": "AttachToNormalizedTimeMixin",
-          "modifierName": "Monster_Shaman_None_Cooking_Begin",
-          "LJPPDIGCJMJ": "",
-          "stateID": "SummonPot_BS",
-          "normalizeStart": 0.9
-        },
-        {
-          "$type": "AttachToStateIDMixin",
-          "LJPPDIGCJMJ": "",
-          "stateIDs": [
-            "Weak_BS"
-          ],
-          "modifierName": "Monster_Shaman_None_Weak_RemoveCooking"
-        },
-        {
-          "$type": "AttachToStateIDMixin",
-          "LJPPDIGCJMJ": "",
-          "stateIDs": [
-            "SummonPot_BS",
-            "SummonPot_Loop"
-          ],
-          "modifierName": "Monster_Shaman_None_Cooking_SubHurtDecrease"
-        },
-        {
-          "$type": "AttachModifierToSelfGlobalValueMixin",
-          "modifierNameSteps": [
-            "Monster_Shaman_None_PotClose",
-            "Monster_Shaman_None_PotOn"
-          ],
-          "DEFOFMOIAAI": true,
-          "valueSteps": [
-            -0.5,
-            0.5,
-            1.5
-          ],
-          "globalValueKey": "_POT_LIFE_BEGIN",
-          "defaultGlobalValueOnCreate": 0.0
-        },
-        {
-          "$type": "AttachToNormalizedTimeMixin",
-          "modifierName": "Monster_Shaman_None_Cooking_GoAngryShow",
-          "LJPPDIGCJMJ": "",
-          "normalizeEnd": 0.4,
-          "stateID": "SummonPot_Fail",
-          "normalizeStart": 0.06
-        },
-        {
-          "$type": "AttachToNormalizedTimeMixin",
-          "modifierName": "Monster_Shaman_None_Cooking_GoHardShow",
-          "LJPPDIGCJMJ": "",
-          "normalizeEnd": 0.7,
-          "stateID": "SummonPot_Success",
-          "normalizeStart": 0.01
-        },
-        {
-          "$type": "AttachToAIAlertnessMixin",
-          "MKDABMCENDB": [
-            0
-          ],
-          "modifierName": "Monster_Shaman_None_Cooking_RemoveState"
-        }
-      ],
-      "abilityName": "Monster_Shaman_None_Cooking",
       "onAdded": [
         {
           "$type": "Predicated",
           "successActions": [
             {
               "$type": "SetOverrideMapValue",
-              "CBOMLBFIPJM": 2.9,
-              "maxValue": 0.0,
               "abilityName": "",
+              "maxValue": 0.0,
               "minValue": 0.0,
-              "overrideMapKey": "Cooking_SubHurtDelta"
+              "overrideMapKey": "Cooking_SubHurtDelta",
+              "value": 2.9
             }
           ],
           "targetPredicates": [
             {
-              "$type": "EOFDCELPGFO",
-              "CBOMLBFIPJM": 1.0,
-              "key": "_SHAMAN_IN_ABYSS"
+              "$type": "ByTargetGlobalValue",
+              "key": "_SHAMAN_IN_ABYSS",
+              "value": 1.0
             }
           ]
         }
       ],
-      "abilitySpecials": {
-        "Cooking_SubHurtDelta": 1.1
-      }
+      "onKill": [
+        {
+          "$type": "RemoveModifier",
+          "modifierName": "Monster_Shaman_None_Cooking_Timing"
+        }
+      ]
     }
   },
   {
     "Default": {
+      "abilityMixins": [
+        {
+          "$type": "AttachModifierToGlobalValueMixin",
+          "globalValueKey": "_POT_LIFE_BEGIN",
+          "globalValueTarget": "Owner",
+          "modifierNameSteps": [
+            "Monster_Shaman_None_Pot_KillSelf",
+            "Monster_Shaman_None_Pot_Alive"
+          ],
+          "valueSteps": [
+            -0.5,
+            0.5,
+            1.5
+          ],
+          "DEFOFMOIAAI": true
+        },
+        {
+          "$type": "AttachModifierToSelfGlobalValueMixin",
+          "defaultGlobalValueOnCreate": 1.0,
+          "globalValueKey": "_FIRE_STATE",
+          "modifierNameSteps": [
+            "Monster_Shaman_None_Pot_SetOwnerNoFire",
+            "Monster_Shaman_None_Pot_SetOwnerFire"
+          ],
+          "valueSteps": [
+            -0.5,
+            0.5,
+            1.5
+          ],
+          "DEFOFMOIAAI": true
+        },
+        {
+          "$type": "AttachModifierToSelfGlobalValueMixin",
+          "defaultGlobalValueOnCreate": 1.0,
+          "globalValueKey": "_FIRE_ELEMNT_NUMS",
+          "modifierNameSteps": [
+            "_FIRE_ELEMNT_OFF",
+            "_FIRE_ELEMNT_ON"
+          ],
+          "valueSteps": [
+            -0.5,
+            0.5,
+            1.5
+          ],
+          "DEFOFMOIAAI": true
+        }
+      ],
+      "abilityName": "Monster_Shaman_None_Pot",
+      "abilitySpecials": {
+        "RockDurability": 750.0
+      },
       "modifiers": {
         "_FIRE_ELEMNT_OFF": {
+          "elementDurability": 100.0,
+          "modifierName": "",
           "onAdded": [
             {
               "$type": "SetGlobalValue",
               "key": "_FIRE_STATE",
-              "minValue": 0.0,
               "maxValue": 0.0,
-              "CBOMLBFIPJM": 0.0
+              "minValue": 0.0,
+              "value": 0.0
             }
           ],
-          "elementDurability": 100.0,
-          "modifierName": "",
           "AIHNJLDFEGJ": 0.0
         },
         "_FIRE_ELEMNT_ON": {
@@ -1383,42 +1434,44 @@
         },
         "Monster_Shaman_None_Fire_Off": {
           "duration": 0.1,
+          "elementDurability": 100.0,
+          "modifierName": "",
           "onAdded": [
             {
               "$type": "SetGlobalValue",
               "key": "_FIRE_ON",
-              "minValue": 0.0,
               "maxValue": 0.0,
-              "CBOMLBFIPJM": 0.0
+              "minValue": 0.0,
+              "value": 0.0
             }
           ],
-          "elementDurability": 100.0,
-          "modifierName": "",
           "AIHNJLDFEGJ": 0.0
         },
         "Monster_Shaman_None_Fire_On": {
           "duration": 0.1,
+          "elementDurability": 100.0,
+          "modifierName": "",
           "onAdded": [
             {
               "$type": "SetGlobalValue",
               "key": "_FIRE_ON",
-              "minValue": 0.0,
               "maxValue": 0.0,
-              "CBOMLBFIPJM": 1.0
+              "minValue": 0.0,
+              "value": 1.0
             },
             {
               "$type": "SetGlobalValue",
               "key": "_FIRE_ELEMNT_NUMS",
-              "minValue": 0.0,
               "maxValue": 0.0,
-              "CBOMLBFIPJM": 1.0
+              "minValue": 0.0,
+              "value": 1.0
             }
           ],
-          "elementDurability": 100.0,
-          "modifierName": "",
           "AIHNJLDFEGJ": 0.0
         },
         "Monster_Shaman_None_Pot_SetOwnerNoFire": {
+          "elementDurability": 100.0,
+          "modifierName": "",
           "onAdded": [
             {
               "$type": "ApplyModifier",
@@ -1426,11 +1479,11 @@
               "target": "Owner"
             }
           ],
-          "elementDurability": 100.0,
-          "modifierName": "",
           "AIHNJLDFEGJ": 0.0
         },
         "Monster_Shaman_None_Pot_SetOwnerFire": {
+          "elementDurability": 100.0,
+          "modifierName": "",
           "onAdded": [
             {
               "$type": "ApplyModifier",
@@ -1440,31 +1493,29 @@
             {
               "$type": "SetGlobalValue",
               "key": "_FIRE_ELEMNT_NUMS",
-              "minValue": 0.0,
               "maxValue": 0.0,
-              "CBOMLBFIPJM": 1.0
+              "minValue": 0.0,
+              "value": 1.0
             }
           ],
-          "elementDurability": 100.0,
-          "modifierName": "",
           "AIHNJLDFEGJ": 0.0
         },
         "Monster_Shaman_None_Pot_KillSelf": {
+          "elementDurability": 100.0,
+          "modifierName": "",
           "onAdded": [
             {
               "$type": "FireEffect",
               "effectPattern": "Eff_Monster_Shaman_None_RockPotCookingFail",
+              "effectTempleteID": -1.0,
               "scale": 1.0,
-              "ILLLPEOODKP": "",
-              "effectTempleteID": -1.0
+              "ILLLPEOODKP": ""
             },
             {
               "$type": "KillSelf",
               "target": "Caster"
             }
           ],
-          "elementDurability": 100.0,
-          "modifierName": "",
           "AIHNJLDFEGJ": 0.0
         },
         "Monster_Shaman_None_Pot_Alive": {
@@ -1473,34 +1524,34 @@
           "AIHNJLDFEGJ": 0.0
         },
         "Monster_Shaman_None_Pot_LifeEffcet": {
+          "elementDurability": 100.0,
+          "modifierName": "",
           "onAdded": [
             {
               "$type": "AttachEffect",
-              "ILLLPEOODKP": "",
-              "scale": 1.0,
               "effectPattern": "Eff_Monster_Shaman_None_RockPot",
-              "effectTempleteID": -1.0
+              "effectTempleteID": -1.0,
+              "scale": 1.0,
+              "ILLLPEOODKP": ""
             }
           ],
           "properties": {
             "Actor_EndureDelta": 0.0
           },
-          "elementDurability": 100.0,
           "state": "Limbo",
-          "modifierName": "",
           "AIHNJLDFEGJ": 0.0
         },
         "Pot_HalfBreak": {
+          "elementDurability": 100.0,
+          "modifierName": "",
           "onAdded": [
             {
               "$type": "SendEffectTrigger",
-              "parameter": "HalfBreak",
+              "attachPoint": "",
               "effectPattern": "Eff_Monster_Shaman_None_RockPot",
-              "attachPoint": ""
+              "parameter": "HalfBreak"
             }
           ],
-          "elementDurability": 100.0,
-          "modifierName": "",
           "AIHNJLDFEGJ": 0.0
         },
         "Pot_FullOK": {
@@ -1509,27 +1560,13 @@
           "AIHNJLDFEGJ": 0.0
         },
         "Monster_Shaman_None_Pot_RockShield": {
-          "onAdded": [
-            {
-              "$type": "SetGlobalValue",
-              "key": "_POT_TOTAL_RECIVE_DAMAGE",
-              "minValue": 0.0,
-              "maxValue": 0.0,
-              "CBOMLBFIPJM": 0.0
-            }
-          ],
           "elementDurability": "RockDurability",
+          "elementType": "Rock",
           "modifierMixins": [
             {
               "$type": "ElementShieldMixin",
-              "AMMMDCMOAPF": true,
-              "GPIBKOHGEIJ": "_POT_TOTAL_RECIVE_DAMAGE",
-              "shieldHPRatio": 1.0,
-              "GJGBEPCFEBB": true,
-              "shieldAngle": 360.0,
+              "damageRatio": 0.0,
               "elementType": "Rock",
-              "showDamageText": "",
-              "EBCOGOJCLAE": 0.0,
               "onShieldBroken": [
                 {
                   "$type": "ApplyModifier",
@@ -1538,9 +1575,9 @@
                 },
                 {
                   "$type": "SendEffectTrigger",
-                  "parameter": "Break",
+                  "attachPoint": "",
                   "effectPattern": "Eff_Monster_Shaman_None_RockPot",
-                  "attachPoint": ""
+                  "parameter": "Break"
                 },
                 {
                   "$type": "ApplyModifier",
@@ -1548,17 +1585,23 @@
                 },
                 {
                   "$type": "EnableHitBoxByName",
-                  "MPHBGGFPBII": [
+                  "hitBoxNames": [
                     "HitBox"
                   ]
                 },
                 {
                   "$type": "EnablePushColliderName",
-                  "EFOJFJDLLMK": [
+                  "pushColliderNames": [
                     "PushColliderAvatar"
                   ]
                 }
-              ]
+              ],
+              "shieldAngle": 360.0,
+              "shieldHPRatio": 1.0,
+              "showDamageText": "",
+              "AMMMDCMOAPF": true,
+              "GJGBEPCFEBB": true,
+              "GPIBKOHGEIJ": "_POT_TOTAL_RECIVE_DAMAGE"
             },
             {
               "$type": "AttachModifierToElementDurabilityMixin",
@@ -1583,9 +1626,16 @@
               ]
             }
           ],
-          "elementType": "Rock",
           "modifierName": "",
-          "AIHNJLDFEGJ": 0.0,
+          "onAdded": [
+            {
+              "$type": "SetGlobalValue",
+              "key": "_POT_TOTAL_RECIVE_DAMAGE",
+              "maxValue": 0.0,
+              "minValue": 0.0,
+              "value": 0.0
+            }
+          ],
           "onBeingHit": [
             {
               "$type": "Predicated",
@@ -1593,100 +1643,100 @@
                 {
                   "$type": "SetGlobalValue",
                   "key": "_FIRE_STATE",
-                  "minValue": 0.0,
                   "maxValue": 0.0,
-                  "CBOMLBFIPJM": 1.0
+                  "minValue": 0.0,
+                  "value": 1.0
                 }
               ],
               "targetPredicates": [
                 {
-                  "$type": "ICMKHKKAALL",
+                  "$type": "ByHitElement",
                   "element": "Fire"
                 }
               ]
             },
             {
               "$type": "Predicated",
-              "successActions": [
-                {
-                  "$type": "SetGlobalDir",
-                  "key": "_HIT_EFFECT_DIR",
-                  "born": {
-                    "$type": "NABPLNFPHCK",
-                    "useRotation": true,
-                    "direction": {
-                      "$type": "ELLFELLPBME",
-                      "KFAOLPBMANI": ""
-                    }
-                  },
-                  "setTarget": false,
-                  "target": "Target"
-                }
-              ],
               "failActions": [
                 {
                   "$type": "SetGlobalDir",
-                  "key": "_HIT_EFFECT_DIR",
                   "born": {
-                    "$type": "NABPLNFPHCK",
-                    "useRotation": true,
+                    "$type": "ConfigBornBySelf",
                     "direction": {
-                      "$type": "ELLFELLPBME",
-                      "KFAOLPBMANI": ""
-                    }
+                      "$type": "ConfigDirectionByLookAtEntity",
+                      "namedTransform": ""
+                    },
+                    "useRotation": true
                   },
+                  "key": "_HIT_EFFECT_DIR",
                   "setTarget": false,
                   "target": "TargetOriginOwner"
                 }
               ],
+              "successActions": [
+                {
+                  "$type": "SetGlobalDir",
+                  "born": {
+                    "$type": "ConfigBornBySelf",
+                    "direction": {
+                      "$type": "ConfigDirectionByLookAtEntity",
+                      "namedTransform": ""
+                    },
+                    "useRotation": true
+                  },
+                  "key": "_HIT_EFFECT_DIR",
+                  "setTarget": false,
+                  "target": "Target"
+                }
+              ],
+              "target": "Target",
               "targetPredicates": [
                 {
-                  "$type": "DEOFBICNFHF",
+                  "$type": "ByEntityTypes",
                   "entityTypes": [
                     "Avatar",
                     "Partner",
                     "Vehicle"
                   ]
                 }
-              ],
-              "target": "Target"
+              ]
             },
             {
               "$type": "FireEffect",
-              "effectPattern": "Eff_Monster_Shaman_None_RockPotBeHit",
-              "scale": 1.0,
               "born": {
-                "$type": "NABPLNFPHCK",
-                "useRotation": true,
+                "$type": "ConfigBornBySelf",
                 "direction": {
-                  "$type": "KMEAEFMPHKB",
+                  "$type": "ConfigDirectionByGlobalValue",
                   "directionKey": "_HIT_EFFECT_DIR"
-                }
+                },
+                "useRotation": true
               },
-              "ILLLPEOODKP": "",
-              "effectTempleteID": -1.0
+              "effectPattern": "Eff_Monster_Shaman_None_RockPotBeHit",
+              "effectTempleteID": -1.0,
+              "scale": 1.0,
+              "ILLLPEOODKP": ""
             },
             {
               "$type": "Predicated",
               "successActions": [
                 {
                   "$type": "AddGlobalValue",
-                  "useLimitRange": true,
                   "key": "_FIRE_ELEMNT_NUMS",
                   "maxValue": 2.0,
                   "minValue": 0.0,
-                  "CBOMLBFIPJM": -1.0
+                  "useLimitRange": true,
+                  "value": -1.0
                 }
               ],
               "targetPredicates": [
                 {
-                  "$type": "ICMKHKKAALL",
+                  "$type": "ByHitElement",
                   "element": "Electric"
                 },
                 {
-                  "$type": "EOFDCELPGFO",
-                  "CBOMLBFIPJM": 1.0,
-                  "key": "_FIRE_STATE"
+                  "$type": "ByTargetGlobalValue",
+                  "key": "_FIRE_STATE",
+                  "value": 1.0
                 }
               ]
             },
@@ -1695,22 +1745,22 @@
               "successActions": [
                 {
                   "$type": "AddGlobalValue",
-                  "useLimitRange": true,
                   "key": "_FIRE_ELEMNT_NUMS",
                   "maxValue": 2.0,
                   "minValue": 0.0,
-                  "CBOMLBFIPJM": -2.0
+                  "useLimitRange": true,
+                  "value": -2.0
                 }
               ],
               "targetPredicates": [
                 {
-                  "$type": "ICMKHKKAALL",
+                  "$type": "ByHitElement",
                   "element": "Water"
                 },
                 {
-                  "$type": "EOFDCELPGFO",
-                  "CBOMLBFIPJM": 1.0,
-                  "key": "_FIRE_STATE"
+                  "$type": "ByTargetGlobalValue",
+                  "key": "_FIRE_STATE",
+                  "value": 1.0
                 }
               ]
             },
@@ -1719,47 +1769,111 @@
               "successActions": [
                 {
                   "$type": "AddGlobalValue",
-                  "useLimitRange": true,
                   "key": "_FIRE_ELEMNT_NUMS",
                   "maxValue": 2.0,
                   "minValue": 0.0,
-                  "CBOMLBFIPJM": -0.5
+                  "useLimitRange": true,
+                  "value": -0.5
                 }
               ],
               "targetPredicates": [
                 {
-                  "$type": "GOBNKFIFGFJ",
+                  "$type": "ByAnd",
                   "predicates": [
                     {
-                      "$type": "GPEMEIHPCCF",
+                      "$type": "ByAny",
                       "predicates": [
                         {
-                          "$type": "ICMKHKKAALL",
+                          "$type": "ByHitElement",
                           "element": "Ice"
                         },
                         {
-                          "$type": "ICMKHKKAALL",
+                          "$type": "ByHitElement",
                           "element": "Rock"
                         },
                         {
-                          "$type": "ICMKHKKAALL",
+                          "$type": "ByHitElement",
                           "element": "Wind"
                         }
                       ]
                     },
                     {
-                      "$type": "EOFDCELPGFO",
-                      "CBOMLBFIPJM": 1.0,
-                      "key": "_FIRE_STATE"
+                      "$type": "ByTargetGlobalValue",
+                      "key": "_FIRE_STATE",
+                      "value": 1.0
                     }
                   ]
                 }
               ]
             }
-          ]
+          ],
+          "AIHNJLDFEGJ": 0.0
         },
         "Monster_Shaman_None_Pot_RockShield_DelayDie": {
           "duration": 1.5,
+          "elementDurability": 100.0,
+          "modifierName": "",
+          "onAdded": [
+            {
+              "$type": "Predicated",
+              "successActions": [
+                {
+                  "$type": "SetGlobalValue",
+                  "key": "_POT_TOTAL_RECIVE_DAMAGE",
+                  "maxValue": 0.0,
+                  "minValue": 0.0,
+                  "value": [
+                    "FIGHT_PROP_MAX_HP",
+                    0.1,
+                    "MUL"
+                  ]
+                }
+              ],
+              "targetPredicates": [
+                {
+                  "$type": "ByTargetGlobalValue",
+                  "compareType": "MoreThanAndEqual",
+                  "key": "_POT_TOTAL_RECIVE_DAMAGE",
+                  "value": [
+                    "FIGHT_PROP_MAX_HP",
+                    0.1,
+                    "MUL"
+                  ]
+                }
+              ]
+            },
+            {
+              "$type": "DamageByAttackValue",
+              "attackInfo": {
+                "attackProperty": {
+                  "damageExtra": [
+                    "FIGHT_PROP_MAX_HP",
+                    0.1,
+                    "MUL",
+                    "_POT_TOTAL_RECIVE_DAMAGE",
+                    "ADD"
+                  ],
+                  "damagePercentage": 0.0,
+                  "damagePercentageRatio": 0.0,
+                  "elementDurability": 0.0,
+                  "enBreak": 1.0,
+                  "ignoreModifyDamage": true,
+                  "trueDamage": true,
+                  "IIPHCFEONLK": 0.0,
+                  "ELIEOGNBGKG": 1.0
+                },
+                "attackTag": "",
+                "attenuationGroup": "default",
+                "attenuationTag": "",
+                "hitPattern": {
+                  "hitImpulseType": "LV0",
+                  "onHitEffectName": "none",
+                  "FLFCIDDNMNA": ""
+                }
+              },
+              "target": "Owner"
+            }
+          ],
           "onRemoved": [
             {
               "$type": "RemoveModifier",
@@ -1770,87 +1884,26 @@
               "target": "Caster"
             }
           ],
-          "onAdded": [
-            {
-              "$type": "Predicated",
-              "successActions": [
-                {
-                  "$type": "SetGlobalValue",
-                  "key": "_POT_TOTAL_RECIVE_DAMAGE",
-                  "minValue": 0.0,
-                  "maxValue": 0.0,
-                  "CBOMLBFIPJM": [
-                    "FIGHT_PROP_MAX_HP",
-                    0.1,
-                    "MUL"
-                  ]
-                }
-              ],
-              "targetPredicates": [
-                {
-                  "$type": "EOFDCELPGFO",
-                  "CBOMLBFIPJM": [
-                    "FIGHT_PROP_MAX_HP",
-                    0.1,
-                    "MUL"
-                  ],
-                  "compareType": "MoreThanAndEqual",
-                  "key": "_POT_TOTAL_RECIVE_DAMAGE"
-                }
-              ]
-            },
-            {
-              "$type": "DamageByAttackValue",
-              "attackInfo": {
-                "attackProperty": {
-                  "damagePercentageRatio": 0.0,
-                  "ignoreModifyDamage": true,
-                  "enBreak": 1.0,
-                  "trueDamage": true,
-                  "damagePercentage": 0.0,
-                  "damageExtra": [
-                    "FIGHT_PROP_MAX_HP",
-                    0.1,
-                    "MUL",
-                    "_POT_TOTAL_RECIVE_DAMAGE",
-                    "ADD"
-                  ],
-                  "elementDurability": 0.0,
-                  "ELIEOGNBGKG": 1.0,
-                  "arkheGrade": 0.0
-                },
-                "hitPattern": {
-                  "FLFCIDDNMNA": "",
-                  "onHitEffectName": "none",
-                  "hitImpulseType": "LV0"
-                },
-                "attenuationGroup": "default",
-                "attenuationTag": "",
-                "attackTag": ""
-              },
-              "target": "Owner"
-            }
-          ],
-          "elementDurability": 100.0,
-          "modifierName": "",
           "AIHNJLDFEGJ": 0.0
         },
         "Monster_Shaman_None_GoWeak": {
           "duration": 0.1,
+          "elementDurability": 100.0,
+          "modifierName": "",
           "onAdded": [
             {
               "$type": "SetGlobalValue",
               "key": "_MONSTER_POT_HAS_BROKENED",
-              "minValue": 0.0,
               "maxValue": 0.0,
-              "CBOMLBFIPJM": 1.0
+              "minValue": 0.0,
+              "value": 1.0
             },
             {
               "$type": "SetGlobalValue",
               "key": "_SHAMAN_STATE",
-              "minValue": 0.0,
               "maxValue": 0.0,
-              "CBOMLBFIPJM": 4.0
+              "minValue": 0.0,
+              "value": 4.0
             },
             {
               "$type": "SetAnimatorTrigger",
@@ -1859,80 +1912,21 @@
             {
               "$type": "FireEffect",
               "effectPattern": "Eff_Monster_Shaman_None_RockPotWeak",
+              "effectTempleteID": -1.0,
               "scale": 1.0,
-              "ILLLPEOODKP": "",
-              "effectTempleteID": -1.0
+              "ILLLPEOODKP": ""
             }
           ],
-          "elementDurability": 100.0,
-          "modifierName": "",
           "AIHNJLDFEGJ": 0.0
         }
       },
-      "ANHJPOLNHIG": [
-        "_POT_TOTAL_RECIVE_DAMAGE"
-      ],
-      "onKill": [
-        {
-          "$type": "RemoveModifier",
-          "modifierName": "Monster_Shaman_None_Pot_LifeEffcet"
-        }
-      ],
-      "abilityMixins": [
-        {
-          "$type": "AttachModifierToGlobalValueMixin",
-          "modifierNameSteps": [
-            "Monster_Shaman_None_Pot_KillSelf",
-            "Monster_Shaman_None_Pot_Alive"
-          ],
-          "globalValueTarget": "Owner",
-          "globalValueKey": "_POT_LIFE_BEGIN",
-          "valueSteps": [
-            -0.5,
-            0.5,
-            1.5
-          ],
-          "DEFOFMOIAAI": true
-        },
-        {
-          "$type": "AttachModifierToSelfGlobalValueMixin",
-          "modifierNameSteps": [
-            "Monster_Shaman_None_Pot_SetOwnerNoFire",
-            "Monster_Shaman_None_Pot_SetOwnerFire"
-          ],
-          "DEFOFMOIAAI": true,
-          "valueSteps": [
-            -0.5,
-            0.5,
-            1.5
-          ],
-          "globalValueKey": "_FIRE_STATE",
-          "defaultGlobalValueOnCreate": 1.0
-        },
-        {
-          "$type": "AttachModifierToSelfGlobalValueMixin",
-          "modifierNameSteps": [
-            "_FIRE_ELEMNT_OFF",
-            "_FIRE_ELEMNT_ON"
-          ],
-          "DEFOFMOIAAI": true,
-          "valueSteps": [
-            -0.5,
-            0.5,
-            1.5
-          ],
-          "globalValueKey": "_FIRE_ELEMNT_NUMS",
-          "defaultGlobalValueOnCreate": 1.0
-        }
-      ],
-      "abilityName": "Monster_Shaman_None_Pot",
       "onAdded": [
         {
           "$type": "SetGlobalValue",
           "key": "_FIRE_STATE",
-          "minValue": 0.0,
           "maxValue": 0.0,
-          "CBOMLBFIPJM": 1.0
+          "minValue": 0.0,
+          "value": 1.0
         },
         {
           "$type": "AttachModifier",
@@ -1940,59 +1934,65 @@
         },
         {
           "$type": "CreateGadget",
-          "gadgetID": 42103046,
-          "FGNHCAEHEJK": true,
           "born": {
-            "$type": "NABPLNFPHCK",
-            "onGround": true,
-            "useRotation": true,
+            "$type": "ConfigBornBySelf",
             "direction": {
-              "$type": "INIJNNEABNP",
+              "$type": "ConfigDirectionByDefault",
               "NLFOCCICIEB": 0.0
-            }
-          }
+            },
+            "onGround": true,
+            "useRotation": true
+          },
+          "gadgetID": 42103046,
+          "FGNHCAEHEJK": true
         },
         {
           "$type": "AttachModifier",
           "modifierName": "Monster_Shaman_None_Pot_LifeEffcet"
         }
       ],
-      "abilitySpecials": {
-        "RockDurability": 750.0
-      }
+      "onKill": [
+        {
+          "$type": "RemoveModifier",
+          "modifierName": "Monster_Shaman_None_Pot_LifeEffcet"
+        }
+      ],
+      "ANHJPOLNHIG": [
+        "_POT_TOTAL_RECIVE_DAMAGE"
+      ]
     }
   },
   {
     "Default": {
+      "abilityName": "Monster_Shaman_None_Pot_Fire",
       "modifiers": {
         "Monster_Shaman_None_Pot_FireOff_BecauseRain": {
           "duration": 0.03,
+          "elementDurability": 100.0,
+          "modifierName": "",
           "onAdded": [
             {
               "$type": "SetGlobalValue",
               "key": "_FIRE_STATE",
-              "minValue": 0.0,
               "maxValue": 0.0,
-              "CBOMLBFIPJM": 0.0
+              "minValue": 0.0,
+              "value": 0.0
             }
           ],
-          "elementDurability": 100.0,
-          "modifierName": "",
           "AIHNJLDFEGJ": 0.0
         },
         "Monster_Shaman_None_Pot_FireEffcet": {
-          "thinkInterval": 0.2,
+          "elementDurability": 100.0,
+          "modifierName": "",
           "onAdded": [
             {
               "$type": "AttachEffect",
-              "ILLLPEOODKP": "",
-              "scale": 1.0,
               "effectPattern": "Eff_Monster_Shaman_None_CookingFire",
-              "effectTempleteID": -1.0
+              "effectTempleteID": -1.0,
+              "scale": 1.0,
+              "ILLLPEOODKP": ""
             }
           ],
-          "elementDurability": 100.0,
-          "modifierName": "",
           "onThinkInterval": [
             {
               "$type": "Predicated",
@@ -2005,12 +2005,13 @@
               ],
               "targetPredicates": [
                 {
-                  "$type": "LJBLAFGJKGI",
+                  "$type": "ByHasModifier",
                   "modifierName": "WetModifier"
                 }
               ]
             }
           ],
+          "thinkInterval": 0.2,
           "AIHNJLDFEGJ": 0.0
         },
         "Monster_Shaman_None_Pot_FireLisnter": {
@@ -2018,12 +2019,12 @@
           "modifierMixins": [
             {
               "$type": "AttachModifierToGlobalValueMixin",
+              "globalValueKey": "_FIRE_STATE",
+              "globalValueTarget": "Owner",
               "modifierNameSteps": [
                 "Monster_Shaman_None_Pot_Fire_Off",
                 "Monster_Shaman_None_Pot_Fire_On"
               ],
-              "globalValueTarget": "Owner",
-              "globalValueKey": "_FIRE_STATE",
               "targetRegisterType": "RegisterAlways",
               "valueSteps": [
                 -0.5,
@@ -2037,73 +2038,62 @@
           "AIHNJLDFEGJ": 0.0
         },
         "Monster_Shaman_None_Pot_Fire_Off": {
+          "elementDurability": 100.0,
+          "modifierName": "",
           "onAdded": [
             {
               "$type": "SendEffectTrigger",
-              "parameter": "FireOn",
+              "attachPoint": "",
               "effectPattern": "Eff_Monster_Shaman_None_CookingFire",
-              "type": "Bool",
-              "attachPoint": ""
+              "parameter": "FireOn",
+              "type": "Bool"
             }
           ],
-          "elementDurability": 100.0,
-          "modifierName": "",
           "AIHNJLDFEGJ": 0.0
         },
         "Monster_Shaman_None_Pot_Fire_On": {
-          "thinkInterval": 3.0,
+          "elementDurability": 100.0,
+          "modifierName": "",
           "onAdded": [
             {
               "$type": "SendEffectTrigger",
-              "parameter": "FireOn",
-              "GGKIEIJLCJJ": 1,
+              "attachPoint": "",
               "effectPattern": "Eff_Monster_Shaman_None_CookingFire",
+              "parameter": "FireOn",
               "type": "Bool",
-              "attachPoint": ""
+              "value": 1
             }
           ],
-          "elementDurability": 100.0,
-          "modifierName": "",
           "onThinkInterval": [
             {
               "$type": "Randomed",
+              "chance": 0.5,
               "failActions": [
                 {
                   "$type": "FireEffect",
+                  "doAfterDie": false,
                   "effectPattern": "Eff_Monster_Shaman_None_CookToPot2",
-                  "scale": 1.0,
-                  "ILLLPEOODKP": "",
                   "effectTempleteID": -1.0,
-                  "doAfterDie": false
+                  "scale": 1.0,
+                  "ILLLPEOODKP": ""
                 }
               ],
-              "chance": 0.5,
               "successActions": [
                 {
                   "$type": "FireEffect",
+                  "doAfterDie": false,
                   "effectPattern": "Eff_Monster_Shaman_None_CookToPot1",
-                  "scale": 1.0,
-                  "ILLLPEOODKP": "",
                   "effectTempleteID": -1.0,
-                  "doAfterDie": false
+                  "scale": 1.0,
+                  "ILLLPEOODKP": ""
                 }
               ]
             }
           ],
+          "thinkInterval": 3.0,
           "AIHNJLDFEGJ": 0.0
         }
       },
-      "onKill": [
-        {
-          "$type": "RemoveModifier",
-          "modifierName": "Monster_Shaman_None_Pot_FireLisnter"
-        },
-        {
-          "$type": "RemoveModifier",
-          "modifierName": "Monster_Shaman_None_Pot_FireEffcet"
-        }
-      ],
-      "abilityName": "Monster_Shaman_None_Pot_Fire",
       "onAdded": [
         {
           "$type": "AttachModifier",
@@ -2113,316 +2103,391 @@
           "$type": "AttachModifier",
           "modifierName": "Monster_Shaman_None_Pot_FireLisnter"
         }
+      ],
+      "onKill": [
+        {
+          "$type": "RemoveModifier",
+          "modifierName": "Monster_Shaman_None_Pot_FireLisnter"
+        },
+        {
+          "$type": "RemoveModifier",
+          "modifierName": "Monster_Shaman_None_Pot_FireEffcet"
+        }
       ]
     }
   },
   {
     "Default": {
-      "modifiers": {
-        "Monster_Shaman_None_VegetableAtk_CreateBullet": {
-          "onAdded": [
-            {
-              "$type": "CreateGadget",
-              "gadgetID": 42103020,
-              "FGNHCAEHEJK": true,
-              "born": {
-                "$type": "LKIBKKFEOLJ",
-                "positionKey": "_SHAMAN_BORN_POS",
-                "directionKey": "",
-                "bornRandom": {
-                  "$type": "DBJNGNDCMAH",
-                  "minRandomRange": 0.0,
-                  "maxRandomRange": 3.0
-                }
-              }
-            },
-            {
-              "$type": "CreateGadget",
-              "gadgetID": 42103020,
-              "FGNHCAEHEJK": true,
-              "born": {
-                "$type": "LKIBKKFEOLJ",
-                "positionKey": "_SHAMAN_BORN_POS",
-                "directionKey": "",
-                "bornRandom": {
-                  "$type": "DBJNGNDCMAH",
-                  "minRandomRange": 3.0,
-                  "maxRandomRange": 5.0
-                }
-              }
-            },
-            {
-              "$type": "CreateGadget",
-              "gadgetID": 42103020,
-              "FGNHCAEHEJK": true,
-              "born": {
-                "$type": "LKIBKKFEOLJ",
-                "positionKey": "_SHAMAN_BORN_POS",
-                "directionKey": "",
-                "bornRandom": {
-                  "$type": "DBJNGNDCMAH",
-                  "minRandomRange": 5.0,
-                  "maxRandomRange": 8.0
-                }
-              }
-            },
-            {
-              "$type": "CreateGadget",
-              "gadgetID": 42103020,
-              "FGNHCAEHEJK": true,
-              "born": {
-                "$type": "LKIBKKFEOLJ",
-                "positionKey": "_SHAMAN_BORN_POS",
-                "directionKey": "",
-                "bornRandom": {
-                  "$type": "DBJNGNDCMAH",
-                  "minRandomRange": 8.0,
-                  "maxRandomRange": 10.0
-                }
-              }
-            },
-            {
-              "$type": "CreateGadget",
-              "gadgetID": 42103020,
-              "FGNHCAEHEJK": true,
-              "born": {
-                "$type": "LKIBKKFEOLJ",
-                "positionKey": "_SHAMAN_BORN_POS",
-                "directionKey": "",
-                "bornRandom": {
-                  "$type": "DBJNGNDCMAH",
-                  "minRandomRange": 10.0,
-                  "maxRandomRange": 12.0
-                }
-              }
-            },
-            {
-              "$type": "SetGlobalPos",
-              "setTarget": false,
-              "key": "_SHAMAN_VEGETABLE_BULLET_POS",
-              "born": {
-                "$type": "MEFIKHFIDIO",
-                "alongGround": true,
-                "onGround": true
-              },
-              "target": "SelfAttackTarget"
-            },
-            {
-              "$type": "CreateGadget",
-              "gadgetID": 42103020,
-              "FGNHCAEHEJK": true,
-              "born": {
-                "$type": "LKIBKKFEOLJ",
-                "positionKey": "_SHAMAN_VEGETABLE_BULLET_POS",
-                "directionKey": ""
-              }
-            }
-          ],
-          "elementDurability": 100.0,
-          "modifierName": "",
-          "AIHNJLDFEGJ": 0.0
-        },
-        "Monster_Shaman_None_NormalAttackEffect": {
-          "onAdded": [
-            {
-              "$type": "Predicated",
-              "successActions": [
-                {
-                  "$type": "SetGlobalValue",
-                  "key": "_SHAMAN_NORMAL_ATTACK_TYPE",
-                  "minValue": 0.0,
-                  "maxValue": 0.0,
-                  "CBOMLBFIPJM": 2.0
-                },
-                {
-                  "$type": "FireEffect",
-                  "effectPattern": "Eff_Monster_Shaman_None_NormalAttack01_EffectPlus",
-                  "scale": 1.0,
-                  "ILLLPEOODKP": "",
-                  "effectTempleteID": -1.0
-                }
-              ],
-              "failActions": [
-                {
-                  "$type": "SetGlobalValue",
-                  "key": "_SHAMAN_NORMAL_ATTACK_TYPE",
-                  "minValue": 0.0,
-                  "maxValue": 0.0,
-                  "CBOMLBFIPJM": 1.0
-                },
-                {
-                  "$type": "FireEffect",
-                  "effectPattern": "Eff_Monster_Shaman_None_NormalAttack01_Effect_02",
-                  "scale": 1.0,
-                  "ILLLPEOODKP": "",
-                  "effectTempleteID": -1.0
-                }
-              ],
-              "targetPredicates": [
-                {
-                  "$type": "EOFDCELPGFO",
-                  "CBOMLBFIPJM": 2.0,
-                  "key": "_SHAMAN_STATE"
-                }
-              ]
-            }
-          ],
-          "elementDurability": 100.0,
-          "modifierName": "",
-          "AIHNJLDFEGJ": 0.0
-        },
-        "Monster_Shaman_None_NormalAttackEvent": {
-          "onAdded": [
-            {
-              "$type": "Predicated",
-              "successActions": [
-                {
-                  "$type": "TriggerAttackEvent",
-                  "targetType": "Enemy",
-                  "attackEvent": {
-                    "attackInfo": {
-                      "attackProperty": {
-                        "attackType": "Melee",
-                        "damagePercentageRatio": 0.0,
-                        "strikeType": "Slash",
-                        "enBreak": 100.0,
-                        "damagePercentage": 0.8,
-                        "elementDurability": 100.0,
-                        "arkheGrade": 0.0
-                      },
-                      "cameraShake": {
-                        "shakeDir": {
-                          "y": -0.3,
-                          "x": -1.0
-                        },
-                        "shakeTime": 0.15,
-                        "shakeType": "HitVector",
-                        "shakeDistance": 25.0,
-                        "MNKFEFOKFKP": "",
-                        "shakeRange": 0.2
-                      },
-                      "hitPattern": {
-                        "FLFCIDDNMNA": "",
-                        "onHitEffectName": "default",
-                        "hitImpulseType": "LV5"
-                      },
-                      "attenuationGroup": "default",
-                      "attenuationTag": "",
-                      "attackTag": ""
-                    },
-                    "attackPattern": {
-                      "$type": "DDLDAMKEKJD",
-                      "radius": 9.0,
-                      "height": 2.0,
-                      "triggerType": "TriggerNoRepeat",
-                      "born": {
-                        "$type": "NABPLNFPHCK",
-                        "useRotation": true,
-                        "offset": {
-                          "x": 0.0,
-                          "z": 0.0,
-                          "y": 0.0
-                        }
-                      }
-                    }
-                  }
-                }
-              ],
-              "failActions": [
-                {
-                  "$type": "TriggerAttackEvent",
-                  "targetType": "Enemy",
-                  "attackEvent": {
-                    "attackInfo": {
-                      "attackProperty": {
-                        "attackType": "Melee",
-                        "damagePercentageRatio": 0.0,
-                        "strikeType": "Slash",
-                        "enBreak": 100.0,
-                        "damagePercentage": 0.8,
-                        "elementDurability": 100.0,
-                        "arkheGrade": 0.0
-                      },
-                      "cameraShake": {
-                        "shakeDir": {
-                          "y": -0.3,
-                          "x": -1.0
-                        },
-                        "shakeTime": 0.15,
-                        "shakeType": "HitVector",
-                        "shakeDistance": 25.0,
-                        "MNKFEFOKFKP": "",
-                        "shakeRange": 0.2
-                      },
-                      "hitPattern": {
-                        "FLFCIDDNMNA": "",
-                        "onHitEffectName": "default",
-                        "hitImpulseType": "LV5"
-                      },
-                      "attenuationGroup": "default",
-                      "attenuationTag": "",
-                      "attackTag": ""
-                    },
-                    "attackPattern": {
-                      "$type": "DDLDAMKEKJD",
-                      "radius": 6.0,
-                      "height": 2.0,
-                      "triggerType": "TriggerNoRepeat",
-                      "born": {
-                        "$type": "NABPLNFPHCK",
-                        "useRotation": true,
-                        "offset": {
-                          "x": 0.0,
-                          "z": 0.0,
-                          "y": 0.0
-                        }
-                      }
-                    }
-                  }
-                }
-              ],
-              "targetPredicates": [
-                {
-                  "$type": "EOFDCELPGFO",
-                  "CBOMLBFIPJM": 2.0,
-                  "key": "_SHAMAN_NORMAL_ATTACK_TYPE"
-                }
-              ]
-            }
-          ],
-          "elementDurability": 100.0,
-          "modifierName": "",
-          "AIHNJLDFEGJ": 0.0
-        }
-      },
       "abilityMixins": [
         {
           "$type": "AttachToNormalizedTimeMixin",
           "modifierName": "Monster_Shaman_None_NormalAttackEffect",
-          "LJPPDIGCJMJ": "",
           "normalizeEnd": 0.5,
+          "normalizeStart": 0.17,
           "stateID": "NormalAttack01",
-          "normalizeStart": 0.17
+          "LJPPDIGCJMJ": ""
         },
         {
           "$type": "AttachToNormalizedTimeMixin",
           "modifierName": "Monster_Shaman_None_NormalAttackEvent",
-          "LJPPDIGCJMJ": "",
+          "normalizeStart": 0.38,
           "stateID": "NormalAttack01",
-          "normalizeStart": 0.38
+          "LJPPDIGCJMJ": ""
         },
         {
           "$type": "AttachToNormalizedTimeMixin",
           "modifierName": "Monster_Shaman_None_VegetableAtk_CreateBullet",
-          "LJPPDIGCJMJ": "",
-          "stateID": "VegetableAtk_AS"
+          "stateID": "VegetableAtk_AS",
+          "LJPPDIGCJMJ": ""
         }
       ],
-      "abilityName": "Monster_Shaman_None_ExtraAttack"
+      "abilityName": "Monster_Shaman_None_ExtraAttack",
+      "modifiers": {
+        "Monster_Shaman_None_VegetableAtk_CreateBullet": {
+          "elementDurability": 100.0,
+          "modifierName": "",
+          "onAdded": [
+            {
+              "$type": "CreateGadget",
+              "born": {
+                "$type": "ConfigBornByGlobalValue",
+                "bornRandom": {
+                  "$type": "BornRandomFromCenter",
+                  "maxRandomRange": 3.0,
+                  "minRandomRange": 0.0
+                },
+                "directionKey": "",
+                "positionKey": "_SHAMAN_BORN_POS"
+              },
+              "gadgetID": 42103020,
+              "FGNHCAEHEJK": true
+            },
+            {
+              "$type": "CreateGadget",
+              "born": {
+                "$type": "ConfigBornByGlobalValue",
+                "bornRandom": {
+                  "$type": "BornRandomFromCenter",
+                  "maxRandomRange": 5.0,
+                  "minRandomRange": 3.0
+                },
+                "directionKey": "",
+                "positionKey": "_SHAMAN_BORN_POS"
+              },
+              "gadgetID": 42103020,
+              "FGNHCAEHEJK": true
+            },
+            {
+              "$type": "CreateGadget",
+              "born": {
+                "$type": "ConfigBornByGlobalValue",
+                "bornRandom": {
+                  "$type": "BornRandomFromCenter",
+                  "maxRandomRange": 8.0,
+                  "minRandomRange": 5.0
+                },
+                "directionKey": "",
+                "positionKey": "_SHAMAN_BORN_POS"
+              },
+              "gadgetID": 42103020,
+              "FGNHCAEHEJK": true
+            },
+            {
+              "$type": "CreateGadget",
+              "born": {
+                "$type": "ConfigBornByGlobalValue",
+                "bornRandom": {
+                  "$type": "BornRandomFromCenter",
+                  "maxRandomRange": 10.0,
+                  "minRandomRange": 8.0
+                },
+                "directionKey": "",
+                "positionKey": "_SHAMAN_BORN_POS"
+              },
+              "gadgetID": 42103020,
+              "FGNHCAEHEJK": true
+            },
+            {
+              "$type": "CreateGadget",
+              "born": {
+                "$type": "ConfigBornByGlobalValue",
+                "bornRandom": {
+                  "$type": "BornRandomFromCenter",
+                  "maxRandomRange": 12.0,
+                  "minRandomRange": 10.0
+                },
+                "directionKey": "",
+                "positionKey": "_SHAMAN_BORN_POS"
+              },
+              "gadgetID": 42103020,
+              "FGNHCAEHEJK": true
+            },
+            {
+              "$type": "SetGlobalPos",
+              "born": {
+                "$type": "ConfigBornByPredicatePoint",
+                "alongGround": true,
+                "onGround": true
+              },
+              "key": "_SHAMAN_VEGETABLE_BULLET_POS",
+              "setTarget": false,
+              "target": "SelfAttackTarget"
+            },
+            {
+              "$type": "CreateGadget",
+              "born": {
+                "$type": "ConfigBornByGlobalValue",
+                "directionKey": "",
+                "positionKey": "_SHAMAN_VEGETABLE_BULLET_POS"
+              },
+              "gadgetID": 42103020,
+              "FGNHCAEHEJK": true
+            }
+          ],
+          "AIHNJLDFEGJ": 0.0
+        },
+        "Monster_Shaman_None_NormalAttackEffect": {
+          "elementDurability": 100.0,
+          "modifierName": "",
+          "onAdded": [
+            {
+              "$type": "Predicated",
+              "failActions": [
+                {
+                  "$type": "SetGlobalValue",
+                  "key": "_SHAMAN_NORMAL_ATTACK_TYPE",
+                  "maxValue": 0.0,
+                  "minValue": 0.0,
+                  "value": 1.0
+                },
+                {
+                  "$type": "FireEffect",
+                  "effectPattern": "Eff_Monster_Shaman_None_NormalAttack01_Effect_02",
+                  "effectTempleteID": -1.0,
+                  "scale": 1.0,
+                  "ILLLPEOODKP": ""
+                }
+              ],
+              "successActions": [
+                {
+                  "$type": "SetGlobalValue",
+                  "key": "_SHAMAN_NORMAL_ATTACK_TYPE",
+                  "maxValue": 0.0,
+                  "minValue": 0.0,
+                  "value": 2.0
+                },
+                {
+                  "$type": "FireEffect",
+                  "effectPattern": "Eff_Monster_Shaman_None_NormalAttack01_EffectPlus",
+                  "effectTempleteID": -1.0,
+                  "scale": 1.0,
+                  "ILLLPEOODKP": ""
+                }
+              ],
+              "targetPredicates": [
+                {
+                  "$type": "ByTargetGlobalValue",
+                  "key": "_SHAMAN_STATE",
+                  "value": 2.0
+                }
+              ]
+            }
+          ],
+          "AIHNJLDFEGJ": 0.0
+        },
+        "Monster_Shaman_None_NormalAttackEvent": {
+          "elementDurability": 100.0,
+          "modifierName": "",
+          "onAdded": [
+            {
+              "$type": "Predicated",
+              "failActions": [
+                {
+                  "$type": "TriggerAttackEvent",
+                  "attackEvent": {
+                    "attackInfo": {
+                      "attackProperty": {
+                        "attackType": "Melee",
+                        "damagePercentage": 0.8,
+                        "damagePercentageRatio": 0.0,
+                        "elementDurability": 100.0,
+                        "enBreak": 100.0,
+                        "strikeType": "Slash",
+                        "IIPHCFEONLK": 0.0
+                      },
+                      "attackTag": "",
+                      "attenuationGroup": "default",
+                      "attenuationTag": "",
+                      "cameraShake": {
+                        "shakeDir": {
+                          "x": -1.0,
+                          "y": -0.3
+                        },
+                        "shakeDistance": 25.0,
+                        "shakeRange": 0.2,
+                        "shakeTime": 0.15,
+                        "shakeType": "HitVector",
+                        "MNKFEFOKFKP": ""
+                      },
+                      "hitPattern": {
+                        "hitImpulseType": "LV5",
+                        "onHitEffectName": "default",
+                        "FLFCIDDNMNA": ""
+                      }
+                    },
+                    "attackPattern": {
+                      "$type": "ConfigAttackCircle",
+                      "born": {
+                        "$type": "ConfigBornBySelf",
+                        "offset": {
+                          "x": 0.0,
+                          "y": 0.0,
+                          "z": 0.0
+                        },
+                        "useRotation": true
+                      },
+                      "height": 2.0,
+                      "radius": 6.0,
+                      "triggerType": "TriggerNoRepeat"
+                    }
+                  },
+                  "targetType": "Enemy"
+                }
+              ],
+              "successActions": [
+                {
+                  "$type": "TriggerAttackEvent",
+                  "attackEvent": {
+                    "attackInfo": {
+                      "attackProperty": {
+                        "attackType": "Melee",
+                        "damagePercentage": 0.8,
+                        "damagePercentageRatio": 0.0,
+                        "elementDurability": 100.0,
+                        "enBreak": 100.0,
+                        "strikeType": "Slash",
+                        "IIPHCFEONLK": 0.0
+                      },
+                      "attackTag": "",
+                      "attenuationGroup": "default",
+                      "attenuationTag": "",
+                      "cameraShake": {
+                        "shakeDir": {
+                          "x": -1.0,
+                          "y": -0.3
+                        },
+                        "shakeDistance": 25.0,
+                        "shakeRange": 0.2,
+                        "shakeTime": 0.15,
+                        "shakeType": "HitVector",
+                        "MNKFEFOKFKP": ""
+                      },
+                      "hitPattern": {
+                        "hitImpulseType": "LV5",
+                        "onHitEffectName": "default",
+                        "FLFCIDDNMNA": ""
+                      }
+                    },
+                    "attackPattern": {
+                      "$type": "ConfigAttackCircle",
+                      "born": {
+                        "$type": "ConfigBornBySelf",
+                        "offset": {
+                          "x": 0.0,
+                          "y": 0.0,
+                          "z": 0.0
+                        },
+                        "useRotation": true
+                      },
+                      "height": 2.0,
+                      "radius": 9.0,
+                      "triggerType": "TriggerNoRepeat"
+                    }
+                  },
+                  "targetType": "Enemy"
+                }
+              ],
+              "targetPredicates": [
+                {
+                  "$type": "ByTargetGlobalValue",
+                  "key": "_SHAMAN_NORMAL_ATTACK_TYPE",
+                  "value": 2.0
+                }
+              ]
+            }
+          ],
+          "AIHNJLDFEGJ": 0.0
+        }
+      }
     }
   },
   {
     "Default": {
+      "abilityMixins": [
+        {
+          "$type": "AttachToMultiNormalizedTimeMixin",
+          "modifierName": "Monster_Shaman_None_JumpAtk_RushMove",
+          "normalizedStateIDList": [
+            {
+              "normalizeEnd": 0.65,
+              "normalizeStart": 0.05,
+              "stateID": "JumpAtk_InAir"
+            },
+            {
+              "normalizeEnd": 0.58,
+              "stateID": "JumpAtk_Jump"
+            },
+            {
+              "normalizeEnd": 0.58,
+              "stateID": "JumpAtk_Jump2"
+            }
+          ],
+          "LJPPDIGCJMJ": ""
+        },
+        {
+          "$type": "AttachToMultiNormalizedTimeMixin",
+          "modifierName": "Monster_Shaman_None_JumpAtk_Damage",
+          "normalizedStateIDList": [
+            {
+              "normalizeStart": 0.85,
+              "stateID": "JumpAtk_InAir"
+            },
+            {
+              "normalizeStart": 0.81,
+              "stateID": "JumpBack_InAir"
+            },
+            {
+              "normalizeStart": 0.95,
+              "stateID": "JumpAtk_Jump"
+            },
+            {
+              "normalizeStart": 0.95,
+              "stateID": "JumpAtk_Jump2"
+            }
+          ],
+          "LJPPDIGCJMJ": ""
+        },
+        {
+          "$type": "AttachToNormalizedTimeMixin",
+          "modifierName": "Monster_Shaman_None_JumpBackToBorn_Move",
+          "normalizeEnd": 0.65,
+          "normalizeStart": 0.05,
+          "stateID": "JumpBack_InAir",
+          "LJPPDIGCJMJ": ""
+        },
+        {
+          "$type": "AttachToStateIDMixin",
+          "modifierName": "Monster_Shaman_None_JumpAtk_ClosePush",
+          "stateIDs": [
+            "JumpAtk_InAir",
+            "JumpAtk_Jump",
+            "JumpAtk_Jump2",
+            "JumpBack_InAir"
+          ],
+          "LJPPDIGCJMJ": ""
+        }
+      ],
+      "abilityName": "Monster_Shaman_None_JumpAtk",
       "modifiers": {
         "Monster_Shaman_None_JumpAtk_ClosePush": {
           "elementDurability": 100.0,
@@ -2432,7 +2497,7 @@
               "onAdded": [
                 {
                   "$type": "EnablePushColliderName",
-                  "EFOJFJDLLMK": [
+                  "pushColliderNames": [
                     "PushCollider",
                     "PushCollider_Wand"
                   ]
@@ -2441,11 +2506,11 @@
               "onRemoved": [
                 {
                   "$type": "EnablePushColliderName",
-                  "setEnable": true,
-                  "EFOJFJDLLMK": [
+                  "pushColliderNames": [
                     "PushCollider",
                     "PushCollider_Wand"
-                  ]
+                  ],
+                  "setEnable": true
                 }
               ]
             }
@@ -2454,475 +2519,429 @@
           "AIHNJLDFEGJ": 0.0
         },
         "Monster_Shaman_None_JumpBackToBorn_Move": {
+          "elementDurability": 100.0,
+          "modifierName": "",
           "onAdded": [
             {
               "$type": "FireEffect",
               "effectPattern": "Eff_Monster_Shaman_None_FallAttack01_BS_01",
+              "effectTempleteID": -1.0,
               "scale": 1.0,
-              "ILLLPEOODKP": "",
-              "effectTempleteID": -1.0
+              "ILLLPEOODKP": ""
             },
             {
               "$type": "ApplyModifier",
               "modifierName": "Monster_Shaman_None_JumpAtk_RushMoveToBornActions"
             }
           ],
-          "elementDurability": 100.0,
-          "modifierName": "",
           "AIHNJLDFEGJ": 0.0
         },
         "Monster_Shaman_None_JumpAtk_RushMoveToBornActions": {
           "duration": 1.0,
+          "elementDurability": 100.0,
+          "modifierName": "",
           "onAdded": [
             {
               "$type": "FixedMonsterRushMove",
-              "overrideMoveCollider": "",
-              "maxRange": -1.0,
               "animatorStateIDs": [
                 "JumpAtk_InAir",
                 "JumpAtk_Jump",
                 "JumpAtk_Jump2",
                 "JumpBack_InAir"
               ],
-              "toPos": {
-                "$type": "LKIBKKFEOLJ",
-                "positionKey": "_SHAMAN_BORN_POS",
-                "directionKey": ""
-              },
               "exactArrive": true,
-              "timeRange": 1.0
+              "maxRange": -1.0,
+              "overrideMoveCollider": "",
+              "timeRange": 1.0,
+              "toPos": {
+                "$type": "ConfigBornByGlobalValue",
+                "directionKey": "",
+                "positionKey": "_SHAMAN_BORN_POS"
+              }
             },
             {
               "$type": "AttachEffect",
-              "ILLLPEOODKP": "",
               "born": {
-                "$type": "LKIBKKFEOLJ",
-                "positionKey": "_SHAMAN_BORN_POS",
-                "directionKey": ""
+                "$type": "ConfigBornByGlobalValue",
+                "directionKey": "",
+                "positionKey": "_SHAMAN_BORN_POS"
               },
-              "scale": 1.0,
               "effectPattern": "Eff_Monster_Shaman_FloorAttack_01_Warnning02",
-              "effectTempleteID": -1.0
+              "effectTempleteID": -1.0,
+              "scale": 1.0,
+              "ILLLPEOODKP": ""
             }
           ],
-          "elementDurability": 100.0,
-          "modifierName": "",
           "AIHNJLDFEGJ": 0.0
         },
         "Monster_Shaman_None_JumpAtk_RushMove": {
+          "elementDurability": 100.0,
+          "modifierName": "",
           "onAdded": [
             {
               "$type": "FireEffect",
               "effectPattern": "Eff_Monster_Shaman_None_FallAttack01_BS_01",
+              "effectTempleteID": -1.0,
               "scale": 1.0,
-              "ILLLPEOODKP": "",
-              "effectTempleteID": -1.0
+              "ILLLPEOODKP": ""
             },
             {
               "$type": "ApplyModifier",
               "modifierName": "Monster_Shaman_None_JumpAtk_RushMove_Actions"
             }
           ],
-          "elementDurability": 100.0,
-          "modifierName": "",
           "AIHNJLDFEGJ": 0.0
         },
         "Monster_Shaman_None_JumpAtk_RushMove_Actions": {
           "duration": 1.0,
+          "elementDurability": 100.0,
+          "modifierName": "",
           "onAdded": [
             {
               "$type": "SetGlobalPos",
-              "setTarget": false,
-              "key": "_SHAMAN_JUMPATK_POS",
               "born": {
-                "$type": "MEFIKHFIDIO",
-                "onGround": true,
+                "$type": "ConfigBornByPredicatePoint",
                 "direction": {
-                  "$type": "INIJNNEABNP",
+                  "$type": "ConfigDirectionByDefault",
                   "NLFOCCICIEB": 0.0
-                }
+                },
+                "onGround": true
               },
+              "key": "_SHAMAN_JUMPATK_POS",
+              "setTarget": false,
               "target": "SelfAttackTarget"
             },
             {
               "$type": "FixedMonsterRushMove",
-              "overrideMoveCollider": "",
-              "maxRange": 20.0,
               "animatorStateIDs": [
                 "JumpAtk_InAir",
                 "JumpAtk_Jump",
                 "JumpAtk_Jump2"
               ],
+              "maxRange": 20.0,
+              "overrideMoveCollider": "",
+              "timeRange": 1.0,
               "toPos": {
-                "$type": "LKIBKKFEOLJ",
-                "positionKey": "_SHAMAN_JUMPATK_POS",
-                "directionKey": ""
-              },
-              "timeRange": 1.0
-            },
-            {
-              "$type": "AttachEffect",
-              "ILLLPEOODKP": "",
-              "born": {
-                "$type": "LKIBKKFEOLJ",
-                "positionKey": "_SHAMAN_JUMPATK_POS",
-                "directionKey": ""
-              },
-              "scale": 1.0,
-              "effectPattern": "Eff_Monster_Shaman_FloorAttack_01_Warnning02",
-              "effectTempleteID": -1.0
-            }
-          ],
-          "elementDurability": 100.0,
-          "modifierName": "",
-          "AIHNJLDFEGJ": 0.0
-        },
-        "Monster_Shaman_None_JumpAtk_Damage": {
-          "onAdded": [
-            {
-              "$type": "SetGlobalPos",
-              "key": "_SHMAN_JUM_END_POS",
-              "born": {
-                "$type": "NABPLNFPHCK",
-                "onGround": true,
-                "useRotation": true,
-                "direction": {
-                  "$type": "INIJNNEABNP",
-                  "NLFOCCICIEB": 0.0
-                }
+                "$type": "ConfigBornByGlobalValue",
+                "directionKey": "",
+                "positionKey": "_SHAMAN_JUMPATK_POS"
               }
             },
             {
-              "$type": "FireEffect",
-              "effectPattern": "Eff_Monster_Shaman_FloorAttack_01",
-              "scale": 1.0,
+              "$type": "AttachEffect",
               "born": {
-                "$type": "LKIBKKFEOLJ",
-                "positionKey": "_SHMAN_JUM_END_POS",
-                "directionKey": ""
+                "$type": "ConfigBornByGlobalValue",
+                "directionKey": "",
+                "positionKey": "_SHAMAN_JUMPATK_POS"
               },
-              "ILLLPEOODKP": "",
-              "effectTempleteID": -1.0
+              "effectPattern": "Eff_Monster_Shaman_FloorAttack_01_Warnning02",
+              "effectTempleteID": -1.0,
+              "scale": 1.0,
+              "ILLLPEOODKP": ""
+            }
+          ],
+          "AIHNJLDFEGJ": 0.0
+        },
+        "Monster_Shaman_None_JumpAtk_Damage": {
+          "elementDurability": 100.0,
+          "modifierName": "",
+          "onAdded": [
+            {
+              "$type": "SetGlobalPos",
+              "born": {
+                "$type": "ConfigBornBySelf",
+                "direction": {
+                  "$type": "ConfigDirectionByDefault",
+                  "NLFOCCICIEB": 0.0
+                },
+                "onGround": true,
+                "useRotation": true
+              },
+              "key": "_SHMAN_JUM_END_POS"
+            },
+            {
+              "$type": "FireEffect",
+              "born": {
+                "$type": "ConfigBornByGlobalValue",
+                "directionKey": "",
+                "positionKey": "_SHMAN_JUM_END_POS"
+              },
+              "effectPattern": "Eff_Monster_Shaman_FloorAttack_01",
+              "effectTempleteID": -1.0,
+              "scale": 1.0,
+              "ILLLPEOODKP": ""
             },
             {
               "$type": "TriggerAttackEvent",
-              "targetType": "Enemy",
               "attackEvent": {
                 "attackInfo": {
                   "attackProperty": {
                     "attackType": "Melee",
-                    "damagePercentageRatio": 0.0,
-                    "strikeType": "Blunt",
-                    "enBreak": 105.0,
                     "damagePercentage": 0.7,
+                    "damagePercentageRatio": 0.0,
                     "elementDurability": 100.0,
-                    "arkheGrade": 0.0
+                    "enBreak": 105.0,
+                    "strikeType": "Blunt",
+                    "IIPHCFEONLK": 0.0
                   },
-                  "hitPattern": {
-                    "FLFCIDDNMNA": "",
-                    "retreatType": "ByHitDirection",
-                    "onHitEffectName": "default",
-                    "hitImpulseType": "LV3"
-                  },
+                  "attackTag": "",
                   "attenuationGroup": "default",
                   "attenuationTag": "",
-                  "attackTag": ""
+                  "hitPattern": {
+                    "hitImpulseType": "LV3",
+                    "onHitEffectName": "default",
+                    "retreatType": "ByHitDirection",
+                    "FLFCIDDNMNA": ""
+                  }
                 },
                 "attackPattern": {
-                  "$type": "DDLDAMKEKJD",
-                  "radius": 3.5,
-                  "height": 2.0,
-                  "triggerType": "TriggerNoRepeat",
+                  "$type": "ConfigAttackCircle",
                   "born": {
-                    "$type": "LKIBKKFEOLJ",
-                    "positionKey": "_SHMAN_JUM_END_POS",
-                    "directionKey": ""
-                  }
+                    "$type": "ConfigBornByGlobalValue",
+                    "directionKey": "",
+                    "positionKey": "_SHMAN_JUM_END_POS"
+                  },
+                  "height": 2.0,
+                  "radius": 3.5,
+                  "triggerType": "TriggerNoRepeat"
                 }
-              }
+              },
+              "targetType": "Enemy"
             },
             {
               "$type": "ApplyModifier",
               "modifierName": "Monster_Shaman_None_JumpAtk_Damage_Plus1",
               "predicates": [
                 {
-                  "$type": "EOFDCELPGFO",
-                  "CBOMLBFIPJM": 2.0,
-                  "key": "_SHAMAN_STATE"
+                  "$type": "ByTargetGlobalValue",
+                  "key": "_SHAMAN_STATE",
+                  "value": 2.0
                 }
               ]
             }
           ],
-          "elementDurability": 100.0,
-          "modifierName": "",
           "AIHNJLDFEGJ": 0.0
         },
         "Monster_Shaman_None_JumpAtk_Damage_Plus1": {
           "duration": 0.5,
+          "elementDurability": 100.0,
+          "modifierName": "",
           "onRemoved": [
             {
               "$type": "FireEffect",
-              "effectPattern": "Eff_Monster_Shaman_FloorAttack_01_Plus1",
-              "scale": 1.0,
               "born": {
-                "$type": "LKIBKKFEOLJ",
-                "positionKey": "_SHMAN_JUM_END_POS",
-                "directionKey": ""
+                "$type": "ConfigBornByGlobalValue",
+                "directionKey": "",
+                "positionKey": "_SHMAN_JUM_END_POS"
               },
-              "ILLLPEOODKP": "",
-              "effectTempleteID": -1.0
+              "effectPattern": "Eff_Monster_Shaman_FloorAttack_01_Plus1",
+              "effectTempleteID": -1.0,
+              "scale": 1.0,
+              "ILLLPEOODKP": ""
             },
             {
               "$type": "TriggerAttackEvent",
-              "targetType": "Enemy",
               "attackEvent": {
                 "attackInfo": {
                   "attackProperty": {
                     "attackType": "Range",
-                    "damagePercentageRatio": 0.0,
-                    "strikeType": "Default",
-                    "enBreak": 100.0,
                     "damagePercentage": 1.0,
+                    "damagePercentageRatio": 0.0,
                     "elementDurability": 100.0,
-                    "arkheGrade": 0.0
+                    "enBreak": 100.0,
+                    "strikeType": "Default",
+                    "IIPHCFEONLK": 0.0
                   },
-                  "cameraShake": {
-                    "shakeDir": {
-                      "y": -0.3,
-                      "x": -1.0
-                    },
-                    "shakeTime": 0.15,
-                    "shakeType": "HitVector",
-                    "shakeDistance": 25.0,
-                    "MNKFEFOKFKP": "",
-                    "shakeRange": 0.2
-                  },
-                  "hitPattern": {
-                    "FLFCIDDNMNA": "",
-                    "onHitEffectName": "default",
-                    "hitImpulseType": "LV3"
-                  },
+                  "attackTag": "",
                   "attenuationGroup": "default",
                   "attenuationTag": "",
-                  "attackTag": ""
+                  "cameraShake": {
+                    "shakeDir": {
+                      "x": -1.0,
+                      "y": -0.3
+                    },
+                    "shakeDistance": 25.0,
+                    "shakeRange": 0.2,
+                    "shakeTime": 0.15,
+                    "shakeType": "HitVector",
+                    "MNKFEFOKFKP": ""
+                  },
+                  "hitPattern": {
+                    "hitImpulseType": "LV3",
+                    "onHitEffectName": "default",
+                    "FLFCIDDNMNA": ""
+                  }
                 },
                 "attackPattern": {
-                  "$type": "DDLDAMKEKJD",
-                  "radius": 8.0,
-                  "NGFJGIAMCKD": 4.0,
-                  "height": 2.0,
-                  "triggerType": "TriggerNoRepeat",
+                  "$type": "ConfigAttackCircle",
                   "born": {
-                    "$type": "LKIBKKFEOLJ",
-                    "positionKey": "_SHMAN_JUM_END_POS",
-                    "directionKey": ""
-                  }
+                    "$type": "ConfigBornByGlobalValue",
+                    "directionKey": "",
+                    "positionKey": "_SHMAN_JUM_END_POS"
+                  },
+                  "height": 2.0,
+                  "innerRadius": 4.0,
+                  "radius": 8.0,
+                  "triggerType": "TriggerNoRepeat"
                 }
-              }
+              },
+              "targetType": "Enemy"
             },
             {
               "$type": "ApplyModifier",
               "modifierName": "Monster_Shaman_None_JumpAtk_Damage_Plus2"
             }
           ],
-          "elementDurability": 100.0,
-          "modifierName": "",
           "AIHNJLDFEGJ": 0.0
         },
         "Monster_Shaman_None_JumpAtk_Damage_Plus2": {
           "duration": 0.5,
+          "elementDurability": 100.0,
+          "modifierName": "",
           "onRemoved": [
             {
               "$type": "FireEffect",
-              "effectPattern": "Eff_Monster_Shaman_FloorAttack_01_Plus2",
-              "scale": 1.0,
               "born": {
-                "$type": "LKIBKKFEOLJ",
-                "positionKey": "_SHMAN_JUM_END_POS",
-                "directionKey": ""
+                "$type": "ConfigBornByGlobalValue",
+                "directionKey": "",
+                "positionKey": "_SHMAN_JUM_END_POS"
               },
-              "ILLLPEOODKP": "",
-              "effectTempleteID": -1.0
+              "effectPattern": "Eff_Monster_Shaman_FloorAttack_01_Plus2",
+              "effectTempleteID": -1.0,
+              "scale": 1.0,
+              "ILLLPEOODKP": ""
             },
             {
               "$type": "TriggerAttackEvent",
-              "targetType": "Enemy",
               "attackEvent": {
                 "attackInfo": {
                   "attackProperty": {
                     "attackType": "Range",
-                    "damagePercentageRatio": 0.0,
-                    "strikeType": "Default",
-                    "enBreak": 100.0,
                     "damagePercentage": 1.0,
+                    "damagePercentageRatio": 0.0,
                     "elementDurability": 100.0,
-                    "arkheGrade": 0.0
+                    "enBreak": 100.0,
+                    "strikeType": "Default",
+                    "IIPHCFEONLK": 0.0
                   },
-                  "cameraShake": {
-                    "shakeDir": {
-                      "y": -0.3,
-                      "x": -1.0
-                    },
-                    "shakeTime": 0.15,
-                    "shakeType": "HitVector",
-                    "shakeDistance": 25.0,
-                    "MNKFEFOKFKP": "",
-                    "shakeRange": 0.2
-                  },
-                  "hitPattern": {
-                    "FLFCIDDNMNA": "",
-                    "onHitEffectName": "default",
-                    "hitImpulseType": "LV3"
-                  },
+                  "attackTag": "",
                   "attenuationGroup": "default",
                   "attenuationTag": "",
-                  "attackTag": ""
+                  "cameraShake": {
+                    "shakeDir": {
+                      "x": -1.0,
+                      "y": -0.3
+                    },
+                    "shakeDistance": 25.0,
+                    "shakeRange": 0.2,
+                    "shakeTime": 0.15,
+                    "shakeType": "HitVector",
+                    "MNKFEFOKFKP": ""
+                  },
+                  "hitPattern": {
+                    "hitImpulseType": "LV3",
+                    "onHitEffectName": "default",
+                    "FLFCIDDNMNA": ""
+                  }
                 },
                 "attackPattern": {
-                  "$type": "DDLDAMKEKJD",
-                  "radius": 12.0,
-                  "NGFJGIAMCKD": 8.0,
-                  "height": 2.0,
-                  "triggerType": "TriggerNoRepeat",
+                  "$type": "ConfigAttackCircle",
                   "born": {
-                    "$type": "LKIBKKFEOLJ",
-                    "positionKey": "_SHMAN_JUM_END_POS",
-                    "directionKey": ""
-                  }
+                    "$type": "ConfigBornByGlobalValue",
+                    "directionKey": "",
+                    "positionKey": "_SHMAN_JUM_END_POS"
+                  },
+                  "height": 2.0,
+                  "innerRadius": 8.0,
+                  "radius": 12.0,
+                  "triggerType": "TriggerNoRepeat"
                 }
-              }
+              },
+              "targetType": "Enemy"
             }
           ],
-          "elementDurability": 100.0,
-          "modifierName": "",
           "AIHNJLDFEGJ": 0.0
         }
-      },
-      "abilityMixins": [
-        {
-          "$type": "AttachToMultiNormalizedTimeMixin",
-          "modifierName": "Monster_Shaman_None_JumpAtk_RushMove",
-          "LJPPDIGCJMJ": "",
-          "normalizedStateIDList": [
-            {
-              "stateID": "JumpAtk_InAir",
-              "normalizeStart": 0.05,
-              "normalizeEnd": 0.65
-            },
-            {
-              "stateID": "JumpAtk_Jump",
-              "normalizeEnd": 0.58
-            },
-            {
-              "stateID": "JumpAtk_Jump2",
-              "normalizeEnd": 0.58
-            }
-          ]
-        },
-        {
-          "$type": "AttachToMultiNormalizedTimeMixin",
-          "modifierName": "Monster_Shaman_None_JumpAtk_Damage",
-          "LJPPDIGCJMJ": "",
-          "normalizedStateIDList": [
-            {
-              "stateID": "JumpAtk_InAir",
-              "normalizeStart": 0.85
-            },
-            {
-              "stateID": "JumpBack_InAir",
-              "normalizeStart": 0.81
-            },
-            {
-              "stateID": "JumpAtk_Jump",
-              "normalizeStart": 0.95
-            },
-            {
-              "stateID": "JumpAtk_Jump2",
-              "normalizeStart": 0.95
-            }
-          ]
-        },
-        {
-          "$type": "AttachToNormalizedTimeMixin",
-          "modifierName": "Monster_Shaman_None_JumpBackToBorn_Move",
-          "LJPPDIGCJMJ": "",
-          "normalizeEnd": 0.65,
-          "stateID": "JumpBack_InAir",
-          "normalizeStart": 0.05
-        },
-        {
-          "$type": "AttachToStateIDMixin",
-          "LJPPDIGCJMJ": "",
-          "stateIDs": [
-            "JumpAtk_InAir",
-            "JumpAtk_Jump",
-            "JumpAtk_Jump2",
-            "JumpBack_InAir"
-          ],
-          "modifierName": "Monster_Shaman_None_JumpAtk_ClosePush"
-        }
-      ],
-      "abilityName": "Monster_Shaman_None_JumpAtk"
+      }
     }
   },
   {
     "Default": {
+      "abilityMixins": [
+        {
+          "$type": "AttachToStateIDMixin",
+          "modifierName": "Monster_Shaman_None_FleeMode_Handler",
+          "stateIDs": [
+            "BeHit"
+          ],
+          "LJPPDIGCJMJ": ""
+        },
+        {
+          "$type": "AttachToNormalizedTimeMixin",
+          "modifierName": "Monster_Shaman_None_FleeMode_EscapeEffect",
+          "stateID": "Escape",
+          "LJPPDIGCJMJ": ""
+        }
+      ],
+      "abilityName": "Monster_Shaman_None_FleeMode",
       "modifiers": {
         "Monster_Shaman_None_FleeMode_EscapeEffect": {
+          "elementDurability": 100.0,
+          "modifierName": "",
           "onAdded": [
             {
               "$type": "AttachEffect",
-              "ILLLPEOODKP": "",
-              "scale": 1.0,
               "effectPattern": "Eff_Monster_Shaman_Escape_Large",
-              "effectTempleteID": -1.0
+              "effectTempleteID": -1.0,
+              "scale": 1.0,
+              "ILLLPEOODKP": ""
             }
           ],
-          "elementDurability": 100.0,
-          "modifierName": "",
           "AIHNJLDFEGJ": 0.0
         },
         "Monster_Shaman_None_FleeMode_Handler": {
+          "elementDurability": 100.0,
+          "modifierName": "",
           "onAdded": [
             {
               "$type": "Predicated",
               "successActions": [
                 {
                   "$type": "AddGlobalValue",
-                  "useLimitRange": true,
                   "key": "_BE_HITH_TIMES",
                   "maxValue": 2.0,
                   "minValue": 0.0,
-                  "CBOMLBFIPJM": 1.0
+                  "useLimitRange": true,
+                  "value": 1.0
                 },
                 {
                   "$type": "ApplyModifier",
                   "modifierName": "Monster_Shaman_None_Ender_FleeMode",
                   "predicates": [
                     {
-                      "$type": "EOFDCELPGFO",
-                      "CBOMLBFIPJM": 2.0,
-                      "key": "_BE_HITH_TIMES"
+                      "$type": "ByTargetGlobalValue",
+                      "key": "_BE_HITH_TIMES",
+                      "value": 2.0
                     }
                   ]
                 }
               ],
               "targetPredicates": [
                 {
-                  "$type": "GKGBIPDLMMG",
+                  "$type": "ByNot",
                   "predicates": [
                     {
-                      "$type": "EOFDCELPGFO",
-                      "CBOMLBFIPJM": 2.0,
-                      "key": "_SHAMAN_STATE"
+                      "$type": "ByTargetGlobalValue",
+                      "key": "_SHAMAN_STATE",
+                      "value": 2.0
                     }
                   ]
                 },
                 {
-                  "$type": "GKGBIPDLMMG",
+                  "$type": "ByNot",
                   "predicates": [
                     {
-                      "$type": "LJBLAFGJKGI",
+                      "$type": "ByHasModifier",
                       "modifierName": "Monster_Shaman_None_FleeMode_EscapeCD"
                     }
                   ]
@@ -2930,58 +2949,33 @@
               ]
             }
           ],
-          "elementDurability": 100.0,
-          "modifierName": "",
           "AIHNJLDFEGJ": 0.0
         },
         "Monster_Shaman_None_Ender_FleeMode": {
           "duration": 2.0,
-          "onRemoved": [
-            {
-              "$type": "SetPoseBool",
-              "boolID": "EscapeState"
-            },
-            {
-              "$type": "SetGlobalValue",
-              "key": "_SHAMAN_STATE",
-              "minValue": 0.0,
-              "maxValue": 0.0,
-              "CBOMLBFIPJM": "_SHAMAN_STATE_TEMP",
-              "predicates": [
-                {
-                  "$type": "GKGBIPDLMMG",
-                  "predicates": [
-                    {
-                      "$type": "EOFDCELPGFO",
-                      "CBOMLBFIPJM": 1.0,
-                      "key": "_SHAMAN_STATE"
-                    }
-                  ]
-                }
-              ]
-            }
-          ],
+          "elementDurability": 100.0,
+          "modifierName": "",
           "onAdded": [
             {
               "$type": "SetGlobalValue",
               "key": "_SHAMAN_STATE_TEMP",
-              "minValue": 0.0,
               "maxValue": 0.0,
-              "CBOMLBFIPJM": "_SHAMAN_STATE"
+              "minValue": 0.0,
+              "value": "_SHAMAN_STATE"
             },
             {
               "$type": "SetGlobalValue",
               "key": "_BE_HITH_TIMES",
-              "minValue": 0.0,
               "maxValue": 0.0,
-              "CBOMLBFIPJM": 0.0
+              "minValue": 0.0,
+              "value": 0.0
             },
             {
               "$type": "SetGlobalValue",
               "key": "_SHAMAN_STATE",
-              "minValue": 0.0,
               "maxValue": 0.0,
-              "CBOMLBFIPJM": 5.0
+              "minValue": 0.0,
+              "value": 5.0
             },
             {
               "$type": "ClearEndura"
@@ -2991,11 +2985,34 @@
               "modifierName": "Monster_Shaman_None_FleeMode_EscapeCD"
             }
           ],
+          "onRemoved": [
+            {
+              "$type": "SetPoseBool",
+              "boolID": "EscapeState"
+            },
+            {
+              "$type": "SetGlobalValue",
+              "key": "_SHAMAN_STATE",
+              "maxValue": 0.0,
+              "minValue": 0.0,
+              "predicates": [
+                {
+                  "$type": "ByNot",
+                  "predicates": [
+                    {
+                      "$type": "ByTargetGlobalValue",
+                      "key": "_SHAMAN_STATE",
+                      "value": 1.0
+                    }
+                  ]
+                }
+              ],
+              "value": "_SHAMAN_STATE_TEMP"
+            }
+          ],
           "properties": {
             "Actor_EndureDelta": 0.0
           },
-          "elementDurability": 100.0,
-          "modifierName": "",
           "AIHNJLDFEGJ": 0.0
         },
         "Monster_Shaman_None_FleeMode_EscapeCD": {
@@ -3008,98 +3025,81 @@
       "ANHJPOLNHIG": [
         "_SHAMAN_STATE",
         "_SHAMAN_STATE_TEMP"
-      ],
-      "abilityMixins": [
-        {
-          "$type": "AttachToStateIDMixin",
-          "LJPPDIGCJMJ": "",
-          "stateIDs": [
-            "BeHit"
-          ],
-          "modifierName": "Monster_Shaman_None_FleeMode_Handler"
-        },
-        {
-          "$type": "AttachToNormalizedTimeMixin",
-          "modifierName": "Monster_Shaman_None_FleeMode_EscapeEffect",
-          "LJPPDIGCJMJ": "",
-          "stateID": "Escape"
-        }
-      ],
-      "abilityName": "Monster_Shaman_None_FleeMode"
+      ]
     }
   },
   {
     "Default": {
+      "abilityName": "Monster_Shaman_None_Pot_SummonFireCicle",
       "modifiers": {
         "Monster_Shaman_None_Pot_SummonFireCicle_Delay": {
           "duration": 1.5,
-          "onRemoved": [
-            {
-              "$type": "FireEffect",
-              "effectPattern": "Eff_Monster_Shaman_None_CookingAtk_Attack",
-              "scale": 1.0,
-              "ILLLPEOODKP": "",
-              "effectTempleteID": -1.0
-            },
-            {
-              "$type": "TriggerAttackEvent",
-              "targetType": "AllExceptSelf",
-              "attackEvent": {
-                "attackInfo": {
-                  "attackProperty": {
-                    "elementType": "Fire",
-                    "attackType": "Melee",
-                    "damagePercentageRatio": 0.0,
-                    "strikeType": "Pierce",
-                    "enBreak": 105.0,
-                    "damagePercentage": 0.7,
-                    "elementDurability": 25.0,
-                    "arkheGrade": 0.0
-                  },
-                  "hitPattern": {
-                    "FLFCIDDNMNA": "",
-                    "retreatType": "ByHitDirection",
-                    "onHitEffectName": "default",
-                    "hitImpulseType": "LV4"
-                  },
-                  "attenuationGroup": "Nutcracker_Stage1_MaleCircle1",
-                  "attenuationTag": "FireCircleAtk",
-                  "attackTag": "",
-                  "canBeModifiedBy": "OriginOwner"
-                },
-                "attackPattern": {
-                  "$type": "DDLDAMKEKJD",
-                  "radius": 3.0,
-                  "height": 3.0,
-                  "triggerType": "TriggerNoRepeat",
-                  "born": {
-                    "$type": "NABPLNFPHCK",
-                    "useRotation": true,
-                    "offset": {
-                      "x": 0.0,
-                      "z": 0.0,
-                      "y": 0.0
-                    }
-                  }
-                }
-              }
-            }
-          ],
+          "elementDurability": 100.0,
+          "modifierName": "",
           "onAdded": [
             {
               "$type": "FireEffect",
               "effectPattern": "Eff_Monster_Shaman_None_CookingAtk_Warning",
+              "effectTempleteID": -1.0,
               "scale": 1.0,
-              "ILLLPEOODKP": "",
-              "effectTempleteID": -1.0
+              "ILLLPEOODKP": ""
             }
           ],
-          "elementDurability": 100.0,
-          "modifierName": "",
+          "onRemoved": [
+            {
+              "$type": "FireEffect",
+              "effectPattern": "Eff_Monster_Shaman_None_CookingAtk_Attack",
+              "effectTempleteID": -1.0,
+              "scale": 1.0,
+              "ILLLPEOODKP": ""
+            },
+            {
+              "$type": "TriggerAttackEvent",
+              "attackEvent": {
+                "attackInfo": {
+                  "attackProperty": {
+                    "attackType": "Melee",
+                    "damagePercentage": 0.7,
+                    "damagePercentageRatio": 0.0,
+                    "elementDurability": 25.0,
+                    "elementType": "Fire",
+                    "enBreak": 105.0,
+                    "strikeType": "Pierce",
+                    "IIPHCFEONLK": 0.0
+                  },
+                  "attackTag": "",
+                  "attenuationGroup": "Nutcracker_Stage1_MaleCircle1",
+                  "attenuationTag": "FireCircleAtk",
+                  "canBeModifiedBy": "OriginOwner",
+                  "hitPattern": {
+                    "hitImpulseType": "LV4",
+                    "onHitEffectName": "default",
+                    "retreatType": "ByHitDirection",
+                    "FLFCIDDNMNA": ""
+                  }
+                },
+                "attackPattern": {
+                  "$type": "ConfigAttackCircle",
+                  "born": {
+                    "$type": "ConfigBornBySelf",
+                    "offset": {
+                      "x": 0.0,
+                      "y": 0.0,
+                      "z": 0.0
+                    },
+                    "useRotation": true
+                  },
+                  "height": 3.0,
+                  "radius": 3.0,
+                  "triggerType": "TriggerNoRepeat"
+                }
+              },
+              "targetType": "AllExceptSelf"
+            }
+          ],
           "AIHNJLDFEGJ": 0.0
         }
       },
-      "abilityName": "Monster_Shaman_None_Pot_SummonFireCicle",
       "onAdded": [
         {
           "$type": "ApplyModifier",
@@ -3116,9 +3116,9 @@
         {
           "$type": "SetGlobalValue",
           "key": "_SHAMAN_IN_ABYSS",
-          "minValue": 0.0,
           "maxValue": 0.0,
-          "CBOMLBFIPJM": 1.0
+          "minValue": 0.0,
+          "value": 1.0
         }
       ]
     }

@@ -1,28 +1,34 @@
 [
   {
     "Default": {
+      "abilityName": "SceneObj_Area_Common_Property_EnemyHealth_Skill",
       "modifiers": {
         "CheckInView": {
-          "thinkInterval": 0.35,
           "elementDurability": 100.0,
           "modifierName": "",
           "onThinkInterval": [
             {
               "$type": "Predicated",
+              "failActions": [
+                {
+                  "$type": "DebugLog",
+                  "content": "Not in camera view, remain invincible."
+                }
+              ],
               "successActions": [
                 {
                   "$type": "SetGlobalValueV2",
-                  "minValue": 0.0,
                   "key": "GV_SkillHitByPlayer",
                   "maxValue": 0.0,
-                  "CBOMLBFIPJM": 0.0
+                  "minValue": 0.0,
+                  "value": 0.0
                 },
                 {
                   "$type": "SetGlobalValueV2",
-                  "minValue": 0.0,
                   "key": "GV_InitCompleted",
                   "maxValue": 0.0,
-                  "CBOMLBFIPJM": 1.0
+                  "minValue": 0.0,
+                  "value": 1.0
                 },
                 {
                   "$type": "RemoveModifier",
@@ -33,55 +39,32 @@
                   "modifierName": "CheckInView"
                 }
               ],
-              "failActions": [
-                {
-                  "$type": "DebugLog",
-                  "content": "Not in camera view, remain invincible."
-                }
-              ],
               "targetPredicates": [
                 {
                   "$type": "MOFKBDHMHJP",
-                  "BONDOCOMGBI": true,
+                  "target": "Self",
                   "HIMPEDLPMNM": false,
+                  "BONDOCOMGBI": true,
                   "LDBCBKCNKDH": [
                     "EnemyNode"
-                  ],
-                  "target": "Self"
+                  ]
                 }
               ]
             }
           ],
+          "thinkInterval": 0.35,
           "AIHNJLDFEGJ": 0.0
         },
         "InvincibleModifier": {
-          "onRemoved": [
-            {
-              "$type": "SetGlobalValueV2",
-              "minValue": 0.0,
-              "key": "_Invincible",
-              "maxValue": 0.0,
-              "CBOMLBFIPJM": 0.0
-            },
-            {
-              "$type": "ApplyModifier",
-              "modifierName": "StateMachineHandler"
-            },
-            {
-              "$type": "EnableColliderByName",
-              "PLDFIIMNOCD": [
-                "HitBox"
-              ],
-              "setEnable": true
-            }
-          ],
+          "elementDurability": 100.0,
+          "modifierName": "",
           "onAdded": [
             {
               "$type": "SetGlobalValueV2",
-              "minValue": 0.0,
               "key": "_Invincible",
               "maxValue": 0.0,
-              "CBOMLBFIPJM": 1.0
+              "minValue": 0.0,
+              "value": 1.0
             },
             {
               "$type": "HealHP",
@@ -89,9 +72,27 @@
               "FFNEJGGNAFF": ""
             }
           ],
-          "elementDurability": 100.0,
+          "onRemoved": [
+            {
+              "$type": "SetGlobalValueV2",
+              "key": "_Invincible",
+              "maxValue": 0.0,
+              "minValue": 0.0,
+              "value": 0.0
+            },
+            {
+              "$type": "ApplyModifier",
+              "modifierName": "StateMachineHandler"
+            },
+            {
+              "$type": "EnableColliderByName",
+              "setEnable": true,
+              "transformNames": [
+                "HitBox"
+              ]
+            }
+          ],
           "state": "Invincible",
-          "modifierName": "",
           "AIHNJLDFEGJ": 0.0
         },
         "BillboardController": {
@@ -100,6 +101,22 @@
             {
               "$type": "BillboardV2Mixin",
               "FMEEEHPMHDB": {
+                "INJHBCKFHJP": {
+                  "attachPointName": "Billboard",
+                  "showDistance": 200.0,
+                  "DHCJDPAELEF": true
+                },
+                "IPFABCFDBGG": {
+                  "size": "Big",
+                  "JACFGNPNMGL": {},
+                  "CHBMKLMPFNC": {
+                    "showDistance": 200.0,
+                    "FEENOOJONEH": [
+                      "Distance",
+                      "Damaged"
+                    ]
+                  }
+                },
                 "OKLHEEKHNEJ": {
                   "KHJOCFJEPJB": [
                     {
@@ -109,10 +126,10 @@
                           "show": true
                         }
                       ],
-                      "KJBLNCHOCEE": [
+                      "conditions": [
                         {
                           "$type": "ONDPIHBCCBK",
-                          "ANIHOKMEKHK": 201
+                          "state": 201
                         }
                       ],
                       "CKJFCOKFLCM": true
@@ -124,7 +141,7 @@
                           "show": true
                         }
                       ],
-                      "KJBLNCHOCEE": [
+                      "conditions": [
                         {
                           "$type": "ONDPIHBCCBK"
                         }
@@ -132,22 +149,6 @@
                       "CKJFCOKFLCM": true
                     }
                   ]
-                },
-                "IPFABCFDBGG": {
-                  "JACFGNPNMGL": {},
-                  "size": "Big",
-                  "CHBMKLMPFNC": {
-                    "FEENOOJONEH": [
-                      "Distance",
-                      "Damaged"
-                    ],
-                    "EJJGLFHDCCH": 200.0
-                  }
-                },
-                "INJHBCKFHJP": {
-                  "attachPointName": "Billboard",
-                  "EJJGLFHDCCH": 200.0,
-                  "DHCJDPAELEF": true
                 }
               }
             }
@@ -157,32 +158,32 @@
         },
         "BeHitFXModifier_Exp_01": {
           "duration": 1.0,
-          "stacking": "Multiple",
           "elementDurability": 100.0,
           "modifierMixins": [
             {
               "$type": "AttachSubEmitterEffectMixin",
               "effectPattern": "Eff_SceneObj_CharacterBullet_Exp_01",
-              "MCBLCOBNCOJ": 3.0,
+              "scale": 3.0,
               "GKHPNAJNIAA": "HitFX"
             }
           ],
           "modifierName": "",
+          "stacking": "Multiple",
           "AIHNJLDFEGJ": 0.0
         },
         "BeHitFXModifier_Exp_02": {
           "duration": 1.0,
-          "stacking": "Multiple",
           "elementDurability": 100.0,
           "modifierMixins": [
             {
               "$type": "AttachSubEmitterEffectMixin",
               "effectPattern": "Eff_SceneObj_CharacterBullet_Exp_02",
-              "MCBLCOBNCOJ": 3.0,
+              "scale": 3.0,
               "GKHPNAJNIAA": "HitFX"
             }
           ],
           "modifierName": "",
+          "stacking": "Multiple",
           "AIHNJLDFEGJ": 0.0
         },
         "StateMachineHandler": {
@@ -190,10 +191,10 @@
           "modifierMixins": [
             {
               "$type": "AttachModifierToGlobalValueMixin",
+              "globalValueKey": "GV_SkillHitByPlayer",
               "modifierNameSteps": [
                 "KillSelfModifier"
               ],
-              "globalValueKey": "GV_SkillHitByPlayer",
               "valueSteps": [
                 0.5,
                 1.5
@@ -202,10 +203,10 @@
             },
             {
               "$type": "AttachModifierToGlobalValueMixin",
+              "globalValueKey": "GV_ContextData",
               "modifierNameSteps": [
                 "Point_ExitCheckCreateItems"
               ],
-              "globalValueKey": "GV_ContextData",
               "valueSteps": [
                 -1.5,
                 -0.5
@@ -213,19 +214,17 @@
               "DEFOFMOIAAI": true
             }
           ],
-          "state": "Limbo",
           "modifierName": "",
-          "AIHNJLDFEGJ": 0.0,
           "onBeingHit": [
             {
               "$type": "AttachModifier",
               "modifierName": "BeHitFXModifier_Exp_01",
               "predicates": [
                 {
-                  "$type": "EOFDCELPGFO",
-                  "CBOMLBFIPJM": 0.0,
+                  "$type": "ByTargetGlobalValue",
                   "key": "GV_BulletLockMode",
-                  "target": "Team"
+                  "target": "Team",
+                  "value": 0.0
                 }
               ]
             },
@@ -234,51 +233,25 @@
               "modifierName": "BeHitFXModifier_Exp_02",
               "predicates": [
                 {
-                  "$type": "EOFDCELPGFO",
-                  "CBOMLBFIPJM": 1.0,
+                  "$type": "ByTargetGlobalValue",
                   "key": "GV_BulletLockMode",
-                  "target": "Team"
+                  "target": "Team",
+                  "value": 1.0
                 }
               ]
             },
             {
               "$type": "Predicated",
-              "successActions": [
-                {
-                  "$type": "Predicated",
-                  "successActions": [
-                    {
-                      "$type": "SetGlobalValueV2",
-                      "minValue": 0.0,
-                      "key": "_Die",
-                      "maxValue": 0.0,
-                      "CBOMLBFIPJM": 1.0
-                    },
-                    {
-                      "$type": "AttachModifier",
-                      "modifierName": "KillSelfModifier"
-                    }
-                  ],
-                  "targetPredicates": [
-                    {
-                      "$type": "HGKCHJOOMCH",
-                      "KIKIBABLEMA": 0.2,
-                      "logic": "LesserOrEqual",
-                      "target": "Self"
-                    }
-                  ]
-                }
-              ],
               "failActions": [
                 {
                   "$type": "Predicated",
                   "successActions": [
                     {
                       "$type": "SetGlobalValueV2",
-                      "minValue": 0.0,
                       "key": "_Die",
                       "maxValue": 0.0,
-                      "CBOMLBFIPJM": 1.0
+                      "minValue": 0.0,
+                      "value": 1.0
                     },
                     {
                       "$type": "AttachModifier",
@@ -287,17 +260,17 @@
                   ],
                   "targetPredicates": [
                     {
-                      "$type": "GPEMEIHPCCF",
+                      "$type": "ByAny",
                       "predicates": [
                         {
-                          "$type": "CCHPEOBKOBO",
+                          "$type": "ByAttackTags",
                           "attackTags": [
                             "_STG_RotateBall"
                           ]
                         },
                         {
-                          "$type": "HGKCHJOOMCH",
-                          "KIKIBABLEMA": 0.4,
+                          "$type": "ByTargetHPRatio",
+                          "hpRatio": 0.4,
                           "logic": "LesserOrEqual",
                           "target": "Self"
                         }
@@ -306,184 +279,182 @@
                   ]
                 }
               ],
+              "successActions": [
+                {
+                  "$type": "Predicated",
+                  "successActions": [
+                    {
+                      "$type": "SetGlobalValueV2",
+                      "key": "_Die",
+                      "maxValue": 0.0,
+                      "minValue": 0.0,
+                      "value": 1.0
+                    },
+                    {
+                      "$type": "AttachModifier",
+                      "modifierName": "KillSelfModifier"
+                    }
+                  ],
+                  "targetPredicates": [
+                    {
+                      "$type": "ByTargetHPRatio",
+                      "hpRatio": 0.2,
+                      "logic": "LesserOrEqual",
+                      "target": "Self"
+                    }
+                  ]
+                }
+              ],
               "targetPredicates": [
                 {
-                  "$type": "EOFDCELPGFO",
-                  "CBOMLBFIPJM": 1.0,
+                  "$type": "ByTargetGlobalValue",
                   "key": "GV_IsBoss",
-                  "target": "Self"
+                  "target": "Self",
+                  "value": 1.0
                 }
               ]
             },
             {
               "$type": "SetGlobalValueV2",
-              "minValue": 0.0,
               "key": "GV_LifeEnd",
               "maxValue": 0.0,
-              "CBOMLBFIPJM": 1.0,
-              "target": "Other"
+              "minValue": 0.0,
+              "target": "Other",
+              "value": 1.0
             }
-          ]
+          ],
+          "state": "Limbo",
+          "AIHNJLDFEGJ": 0.0
         },
         "Point_ExitCheckCreateItems": {
+          "elementDurability": 100.0,
+          "modifierName": "",
           "onAdded": [
             {
               "$type": "ApplyModifier",
               "modifierName": "CreateItems",
               "predicates": [
                 {
-                  "$type": "EOFDCELPGFO",
-                  "CBOMLBFIPJM": 1.0,
+                  "$type": "ByTargetGlobalValue",
                   "key": "SGV_ItemDropWhenLeaveStart",
-                  "target": "Self"
+                  "target": "Self",
+                  "value": 1.0
                 },
                 {
                   "$type": "MOFKBDHMHJP",
-                  "BONDOCOMGBI": true,
+                  "target": "Self",
                   "HIMPEDLPMNM": false,
+                  "BONDOCOMGBI": true,
                   "LDBCBKCNKDH": [
                     "EnemyNode"
-                  ],
-                  "target": "Self"
+                  ]
                 }
               ]
             }
           ],
-          "elementDurability": 100.0,
-          "modifierName": "",
           "AIHNJLDFEGJ": 0.0
         },
         "CreateItems": {
+          "elementDurability": 100.0,
+          "modifierName": "",
           "onAdded": [
             {
               "$type": "SetGlobalValueV2",
-              "minValue": 0.0,
               "key": "_DropAlreadyChecked",
               "maxValue": 0.0,
-              "CBOMLBFIPJM": 1.0
+              "minValue": 0.0,
+              "value": 1.0
             },
             {
               "$type": "CreateGadget",
+              "born": {
+                "$type": "ConfigBornByAttachPoint",
+                "attachPointName": "EnemyNode",
+                "direction": {
+                  "$type": "ConfigDirectionByEntity"
+                },
+                "useRotation": true
+              },
               "gadgetID": 73120020,
-              "born": {
-                "$type": "BGOLIIIHLMO",
-                "attachPointName": "EnemyNode",
-                "useRotation": true,
-                "direction": {
-                  "$type": "FPLAJGOAOHH"
-                }
-              },
               "predicates": [
                 {
-                  "$type": "EOFDCELPGFO",
-                  "CBOMLBFIPJM": 1.0,
+                  "$type": "ByTargetGlobalValue",
                   "key": "SGV_ItemDrop",
-                  "target": "Self"
+                  "target": "Self",
+                  "value": 1.0
                 }
               ]
             },
             {
               "$type": "CreateGadget",
+              "born": {
+                "$type": "ConfigBornByAttachPoint",
+                "attachPointName": "EnemyNode",
+                "direction": {
+                  "$type": "ConfigDirectionByEntity"
+                },
+                "useRotation": true
+              },
               "gadgetID": 73120015,
-              "born": {
-                "$type": "BGOLIIIHLMO",
-                "attachPointName": "EnemyNode",
-                "useRotation": true,
-                "direction": {
-                  "$type": "FPLAJGOAOHH"
-                }
-              },
               "predicates": [
                 {
-                  "$type": "EOFDCELPGFO",
-                  "CBOMLBFIPJM": 2.0,
+                  "$type": "ByTargetGlobalValue",
                   "key": "SGV_ItemDrop",
-                  "target": "Self"
+                  "target": "Self",
+                  "value": 2.0
                 }
               ]
             },
             {
               "$type": "CreateGadget",
+              "born": {
+                "$type": "ConfigBornByAttachPoint",
+                "attachPointName": "EnemyNode",
+                "direction": {
+                  "$type": "ConfigDirectionByEntity"
+                },
+                "useRotation": true
+              },
               "gadgetID": 73120022,
-              "born": {
-                "$type": "BGOLIIIHLMO",
-                "attachPointName": "EnemyNode",
-                "useRotation": true,
-                "direction": {
-                  "$type": "FPLAJGOAOHH"
-                }
-              },
               "predicates": [
                 {
-                  "$type": "EOFDCELPGFO",
-                  "CBOMLBFIPJM": 3.0,
+                  "$type": "ByTargetGlobalValue",
                   "key": "SGV_ItemDrop",
-                  "target": "Self"
+                  "target": "Self",
+                  "value": 3.0
                 }
               ]
             },
             {
               "$type": "CreateGadget",
-              "gadgetID": 73120021,
               "born": {
-                "$type": "BGOLIIIHLMO",
+                "$type": "ConfigBornByAttachPoint",
                 "attachPointName": "EnemyNode",
-                "useRotation": true,
                 "direction": {
-                  "$type": "FPLAJGOAOHH"
-                }
+                  "$type": "ConfigDirectionByEntity"
+                },
+                "useRotation": true
               },
+              "gadgetID": 73120021,
               "predicates": [
                 {
-                  "$type": "EOFDCELPGFO",
-                  "CBOMLBFIPJM": 4.0,
+                  "$type": "ByTargetGlobalValue",
                   "key": "SGV_ItemDrop",
-                  "target": "Self"
+                  "target": "Self",
+                  "value": 4.0
                 }
               ]
             }
           ],
           "stacking": "Unique",
-          "elementDurability": 100.0,
-          "modifierName": "",
           "AIHNJLDFEGJ": 0.0
         },
         "KillSelfModifier": {
+          "elementDurability": 100.0,
+          "modifierName": "",
           "onAdded": [
             {
               "$type": "Predicated",
-              "successActions": [
-                {
-                  "$type": "SetGlobalValueV2",
-                  "minValue": 0.0,
-                  "key": "_Die",
-                  "maxValue": 0.0,
-                  "CBOMLBFIPJM": 1.0
-                },
-                {
-                  "$type": "ServerLuaCall",
-                  "param1": 0.0,
-                  "param2": 0.0,
-                  "funcName": "SLC_TriggerEnemyDieEvent",
-                  "AHCNJKIEMPP": 0.0,
-                  "NPNEPKILMEK": [
-                    251187013,
-                    251212001,
-                    251193002,
-                    251199001
-                  ],
-                  "luaCallType": "SpecificGroup",
-                  "doOffStage": true
-                },
-                {
-                  "$type": "KillSelf",
-                  "MBGFJOOIMOK": [
-                    73120001,
-                    73120002,
-                    73120012
-                  ]
-                }
-              ],
               "failActions": [
                 {
                   "$type": "DebugLog",
@@ -491,84 +462,65 @@
                 },
                 {
                   "$type": "SetGlobalValueV2",
-                  "minValue": 0.0,
                   "key": "GV_SkillHitByPlayer",
                   "maxValue": 0.0,
-                  "CBOMLBFIPJM": 0.0
+                  "minValue": 0.0,
+                  "value": 0.0
+                }
+              ],
+              "successActions": [
+                {
+                  "$type": "SetGlobalValueV2",
+                  "key": "_Die",
+                  "maxValue": 0.0,
+                  "minValue": 0.0,
+                  "value": 1.0
+                },
+                {
+                  "$type": "ServerLuaCall",
+                  "callParamList": [
+                    251187013,
+                    251212001,
+                    251193002,
+                    251199001
+                  ],
+                  "doOffStage": true,
+                  "funcName": "SLC_TriggerEnemyDieEvent",
+                  "luaCallType": "SpecificGroup",
+                  "param1": 0.0,
+                  "param2": 0.0,
+                  "param3": 0.0
+                },
+                {
+                  "$type": "KillSelf",
+                  "configIdArray": [
+                    73120001,
+                    73120002,
+                    73120012
+                  ]
                 }
               ],
               "targetPredicates": [
                 {
-                  "$type": "EOFDCELPGFO",
-                  "CBOMLBFIPJM": 0.0,
+                  "$type": "ByTargetGlobalValue",
                   "compareType": "NoneOrEqual",
                   "key": "_Invincible",
-                  "target": "Self"
+                  "target": "Self",
+                  "value": 0.0
                 },
                 {
-                  "$type": "EOFDCELPGFO",
-                  "CBOMLBFIPJM": 1.0,
+                  "$type": "ByTargetGlobalValue",
                   "compareType": "NoneOrEqual",
                   "key": "GV_InitCompleted",
-                  "target": "Self"
+                  "target": "Self",
+                  "value": 1.0
                 }
               ]
             }
           ],
-          "elementDurability": 100.0,
-          "modifierName": "",
           "AIHNJLDFEGJ": 0.0
         }
       },
-      "ANHJPOLNHIG": [
-        "GV_SkillHitByPlayer",
-        "_Die",
-        "SGV_ItemDropWhenLeaveStart",
-        "_DropAlreadyChecked",
-        "GV_ContextData",
-        "_Invincible",
-        "GV_InitCompleted"
-      ],
-      "onKill": [
-        {
-          "$type": "Predicated",
-          "successActions": [
-            {
-              "$type": "ApplyModifier",
-              "modifierName": "CreateItems",
-              "predicates": [
-                {
-                  "$type": "GPEMEIHPCCF",
-                  "predicates": [
-                    {
-                      "$type": "HGKCHJOOMCH",
-                      "KIKIBABLEMA": 0.1,
-                      "logic": "Lesser",
-                      "target": "Self"
-                    },
-                    {
-                      "$type": "EOFDCELPGFO",
-                      "CBOMLBFIPJM": 1.0,
-                      "key": "GV_SkillHitByPlayer",
-                      "target": "Self"
-                    }
-                  ]
-                }
-              ]
-            }
-          ],
-          "targetPredicates": [
-            {
-              "$type": "EOFDCELPGFO",
-              "CBOMLBFIPJM": 0.0,
-              "compareType": "NoneOrEqual",
-              "key": "_DropAlreadyChecked",
-              "target": "Self"
-            }
-          ]
-        }
-      ],
-      "abilityName": "SceneObj_Area_Common_Property_EnemyHealth_Skill",
       "onAdded": [
         {
           "$type": "AttachModifier",
@@ -587,21 +539,87 @@
           "gadgetID": 73120019,
           "FGNHCAEHEJK": true
         }
+      ],
+      "onKill": [
+        {
+          "$type": "Predicated",
+          "successActions": [
+            {
+              "$type": "ApplyModifier",
+              "modifierName": "CreateItems",
+              "predicates": [
+                {
+                  "$type": "ByAny",
+                  "predicates": [
+                    {
+                      "$type": "ByTargetHPRatio",
+                      "hpRatio": 0.1,
+                      "logic": "Lesser",
+                      "target": "Self"
+                    },
+                    {
+                      "$type": "ByTargetGlobalValue",
+                      "key": "GV_SkillHitByPlayer",
+                      "target": "Self",
+                      "value": 1.0
+                    }
+                  ]
+                }
+              ]
+            }
+          ],
+          "targetPredicates": [
+            {
+              "$type": "ByTargetGlobalValue",
+              "compareType": "NoneOrEqual",
+              "key": "_DropAlreadyChecked",
+              "target": "Self",
+              "value": 0.0
+            }
+          ]
+        }
+      ],
+      "ANHJPOLNHIG": [
+        "GV_SkillHitByPlayer",
+        "_Die",
+        "SGV_ItemDropWhenLeaveStart",
+        "_DropAlreadyChecked",
+        "GV_ContextData",
+        "_Invincible",
+        "GV_InitCompleted"
       ]
     }
   },
   {
     "Default": {
+      "abilityMixins": [
+        {
+          "$type": "AttachModifierToGlobalValueMixin",
+          "globalValueKey": "GV_ShootUpgradeItem",
+          "globalValueTarget": "Team",
+          "modifierNameSteps": [
+            "CheckLock",
+            "UpgradeBeingLocked"
+          ],
+          "valueSteps": [
+            -0.5,
+            0.5,
+            1.5
+          ],
+          "DEFOFMOIAAI": true
+        }
+      ],
+      "abilityName": "SceneObj_Area_Common_Property_EnemyAnchor",
       "modifiers": {
         "CheckLock": {
           "elementDurability": 100.0,
           "modifierMixins": [
             {
               "$type": "AttachModifierToGlobalValueMixin",
+              "globalValueKey": "_BeingLocked",
               "modifierNameSteps": [
                 "BeingLocked"
               ],
-              "globalValueKey": "_BeingLocked",
               "valueSteps": [
                 0.5,
                 1.5
@@ -613,22 +631,20 @@
           "AIHNJLDFEGJ": 0.0
         },
         "BeingLocked": {
-          "thinkInterval": 0.2,
-          "stacking": "Unique",
           "elementDurability": 100.0,
           "modifierName": "",
           "onThinkInterval": [
             {
               "$type": "Predicated",
-              "successActions": [
-                {
-                  "$type": "AttachModifier",
-                  "modifierName": "BeingLocked_ShowEffect"
-                }
-              ],
               "failActions": [
                 {
                   "$type": "RemoveModifier",
+                  "modifierName": "BeingLocked_ShowEffect"
+                }
+              ],
+              "successActions": [
+                {
+                  "$type": "AttachModifier",
                   "modifierName": "BeingLocked_ShowEffect"
                 }
               ],
@@ -638,33 +654,33 @@
                   "target": "Self"
                 },
                 {
-                  "$type": "EOFDCELPGFO",
-                  "CBOMLBFIPJM": 0.0,
+                  "$type": "ByTargetGlobalValue",
                   "key": "GV_LevelOffsetControlMode",
-                  "target": "Team"
+                  "target": "Team",
+                  "value": 0.0
                 }
               ]
             }
           ],
+          "stacking": "Unique",
+          "thinkInterval": 0.2,
           "AIHNJLDFEGJ": 0.0
         },
         "UpgradeBeingLocked": {
-          "thinkInterval": 0.2,
-          "stacking": "Unique",
           "elementDurability": 100.0,
           "modifierName": "",
           "onThinkInterval": [
             {
               "$type": "Predicated",
-              "successActions": [
-                {
-                  "$type": "AttachModifier",
-                  "modifierName": "UpgradeBeingLocked_ShowEffect"
-                }
-              ],
               "failActions": [
                 {
                   "$type": "RemoveModifier",
+                  "modifierName": "UpgradeBeingLocked_ShowEffect"
+                }
+              ],
+              "successActions": [
+                {
+                  "$type": "AttachModifier",
                   "modifierName": "UpgradeBeingLocked_ShowEffect"
                 }
               ],
@@ -674,130 +690,132 @@
                   "target": "Self"
                 },
                 {
-                  "$type": "EOFDCELPGFO",
-                  "CBOMLBFIPJM": 0.0,
+                  "$type": "ByTargetGlobalValue",
                   "key": "GV_LevelOffsetControlMode",
-                  "target": "Team"
+                  "target": "Team",
+                  "value": 0.0
                 }
               ]
             }
           ],
+          "stacking": "Unique",
+          "thinkInterval": 0.2,
           "AIHNJLDFEGJ": 0.0
         },
         "BeingLocked_ShowEffect": {
+          "elementDurability": 100.0,
+          "modifierName": "",
           "onAdded": [
             {
               "$type": "Predicated",
               "successActions": [
                 {
                   "$type": "AttachEffect",
-                  "ILLLPEOODKP": "",
-                  "scale": 0.9,
                   "effectPattern": "Eff_SceneObj_AirFightLock_01",
                   "effectTempleteID": -1.0,
                   "predicates": [
                     {
-                      "$type": "EOFDCELPGFO",
-                      "CBOMLBFIPJM": 0.0,
+                      "$type": "ByTargetGlobalValue",
                       "compareType": "NoneOrEqual",
                       "key": "GV_IsBoss",
-                      "target": "Owner"
+                      "target": "Owner",
+                      "value": 0.0
                     }
-                  ]
+                  ],
+                  "scale": 0.9,
+                  "ILLLPEOODKP": ""
                 },
                 {
                   "$type": "AttachEffect",
-                  "ILLLPEOODKP": "",
-                  "scale": 1.8,
                   "effectPattern": "Eff_SceneObj_AirFightLock_01",
                   "effectTempleteID": -1.0,
                   "predicates": [
                     {
-                      "$type": "EOFDCELPGFO",
-                      "CBOMLBFIPJM": 1.0,
+                      "$type": "ByTargetGlobalValue",
                       "key": "GV_IsBoss",
-                      "target": "Owner"
+                      "target": "Owner",
+                      "value": 1.0
                     }
-                  ]
+                  ],
+                  "scale": 1.8,
+                  "ILLLPEOODKP": ""
                 },
                 {
                   "$type": "SetEffectFollowPath",
-                  "DPNPNCGKIMP": "RootNode",
                   "attachPoint": "",
-                  "effectPattern": "Eff_SceneObj_AirFightLock_01"
+                  "effectPattern": "Eff_SceneObj_AirFightLock_01",
+                  "followPath": "RootNode"
                 }
               ],
+              "target": "Team",
               "targetPredicates": [
                 {
-                  "$type": "EOFDCELPGFO",
-                  "CBOMLBFIPJM": 0.0,
-                  "key": "GV_LevelOffsetControlMode"
+                  "$type": "ByTargetGlobalValue",
+                  "key": "GV_LevelOffsetControlMode",
+                  "value": 0.0
                 }
-              ],
-              "target": "Team"
+              ]
             }
           ],
           "stacking": "Unique",
-          "elementDurability": 100.0,
-          "modifierName": "",
           "AIHNJLDFEGJ": 0.0
         },
         "UpgradeBeingLocked_ShowEffect": {
+          "elementDurability": 100.0,
+          "modifierName": "",
           "onAdded": [
             {
               "$type": "Predicated",
               "successActions": [
                 {
                   "$type": "AttachEffect",
-                  "ILLLPEOODKP": "",
-                  "scale": 0.9,
                   "effectPattern": "Eff_SceneObj_AirFightLock_02",
                   "effectTempleteID": -1.0,
                   "predicates": [
                     {
-                      "$type": "EOFDCELPGFO",
-                      "CBOMLBFIPJM": 0.0,
+                      "$type": "ByTargetGlobalValue",
                       "compareType": "NoneOrEqual",
                       "key": "GV_IsBoss",
-                      "target": "Owner"
+                      "target": "Owner",
+                      "value": 0.0
                     }
-                  ]
+                  ],
+                  "scale": 0.9,
+                  "ILLLPEOODKP": ""
                 },
                 {
                   "$type": "AttachEffect",
-                  "ILLLPEOODKP": "",
-                  "scale": 1.8,
                   "effectPattern": "Eff_SceneObj_AirFightLock_02",
                   "effectTempleteID": -1.0,
                   "predicates": [
                     {
-                      "$type": "EOFDCELPGFO",
-                      "CBOMLBFIPJM": 1.0,
+                      "$type": "ByTargetGlobalValue",
                       "key": "GV_IsBoss",
-                      "target": "Owner"
+                      "target": "Owner",
+                      "value": 1.0
                     }
-                  ]
+                  ],
+                  "scale": 1.8,
+                  "ILLLPEOODKP": ""
                 },
                 {
                   "$type": "SetEffectFollowPath",
-                  "DPNPNCGKIMP": "RootNode",
                   "attachPoint": "",
-                  "effectPattern": "Eff_SceneObj_AirFightLock_02"
+                  "effectPattern": "Eff_SceneObj_AirFightLock_02",
+                  "followPath": "RootNode"
                 }
               ],
+              "target": "Team",
               "targetPredicates": [
                 {
-                  "$type": "EOFDCELPGFO",
-                  "CBOMLBFIPJM": 0.0,
-                  "key": "GV_LevelOffsetControlMode"
+                  "$type": "ByTargetGlobalValue",
+                  "key": "GV_LevelOffsetControlMode",
+                  "value": 0.0
                 }
-              ],
-              "target": "Team"
+              ]
             }
           ],
           "stacking": "Unique",
-          "elementDurability": 100.0,
-          "modifierName": "",
           "AIHNJLDFEGJ": 0.0
         },
         "SyncOwnerHp": {
@@ -805,11 +823,11 @@
           "modifierMixins": [
             {
               "$type": "AttachModifierToGlobalValueMixin",
+              "globalValueKey": "_Die",
+              "globalValueTarget": "Owner",
               "modifierNameSteps": [
                 "DieActionModifier"
               ],
-              "globalValueTarget": "Owner",
-              "globalValueKey": "_Die",
               "valueSteps": [
                 0.5,
                 1.5
@@ -821,44 +839,26 @@
           "AIHNJLDFEGJ": 0.0
         },
         "DieActionModifier": {
+          "elementDurability": 100.0,
+          "modifierName": "",
           "onAdded": [
             {
               "$type": "SetGlobalValueV2",
-              "minValue": 0.0,
               "key": "_Die",
               "maxValue": 0.0,
-              "CBOMLBFIPJM": 1.0
+              "minValue": 0.0,
+              "value": 1.0
             },
             {
               "$type": "KillSelf",
-              "MBGFJOOIMOK": [
+              "configIdArray": [
                 73120019
               ]
             }
           ],
-          "elementDurability": 100.0,
-          "modifierName": "",
           "AIHNJLDFEGJ": 0.0
         }
       },
-      "abilityMixins": [
-        {
-          "$type": "AttachModifierToGlobalValueMixin",
-          "modifierNameSteps": [
-            "CheckLock",
-            "UpgradeBeingLocked"
-          ],
-          "globalValueTarget": "Team",
-          "globalValueKey": "GV_ShootUpgradeItem",
-          "valueSteps": [
-            -0.5,
-            0.5,
-            1.5
-          ],
-          "DEFOFMOIAAI": true
-        }
-      ],
-      "abilityName": "SceneObj_Area_Common_Property_EnemyAnchor",
       "onAdded": [
         {
           "$type": "AttachModifier",
@@ -869,136 +869,80 @@
   },
   {
     "Default": {
+      "abilityName": "SceneObj_Area_Common_Property_Ani_6_4_AirEmeny_NormalSizeView",
       "onKill": [
         {
           "$type": "FireEffect",
-          "effectPattern": "Eff_SceneObj_BalloonEnemy_Exp_Small",
-          "scale": 1.0,
           "born": {
-            "$type": "BGOLIIIHLMO",
+            "$type": "ConfigBornByAttachPoint",
             "attachPointName": "EnemyNode",
             "useRotation": true
           },
-          "ILLLPEOODKP": "",
+          "effectPattern": "Eff_SceneObj_BalloonEnemy_Exp_Small",
           "effectTempleteID": -1.0,
           "predicates": [
             {
-              "$type": "EOFDCELPGFO",
-              "CBOMLBFIPJM": 0.0,
+              "$type": "ByTargetGlobalValue",
               "compareType": "NoneOrEqual",
               "key": "_MuteKillEffect",
-              "target": "Self"
+              "target": "Self",
+              "value": 0.0
             }
-          ]
-        }
-      ],
-      "abilityName": "SceneObj_Area_Common_Property_Ani_6_4_AirEmeny_NormalSizeView"
-    }
-  },
-  {
-    "Default": {
-      "onKill": [
-        {
-          "$type": "FireEffect",
-          "effectPattern": "Eff_SceneObj_BalloonEnemy_Exp_Big_02",
+          ],
           "scale": 1.0,
-          "born": {
-            "$type": "BGOLIIIHLMO",
-            "attachPointName": "EnemyNode",
-            "useRotation": true
-          },
-          "ILLLPEOODKP": "",
-          "effectTempleteID": -1.0,
-          "predicates": [
-            {
-              "$type": "EOFDCELPGFO",
-              "CBOMLBFIPJM": 0.0,
-              "key": "_MuteKillEffect",
-              "target": "Self"
-            }
-          ]
-        }
-      ],
-      "abilityName": "SceneObj_Area_Common_Property_Ani_6_4_AirEmeny_BOSSSizeView",
-      "onAdded": [
-        {
-          "$type": "SetGlobalValueV2",
-          "minValue": 0.0,
-          "key": "GV_IsBoss",
-          "maxValue": 0.0,
-          "CBOMLBFIPJM": 1.0
+          "ILLLPEOODKP": ""
         }
       ]
     }
   },
   {
     "Default": {
-      "modifiers": {
-        "Normal": {
-          "onAdded": [
-            {
-              "$type": "SetPartScaleByTransform",
-              "NFHGCPEPCOK": "FieldTrigger",
-              "BMIODAODPLA": {
-                "x": 1.0,
-                "z": 1.0,
-                "y": 1.0
-              },
-              "canBeHandledOnRecover": true
-            }
-          ],
-          "stacking": "Unique",
-          "elementDurability": 100.0,
-          "modifierName": "",
-          "AIHNJLDFEGJ": 0.0
-        },
-        "LightingModeExtend": {
-          "onAdded": [
-            {
-              "$type": "SetPartScaleByTransform",
-              "NFHGCPEPCOK": "FieldTrigger",
-              "BMIODAODPLA": {
-                "x": 1.0,
-                "z": 1.0,
-                "y": 30.0
-              },
-              "canBeHandledOnRecover": true
-            }
-          ],
-          "stacking": "Unique",
-          "elementDurability": 100.0,
-          "modifierName": "",
-          "AIHNJLDFEGJ": 0.0
-        },
-        "FlappyBirdExtend": {
-          "onAdded": [
-            {
-              "$type": "SetPartScaleByTransform",
-              "NFHGCPEPCOK": "FieldTrigger",
-              "BMIODAODPLA": {
-                "x": 2.0,
-                "z": 1.0,
-                "y": 1.0
-              },
-              "canBeHandledOnRecover": true
-            }
-          ],
-          "stacking": "Unique",
-          "elementDurability": 100.0,
-          "modifierName": "",
-          "AIHNJLDFEGJ": 0.0
+      "abilityName": "SceneObj_Area_Common_Property_Ani_6_4_AirEmeny_BOSSSizeView",
+      "onAdded": [
+        {
+          "$type": "SetGlobalValueV2",
+          "key": "GV_IsBoss",
+          "maxValue": 0.0,
+          "minValue": 0.0,
+          "value": 1.0
         }
-      },
+      ],
+      "onKill": [
+        {
+          "$type": "FireEffect",
+          "born": {
+            "$type": "ConfigBornByAttachPoint",
+            "attachPointName": "EnemyNode",
+            "useRotation": true
+          },
+          "effectPattern": "Eff_SceneObj_BalloonEnemy_Exp_Big_02",
+          "effectTempleteID": -1.0,
+          "predicates": [
+            {
+              "$type": "ByTargetGlobalValue",
+              "key": "_MuteKillEffect",
+              "target": "Self",
+              "value": 0.0
+            }
+          ],
+          "scale": 1.0,
+          "ILLLPEOODKP": ""
+        }
+      ]
+    }
+  },
+  {
+    "Default": {
       "abilityMixins": [
         {
           "$type": "AttachModifierToGlobalValueMixin",
+          "globalValueKey": "GV_LevelOffsetControlMode",
+          "globalValueTarget": "Team",
           "modifierNameSteps": [
             "Normal",
             "LightingModeExtend",
             "FlappyBirdExtend"
           ],
-          "globalValueTarget": "Team",
-          "globalValueKey": "GV_LevelOffsetControlMode",
           "valueSteps": [
             -0.5,
             0.5,
@@ -1008,67 +952,74 @@
           "DEFOFMOIAAI": true
         }
       ],
-      "abilityName": "SceneObj_Area_Common_Property_6_4_AirEmenyMagicBall_ExtendCollider"
+      "abilityName": "SceneObj_Area_Common_Property_6_4_AirEmenyMagicBall_ExtendCollider",
+      "modifiers": {
+        "Normal": {
+          "elementDurability": 100.0,
+          "modifierName": "",
+          "onAdded": [
+            {
+              "$type": "SetPartScaleByTransform",
+              "canBeHandledOnRecover": true,
+              "NFHGCPEPCOK": "FieldTrigger",
+              "BMIODAODPLA": {
+                "x": 1.0,
+                "y": 1.0,
+                "z": 1.0
+              }
+            }
+          ],
+          "stacking": "Unique",
+          "AIHNJLDFEGJ": 0.0
+        },
+        "LightingModeExtend": {
+          "elementDurability": 100.0,
+          "modifierName": "",
+          "onAdded": [
+            {
+              "$type": "SetPartScaleByTransform",
+              "canBeHandledOnRecover": true,
+              "NFHGCPEPCOK": "FieldTrigger",
+              "BMIODAODPLA": {
+                "x": 1.0,
+                "y": 30.0,
+                "z": 1.0
+              }
+            }
+          ],
+          "stacking": "Unique",
+          "AIHNJLDFEGJ": 0.0
+        },
+        "FlappyBirdExtend": {
+          "elementDurability": 100.0,
+          "modifierName": "",
+          "onAdded": [
+            {
+              "$type": "SetPartScaleByTransform",
+              "canBeHandledOnRecover": true,
+              "NFHGCPEPCOK": "FieldTrigger",
+              "BMIODAODPLA": {
+                "x": 1.0,
+                "y": 1.0,
+                "z": 2.0
+              }
+            }
+          ],
+          "stacking": "Unique",
+          "AIHNJLDFEGJ": 0.0
+        }
+      }
     }
   },
   {
     "Default": {
-      "modifiers": {
-        "KillSelfModifier": {
-          "onAdded": [
-            {
-              "$type": "FireEffect",
-              "effectPattern": "Eff_SceneObj_MagicalBullet_02",
-              "scale": 1.0,
-              "ILLLPEOODKP": "",
-              "effectTempleteID": -1.0
-            },
-            {
-              "$type": "RemoveModifier",
-              "modifierName": "TrailFX_BulletView"
-            },
-            {
-              "$type": "KillSelf",
-              "MBGFJOOIMOK": [
-                73120003,
-                73120027,
-                73120006,
-                73120046
-              ]
-            }
-          ],
-          "elementDurability": 100.0,
-          "modifierName": "",
-          "AIHNJLDFEGJ": 0.0
-        },
-        "TrailFX_BulletView": {
-          "elementDurability": 100.0,
-          "modifierMixins": [
-            {
-              "$type": "AttachSubEmitterEffectMixin",
-              "effectPattern": "Eff_SceneObj_MagicalBullet_03",
-              "GKHPNAJNIAA": "",
-              "NHHILEOGIDN": true,
-              "CEBHIKGMAED": true
-            }
-          ],
-          "modifierName": "",
-          "AIHNJLDFEGJ": 0.0
-        }
-      },
-      "onKill": [
-        {
-          "$type": "RemoveModifier",
-          "modifierName": "TrailFX_BulletView"
-        }
-      ],
       "abilityMixins": [
         {
           "$type": "AttachModifierToGlobalValueMixin",
+          "globalValueKey": "_GadgetKiller",
           "modifierNameSteps": [
             "KillSelfModifier"
           ],
-          "globalValueKey": "_GadgetKiller",
           "valueSteps": [
             0.5,
             1.5
@@ -1077,79 +1028,17 @@
         }
       ],
       "abilityName": "SceneObj_Area_Common_Property_6_4_AirEmenyMagicBall",
-      "PFJMEMFDGOH": [
-        {
-          "$type": "Predicated",
-          "successActions": [
-            {
-              "$type": "FireEffect",
-              "effectPattern": "Eff_SceneObj_MagicalBullet_02",
-              "scale": 1.0,
-              "ILLLPEOODKP": "",
-              "effectTempleteID": -1.0
-            },
-            {
-              "$type": "RemoveModifier",
-              "modifierName": "TrailFX_BulletView",
-              "predicates": [
-                {
-                  "$type": "EOFDCELPGFO",
-                  "CBOMLBFIPJM": 1.0,
-                  "key": "GV_MagicBallBulletType"
-                }
-              ]
-            },
-            {
-              "$type": "KillSelf",
-              "MBGFJOOIMOK": [
-                73120003,
-                73120027,
-                73120006,
-                73120046
-              ],
-              "predicates": [
-                {
-                  "$type": "EOFDCELPGFO",
-                  "CBOMLBFIPJM": 1.0,
-                  "key": "GV_MagicBallBulletType"
-                }
-              ]
-            }
-          ],
-          "targetPredicates": [
-            {
-              "$type": "ILMHBGFOAJN",
-              "MBGFJOOIMOK": [
-                73120005
-              ]
-            },
-            {
-              "$type": "NBMIFIMDPII",
-              "target": "Self"
-            }
-          ],
-          "target": "Other"
-        }
-      ],
-      "onAdded": [
-        {
-          "$type": "AttachModifier",
-          "modifierName": "TrailFX_BulletView"
-        }
-      ]
-    }
-  },
-  {
-    "Default": {
       "modifiers": {
         "KillSelfModifier": {
+          "elementDurability": 100.0,
+          "modifierName": "",
           "onAdded": [
             {
               "$type": "FireEffect",
               "effectPattern": "Eff_SceneObj_MagicalBullet_02",
+              "effectTempleteID": -1.0,
               "scale": 1.0,
-              "ILLLPEOODKP": "",
-              "effectTempleteID": -1.0
+              "ILLLPEOODKP": ""
             },
             {
               "$type": "RemoveModifier",
@@ -1157,7 +1046,7 @@
             },
             {
               "$type": "KillSelf",
-              "MBGFJOOIMOK": [
+              "configIdArray": [
                 73120003,
                 73120027,
                 73120006,
@@ -1165,8 +1054,6 @@
               ]
             }
           ],
-          "elementDurability": 100.0,
-          "modifierName": "",
           "AIHNJLDFEGJ": 0.0
         },
         "TrailFX_BulletView": {
@@ -1174,23 +1061,93 @@
           "modifierMixins": [
             {
               "$type": "AttachSubEmitterEffectMixin",
-              "effectPattern": "Eff_SceneObj_MagicalBullet_04",
-              "GKHPNAJNIAA": "",
+              "effectPattern": "Eff_SceneObj_MagicalBullet_03",
+              "CEBHIKGMAED": true,
               "NHHILEOGIDN": true,
-              "CEBHIKGMAED": true
+              "GKHPNAJNIAA": ""
             }
           ],
           "modifierName": "",
           "AIHNJLDFEGJ": 0.0
         }
       },
+      "onAdded": [
+        {
+          "$type": "AttachModifier",
+          "modifierName": "TrailFX_BulletView"
+        }
+      ],
+      "onFieldEnter": [
+        {
+          "$type": "Predicated",
+          "successActions": [
+            {
+              "$type": "FireEffect",
+              "effectPattern": "Eff_SceneObj_MagicalBullet_02",
+              "effectTempleteID": -1.0,
+              "scale": 1.0,
+              "ILLLPEOODKP": ""
+            },
+            {
+              "$type": "RemoveModifier",
+              "modifierName": "TrailFX_BulletView",
+              "predicates": [
+                {
+                  "$type": "ByTargetGlobalValue",
+                  "key": "GV_MagicBallBulletType",
+                  "value": 1.0
+                }
+              ]
+            },
+            {
+              "$type": "KillSelf",
+              "configIdArray": [
+                73120003,
+                73120027,
+                73120006,
+                73120046
+              ],
+              "predicates": [
+                {
+                  "$type": "ByTargetGlobalValue",
+                  "key": "GV_MagicBallBulletType",
+                  "value": 1.0
+                }
+              ]
+            }
+          ],
+          "target": "Other",
+          "targetPredicates": [
+            {
+              "$type": "ILMHBGFOAJN",
+              "configIdArray": [
+                73120005
+              ]
+            },
+            {
+              "$type": "ByTargetGadgetState",
+              "target": "Self"
+            }
+          ]
+        }
+      ],
+      "onKill": [
+        {
+          "$type": "RemoveModifier",
+          "modifierName": "TrailFX_BulletView"
+        }
+      ]
+    }
+  },
+  {
+    "Default": {
       "abilityMixins": [
         {
           "$type": "AttachModifierToGlobalValueMixin",
+          "globalValueKey": "_GadgetKiller",
           "modifierNameSteps": [
             "KillSelfModifier"
           ],
-          "globalValueKey": "_GadgetKiller",
           "valueSteps": [
             0.5,
             1.5
@@ -1199,31 +1156,80 @@
         }
       ],
       "abilityName": "SceneObj_Area_Common_Property_6_4_AirEmenyMagicBallStatic",
-      "PFJMEMFDGOH": [
+      "modifiers": {
+        "KillSelfModifier": {
+          "elementDurability": 100.0,
+          "modifierName": "",
+          "onAdded": [
+            {
+              "$type": "FireEffect",
+              "effectPattern": "Eff_SceneObj_MagicalBullet_02",
+              "effectTempleteID": -1.0,
+              "scale": 1.0,
+              "ILLLPEOODKP": ""
+            },
+            {
+              "$type": "RemoveModifier",
+              "modifierName": "TrailFX_BulletView"
+            },
+            {
+              "$type": "KillSelf",
+              "configIdArray": [
+                73120003,
+                73120027,
+                73120006,
+                73120046
+              ]
+            }
+          ],
+          "AIHNJLDFEGJ": 0.0
+        },
+        "TrailFX_BulletView": {
+          "elementDurability": 100.0,
+          "modifierMixins": [
+            {
+              "$type": "AttachSubEmitterEffectMixin",
+              "effectPattern": "Eff_SceneObj_MagicalBullet_04",
+              "CEBHIKGMAED": true,
+              "NHHILEOGIDN": true,
+              "GKHPNAJNIAA": ""
+            }
+          ],
+          "modifierName": "",
+          "AIHNJLDFEGJ": 0.0
+        }
+      },
+      "onAdded": [
+        {
+          "$type": "AttachModifier",
+          "modifierName": "TrailFX_BulletView"
+        }
+      ],
+      "onFieldEnter": [
         {
           "$type": "Predicated",
           "successActions": [
             {
               "$type": "FireEffect",
               "effectPattern": "Eff_SceneObj_MagicalBullet_02",
+              "effectTempleteID": -1.0,
               "scale": 1.0,
-              "ILLLPEOODKP": "",
-              "effectTempleteID": -1.0
+              "ILLLPEOODKP": ""
             },
             {
               "$type": "RemoveModifier",
               "modifierName": "TrailFX_BulletView",
               "predicates": [
                 {
-                  "$type": "EOFDCELPGFO",
-                  "CBOMLBFIPJM": 1.0,
-                  "key": "GV_MagicBallBulletType"
+                  "$type": "ByTargetGlobalValue",
+                  "key": "GV_MagicBallBulletType",
+                  "value": 1.0
                 }
               ]
             },
             {
               "$type": "KillSelf",
-              "MBGFJOOIMOK": [
+              "configIdArray": [
                 73120003,
                 73120027,
                 73120006,
@@ -1231,41 +1237,35 @@
               ],
               "predicates": [
                 {
-                  "$type": "EOFDCELPGFO",
-                  "CBOMLBFIPJM": 1.0,
-                  "key": "GV_MagicBallBulletType"
+                  "$type": "ByTargetGlobalValue",
+                  "key": "GV_MagicBallBulletType",
+                  "value": 1.0
                 }
               ]
             }
           ],
+          "target": "Other",
           "targetPredicates": [
             {
               "$type": "ILMHBGFOAJN",
-              "MBGFJOOIMOK": [
+              "configIdArray": [
                 73120005
               ]
             },
             {
-              "$type": "NBMIFIMDPII",
+              "$type": "ByTargetGadgetState",
               "target": "Self"
             }
-          ],
-          "target": "Other"
-        }
-      ],
-      "onAdded": [
-        {
-          "$type": "AttachModifier",
-          "modifierName": "TrailFX_BulletView"
+          ]
         }
       ]
     }
   },
   {
     "Default": {
+      "abilityName": "SceneObj_Area_Common_Property_6_4_AirEmenyMagicBall_BulletView",
       "modifiers": {
         "TickCheckDistanceOcean": {
-          "thinkInterval": 3.0,
           "elementDurability": 100.0,
           "modifierName": "",
           "onThinkInterval": [
@@ -1274,7 +1274,7 @@
               "successActions": [
                 {
                   "$type": "KillSelf",
-                  "MBGFJOOIMOK": [
+                  "configIdArray": [
                     73120003,
                     73120046,
                     73120027
@@ -1287,38 +1287,38 @@
                   ]
                 }
               ],
+              "target": "CurLocalAvatar",
               "targetPredicates": [
                 {
                   "$type": "NJJPJIKMNLM",
-                  "HCMBDILIBOD": {
-                    "$type": "BOJMMDAIGMM",
-                    "alongGround": true,
-                    "onGround": true,
-                    "useRotation": true
-                  },
                   "compareType": "XYZ",
-                  "MCPOPCPIKHF": {
-                    "$type": "NABPLNFPHCK",
+                  "value": 3.0,
+                  "HCMBDILIBOD": {
+                    "$type": "ConfigBornByTarget",
                     "alongGround": true,
                     "onGround": true,
                     "useRotation": true
                   },
-                  "CBOMLBFIPJM": 3.0
+                  "MCPOPCPIKHF": {
+                    "$type": "ConfigBornBySelf",
+                    "alongGround": true,
+                    "onGround": true,
+                    "useRotation": true
+                  }
                 },
                 {
-                  "$type": "EOFDCELPGFO",
-                  "CBOMLBFIPJM": 0.0,
+                  "$type": "ByTargetGlobalValue",
                   "key": "GV_LevelOffsetControlMode",
-                  "target": "Team"
+                  "target": "Team",
+                  "value": 0.0
                 }
-              ],
-              "target": "CurLocalAvatar"
+              ]
             }
           ],
+          "thinkInterval": 3.0,
           "AIHNJLDFEGJ": 0.0
         },
         "TickCheckDistanceOther": {
-          "thinkInterval": 7.0,
           "elementDurability": 100.0,
           "modifierName": "",
           "onThinkInterval": [
@@ -1327,7 +1327,7 @@
               "successActions": [
                 {
                   "$type": "KillSelf",
-                  "MBGFJOOIMOK": [
+                  "configIdArray": [
                     73120003,
                     73120046,
                     73120027
@@ -1340,46 +1340,46 @@
                   ]
                 }
               ],
+              "target": "CurLocalAvatar",
               "targetPredicates": [
                 {
                   "$type": "NJJPJIKMNLM",
-                  "HCMBDILIBOD": {
-                    "$type": "BOJMMDAIGMM",
-                    "alongGround": true,
-                    "onGround": true,
-                    "useRotation": true
-                  },
                   "compareType": "XYZ",
-                  "MCPOPCPIKHF": {
-                    "$type": "NABPLNFPHCK",
+                  "value": 3.0,
+                  "HCMBDILIBOD": {
+                    "$type": "ConfigBornByTarget",
                     "alongGround": true,
                     "onGround": true,
                     "useRotation": true
                   },
-                  "CBOMLBFIPJM": 3.0
+                  "MCPOPCPIKHF": {
+                    "$type": "ConfigBornBySelf",
+                    "alongGround": true,
+                    "onGround": true,
+                    "useRotation": true
+                  }
                 },
                 {
-                  "$type": "EOFDCELPGFO",
-                  "CBOMLBFIPJM": 0.0,
+                  "$type": "ByTargetGlobalValue",
                   "compareType": "MoreThan",
                   "key": "GV_LevelOffsetControlMode",
-                  "target": "Team"
+                  "target": "Team",
+                  "value": 0.0
                 }
-              ],
-              "target": "CurLocalAvatar"
+              ]
             }
           ],
+          "thinkInterval": 7.0,
           "AIHNJLDFEGJ": 0.0
         }
       },
-      "abilityName": "SceneObj_Area_Common_Property_6_4_AirEmenyMagicBall_BulletView",
       "onAdded": [
         {
           "$type": "SetGlobalValueV2",
-          "minValue": 0.0,
           "key": "GV_MagicBallBulletType",
           "maxValue": 0.0,
-          "CBOMLBFIPJM": 1.0
+          "minValue": 0.0,
+          "value": 1.0
         },
         {
           "$type": "AttachModifier",
@@ -1398,116 +1398,19 @@
       "onAdded": [
         {
           "$type": "SetGlobalValueV2",
-          "minValue": 0.0,
           "key": "GV_MagicBallBulletType",
           "maxValue": 0.0,
-          "CBOMLBFIPJM": 0.0
+          "minValue": 0.0,
+          "value": 0.0
         }
       ]
     }
   },
   {
     "Default": {
+      "abilityName": "SceneObj_Area_Common_Property_6_4_AirEmenyMagicBall_Platform_RotateFourController",
       "modifiers": {
         "LocalGadgetManager": {
-          "onAdded": [
-            {
-              "$type": "CreateGadget",
-              "gadgetID": 73120008,
-              "campID": 5001,
-              "born": {
-                "$type": "BGOLIIIHLMO",
-                "attachPointName": "RotateNode_1",
-                "attachPointTargetType": "Caster",
-                "useRotation": true,
-                "offset": {
-                  "x": 0.0,
-                  "z": 0.0,
-                  "y": 0.0
-                },
-                "direction": {
-                  "$type": "FPLAJGOAOHH",
-                  "OOKIMPBMBCN": {
-                    "x": 0.0,
-                    "z": 0.0,
-                    "y": 180.0
-                  }
-                }
-              }
-            },
-            {
-              "$type": "CreateGadget",
-              "gadgetID": 73120009,
-              "campID": 5001,
-              "born": {
-                "$type": "BGOLIIIHLMO",
-                "attachPointName": "RotateNode_2",
-                "attachPointTargetType": "Caster",
-                "useRotation": true,
-                "offset": {
-                  "x": 0.0,
-                  "z": 0.0,
-                  "y": 0.0
-                },
-                "direction": {
-                  "$type": "FPLAJGOAOHH",
-                  "OOKIMPBMBCN": {
-                    "x": 0.0,
-                    "z": 0.0,
-                    "y": 180.0
-                  }
-                }
-              }
-            },
-            {
-              "$type": "CreateGadget",
-              "gadgetID": 73120010,
-              "campID": 5001,
-              "born": {
-                "$type": "BGOLIIIHLMO",
-                "attachPointName": "RotateNode_3",
-                "attachPointTargetType": "Caster",
-                "useRotation": true,
-                "offset": {
-                  "x": 0.0,
-                  "z": 0.0,
-                  "y": 0.0
-                },
-                "direction": {
-                  "$type": "FPLAJGOAOHH",
-                  "OOKIMPBMBCN": {
-                    "x": 0.0,
-                    "z": 0.0,
-                    "y": 180.0
-                  }
-                }
-              }
-            },
-            {
-              "$type": "CreateGadget",
-              "gadgetID": 73120011,
-              "campID": 5001,
-              "born": {
-                "$type": "BGOLIIIHLMO",
-                "attachPointName": "RotateNode_4",
-                "attachPointTargetType": "Caster",
-                "useRotation": true,
-                "offset": {
-                  "x": 0.0,
-                  "z": 0.0,
-                  "y": 0.0
-                },
-                "direction": {
-                  "$type": "FPLAJGOAOHH",
-                  "OOKIMPBMBCN": {
-                    "x": 0.0,
-                    "z": 0.0,
-                    "y": 180.0
-                  }
-                }
-              }
-            }
-          ],
           "elementDurability": 100.0,
           "modifierMixins": [
             {
@@ -1515,23 +1418,117 @@
               "actionQueue": [
                 {
                   "$type": "SetGlobalValueV2",
-                  "minValue": 0.0,
                   "key": "FollowRuntimeID",
                   "maxValue": 0.0,
-                  "CBOMLBFIPJM": "GV_SelfRuntimeID",
-                  "target": "Target"
+                  "minValue": 0.0,
+                  "target": "Target",
+                  "value": "GV_SelfRuntimeID"
                 }
               ]
             }
           ],
           "modifierName": "",
+          "onAdded": [
+            {
+              "$type": "CreateGadget",
+              "born": {
+                "$type": "ConfigBornByAttachPoint",
+                "attachPointName": "RotateNode_1",
+                "attachPointTargetType": "Caster",
+                "direction": {
+                  "$type": "ConfigDirectionByEntity",
+                  "angleOffset": {
+                    "x": 0.0,
+                    "y": 180.0,
+                    "z": 0.0
+                  }
+                },
+                "offset": {
+                  "x": 0.0,
+                  "y": 0.0,
+                  "z": 0.0
+                },
+                "useRotation": true
+              },
+              "campID": 5001,
+              "gadgetID": 73120008
+            },
+            {
+              "$type": "CreateGadget",
+              "born": {
+                "$type": "ConfigBornByAttachPoint",
+                "attachPointName": "RotateNode_2",
+                "attachPointTargetType": "Caster",
+                "direction": {
+                  "$type": "ConfigDirectionByEntity",
+                  "angleOffset": {
+                    "x": 0.0,
+                    "y": 180.0,
+                    "z": 0.0
+                  }
+                },
+                "offset": {
+                  "x": 0.0,
+                  "y": 0.0,
+                  "z": 0.0
+                },
+                "useRotation": true
+              },
+              "campID": 5001,
+              "gadgetID": 73120009
+            },
+            {
+              "$type": "CreateGadget",
+              "born": {
+                "$type": "ConfigBornByAttachPoint",
+                "attachPointName": "RotateNode_3",
+                "attachPointTargetType": "Caster",
+                "direction": {
+                  "$type": "ConfigDirectionByEntity",
+                  "angleOffset": {
+                    "x": 0.0,
+                    "y": 180.0,
+                    "z": 0.0
+                  }
+                },
+                "offset": {
+                  "x": 0.0,
+                  "y": 0.0,
+                  "z": 0.0
+                },
+                "useRotation": true
+              },
+              "campID": 5001,
+              "gadgetID": 73120010
+            },
+            {
+              "$type": "CreateGadget",
+              "born": {
+                "$type": "ConfigBornByAttachPoint",
+                "attachPointName": "RotateNode_4",
+                "attachPointTargetType": "Caster",
+                "direction": {
+                  "$type": "ConfigDirectionByEntity",
+                  "angleOffset": {
+                    "x": 0.0,
+                    "y": 180.0,
+                    "z": 0.0
+                  }
+                },
+                "offset": {
+                  "x": 0.0,
+                  "y": 0.0,
+                  "z": 0.0
+                },
+                "useRotation": true
+              },
+              "campID": 5001,
+              "gadgetID": 73120011
+            }
+          ],
           "AIHNJLDFEGJ": 0.0
         }
       },
-      "ANHJPOLNHIG": [
-        "GV_SelfRuntimeID"
-      ],
-      "abilityName": "SceneObj_Area_Common_Property_6_4_AirEmenyMagicBall_Platform_RotateFourController",
       "onAdded": [
         {
           "$type": "SetTargetToTargetKey",
@@ -1541,6 +1538,9 @@
           "$type": "AttachModifier",
           "modifierName": "LocalGadgetManager"
         }
+      ],
+      "ANHJPOLNHIG": [
+        "GV_SelfRuntimeID"
       ]
     }
   }

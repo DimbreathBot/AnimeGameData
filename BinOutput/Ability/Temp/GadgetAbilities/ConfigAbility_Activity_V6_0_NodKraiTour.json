@@ -1,48 +1,40 @@
 [
   {
     "Default": {
+      "abilityMixins": [
+        {
+          "$type": "AttachToGadgetStateMixin",
+          "gadgetState": 201,
+          "modifierName": "Active"
+        },
+        {
+          "$type": "AttachToGadgetStateMixin",
+          "gadgetState": 203,
+          "modifierName": "Stop"
+        }
+      ],
+      "abilityName": "SceneObj_Area_Nt_Property_Ani_Prop_Event_NodKraiTourFight_01",
+      "abilitySpecials": {
+        "Value_DamageSystemValue": 0.0,
+        "Damage_Rate": 10.0
+      },
       "modifiers": {
         "Active": {
-          "onAdded": [
-            {
-              "$type": "SetAnimatorInt",
-              "intID": "GadgetState",
-              "CBOMLBFIPJM": 201.0
-            },
-            {
-              "$type": "SetGlobalValueV2",
-              "minValue": 0.0,
-              "key": "GV_Start",
-              "maxValue": 0.0,
-              "CBOMLBFIPJM": 0.0
-            },
-            {
-              "$type": "AttachModifier",
-              "modifierName": "Timer_Handler"
-            },
-            {
-              "$type": "AttachEffect",
-              "ILLLPEOODKP": "",
-              "scale": 1.0,
-              "effectPattern": "Eff_SceneObj_NodKraiTourFight_01_Warning",
-              "effectTempleteID": -1.0
-            }
-          ],
           "elementDurability": 100.0,
           "modifierMixins": [
             {
               "$type": "ChargeBarMixin",
-              "DFOLBCDILPA": 0.0,
-              "DBLCFLNEFHI": "Electric",
+              "chargeBarElementType": "Electric",
+              "initialValue": 0.0,
               "maxValue": 100.0
             },
             {
               "$type": "AttachModifierToGlobalValueMixin",
+              "globalValueKey": "GV_RotateSpeed",
               "modifierNameSteps": [
                 "LowSpeed",
                 "HighSpeed"
               ],
-              "globalValueKey": "GV_RotateSpeed",
               "valueSteps": [
                 -0.5,
                 0.5,
@@ -51,33 +43,39 @@
             }
           ],
           "modifierName": "",
+          "onAdded": [
+            {
+              "$type": "SetAnimatorInt",
+              "intID": "GadgetState",
+              "value": 201.0
+            },
+            {
+              "$type": "SetGlobalValueV2",
+              "key": "GV_Start",
+              "maxValue": 0.0,
+              "minValue": 0.0,
+              "value": 0.0
+            },
+            {
+              "$type": "AttachModifier",
+              "modifierName": "Timer_Handler"
+            },
+            {
+              "$type": "AttachEffect",
+              "effectPattern": "Eff_SceneObj_NodKraiTourFight_01_Warning",
+              "effectTempleteID": -1.0,
+              "scale": 1.0,
+              "ILLLPEOODKP": ""
+            }
+          ],
           "AIHNJLDFEGJ": 0.0
         },
         "Timer_Handler": {
-          "thinkInterval": 0.5,
           "elementDurability": 100.0,
           "modifierName": "",
           "onThinkInterval": [
             {
               "$type": "Predicated",
-              "successActions": [
-                {
-                  "$type": "AddGlobalValue",
-                  "key": "_CHARGEBAR_VALUE",
-                  "maxValue": 0.0,
-                  "minValue": 0.0,
-                  "CBOMLBFIPJM": 10.0
-                },
-                {
-                  "$type": "ApplyModifier",
-                  "modifierName": "Charge_Effect"
-                },
-                {
-                  "$type": "ApplyModifier",
-                  "modifierName": "NodKraiTourFight_Force_Show_Moon",
-                  "target": "Team"
-                }
-              ],
               "failActions": [
                 {
                   "$type": "RemoveModifier",
@@ -89,31 +87,49 @@
                   "target": "Team"
                 }
               ],
+              "successActions": [
+                {
+                  "$type": "AddGlobalValue",
+                  "key": "_CHARGEBAR_VALUE",
+                  "maxValue": 0.0,
+                  "minValue": 0.0,
+                  "value": 10.0
+                },
+                {
+                  "$type": "ApplyModifier",
+                  "modifierName": "Charge_Effect"
+                },
+                {
+                  "$type": "ApplyModifier",
+                  "modifierName": "NodKraiTourFight_Force_Show_Moon",
+                  "target": "Team"
+                }
+              ],
+              "target": "Team",
               "targetPredicates": [
                 {
-                  "$type": "CNFMGJJEOPM",
-                  "NJICAELBCCB": "",
-                  "JBOGOHPICML": "",
+                  "$type": "ByTargetPositionToSelfPosition",
                   "compareType": "XYZ",
-                  "CBOMLBFIPJM": 15.0,
-                  "logic": "LesserOrEqual"
+                  "logic": "LesserOrEqual",
+                  "value": 15.0,
+                  "JBOGOHPICML": "",
+                  "NJICAELBCCB": ""
                 },
                 {
-                  "$type": "EOFDCELPGFO",
-                  "CBOMLBFIPJM": 100.0,
+                  "$type": "ByTargetGlobalValue",
                   "compareType": "MoreThanAndEqual",
-                  "key": "SGV_PlayerTeam_MagnetPower"
+                  "key": "SGV_PlayerTeam_MagnetPower",
+                  "value": 100.0
                 },
                 {
-                  "$type": "FONKGIILJIO",
+                  "$type": "ByEntityIsAlive",
                   "target": "TargetCurLocalAvatar"
                 },
                 {
-                  "$type": "NNMDCGOFEHG",
+                  "$type": "ByHostOrGuest",
                   "isHost": true
                 }
-              ],
-              "target": "Team"
+              ]
             },
             {
               "$type": "Predicated",
@@ -124,364 +140,349 @@
                 },
                 {
                   "$type": "SetGlobalValueV2",
-                  "minValue": 0.0,
                   "key": "_CHARGEBAR_VALUE",
                   "maxValue": 0.0,
-                  "CBOMLBFIPJM": 0.0
+                  "minValue": 0.0,
+                  "value": 0.0
                 }
               ],
               "targetPredicates": [
                 {
-                  "$type": "EOFDCELPGFO",
-                  "CBOMLBFIPJM": 100.0,
+                  "$type": "ByTargetGlobalValue",
                   "compareType": "MoreThanAndEqual",
                   "key": "_CHARGEBAR_VALUE",
-                  "target": "Self"
+                  "target": "Self",
+                  "value": 100.0
                 }
               ]
             }
           ],
+          "thinkInterval": 0.5,
           "AIHNJLDFEGJ": 0.0
         },
         "NodKraiTourFight_Force_Show_Moon": {
           "duration": 2.0,
-          "onRemoved": [
-            {
-              "$type": "SetGlobalValueV2",
-              "minValue": 0.0,
-              "key": "GV_PlayerTeam_MagnetPower_Block",
-              "maxValue": 0.0,
-              "CBOMLBFIPJM": 0.0
-            }
-          ],
+          "elementDurability": 100.0,
+          "modifierName": "",
           "onAdded": [
             {
               "$type": "SetGlobalValueV2",
-              "minValue": 0.0,
               "key": "GV_PlayerTeam_MagnetPower_Block",
               "maxValue": 0.0,
-              "CBOMLBFIPJM": -1.0
+              "minValue": 0.0,
+              "value": -1.0
             }
           ],
-          "elementDurability": 100.0,
-          "modifierName": "",
+          "onRemoved": [
+            {
+              "$type": "SetGlobalValueV2",
+              "key": "GV_PlayerTeam_MagnetPower_Block",
+              "maxValue": 0.0,
+              "minValue": 0.0,
+              "value": 0.0
+            }
+          ],
           "AIHNJLDFEGJ": 0.0
         },
         "Charge_Effect": {
           "duration": 2.0,
+          "elementDurability": 100.0,
+          "modifierName": "",
           "onAdded": [
             {
               "$type": "AttachEffect",
-              "ILLLPEOODKP": "",
-              "scale": 1.0,
               "effectPattern": "Eff_SceneObj_NodKraiTourFight_01_Charge",
-              "effectTempleteID": -1.0
+              "effectTempleteID": -1.0,
+              "scale": 1.0,
+              "ILLLPEOODKP": ""
             }
           ],
-          "elementDurability": 100.0,
-          "modifierName": "",
           "AIHNJLDFEGJ": 0.0
         },
         "NodKraiTourFight_DoDamage": {
           "duration": 0.5,
+          "elementDurability": 100.0,
+          "modifierName": "",
           "onAdded": [
             {
               "$type": "FireEffect",
               "effectPattern": "Eff_SceneObj_NodKraiTourFight_01_Ring_01",
+              "effectTempleteID": -1.0,
               "scale": 1.0,
-              "ILLLPEOODKP": "",
-              "effectTempleteID": -1.0
+              "ILLLPEOODKP": ""
             },
             {
               "$type": "SetSystemValueToOverrideMap",
-              "OAEJNDBEDPO": -1.0,
               "key": "DamageSystemValue",
-              "type": "ElementLevelCo"
+              "type": "ElementLevelCo",
+              "OAEJNDBEDPO": -1.0
             },
             {
               "$type": "TriggerAttackEvent",
-              "targetType": "Enemy",
               "attackEvent": {
                 "attackInfo": {
                   "attackProperty": {
-                    "damagePercentageRatio": 0.0,
-                    "strikeType": "Blunt",
-                    "enBreak": 25.0,
-                    "trueDamage": true,
                     "damageExtra": [
                       18.0,
                       "Value_DamageSystemValue",
                       "MUL"
                     ],
+                    "damagePercentageRatio": 0.0,
                     "elementDurability": 20.0,
-                    "arkheGrade": 0.0
+                    "enBreak": 25.0,
+                    "strikeType": "Blunt",
+                    "trueDamage": true,
+                    "IIPHCFEONLK": 0.0
                   },
-                  "hitPattern": {
-                    "FLFCIDDNMNA": "",
-                    "retreatType": "ByOriginOwner",
-                    "onHitEffectName": "default",
-                    "canBeDefenceHalt": true,
-                    "hitImpulseType": "LV5"
-                  },
+                  "attackTag": "",
                   "attenuationGroup": "default",
                   "attenuationTag": "",
-                  "attackTag": ""
+                  "hitPattern": {
+                    "canBeDefenceHalt": true,
+                    "hitImpulseType": "LV5",
+                    "onHitEffectName": "default",
+                    "retreatType": "ByOriginOwner",
+                    "FLFCIDDNMNA": ""
+                  }
                 },
                 "attackPattern": {
-                  "$type": "HCAGHMDHEGG",
-                  "radius": 15.0,
-                  "triggerType": "TriggerNoRepeat",
+                  "$type": "ConfigAttackSphere",
                   "born": {
-                    "$type": "NABPLNFPHCK",
-                    "useRotation": true,
+                    "$type": "ConfigBornBySelf",
                     "offset": {
                       "x": 0.0,
-                      "z": 0.0,
-                      "y": 0.0
-                    }
-                  }
+                      "y": 0.0,
+                      "z": 0.0
+                    },
+                    "useRotation": true
+                  },
+                  "radius": 15.0,
+                  "triggerType": "TriggerNoRepeat"
                 }
-              }
+              },
+              "targetType": "Enemy"
             },
             {
               "$type": "ApplyModifier",
               "modifierName": "Rotate_Timer"
             }
           ],
-          "elementDurability": 100.0,
-          "modifierName": "",
           "AIHNJLDFEGJ": 0.0
         },
         "Rotate_Timer": {
           "duration": 1.0,
+          "elementDurability": 100.0,
+          "modifierName": "",
+          "onAdded": [
+            {
+              "$type": "SetGlobalValueV2",
+              "key": "GV_RotateSpeed",
+              "maxValue": 0.0,
+              "minValue": 0.0,
+              "value": 1.0
+            }
+          ],
           "onRemoved": [
             {
               "$type": "SetGlobalValueV2",
-              "minValue": 0.0,
               "key": "GV_RotateSpeed",
               "maxValue": 0.0,
-              "CBOMLBFIPJM": 0.0
-            }
-          ],
-          "onAdded": [
-            {
-              "$type": "SetGlobalValueV2",
               "minValue": 0.0,
-              "key": "GV_RotateSpeed",
-              "maxValue": 0.0,
-              "CBOMLBFIPJM": 1.0
+              "value": 0.0
             }
           ],
-          "elementDurability": 100.0,
-          "modifierName": "",
           "AIHNJLDFEGJ": 0.0
         },
         "LowSpeed": {
+          "elementDurability": 100.0,
+          "modifierName": "",
           "onAdded": [
             {
               "$type": "AttachEffect",
-              "ILLLPEOODKP": "",
-              "scale": 1.0,
               "effectPattern": "Eff_SceneObj_NodKraiTourFight_01_Active_01",
-              "effectTempleteID": -1.0
+              "effectTempleteID": -1.0,
+              "scale": 1.0,
+              "ILLLPEOODKP": ""
             },
             {
               "$type": "SetAnimatorInt",
               "intID": "GadgetState",
-              "CBOMLBFIPJM": 201.0
+              "value": 201.0
             }
           ],
-          "elementDurability": 100.0,
-          "modifierName": "",
           "AIHNJLDFEGJ": 0.0
         },
         "HighSpeed": {
+          "elementDurability": 100.0,
+          "modifierName": "",
           "onAdded": [
             {
               "$type": "AttachEffect",
-              "ILLLPEOODKP": "",
-              "scale": 1.0,
               "effectPattern": "Eff_SceneObj_NodKraiTourFight_01_Active_02",
-              "effectTempleteID": -1.0
+              "effectTempleteID": -1.0,
+              "scale": 1.0,
+              "ILLLPEOODKP": ""
             },
             {
               "$type": "SetAnimatorInt",
               "intID": "GadgetState",
-              "CBOMLBFIPJM": 202.0
+              "value": 202.0
             }
           ],
-          "elementDurability": 100.0,
-          "modifierName": "",
           "AIHNJLDFEGJ": 0.0
         },
         "Stop": {
+          "elementDurability": 100.0,
+          "modifierName": "",
           "onAdded": [
             {
               "$type": "SetAnimatorInt",
               "intID": "GadgetState",
-              "CBOMLBFIPJM": 203.0
+              "value": 203.0
             }
           ],
-          "elementDurability": 100.0,
-          "modifierName": "",
           "AIHNJLDFEGJ": 0.0
         }
       },
-      "abilityMixins": [
-        {
-          "$type": "AttachToGadgetStateMixin",
-          "modifierName": "Active",
-          "gadgetState": 201
-        },
-        {
-          "$type": "AttachToGadgetStateMixin",
-          "modifierName": "Stop",
-          "gadgetState": 203
-        }
-      ],
-      "abilityName": "SceneObj_Area_Nt_Property_Ani_Prop_Event_NodKraiTourFight_01",
       "onAdded": [
         {
           "$type": "SetSystemValueToOverrideMap",
-          "OAEJNDBEDPO": -1.0,
+          "doOffStage": true,
           "key": "Value_DamageSystemValue",
           "type": "ElementLevelCo",
-          "doOffStage": true
+          "OAEJNDBEDPO": -1.0
         },
         {
           "$type": "SetGlobalValueV2",
-          "minValue": 0.0,
           "key": "GV_RotateSpeed",
           "maxValue": 0.0,
-          "CBOMLBFIPJM": 0.0
+          "minValue": 0.0,
+          "value": 0.0
         },
         {
           "$type": "SetGlobalValueV2",
-          "minValue": 0.0,
           "key": "_CHARGEBAR_VALUE",
           "maxValue": 0.0,
-          "CBOMLBFIPJM": 0.0
-        }
-      ],
-      "abilitySpecials": {
-        "Value_DamageSystemValue": 0.0,
-        "Damage_Rate": 10.0
-      }
-    }
-  },
-  {
-    "Default": {
-      "modifiers": {
-        "Controller": {
-          "elementDurability": 100.0,
-          "modifierName": "",
-          "AIHNJLDFEGJ": 0.0
-        }
-      },
-      "abilityMixins": [
-        {
-          "$type": "DoActionOnGlobalValueChangeMixin",
-          "actions": [
-            {
-              "$type": "SetGlobalPos",
-              "key": "_ABILITY_MonsterCamp_5_0_WindZone_Pos_Avatar",
-              "born": {
-                "$type": "NABPLNFPHCK",
-                "useRotation": true
-              },
-              "doOffStage": true
-            },
-            {
-              "$type": "CreateGadget",
-              "gadgetID": 44000603,
-              "campID": 1001,
-              "campTargetType": "Enemy",
-              "born": {
-                "$type": "LKIBKKFEOLJ",
-                "positionKey": "_ABILITY_MonsterCamp_5_0_WindZone_Pos_Avatar",
-                "directionKey": "",
-                "onGround": true,
-                "useRotation": true,
-                "offset": {
-                  "x": 0.0,
-                  "z": 0.0,
-                  "y": 0.0
-                }
-              },
-              "target": "CurLocalAvatar",
-              "doOffStage": true
-            }
-          ],
-          "globalValueKey": "SGV_Activity_MonsterCamp_50_WindBuff"
-        }
-      ],
-      "abilityName": "V6_0_MonsterCamp_Team",
-      "isDynamicAbility": true
-    }
-  },
-  {
-    "Default": {
-      "modifiers": {
-        "Handler": {
-          "onAdded": [
-            {
-              "$type": "SetGlobalValue",
-              "key": "_Ability_Maglev_Obstacle",
-              "minValue": 0.0,
-              "maxValue": 0.0,
-              "CBOMLBFIPJM": 1.0
-            }
-          ],
-          "elementDurability": 100.0,
-          "modifierName": "",
-          "AIHNJLDFEGJ": 0.0
-        }
-      },
-      "abilityName": "SceneObj_Area_NodKrai_Property_Ani_Prop_MagneticFracture_01",
-      "PFJMEMFDGOH": [
-        {
-          "$type": "Predicated",
-          "successActions": [
-            {
-              "$type": "FireEffect",
-              "effectPattern": "Eff_SceneObj_MagneticFracture_01_Hit",
-              "scale": 1.0,
-              "ILLLPEOODKP": "",
-              "effectTempleteID": -1.0
-            },
-            {
-              "$type": "SendEffectTrigger",
-              "parameter": "Stop",
-              "effectPattern": "Eff_SceneObj_MagneticFracture_01",
-              "attachPoint": ""
-            },
-            {
-              "$type": "KillSelf",
-              "target": "Caster"
-            }
-          ],
-          "targetPredicates": [
-            {
-              "$type": "DEOFBICNFHF",
-              "entityTypes": [
-                "Avatar",
-                "Vehicle"
-              ]
-            }
-          ],
-          "target": "Other"
-        }
-      ],
-      "onAdded": [
-        {
-          "$type": "AttachModifier",
-          "modifierName": "Handler"
+          "minValue": 0.0,
+          "value": 0.0
         }
       ]
     }
   },
   {
     "Default": {
+      "abilityMixins": [
+        {
+          "$type": "DoActionOnGlobalValueChangeMixin",
+          "actions": [
+            {
+              "$type": "SetGlobalPos",
+              "born": {
+                "$type": "ConfigBornBySelf",
+                "useRotation": true
+              },
+              "doOffStage": true,
+              "key": "_ABILITY_MonsterCamp_5_0_WindZone_Pos_Avatar"
+            },
+            {
+              "$type": "CreateGadget",
+              "born": {
+                "$type": "ConfigBornByGlobalValue",
+                "directionKey": "",
+                "offset": {
+                  "x": 0.0,
+                  "y": 0.0,
+                  "z": 0.0
+                },
+                "onGround": true,
+                "positionKey": "_ABILITY_MonsterCamp_5_0_WindZone_Pos_Avatar",
+                "useRotation": true
+              },
+              "campID": 1001,
+              "campTargetType": "Enemy",
+              "doOffStage": true,
+              "gadgetID": 44000603,
+              "target": "CurLocalAvatar"
+            }
+          ],
+          "globalValueKey": "SGV_Activity_MonsterCamp_50_WindBuff"
+        }
+      ],
+      "abilityName": "V6_0_MonsterCamp_Team",
+      "isDynamicAbility": true,
+      "modifiers": {
+        "Controller": {
+          "elementDurability": 100.0,
+          "modifierName": "",
+          "AIHNJLDFEGJ": 0.0
+        }
+      }
+    }
+  },
+  {
+    "Default": {
+      "abilityName": "SceneObj_Area_NodKrai_Property_Ani_Prop_MagneticFracture_01",
+      "modifiers": {
+        "Handler": {
+          "elementDurability": 100.0,
+          "modifierName": "",
+          "onAdded": [
+            {
+              "$type": "SetGlobalValue",
+              "key": "_Ability_Maglev_Obstacle",
+              "maxValue": 0.0,
+              "minValue": 0.0,
+              "value": 1.0
+            }
+          ],
+          "AIHNJLDFEGJ": 0.0
+        }
+      },
+      "onAdded": [
+        {
+          "$type": "AttachModifier",
+          "modifierName": "Handler"
+        }
+      ],
+      "onFieldEnter": [
+        {
+          "$type": "Predicated",
+          "successActions": [
+            {
+              "$type": "FireEffect",
+              "effectPattern": "Eff_SceneObj_MagneticFracture_01_Hit",
+              "effectTempleteID": -1.0,
+              "scale": 1.0,
+              "ILLLPEOODKP": ""
+            },
+            {
+              "$type": "SendEffectTrigger",
+              "attachPoint": "",
+              "effectPattern": "Eff_SceneObj_MagneticFracture_01",
+              "parameter": "Stop"
+            },
+            {
+              "$type": "KillSelf",
+              "target": "Caster"
+            }
+          ],
+          "target": "Other",
+          "targetPredicates": [
+            {
+              "$type": "ByEntityTypes",
+              "entityTypes": [
+                "Avatar",
+                "Vehicle"
+              ]
+            }
+          ]
+        }
+      ]
+    }
+  },
+  {
+    "Default": {
+      "abilityName": "SceneObj_Area_NodKrai_Property_Ani_Prop_AwakeDoor_01",
       "modifiers": {
         "Handler": {
           "elementDurability": 100.0,
@@ -492,25 +493,25 @@
             },
             {
               "$type": "AttachToGadgetStateMixin",
-              "modifierName": "Active",
-              "gadgetState": 201
+              "gadgetState": 201,
+              "modifierName": "Active"
             }
           ],
           "modifierName": "",
           "AIHNJLDFEGJ": 0.0
         },
         "Idle": {
+          "elementDurability": 100.0,
+          "modifierName": "",
           "onAdded": [
             {
               "$type": "AttachEffect",
-              "ILLLPEOODKP": "",
-              "scale": 1.0,
               "effectPattern": "Eff_SceneObj_AwakeDoor_01",
-              "effectTempleteID": -1.0
+              "effectTempleteID": -1.0,
+              "scale": 1.0,
+              "ILLLPEOODKP": ""
             }
           ],
-          "elementDurability": 100.0,
-          "modifierName": "",
           "AIHNJLDFEGJ": 0.0
         },
         "Active": {
@@ -519,52 +520,52 @@
           "AIHNJLDFEGJ": 0.0
         }
       },
-      "abilityName": "SceneObj_Area_NodKrai_Property_Ani_Prop_AwakeDoor_01",
-      "PFJMEMFDGOH": [
+      "onAdded": [
+        {
+          "$type": "AttachModifier",
+          "modifierName": "Handler"
+        }
+      ],
+      "onFieldEnter": [
         {
           "$type": "Predicated",
           "successActions": [
             {
               "$type": "FireEffect",
               "effectPattern": "Eff_SceneObj_AwakeDoor_02",
-              "scale": 1.0,
-              "ILLLPEOODKP": "",
               "effectTempleteID": -1.0,
               "predicates": [
                 {
-                  "$type": "NBMIFIMDPII",
+                  "$type": "ByTargetGadgetState",
                   "target": "Self"
                 }
-              ]
+              ],
+              "scale": 1.0,
+              "ILLLPEOODKP": ""
             },
             {
               "$type": "ChangeGadgetState",
-              "ANIHOKMEKHK": 201,
+              "state": 201,
               "target": "Caster"
             }
           ],
+          "target": "Other",
           "targetPredicates": [
             {
-              "$type": "DEOFBICNFHF",
+              "$type": "ByEntityTypes",
               "entityTypes": [
                 "Avatar",
                 "Vehicle"
               ]
             }
-          ],
-          "target": "Other"
-        }
-      ],
-      "onAdded": [
-        {
-          "$type": "AttachModifier",
-          "modifierName": "Handler"
+          ]
         }
       ]
     }
   },
   {
     "Default": {
+      "abilityName": "SceneObj_Area_NodKrai_Property_Ani_Prop_MoonFinger_Scan",
       "modifiers": {
         "Handler01": {
           "elementDurability": 100.0,
@@ -575,63 +576,62 @@
             },
             {
               "$type": "AttachToGadgetStateMixin",
-              "modifierName": "Hide",
-              "gadgetState": 201
+              "gadgetState": 201,
+              "modifierName": "Hide"
             }
           ],
           "modifierName": "",
           "AIHNJLDFEGJ": 0.0
         },
         "Hook": {
-          "onAdded": [
-            {
-              "$type": "AttachEffect",
-              "ILLLPEOODKP": "",
-              "scale": 1.0,
-              "effectPattern": "Eff_SceneObj_MoonFinger_01",
-              "effectTempleteID": -1.0
-            }
-          ],
           "elementDurability": 100.0,
           "modifierMixins": [
             {
               "$type": "SubTagScanEntityMixin",
-              "MBDANNCNLFN": "NodKrai_Maglev_MoonFinger_Activity",
-              "KFAOLPBMANI": "",
-              "tag": "NodKrai_MainTag"
+              "namedTransform": "",
+              "tag": "NodKrai_MainTag",
+              "MBDANNCNLFN": "NodKrai_Maglev_MoonFinger_Activity"
             },
             {
               "$type": "AttachModifierToSelfGlobalValueMixin",
+              "defaultGlobalValueOnCreate": 0.0,
+              "globalValueKey": "GV_NK_MoonFinger_Target",
               "modifierNameSteps": [
                 "Active"
               ],
               "valueSteps": [
                 0.5,
                 1.5
-              ],
-              "globalValueKey": "GV_NK_MoonFinger_Target",
-              "defaultGlobalValueOnCreate": 0.0
+              ]
             }
           ],
           "modifierName": "",
-          "AIHNJLDFEGJ": 0.0
-        },
-        "Active": {
           "onAdded": [
             {
               "$type": "AttachEffect",
-              "ILLLPEOODKP": "",
+              "effectPattern": "Eff_SceneObj_MoonFinger_01",
+              "effectTempleteID": -1.0,
               "scale": 1.0,
-              "effectPattern": "Eff_SceneObj_MoonFinger_01_Active",
-              "effectTempleteID": -1.0
+              "ILLLPEOODKP": ""
             }
           ],
+          "AIHNJLDFEGJ": 0.0
+        },
+        "Active": {
           "elementDurability": 100.0,
           "modifierName": "",
+          "onAdded": [
+            {
+              "$type": "AttachEffect",
+              "effectPattern": "Eff_SceneObj_MoonFinger_01_Active",
+              "effectTempleteID": -1.0,
+              "scale": 1.0,
+              "ILLLPEOODKP": ""
+            }
+          ],
           "AIHNJLDFEGJ": 0.0
         },
         "Hide": {
-          "thinkInterval": 1.0,
           "elementDurability": 100.0,
           "modifierName": "",
           "onThinkInterval": [
@@ -645,27 +645,27 @@
               ],
               "targetPredicates": [
                 {
-                  "$type": "EOFDCELPGFO",
-                  "CBOMLBFIPJM": 0.0,
+                  "$type": "ByTargetGlobalValue",
                   "compareType": "NoneOrEqual",
                   "key": "_ABILITY_GrapplingHookSkill_Step",
-                  "target": "CurLocalAvatar"
+                  "target": "CurLocalAvatar",
+                  "value": 0.0
                 },
                 {
-                  "$type": "CNFMGJJEOPM",
-                  "NJICAELBCCB": "",
-                  "JBOGOHPICML": "",
+                  "$type": "ByTargetPositionToSelfPosition",
                   "compareType": "XYZ",
-                  "CBOMLBFIPJM": 3.0,
-                  "target": "CurLocalAvatar"
+                  "target": "CurLocalAvatar",
+                  "value": 3.0,
+                  "JBOGOHPICML": "",
+                  "NJICAELBCCB": ""
                 }
               ]
             }
           ],
+          "thinkInterval": 1.0,
           "AIHNJLDFEGJ": 0.0
         }
       },
-      "abilityName": "SceneObj_Area_NodKrai_Property_Ani_Prop_MoonFinger_Scan",
       "onAdded": [
         {
           "$type": "AttachModifier",
@@ -676,6 +676,7 @@
   },
   {
     "Default": {
+      "abilityName": "SceneObj_Area_NodKrai_Property_Ani_Prop_MoonFinger_Platform",
       "modifiers": {
         "Handler02": {
           "elementDurability": 100.0,
@@ -686,52 +687,27 @@
             },
             {
               "$type": "AttachToGadgetStateMixin",
-              "modifierName": "Platform_On",
-              "gadgetState": 201
+              "gadgetState": 201,
+              "modifierName": "Platform_On"
             }
           ],
           "modifierName": "",
           "AIHNJLDFEGJ": 0.0
         },
         "Platform_Off": {
+          "elementDurability": 100.0,
+          "modifierName": "",
           "onAdded": [
             {
               "$type": "EnableSceneTransformByName",
-              "PLDFIIMNOCD": [
+              "transformNames": [
                 "Collider"
               ]
             }
           ],
-          "elementDurability": 100.0,
-          "modifierName": "",
           "AIHNJLDFEGJ": 0.0
         },
         "Platform_On": {
-          "onAdded": [
-            {
-              "$type": "EnableSceneTransformByName",
-              "setEnable": true,
-              "PLDFIIMNOCD": [
-                "Collider"
-              ]
-            },
-            {
-              "$type": "AttachEffect",
-              "ILLLPEOODKP": "",
-              "born": {
-                "$type": "BGOLIIIHLMO",
-                "attachPointName": "Collider",
-                "useRotation": true
-              },
-              "scale": 1.0,
-              "effectPattern": "Eff_SceneObj_MoonFinger_Platform_01",
-              "effectTempleteID": -1.0
-            },
-            {
-              "$type": "ApplyModifier",
-              "modifierName": "Reset_Show_Platform"
-            }
-          ],
           "elementDurability": 100.0,
           "modifierMixins": [
             {
@@ -739,46 +715,70 @@
               "onThinkInterval": [
                 {
                   "$type": "Predicated",
+                  "otherTargets": {
+                    "$type": "SelectTargetsByLCTrigger",
+                    "campTargetType": "All",
+                    "entityTypePriority": [
+                      "Avatar"
+                    ],
+                    "topLimit": 1
+                  },
                   "successActions": [
                     {
                       "$type": "ApplyModifier",
                       "modifierName": "Reset_Show_Platform"
                     }
-                  ],
-                  "otherTargets": {
-                    "$type": "LKMPMCNIGCC",
-                    "campTargetType": "All",
-                    "topLimit": 1,
-                    "entityTypePriority": [
-                      "Avatar"
-                    ]
-                  }
+                  ]
                 }
               ],
               "thinkInterval": 1.0
             }
           ],
           "modifierName": "",
+          "onAdded": [
+            {
+              "$type": "EnableSceneTransformByName",
+              "setEnable": true,
+              "transformNames": [
+                "Collider"
+              ]
+            },
+            {
+              "$type": "AttachEffect",
+              "born": {
+                "$type": "ConfigBornByAttachPoint",
+                "attachPointName": "Collider",
+                "useRotation": true
+              },
+              "effectPattern": "Eff_SceneObj_MoonFinger_Platform_01",
+              "effectTempleteID": -1.0,
+              "scale": 1.0,
+              "ILLLPEOODKP": ""
+            },
+            {
+              "$type": "ApplyModifier",
+              "modifierName": "Reset_Show_Platform"
+            }
+          ],
           "AIHNJLDFEGJ": 0.0
         },
         "Reset_Show_Platform": {
           "duration": 3.5,
+          "elementDurability": 100.0,
+          "modifierName": "",
           "onRemoved": [
             {
               "$type": "ChangeGadgetState",
               "target": "Caster"
             }
           ],
-          "elementDurability": 100.0,
-          "modifierName": "",
           "AIHNJLDFEGJ": 0.0
         }
       },
-      "abilityName": "SceneObj_Area_NodKrai_Property_Ani_Prop_MoonFinger_Platform",
       "onAdded": [
         {
           "$type": "EnableSceneTransformByName",
-          "PLDFIIMNOCD": [
+          "transformNames": [
             "Collider"
           ]
         },
@@ -791,6 +791,106 @@
   },
   {
     "Default": {
+      "abilityMixins": [
+        {
+          "$type": "CheckSubTagScanEntityMixin",
+          "activateSkillKey": "AVATAR_MagLev",
+          "tag": "NodKrai_MainTag",
+          "MBDANNCNLFN": "NodKrai_Maglev_MoonFinger_Activity",
+          "AKFANJPEJNN": [
+            {
+              "$type": "RemoveAvatarSkillInfo",
+              "doOffStage": true,
+              "skillID": 20043
+            },
+            {
+              "$type": "RemoveAvatarSkillInfo",
+              "doOffStage": true,
+              "skillID": 20044
+            },
+            {
+              "$type": "RemoveModifier",
+              "doOffStage": true,
+              "modifierName": "Hook_SwitchAirSkill"
+            }
+          ],
+          "HDEOAHBHOEC": [
+            {
+              "$type": "AddAvatarSkillInfo",
+              "doOffStage": true,
+              "skillID": 20043
+            },
+            {
+              "$type": "AddAvatarSkillInfo",
+              "doOffStage": true,
+              "skillID": 20044
+            },
+            {
+              "$type": "ApplyModifier",
+              "doOffStage": true,
+              "modifierName": "Hook_SwitchAirSkill"
+            }
+          ],
+          "ILOOHKBIBJM": [
+            {
+              "$type": "SetGlobalValueV2",
+              "doOffStage": true,
+              "key": "GV_NK_MagCoreSkill_Target",
+              "maxValue": 0.0,
+              "minValue": 0.0,
+              "target": "Team",
+              "value": 5.0
+            },
+            {
+              "$type": "ApplyModifier",
+              "doOffStage": true,
+              "modifierName": "GrapplingHook_Scan",
+              "target": "Target"
+            }
+          ],
+          "IMEDGAOLLEM": [
+            {
+              "$type": "SetGlobalValueV2",
+              "doOffStage": true,
+              "key": "GV_NK_MagCoreSkill_Target",
+              "maxValue": 0.0,
+              "minValue": 0.0,
+              "target": "Team",
+              "value": 0.0
+            },
+            {
+              "$type": "RemoveModifier",
+              "doOffStage": true,
+              "modifierName": "GrapplingHook_Scan",
+              "target": "Target"
+            }
+          ]
+        },
+        {
+          "$type": "AttachModifierToSelfGlobalValueMixin",
+          "defaultGlobalValueOnCreate": 0.0,
+          "globalValueKey": "_ABILITY_GrapplingHookSkill_Step",
+          "modifierNameSteps": [
+            "Blank",
+            "UNIQUE_NodKraiTour_GrapplingHookSkill_HookEffect"
+          ],
+          "valueSteps": [
+            -0.5,
+            0.5,
+            3.9
+          ]
+        },
+        {
+          "$type": "AttachToStateIDMixin",
+          "modifierName": "UNIQUE_NodKraiTour_GrapplingHookSkill_SkillHandler",
+          "stateIDs": [
+            "ActivitySkill_GrapplingHook"
+          ],
+          "LJPPDIGCJMJ": ""
+        }
+      ],
+      "abilityName": "DynamicAbility_Avatar_6_0_MoonFinger",
+      "isDynamicAbility": true,
       "modifiers": {
         "Blank": {
           "elementDurability": 100.0,
@@ -798,68 +898,44 @@
           "AIHNJLDFEGJ": 0.0
         },
         "UNIQUE_NodKraiTour_GrapplingHookSkill_RecoverHandler": {
+          "elementDurability": 100.0,
+          "isUnique": true,
+          "modifierName": "",
           "onReconnect": [
             {
               "$type": "SetGlobalValue",
+              "doOffStage": true,
               "key": "_ABILITY_GrapplingHookSkill_Step",
-              "minValue": 0.0,
               "maxValue": 0.0,
-              "CBOMLBFIPJM": 0.0,
-              "doOffStage": true
+              "minValue": 0.0,
+              "value": 0.0
             },
             {
               "$type": "RemoveModifier",
-              "modifierName": "UNIQUE_NodKraiTour_GrapplingHookSkill_PreSkill",
-              "doOffStage": true
+              "doOffStage": true,
+              "modifierName": "UNIQUE_NodKraiTour_GrapplingHookSkill_PreSkill"
             },
             {
               "$type": "RemoveModifier",
-              "modifierName": "UNIQUE_NodKraiTour_GrapplingHookSkill_ThrowHook",
-              "doOffStage": true
+              "doOffStage": true,
+              "modifierName": "UNIQUE_NodKraiTour_GrapplingHookSkill_ThrowHook"
             },
             {
               "$type": "RemoveModifier",
-              "modifierName": "UNIQUE_NodKraiTour_GrapplingHookSkill_SkillStart",
-              "doOffStage": true
+              "doOffStage": true,
+              "modifierName": "UNIQUE_NodKraiTour_GrapplingHookSkill_SkillStart"
             }
           ],
-          "elementDurability": 100.0,
-          "modifierName": "",
-          "isUnique": true,
           "AIHNJLDFEGJ": 0.0
         },
         "UNIQUE_NodKraiTour_GrapplingHookSkill_SkillHandler": {
-          "onRemoved": [
-            {
-              "$type": "SetGlobalValue",
-              "key": "_ABILITY_GrapplingHookSkill_Step",
-              "minValue": 0.0,
-              "maxValue": 0.0,
-              "CBOMLBFIPJM": 0.0,
-              "doOffStage": true,
-              "predicates": [
-                {
-                  "$type": "EOFDCELPGFO",
-                  "CBOMLBFIPJM": 3.0,
-                  "compareType": "LessAndEqual",
-                  "key": "_ABILITY_GrapplingHookSkill_Step"
-                }
-              ]
-            }
-          ],
-          "onAdded": [
-            {
-              "$type": "SetGlobalValue",
-              "key": "_ABILITY_GrapplingHookSkill_Step",
-              "minValue": 0.0,
-              "maxValue": 0.0,
-              "CBOMLBFIPJM": 1.0
-            }
-          ],
           "elementDurability": 100.0,
+          "isUnique": true,
           "modifierMixins": [
             {
               "$type": "AttachModifierToSelfGlobalValueMixin",
+              "defaultGlobalValueOnCreate": 0.0,
+              "globalValueKey": "_ABILITY_GrapplingHookSkill_Step",
               "modifierNameSteps": [
                 "UNIQUE_NodKraiTour_GrapplingHookSkill_PreSkill",
                 "UNIQUE_NodKraiTour_GrapplingHookSkill_ThrowHook"
@@ -868,25 +944,49 @@
                 0.5,
                 1.5,
                 3.5
-              ],
-              "globalValueKey": "_ABILITY_GrapplingHookSkill_Step",
-              "defaultGlobalValueOnCreate": 0.0
+              ]
             },
             {
               "$type": "AttachModifierToSelfGlobalValueMixin",
+              "defaultGlobalValueOnCreate": 0.0,
+              "globalValueKey": "_ABILITY_GrapplingHookSkill_Step",
               "modifierNameSteps": [
                 "UNIQUE_NodKraiTour_GrapplingHookSkill_SkillStart"
               ],
               "valueSteps": [
                 2.5,
                 4.5
-              ],
-              "globalValueKey": "_ABILITY_GrapplingHookSkill_Step",
-              "defaultGlobalValueOnCreate": 0.0
+              ]
             }
           ],
           "modifierName": "",
-          "isUnique": true,
+          "onAdded": [
+            {
+              "$type": "SetGlobalValue",
+              "key": "_ABILITY_GrapplingHookSkill_Step",
+              "maxValue": 0.0,
+              "minValue": 0.0,
+              "value": 1.0
+            }
+          ],
+          "onRemoved": [
+            {
+              "$type": "SetGlobalValue",
+              "doOffStage": true,
+              "key": "_ABILITY_GrapplingHookSkill_Step",
+              "maxValue": 0.0,
+              "minValue": 0.0,
+              "predicates": [
+                {
+                  "$type": "ByTargetGlobalValue",
+                  "compareType": "LessAndEqual",
+                  "key": "_ABILITY_GrapplingHookSkill_Step",
+                  "value": 3.0
+                }
+              ],
+              "value": 0.0
+            }
+          ],
           "AIHNJLDFEGJ": 0.0
         },
         "Hook_SwitchAirSkill": {
@@ -894,32 +994,34 @@
           "modifierMixins": [
             {
               "$type": "AvatarChangeSkillMixin",
-              "OLDBNEGFONF": 20044,
-              "index": -1,
               "flySkillID": 20044,
-              "priority": "Playmode"
+              "index": -1,
+              "priority": "Playmode",
+              "OLDBNEGFONF": 20044
             },
             {
               "$type": "AttachToStateIDMixin",
               "isCheckOnAttach": true,
-              "LJPPDIGCJMJ": "",
+              "modifierName": "ChangePlayMode_FlyMark",
               "stateIDs": [
                 "Fly",
                 "Fall"
               ],
-              "modifierName": "ChangePlayMode_FlyMark"
+              "LJPPDIGCJMJ": ""
             },
             {
               "$type": "AttachToStateIDMixin",
               "isCheckOnAttach": true,
-              "LJPPDIGCJMJ": "",
+              "modifierName": "ChangePlayMode_JumpMark_Handler",
               "stateIDs": [
                 "Jump"
               ],
-              "modifierName": "ChangePlayMode_JumpMark_Handler"
+              "LJPPDIGCJMJ": ""
             },
             {
               "$type": "AttachModifierToSelfGlobalValueMixin",
+              "defaultGlobalValueOnCreate": 0.0,
+              "globalValueKey": "_ABILITY_GrapplingHookSkill_JoypadAirSkill_Mark",
               "modifierNameSteps": [
                 "Blank",
                 "ChangePlayModeForJoypad"
@@ -928,9 +1030,7 @@
                 -0.5,
                 0.5,
                 5.5
-              ],
-              "globalValueKey": "_ABILITY_GrapplingHookSkill_JoypadAirSkill_Mark",
-              "defaultGlobalValueOnCreate": 0.0
+              ]
             }
           ],
           "modifierName": "",
@@ -942,34 +1042,33 @@
           "AIHNJLDFEGJ": 0.0
         },
         "ChangePlayMode_FlyMark": {
-          "onRemoved": [
-            {
-              "$type": "AddGlobalValue",
-              "useLimitRange": true,
-              "key": "_ABILITY_GrapplingHookSkill_JoypadAirSkill_Mark",
-              "maxValue": 5.0,
-              "minValue": 0.0,
-              "CBOMLBFIPJM": -1.0,
-              "doOffStage": true
-            }
-          ],
+          "elementDurability": 100.0,
+          "modifierName": "",
           "onAdded": [
             {
               "$type": "AddGlobalValue",
-              "useLimitRange": true,
+              "doOffStage": true,
               "key": "_ABILITY_GrapplingHookSkill_JoypadAirSkill_Mark",
               "maxValue": 5.0,
               "minValue": 0.0,
-              "CBOMLBFIPJM": 1.0,
-              "doOffStage": true
+              "useLimitRange": true,
+              "value": 1.0
             }
           ],
-          "elementDurability": 100.0,
-          "modifierName": "",
+          "onRemoved": [
+            {
+              "$type": "AddGlobalValue",
+              "doOffStage": true,
+              "key": "_ABILITY_GrapplingHookSkill_JoypadAirSkill_Mark",
+              "maxValue": 5.0,
+              "minValue": 0.0,
+              "useLimitRange": true,
+              "value": -1.0
+            }
+          ],
           "AIHNJLDFEGJ": 0.0
         },
         "ChangePlayMode_JumpMark_Handler": {
-          "thinkInterval": 0.7,
           "elementDurability": 100.0,
           "modifierName": "",
           "onThinkInterval": [
@@ -978,36 +1077,40 @@
               "modifierName": "ChangePlayMode_JumpMark"
             }
           ],
+          "thinkInterval": 0.7,
           "AIHNJLDFEGJ": 0.0
         },
         "ChangePlayMode_JumpMark": {
-          "onRemoved": [
-            {
-              "$type": "AddGlobalValue",
-              "useLimitRange": true,
-              "key": "_ABILITY_GrapplingHookSkill_JoypadAirSkill_Mark",
-              "maxValue": 5.0,
-              "minValue": 0.0,
-              "CBOMLBFIPJM": -1.0,
-              "doOffStage": true
-            }
-          ],
+          "elementDurability": 100.0,
+          "modifierName": "",
           "onAdded": [
             {
               "$type": "AddGlobalValue",
-              "useLimitRange": true,
+              "doOffStage": true,
               "key": "_ABILITY_GrapplingHookSkill_JoypadAirSkill_Mark",
               "maxValue": 5.0,
               "minValue": 0.0,
-              "CBOMLBFIPJM": 1.0,
-              "doOffStage": true
+              "useLimitRange": true,
+              "value": 1.0
             }
           ],
-          "elementDurability": 100.0,
-          "modifierName": "",
+          "onRemoved": [
+            {
+              "$type": "AddGlobalValue",
+              "doOffStage": true,
+              "key": "_ABILITY_GrapplingHookSkill_JoypadAirSkill_Mark",
+              "maxValue": 5.0,
+              "minValue": 0.0,
+              "useLimitRange": true,
+              "value": -1.0
+            }
+          ],
           "AIHNJLDFEGJ": 0.0
         },
         "UNIQUE_NodKraiTour_GrapplingHookSkill_PreSkill": {
+          "elementDurability": 100.0,
+          "isUnique": true,
+          "modifierName": "",
           "onAdded": [
             {
               "$type": "AttachModifier",
@@ -1021,17 +1124,56 @@
           "properties": {
             "Actor_EndureDelta": 0.0
           },
-          "elementDurability": 100.0,
-          "modifierName": "",
-          "isUnique": true,
           "AIHNJLDFEGJ": 0.0
         },
         "RushMoveOnGround": {
           "duration": 0.06,
+          "elementDurability": 100.0,
+          "modifierName": "",
+          "onAdded": [
+            {
+              "$type": "Predicated",
+              "successActions": [
+                {
+                  "$type": "RemoveVelocityForce",
+                  "forces": [
+                    "RushMoveType",
+                    "InertiaType"
+                  ]
+                },
+                {
+                  "$type": "FixedAvatarRushMove",
+                  "animatorStateIDs": [
+                    "ActivitySkill_GrapplingHook"
+                  ],
+                  "isInAir": true,
+                  "maxRange": 2.0,
+                  "overrideMoveCollider": "",
+                  "timeRange": 0.05,
+                  "toPos": {
+                    "$type": "ConfigBornBySelf",
+                    "offset": {
+                      "x": 0.0,
+                      "y": 0.5,
+                      "z": 0.0
+                    },
+                    "useRotation": true
+                  }
+                }
+              ],
+              "targetPredicates": [
+                {
+                  "$type": "ByTargetAltitude",
+                  "logic": "LesserOrEqual",
+                  "value": 0.5
+                }
+              ]
+            }
+          ],
           "onRemoved": [
             {
               "$type": "RemoveVelocityForce",
-              "HALNPNMJJAN": [
+              "forces": [
                 "RushMoveType",
                 "InertiaType"
               ]
@@ -1041,113 +1183,57 @@
               "key": "Avatar_HookVisible",
               "maxValue": 0.0,
               "minValue": 0.0,
-              "CBOMLBFIPJM": 1.0
+              "value": 1.0
             },
             {
               "$type": "SetGlobalValue",
               "key": "_ABILITY_GrapplingHookSkill_Step",
-              "minValue": 0.0,
               "maxValue": 0.0,
-              "CBOMLBFIPJM": 2.0,
+              "minValue": 0.0,
               "predicates": [
                 {
-                  "$type": "EOFDCELPGFO",
-                  "CBOMLBFIPJM": 1.0,
-                  "key": "_ABILITY_GrapplingHookSkill_Step"
-                }
-              ]
-            }
-          ],
-          "onAdded": [
-            {
-              "$type": "Predicated",
-              "successActions": [
-                {
-                  "$type": "RemoveVelocityForce",
-                  "HALNPNMJJAN": [
-                    "RushMoveType",
-                    "InertiaType"
-                  ]
-                },
-                {
-                  "$type": "FixedAvatarRushMove",
-                  "toPos": {
-                    "$type": "NABPLNFPHCK",
-                    "useRotation": true,
-                    "offset": {
-                      "x": 0.0,
-                      "z": 0.0,
-                      "y": 0.5
-                    }
-                  },
-                  "overrideMoveCollider": "",
-                  "maxRange": 2.0,
-                  "timeRange": 0.05,
-                  "animatorStateIDs": [
-                    "ActivitySkill_GrapplingHook"
-                  ],
-                  "isInAir": true
+                  "$type": "ByTargetGlobalValue",
+                  "key": "_ABILITY_GrapplingHookSkill_Step",
+                  "value": 1.0
                 }
               ],
-              "targetPredicates": [
-                {
-                  "$type": "AKINJGNEPNO",
-                  "CBOMLBFIPJM": 0.5,
-                  "logic": "LesserOrEqual"
-                }
-              ]
+              "value": 2.0
             }
           ],
           "properties": {
             "Actor_EndureDelta": 0.0
           },
-          "elementDurability": 100.0,
-          "modifierName": "",
           "AIHNJLDFEGJ": 0.0
         },
         "UNIQUE_NodKraiTour_GrapplingHookSkill_ThrowHook": {
-          "onAdded": [
-            {
-              "$type": "TriggerAudio",
-              "operation": {
-                "$type": "KLKMGHDGPIK",
-                "operation": {
-                  "text": "Play_Sfx_Char_ActivitySkill_CustomSkill01"
-                }
-              },
-              "BDPFBBFKKAH": true
-            }
-          ],
-          "properties": {
-            "Actor_EndureDelta": 0.0
-          },
           "elementDurability": 100.0,
+          "isUnique": true,
           "modifierMixins": [
             {
               "$type": "ThrowGrapplingHookMixin",
-              "PCMNPIJIDCO": [
+              "effectPattern": "Eff_SceneObj_WhiteMoonSpirit_01_Line",
+              "onHookReached": [
                 {
                   "$type": "SetGlobalValue",
                   "key": "_ABILITY_GrapplingHookSkill_Step",
-                  "minValue": 0.0,
                   "maxValue": 0.0,
-                  "CBOMLBFIPJM": 3.0,
+                  "minValue": 0.0,
                   "predicates": [
                     {
-                      "$type": "EOFDCELPGFO",
-                      "CBOMLBFIPJM": 2.0,
-                      "key": "_ABILITY_GrapplingHookSkill_Step"
+                      "$type": "ByTargetGlobalValue",
+                      "key": "_ABILITY_GrapplingHookSkill_Step",
+                      "value": 2.0
                     }
-                  ]
+                  ],
+                  "value": 3.0
                 },
                 {
                   "$type": "AttachModifier",
                   "modifierName": "HookEffectTrigger"
                 }
               ],
-              "ENPMFMNADIO": true,
               "positionKey": "_GrapplingHook_TargetPos",
-              "effectPattern": "Eff_SceneObj_WhiteMoonSpirit_01_Line",
+              "ENPMFMNADIO": true,
               "KPBPPPJMKNE": "NodKrai_MainTag"
             },
             {
@@ -1155,95 +1241,59 @@
             }
           ],
           "modifierName": "",
-          "isUnique": true,
+          "onAdded": [
+            {
+              "$type": "TriggerAudio",
+              "muteRemoteAction": true,
+              "operation": {
+                "$type": "ConfigAudioEventOp",
+                "operation": {
+                  "text": "Play_Sfx_Char_ActivitySkill_CustomSkill01"
+                }
+              }
+            }
+          ],
+          "properties": {
+            "Actor_EndureDelta": 0.0
+          },
           "AIHNJLDFEGJ": 0.0
         },
         "UNIQUE_NodKraiTour_GrapplingHookSkill_SkillStart": {
-          "onAdded": [
-            {
-              "$type": "GrapplingHookRushMove",
-              "JLBCKKLJKEF": 20.0,
-              "CIFADBDOAFI": 15.0,
-              "toPos": {
-                "$type": "LKIBKKFEOLJ",
-                "positionKey": "_GrapplingHook_TargetPos",
-                "directionKey": "",
-                "offset": {
-                  "x": 0.0,
-                  "z": 0.0,
-                  "y": -0.5
-                },
-                "direction": {
-                  "$type": "KMEAEFMPHKB",
-                  "directionKey": "_GrapplingHook_TargetDir"
-                }
-              },
-              "animatorStateIDs": [
-                "ActivitySkill_GrapplingHook",
-                "Fly",
-                "Standby",
-                "Run"
-              ],
-              "NFHNGOHFHHB": 10.0,
-              "isInAir": true,
-              "predicates": [
-                {
-                  "$type": "EOFDCELPGFO",
-                  "CBOMLBFIPJM": 3.0,
-                  "key": "_ABILITY_GrapplingHookSkill_Step"
-                }
-              ]
-            },
-            {
-              "$type": "AttachModifier",
-              "modifierName": "Camera_Blur",
-              "predicates": [
-                {
-                  "$type": "EOFDCELPGFO",
-                  "CBOMLBFIPJM": 3.0,
-                  "key": "_ABILITY_GrapplingHookSkill_Step"
-                }
-              ]
-            },
-            {
-              "$type": "DebugLog",
-              "content": "!!!!!!!!!!!Camera_Blur!!!!!!!!!!"
-            }
-          ],
           "elementDurability": 100.0,
+          "isUnique": true,
           "modifierMixins": [
             {
               "$type": "GrapplingHookMoveMixin",
-              "AHLPACEPFBM": 1.0,
-              "JOENEEBFPPJ": 0.5,
-              "OCIEFJMDFEO": 5.0,
-              "LNAEPNKNKBG": [
+              "arriveDistance": 0.5,
+              "onArrived": [
                 {
                   "$type": "SetGlobalValue",
                   "key": "_ABILITY_GrapplingHookSkill_Step",
-                  "minValue": 0.0,
                   "maxValue": 0.0,
-                  "CBOMLBFIPJM": 4.0,
+                  "minValue": 0.0,
                   "predicates": [
                     {
-                      "$type": "EOFDCELPGFO",
-                      "CBOMLBFIPJM": 3.0,
-                      "key": "_ABILITY_GrapplingHookSkill_Step"
+                      "$type": "ByTargetGlobalValue",
+                      "key": "_ABILITY_GrapplingHookSkill_Step",
+                      "value": 3.0
                     }
-                  ]
+                  ],
+                  "value": 4.0
                 },
                 {
                   "$type": "ApplyModifier",
                   "modifierName": "GrapplingHook_ArrivedRushMove"
                 }
-              ]
+              ],
+              "upForceTime": 1.0,
+              "upForceValue": 5.0
             },
             {
               "$type": "ModifyCameraMaxDistanceMixin",
-              "resetToMaxOnStart": true,
               "lerpInDuration": 0.2,
+              "lerpOutDuration": 0.7,
               "maxDistance": 10.0,
-              "lerpOutDuration": 0.7
+              "resetToMaxOnStart": true
             },
             {
               "$type": "TriggerPostProcessEffectMixin",
@@ -1252,26 +1302,83 @@
             }
           ],
           "modifierName": "",
-          "isUnique": true,
+          "onAdded": [
+            {
+              "$type": "GrapplingHookRushMove",
+              "accSpeed": 10.0,
+              "animatorStateIDs": [
+                "ActivitySkill_GrapplingHook",
+                "Fly",
+                "Standby",
+                "Run"
+              ],
+              "isInAir": true,
+              "maxSpeed": 20.0,
+              "predicates": [
+                {
+                  "$type": "ByTargetGlobalValue",
+                  "key": "_ABILITY_GrapplingHookSkill_Step",
+                  "value": 3.0
+                }
+              ],
+              "speed": 15.0,
+              "toPos": {
+                "$type": "ConfigBornByGlobalValue",
+                "direction": {
+                  "$type": "ConfigDirectionByGlobalValue",
+                  "directionKey": "_GrapplingHook_TargetDir"
+                },
+                "directionKey": "",
+                "offset": {
+                  "x": 0.0,
+                  "y": -0.5,
+                  "z": 0.0
+                },
+                "positionKey": "_GrapplingHook_TargetPos"
+              }
+            },
+            {
+              "$type": "AttachModifier",
+              "modifierName": "Camera_Blur",
+              "predicates": [
+                {
+                  "$type": "ByTargetGlobalValue",
+                  "key": "_ABILITY_GrapplingHookSkill_Step",
+                  "value": 3.0
+                }
+              ]
+            },
+            {
+              "$type": "DebugLog",
+              "content": "!!!!!!!!!!!Camera_Blur!!!!!!!!!!"
+            }
+          ],
           "AIHNJLDFEGJ": 0.0
         },
         "UNIQUE_NodKraiTour_GrapplingHookSkill_HookHideHanlde": {
-          "onRemoved": [
+          "elementDurability": 100.0,
+          "isUnique": true,
+          "modifierMixins": [
             {
-              "$type": "SetGlobalValue",
-              "key": "Avatar_HookVisible",
-              "minValue": 0.0,
-              "maxValue": 0.0,
-              "CBOMLBFIPJM": 0.0,
-              "doOffStage": true
-            },
-            {
-              "$type": "TriggerSetVisible",
-              "visible": true,
-              "canBeHandledOnRecover": true,
-              "doOffStage": true
+              "$type": "DoActionOnGlobalValueChangeMixin",
+              "actions": [
+                {
+                  "$type": "TriggerSetVisible",
+                  "predicates": [
+                    {
+                      "$type": "ByTargetGlobalValue",
+                      "compareType": "MoreThanAndEqual",
+                      "key": "Avatar_HookVisible",
+                      "value": 1.0
+                    }
+                  ]
+                }
+              ],
+              "globalValueKey": "Avatar_HookVisible",
+              "NBOEEIHGCPD": true
             }
           ],
+          "modifierName": "",
           "onAdded": [
             {
               "$type": "TriggerSetVisible"
@@ -1282,33 +1389,32 @@
               "target": "Team"
             }
           ],
-          "elementDurability": 100.0,
-          "modifierMixins": [
+          "onRemoved": [
             {
-              "$type": "DoActionOnGlobalValueChangeMixin",
-              "actions": [
-                {
-                  "$type": "TriggerSetVisible",
-                  "predicates": [
-                    {
-                      "$type": "EOFDCELPGFO",
-                      "CBOMLBFIPJM": 1.0,
-                      "compareType": "MoreThanAndEqual",
-                      "key": "Avatar_HookVisible"
-                    }
-                  ]
-                }
-              ],
-              "NBOEEIHGCPD": true,
-              "globalValueKey": "Avatar_HookVisible"
+              "$type": "SetGlobalValue",
+              "doOffStage": true,
+              "key": "Avatar_HookVisible",
+              "maxValue": 0.0,
+              "minValue": 0.0,
+              "value": 0.0
+            },
+            {
+              "$type": "TriggerSetVisible",
+              "canBeHandledOnRecover": true,
+              "doOffStage": true,
+              "visible": true
             }
           ],
-          "modifierName": "",
-          "isUnique": true,
           "AIHNJLDFEGJ": 0.0
         },
         "NotifySpirit_Control": {
-          "thinkInterval": 0.2,
+          "elementDurability": 100.0,
+          "modifierName": "",
+          "onAdded": [
+            {
+              "$type": "TriggerThinkInterval"
+            }
+          ],
           "onRemoved": [
             {
               "$type": "AttachModifier",
@@ -1319,13 +1425,6 @@
               }
             }
           ],
-          "onAdded": [
-            {
-              "$type": "TriggerThinkInterval"
-            }
-          ],
-          "elementDurability": 100.0,
-          "modifierName": "",
           "onThinkInterval": [
             {
               "$type": "AttachModifier",
@@ -1336,87 +1435,45 @@
               }
             }
           ],
+          "thinkInterval": 0.2,
           "AIHNJLDFEGJ": 0.0
         },
         "NotifySpirit_Invisible": {
           "duration": 1.0,
+          "elementDurability": 100.0,
+          "modifierName": "",
           "onAdded": [
             {
               "$type": "SetGlobalValueV2",
-              "minValue": 0.0,
               "key": "_Ability_MoonSpirit_Invisible",
               "maxValue": 0.0,
-              "CBOMLBFIPJM": 2.0
+              "minValue": 0.0,
+              "value": 2.0
             }
           ],
           "stacking": "Multiple",
-          "elementDurability": 100.0,
-          "modifierName": "",
           "AIHNJLDFEGJ": 0.0
         },
         "NotifySpirit_Visible": {
           "duration": 1.0,
+          "elementDurability": 100.0,
+          "modifierName": "",
           "onAdded": [
             {
               "$type": "SetGlobalValueV2",
-              "minValue": 0.0,
               "key": "_Ability_MoonSpirit_Invisible",
               "maxValue": 0.0,
-              "CBOMLBFIPJM": 0.0
+              "minValue": 0.0,
+              "value": 0.0
             }
           ],
           "stacking": "Multiple",
-          "elementDurability": 100.0,
-          "modifierName": "",
           "AIHNJLDFEGJ": 0.0
         },
         "UNIQUE_NodKraiTour_GrapplingHookSkill_HookEffect": {
-          "onRemoved": [
-            {
-              "$type": "SetVelocityIgnoreAirGY",
-              "doOffStage": true
-            },
-            {
-              "$type": "RemoveVelocityForce",
-              "HALNPNMJJAN": [
-                "RushMoveType",
-                "InertiaType"
-              ],
-              "doOffStage": true
-            },
-            {
-              "$type": "FireEffect",
-              "effectPattern": "Eff_SceneObj_Grapple_01_MoveOut",
-              "scale": 1.0,
-              "ILLLPEOODKP": "",
-              "effectTempleteID": -1.0
-            },
-            {
-              "$type": "ApplyModifier",
-              "modifierName": "GrapplingHook_SkillCharge",
-              "doOffStage": true
-            },
-            {
-              "$type": "KillGadgetV2",
-              "gadgetInfo": {
-                "configID": 70294065
-              },
-              "doOffStage": true
-            },
-            {
-              "$type": "SetGlobalValueV2",
-              "minValue": 0.0,
-              "key": "_Ability_Maglev_InTSkill",
-              "maxValue": 0.0,
-              "CBOMLBFIPJM": 0.0,
-              "target": "Team",
-              "doOffStage": true
-            },
-            {
-              "$type": "DebugLog",
-              "content": "Maglev GrapplingHookSkill_HookEffect: onRemoved"
-            }
-          ],
+          "elementDurability": 100.0,
+          "isUnique": true,
+          "modifierName": "",
           "onAdded": [
             {
               "$type": "SetVelocityIgnoreAirGY",
@@ -1428,68 +1485,97 @@
             },
             {
               "$type": "AttachModifier",
-              "modifierName": "UNIQUE_NodKraiTour_GrapplingHookSkill_HookHideHanlde",
-              "doOffStage": true
+              "doOffStage": true,
+              "modifierName": "UNIQUE_NodKraiTour_GrapplingHookSkill_HookHideHanlde"
             },
             {
               "$type": "CreateGadget",
-              "gadgetID": 70294065,
-              "campID": 1001,
-              "campTargetType": "Self",
               "born": {
-                "$type": "BOJMMDAIGMM",
+                "$type": "ConfigBornByTarget",
                 "offset": {
                   "x": 0.0,
-                  "z": 0.0,
-                  "y": 0.0
+                  "y": 0.0,
+                  "z": 0.0
                 }
               },
+              "campID": 1001,
+              "campTargetType": "Self",
+              "gadgetID": 70294065,
               "target": "CurLocalAvatar"
+            }
+          ],
+          "onRemoved": [
+            {
+              "$type": "SetVelocityIgnoreAirGY",
+              "doOffStage": true
+            },
+            {
+              "$type": "RemoveVelocityForce",
+              "doOffStage": true,
+              "forces": [
+                "RushMoveType",
+                "InertiaType"
+              ]
+            },
+            {
+              "$type": "FireEffect",
+              "effectPattern": "Eff_SceneObj_Grapple_01_MoveOut",
+              "effectTempleteID": -1.0,
+              "scale": 1.0,
+              "ILLLPEOODKP": ""
+            },
+            {
+              "$type": "ApplyModifier",
+              "doOffStage": true,
+              "modifierName": "GrapplingHook_SkillCharge"
+            },
+            {
+              "$type": "KillGadgetV2",
+              "doOffStage": true,
+              "gadgetInfo": {
+                "configID": 70294065
+              }
+            },
+            {
+              "$type": "SetGlobalValueV2",
+              "doOffStage": true,
+              "key": "_Ability_Maglev_InTSkill",
+              "maxValue": 0.0,
+              "minValue": 0.0,
+              "target": "Team",
+              "value": 0.0
+            },
+            {
+              "$type": "DebugLog",
+              "content": "Maglev GrapplingHookSkill_HookEffect: onRemoved"
             }
           ],
           "properties": {
             "Actor_AddGravityScale": -2.0
           },
-          "elementDurability": 100.0,
-          "modifierName": "",
-          "isUnique": true,
           "AIHNJLDFEGJ": 0.0
         },
         "GrapplingHook_SkillCharge": {
           "duration": 1.0,
+          "elementDurability": 100.0,
+          "modifierName": "",
           "onRemoved": [
             {
               "$type": "SetGlobalValue",
-              "useLimitRange": true,
+              "doOffStage": true,
               "key": "AVATAR_GrapplingHookSkill",
-              "minValue": 0.0,
               "maxValue": 100.0,
-              "CBOMLBFIPJM": 100.0,
-              "doOffStage": true
+              "minValue": 0.0,
+              "useLimitRange": true,
+              "value": 100.0
             }
           ],
-          "elementDurability": 100.0,
-          "modifierName": "",
           "AIHNJLDFEGJ": 0.0
         },
         "GrapplingHook_ArrivedRushMove": {
           "duration": 0.2,
-          "onRemoved": [
-            {
-              "$type": "SetVelocityIgnoreAirGY"
-            },
-            {
-              "$type": "SetAnimatorTrigger",
-              "triggerID": "GrapplingHook_Drop"
-            },
-            {
-              "$type": "SetGlobalValue",
-              "key": "_ABILITY_GrapplingHookSkill_Step",
-              "minValue": 0.0,
-              "maxValue": 0.0,
-              "CBOMLBFIPJM": 0.0
-            }
-          ],
+          "elementDurability": 100.0,
+          "modifierName": "",
           "onAdded": [
             {
               "$type": "AvatarExitCameraShot",
@@ -1501,31 +1587,31 @@
             },
             {
               "$type": "RemoveVelocityForce",
-              "HALNPNMJJAN": [
+              "forces": [
                 "InertiaType",
                 "GrapplingHookMoveType"
               ]
             },
             {
               "$type": "FixedAvatarRushMove",
-              "toPos": {
-                "$type": "NABPLNFPHCK",
-                "useRotation": true,
-                "offset": {
-                  "x": 0.0,
-                  "z": 0.0,
-                  "y": 1.0
-                }
-              },
-              "overrideMoveCollider": "",
-              "maxRange": 0.5,
-              "timeRange": 0.05,
               "animatorStateIDs": [
                 "ActivitySkill_GrapplingHook",
                 "DropDown"
               ],
               "isInAir": true,
-              "target": "CurLocalAvatar"
+              "maxRange": 0.5,
+              "overrideMoveCollider": "",
+              "target": "CurLocalAvatar",
+              "timeRange": 0.05,
+              "toPos": {
+                "$type": "ConfigBornBySelf",
+                "offset": {
+                  "x": 0.0,
+                  "y": 1.0,
+                  "z": 0.0
+                },
+                "useRotation": true
+              }
             },
             {
               "$type": "ApplyModifier",
@@ -1536,11 +1622,25 @@
               }
             }
           ],
+          "onRemoved": [
+            {
+              "$type": "SetVelocityIgnoreAirGY"
+            },
+            {
+              "$type": "SetAnimatorTrigger",
+              "triggerID": "GrapplingHook_Drop"
+            },
+            {
+              "$type": "SetGlobalValue",
+              "key": "_ABILITY_GrapplingHookSkill_Step",
+              "maxValue": 0.0,
+              "minValue": 0.0,
+              "value": 0.0
+            }
+          ],
           "properties": {
             "Actor_AddGravityScale": -2.0
           },
-          "elementDurability": 100.0,
-          "modifierName": "",
           "AIHNJLDFEGJ": 0.0
         },
         "Camera_Blur": {
@@ -1549,9 +1649,9 @@
           "modifierMixins": [
             {
               "$type": "CameraBlurMixin",
-              "NFBFBAJDMPJ": {
-                "LCOPJHPGJCO": 0.1,
-                "LFMGJKCOGPI": 1.0
+              "cameraRadialBlur": {
+                "fadeTime": 0.1,
+                "power": 1.0
               }
             }
           ],
@@ -1561,23 +1661,25 @@
         "UNIQUE_NodKraiTour_StreamingOptimization": {
           "duration": 4.0,
           "elementDurability": 100.0,
+          "isUnique": true,
           "modifierMixins": [
             {
               "$type": "StreamingModifierMixin"
             }
           ],
           "modifierName": "",
-          "isUnique": true,
           "AIHNJLDFEGJ": 0.0
         },
         "GrapplingHook_Init": {
+          "elementDurability": 100.0,
+          "modifierName": "",
           "onAdded": [
             {
               "$type": "SetGlobalValue",
               "key": "_ABILITY_GrapplingHookSkill_Step",
-              "minValue": 0.0,
               "maxValue": 0.0,
-              "CBOMLBFIPJM": 0.0
+              "minValue": 0.0,
+              "value": 0.0
             },
             {
               "$type": "SetAnimatorTrigger",
@@ -1589,7 +1691,7 @@
             },
             {
               "$type": "RemoveVelocityForce",
-              "HALNPNMJJAN": [
+              "forces": [
                 "RushMoveType",
                 "InertiaType",
                 "FixedRushMoveType",
@@ -1599,89 +1701,87 @@
             }
           ],
           "stacking": "MultipleRefresh",
-          "GMGIAGMCGLF": {
-            "PFEHHABPHDB": "",
-            "KAANKELFPLA": 1.0
+          "stackingOption": {
+            "abilitySpecialName": "",
+            "maxModifierNumForMultipleType": 1.0
           },
-          "elementDurability": 100.0,
-          "modifierName": "",
           "AIHNJLDFEGJ": 0.0
         },
         "GrapplingHook_Scan": {
+          "elementDurability": 100.0,
+          "modifierName": "",
+          "onAdded": [
+            {
+              "$type": "SetGlobalValue",
+              "key": "GV_NK_MoonFinger_Target",
+              "maxValue": 0.0,
+              "minValue": 0.0,
+              "value": 1.0
+            }
+          ],
           "onRemoved": [
             {
               "$type": "SetGlobalValue",
               "key": "GV_NK_MoonFinger_Target",
-              "minValue": 0.0,
               "maxValue": 0.0,
-              "CBOMLBFIPJM": 0.0
+              "minValue": 0.0,
+              "value": 0.0
             }
           ],
-          "onAdded": [
-            {
-              "$type": "SetGlobalValue",
-              "key": "GV_NK_MoonFinger_Target",
-              "minValue": 0.0,
-              "maxValue": 0.0,
-              "CBOMLBFIPJM": 1.0
-            }
-          ],
-          "elementDurability": 100.0,
-          "modifierName": "",
           "AIHNJLDFEGJ": 0.0
         },
         "GrapplingHook_Arrive": {
           "duration": 5.0,
+          "elementDurability": 100.0,
+          "modifierName": "",
           "onAdded": [
             {
               "$type": "ChangeGadgetState",
-              "MBGFJOOIMOK": [
+              "configIdArray": [
                 73081006,
                 73081009
               ],
-              "ANIHOKMEKHK": 201
+              "state": 201
             }
           ],
-          "elementDurability": 100.0,
-          "modifierName": "",
           "AIHNJLDFEGJ": 0.0
         },
         "HookEffectTrigger": {
+          "elementDurability": 100.0,
+          "modifierName": "",
           "onAdded": [
             {
               "$type": "AttachEffect",
-              "ILLLPEOODKP": "",
               "born": {
-                "$type": "LKIBKKFEOLJ",
-                "positionKey": "_Ability_Maglev_TargetPos",
-                "directionKey": ""
+                "$type": "ConfigBornByGlobalValue",
+                "directionKey": "",
+                "positionKey": "_Ability_Maglev_TargetPos"
               },
-              "scale": 1.0,
               "effectPattern": "Eff_SceneObj_WhiteMoonSpirit_01_Hook",
               "effectTempleteID": -1.0,
-              "BDPFBBFKKAH": true
+              "muteRemoteAction": true,
+              "scale": 1.0,
+              "ILLLPEOODKP": ""
             },
             {
               "$type": "SendEffectTrigger",
-              "parameter": "Get",
+              "attachPoint": "",
               "effectPattern": "Eff_SceneObj_WhiteMoonSpirit_01_Line",
-              "attachPoint": ""
+              "parameter": "Get"
             }
           ],
-          "elementDurability": 100.0,
-          "modifierName": "",
           "AIHNJLDFEGJ": 0.0
         }
       },
       "onAbilityStart": [
         {
           "$type": "SetGlobalValueV2",
-          "minValue": 0.0,
+          "doOffStage": true,
           "key": "_Ability_Maglev_InTSkill",
           "maxValue": 0.0,
-          "CBOMLBFIPJM": 1.0,
+          "minValue": 0.0,
           "target": "Team",
-          "doOffStage": true
+          "value": 1.0
         },
         {
           "$type": "ClearGlobalPos",
@@ -1689,6 +1789,12 @@
         },
         {
           "$type": "Predicated",
+          "otherTargets": {
+            "$type": "IKKPJCBJHAP",
+            "tag": "NodKrai_MainTag",
+            "topLimit": 1,
+            "MBDANNCNLFN": "NodKrai_Maglev_MoonFinger_Activity"
+          },
           "successActions": [
             {
               "$type": "DebugLog",
@@ -1696,36 +1802,36 @@
             },
             {
               "$type": "SetGlobalPos",
-              "setTarget": false,
-              "key": "_GrapplingHook_TargetPos",
               "born": {
-                "$type": "BOJMMDAIGMM"
+                "$type": "ConfigBornByTarget"
               },
+              "key": "_GrapplingHook_TargetPos",
+              "setTarget": false,
               "target": "Target"
             },
             {
               "$type": "SetGlobalDir",
-              "key": "_GrapplingHook_TargetDir",
               "born": {
-                "$type": "NABPLNFPHCK",
-                "useRotation": true,
+                "$type": "ConfigBornBySelf",
                 "direction": {
-                  "$type": "ELLFELLPBME",
-                  "KFAOLPBMANI": ""
-                }
+                  "$type": "ConfigDirectionByLookAtEntity",
+                  "namedTransform": ""
+                },
+                "useRotation": true
               },
+              "key": "_GrapplingHook_TargetDir",
               "setTarget": false,
               "target": "Target"
             },
             {
               "$type": "SetSelfAttackTarget",
-              "turnToTargetImmediately": true,
-              "target": "Target"
+              "target": "Target",
+              "turnToTargetImmediately": true
             },
             {
               "$type": "SetTargetToTargetKey",
-              "targetKey": "_GrapplingHook_Target",
-              "target": "Target"
+              "target": "Target",
+              "targetKey": "_GrapplingHook_Target"
             },
             {
               "$type": "EntityDoSkill",
@@ -1735,13 +1841,21 @@
               "$type": "EntityDoSkill",
               "skillID": 20043
             }
-          ],
-          "otherTargets": {
-            "$type": "IKKPJCBJHAP",
-            "tag": "NodKrai_MainTag",
-            "MBDANNCNLFN": "NodKrai_Maglev_MoonFinger_Activity",
-            "topLimit": 1
-          }
+          ]
+        }
+      ],
+      "onAdded": [
+        {
+          "$type": "SetGlobalValue",
+          "doOffStage": true,
+          "key": "_ABILITY_GrapplingHookSkill_Step",
+          "maxValue": 0.0,
+          "minValue": 0.0,
+          "value": 0.0
+        },
+        {
+          "$type": "ApplyModifier",
+          "modifierName": "UNIQUE_NodKraiTour_GrapplingHookSkill_RecoverHandler"
         }
       ],
       "onKill": [
@@ -1749,128 +1863,17 @@
           "$type": "ApplyModifier",
           "modifierName": "GrapplingHook_Init"
         }
-      ],
-      "abilityMixins": [
-        {
-          "$type": "CheckSubTagScanEntityMixin",
-          "MBDANNCNLFN": "NodKrai_Maglev_MoonFinger_Activity",
-          "ILOOHKBIBJM": [
-            {
-              "$type": "SetGlobalValueV2",
-              "minValue": 0.0,
-              "key": "GV_NK_MagCoreSkill_Target",
-              "maxValue": 0.0,
-              "CBOMLBFIPJM": 5.0,
-              "target": "Team",
-              "doOffStage": true
-            },
-            {
-              "$type": "ApplyModifier",
-              "modifierName": "GrapplingHook_Scan",
-              "target": "Target",
-              "doOffStage": true
-            }
-          ],
-          "AKFANJPEJNN": [
-            {
-              "$type": "RemoveAvatarSkillInfo",
-              "skillID": 20043,
-              "doOffStage": true
-            },
-            {
-              "$type": "RemoveAvatarSkillInfo",
-              "skillID": 20044,
-              "doOffStage": true
-            },
-            {
-              "$type": "RemoveModifier",
-              "modifierName": "Hook_SwitchAirSkill",
-              "doOffStage": true
-            }
-          ],
-          "activateSkillKey": "AVATAR_MagLev",
-          "IMEDGAOLLEM": [
-            {
-              "$type": "SetGlobalValueV2",
-              "minValue": 0.0,
-              "key": "GV_NK_MagCoreSkill_Target",
-              "maxValue": 0.0,
-              "CBOMLBFIPJM": 0.0,
-              "target": "Team",
-              "doOffStage": true
-            },
-            {
-              "$type": "RemoveModifier",
-              "modifierName": "GrapplingHook_Scan",
-              "target": "Target",
-              "doOffStage": true
-            }
-          ],
-          "HDEOAHBHOEC": [
-            {
-              "$type": "AddAvatarSkillInfo",
-              "skillID": 20043,
-              "doOffStage": true
-            },
-            {
-              "$type": "AddAvatarSkillInfo",
-              "skillID": 20044,
-              "doOffStage": true
-            },
-            {
-              "$type": "ApplyModifier",
-              "modifierName": "Hook_SwitchAirSkill",
-              "doOffStage": true
-            }
-          ],
-          "tag": "NodKrai_MainTag"
-        },
-        {
-          "$type": "AttachModifierToSelfGlobalValueMixin",
-          "modifierNameSteps": [
-            "Blank",
-            "UNIQUE_NodKraiTour_GrapplingHookSkill_HookEffect"
-          ],
-          "valueSteps": [
-            -0.5,
-            0.5,
-            3.9
-          ],
-          "globalValueKey": "_ABILITY_GrapplingHookSkill_Step",
-          "defaultGlobalValueOnCreate": 0.0
-        },
-        {
-          "$type": "AttachToStateIDMixin",
-          "LJPPDIGCJMJ": "",
-          "stateIDs": [
-            "ActivitySkill_GrapplingHook"
-          ],
-          "modifierName": "UNIQUE_NodKraiTour_GrapplingHookSkill_SkillHandler"
-        }
-      ],
-      "abilityName": "DynamicAbility_Avatar_6_0_MoonFinger",
-      "isDynamicAbility": true,
-      "onAdded": [
-        {
-          "$type": "SetGlobalValue",
-          "key": "_ABILITY_GrapplingHookSkill_Step",
-          "minValue": 0.0,
-          "maxValue": 0.0,
-          "CBOMLBFIPJM": 0.0,
-          "doOffStage": true
-        },
-        {
-          "$type": "ApplyModifier",
-          "modifierName": "UNIQUE_NodKraiTour_GrapplingHookSkill_RecoverHandler"
-        }
       ]
     }
   },
   {
     "Default": {
+      "abilityName": "DynamicAbility_TEAM_6_0_NodKraiTourParkour_Camera",
+      "isDynamicAbility": true,
       "modifiers": {
         "UNIQUE_NodKraiTourParkour_TeamCameraHandler": {
           "elementDurability": 100.0,
+          "isUnique": true,
           "modifierMixins": [
             {
               "$type": "CurLocalAvatarMixinV2",
@@ -1878,7 +1881,6 @@
             }
           ],
           "modifierName": "",
-          "isUnique": true,
           "AIHNJLDFEGJ": 0.0
         },
         "DynamicAbility_Avatar_6_0_Camera": {
@@ -1888,23 +1890,23 @@
               "$type": "SpawnCameraStateMixin",
               "DGPDJMGNEHP": {
                 "duration": 0.15,
-                "DAGICMOAFJP": 2,
-                "AKLMKDHGNAD": 2
+                "AKLMKDHGNAD": 2,
+                "DAGICMOAFJP": 2
               },
               "AFDENKPAECI": {
                 "$type": "LGCDIODAJOK",
+                "fov": 45.0,
+                "LLMLMENGFIP": -35.0,
+                "BABKMAAEDIA": 2.0,
+                "POIDNBJALBF": 4.418,
+                "IDIKEPGBBOM": 5.0,
                 "EKDCFEFJCBE": 55.0,
                 "EHGAEKEFHMK": true,
-                "IDIKEPGBBOM": 5.0,
-                "fov": 45.0,
+                "NFMCBONAMOF": "CameraLook",
                 "GJBAJGLBEBK": {
                   "y": 3.0,
                   "z": -15.0
-                },
-                "POIDNBJALBF": 4.418,
-                "LLMLMENGFIP": -35.0,
-                "NFMCBONAMOF": "CameraLook",
-                "BABKMAAEDIA": 2.0
+                }
               }
             }
           ],
@@ -1912,8 +1914,6 @@
           "AIHNJLDFEGJ": 0.0
         }
       },
-      "abilityName": "DynamicAbility_TEAM_6_0_NodKraiTourParkour_Camera",
-      "isDynamicAbility": true,
       "onAdded": [
         {
           "$type": "AttachModifier",
@@ -1924,28 +1924,28 @@
   },
   {
     "Default": {
+      "abilityName": "SceneObj_Area_NodKrai_Property_Ani_Prop_MoonFloor_01",
       "modifiers": {
         "Handler": {
+          "elementDurability": 100.0,
+          "modifierName": "",
           "onAdded": [
             {
               "$type": "AttachEffect",
-              "ILLLPEOODKP": "",
               "born": {
-                "$type": "BGOLIIIHLMO",
+                "$type": "ConfigBornByAttachPoint",
                 "attachPointName": "floor_1",
                 "useRotation": true
               },
-              "scale": 2.0,
               "effectPattern": "Eff_SceneObj_MoonFinger_Platform_01",
-              "effectTempleteID": -1.0
+              "effectTempleteID": -1.0,
+              "scale": 2.0,
+              "ILLLPEOODKP": ""
             }
           ],
-          "elementDurability": 100.0,
-          "modifierName": "",
           "AIHNJLDFEGJ": 0.0
         }
       },
-      "abilityName": "SceneObj_Area_NodKrai_Property_Ani_Prop_MoonFloor_01",
       "onAdded": [
         {
           "$type": "AttachModifier",
@@ -1956,95 +1956,6 @@
   },
   {
     "Default": {
-      "modifiers": {
-        "defaultState": {
-          "onAdded": [
-            {
-              "$type": "SendEffectTrigger",
-              "parameter": "State",
-              "effectPattern": "Eff_SceneObj_Challengestarter_02",
-              "type": "Int",
-              "attachPoint": ""
-            }
-          ],
-          "elementDurability": 100.0,
-          "modifierMixins": [
-            {
-              "$type": "BillboardV2Mixin",
-              "LPGEPABJEHG": true,
-              "FMEEEHPMHDB": {
-                "INJHBCKFHJP": {
-                  "attachPointName": "BillboardAttach",
-                  "EJJGLFHDCCH": 50.0
-                },
-                "JEJAGCKKJAA": {
-                  "prefabName": "",
-                  "iconPath": "ART/UI/Atlas/InteeIcon/UI_NPCTopIcon_Activity_NodKraiTourParkour",
-                  "CPLHKIEMGAD": 42.0
-                }
-              }
-            }
-          ],
-          "modifierName": "",
-          "AIHNJLDFEGJ": 0.0
-        },
-        "activeState": {
-          "onReconnect": [
-            {
-              "$type": "SendEffectTrigger",
-              "parameter": "State",
-              "GGKIEIJLCJJ": 201,
-              "effectPattern": "Eff_SceneObj_Challengestarter_02",
-              "type": "Int",
-              "attachPoint": ""
-            }
-          ],
-          "onAdded": [
-            {
-              "$type": "SendEffectTrigger",
-              "parameter": "State",
-              "GGKIEIJLCJJ": 201,
-              "effectPattern": "Eff_SceneObj_Challengestarter_02",
-              "type": "Int",
-              "attachPoint": ""
-            }
-          ],
-          "elementDurability": 100.0,
-          "modifierName": "",
-          "AIHNJLDFEGJ": 0.0
-        },
-        "AddEffect": {
-          "onAdded": [
-            {
-              "$type": "AttachEffect",
-              "ILLLPEOODKP": "",
-              "born": {
-                "$type": "BGOLIIIHLMO",
-                "attachPointName": "EffectPoint",
-                "useRotation": true
-              },
-              "scale": 1.0,
-              "effectPattern": "Eff_SceneObj_Challengestarter_02",
-              "effectTempleteID": -1.0
-            }
-          ],
-          "elementDurability": 100.0,
-          "modifierName": "",
-          "AIHNJLDFEGJ": 0.0
-        },
-        "ReMove": {
-          "duration": 2.0,
-          "onRemoved": [
-            {
-              "$type": "RemoveModifier",
-              "modifierName": "AddEffect"
-            }
-          ],
-          "elementDurability": 100.0,
-          "modifierName": "",
-          "AIHNJLDFEGJ": 0.0
-        }
-      },
       "abilityMixins": [
         {
           "$type": "AttachToGadgetStateMixin",
@@ -2052,29 +1963,36 @@
         },
         {
           "$type": "AttachToGadgetStateMixin",
-          "modifierName": "activeState",
-          "gadgetState": 201
+          "gadgetState": 201,
+          "modifierName": "activeState"
         },
         {
           "$type": "AttachToGadgetStateMixin",
-          "modifierName": "ReMove",
-          "gadgetState": 202
+          "gadgetState": 202,
+          "modifierName": "ReMove"
         },
         {
           "$type": "WidgetMpSupportMixin",
-          "CMEPEHIJMPL": [
+          "succActions": [
             {
               "$type": "Predicated",
+              "failActions": [
+                {
+                  "$type": "ShowReminder",
+                  "id": 1003360013,
+                  "muteRemoteAction": true
+                }
+              ],
               "successActions": [
                 {
                   "$type": "PushInterActionByConfigPath",
                   "cfgPath": "UI/open_NodKraiParkourChallengePage01",
                   "predicates": [
                     {
-                      "$type": "EOFDCELPGFO",
-                      "CBOMLBFIPJM": 1.0,
+                      "$type": "ByTargetGlobalValue",
                       "key": "SGV_Level",
-                      "target": "Self"
+                      "target": "Self",
+                      "value": 1.0
                     }
                   ]
                 },
@@ -2083,10 +2001,10 @@
                   "cfgPath": "UI/open_NodKraiParkourChallengePage02",
                   "predicates": [
                     {
-                      "$type": "EOFDCELPGFO",
-                      "CBOMLBFIPJM": 2.0,
+                      "$type": "ByTargetGlobalValue",
                       "key": "SGV_Level",
-                      "target": "Self"
+                      "target": "Self",
+                      "value": 2.0
                     }
                   ]
                 },
@@ -2095,10 +2013,10 @@
                   "cfgPath": "UI/open_NodKraiParkourChallengePage03",
                   "predicates": [
                     {
-                      "$type": "EOFDCELPGFO",
-                      "CBOMLBFIPJM": 3.0,
+                      "$type": "ByTargetGlobalValue",
                       "key": "SGV_Level",
-                      "target": "Self"
+                      "target": "Self",
+                      "value": 3.0
                     }
                   ]
                 },
@@ -2107,10 +2025,10 @@
                   "cfgPath": "UI/open_NodKraiParkourChallengePage04",
                   "predicates": [
                     {
-                      "$type": "EOFDCELPGFO",
-                      "CBOMLBFIPJM": 4.0,
+                      "$type": "ByTargetGlobalValue",
                       "key": "SGV_Level",
-                      "target": "Self"
+                      "target": "Self",
+                      "value": 4.0
                     }
                   ]
                 },
@@ -2119,10 +2037,10 @@
                   "cfgPath": "UI/open_NodKraiParkourChallengePage05",
                   "predicates": [
                     {
-                      "$type": "EOFDCELPGFO",
-                      "CBOMLBFIPJM": 5.0,
+                      "$type": "ByTargetGlobalValue",
                       "key": "SGV_Level",
-                      "target": "Self"
+                      "target": "Self",
+                      "value": 5.0
                     }
                   ]
                 },
@@ -2131,19 +2049,12 @@
                   "cfgPath": "UI/open_NodKraiParkourChallengePage06",
                   "predicates": [
                     {
-                      "$type": "EOFDCELPGFO",
-                      "CBOMLBFIPJM": 6.0,
+                      "$type": "ByTargetGlobalValue",
                       "key": "SGV_Level",
-                      "target": "Self"
+                      "target": "Self",
+                      "value": 6.0
                     }
                   ]
-                }
-              ],
-              "failActions": [
-                {
-                  "$type": "ShowReminder",
-                  "id": 1003360013,
-                  "BDPFBBFKKAH": true
                 }
               ],
               "targetPredicates": [
@@ -2157,6 +2068,95 @@
         }
       ],
       "abilityName": "SceneObj_Area_NodKrai_NodKraiTourParkour_Challengestarter_01",
+      "modifiers": {
+        "defaultState": {
+          "elementDurability": 100.0,
+          "modifierMixins": [
+            {
+              "$type": "BillboardV2Mixin",
+              "LPGEPABJEHG": true,
+              "FMEEEHPMHDB": {
+                "INJHBCKFHJP": {
+                  "attachPointName": "BillboardAttach",
+                  "showDistance": 50.0
+                },
+                "JEJAGCKKJAA": {
+                  "iconPath": "ART/UI/Atlas/InteeIcon/UI_NPCTopIcon_Activity_NodKraiTourParkour",
+                  "prefabName": "",
+                  "CPLHKIEMGAD": 42.0
+                }
+              }
+            }
+          ],
+          "modifierName": "",
+          "onAdded": [
+            {
+              "$type": "SendEffectTrigger",
+              "attachPoint": "",
+              "effectPattern": "Eff_SceneObj_Challengestarter_02",
+              "parameter": "State",
+              "type": "Int"
+            }
+          ],
+          "AIHNJLDFEGJ": 0.0
+        },
+        "activeState": {
+          "elementDurability": 100.0,
+          "modifierName": "",
+          "onAdded": [
+            {
+              "$type": "SendEffectTrigger",
+              "attachPoint": "",
+              "effectPattern": "Eff_SceneObj_Challengestarter_02",
+              "parameter": "State",
+              "type": "Int",
+              "value": 201
+            }
+          ],
+          "onReconnect": [
+            {
+              "$type": "SendEffectTrigger",
+              "attachPoint": "",
+              "effectPattern": "Eff_SceneObj_Challengestarter_02",
+              "parameter": "State",
+              "type": "Int",
+              "value": 201
+            }
+          ],
+          "AIHNJLDFEGJ": 0.0
+        },
+        "AddEffect": {
+          "elementDurability": 100.0,
+          "modifierName": "",
+          "onAdded": [
+            {
+              "$type": "AttachEffect",
+              "born": {
+                "$type": "ConfigBornByAttachPoint",
+                "attachPointName": "EffectPoint",
+                "useRotation": true
+              },
+              "effectPattern": "Eff_SceneObj_Challengestarter_02",
+              "effectTempleteID": -1.0,
+              "scale": 1.0,
+              "ILLLPEOODKP": ""
+            }
+          ],
+          "AIHNJLDFEGJ": 0.0
+        },
+        "ReMove": {
+          "duration": 2.0,
+          "elementDurability": 100.0,
+          "modifierName": "",
+          "onRemoved": [
+            {
+              "$type": "RemoveModifier",
+              "modifierName": "AddEffect"
+            }
+          ],
+          "AIHNJLDFEGJ": 0.0
+        }
+      },
       "onAdded": [
         {
           "$type": "AttachModifier",
@@ -2167,50 +2167,79 @@
   },
   {
     "Default": {
+      "abilityName": "SceneObj_Area_NodKrai_NodKraiTourParkou_Drone_01",
       "modifiers": {
         "Handler": {
+          "elementDurability": 100.0,
+          "modifierMixins": [
+            {
+              "$type": "AttachModifierToSelfGlobalValueMixin",
+              "defaultGlobalValueOnCreate": 0.0,
+              "globalValueKey": "_Ability_NodKraiTourParkou_PlayerTouched",
+              "modifierNameSteps": [
+                "PlayerTouched"
+              ],
+              "valueSteps": [
+                0.5,
+                1.5
+              ]
+            },
+            {
+              "$type": "AttachModifierToSelfGlobalValueMixin",
+              "defaultGlobalValueOnCreate": 0.0,
+              "globalValueKey": "_NodKraiDrone_onMonopole",
+              "modifierNameSteps": [
+                "PlayerScaned"
+              ],
+              "valueSteps": [
+                0.5,
+                1.5
+              ]
+            }
+          ],
+          "modifierName": "",
           "onAdded": [
             {
               "$type": "SetGlobalValue",
               "key": "_Ability_Maglev_Obstacle",
-              "minValue": 0.0,
               "maxValue": 0.0,
-              "CBOMLBFIPJM": 1024.0
+              "minValue": 0.0,
+              "value": 1024.0
             },
             {
               "$type": "SetGlobalValue",
               "key": "GV_NodKraiDrone_DontKill",
-              "minValue": 0.0,
               "maxValue": 0.0,
-              "CBOMLBFIPJM": 1.0
+              "minValue": 0.0,
+              "value": 1.0
             },
             {
               "$type": "SetGlobalValue",
               "key": "_Ability_NodKraiTourParkou_Obstacle",
-              "minValue": 0.0,
               "maxValue": 0.0,
-              "CBOMLBFIPJM": 1.0
+              "minValue": 0.0,
+              "value": 1.0
             },
             {
               "$type": "Predicated",
               "successActions": [
                 {
                   "$type": "CreateGadget",
-                  "gadgetID": 73081011,
-                  "campID": 5001,
-                  "campTargetType": "Self",
                   "born": {
-                    "$type": "BGOLIIIHLMO",
+                    "$type": "ConfigBornByAttachPoint",
                     "attachPointName": "FollowNode",
                     "useRotation": true
                   },
-                  "doOffStage": true
+                  "campID": 5001,
+                  "campTargetType": "Self",
+                  "doOffStage": true,
+                  "gadgetID": 73081011
                 }
               ],
               "targetPredicates": [
                 {
                   "$type": "ILMHBGFOAJN",
-                  "MBGFJOOIMOK": [
+                  "configIdArray": [
                     73081004
                   ]
                 }
@@ -2218,83 +2247,54 @@
             },
             {
               "$type": "AttachEffect",
-              "ILLLPEOODKP": "",
+              "effectPattern": "Eff_SceneObj_NodKraiTourParkour_Drone_Light_01",
+              "effectTempleteID": -1.0,
               "isPlatformDependent": true,
               "scale": 1.0,
-              "effectPattern": "Eff_SceneObj_NodKraiTourParkour_Drone_Light_01",
-              "effectTempleteID": -1.0
+              "ILLLPEOODKP": ""
             }
           ],
-          "elementDurability": 100.0,
-          "modifierMixins": [
-            {
-              "$type": "AttachModifierToSelfGlobalValueMixin",
-              "modifierNameSteps": [
-                "PlayerTouched"
-              ],
-              "valueSteps": [
-                0.5,
-                1.5
-              ],
-              "globalValueKey": "_Ability_NodKraiTourParkou_PlayerTouched",
-              "defaultGlobalValueOnCreate": 0.0
-            },
-            {
-              "$type": "AttachModifierToSelfGlobalValueMixin",
-              "modifierNameSteps": [
-                "PlayerScaned"
-              ],
-              "valueSteps": [
-                0.5,
-                1.5
-              ],
-              "globalValueKey": "_NodKraiDrone_onMonopole",
-              "defaultGlobalValueOnCreate": 0.0
-            }
-          ],
-          "modifierName": "",
           "AIHNJLDFEGJ": 0.0
         },
         "PlayerTouched": {
+          "elementDurability": 100.0,
+          "modifierName": "",
           "onAdded": [
             {
               "$type": "ServerLuaCall",
+              "funcName": "SLC_NodKraiTourParkou_TouchBarrier",
+              "luaCallType": "CurGalleryControlGroup",
               "param1": 0.0,
               "param2": 0.0,
-              "funcName": "SLC_NodKraiTourParkou_TouchBarrier",
-              "AHCNJKIEMPP": 0.0,
-              "luaCallType": "CurGalleryControlGroup"
+              "param3": 0.0
             },
             {
               "$type": "KillSelf",
               "target": "Caster"
             }
           ],
-          "elementDurability": 100.0,
-          "modifierName": "",
           "AIHNJLDFEGJ": 0.0
         },
         "PlayerScaned": {
+          "elementDurability": 100.0,
+          "modifierName": "",
           "onAdded": [
             {
               "$type": "ServerLuaCall",
+              "funcName": "SLC_NodKraiTourParkou_ScanBarrier",
+              "luaCallType": "CurGalleryControlGroup",
               "param1": 0.0,
               "param2": 0.0,
-              "funcName": "SLC_NodKraiTourParkou_ScanBarrier",
-              "AHCNJKIEMPP": 0.0,
-              "luaCallType": "CurGalleryControlGroup"
+              "param3": 0.0
             },
             {
               "$type": "KillSelf",
               "target": "Caster"
             }
           ],
-          "elementDurability": 100.0,
-          "modifierName": "",
           "AIHNJLDFEGJ": 0.0
         }
       },
-      "abilityName": "SceneObj_Area_NodKrai_NodKraiTourParkou_Drone_01",
       "onAdded": [
         {
           "$type": "AttachModifier",
@@ -2305,30 +2305,16 @@
   },
   {
     "Default": {
+      "abilityName": "DynamicAbility_Avatar_NodKraiTourParkou_Team_LocalTrigger",
+      "isDynamicAbility": true,
       "modifiers": {
         "NodKraiTourParkou_Team_LocalTrigger": {
-          "onAdded": [
-            {
-              "$type": "SetGlobalValueV2",
-              "minValue": 0.0,
-              "key": "_ABILITY_MagnetAbsorbThrowSkill_Active",
-              "maxValue": 0.0,
-              "CBOMLBFIPJM": 1.0
-            }
-          ],
           "elementDurability": 100.0,
           "modifierMixins": [
             {
               "$type": "LocalTeamTriggerMixin",
+              "NMGKGCEEPAN": "NodKraiTourParkou",
               "OFDNNHAMJIP": "RootNode",
-              "IHIMIAKHJFH": {
-                "prefabName": "",
-                "campTargetType": "AllExceptSelf",
-                "GGIHLEMLIGN": "BulletTrigger",
-                "shapeName": "SphereR3",
-                "triggerType": "TriggerNoRepeat",
-                "triggerCD": 0.1
-              },
               "CNOKKMALIAP": [
                 {
                   "$type": "DebugLog",
@@ -2343,26 +2329,33 @@
                       "target": "Target"
                     }
                   ],
+                  "target": "Target",
                   "targetPredicates": [
                     {
-                      "$type": "EOFDCELPGFO",
-                      "CBOMLBFIPJM": 1.0,
+                      "$type": "ByTargetGlobalValue",
                       "compareType": "MoreThanAndEqual",
-                      "key": "_Ability_NodKraiTourParkou_Obstacle"
+                      "key": "_Ability_NodKraiTourParkou_Obstacle",
+                      "value": 1.0
                     }
-                  ],
-                  "target": "Target"
+                  ]
                 }
               ],
-              "NMGKGCEEPAN": "NodKraiTourParkou"
+              "IHIMIAKHJFH": {
+                "campTargetType": "AllExceptSelf",
+                "prefabName": "",
+                "shapeName": "SphereR3",
+                "triggerCD": 0.1,
+                "triggerType": "TriggerNoRepeat",
+                "GGIHLEMLIGN": "BulletTrigger"
+              }
             },
             {
               "$type": "AttachModifierToGlobalValueMixin",
+              "globalValueKey": "GV_Magnetization",
+              "globalValueTarget": "Team",
               "modifierNameSteps": [
                 "NodKraiTourParkouNotify_Handler"
               ],
-              "globalValueTarget": "Team",
-              "globalValueKey": "GV_Magnetization",
               "valueSteps": [
                 0.5,
                 2.5
@@ -2370,6 +2363,15 @@
             }
           ],
           "modifierName": "",
+          "onAdded": [
+            {
+              "$type": "SetGlobalValueV2",
+              "key": "_ABILITY_MagnetAbsorbThrowSkill_Active",
+              "maxValue": 0.0,
+              "minValue": 0.0,
+              "value": 1.0
+            }
+          ],
           "AIHNJLDFEGJ": 0.0
         },
         "NodKraiTourParkouNotify_Handler": {
@@ -2377,15 +2379,8 @@
           "modifierMixins": [
             {
               "$type": "LocalTeamTriggerMixin",
+              "NMGKGCEEPAN": "PassiveAbsorb_NotifyGroup",
               "OFDNNHAMJIP": "RootNode",
-              "IHIMIAKHJFH": {
-                "prefabName": "",
-                "campTargetType": "AllExceptSelf",
-                "GGIHLEMLIGN": "InterTarget",
-                "shapeName": "SphereR5",
-                "triggerType": "TriggerAlways",
-                "triggerCD": 0.3
-              },
               "CNOKKMALIAP": [
                 {
                   "$type": "Predicated",
@@ -2396,67 +2391,72 @@
                       "target": "Target"
                     }
                   ],
+                  "target": "Target",
                   "targetPredicates": [
                     {
-                      "$type": "EOFDCELPGFO",
-                      "CBOMLBFIPJM": 2.0,
-                      "key": "_Ability_MixMag_Special"
+                      "$type": "ByTargetGlobalValue",
+                      "key": "_Ability_MixMag_Special",
+                      "value": 2.0
                     }
-                  ],
-                  "target": "Target"
+                  ]
                 }
               ],
-              "NMGKGCEEPAN": "PassiveAbsorb_NotifyGroup"
+              "IHIMIAKHJFH": {
+                "campTargetType": "AllExceptSelf",
+                "prefabName": "",
+                "shapeName": "SphereR5",
+                "triggerCD": 0.3,
+                "triggerType": "TriggerAlways",
+                "GGIHLEMLIGN": "InterTarget"
+              }
             }
           ],
           "modifierName": "",
           "AIHNJLDFEGJ": 0.0
         },
         "NodKraiTourParkouNotify_FromTeam": {
+          "elementDurability": 100.0,
+          "modifierName": "",
           "onAdded": [
             {
               "$type": "SetGlobalValueV2",
-              "minValue": 0.0,
               "key": "_Ability_NodKraiTourParkou_PlayerTouched",
               "maxValue": 0.0,
-              "CBOMLBFIPJM": 1.0
+              "minValue": 0.0,
+              "value": 1.0
             }
           ],
-          "elementDurability": 100.0,
-          "modifierName": "",
           "AIHNJLDFEGJ": 0.0
         },
         "NodKraiTourParkouNotify_AbsorbMoonParticle": {
+          "elementDurability": 100.0,
+          "modifierName": "",
           "onAdded": [
             {
               "$type": "ServerLuaCall",
+              "funcName": "SLC_NodKraiTourParkou_AbsorbMoonParticle",
+              "luaCallType": "CurGalleryControlGroup",
               "param1": 0.0,
               "param2": 0.0,
-              "funcName": "SLC_NodKraiTourParkou_AbsorbMoonParticle",
-              "AHCNJKIEMPP": 0.0,
-              "luaCallType": "CurGalleryControlGroup"
+              "param3": 0.0
             },
             {
               "$type": "CopyGlobalValue",
-              "srcKey": "_ABILITY_MagnetAbsorbThrowSkill_ChildTarget_0",
               "dstKey": "_Ability_MixMagParticle_FollowTarget_0",
+              "srcKey": "_ABILITY_MagnetAbsorbThrowSkill_ChildTarget_0",
               "target": "Team"
             },
             {
               "$type": "CopyGlobalValue",
-              "srcKey": "_ABILITY_MagnetAbsorbThrowSkill_ChildTarget_1",
               "dstKey": "_Ability_MixMagParticle_FollowTarget_1",
+              "srcKey": "_ABILITY_MagnetAbsorbThrowSkill_ChildTarget_1",
               "target": "Team"
             }
           ],
           "stacking": "Unique",
-          "elementDurability": 100.0,
-          "modifierName": "",
           "AIHNJLDFEGJ": 0.0
         }
       },
-      "abilityName": "DynamicAbility_Avatar_NodKraiTourParkou_Team_LocalTrigger",
-      "isDynamicAbility": true,
       "onAdded": [
         {
           "$type": "AttachModifier",
@@ -2467,33 +2467,28 @@
   },
   {
     "Default": {
+      "abilityName": "SceneObj_Area_NodKrai_Property_Ani_Prop_UAVCage_02",
       "modifiers": {
         "Handler": {
-          "onAdded": [
-            {
-              "$type": "ApplyModifier",
-              "modifierName": "Eff"
-            }
-          ],
           "elementDurability": 100.0,
           "modifierMixins": [
             {
               "$type": "AttachModifierToGlobalValueMixin",
+              "globalValueKey": "_Ability_Maglev_Obstacle",
+              "globalValueTarget": "Owner",
               "modifierNameSteps": [
                 "Holder"
               ],
-              "globalValueTarget": "Owner",
-              "globalValueKey": "_Ability_Maglev_Obstacle",
               "targetRegisterType": "RegisterAlways",
+              "valueSteps": [
+                0.5,
+                1.5
+              ],
               "BCNFPODJAGP": [
                 {
                   "$type": "DebugLog",
                   "content": "测试 onGVGet"
                 }
-              ],
-              "valueSteps": [
-                0.5,
-                1.5
               ],
               "HEBEHFHHDKB": [
                 {
@@ -2512,6 +2507,12 @@
             }
           ],
           "modifierName": "",
+          "onAdded": [
+            {
+              "$type": "ApplyModifier",
+              "modifierName": "Eff"
+            }
+          ],
           "AIHNJLDFEGJ": 0.0
         },
         "Holder": {
@@ -2520,27 +2521,35 @@
           "AIHNJLDFEGJ": 0.0
         },
         "Eff": {
+          "elementDurability": 100.0,
+          "modifierName": "",
           "onAdded": [
             {
               "$type": "AttachEffect",
-              "ILLLPEOODKP": "",
-              "scale": 0.8,
               "effectPattern": "Eff_SceneObj_Stages_MagForce_Thick_S100X100_01",
-              "effectTempleteID": -1.0
+              "effectTempleteID": -1.0,
+              "scale": 0.8,
+              "ILLLPEOODKP": ""
             },
             {
               "$type": "SetEffectFollowPath",
-              "DPNPNCGKIMP": "EffPoint",
               "attachPoint": "",
-              "effectPattern": "Eff_SceneObj_Stages_MagForce_Thick_S100X100_01"
+              "effectPattern": "Eff_SceneObj_Stages_MagForce_Thick_S100X100_01",
+              "followPath": "EffPoint"
             }
           ],
-          "elementDurability": 100.0,
-          "modifierName": "",
           "AIHNJLDFEGJ": 0.0
         },
         "Down": {
           "duration": 1.0,
+          "elementDurability": 100.0,
+          "modifierName": "",
+          "onAdded": [
+            {
+              "$type": "SetAnimatorTrigger",
+              "triggerID": "Down"
+            }
+          ],
           "onRemoved": [
             {
               "$type": "KillGadgetV2",
@@ -2549,18 +2558,9 @@
               }
             }
           ],
-          "onAdded": [
-            {
-              "$type": "SetAnimatorTrigger",
-              "triggerID": "Down"
-            }
-          ],
-          "elementDurability": 100.0,
-          "modifierName": "",
           "AIHNJLDFEGJ": 0.0
         }
       },
-      "abilityName": "SceneObj_Area_NodKrai_Property_Ani_Prop_UAVCage_02",
       "onAdded": [
         {
           "$type": "AttachModifier",
@@ -2571,36 +2571,36 @@
   },
   {
     "Default": {
+      "abilityName": "SceneObj_Area_NodKrai_Property_Ani_Prop_NodKraiDroneWithBox_01",
       "modifiers": {
         "Handler": {
+          "elementDurability": 100.0,
+          "modifierName": "",
           "onAdded": [
             {
               "$type": "SetGlobalValue",
               "key": "_Ability_Maglev_Obstacle",
-              "minValue": 0.0,
               "maxValue": 0.0,
-              "CBOMLBFIPJM": 1.0
+              "minValue": 0.0,
+              "value": 1.0
             },
             {
               "$type": "CreateGadget",
-              "gadgetID": 73081015,
-              "campID": 5001,
-              "campTargetType": "Self",
-              "FGNHCAEHEJK": true,
               "born": {
-                "$type": "BGOLIIIHLMO",
+                "$type": "ConfigBornByAttachPoint",
                 "attachPointName": "FollowNode_Box",
                 "useRotation": true
               },
-              "doOffStage": true
+              "campID": 5001,
+              "campTargetType": "Self",
+              "doOffStage": true,
+              "gadgetID": 73081015,
+              "FGNHCAEHEJK": true
             }
           ],
-          "elementDurability": 100.0,
-          "modifierName": "",
           "AIHNJLDFEGJ": 0.0
         }
       },
-      "abilityName": "SceneObj_Area_NodKrai_Property_Ani_Prop_NodKraiDroneWithBox_01",
       "onAdded": [
         {
           "$type": "AttachModifier",
@@ -2611,21 +2611,15 @@
   },
   {
     "Default": {
+      "abilityName": "SceneObj_Area_NodKrai_Property_Ani_Prop_NodKraiDroneWithBox_02",
       "modifiers": {
         "Handler": {
-          "onAdded": [
-            {
-              "$type": "SetGlobalValue",
-              "key": "GV_Down",
-              "minValue": 0.0,
-              "maxValue": 0.0,
-              "CBOMLBFIPJM": 0.0
-            }
-          ],
           "elementDurability": 100.0,
           "modifierMixins": [
             {
               "$type": "AttachModifierToSelfGlobalValueMixin",
+              "defaultGlobalValueOnCreate": 0.0,
+              "globalValueKey": "GV_Down",
               "modifierNameSteps": [
                 "Idle",
                 "Down"
@@ -2634,27 +2628,25 @@
                 -0.5,
                 0.5,
                 1.5
-              ],
-              "globalValueKey": "GV_Down",
-              "defaultGlobalValueOnCreate": 0.0
+              ]
             },
             {
               "$type": "AttachModifierToGlobalValueMixin",
+              "globalValueKey": "_Ability_Maglev_Obstacle",
+              "globalValueTarget": "Owner",
               "modifierNameSteps": [
                 "Holder"
               ],
-              "globalValueTarget": "Owner",
-              "globalValueKey": "_Ability_Maglev_Obstacle",
               "targetRegisterType": "RegisterAlways",
+              "valueSteps": [
+                0.5,
+                1.5
+              ],
               "BCNFPODJAGP": [
                 {
                   "$type": "DebugLog",
                   "content": "测试 onGVGet"
                 }
-              ],
-              "valueSteps": [
-                0.5,
-                1.5
               ],
               "HEBEHFHHDKB": [
                 {
@@ -2664,14 +2656,23 @@
                 {
                   "$type": "SetGlobalValue",
                   "key": "GV_Down",
-                  "minValue": 0.0,
                   "maxValue": 0.0,
-                  "CBOMLBFIPJM": 1.0
+                  "minValue": 0.0,
+                  "value": 1.0
                 }
               ]
             }
           ],
           "modifierName": "",
+          "onAdded": [
+            {
+              "$type": "SetGlobalValue",
+              "key": "GV_Down",
+              "maxValue": 0.0,
+              "minValue": 0.0,
+              "value": 0.0
+            }
+          ],
           "AIHNJLDFEGJ": 0.0
         },
         "Holder": {
@@ -2684,22 +2685,22 @@
           "modifierMixins": [
             {
               "$type": "SingleMagnetMixin",
-              "NCIPCJFOKFG": 25.0,
-              "FCPBCLKMNGH": "MagnetNode",
-              "BDONFADLJJO": "SGV_NK_SingleMag_OccupyAuth_",
+              "fieldType": "GV_NK_SingleMag_FieldType_1",
               "id": 1,
-              "NAFKJNHOPAN": "SGV_NK_SingleMag_OccupyMagnetID_",
-              "ODIBLMEGDCA": "SGV_NK_SingleMag_OccupyTarget_",
+              "strength": 25.0,
               "AAIGIHAOGBE": "",
               "KDDBHIPACOA": "",
-              "GAPDDIDKCKO": "GV_NK_SingleMag_ScaleLength",
-              "fieldType": "GV_NK_SingleMag_FieldType_1",
-              "NDKOJADFCJC": "GV_NK_SingleMagnet_AngleTolerance",
-              "GKIOOGPABKE": "GV_NK_SingleMag_Pole_1",
               "LMNMHLHOJDK": "",
               "AJIBNBCNFOM": "Eff_SceneObj_Stages_MagForce_Thick_S100X100_01",
+              "PEBEENLLNKA": "GV_NK_SingleMag_AttractType",
+              "GKIOOGPABKE": "GV_NK_SingleMag_Pole_1",
+              "GAPDDIDKCKO": "GV_NK_SingleMag_ScaleLength",
+              "NDKOJADFCJC": "GV_NK_SingleMagnet_AngleTolerance",
+              "FCPBCLKMNGH": "MagnetNode",
               "DBFIONIAIEH": "MagnetTrigger_1",
-              "PEBEENLLNKA": "GV_NK_SingleMag_AttractType"
+              "BDONFADLJJO": "SGV_NK_SingleMag_OccupyAuth_",
+              "NAFKJNHOPAN": "SGV_NK_SingleMag_OccupyMagnetID_",
+              "ODIBLMEGDCA": "SGV_NK_SingleMag_OccupyTarget_"
             },
             {
               "$type": "ShaderStateMachineSwitchMixin",
@@ -2710,6 +2711,8 @@
           "AIHNJLDFEGJ": 0.0
         },
         "Down": {
+          "elementDurability": 100.0,
+          "modifierName": "",
           "onAdded": [
             {
               "$type": "SetAnimatorTrigger",
@@ -2720,65 +2723,62 @@
               "modifierName": "KillSelf"
             }
           ],
-          "elementDurability": 100.0,
-          "modifierName": "",
           "AIHNJLDFEGJ": 0.0
         },
         "KillSelf": {
           "duration": 1.0,
+          "elementDurability": 100.0,
+          "modifierMixins": [
+            {
+              "$type": "ShaderStateMachineSwitchMixin",
+              "IKJPMDJLPLP": 1,
+              "MGLMGICCHHK": "Default"
+            }
+          ],
+          "modifierName": "",
           "onRemoved": [
             {
               "$type": "KillSelf",
               "target": "Caster"
             }
           ],
-          "elementDurability": 100.0,
-          "modifierMixins": [
-            {
-              "$type": "ShaderStateMachineSwitchMixin",
-              "MGLMGICCHHK": "Default",
-              "IKJPMDJLPLP": 1
-            }
-          ],
-          "modifierName": "",
           "AIHNJLDFEGJ": 0.0
         }
       },
-      "abilityName": "SceneObj_Area_NodKrai_Property_Ani_Prop_NodKraiDroneWithBox_02",
       "onAdded": [
         {
           "$type": "SetGlobalValueV2",
-          "minValue": 0.0,
           "key": "GV_NK_SingleMag_FieldType_1",
           "maxValue": 0.0,
-          "CBOMLBFIPJM": 1.0
+          "minValue": 0.0,
+          "value": 1.0
         },
         {
           "$type": "Predicated",
-          "successActions": [
-            {
-              "$type": "SetGlobalValueV2",
-              "minValue": 0.0,
-              "key": "GV_NK_SingleMag_Pole_1",
-              "maxValue": 0.0,
-              "CBOMLBFIPJM": 2.0
-            }
-          ],
           "failActions": [
             {
               "$type": "SetGlobalValueV2",
-              "minValue": 0.0,
               "key": "GV_NK_SingleMag_Pole_1",
               "maxValue": 0.0,
-              "CBOMLBFIPJM": 1.0
+              "minValue": 0.0,
+              "value": 1.0
+            }
+          ],
+          "successActions": [
+            {
+              "$type": "SetGlobalValueV2",
+              "key": "GV_NK_SingleMag_Pole_1",
+              "maxValue": 0.0,
+              "minValue": 0.0,
+              "value": 2.0
             }
           ],
           "targetPredicates": [
             {
-              "$type": "EOFDCELPGFO",
-              "CBOMLBFIPJM": 1.0,
+              "$type": "ByTargetGlobalValue",
               "key": "SGV_NK_SingleMagSet_Pole_2",
-              "target": "Owner"
+              "target": "Owner",
+              "value": 1.0
             }
           ]
         },
@@ -2791,130 +2791,130 @@
   },
   {
     "Default": {
+      "abilityName": "SceneObj_Area_NodKrai_Property_Ani_Prop_MixedMagneticParticle_02",
       "modifiers": {
         "Handler": {
-          "onAdded": [
-            {
-              "$type": "SetGlobalValueV2",
-              "minValue": 0.0,
-              "key": "_MixMagnetObject_ForbidSubTag",
-              "maxValue": 0.0,
-              "CBOMLBFIPJM": 1.0
-            },
-            {
-              "$type": "SetGlobalValueV2",
-              "minValue": 0.0,
-              "key": "_Ability_MixMag_Special",
-              "maxValue": 0.0,
-              "CBOMLBFIPJM": 2.0
-            }
-          ],
           "elementDurability": 100.0,
           "modifierMixins": [
             {
               "$type": "AttachSubEmitterEffectMixin",
-              "KLHHAGPBGGI": true,
               "effectPattern": "Eff_SceneObj_MixedMagneticParticle_Active",
-              "GKHPNAJNIAA": "",
-              "NHHILEOGIDN": true
+              "KLHHAGPBGGI": true,
+              "NHHILEOGIDN": true,
+              "GKHPNAJNIAA": ""
             }
           ],
           "modifierName": "",
+          "onAdded": [
+            {
+              "$type": "SetGlobalValueV2",
+              "key": "_MixMagnetObject_ForbidSubTag",
+              "maxValue": 0.0,
+              "minValue": 0.0,
+              "value": 1.0
+            },
+            {
+              "$type": "SetGlobalValueV2",
+              "key": "_Ability_MixMag_Special",
+              "maxValue": 0.0,
+              "minValue": 0.0,
+              "value": 2.0
+            }
+          ],
           "AIHNJLDFEGJ": 0.0
         }
       },
-      "abilityName": "SceneObj_Area_NodKrai_Property_Ani_Prop_MixedMagneticParticle_02",
-      "PFJMEMFDGOH": [
+      "onAdded": [
+        {
+          "$type": "AttachModifier",
+          "modifierName": "Handler"
+        }
+      ],
+      "onFieldEnter": [
         {
           "$type": "Predicated",
           "successActions": [
             {
               "$type": "FireEffect",
               "effectPattern": "Eff_SceneObj_MixedMagneticParticle_Disappear",
+              "effectTempleteID": -1.0,
               "scale": 1.0,
-              "ILLLPEOODKP": "",
-              "effectTempleteID": -1.0
+              "ILLLPEOODKP": ""
             },
             {
               "$type": "AddGlobalValue",
-              "useLimitRange": true,
               "key": "AVATAR_GLIDING_ENERGY",
               "maxValue": 100.0,
               "minValue": 0.0,
-              "CBOMLBFIPJM": 20.0,
-              "target": "Team"
+              "target": "Team",
+              "useLimitRange": true,
+              "value": 20.0
             },
             {
               "$type": "KillSelf",
-              "MBGFJOOIMOK": [
+              "configIdArray": [
                 73081012,
                 73081013
               ]
             }
           ],
+          "target": "Target",
           "targetPredicates": [
             {
-              "$type": "DEOFBICNFHF",
+              "$type": "ByEntityTypes",
               "entityTypes": [
                 "Avatar"
               ]
             }
-          ],
-          "target": "Target"
-        }
-      ],
-      "onAdded": [
-        {
-          "$type": "AttachModifier",
-          "modifierName": "Handler"
+          ]
         }
       ]
     }
   },
   {
     "Default": {
+      "abilityName": "DynamicAbility_MagnetCarrier_TeamAbility",
+      "isDynamicAbility": true,
       "modifiers": {
         "MagnetCarrier_Handler": {
+          "elementDurability": 100.0,
+          "modifierName": "",
           "onAdded": [
             {
               "$type": "ApplyModifier",
               "modifierName": "Kill_Summon_Gadget",
               "otherTargets": {
-                "$type": "INIACGFCEDH",
-                "sizeRatio": 1.0,
+                "$type": "SelectTargetsByShape",
                 "campTargetType": "All",
-                "shapeName": "CircleR50H50C"
+                "shapeName": "CircleR50H50C",
+                "sizeRatio": 1.0
               },
               "predicates": [
                 {
-                  "$type": "EOFDCELPGFO",
-                  "CBOMLBFIPJM": 0.0,
+                  "$type": "ByTargetGlobalValue",
                   "compareType": "MoreThan",
-                  "key": "_COMMON_GADGET_ISSUMMON"
+                  "key": "_COMMON_GADGET_ISSUMMON",
+                  "value": 0.0
                 }
               ]
             }
           ],
-          "elementDurability": 100.0,
-          "modifierName": "",
           "AIHNJLDFEGJ": 0.0
         },
         "Kill_Summon_Gadget": {
+          "elementDurability": 100.0,
+          "modifierName": "",
           "onAdded": [
             {
               "$type": "KillSelf",
-              "MBGFJOOIMOK": [
+              "configIdArray": [
                 70000000
               ]
             }
           ],
-          "elementDurability": 100.0,
-          "modifierName": "",
           "AIHNJLDFEGJ": 0.0
         }
       },
-      "abilityName": "DynamicAbility_MagnetCarrier_TeamAbility",
-      "isDynamicAbility": true,
       "onAdded": [
         {
           "$type": "AttachModifier",

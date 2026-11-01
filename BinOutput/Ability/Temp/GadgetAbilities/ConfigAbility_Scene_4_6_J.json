@@ -1,6 +1,75 @@
 [
   {
     "Default": {
+      "abilityMixins": [
+        {
+          "$type": "UIInteractMixin",
+          "actionList": [
+            {
+              "$type": "DebugLog",
+              "content": "#Whale_Cannon# open page"
+            },
+            {
+              "$type": "SetGlobalValueV2",
+              "key": "GV_Cannon_State",
+              "maxValue": 0.0,
+              "minValue": 0.0,
+              "predicates": [
+                {
+                  "$type": "ByHostOrGuest",
+                  "isHost": true
+                }
+              ],
+              "value": 1.0
+            }
+          ],
+          "uiMessageId": "RemusMagicDragon_Start_Aim"
+        },
+        {
+          "$type": "UIInteractMixin",
+          "actionList": [
+            {
+              "$type": "DebugLog",
+              "content": "#Whale_Cannon# close page"
+            },
+            {
+              "$type": "SetGlobalValueV2",
+              "doOffStage": true,
+              "key": "GV_Cannon_State",
+              "maxValue": 0.0,
+              "minValue": 0.0,
+              "value": 0.0
+            }
+          ],
+          "uiMessageId": "RemusMagicDragon_Exit_Aim"
+        },
+        {
+          "$type": "StageReadyMixin",
+          "onStageReady": [
+            {
+              "$type": "NotifyUI",
+              "doOffStage": true,
+              "message": "ExitRemusMagicDragon",
+              "stringParam": "",
+              "uiContextName": "InLevelMainPage"
+            },
+            {
+              "$type": "DebugLog",
+              "content": "#Whale_Cannon# n1"
+            },
+            {
+              "$type": "SetGlobalValueV2",
+              "doOffStage": true,
+              "key": "GV_Cannon_State",
+              "maxValue": 0.0,
+              "minValue": 0.0,
+              "value": 0.0
+            }
+          ]
+        }
+      ],
+      "abilityName": "Ability_Whale_Cannon_Avatar",
+      "isDynamicAbility": true,
       "modifiers": {
         "Blank": {
           "elementDurability": 100.0,
@@ -8,29 +77,29 @@
           "AIHNJLDFEGJ": 0.0
         },
         "PanelControl_Team": {
+          "elementDurability": 100.0,
+          "modifierName": "",
           "onRemoved": [
             {
               "$type": "NotifyUI",
-              "uiContextName": "InLevelMainPage",
-              "stringParam": "",
+              "doOffStage": true,
               "message": "ExitRemusMagicDragon",
-              "doOffStage": true
+              "stringParam": "",
+              "uiContextName": "InLevelMainPage"
             },
             {
               "$type": "SetGlobalValueV2",
-              "minValue": 0.0,
               "key": "GV_Cannon_State",
               "maxValue": 0.0,
-              "CBOMLBFIPJM": 0.0,
-              "target": "CurLocalAvatar"
+              "minValue": 0.0,
+              "target": "CurLocalAvatar",
+              "value": 0.0
             },
             {
               "$type": "DebugLog",
               "content": "#Whale_Cannon# n3"
             }
           ],
-          "elementDurability": 100.0,
-          "modifierName": "",
           "AIHNJLDFEGJ": 0.0
         },
         "Whale_Cannon_Avatar_Controller": {
@@ -38,24 +107,25 @@
           "modifierMixins": [
             {
               "$type": "AttachModifierToSelfGlobalValueAndTalkStateMixin",
-              "IJBJPNOPCOC": 0.0,
+              "defaultGlobalValueOnCreate": 0.0,
+              "globalValueKey": "GV_Cannon_State",
+              "gvInTalk": 0.0,
               "modifierNameSteps": [
                 "Blank",
                 "UNIQUE_Whale_Cannon_Prepare",
                 "UNIQUE_Whale_Cannon_ShootPlayer"
               ],
-              "DEFOFMOIAAI": true,
               "valueSteps": [
                 -0.5,
                 0.5,
                 1.5,
                 2.5
               ],
-              "globalValueKey": "GV_Cannon_State",
-              "defaultGlobalValueOnCreate": 0.0
+              "DEFOFMOIAAI": true
             },
             {
               "$type": "AttachModifierToSelfGlobalValueNoInitMixin",
+              "globalValueKey": "GV_Cannon_State",
               "modifierNameSteps": [
                 "BlankState",
                 "AvatarInShoot"
@@ -64,11 +134,11 @@
                 -1.0,
                 0.5,
                 2.5
-              ],
-              "globalValueKey": "GV_Cannon_State"
+              ]
             },
             {
               "$type": "AttachModifierToSelfGlobalValueNoInitMixin",
+              "globalValueKey": "GV_Cannon_State",
               "modifierNameSteps": [
                 "BlankState",
                 "CheckPaimonArea"
@@ -77,8 +147,7 @@
                 -1.0,
                 0.5,
                 2.5
-              ],
-              "globalValueKey": "GV_Cannon_State"
+              ]
             }
           ],
           "modifierName": "",
@@ -90,30 +159,38 @@
           "AIHNJLDFEGJ": 0.0
         },
         "AvatarInShoot": {
-          "thinkInterval": 3.0,
+          "elementDurability": 100.0,
+          "modifierMixins": [
+            {
+              "$type": "EntityInVisibleMixin",
+              "reason": "Mixin",
+              "AAHPKGHIPPG": true
+            }
+          ],
+          "modifierName": "",
           "onAdded": [
             {
               "$type": "SetGlobalValue",
+              "doOffStage": true,
               "key": "_ABILITY_WhaleHookSkill_Step",
-              "minValue": 0.0,
               "maxValue": 0.0,
-              "CBOMLBFIPJM": 0.0,
-              "doOffStage": true
+              "minValue": 0.0,
+              "value": 0.0
             },
             {
               "$type": "ApplyModifier",
               "modifierName": "UNIQUE_TriggerWhaleStop_InCannon",
               "otherTargets": {
-                "$type": "DBPHPMIHBCO",
+                "$type": "SelectTargetsByTag",
                 "tag": "Whale_Wander"
               }
             },
             {
               "$type": "FireEffect",
               "effectPattern": "Eff_RemusMagicdragon_Whale_Cannon_Enter_01",
+              "effectTempleteID": -1.0,
               "scale": 1.0,
-              "ILLLPEOODKP": "",
-              "effectTempleteID": -1.0
+              "ILLLPEOODKP": ""
             },
             {
               "$type": "AttachModifier",
@@ -121,54 +198,45 @@
               "target": "Team"
             }
           ],
-          "elementDurability": 100.0,
-          "modifierMixins": [
-            {
-              "$type": "EntityInVisibleMixin",
-              "AAHPKGHIPPG": true,
-              "reason": "Mixin"
-            }
-          ],
-          "modifierName": "",
           "onThinkInterval": [
             {
               "$type": "ApplyModifier",
               "modifierName": "UNIQUE_TriggerWhaleStop_InCannon",
               "otherTargets": {
-                "$type": "DBPHPMIHBCO",
+                "$type": "SelectTargetsByTag",
                 "tag": "Whale_Wander"
               }
             }
           ],
+          "thinkInterval": 3.0,
           "AIHNJLDFEGJ": 0.0
         },
         "BanWhaleTeleport": {
-          "onRemoved": [
-            {
-              "$type": "SetGlobalValueV2",
-              "minValue": 0.0,
-              "key": "GV_Ban_Whale_Teleport",
-              "maxValue": 0.0,
-              "CBOMLBFIPJM": 0.0,
-              "doOffStage": true
-            }
-          ],
+          "elementDurability": 100.0,
+          "modifierName": "",
           "onAdded": [
             {
               "$type": "SetGlobalValueV2",
-              "minValue": 0.0,
+              "doOffStage": true,
               "key": "GV_Ban_Whale_Teleport",
               "maxValue": 0.0,
-              "CBOMLBFIPJM": 1.0,
-              "doOffStage": true
+              "minValue": 0.0,
+              "value": 1.0
             }
           ],
-          "elementDurability": 100.0,
-          "modifierName": "",
+          "onRemoved": [
+            {
+              "$type": "SetGlobalValueV2",
+              "doOffStage": true,
+              "key": "GV_Ban_Whale_Teleport",
+              "maxValue": 0.0,
+              "minValue": 0.0,
+              "value": 0.0
+            }
+          ],
           "AIHNJLDFEGJ": 0.0
         },
         "CheckPaimonArea": {
-          "thinkInterval": 0.5,
           "elementDurability": 100.0,
           "modifierName": "",
           "onThinkInterval": [
@@ -177,11 +245,11 @@
               "successActions": [
                 {
                   "$type": "SetGlobalValueV2",
-                  "minValue": 0.0,
+                  "doOffStage": true,
                   "key": "GV_Cannon_State",
                   "maxValue": 0.0,
-                  "CBOMLBFIPJM": 0.0,
-                  "doOffStage": true
+                  "minValue": 0.0,
+                  "value": 0.0
                 }
               ],
               "targetPredicates": [
@@ -191,46 +259,49 @@
               ]
             }
           ],
+          "thinkInterval": 0.5,
           "AIHNJLDFEGJ": 0.0
         },
         "UNIQUE_TriggerWhaleStop_InCannon": {
           "duration": 0.06,
+          "elementDurability": 100.0,
+          "isUnique": true,
+          "modifierName": "",
           "onAdded": [
             {
               "$type": "AddGlobalValueV2",
-              "minValue": 0.0,
               "key": "GV_StopTrigger",
-              "CBOMLBFIPJM": 1.0,
-              "maxValue": 0.0
+              "maxValue": 0.0,
+              "minValue": 0.0,
+              "value": 1.0
             }
           ],
-          "elementDurability": 100.0,
-          "modifierName": "",
-          "isUnique": true,
           "AIHNJLDFEGJ": 0.0
         },
         "UNIQUE_Whale_Cannon_Prepare": {
+          "elementDurability": 100.0,
+          "isUnique": true,
+          "modifierName": "",
           "onAdded": [
             {
               "$type": "SetGlobalValue",
               "key": "_ABILITY_WhaleHookSkill_Step",
-              "minValue": 0.0,
               "maxValue": 0.0,
-              "CBOMLBFIPJM": 0.0
+              "minValue": 0.0,
+              "value": 0.0
             },
             {
               "$type": "DebugLog",
               "content": "Whale_Log Cannon_Prepare"
             }
           ],
-          "stacking": "Unique",
           "onKill": [
             {
               "$type": "NotifyUI",
-              "uiContextName": "InLevelMainPage",
-              "stringParam": "",
+              "doOffStage": true,
               "message": "ExitRemusMagicDragon",
-              "doOffStage": true
+              "stringParam": "",
+              "uiContextName": "InLevelMainPage"
             },
             {
               "$type": "DebugLog",
@@ -238,106 +309,95 @@
             },
             {
               "$type": "SetGlobalValueV2",
-              "minValue": 0.0,
+              "doOffStage": true,
               "key": "GV_Cannon_State",
               "maxValue": 0.0,
-              "CBOMLBFIPJM": 0.0,
-              "doOffStage": true
+              "minValue": 0.0,
+              "value": 0.0
             }
           ],
-          "elementDurability": 100.0,
-          "modifierName": "",
-          "isUnique": true,
+          "stacking": "Unique",
           "AIHNJLDFEGJ": 0.0
         },
         "UNIQUE_Whale_Cannon_ShootPlayer": {
-          "thinkInterval": 0.3,
-          "onRemoved": [
+          "elementDurability": 100.0,
+          "isUnique": true,
+          "modifierMixins": [
             {
-              "$type": "SetGlobalValueV2",
-              "minValue": 0.0,
-              "key": "GV_Cannon_Timer_Trigger",
-              "maxValue": 0.0,
-              "CBOMLBFIPJM": 0.0,
-              "doOffStage": true
-            },
-            {
-              "$type": "SetGlobalValueV2",
-              "minValue": 0.0,
-              "key": "GV_BoostCount",
-              "maxValue": 0.0,
-              "CBOMLBFIPJM": 0.0,
-              "doOffStage": true
-            },
-            {
-              "$type": "RemoveUniqueModifier",
-              "modifierName": "UNIQUE_Camera_Blur_Cannon_QTE",
-              "doOffStage": true
-            },
-            {
-              "$type": "SetGlobalValueV2",
-              "minValue": 0.0,
-              "key": "GV_Cannon_State",
-              "maxValue": 0.0,
-              "CBOMLBFIPJM": 0.0,
-              "doOffStage": true
-            },
-            {
-              "$type": "NotifyUI",
-              "uiContextName": "InLevelMainPage",
-              "stringParam": "",
-              "message": "ExitRemusMagicDragon",
-              "doOffStage": true
-            },
-            {
-              "$type": "DebugLog",
-              "content": "#Whale_Cannon# n5"
-            },
-            {
-              "$type": "ClearGlobalPos",
-              "key": "_ABILITY_Whale_Cannon_Target_Pos",
-              "doOffStage": true
-            },
-            {
-              "$type": "KillGadget",
-              "gadgetInfo": {
-                "configID": 70330821,
-                "sortType": "Reversed"
-              },
-              "doOffStage": true
-            },
-            {
-              "$type": "FireEffect",
-              "effectPattern": "Eff_RemusMagicdragon_Whale_Cannon_Exit_01",
-              "scale": 1.0,
-              "ILLLPEOODKP": "",
-              "effectTempleteID": -1.0
-            },
-            {
-              "$type": "DebugLog",
-              "content": "#Whale_Cannon# remove bullet"
-            },
-            {
-              "$type": "RemoveVelocityForce",
-              "HALNPNMJJAN": [
-                "RushMoveType",
-                "InertiaType",
-                "FixedRushMoveType",
-                "RiseType",
-                "AirflowAccType",
-                "AirflowType",
-                "SpeedupType"
+              "$type": "CarpJumpSecondMoveMixin",
+              "radius": 1.0,
+              "KDDMAOGIICI": 0.0,
+              "CCDPPFKPHOK": 1.0,
+              "MFDLIJHLDKP": 2.0,
+              "HMENLBHFIBH": true,
+              "CCHGNHHLMKP": [
+                {
+                  "$type": "DebugLog",
+                  "content": "WhaleCannonStop > CarpJumpSecondMoveMixin"
+                },
+                {
+                  "$type": "SetGlobalValueV2",
+                  "doOffStage": true,
+                  "key": "GV_Cannon_State",
+                  "maxValue": 0.0,
+                  "minValue": 0.0,
+                  "value": 0.0
+                },
+                {
+                  "$type": "RemoveUniqueModifier",
+                  "modifierName": "UNIQUE_Whale_Cannon_ShootPlayer"
+                }
               ]
+            },
+            {
+              "$type": "SpawnCameraStateMixin",
+              "DGPDJMGNEHP": {
+                "duration": 0.0,
+                "BJFFNFAIGBM": 1,
+                "AKLMKDHGNAD": 2,
+                "DAGICMOAFJP": 2,
+                "NAOIPIIJHAJ": 4
+              },
+              "AFDENKPAECI": {
+                "$type": "LOJKEADJKJI",
+                "KFIBIAPGMMA": 1.0,
+                "FICLCDBJCMM": 45.0,
+                "JGNKGKONPNM": 45.0,
+                "FKICECOCEBA": 90.0,
+                "EKLJPNFLCBO": 46001,
+                "NALICOGEKCL": "",
+                "KPBNNGBJLMP": "CameraForward",
+                "NFMCBONAMOF": "CameraLook"
+              }
+            },
+            {
+              "$type": "DoActionOnGlobalValueChangeMixin",
+              "actions": [
+                {
+                  "$type": "AttachModifier",
+                  "modifierName": "UNIQUE_Whale_Cannon_Refresh_QTE_Timer",
+                  "predicates": [
+                    {
+                      "$type": "ByTargetGlobalValue",
+                      "compareType": "MoreThan",
+                      "key": "GV_Cannon_Timer_Trigger",
+                      "value": 0.0
+                    }
+                  ]
+                }
+              ],
+              "globalValueKey": "GV_Cannon_Timer_Trigger"
             }
           ],
+          "modifierName": "",
           "onAdded": [
             {
               "$type": "SetGlobalValueV2",
-              "minValue": 0.0,
+              "doOffStage": true,
               "key": "GV_BoostCount",
               "maxValue": 0.0,
-              "CBOMLBFIPJM": 0.0,
-              "doOffStage": true
+              "minValue": 0.0,
+              "value": 0.0
             },
             {
               "$type": "AttachModifier",
@@ -345,27 +405,27 @@
             },
             {
               "$type": "TurnDirection",
-              "LGECMJNAKDG": "OnlyCamera"
+              "turnMode": "OnlyCamera"
             },
             {
               "$type": "DoActionsLocal",
               "actionList": [
                 {
                   "$type": "AttachEffect",
-                  "ILLLPEOODKP": "",
-                  "scale": 1.0,
                   "effectPattern": "Eff_RemusMagicdragon_Moving_Remote_01",
                   "effectTempleteID": -1.0,
                   "predicates": [
                     {
-                      "$type": "GKGBIPDLMMG",
+                      "$type": "ByNot",
                       "predicates": [
                         {
-                          "$type": "ALBIJACMAEB"
+                          "$type": "ByIsLocalAvatar"
                         }
                       ]
                     }
-                  ]
+                  ],
+                  "scale": 1.0,
+                  "ILLLPEOODKP": ""
                 }
               ],
               "canBeHandledOnRecover": true
@@ -373,30 +433,30 @@
             {
               "$type": "TriggerBullet",
               "born": {
-                "$type": "BGOLIIIHLMO",
+                "$type": "ConfigBornByAttachPoint",
                 "attachPointName": "RootNode",
                 "useRotation": true
               },
               "bulletID": 70330821,
-              "trackTarget": "Self",
-              "lifeByOwnerV2": true
+              "lifeByOwnerV2": true,
+              "trackTarget": "Self"
             },
             {
               "$type": "SetGlobalPos",
-              "key": "_ABILITY_Whale_Cannon_Target_Pos",
               "born": {
-                "$type": "NABPLNFPHCK",
-                "useRotation": true,
+                "$type": "ConfigBornBySelf",
                 "offset": {
-                  "x": 0.0,
-                  "z": 100.0,
-                  "y": 0.0
-                }
-              }
+                  "x": 100.0,
+                  "y": 0.0,
+                  "z": 0.0
+                },
+                "useRotation": true
+              },
+              "key": "_ABILITY_Whale_Cannon_Target_Pos"
             },
             {
               "$type": "RemoveVelocityForce",
-              "HALNPNMJJAN": [
+              "forces": [
                 "RushMoveType",
                 "InertiaType",
                 "FixedRushMoveType",
@@ -411,111 +471,131 @@
               "abilityName": "Ability_Avatar_Whale_Cannon_QTE_Succ"
             }
           ],
-          "stacking": "Unique",
           "onKill": [
             {
               "$type": "SetGlobalValueV2",
-              "minValue": 0.0,
+              "doOffStage": true,
               "key": "GV_Cannon_State",
               "maxValue": 0.0,
-              "CBOMLBFIPJM": 0.0,
-              "doOffStage": true
+              "minValue": 0.0,
+              "value": 0.0
             }
           ],
-          "elementDurability": 100.0,
-          "modifierMixins": [
+          "onRemoved": [
             {
-              "$type": "CarpJumpSecondMoveMixin",
-              "CCDPPFKPHOK": 1.0,
-              "HMENLBHFIBH": true,
-              "CCHGNHHLMKP": [
-                {
-                  "$type": "DebugLog",
-                  "content": "WhaleCannonStop > CarpJumpSecondMoveMixin"
-                },
-                {
-                  "$type": "SetGlobalValueV2",
-                  "minValue": 0.0,
-                  "key": "GV_Cannon_State",
-                  "maxValue": 0.0,
-                  "CBOMLBFIPJM": 0.0,
-                  "doOffStage": true
-                },
-                {
-                  "$type": "RemoveUniqueModifier",
-                  "modifierName": "UNIQUE_Whale_Cannon_ShootPlayer"
-                }
-              ],
-              "KDDMAOGIICI": 0.0,
-              "radius": 1.0,
-              "MFDLIJHLDKP": 2.0
+              "$type": "SetGlobalValueV2",
+              "doOffStage": true,
+              "key": "GV_Cannon_Timer_Trigger",
+              "maxValue": 0.0,
+              "minValue": 0.0,
+              "value": 0.0
             },
             {
-              "$type": "SpawnCameraStateMixin",
-              "DGPDJMGNEHP": {
-                "BJFFNFAIGBM": 1,
-                "NAOIPIIJHAJ": 4,
-                "duration": 0.0,
-                "DAGICMOAFJP": 2,
-                "AKLMKDHGNAD": 2
-              },
-              "AFDENKPAECI": {
-                "$type": "LOJKEADJKJI",
-                "NALICOGEKCL": "",
-                "NFMCBONAMOF": "CameraLook",
-                "JGNKGKONPNM": 45.0,
-                "KPBNNGBJLMP": "CameraForward",
-                "fovMax": 90.0,
-                "KFIBIAPGMMA": 1.0,
-                "EKLJPNFLCBO": 46001,
-                "FICLCDBJCMM": 45.0
+              "$type": "SetGlobalValueV2",
+              "doOffStage": true,
+              "key": "GV_BoostCount",
+              "maxValue": 0.0,
+              "minValue": 0.0,
+              "value": 0.0
+            },
+            {
+              "$type": "RemoveUniqueModifier",
+              "doOffStage": true,
+              "modifierName": "UNIQUE_Camera_Blur_Cannon_QTE"
+            },
+            {
+              "$type": "SetGlobalValueV2",
+              "doOffStage": true,
+              "key": "GV_Cannon_State",
+              "maxValue": 0.0,
+              "minValue": 0.0,
+              "value": 0.0
+            },
+            {
+              "$type": "NotifyUI",
+              "doOffStage": true,
+              "message": "ExitRemusMagicDragon",
+              "stringParam": "",
+              "uiContextName": "InLevelMainPage"
+            },
+            {
+              "$type": "DebugLog",
+              "content": "#Whale_Cannon# n5"
+            },
+            {
+              "$type": "ClearGlobalPos",
+              "doOffStage": true,
+              "key": "_ABILITY_Whale_Cannon_Target_Pos"
+            },
+            {
+              "$type": "KillGadget",
+              "doOffStage": true,
+              "gadgetInfo": {
+                "configID": 70330821,
+                "sortType": "Reversed"
               }
             },
             {
-              "$type": "DoActionOnGlobalValueChangeMixin",
-              "actions": [
-                {
-                  "$type": "AttachModifier",
-                  "modifierName": "UNIQUE_Whale_Cannon_Refresh_QTE_Timer",
-                  "predicates": [
-                    {
-                      "$type": "EOFDCELPGFO",
-                      "CBOMLBFIPJM": 0.0,
-                      "compareType": "MoreThan",
-                      "key": "GV_Cannon_Timer_Trigger"
-                    }
-                  ]
-                }
-              ],
-              "globalValueKey": "GV_Cannon_Timer_Trigger"
-            }
-          ],
-          "modifierName": "",
-          "isUnique": true,
-          "onThinkInterval": [
+              "$type": "FireEffect",
+              "effectPattern": "Eff_RemusMagicdragon_Whale_Cannon_Exit_01",
+              "effectTempleteID": -1.0,
+              "scale": 1.0,
+              "ILLLPEOODKP": ""
+            },
             {
-              "$type": "SetGlobalValueV2",
-              "minValue": 0.0,
-              "key": "GV_Cannon_State",
-              "maxValue": 0.0,
-              "CBOMLBFIPJM": 0.0,
-              "doOffStage": true,
-              "predicates": [
-                {
-                  "$type": "CBHEIAINBAI",
-                  "PKFBOEPNANB": true,
-                  "target": "Caster"
-                }
+              "$type": "DebugLog",
+              "content": "#Whale_Cannon# remove bullet"
+            },
+            {
+              "$type": "RemoveVelocityForce",
+              "forces": [
+                "RushMoveType",
+                "InertiaType",
+                "FixedRushMoveType",
+                "RiseType",
+                "AirflowAccType",
+                "AirflowType",
+                "SpeedupType"
               ]
             }
           ],
+          "onThinkInterval": [
+            {
+              "$type": "SetGlobalValueV2",
+              "doOffStage": true,
+              "key": "GV_Cannon_State",
+              "maxValue": 0.0,
+              "minValue": 0.0,
+              "predicates": [
+                {
+                  "$type": "CBHEIAINBAI",
+                  "target": "Caster",
+                  "PKFBOEPNANB": true
+                }
+              ],
+              "value": 0.0
+            }
+          ],
+          "stacking": "Unique",
+          "thinkInterval": 0.3,
           "AIHNJLDFEGJ": 0.0
         },
         "UNIQUE_Whale_Cannon_Refresh_QTE_Timer": {
           "duration": 3.0,
+          "elementDurability": 100.0,
+          "isUnique": true,
+          "modifierName": "",
           "onRemoved": [
             {
               "$type": "Predicated",
+              "predicates": [
+                {
+                  "$type": "ByTargetGlobalValue",
+                  "compareType": "MoreThan",
+                  "key": "GV_BoostCount",
+                  "value": 4.0
+                }
+              ],
               "successActions": [
                 {
                   "$type": "DebugLog",
@@ -525,18 +605,23 @@
                   "$type": "ApplyModifier",
                   "modifierName": "UNIQUE_Whale_Cannon_Final_Stop"
                 }
-              ],
-              "predicates": [
-                {
-                  "$type": "EOFDCELPGFO",
-                  "CBOMLBFIPJM": 4.0,
-                  "compareType": "MoreThan",
-                  "key": "GV_BoostCount"
-                }
               ]
             },
             {
               "$type": "Predicated",
+              "predicates": [
+                {
+                  "$type": "ByTargetGlobalValue",
+                  "compareType": "LessAndEqual",
+                  "key": "GV_BoostCount",
+                  "value": 4.0
+                },
+                {
+                  "$type": "ByTargetGlobalValue",
+                  "key": "GV_Cannon_State",
+                  "value": 2.0
+                }
+              ],
               "successActions": [
                 {
                   "$type": "DebugLog",
@@ -546,47 +631,69 @@
                   "$type": "ApplyModifier",
                   "modifierName": "UNIQUE_Whale_Cannon_QTE"
                 }
-              ],
-              "predicates": [
-                {
-                  "$type": "EOFDCELPGFO",
-                  "CBOMLBFIPJM": 4.0,
-                  "compareType": "LessAndEqual",
-                  "key": "GV_BoostCount"
-                },
-                {
-                  "$type": "EOFDCELPGFO",
-                  "CBOMLBFIPJM": 2.0,
-                  "key": "GV_Cannon_State"
-                }
               ]
             }
           ],
           "stacking": "Unique",
-          "elementDurability": 100.0,
-          "modifierName": "",
-          "isUnique": true,
           "AIHNJLDFEGJ": 0.0
         },
         "UNIQUE_Whale_Cannon_QTE": {
           "duration": 2.5,
+          "elementDurability": 100.0,
+          "isUnique": true,
+          "modifierName": "",
+          "onAdded": [
+            {
+              "$type": "SetGlobalValueV2",
+              "key": "QTE_Cannon_QTE_Succ",
+              "maxValue": 0.0,
+              "minValue": 0.0,
+              "value": 0.0
+            },
+            {
+              "$type": "AddGlobalValue",
+              "key": "GV_BoostCount",
+              "maxValue": 0.0,
+              "minValue": 0.0,
+              "value": 1.0
+            },
+            {
+              "$type": "SetGlobalValueV2",
+              "doOffStage": true,
+              "key": "GV_QTE_Perfect_Time",
+              "maxValue": 0.0,
+              "minValue": 0.0,
+              "value": 2.0
+            },
+            {
+              "$type": "NotifyUI",
+              "message": "BeginRemusMagicDragonQTE",
+              "stringParam": "",
+              "uiContextName": "InLevelMainPage"
+            },
+            {
+              "$type": "RemoveUniqueModifier",
+              "doOffStage": true,
+              "modifierName": "UNIQUE_Camera_Blur_Cannon_QTE"
+            }
+          ],
           "onRemoved": [
             {
               "$type": "Predicated",
               "successActions": [
                 {
                   "$type": "SetGlobalValueV2",
-                  "minValue": 0.0,
+                  "doOffStage": true,
                   "key": "GV_Cannon_State",
                   "maxValue": 0.0,
-                  "CBOMLBFIPJM": 0.0,
-                  "doOffStage": true
+                  "minValue": 0.0,
+                  "value": 0.0
                 },
                 {
                   "$type": "NotifyUI",
-                  "uiContextName": "InLevelMainPage",
+                  "message": "ExitRemusMagicDragon",
                   "stringParam": "",
-                  "message": "ExitRemusMagicDragon"
+                  "uiContextName": "InLevelMainPage"
                 },
                 {
                   "$type": "DebugLog",
@@ -595,57 +702,29 @@
               ],
               "targetPredicates": [
                 {
-                  "$type": "EOFDCELPGFO",
-                  "CBOMLBFIPJM": 0.0,
+                  "$type": "ByTargetGlobalValue",
                   "key": "QTE_Cannon_QTE_Succ",
-                  "target": "Self"
+                  "target": "Self",
+                  "value": 0.0
                 }
               ]
             }
           ],
-          "onAdded": [
-            {
-              "$type": "SetGlobalValueV2",
-              "minValue": 0.0,
-              "key": "QTE_Cannon_QTE_Succ",
-              "maxValue": 0.0,
-              "CBOMLBFIPJM": 0.0
-            },
-            {
-              "$type": "AddGlobalValue",
-              "key": "GV_BoostCount",
-              "maxValue": 0.0,
-              "minValue": 0.0,
-              "CBOMLBFIPJM": 1.0
-            },
-            {
-              "$type": "SetGlobalValueV2",
-              "minValue": 0.0,
-              "key": "GV_QTE_Perfect_Time",
-              "maxValue": 0.0,
-              "CBOMLBFIPJM": 2.0,
-              "doOffStage": true
-            },
-            {
-              "$type": "NotifyUI",
-              "uiContextName": "InLevelMainPage",
-              "stringParam": "",
-              "message": "BeginRemusMagicDragonQTE"
-            },
-            {
-              "$type": "RemoveUniqueModifier",
-              "modifierName": "UNIQUE_Camera_Blur_Cannon_QTE",
-              "doOffStage": true
-            }
-          ],
           "stacking": "Unique",
-          "elementDurability": 100.0,
-          "modifierName": "",
-          "isUnique": true,
           "AIHNJLDFEGJ": 0.0
         },
         "UNIQUE_Whale_Cannon_Final_Stop": {
           "duration": 2.0,
+          "elementDurability": 100.0,
+          "isUnique": true,
+          "modifierName": "",
+          "onAdded": [
+            {
+              "$type": "RemoveUniqueModifier",
+              "doOffStage": true,
+              "modifierName": "UNIQUE_Camera_Blur_Cannon_QTE"
+            }
+          ],
           "onRemoved": [
             {
               "$type": "DebugLog",
@@ -656,105 +735,26 @@
               "abilityName": "Ability_Avatar_Whale_Cannon_QTE_Fail"
             }
           ],
-          "onAdded": [
-            {
-              "$type": "RemoveUniqueModifier",
-              "modifierName": "UNIQUE_Camera_Blur_Cannon_QTE",
-              "doOffStage": true
-            }
-          ],
           "stacking": "Unique",
-          "elementDurability": 100.0,
-          "modifierName": "",
-          "isUnique": true,
           "AIHNJLDFEGJ": 0.0
         }
       },
-      "abilityMixins": [
-        {
-          "$type": "UIInteractMixin",
-          "actionList": [
-            {
-              "$type": "DebugLog",
-              "content": "#Whale_Cannon# open page"
-            },
-            {
-              "$type": "SetGlobalValueV2",
-              "minValue": 0.0,
-              "key": "GV_Cannon_State",
-              "maxValue": 0.0,
-              "CBOMLBFIPJM": 1.0,
-              "predicates": [
-                {
-                  "$type": "NNMDCGOFEHG",
-                  "isHost": true
-                }
-              ]
-            }
-          ],
-          "uimessageid": "RemusMagicDragon_Start_Aim"
-        },
-        {
-          "$type": "UIInteractMixin",
-          "actionList": [
-            {
-              "$type": "DebugLog",
-              "content": "#Whale_Cannon# close page"
-            },
-            {
-              "$type": "SetGlobalValueV2",
-              "minValue": 0.0,
-              "key": "GV_Cannon_State",
-              "maxValue": 0.0,
-              "CBOMLBFIPJM": 0.0,
-              "doOffStage": true
-            }
-          ],
-          "uimessageid": "RemusMagicDragon_Exit_Aim"
-        },
-        {
-          "$type": "StageReadyMixin",
-          "LBHGDFODDCC": [
-            {
-              "$type": "NotifyUI",
-              "uiContextName": "InLevelMainPage",
-              "stringParam": "",
-              "message": "ExitRemusMagicDragon",
-              "doOffStage": true
-            },
-            {
-              "$type": "DebugLog",
-              "content": "#Whale_Cannon# n1"
-            },
-            {
-              "$type": "SetGlobalValueV2",
-              "minValue": 0.0,
-              "key": "GV_Cannon_State",
-              "maxValue": 0.0,
-              "CBOMLBFIPJM": 0.0,
-              "doOffStage": true
-            }
-          ]
-        }
-      ],
-      "abilityName": "Ability_Whale_Cannon_Avatar",
-      "isDynamicAbility": true,
       "onAdded": [
         {
           "$type": "SetGlobalValueV2",
-          "minValue": 0.0,
+          "doOffStage": true,
           "key": "GV_Cannon_State",
           "maxValue": 0.0,
-          "CBOMLBFIPJM": 0.0,
-          "doOffStage": true
+          "minValue": 0.0,
+          "value": 0.0
         },
         {
           "$type": "SetGlobalValueV2",
-          "minValue": 0.0,
+          "doOffStage": true,
           "key": "GV_Cannon_Timer_Trigger",
           "maxValue": 0.0,
-          "CBOMLBFIPJM": 0.0,
-          "doOffStage": true
+          "minValue": 0.0,
+          "value": 0.0
         },
         {
           "$type": "AttachModifier",
@@ -769,10 +769,10 @@
       "onAvatarOut": [
         {
           "$type": "NotifyUI",
-          "uiContextName": "InLevelMainPage",
-          "stringParam": "",
+          "doOffStage": true,
           "message": "ExitRemusMagicDragon",
-          "doOffStage": true
+          "stringParam": "",
+          "uiContextName": "InLevelMainPage"
         },
         {
           "$type": "DebugLog",
@@ -780,64 +780,45 @@
         },
         {
           "$type": "SetGlobalValueV2",
-          "minValue": 0.0,
+          "doOffStage": true,
           "key": "GV_Cannon_State",
           "maxValue": 0.0,
-          "CBOMLBFIPJM": 0.0,
-          "doOffStage": true
+          "minValue": 0.0,
+          "value": 0.0
         }
       ]
     }
   },
   {
     "Default": {
+      "abilityName": "Ability_Avatar_Whale_Cannon_Shoot_Start",
+      "isDynamicAbility": true,
       "onAbilityStart": [
         {
           "$type": "SetGlobalValueV2",
-          "minValue": 0.0,
+          "doOffStage": true,
           "key": "GV_Cannon_State",
           "maxValue": 0.0,
-          "CBOMLBFIPJM": 2.0,
-          "doOffStage": true
+          "minValue": 0.0,
+          "value": 2.0
         }
-      ],
-      "abilityName": "Ability_Avatar_Whale_Cannon_Shoot_Start",
-      "isDynamicAbility": true
+      ]
     }
   },
   {
     "Default": {
+      "abilityName": "Ability_Avatar_Whale_Cannon_QTE_Succ",
+      "isDynamicAbility": true,
       "modifiers": {
         "UNIQUE_Camera_Blur_Cannon_QTE": {
-          "onRemoved": [
-            {
-              "$type": "TriggerAudio",
-              "operation": {
-                "$type": "KLKMGHDGPIK",
-                "operation": {
-                  "text": "Stop_Vfx_RemusMagicdragon_Moving_CameraPostProcess_01"
-                }
-              }
-            }
-          ],
-          "onAdded": [
-            {
-              "$type": "TriggerAudio",
-              "operation": {
-                "$type": "KLKMGHDGPIK",
-                "operation": {
-                  "text": "Play_Vfx_RemusMagicdragon_Moving_CameraPostProcess_01"
-                }
-              }
-            }
-          ],
           "elementDurability": 100.0,
+          "isUnique": true,
           "modifierMixins": [
             {
               "$type": "CameraBlurMixin",
-              "NFBFBAJDMPJ": {
-                "LCOPJHPGJCO": 1.0,
-                "LFMGJKCOGPI": 0.65
+              "cameraRadialBlur": {
+                "fadeTime": 1.0,
+                "power": 0.65
               }
             },
             {
@@ -847,7 +828,28 @@
             }
           ],
           "modifierName": "",
-          "isUnique": true,
+          "onAdded": [
+            {
+              "$type": "TriggerAudio",
+              "operation": {
+                "$type": "ConfigAudioEventOp",
+                "operation": {
+                  "text": "Play_Vfx_RemusMagicdragon_Moving_CameraPostProcess_01"
+                }
+              }
+            }
+          ],
+          "onRemoved": [
+            {
+              "$type": "TriggerAudio",
+              "operation": {
+                "$type": "ConfigAudioEventOp",
+                "operation": {
+                  "text": "Stop_Vfx_RemusMagicdragon_Moving_CameraPostProcess_01"
+                }
+              }
+            }
+          ],
           "AIHNJLDFEGJ": 0.0
         },
         "CameraBlur_WhaleCannon": {
@@ -859,30 +861,30 @@
       "onAbilityStart": [
         {
           "$type": "SetGlobalValueV2",
-          "minValue": 0.0,
           "key": "QTE_Cannon_QTE_Succ",
           "maxValue": 0.0,
-          "CBOMLBFIPJM": 1.0
+          "minValue": 0.0,
+          "value": 1.0
         },
         {
           "$type": "DoWatcherSystemAction",
-          "watcherId": 81473,
-          "target": "CurLocalAvatar"
+          "target": "CurLocalAvatar",
+          "watcherId": 81473
         },
         {
           "$type": "AddVelocityForce",
+          "attenuation": 2.0,
           "born": {
-            "$type": "NABPLNFPHCK",
-            "useRotation": true,
+            "$type": "ConfigBornBySelf",
             "direction": {
-              "$type": "CHHJODLLMHA"
-            }
+              "$type": "ConfigDirectionByCamera"
+            },
+            "useRotation": true
           },
           "forceType": "SpeedupType",
-          "attenuation": 2.0,
-          "HDPIKNLINNC": true,
           "DLEBEPBMEMO": 3.0,
-          "GCDNNBINIMG": 12.0
+          "GCDNNBINIMG": 12.0,
+          "HDPIKNLINNC": true
         },
         {
           "$type": "AttachModifier",
@@ -890,20 +892,20 @@
         },
         {
           "$type": "AddGlobalValueV2",
-          "minValue": 0.0,
           "key": "GV_Cannon_Timer_Trigger",
-          "CBOMLBFIPJM": 1.0,
-          "maxValue": 0.0
+          "maxValue": 0.0,
+          "minValue": 0.0,
+          "value": 1.0
         },
         {
           "$type": "FireEffect",
-          "effectPattern": "Eff_RemusMagicdragon_QteFeedback_Local_01",
-          "scale": 1.0,
           "born": {
-            "$type": "CEJIEPKNPBN"
+            "$type": "ConfigBornByCamera"
           },
-          "ILLLPEOODKP": "",
-          "effectTempleteID": -1.0
+          "effectPattern": "Eff_RemusMagicdragon_QteFeedback_Local_01",
+          "effectTempleteID": -1.0,
+          "scale": 1.0,
+          "ILLLPEOODKP": ""
         },
         {
           "$type": "DoActionsLocal",
@@ -911,30 +913,30 @@
             {
               "$type": "FireEffect",
               "effectPattern": "Eff_RemusMagicdragon_QteFeedback_Remote_01",
-              "scale": 1.0,
-              "ILLLPEOODKP": "",
               "effectTempleteID": -1.0,
               "predicates": [
                 {
-                  "$type": "GKGBIPDLMMG",
+                  "$type": "ByNot",
                   "predicates": [
                     {
-                      "$type": "ALBIJACMAEB"
+                      "$type": "ByIsLocalAvatar"
                     }
                   ]
                 }
-              ]
+              ],
+              "scale": 1.0,
+              "ILLLPEOODKP": ""
             }
           ],
           "canBeHandledOnRecover": true
         }
-      ],
-      "abilityName": "Ability_Avatar_Whale_Cannon_QTE_Succ",
-      "isDynamicAbility": true
+      ]
     }
   },
   {
     "Default": {
+      "abilityName": "Ability_Avatar_Whale_Cannon_QTE_Fail",
+      "isDynamicAbility": true,
       "onAbilityStart": [
         {
           "$type": "DebugLog",
@@ -942,36 +944,83 @@
         },
         {
           "$type": "SetGlobalValueV2",
-          "minValue": 0.0,
           "key": "QTE_Cannon_QTE_Succ",
           "maxValue": 0.0,
-          "CBOMLBFIPJM": 0.0
+          "minValue": 0.0,
+          "value": 0.0
         },
         {
           "$type": "SetGlobalValueV2",
-          "minValue": 0.0,
+          "doOffStage": true,
           "key": "GV_Cannon_State",
           "maxValue": 0.0,
-          "CBOMLBFIPJM": 0.0,
-          "doOffStage": true
+          "minValue": 0.0,
+          "value": 0.0
         },
         {
           "$type": "NotifyUI",
-          "uiContextName": "InLevelMainPage",
+          "message": "ExitRemusMagicDragon",
           "stringParam": "",
-          "message": "ExitRemusMagicDragon"
+          "uiContextName": "InLevelMainPage"
         },
         {
           "$type": "DebugLog",
           "content": "#Whale_Cannon# n7"
         }
-      ],
-      "abilityName": "Ability_Avatar_Whale_Cannon_QTE_Fail",
-      "isDynamicAbility": true
+      ]
     }
   },
   {
     "Default": {
+      "abilityMixins": [
+        {
+          "$type": "AttachModifierToGlobalValueMixin",
+          "globalValueKey": "_ABILITY_Diving_InDive_Mark",
+          "globalValueTarget": "Team",
+          "modifierNameSteps": [
+            "Blank",
+            "HookControl"
+          ],
+          "valueSteps": [
+            -0.5,
+            0.5,
+            1.5
+          ]
+        },
+        {
+          "$type": "AttachModifierToSelfGlobalValueMixin",
+          "defaultGlobalValueOnCreate": 0.0,
+          "globalValueKey": "_ABILITY_WhaleHookSkill_Step",
+          "modifierNameSteps": [
+            "Blank",
+            "UNIQUE_WhaleHookSkill_GrassCoreEffect"
+          ],
+          "valueSteps": [
+            -0.5,
+            0.5,
+            3.9
+          ]
+        },
+        {
+          "$type": "AttachModifierToSelfGlobalValueMixin",
+          "defaultGlobalValueOnCreate": 0.0,
+          "globalValueKey": "_ABILITY_WhaleHookSkill_Step",
+          "modifierNameSteps": [
+            "ExitFirstPerson",
+            "EnterFirstPerson"
+          ],
+          "valueSteps": [
+            -0.5,
+            0.5,
+            3.9
+          ]
+        }
+      ],
+      "abilityName": "Ability_Whale_Hook_Avatar",
+      "abilitySpecials": {
+        "recordFishSkill": 0.0
+      },
+      "isDynamicAbility": true,
       "modifiers": {
         "Blank": {
           "elementDurability": 100.0,
@@ -983,6 +1032,8 @@
           "modifierMixins": [
             {
               "$type": "CheckSubTagScanEntityMixin",
+              "activateSkillKey": "AVATAR_WhaleHookSkill",
+              "tag": "WorldPlay_4_6",
               "MBDANNCNLFN": "WorldPlay_Whale_Hook_4_6",
               "ILOOHKBIBJM": [
                 {
@@ -991,27 +1042,11 @@
                 },
                 {
                   "$type": "ApplyModifier",
+                  "doOffStage": true,
                   "modifierName": "UNIQUE_WhaleHookSkill_ExtraTeamAbility",
-                  "target": "Team",
-                  "doOffStage": true
+                  "target": "Team"
                 }
               ],
-              "AKFANJPEJNN": [
-                {
-                  "$type": "DebugLog",
-                  "content": "Ability_Whale_Hook_Avatar > onExitArea"
-                },
-                {
-                  "$type": "SetGlobalValue",
-                  "key": "InWhaleHookArea",
-                  "minValue": 0.0,
-                  "maxValue": 0.0,
-                  "CBOMLBFIPJM": 0.0,
-                  "target": "Team",
-                  "doOffStage": true
-                }
-              ],
-              "activateSkillKey": "AVATAR_WhaleHookSkill",
               "IMEDGAOLLEM": [
                 {
                   "$type": "DebugLog",
@@ -1019,9 +1054,9 @@
                 },
                 {
                   "$type": "RemoveUniqueModifier",
+                  "doOffStage": true,
                   "modifierName": "UNIQUE_WhaleHookSkill_ExtraTeamAbility",
-                  "target": "Team",
-                  "doOffStage": true
+                  "target": "Team"
                 }
               ],
               "HDEOAHBHOEC": [
@@ -1031,15 +1066,29 @@
                 },
                 {
                   "$type": "SetGlobalValue",
+                  "doOffStage": true,
                   "key": "InWhaleHookArea",
-                  "minValue": 0.0,
                   "maxValue": 0.0,
-                  "CBOMLBFIPJM": 1.0,
+                  "minValue": 0.0,
                   "target": "Team",
-                  "doOffStage": true
+                  "value": 1.0
                 }
               ],
-              "tag": "WorldPlay_4_6"
+              "AKFANJPEJNN": [
+                {
+                  "$type": "DebugLog",
+                  "content": "Ability_Whale_Hook_Avatar > onExitArea"
+                },
+                {
+                  "$type": "SetGlobalValue",
+                  "doOffStage": true,
+                  "key": "InWhaleHookArea",
+                  "maxValue": 0.0,
+                  "minValue": 0.0,
+                  "target": "Team",
+                  "value": 0.0
+                }
+              ]
             }
           ],
           "modifierName": "",
@@ -1050,10 +1099,10 @@
           "modifierMixins": [
             {
               "$type": "SwitchSkillIDMixin",
-              "skillIndex": -1,
-              "MPIKIJDMPDB": true,
               "priority": "Playmode",
-              "skillID": 20076
+              "skillID": 20076,
+              "skillIndex": -1,
+              "MPIKIJDMPDB": true
             }
           ],
           "modifierName": "",
@@ -1064,10 +1113,10 @@
           "modifierMixins": [
             {
               "$type": "SwitchSkillIDMixin",
-              "skillIndex": 3,
-              "PLCLGHCMCDG": true,
               "priority": "Playmode",
-              "skillID": 20346
+              "skillID": 20346,
+              "skillIndex": 3,
+              "useInAir": true
             }
           ],
           "modifierName": "",
@@ -1075,6 +1124,7 @@
         },
         "UNIQUE_WhaleHookSkill_ExtraTeamAbility": {
           "elementDurability": 100.0,
+          "isUnique": true,
           "modifierMixins": [
             {
               "$type": "ActivitySkillMixin",
@@ -1083,105 +1133,80 @@
             }
           ],
           "modifierName": "",
-          "isUnique": true,
           "AIHNJLDFEGJ": 0.0
         },
         "UNIQUE_WhaleHookSkill_RecoverHandler": {
+          "elementDurability": 100.0,
+          "isUnique": true,
+          "modifierName": "",
           "onReconnect": [
             {
               "$type": "SetGlobalValue",
+              "doOffStage": true,
               "key": "_ABILITY_WhaleHookSkill_Step",
-              "minValue": 0.0,
               "maxValue": 0.0,
-              "CBOMLBFIPJM": 0.0,
-              "doOffStage": true
+              "minValue": 0.0,
+              "value": 0.0
             }
           ],
-          "elementDurability": 100.0,
-          "modifierName": "",
-          "isUnique": true,
           "AIHNJLDFEGJ": 0.0
         },
         "UNIQUE_WhaleHookSkill_SkillHandler": {
-          "thinkInterval": 0.2,
           "elementDurability": 100.0,
+          "isUnique": true,
           "modifierMixins": [
             {
               "$type": "AttachToStateIDMixin",
-              "LJPPDIGCJMJ": "",
+              "modifierName": "UNIQUE_WhaleHookSkill_SkillHandlerIntern",
               "stateIDs": [
                 "ActivitySkill_CustomSkill02"
               ],
-              "modifierName": "UNIQUE_WhaleHookSkill_SkillHandlerIntern"
+              "LJPPDIGCJMJ": ""
             }
           ],
           "modifierName": "",
-          "isUnique": true,
           "onThinkInterval": [
             {
               "$type": "SetGlobalValue",
               "key": "_ABILITY_WhaleHookSkill_Step",
-              "minValue": 0.0,
               "maxValue": 0.0,
-              "CBOMLBFIPJM": 0.0,
+              "minValue": 0.0,
               "predicates": [
                 {
-                  "$type": "EOFDCELPGFO",
-                  "CBOMLBFIPJM": 0.0,
+                  "$type": "ByTargetGlobalValue",
                   "compareType": "MoreThan",
                   "key": "GV_Cannon_State",
-                  "target": "Self"
+                  "target": "Self",
+                  "value": 0.0
                 }
-              ]
+              ],
+              "value": 0.0
             },
             {
               "$type": "RemoveUniqueModifier",
-              "modifierName": "UNIQUE_WhaleHookSkill_SkillHandler",
               "doOffStage": true,
+              "modifierName": "UNIQUE_WhaleHookSkill_SkillHandler",
               "predicates": [
                 {
-                  "$type": "EOFDCELPGFO",
-                  "CBOMLBFIPJM": 0.0,
+                  "$type": "ByTargetGlobalValue",
                   "key": "_ABILITY_WhaleHookSkill_Step",
-                  "target": "Self"
+                  "target": "Self",
+                  "value": 0.0
                 }
               ]
             }
           ],
+          "thinkInterval": 0.2,
           "AIHNJLDFEGJ": 0.0
         },
         "UNIQUE_WhaleHookSkill_SkillHandlerIntern": {
-          "onRemoved": [
-            {
-              "$type": "SetGlobalValue",
-              "key": "_ABILITY_WhaleHookSkill_Step",
-              "minValue": 0.0,
-              "maxValue": 0.0,
-              "CBOMLBFIPJM": 0.0,
-              "doOffStage": true,
-              "predicates": [
-                {
-                  "$type": "EOFDCELPGFO",
-                  "CBOMLBFIPJM": 3.0,
-                  "compareType": "LessAndEqual",
-                  "key": "_ABILITY_WhaleHookSkill_Step"
-                }
-              ]
-            }
-          ],
-          "onAdded": [
-            {
-              "$type": "SetGlobalValue",
-              "key": "_ABILITY_WhaleHookSkill_Step",
-              "minValue": 0.0,
-              "maxValue": 0.0,
-              "CBOMLBFIPJM": 1.0
-            }
-          ],
           "elementDurability": 100.0,
+          "isUnique": true,
           "modifierMixins": [
             {
               "$type": "AttachModifierToSelfGlobalValueMixin",
+              "defaultGlobalValueOnCreate": 0.0,
+              "globalValueKey": "_ABILITY_WhaleHookSkill_Step",
               "modifierNameSteps": [
                 "UNIQUE_WhaleHookSkill_PreSkill",
                 "UNIQUE_WhaleHookSkill_ThrowHook"
@@ -1190,47 +1215,74 @@
                 0.5,
                 1.5,
                 3.5
-              ],
-              "globalValueKey": "_ABILITY_WhaleHookSkill_Step",
-              "defaultGlobalValueOnCreate": 0.0
+              ]
             },
             {
               "$type": "AttachModifierToSelfGlobalValueMixin",
+              "defaultGlobalValueOnCreate": 0.0,
+              "globalValueKey": "_ABILITY_WhaleHookSkill_Step",
               "modifierNameSteps": [
                 "UNIQUE_WhaleHookSkill_SkillStart"
               ],
               "valueSteps": [
                 2.5,
                 4.5
-              ],
-              "globalValueKey": "_ABILITY_WhaleHookSkill_Step",
-              "defaultGlobalValueOnCreate": 0.0
+              ]
             },
             {
               "$type": "DisableForceEnterDiveMixin"
             }
           ],
           "modifierName": "",
-          "isUnique": true,
+          "onAdded": [
+            {
+              "$type": "SetGlobalValue",
+              "key": "_ABILITY_WhaleHookSkill_Step",
+              "maxValue": 0.0,
+              "minValue": 0.0,
+              "value": 1.0
+            }
+          ],
+          "onRemoved": [
+            {
+              "$type": "SetGlobalValue",
+              "doOffStage": true,
+              "key": "_ABILITY_WhaleHookSkill_Step",
+              "maxValue": 0.0,
+              "minValue": 0.0,
+              "predicates": [
+                {
+                  "$type": "ByTargetGlobalValue",
+                  "compareType": "LessAndEqual",
+                  "key": "_ABILITY_WhaleHookSkill_Step",
+                  "value": 3.0
+                }
+              ],
+              "value": 0.0
+            }
+          ],
           "AIHNJLDFEGJ": 0.0
         },
         "UNIQUE_TriggerWhaleStop": {
           "duration": 0.06,
+          "elementDurability": 100.0,
+          "isUnique": true,
+          "modifierName": "",
           "onAdded": [
             {
               "$type": "AddGlobalValueV2",
-              "minValue": 0.0,
               "key": "GV_StopTrigger",
-              "CBOMLBFIPJM": 1.0,
-              "maxValue": 0.0
+              "maxValue": 0.0,
+              "minValue": 0.0,
+              "value": 1.0
             }
           ],
-          "elementDurability": 100.0,
-          "modifierName": "",
-          "isUnique": true,
           "AIHNJLDFEGJ": 0.0
         },
         "UNIQUE_WhaleHookSkill_PreSkill": {
+          "elementDurability": 100.0,
+          "isUnique": true,
+          "modifierName": "",
           "onAdded": [
             {
               "$type": "AttachModifier",
@@ -1244,17 +1296,33 @@
           "properties": {
             "Actor_EndureDelta": 0.0
           },
-          "elementDurability": 100.0,
-          "modifierName": "",
-          "isUnique": true,
           "AIHNJLDFEGJ": 0.0
         },
         "RushMoveOnGround": {
           "duration": 0.06,
+          "elementDurability": 100.0,
+          "modifierName": "",
+          "onAdded": [
+            {
+              "$type": "FixedAvatarFlashMove",
+              "animatorStateIDs": [
+                "ActivitySkill_CustomSkill02"
+              ],
+              "toPos": {
+                "$type": "ConfigBornBySelf",
+                "offset": {
+                  "x": 0.0,
+                  "y": 0.2,
+                  "z": 0.0
+                },
+                "useRotation": true
+              }
+            }
+          ],
           "onRemoved": [
             {
               "$type": "RemoveVelocityForce",
-              "HALNPNMJJAN": [
+              "forces": [
                 "RushMoveType",
                 "InertiaType"
               ]
@@ -1264,134 +1332,125 @@
               "key": "Avatar_HookVisible",
               "maxValue": 0.0,
               "minValue": 0.0,
-              "CBOMLBFIPJM": 1.0
+              "value": 1.0
             },
             {
               "$type": "SetGlobalValue",
               "key": "_ABILITY_WhaleHookSkill_Step",
-              "minValue": 0.0,
               "maxValue": 0.0,
-              "CBOMLBFIPJM": 2.0,
+              "minValue": 0.0,
               "predicates": [
                 {
-                  "$type": "EOFDCELPGFO",
-                  "CBOMLBFIPJM": 1.0,
-                  "key": "_ABILITY_WhaleHookSkill_Step"
+                  "$type": "ByTargetGlobalValue",
+                  "key": "_ABILITY_WhaleHookSkill_Step",
+                  "value": 1.0
                 }
-              ]
-            }
-          ],
-          "onAdded": [
-            {
-              "$type": "FixedAvatarFlashMove",
-              "toPos": {
-                "$type": "NABPLNFPHCK",
-                "useRotation": true,
-                "offset": {
-                  "x": 0.0,
-                  "z": 0.0,
-                  "y": 0.2
-                }
-              },
-              "animatorStateIDs": [
-                "ActivitySkill_CustomSkill02"
-              ]
+              ],
+              "value": 2.0
             }
           ],
           "properties": {
             "Actor_EndureDelta": 0.0
           },
-          "elementDurability": 100.0,
-          "modifierName": "",
           "AIHNJLDFEGJ": 0.0
         },
         "UNIQUE_WhaleHookSkill_ThrowHook": {
           "duration": 1.1,
-          "onRemoved": [
-            {
-              "$type": "SetGlobalValue",
-              "key": "_ABILITY_WhaleHookSkill_Step",
-              "minValue": 0.0,
-              "maxValue": 0.0,
-              "CBOMLBFIPJM": 3.0,
-              "predicates": [
-                {
-                  "$type": "EOFDCELPGFO",
-                  "CBOMLBFIPJM": 2.0,
-                  "key": "_ABILITY_WhaleHookSkill_Step"
-                }
-              ]
-            }
-          ],
-          "properties": {
-            "Actor_EndureDelta": 0.0
-          },
           "elementDurability": 100.0,
+          "isUnique": true,
           "modifierMixins": [
             {
               "$type": "GrapplingHookMoveStayInPlaceMixin"
             }
           ],
           "modifierName": "",
-          "isUnique": true,
+          "onRemoved": [
+            {
+              "$type": "SetGlobalValue",
+              "key": "_ABILITY_WhaleHookSkill_Step",
+              "maxValue": 0.0,
+              "minValue": 0.0,
+              "predicates": [
+                {
+                  "$type": "ByTargetGlobalValue",
+                  "key": "_ABILITY_WhaleHookSkill_Step",
+                  "value": 2.0
+                }
+              ],
+              "value": 3.0
+            }
+          ],
+          "properties": {
+            "Actor_EndureDelta": 0.0
+          },
           "AIHNJLDFEGJ": 0.0
         },
         "UNIQUE_WhaleHookSkill_SkillStart": {
-          "onRemoved": [
+          "elementDurability": 100.0,
+          "isUnique": true,
+          "modifierMixins": [
             {
-              "$type": "TriggerAudio",
-              "operation": {
-                "$type": "KLKMGHDGPIK",
-                "operation": {
-                  "text": "Stop_Unique_Whale_Cannon_ShootPlayer"
+              "$type": "GrapplingHookMoveMixin",
+              "arriveDistance": 0.5,
+              "onArrived": [
+                {
+                  "$type": "SetGlobalValue",
+                  "key": "_ABILITY_WhaleHookSkill_Step",
+                  "maxValue": 0.0,
+                  "minValue": 0.0,
+                  "predicates": [
+                    {
+                      "$type": "ByTargetGlobalValue",
+                      "key": "_ABILITY_WhaleHookSkill_Step",
+                      "value": 3.0
+                    }
+                  ],
+                  "value": 4.0
+                },
+                {
+                  "$type": "ApplyModifier",
+                  "modifierName": "GrapplingHook_ArrivedRushMove"
                 }
-              }
-            },
-            {
-              "$type": "RemoveUniqueModifier",
-              "modifierName": "UNIQUE_WhaleHook_Cam_Eff_Delay",
-              "doOffStage": true
-            },
-            {
-              "$type": "RemoveUniqueModifier",
-              "modifierName": "UNIQUE_WhaleHook_Cam_Eff",
-              "doOffStage": true
+              ],
+              "upForceTime": 0.0,
+              "upForceValue": 0.0
             }
           ],
+          "modifierName": "",
           "onAdded": [
             {
               "$type": "GrapplingHookRushMove",
-              "DMAHANNMCAH": 1,
-              "JLBCKKLJKEF": 20.0,
-              "CIFADBDOAFI": 10.0,
-              "toPos": {
-                "$type": "LKIBKKFEOLJ",
-                "positionKey": "_WhaleHook_TargetPos",
-                "directionKey": "",
-                "offset": {
-                  "x": 0.0,
-                  "z": 0.0,
-                  "y": -0.5
-                },
-                "direction": {
-                  "$type": "KMEAEFMPHKB",
-                  "directionKey": "_WhaleHook_TargetDir"
-                }
-              },
+              "accSpeed": 10.0,
               "animatorStateIDs": [
                 "ActivitySkill_CustomSkill02",
                 "Fly",
                 "Standby",
                 "Run"
               ],
-              "NFHNGOHFHHB": 10.0,
+              "maxSpeed": 20.0,
               "predicates": [
                 {
-                  "$type": "EOFDCELPGFO",
-                  "CBOMLBFIPJM": 3.0,
-                  "key": "_ABILITY_WhaleHookSkill_Step"
+                  "$type": "ByTargetGlobalValue",
+                  "key": "_ABILITY_WhaleHookSkill_Step",
+                  "value": 3.0
                 }
-              ]
+              ],
+              "speed": 10.0,
+              "toPos": {
+                "$type": "ConfigBornByGlobalValue",
+                "direction": {
+                  "$type": "ConfigDirectionByGlobalValue",
+                  "directionKey": "_WhaleHook_TargetDir"
+                },
+                "directionKey": "",
+                "offset": {
+                  "x": 0.0,
+                  "y": -0.5,
+                  "z": 0.0
+                },
+                "positionKey": "_WhaleHook_TargetPos"
+              },
+              "DMAHANNMCAH": 1
             },
             {
               "$type": "ApplyModifier",
@@ -1400,61 +1459,52 @@
             {
               "$type": "TriggerAudio",
               "operation": {
-                "$type": "KLKMGHDGPIK",
+                "$type": "ConfigAudioEventOp",
                 "operation": {
                   "text": "Play_Unique_Whale_Cannon_ShootPlayer"
                 }
               }
             }
           ],
-          "elementDurability": 100.0,
-          "modifierMixins": [
+          "onRemoved": [
             {
-              "$type": "GrapplingHookMoveMixin",
-              "AHLPACEPFBM": 0.0,
-              "JOENEEBFPPJ": 0.5,
-              "OCIEFJMDFEO": 0.0,
-              "LNAEPNKNKBG": [
-                {
-                  "$type": "SetGlobalValue",
-                  "key": "_ABILITY_WhaleHookSkill_Step",
-                  "minValue": 0.0,
-                  "maxValue": 0.0,
-                  "CBOMLBFIPJM": 4.0,
-                  "predicates": [
-                    {
-                      "$type": "EOFDCELPGFO",
-                      "CBOMLBFIPJM": 3.0,
-                      "key": "_ABILITY_WhaleHookSkill_Step"
-                    }
-                  ]
-                },
-                {
-                  "$type": "ApplyModifier",
-                  "modifierName": "GrapplingHook_ArrivedRushMove"
+              "$type": "TriggerAudio",
+              "operation": {
+                "$type": "ConfigAudioEventOp",
+                "operation": {
+                  "text": "Stop_Unique_Whale_Cannon_ShootPlayer"
                 }
-              ]
+              }
+            },
+            {
+              "$type": "RemoveUniqueModifier",
+              "doOffStage": true,
+              "modifierName": "UNIQUE_WhaleHook_Cam_Eff_Delay"
+            },
+            {
+              "$type": "RemoveUniqueModifier",
+              "doOffStage": true,
+              "modifierName": "UNIQUE_WhaleHook_Cam_Eff"
             }
           ],
-          "modifierName": "",
-          "isUnique": true,
           "AIHNJLDFEGJ": 0.0
         },
         "UNIQUE_WhaleHook_Cam_Eff_Delay": {
           "duration": 0.1,
+          "elementDurability": 100.0,
+          "isUnique": true,
+          "modifierName": "",
           "onRemoved": [
             {
               "$type": "ApplyModifier",
               "modifierName": "UNIQUE_WhaleHook_Cam_Eff"
             }
           ],
-          "elementDurability": 100.0,
-          "modifierName": "",
-          "isUnique": true,
           "AIHNJLDFEGJ": 0.0
         },
         "UNIQUE_WhaleHook_Cam_Eff": {
           "elementDurability": 100.0,
+          "isUnique": true,
           "modifierMixins": [
             {
               "$type": "TriggerPostProcessEffectMixin",
@@ -1463,39 +1513,18 @@
             },
             {
               "$type": "CameraBlurMixin",
-              "NFBFBAJDMPJ": {
-                "LCOPJHPGJCO": 0.3,
-                "LFMGJKCOGPI": 0.65
+              "cameraRadialBlur": {
+                "fadeTime": 0.3,
+                "power": 0.65
               }
             }
           ],
           "modifierName": "",
-          "isUnique": true,
           "AIHNJLDFEGJ": 0.0
         },
         "UNIQUE_WhaleHookSkill_HookHideHandler": {
-          "onRemoved": [
-            {
-              "$type": "SetGlobalValue",
-              "key": "Avatar_HookVisible",
-              "minValue": 0.0,
-              "maxValue": 0.0,
-              "CBOMLBFIPJM": 0.0,
-              "doOffStage": true
-            },
-            {
-              "$type": "TriggerSetVisible",
-              "visible": true,
-              "canBeHandledOnRecover": true,
-              "doOffStage": true
-            }
-          ],
-          "onAdded": [
-            {
-              "$type": "TriggerSetVisible"
-            }
-          ],
           "elementDurability": 100.0,
+          "isUnique": true,
           "modifierMixins": [
             {
               "$type": "DoActionOnGlobalValueChangeMixin",
@@ -1504,10 +1533,10 @@
                   "$type": "TriggerSetVisible",
                   "predicates": [
                     {
-                      "$type": "EOFDCELPGFO",
-                      "CBOMLBFIPJM": 1.0,
+                      "$type": "ByTargetGlobalValue",
                       "compareType": "MoreThanAndEqual",
-                      "key": "Avatar_HookVisible"
+                      "key": "Avatar_HookVisible",
+                      "value": 1.0
                     }
                   ]
                 }
@@ -1516,68 +1545,61 @@
             }
           ],
           "modifierName": "",
-          "isUnique": true,
+          "onAdded": [
+            {
+              "$type": "TriggerSetVisible"
+            }
+          ],
+          "onRemoved": [
+            {
+              "$type": "SetGlobalValue",
+              "doOffStage": true,
+              "key": "Avatar_HookVisible",
+              "maxValue": 0.0,
+              "minValue": 0.0,
+              "value": 0.0
+            },
+            {
+              "$type": "TriggerSetVisible",
+              "canBeHandledOnRecover": true,
+              "doOffStage": true,
+              "visible": true
+            }
+          ],
           "AIHNJLDFEGJ": 0.0
         },
         "UNIQUE_WhaleHookSkill_GrassCoreEffect": {
-          "onRemoved": [
+          "elementDurability": 100.0,
+          "isUnique": true,
+          "modifierMixins": [
             {
-              "$type": "SetAnimatorTrigger",
-              "triggerID": "CustomSkill02_End_Drop"
-            },
-            {
-              "$type": "KillGadget",
-              "gadgetInfo": {
-                "configID": 70330821,
-                "sortType": "Reversed"
-              },
-              "doOffStage": true
-            },
-            {
-              "$type": "SetVelocityIgnoreAirGY",
-              "doOffStage": true
-            },
-            {
-              "$type": "RemoveVelocityForce",
-              "HALNPNMJJAN": [
-                "RushMoveType",
-                "InertiaType"
-              ],
-              "doOffStage": true
-            },
-            {
-              "$type": "FireEffect",
-              "effectPattern": "Eff_RemusMagicdragon_Whale_Cannon_Exit_01",
-              "scale": 1.0,
-              "ILLLPEOODKP": "",
-              "effectTempleteID": -1.0
-            },
-            {
-              "$type": "ApplyModifier",
-              "modifierName": "GrapplingHook_SkillCharge",
-              "doOffStage": true
+              "$type": "DisableUIMixin",
+              "typeList": [
+                "InteePanel"
+              ]
             }
           ],
+          "modifierName": "",
           "onAdded": [
             {
               "$type": "DoActionsLocal",
               "actionList": [
                 {
                   "$type": "AttachEffect",
-                  "ILLLPEOODKP": "",
-                  "scale": 1.0,
                   "effectPattern": "Eff_RemusMagicdragon_Moving_Remote_01",
                   "effectTempleteID": -1.0,
                   "predicates": [
                     {
-                      "$type": "GKGBIPDLMMG",
+                      "$type": "ByNot",
                       "predicates": [
                         {
-                          "$type": "ALBIJACMAEB"
+                          "$type": "ByIsLocalAvatar"
                         }
                       ]
                     }
-                  ]
+                  ],
+                  "scale": 1.0,
+                  "ILLLPEOODKP": ""
                 }
               ],
               "canBeHandledOnRecover": true
@@ -1594,64 +1616,93 @@
             {
               "$type": "FireEffect",
               "effectPattern": "Eff_RemusMagicdragon_Whale_Cannon_Enter_01",
+              "effectTempleteID": -1.0,
               "scale": 1.0,
-              "ILLLPEOODKP": "",
-              "effectTempleteID": -1.0
+              "ILLLPEOODKP": ""
             },
             {
               "$type": "TriggerBullet",
               "born": {
-                "$type": "BGOLIIIHLMO",
+                "$type": "ConfigBornByAttachPoint",
                 "attachPointName": "RootNode",
                 "useRotation": true
               },
               "bulletID": 70330821,
-              "trackTarget": "Self",
-              "lifeByOwnerV2": true
+              "lifeByOwnerV2": true,
+              "trackTarget": "Self"
+            }
+          ],
+          "onRemoved": [
+            {
+              "$type": "SetAnimatorTrigger",
+              "triggerID": "CustomSkill02_End_Drop"
+            },
+            {
+              "$type": "KillGadget",
+              "doOffStage": true,
+              "gadgetInfo": {
+                "configID": 70330821,
+                "sortType": "Reversed"
+              }
+            },
+            {
+              "$type": "SetVelocityIgnoreAirGY",
+              "doOffStage": true
+            },
+            {
+              "$type": "RemoveVelocityForce",
+              "doOffStage": true,
+              "forces": [
+                "RushMoveType",
+                "InertiaType"
+              ]
+            },
+            {
+              "$type": "FireEffect",
+              "effectPattern": "Eff_RemusMagicdragon_Whale_Cannon_Exit_01",
+              "effectTempleteID": -1.0,
+              "scale": 1.0,
+              "ILLLPEOODKP": ""
+            },
+            {
+              "$type": "ApplyModifier",
+              "doOffStage": true,
+              "modifierName": "GrapplingHook_SkillCharge"
             }
           ],
           "properties": {
             "Actor_AddGravityScale": -2.0
           },
-          "elementDurability": 100.0,
-          "modifierMixins": [
-            {
-              "$type": "DisableUIMixin",
-              "JMEMEMDGEKC": [
-                "InteePanel"
-              ]
-            }
-          ],
-          "modifierName": "",
-          "isUnique": true,
           "AIHNJLDFEGJ": 0.0
         },
         "BanWhaleTeleport_Hook": {
-          "onRemoved": [
-            {
-              "$type": "SetGlobalValueV2",
-              "minValue": 0.0,
-              "key": "GV_Ban_Whale_Teleport",
-              "maxValue": 0.0,
-              "CBOMLBFIPJM": 0.0,
-              "doOffStage": true
-            }
-          ],
+          "elementDurability": 100.0,
+          "modifierName": "",
           "onAdded": [
             {
               "$type": "SetGlobalValueV2",
-              "minValue": 0.0,
+              "doOffStage": true,
               "key": "GV_Ban_Whale_Teleport",
               "maxValue": 0.0,
-              "CBOMLBFIPJM": 1.0,
-              "doOffStage": true
+              "minValue": 0.0,
+              "value": 1.0
             }
           ],
-          "elementDurability": 100.0,
-          "modifierName": "",
+          "onRemoved": [
+            {
+              "$type": "SetGlobalValueV2",
+              "doOffStage": true,
+              "key": "GV_Ban_Whale_Teleport",
+              "maxValue": 0.0,
+              "minValue": 0.0,
+              "value": 0.0
+            }
+          ],
           "AIHNJLDFEGJ": 0.0
         },
         "EnterFirstPerson": {
+          "elementDurability": 100.0,
+          "modifierName": "",
           "onAdded": [
             {
               "$type": "ApplyModifier",
@@ -1659,53 +1710,61 @@
             },
             {
               "$type": "ChangePlayMode",
-              "toPlayMode": "GotoRemusDash",
               "doOffStage": true,
-              "BDPFBBFKKAH": true
+              "muteRemoteAction": true,
+              "toPlayMode": "GotoRemusDash"
             }
           ],
-          "elementDurability": 100.0,
-          "modifierName": "",
           "AIHNJLDFEGJ": 0.0
         },
         "ExitFirstPerson": {
           "duration": 0.1,
+          "elementDurability": 100.0,
+          "modifierName": "",
           "onRemoved": [
             {
               "$type": "ChangePlayMode",
-              "FPFLACICBBN": "GotoRemusDash",
               "doOffStage": true,
-              "BDPFBBFKKAH": true
+              "muteRemoteAction": true,
+              "FPFLACICBBN": "GotoRemusDash"
             },
             {
               "$type": "RemoveModifier",
-              "modifierName": "ZoomToFirstPerson",
-              "doOffStage": true
+              "doOffStage": true,
+              "modifierName": "ZoomToFirstPerson"
             }
           ],
-          "elementDurability": 100.0,
-          "modifierName": "",
           "AIHNJLDFEGJ": 0.0
         },
         "ZoomToFirstPerson": {
-          "onRemoved": [
+          "elementDurability": 100.0,
+          "modifierMixins": [
             {
-              "$type": "SetGlobalValueV2",
-              "minValue": 0.0,
-              "key": "_ABILITY_WhiteBox_Dive",
-              "maxValue": 0.0,
-              "CBOMLBFIPJM": "recordFishSkill"
-            },
-            {
-              "$type": "SetGlobalValueV2",
-              "minValue": 0.0,
-              "key": "_ABILITY_WhiteBox_Dive_Team",
-              "maxValue": 0.0,
-              "CBOMLBFIPJM": "recordFishSkill",
-              "target": "Team",
-              "doOffStage": true
+              "$type": "SpawnCameraStateMixin",
+              "priority": 1,
+              "JBABBKGDBOB": "TempTarget",
+              "DJOOHHCGMDG": {
+                "GCGFDNHKCIH": "_TempTarget"
+              },
+              "DGPDJMGNEHP": {
+                "BJFFNFAIGBM": 1,
+                "AKLMKDHGNAD": 2,
+                "DAGICMOAFJP": 2,
+                "NAOIPIIJHAJ": 4
+              },
+              "AFDENKPAECI": {
+                "$type": "LOJKEADJKJI",
+                "FICLCDBJCMM": 30.0,
+                "JGNKGKONPNM": 30.0,
+                "FKICECOCEBA": 100.0,
+                "EKLJPNFLCBO": 46000,
+                "NFMCBONAMOF": "CameraLook",
+                "KPBNNGBJLMP": "PivotToTarget",
+                "NALICOGEKCL": "TAimPoint"
+              }
             }
           ],
+          "modifierName": "",
           "onAdded": [
             {
               "$type": "AttachModifier",
@@ -1717,63 +1776,55 @@
             },
             {
               "$type": "AttachModifier",
-              "modifierName": "UNIQUE_WhaleHookSkill_HookHideHandler",
-              "doOffStage": true
+              "doOffStage": true,
+              "modifierName": "UNIQUE_WhaleHookSkill_HookHideHandler"
             }
           ],
-          "elementDurability": 100.0,
-          "modifierMixins": [
+          "onRemoved": [
             {
-              "$type": "SpawnCameraStateMixin",
-              "JBABBKGDBOB": "TempTarget",
-              "DGPDJMGNEHP": {
-                "BJFFNFAIGBM": 1,
-                "NAOIPIIJHAJ": 4,
-                "DAGICMOAFJP": 2,
-                "AKLMKDHGNAD": 2
-              },
-              "priority": 1,
-              "AFDENKPAECI": {
-                "$type": "LOJKEADJKJI",
-                "NALICOGEKCL": "TAimPoint",
-                "NFMCBONAMOF": "CameraLook",
-                "JGNKGKONPNM": 30.0,
-                "KPBNNGBJLMP": "PivotToTarget",
-                "fovMax": 100.0,
-                "EKLJPNFLCBO": 46000,
-                "FICLCDBJCMM": 30.0
-              },
-              "DJOOHHCGMDG": {
-                "GCGFDNHKCIH": "_TempTarget"
-              }
+              "$type": "SetGlobalValueV2",
+              "key": "_ABILITY_WhiteBox_Dive",
+              "maxValue": 0.0,
+              "minValue": 0.0,
+              "value": "recordFishSkill"
+            },
+            {
+              "$type": "SetGlobalValueV2",
+              "doOffStage": true,
+              "key": "_ABILITY_WhiteBox_Dive_Team",
+              "maxValue": 0.0,
+              "minValue": 0.0,
+              "target": "Team",
+              "value": "recordFishSkill"
             }
           ],
-          "modifierName": "",
           "AIHNJLDFEGJ": 0.0
         },
         "GrapplingHook_SkillCharge": {
           "duration": 1.0,
+          "elementDurability": 100.0,
+          "modifierName": "",
           "onRemoved": [
             {
               "$type": "SetGlobalValue",
-              "useLimitRange": true,
+              "doOffStage": true,
               "key": "AVATAR_WhaleHookSkill",
-              "minValue": 0.0,
               "maxValue": 100.0,
-              "CBOMLBFIPJM": 100.0,
-              "doOffStage": true
+              "minValue": 0.0,
+              "useLimitRange": true,
+              "value": 100.0
             }
           ],
-          "elementDurability": 100.0,
-          "modifierName": "",
           "AIHNJLDFEGJ": 0.0
         },
         "GrapplingHook_ArrivedRushMove": {
           "duration": 0.2,
+          "elementDurability": 100.0,
+          "modifierName": "",
           "onAdded": [
             {
               "$type": "RemoveVelocityForce",
-              "HALNPNMJJAN": [
+              "forces": [
                 "InertiaType",
                 "GrapplingHookMoveType"
               ]
@@ -1785,35 +1836,35 @@
             {
               "$type": "SetGlobalValue",
               "key": "_ABILITY_WhaleHookSkill_Step",
-              "minValue": 0.0,
               "maxValue": 0.0,
-              "CBOMLBFIPJM": 0.0
+              "minValue": 0.0,
+              "value": 0.0
             }
           ],
-          "elementDurability": 100.0,
-          "modifierName": "",
           "AIHNJLDFEGJ": 0.0
         },
         "UNIQUE_WhaleStreamingOptimization": {
           "duration": 10.0,
           "elementDurability": 100.0,
+          "isUnique": true,
           "modifierMixins": [
             {
               "$type": "StreamingModifierMixin"
             }
           ],
           "modifierName": "",
-          "isUnique": true,
           "AIHNJLDFEGJ": 0.0
         },
         "_WhaleHook_Init": {
+          "elementDurability": 100.0,
+          "modifierName": "",
           "onAdded": [
             {
               "$type": "SetGlobalValue",
               "key": "_ABILITY_WhaleHookSkill_Step",
-              "minValue": 0.0,
               "maxValue": 0.0,
-              "CBOMLBFIPJM": 0.0
+              "minValue": 0.0,
+              "value": 0.0
             },
             {
               "$type": "SetAnimatorTrigger",
@@ -1821,7 +1872,7 @@
             },
             {
               "$type": "RemoveVelocityForce",
-              "HALNPNMJJAN": [
+              "forces": [
                 "RushMoveType",
                 "InertiaType",
                 "FixedRushMoveType",
@@ -1831,12 +1882,10 @@
             }
           ],
           "stacking": "MultipleRefresh",
-          "GMGIAGMCGLF": {
-            "PFEHHABPHDB": "",
-            "KAANKELFPLA": 1.0
+          "stackingOption": {
+            "abilitySpecialName": "",
+            "maxModifierNumForMultipleType": 1.0
           },
-          "elementDurability": 100.0,
-          "modifierName": "",
           "AIHNJLDFEGJ": 0.0
         }
       },
@@ -1850,6 +1899,12 @@
         },
         {
           "$type": "Predicated",
+          "otherTargets": {
+            "$type": "IKKPJCBJHAP",
+            "tag": "WorldPlay_4_6",
+            "topLimit": 1,
+            "MBDANNCNLFN": "WorldPlay_Whale_Hook_4_6"
+          },
           "successActions": [
             {
               "$type": "DebugLog",
@@ -1861,51 +1916,51 @@
             },
             {
               "$type": "SetTargetToTargetKey",
-              "targetKey": "_TempTarget",
-              "target": "Target"
+              "target": "Target",
+              "targetKey": "_TempTarget"
             },
             {
               "$type": "SetCollisionPointToGlobalPos",
-              "OPPDLDMKALF": true,
-              "LANEADNAMOA": {
-                "$type": "NABPLNFPHCK",
-                "useRotation": true,
-                "offset": {
-                  "x": 0.0,
-                  "z": 0.25,
-                  "y": 2.0
-                },
-                "direction": {
-                  "$type": "ELLFELLPBME",
-                  "KFAOLPBMANI": "TAimPoint"
-                }
-              },
-              "GIIKFCBIECE": 250.0,
               "key": "_WhaleHook_TargetPos",
+              "origin": {
+                "$type": "ConfigBornBySelf",
+                "direction": {
+                  "$type": "ConfigDirectionByLookAtEntity",
+                  "namedTransform": "TAimPoint"
+                },
+                "offset": {
+                  "x": 0.25,
+                  "y": 2.0,
+                  "z": 0.0
+                },
+                "useRotation": true
+              },
+              "raycastLength": 250.0,
               "setTarget": false,
-              "IFAGEOOENNG": "BulletTrigger",
-              "target": "Target"
+              "target": "Target",
+              "OPPDLDMKALF": true,
+              "IFAGEOOENNG": "BulletTrigger"
             },
             {
               "$type": "SetGlobalDir",
-              "key": "_WhaleHook_TargetDir",
               "born": {
-                "$type": "NABPLNFPHCK",
-                "useRotation": true,
+                "$type": "ConfigBornBySelf",
                 "direction": {
-                  "$type": "ELLFELLPBME",
-                  "KFAOLPBMANI": ""
-                }
+                  "$type": "ConfigDirectionByLookAtEntity",
+                  "namedTransform": ""
+                },
+                "useRotation": true
               },
+              "key": "_WhaleHook_TargetDir",
               "setTarget": false,
               "target": "Target"
             },
             {
               "$type": "TurnDirectionToPos",
               "toPos": {
-                "$type": "LKIBKKFEOLJ",
-                "positionKey": "_WhaleHook_TargetPos",
-                "directionKey": ""
+                "$type": "ConfigBornByGlobalValue",
+                "directionKey": "",
+                "positionKey": "_WhaleHook_TargetPos"
               }
             },
             {
@@ -1914,8 +1969,8 @@
             },
             {
               "$type": "SetGlobalValueToOverrideMap",
-              "globalValueKey": "_ABILITY_WhiteBox_Dive",
               "abilityName": "",
+              "globalValueKey": "_ABILITY_WhiteBox_Dive",
               "overrideMapKey": "recordFishSkill"
             },
             {
@@ -1924,54 +1979,62 @@
             },
             {
               "$type": "ApplyModifier",
+              "doOffStage": true,
               "modifierName": "UNIQUE_TriggerWhaleStop",
-              "target": "Target",
-              "doOffStage": true
+              "target": "Target"
             },
             {
               "$type": "ServerLuaCall",
-              "param1": 0.0,
-              "param2": 0.0,
-              "funcName": "SLC_TriggerWhaleStop",
-              "AHCNJKIEMPP": 0.0,
-              "NPNEPKILMEK": [
+              "callParamList": [
                 511020035
               ],
-              "luaCallType": "SpecificGroup"
+              "funcName": "SLC_TriggerWhaleStop",
+              "luaCallType": "SpecificGroup",
+              "param1": 0.0,
+              "param2": 0.0,
+              "param3": 0.0
             }
           ],
           "targetPredicates": [
             {
-              "$type": "EOFDCELPGFO",
-              "CBOMLBFIPJM": 0.0,
+              "$type": "ByTargetGlobalValue",
               "key": "GV_Cannon_State",
-              "target": "Self"
+              "target": "Self",
+              "value": 0.0
             }
-          ],
-          "otherTargets": {
-            "$type": "IKKPJCBJHAP",
-            "tag": "WorldPlay_4_6",
-            "MBDANNCNLFN": "WorldPlay_Whale_Hook_4_6",
-            "topLimit": 1
-          }
+          ]
         }
       ],
-      "onRemoved": [
+      "onAdded": [
         {
-          "$type": "RemoveAvatarSkillInfo",
-          "skillID": 20076,
-          "doOffStage": true
-        },
-        {
-          "$type": "ChangePlayMode",
-          "FPFLACICBBN": "GotoRemusDash",
+          "$type": "SetGlobalValueV2",
           "doOffStage": true,
-          "BDPFBBFKKAH": true
+          "key": "GV_Ban_Whale_Teleport",
+          "maxValue": 0.0,
+          "minValue": 0.0,
+          "target": "Team",
+          "value": 0.0
         },
         {
-          "$type": "RemoveModifier",
-          "modifierName": "ZoomToFirstPerson",
-          "doOffStage": true
+          "$type": "AddAvatarSkillInfo",
+          "doOffStage": true,
+          "skillID": 20076
+        },
+        {
+          "$type": "AttachModifier",
+          "modifierName": "AddHookSkill"
+        },
+        {
+          "$type": "SetGlobalValue",
+          "doOffStage": true,
+          "key": "_ABILITY_WhaleHookSkill_Step",
+          "maxValue": 0.0,
+          "minValue": 0.0,
+          "value": 0.0
+        },
+        {
+          "$type": "ApplyModifier",
+          "modifierName": "UNIQUE_WhaleHookSkill_RecoverHandler"
         }
       ],
       "onKill": [
@@ -1980,91 +2043,30 @@
           "modifierName": "_WhaleHook_Init"
         }
       ],
-      "abilityMixins": [
+      "onRemoved": [
         {
-          "$type": "AttachModifierToGlobalValueMixin",
-          "modifierNameSteps": [
-            "Blank",
-            "HookControl"
-          ],
-          "globalValueTarget": "Team",
-          "globalValueKey": "_ABILITY_Diving_InDive_Mark",
-          "valueSteps": [
-            -0.5,
-            0.5,
-            1.5
-          ]
+          "$type": "RemoveAvatarSkillInfo",
+          "doOffStage": true,
+          "skillID": 20076
         },
         {
-          "$type": "AttachModifierToSelfGlobalValueMixin",
-          "modifierNameSteps": [
-            "Blank",
-            "UNIQUE_WhaleHookSkill_GrassCoreEffect"
-          ],
-          "valueSteps": [
-            -0.5,
-            0.5,
-            3.9
-          ],
-          "globalValueKey": "_ABILITY_WhaleHookSkill_Step",
-          "defaultGlobalValueOnCreate": 0.0
+          "$type": "ChangePlayMode",
+          "doOffStage": true,
+          "muteRemoteAction": true,
+          "FPFLACICBBN": "GotoRemusDash"
         },
         {
-          "$type": "AttachModifierToSelfGlobalValueMixin",
-          "modifierNameSteps": [
-            "ExitFirstPerson",
-            "EnterFirstPerson"
-          ],
-          "valueSteps": [
-            -0.5,
-            0.5,
-            3.9
-          ],
-          "globalValueKey": "_ABILITY_WhaleHookSkill_Step",
-          "defaultGlobalValueOnCreate": 0.0
+          "$type": "RemoveModifier",
+          "doOffStage": true,
+          "modifierName": "ZoomToFirstPerson"
         }
-      ],
-      "abilityName": "Ability_Whale_Hook_Avatar",
-      "isDynamicAbility": true,
-      "onAdded": [
-        {
-          "$type": "SetGlobalValueV2",
-          "minValue": 0.0,
-          "key": "GV_Ban_Whale_Teleport",
-          "maxValue": 0.0,
-          "CBOMLBFIPJM": 0.0,
-          "target": "Team",
-          "doOffStage": true
-        },
-        {
-          "$type": "AddAvatarSkillInfo",
-          "skillID": 20076,
-          "doOffStage": true
-        },
-        {
-          "$type": "AttachModifier",
-          "modifierName": "AddHookSkill"
-        },
-        {
-          "$type": "SetGlobalValue",
-          "key": "_ABILITY_WhaleHookSkill_Step",
-          "minValue": 0.0,
-          "maxValue": 0.0,
-          "CBOMLBFIPJM": 0.0,
-          "doOffStage": true
-        },
-        {
-          "$type": "ApplyModifier",
-          "modifierName": "UNIQUE_WhaleHookSkill_RecoverHandler"
-        }
-      ],
-      "abilitySpecials": {
-        "recordFishSkill": 0.0
-      }
+      ]
     }
   },
   {
     "Default": {
+      "abilityName": "Ability_Whale_Hook_Quit_Avatar",
+      "isDynamicAbility": true,
       "onAbilityStart": [
         {
           "$type": "DebugLog",
@@ -2072,33 +2074,53 @@
         },
         {
           "$type": "SetGlobalValue",
+          "doOffStage": true,
           "key": "_ABILITY_WhaleHookSkill_Step",
-          "minValue": 0.0,
           "maxValue": 0.0,
-          "CBOMLBFIPJM": 0.0,
-          "doOffStage": true
+          "minValue": 0.0,
+          "value": 0.0
+        }
+      ],
+      "onAdded": [
+        {
+          "$type": "AddAvatarSkillInfo",
+          "doOffStage": true,
+          "skillID": 20346
         }
       ],
       "onRemoved": [
         {
           "$type": "RemoveAvatarSkillInfo",
-          "skillID": 20346,
-          "doOffStage": true
-        }
-      ],
-      "abilityName": "Ability_Whale_Hook_Quit_Avatar",
-      "isDynamicAbility": true,
-      "onAdded": [
-        {
-          "$type": "AddAvatarSkillInfo",
-          "skillID": 20346,
-          "doOffStage": true
+          "doOffStage": true,
+          "skillID": 20346
         }
       ]
     }
   },
   {
     "Default": {
+      "abilityMixins": [
+        {
+          "$type": "AttachModifierToSelfGlobalValueNoInitMixin",
+          "globalValueKey": "SGV_DragonTheatre_Buff",
+          "modifierNameSteps": [
+            "Blank",
+            "ImpactState"
+          ],
+          "valueSteps": [
+            -1.0,
+            0.5,
+            1.5
+          ],
+          "DEFOFMOIAAI": true
+        }
+      ],
+      "abilityName": "Ability_Team_DragonTheatre_4_6",
+      "abilitySpecials": {
+        "Impact_Damage": 50.0,
+        "ElementLevelCo": 0.0
+      },
+      "isDynamicAbility": true,
       "modifiers": {
         "Blank": {
           "elementDurability": 100.0,
@@ -2106,7 +2128,6 @@
           "AIHNJLDFEGJ": 0.0
         },
         "ImpactState": {
-          "thinkInterval": 2.0,
           "elementDurability": 100.0,
           "modifierName": "",
           "onThinkInterval": [
@@ -2116,111 +2137,83 @@
               "target": "CurLocalAvatar"
             }
           ],
+          "thinkInterval": 2.0,
           "AIHNJLDFEGJ": 0.0
         },
         "Avatar_DragonTheatre_Impact": {
           "duration": 0.1,
+          "elementDurability": 100.0,
+          "modifierName": "",
           "onAdded": [
             {
               "$type": "FireEffect",
-              "effectPattern": "Eff_Stages_SwirlDoField_DoAttack_02",
-              "scale": 1.0,
               "born": {
-                "$type": "BOJMMDAIGMM"
+                "$type": "ConfigBornByTarget"
               },
-              "ILLLPEOODKP": "",
+              "doOffStage": true,
+              "effectPattern": "Eff_Stages_SwirlDoField_DoAttack_02",
               "effectTempleteID": -1.0,
-              "doOffStage": true
+              "scale": 1.0,
+              "ILLLPEOODKP": ""
             },
             {
               "$type": "TriggerAttackEvent",
-              "targetType": "Enemy",
               "attackEvent": {
                 "attackInfo": {
                   "attackProperty": {
                     "attackType": "Melee",
-                    "damagePercentageRatio": 0.0,
-                    "ignoreModifyDamage": true,
-                    "ignoreAttackerProperty": true,
-                    "enBreak": 25.0,
-                    "trueDamage": true,
                     "damageExtra": [
                       "Impact_Damage",
                       "ElementLevelCo",
                       "MUL"
                     ],
+                    "damagePercentageRatio": 0.0,
                     "elementDurability": 0.0,
-                    "arkheGrade": 0.0
+                    "enBreak": 25.0,
+                    "ignoreAttackerProperty": true,
+                    "ignoreModifyDamage": true,
+                    "trueDamage": true,
+                    "IIPHCFEONLK": 0.0
                   },
-                  "hitPattern": {
-                    "FLFCIDDNMNA": "",
-                    "onHitEffectName": "default",
-                    "hitHaltTimeScale": 0.02,
-                    "hitImpulseType": "LV2"
-                  },
+                  "attackTag": "",
                   "attenuationGroup": "default",
                   "attenuationTag": "",
-                  "attackTag": ""
+                  "hitPattern": {
+                    "hitHaltTimeScale": 0.02,
+                    "hitImpulseType": "LV2",
+                    "onHitEffectName": "default",
+                    "FLFCIDDNMNA": ""
+                  }
                 },
                 "attackPattern": {
-                  "$type": "HCAGHMDHEGG",
-                  "radius": 10.0,
-                  "triggerType": "TriggerNoRepeat",
+                  "$type": "ConfigAttackSphere",
                   "born": {
-                    "$type": "NABPLNFPHCK",
+                    "$type": "ConfigBornBySelf",
                     "useRotation": true
-                  }
+                  },
+                  "radius": 10.0,
+                  "triggerType": "TriggerNoRepeat"
                 }
               },
-              "doOffStage": true
+              "doOffStage": true,
+              "targetType": "Enemy"
             }
           ],
-          "elementDurability": 100.0,
-          "modifierName": "",
           "AIHNJLDFEGJ": 0.0
         }
       },
-      "abilityMixins": [
-        {
-          "$type": "AttachModifierToSelfGlobalValueNoInitMixin",
-          "modifierNameSteps": [
-            "Blank",
-            "ImpactState"
-          ],
-          "DEFOFMOIAAI": true,
-          "valueSteps": [
-            -1.0,
-            0.5,
-            1.5
-          ],
-          "globalValueKey": "SGV_DragonTheatre_Buff"
-        }
-      ],
-      "abilityName": "Ability_Team_DragonTheatre_4_6",
-      "isDynamicAbility": true,
       "onAdded": [
         {
           "$type": "SetSystemValueToOverrideMap",
-          "OAEJNDBEDPO": -1.0,
           "key": "ElementLevelCo",
-          "type": "ElementLevelCo"
+          "type": "ElementLevelCo",
+          "OAEJNDBEDPO": -1.0
         }
-      ],
-      "abilitySpecials": {
-        "Impact_Damage": 50.0,
-        "ElementLevelCo": 0.0
-      }
+      ]
     }
   },
   {
     "Default": {
-      "modifiers": {
-        "Controller": {
-          "elementDurability": 100.0,
-          "modifierName": "",
-          "AIHNJLDFEGJ": 0.0
-        }
-      },
       "abilityMixins": [
         {
           "$type": "AttachToGadgetStateMixin",
@@ -2228,17 +2221,6 @@
         }
       ],
       "abilityName": "SceneObj_Whale_Scan_Col_GoldenHall",
-      "onAdded": [
-        {
-          "$type": "ChangeTag",
-          "tag": "IS_LMS_WHALE_SCAN_TARGET",
-          "isAdd": true
-        }
-      ]
-    }
-  },
-  {
-    "Default": {
       "modifiers": {
         "Controller": {
           "elementDurability": 100.0,
@@ -2246,6 +2228,17 @@
           "AIHNJLDFEGJ": 0.0
         }
       },
+      "onAdded": [
+        {
+          "$type": "ChangeTag",
+          "isAdd": true,
+          "tag": "IS_LMS_WHALE_SCAN_TARGET"
+        }
+      ]
+    }
+  },
+  {
+    "Default": {
       "abilityMixins": [
         {
           "$type": "AttachToGadgetStateMixin",
@@ -2253,17 +2246,6 @@
         }
       ],
       "abilityName": "SceneObj_Whale_Scan_Col_GoldenHall_Repair",
-      "onAdded": [
-        {
-          "$type": "ChangeTag",
-          "tag": "IS_LMS_WHALE_SCAN_TARGET",
-          "isAdd": true
-        }
-      ]
-    }
-  },
-  {
-    "Default": {
       "modifiers": {
         "Controller": {
           "elementDurability": 100.0,
@@ -2271,6 +2253,17 @@
           "AIHNJLDFEGJ": 0.0
         }
       },
+      "onAdded": [
+        {
+          "$type": "ChangeTag",
+          "isAdd": true,
+          "tag": "IS_LMS_WHALE_SCAN_TARGET"
+        }
+      ]
+    }
+  },
+  {
+    "Default": {
       "abilityMixins": [
         {
           "$type": "AttachToGadgetStateMixin",
@@ -2278,17 +2271,6 @@
         }
       ],
       "abilityName": "SceneObj_Whale_Scan_Col_Mural_Entry",
-      "onAdded": [
-        {
-          "$type": "ChangeTag",
-          "tag": "IS_LMS_WHALE_SCAN_TARGET",
-          "isAdd": true
-        }
-      ]
-    }
-  },
-  {
-    "Default": {
       "modifiers": {
         "Controller": {
           "elementDurability": 100.0,
@@ -2296,6 +2278,17 @@
           "AIHNJLDFEGJ": 0.0
         }
       },
+      "onAdded": [
+        {
+          "$type": "ChangeTag",
+          "isAdd": true,
+          "tag": "IS_LMS_WHALE_SCAN_TARGET"
+        }
+      ]
+    }
+  },
+  {
+    "Default": {
       "abilityMixins": [
         {
           "$type": "AttachToGadgetStateMixin",
@@ -2303,33 +2296,24 @@
         }
       ],
       "abilityName": "SceneObj_Whale_Scan_Col_Mural",
+      "modifiers": {
+        "Controller": {
+          "elementDurability": 100.0,
+          "modifierName": "",
+          "AIHNJLDFEGJ": 0.0
+        }
+      },
       "onAdded": [
         {
           "$type": "ChangeTag",
-          "tag": "IS_LMS_WHALE_SCAN_TARGET",
-          "isAdd": true
+          "isAdd": true,
+          "tag": "IS_LMS_WHALE_SCAN_TARGET"
         }
       ]
     }
   },
   {
     "Default": {
-      "modifiers": {
-        "CamBlur_FlashBack": {
-          "elementDurability": 100.0,
-          "modifierMixins": [
-            {
-              "$type": "CameraBlurMixin",
-              "NFBFBAJDMPJ": {
-                "LCOPJHPGJCO": 1.0,
-                "LFMGJKCOGPI": 0.65
-              }
-            }
-          ],
-          "modifierName": "",
-          "AIHNJLDFEGJ": 0.0
-        }
-      },
       "abilityMixins": [
         {
           "$type": "CurLocalAvatarMixinV2",
@@ -2337,11 +2321,35 @@
         }
       ],
       "abilityName": "Ability_Team_FlashBack_CamEffect_4_6",
-      "isDynamicAbility": true
+      "isDynamicAbility": true,
+      "modifiers": {
+        "CamBlur_FlashBack": {
+          "elementDurability": 100.0,
+          "modifierMixins": [
+            {
+              "$type": "CameraBlurMixin",
+              "cameraRadialBlur": {
+                "fadeTime": 1.0,
+                "power": 0.65
+              }
+            }
+          ],
+          "modifierName": "",
+          "AIHNJLDFEGJ": 0.0
+        }
+      }
     }
   },
   {
     "Default": {
+      "abilityMixins": [
+        {
+          "$type": "CurLocalAvatarMixinV2",
+          "modifierName": "FirstPerson"
+        }
+      ],
+      "abilityName": "Ability_Team_FirstPerson_4_6",
+      "isDynamicAbility": true,
       "modifiers": {
         "Controller": {
           "elementDurability": 100.0,
@@ -2355,42 +2363,42 @@
               "$type": "CameraShakeMixin",
               "ACAPGGAFIGF": [
                 {
-                  "JAJNLIIENME": {
-                    "y": 0.175,
-                    "x": 0.14
-                  },
-                  "MIFKDCGJGPE": 1.0,
+                  "duration": 5.0,
                   "CINEFPAENNG": 1.0,
+                  "MIFKDCGJGPE": 1.0,
                   "JEGCIPNMLNP": {
-                    "y": 0.7,
-                    "x": 0.5
+                    "x": 0.5,
+                    "y": 0.7
                   },
-                  "duration": 5.0
+                  "JAJNLIIENME": {
+                    "x": 0.14,
+                    "y": 0.175
+                  }
                 },
                 {
-                  "JAJNLIIENME": {
-                    "y": 0.4,
-                    "x": 0.5
-                  },
-                  "MIFKDCGJGPE": 1.0,
+                  "duration": 5.0,
                   "CINEFPAENNG": 1.0,
+                  "MIFKDCGJGPE": 1.0,
                   "JEGCIPNMLNP": {
-                    "y": 0.6,
-                    "x": 0.5
+                    "x": 0.5,
+                    "y": 0.6
                   },
-                  "duration": 5.0
+                  "JAJNLIIENME": {
+                    "x": 0.5,
+                    "y": 0.4
+                  }
                 },
                 {
+                  "duration": 5.0,
+                  "CINEFPAENNG": 1.0,
+                  "MIFKDCGJGPE": 1.0,
                   "JAJNLIIENME": {
                     "x": 0.8
                   },
-                  "MIFKDCGJGPE": 1.0,
-                  "CINEFPAENNG": 1.0,
                   "JEGCIPNMLNP": {
-                    "y": 0.5,
-                    "x": 1.0
-                  },
-                  "duration": 5.0
+                    "x": 1.0,
+                    "y": 0.5
+                  }
                 }
               ]
             }
@@ -2403,50 +2411,42 @@
           "modifierMixins": [
             {
               "$type": "AttachToStateIDMixin",
-              "LJPPDIGCJMJ": "",
+              "modifierName": "InMove",
               "stateIDs": [
                 "ActivitySkill_CommonMove"
               ],
-              "modifierName": "InMove"
+              "LJPPDIGCJMJ": ""
             },
             {
               "$type": "SpawnCameraStateMixin",
               "DGPDJMGNEHP": {
-                "BJFFNFAIGBM": 1,
                 "duration": 0.0,
-                "DAGICMOAFJP": 2,
-                "AKLMKDHGNAD": 2
+                "BJFFNFAIGBM": 1,
+                "AKLMKDHGNAD": 2,
+                "DAGICMOAFJP": 2
               },
               "AFDENKPAECI": {
                 "$type": "LOJKEADJKJI",
                 "LLMLMENGFIP": -55.0,
-                "EKDCFEFJCBE": 35.0,
-                "NALICOGEKCL": "",
-                "NFMCBONAMOF": "MoveCollider",
-                "FKDPCACCNIF": 0.5,
-                "INPCDFNCPDE": 1.7,
-                "JGNKGKONPNM": 50.0,
-                "BKKBOKOBELI": 50.0,
-                "fovMax": 50.0,
-                "KFIBIAPGMMA": 1.0,
                 "CMJBOELEJPF": -50.0,
+                "FKDPCACCNIF": 0.5,
+                "KFIBIAPGMMA": 1.0,
+                "INPCDFNCPDE": 1.7,
+                "EKDCFEFJCBE": 35.0,
+                "BKKBOKOBELI": 50.0,
+                "FICLCDBJCMM": 50.0,
+                "FKICECOCEBA": 50.0,
+                "JGNKGKONPNM": 50.0,
                 "PCPGEFKCBCK": true,
-                "FICLCDBJCMM": 50.0
+                "NALICOGEKCL": "",
+                "NFMCBONAMOF": "MoveCollider"
               }
             }
           ],
           "modifierName": "",
           "AIHNJLDFEGJ": 0.0
         }
-      },
-      "abilityMixins": [
-        {
-          "$type": "CurLocalAvatarMixinV2",
-          "modifierName": "FirstPerson"
-        }
-      ],
-      "abilityName": "Ability_Team_FirstPerson_4_6",
-      "isDynamicAbility": true
+      }
     }
   },
   {
@@ -2454,6 +2454,14 @@
       "abilityMixins": [
         {
           "$type": "LevelCurveMixin",
+          "tag": "",
+          "BEDOJLFENKK": [
+            "SetGroupVariable"
+          ],
+          "HPFCGICMFMF": [
+            "TEST_GV_0",
+            "TEST_GV_1"
+          ],
           "EDFJOMKHLFM": [
             [
               {
@@ -2466,43 +2474,35 @@
               },
               {
                 "$type": "SetGlobalValueToOverrideMap",
-                "globalValueKey": "TEST_GV_0",
                 "abilityName": "",
+                "globalValueKey": "TEST_GV_0",
                 "overrideMapKey": "TEST_GV_0"
               },
               {
                 "$type": "SetGlobalValueToOverrideMap",
-                "globalValueKey": "TEST_GV_1",
                 "abilityName": "",
+                "globalValueKey": "TEST_GV_1",
                 "overrideMapKey": "TEST_GV_1"
               },
               {
                 "$type": "ServerLuaCall",
-                "param1": "TEST_GV_0",
-                "param2": "TEST_GV_1",
-                "paramNum": 2,
-                "funcName": "SLC_FlashBack_SetVar",
-                "AHCNJKIEMPP": 0.0,
-                "NPNEPKILMEK": [
+                "callParamList": [
                   220210001
                 ],
-                "luaCallType": "SpecificGroup"
+                "funcName": "SLC_FlashBack_SetVar",
+                "luaCallType": "SpecificGroup",
+                "param1": "TEST_GV_0",
+                "param2": "TEST_GV_1",
+                "param3": 0.0,
+                "paramNum": 2
               }
             ]
-          ],
-          "HPFCGICMFMF": [
-            "TEST_GV_0",
-            "TEST_GV_1"
-          ],
-          "BEDOJLFENKK": [
-            "SetGroupVariable"
-          ],
-          "tag": ""
+          ]
         },
         {
           "$type": "EntityInVisibleMixin",
-          "AAHPKGHIPPG": true,
-          "reason": "Mixin"
+          "reason": "Mixin",
+          "AAHPKGHIPPG": true
         }
       ],
       "abilityName": "FlashBack_Stage_46_01",
@@ -2511,6 +2511,98 @@
   },
   {
     "Default": {
+      "abilityMixins": [
+        {
+          "$type": "InvisibleInTalkAndCSMixin",
+          "pushColliderNames": [
+            "PushCollider"
+          ],
+          "EMNIAOMNIEF": true
+        },
+        {
+          "$type": "AttachToStateIDMixin",
+          "modifierName": "MoveEffect",
+          "stateIDs": [
+            "Move"
+          ],
+          "LJPPDIGCJMJ": ""
+        },
+        {
+          "$type": "WidgetMpSupportMixin",
+          "succActions": [
+            {
+              "$type": "SetGlobalValueV2",
+              "key": "GV_InTalk",
+              "maxValue": 0.0,
+              "minValue": 0.0,
+              "value": 1.0
+            }
+          ]
+        },
+        {
+          "$type": "AttachModifierToGlobalValueMixin",
+          "globalValueKey": "GV_StopMove",
+          "modifierNameSteps": [
+            "StopMoveControl"
+          ],
+          "valueSteps": [
+            0.5,
+            1.5
+          ],
+          "DEFOFMOIAAI": true
+        },
+        {
+          "$type": "AttachModifierToGlobalValueMixin",
+          "globalValueKey": "GV_Visible",
+          "modifierNameSteps": [
+            "Blank",
+            "Visible"
+          ],
+          "valueSteps": [
+            -0.5,
+            0.5,
+            1.5
+          ],
+          "DEFOFMOIAAI": true
+        },
+        {
+          "$type": "AttachModifierToGlobalValueMixin",
+          "globalValueKey": "GV_InTalk",
+          "modifierNameSteps": [
+            "TalkStop"
+          ],
+          "valueSteps": [
+            0.5,
+            1.5
+          ],
+          "DEFOFMOIAAI": true
+        },
+        {
+          "$type": "DoActionOnGlobalValueChangeMixin",
+          "actions": [
+            {
+              "$type": "SetGlobalValueV2",
+              "key": "GV_InTalk",
+              "maxValue": 0.0,
+              "minValue": 0.0,
+              "value": 0.0
+            }
+          ],
+          "globalValueKey": "SGV_Talk_Done_Trigger"
+        },
+        {
+          "$type": "DoActionOnGlobalValueChangeMixin",
+          "actions": [
+            {
+              "$type": "SetAnimatorTrigger",
+              "doOffStage": true,
+              "triggerID": "AttackTrigger"
+            }
+          ],
+          "globalValueKey": "SGV_Bullet_Trigger"
+        }
+      ],
+      "abilityName": "SceneObj_Area_BigWhale_Interact",
       "modifiers": {
         "Blank": {
           "elementDurability": 100.0,
@@ -2522,39 +2614,30 @@
           "modifierMixins": [
             {
               "$type": "SubTagScanEntityMixin",
-              "MBDANNCNLFN": "WorldPlay_Whale_Hook_4_6",
-              "KFAOLPBMANI": "",
-              "tag": "WorldPlay_4_6"
+              "namedTransform": "",
+              "tag": "WorldPlay_4_6",
+              "MBDANNCNLFN": "WorldPlay_Whale_Hook_4_6"
             }
           ],
           "modifierName": "",
           "AIHNJLDFEGJ": 0.0
         },
         "Visible": {
+          "elementDurability": 100.0,
+          "modifierName": "",
           "onAdded": [
             {
               "$type": "TriggerSetRenderersEnableV2",
-              "setEnable": true,
-              "HLLMGLJLFKK": [
+              "doOffStage": true,
+              "renderNames": [
                 "Body"
               ],
-              "doOffStage": true
+              "setEnable": true
             }
           ],
-          "elementDurability": 100.0,
-          "modifierName": "",
           "AIHNJLDFEGJ": 0.0
         },
         "Controller": {
-          "onReconnect": [
-            {
-              "$type": "SetGlobalValueV2",
-              "minValue": 0.0,
-              "key": "GV_InTalk",
-              "maxValue": 0.0,
-              "CBOMLBFIPJM": 0.0
-            }
-          ],
           "elementDurability": 100.0,
           "modifierMixins": [
             {
@@ -2565,9 +2648,9 @@
                   "modifierName": "TriggerStopForAWhile",
                   "predicates": [
                     {
-                      "$type": "EOFDCELPGFO",
-                      "CBOMLBFIPJM": 0.0,
-                      "key": "GV_InTalk"
+                      "$type": "ByTargetGlobalValue",
+                      "key": "GV_InTalk",
+                      "value": 0.0
                     }
                   ]
                 }
@@ -2582,9 +2665,9 @@
                   "modifierName": "TriggerStopForAWhile",
                   "predicates": [
                     {
-                      "$type": "EOFDCELPGFO",
-                      "CBOMLBFIPJM": 0.0,
-                      "key": "GV_InTalk"
+                      "$type": "ByTargetGlobalValue",
+                      "key": "GV_InTalk",
+                      "value": 0.0
                     }
                   ]
                 }
@@ -2593,31 +2676,36 @@
             }
           ],
           "modifierName": "",
+          "onReconnect": [
+            {
+              "$type": "SetGlobalValueV2",
+              "key": "GV_InTalk",
+              "maxValue": 0.0,
+              "minValue": 0.0,
+              "value": 0.0
+            }
+          ],
           "AIHNJLDFEGJ": 0.0
         },
         "DelayAppear": {
           "duration": 0.1,
+          "elementDurability": 100.0,
+          "modifierName": "",
           "onRemoved": [
             {
               "$type": "SetGlobalValueV2",
-              "minValue": 0.0,
+              "doOffStage": true,
               "key": "GV_Visible",
               "maxValue": 0.0,
-              "CBOMLBFIPJM": 1.0,
-              "doOffStage": true
+              "minValue": 0.0,
+              "value": 1.0
             }
           ],
-          "elementDurability": 100.0,
-          "modifierName": "",
           "AIHNJLDFEGJ": 0.0
         },
         "TalkStop": {
-          "onRemoved": [
-            {
-              "$type": "ApplyModifier",
-              "modifierName": "TriggerStopForAWhile"
-            }
-          ],
+          "elementDurability": 100.0,
+          "modifierName": "",
           "onAdded": [
             {
               "$type": "RemoveModifier",
@@ -2625,88 +2713,68 @@
             },
             {
               "$type": "SetGlobalValueV2",
-              "minValue": 0.0,
               "key": "GV_IsLerpStop",
               "maxValue": 0.0,
-              "CBOMLBFIPJM": 0.0
+              "minValue": 0.0,
+              "value": 0.0
             },
             {
               "$type": "SetGlobalValueV2",
-              "minValue": 0.0,
               "key": "GV_StopMove",
               "maxValue": 0.0,
-              "CBOMLBFIPJM": 1.0
+              "minValue": 0.0,
+              "value": 1.0
             }
           ],
-          "elementDurability": 100.0,
-          "modifierName": "",
+          "onRemoved": [
+            {
+              "$type": "ApplyModifier",
+              "modifierName": "TriggerStopForAWhile"
+            }
+          ],
           "AIHNJLDFEGJ": 0.0
         },
         "TriggerStopForAWhile": {
           "duration": 15.0,
-          "onRemoved": [
-            {
-              "$type": "SetGlobalValueV2",
-              "minValue": 0.0,
-              "key": "GV_StopMove",
-              "maxValue": 0.0,
-              "CBOMLBFIPJM": 0.0,
-              "predicates": [
-                {
-                  "$type": "EOFDCELPGFO",
-                  "CBOMLBFIPJM": 0.0,
-                  "key": "GV_InTalk"
-                }
-              ]
-            }
-          ],
+          "elementDurability": 100.0,
+          "modifierName": "",
           "onAdded": [
             {
               "$type": "SetGlobalValueV2",
-              "minValue": 0.0,
               "key": "GV_StopMove",
               "maxValue": 0.0,
-              "CBOMLBFIPJM": 1.0
+              "minValue": 0.0,
+              "value": 1.0
             }
           ],
-          "elementDurability": 100.0,
-          "modifierName": "",
+          "onRemoved": [
+            {
+              "$type": "SetGlobalValueV2",
+              "key": "GV_StopMove",
+              "maxValue": 0.0,
+              "minValue": 0.0,
+              "predicates": [
+                {
+                  "$type": "ByTargetGlobalValue",
+                  "key": "GV_InTalk",
+                  "value": 0.0
+                }
+              ],
+              "value": 0.0
+            }
+          ],
           "AIHNJLDFEGJ": 0.0
         },
         "StopMoveControl": {
-          "onRemoved": [
-            {
-              "$type": "SetAnimatorFloat",
-              "floatID": "BlendSpeed",
-              "LANICPKFKBF": 1.0,
-              "CBOMLBFIPJM": 1.0,
-              "predicates": [
-                {
-                  "$type": "EOFDCELPGFO",
-                  "CBOMLBFIPJM": 1.0,
-                  "key": "SGV_Default_Move",
-                  "target": "Self"
-                }
-              ]
-            }
-          ],
-          "onAdded": [
-            {
-              "$type": "SetAnimatorFloat",
-              "floatID": "BlendSpeed",
-              "LANICPKFKBF": 1.0,
-              "CBOMLBFIPJM": 0.0
-            }
-          ],
           "elementDurability": 100.0,
           "modifierMixins": [
             {
               "$type": "AttachModifierToGlobalValueMixin",
+              "globalValueKey": "GV_IsLerpStop",
               "modifierNameSteps": [
                 "StopMove_Instant",
                 "StopMove_Lerp"
               ],
-              "globalValueKey": "GV_IsLerpStop",
               "valueSteps": [
                 -0.5,
                 0.5,
@@ -2716,6 +2784,30 @@
             }
           ],
           "modifierName": "",
+          "onAdded": [
+            {
+              "$type": "SetAnimatorFloat",
+              "floatID": "BlendSpeed",
+              "transitionTime": 1.0,
+              "value": 0.0
+            }
+          ],
+          "onRemoved": [
+            {
+              "$type": "SetAnimatorFloat",
+              "floatID": "BlendSpeed",
+              "predicates": [
+                {
+                  "$type": "ByTargetGlobalValue",
+                  "key": "SGV_Default_Move",
+                  "target": "Self",
+                  "value": 1.0
+                }
+              ],
+              "transitionTime": 1.0,
+              "value": 1.0
+            }
+          ],
           "AIHNJLDFEGJ": 0.0
         },
         "StopMove_Instant": {
@@ -2723,9 +2815,9 @@
           "modifierMixins": [
             {
               "$type": "OverrideCurveSpeedMixin",
-              "JKKIFHJPKGJ": 1.0,
               "AMGFHPIKHDB": 0.0,
               "AMHOFDLHIFE": 1.0,
+              "JKKIFHJPKGJ": 1.0,
               "FLBPDHBJNNE": ""
             }
           ],
@@ -2745,95 +2837,200 @@
           "AIHNJLDFEGJ": 0.0
         },
         "MoveEffect": {
+          "elementDurability": 100.0,
+          "modifierName": "",
           "onAdded": [
             {
               "$type": "AttachEffect",
-              "ILLLPEOODKP": "",
               "born": {
-                "$type": "BGOLIIIHLMO",
+                "$type": "ConfigBornByAttachPoint",
                 "attachPointName": "Palm01_L",
                 "useRotation": true
               },
-              "scale": 1.0,
               "effectPattern": "Eff_Monster_Ptahur_Devourer_02_CommonTrail",
-              "effectTempleteID": -1.0
+              "effectTempleteID": -1.0,
+              "scale": 1.0,
+              "ILLLPEOODKP": ""
             },
             {
               "$type": "SetEffectFollowPath",
-              "DPNPNCGKIMP": "Palm01_L",
               "attachPoint": "Palm01_L",
-              "effectPattern": "Eff_Monster_Ptahur_Devourer_02_CommonTrail"
+              "effectPattern": "Eff_Monster_Ptahur_Devourer_02_CommonTrail",
+              "followPath": "Palm01_L"
             },
             {
               "$type": "AttachEffect",
-              "ILLLPEOODKP": "",
               "born": {
-                "$type": "BGOLIIIHLMO",
+                "$type": "ConfigBornByAttachPoint",
                 "attachPointName": "Palm01_R",
                 "useRotation": true
               },
-              "scale": 1.0,
               "effectPattern": "Eff_Monster_Ptahur_Devourer_02_CommonTrail",
-              "effectTempleteID": -1.0
+              "effectTempleteID": -1.0,
+              "scale": 1.0,
+              "ILLLPEOODKP": ""
             },
             {
               "$type": "SetEffectFollowPath",
-              "DPNPNCGKIMP": "Palm01_R",
               "attachPoint": "Palm01_R",
-              "effectPattern": "Eff_Monster_Ptahur_Devourer_02_CommonTrail"
+              "effectPattern": "Eff_Monster_Ptahur_Devourer_02_CommonTrail",
+              "followPath": "Palm01_R"
             },
             {
               "$type": "AttachEffect",
-              "ILLLPEOODKP": "",
               "born": {
-                "$type": "BGOLIIIHLMO",
+                "$type": "ConfigBornByAttachPoint",
                 "attachPointName": "Toe01_L",
                 "useRotation": true
               },
-              "scale": 1.0,
               "effectPattern": "Eff_Monster_Ptahur_Devourer_02_CommonTrail",
-              "effectTempleteID": -1.0
+              "effectTempleteID": -1.0,
+              "scale": 1.0,
+              "ILLLPEOODKP": ""
             },
             {
               "$type": "SetEffectFollowPath",
-              "DPNPNCGKIMP": "Toe01_L",
               "attachPoint": "Toe01_L",
-              "effectPattern": "Eff_Monster_Ptahur_Devourer_02_CommonTrail"
+              "effectPattern": "Eff_Monster_Ptahur_Devourer_02_CommonTrail",
+              "followPath": "Toe01_L"
             },
             {
               "$type": "AttachEffect",
-              "ILLLPEOODKP": "",
               "born": {
-                "$type": "BGOLIIIHLMO",
+                "$type": "ConfigBornByAttachPoint",
                 "attachPointName": "Toe01_R",
                 "useRotation": true
               },
-              "scale": 1.0,
               "effectPattern": "Eff_Monster_Ptahur_Devourer_02_CommonTrail",
-              "effectTempleteID": -1.0
+              "effectTempleteID": -1.0,
+              "scale": 1.0,
+              "ILLLPEOODKP": ""
             },
             {
               "$type": "SetEffectFollowPath",
-              "DPNPNCGKIMP": "Toe01_R",
               "attachPoint": "Toe01_R",
-              "effectPattern": "Eff_Monster_Ptahur_Devourer_02_CommonTrail"
+              "effectPattern": "Eff_Monster_Ptahur_Devourer_02_CommonTrail",
+              "followPath": "Toe01_R"
             }
           ],
-          "elementDurability": 100.0,
-          "modifierName": "",
           "AIHNJLDFEGJ": 0.0
         }
       },
-      "onRemoved": [
+      "onAdded": [
         {
-          "$type": "NotifyUI",
-          "uiContextName": "InLevelMainPage",
-          "stringParam": "",
-          "message": "ExitRemusMagicDragon"
+          "$type": "ChangeTag",
+          "isAdd": true,
+          "tag": "Whale_Wander"
         },
         {
-          "$type": "DebugLog",
-          "content": "#Whale_Cannon# n8"
+          "$type": "AttachModifier",
+          "modifierName": "HookMark"
+        },
+        {
+          "$type": "SetGlobalValueV2",
+          "key": "GV_StopTrigger",
+          "maxValue": 0.0,
+          "minValue": 0.0,
+          "value": 0.0
+        },
+        {
+          "$type": "AttachModifier",
+          "modifierName": "Controller"
+        },
+        {
+          "$type": "SetGlobalValueV2",
+          "key": "GV_StopMove",
+          "maxValue": 0.0,
+          "minValue": 0.0,
+          "value": 0.0
+        },
+        {
+          "$type": "SetGlobalValueV2",
+          "key": "GV_Visible",
+          "maxValue": 0.0,
+          "minValue": 0.0,
+          "value": 0.0
+        },
+        {
+          "$type": "SetGlobalValueV2",
+          "key": "GV_InTalk",
+          "maxValue": 0.0,
+          "minValue": 0.0,
+          "value": 0.0
+        },
+        {
+          "$type": "SetGlobalValueV2",
+          "key": "GV_IsLerpStop",
+          "maxValue": 0.0,
+          "minValue": 0.0,
+          "value": 0.0
+        },
+        {
+          "$type": "SetGlobalValueV2",
+          "key": "GV_StopSpeed",
+          "maxValue": 0.0,
+          "minValue": 0.0,
+          "value": 0.0
+        },
+        {
+          "$type": "SetGlobalValueV2",
+          "key": "GV_InstantStopTime",
+          "maxValue": 0.0,
+          "minValue": 0.0,
+          "value": 0.0
+        },
+        {
+          "$type": "SetGlobalValueV2",
+          "key": "GV_LerpStopTime",
+          "maxValue": 0.0,
+          "minValue": 0.0,
+          "value": 1.0
+        },
+        {
+          "$type": "SetGlobalValueV2",
+          "key": "GV_StartMoveSpeed",
+          "maxValue": 0.0,
+          "minValue": 0.0,
+          "value": 8.0
+        },
+        {
+          "$type": "SetGlobalValueV2",
+          "key": "GV_StartMoveDur",
+          "maxValue": 0.0,
+          "minValue": 0.0,
+          "value": 1.0
+        },
+        {
+          "$type": "FireEffect",
+          "effectPattern": "Eff_Monster_Ptahur_Devourer_02_Appear",
+          "effectTempleteID": -1.0,
+          "scale": 1.0,
+          "ILLLPEOODKP": ""
+        },
+        {
+          "$type": "TriggerSetRenderersEnableV2",
+          "doOffStage": true,
+          "renderNames": [
+            "Body"
+          ]
+        },
+        {
+          "$type": "ApplyModifier",
+          "modifierName": "DelayAppear"
+        },
+        {
+          "$type": "SetAnimatorFloat",
+          "floatID": "BlendSpeed",
+          "predicates": [
+            {
+              "$type": "ByTargetGlobalValue",
+              "key": "SGV_Default_Move",
+              "target": "Self",
+              "value": 1.0
+            }
+          ],
+          "transitionTime": 1.0,
+          "value": 1.0
         }
       ],
       "onKill": [
@@ -2843,13 +3040,13 @@
         {
           "$type": "FireEffect",
           "effectPattern": "Eff_Monster_Ptahur_Devourer_02_Disappear",
+          "effectTempleteID": -1.0,
           "scale": 1.0,
-          "ILLLPEOODKP": "",
-          "effectTempleteID": -1.0
+          "ILLLPEOODKP": ""
         },
         {
           "$type": "SetAnimatorTrigger",
-          "MPTriggerOnRemote": true,
+          "mpTriggerOnRemote": true,
           "triggerID": "Disappear"
         },
         {
@@ -2857,279 +3054,22 @@
           "modifierName": "HookMark"
         }
       ],
-      "abilityMixins": [
+      "onRemoved": [
         {
-          "$type": "InvisibleInTalkAndCSMixin",
-          "EFOJFJDLLMK": [
-            "PushCollider"
-          ],
-          "EMNIAOMNIEF": true
+          "$type": "NotifyUI",
+          "message": "ExitRemusMagicDragon",
+          "stringParam": "",
+          "uiContextName": "InLevelMainPage"
         },
         {
-          "$type": "AttachToStateIDMixin",
-          "LJPPDIGCJMJ": "",
-          "stateIDs": [
-            "Move"
-          ],
-          "modifierName": "MoveEffect"
-        },
-        {
-          "$type": "WidgetMpSupportMixin",
-          "CMEPEHIJMPL": [
-            {
-              "$type": "SetGlobalValueV2",
-              "minValue": 0.0,
-              "key": "GV_InTalk",
-              "maxValue": 0.0,
-              "CBOMLBFIPJM": 1.0
-            }
-          ]
-        },
-        {
-          "$type": "AttachModifierToGlobalValueMixin",
-          "modifierNameSteps": [
-            "StopMoveControl"
-          ],
-          "globalValueKey": "GV_StopMove",
-          "valueSteps": [
-            0.5,
-            1.5
-          ],
-          "DEFOFMOIAAI": true
-        },
-        {
-          "$type": "AttachModifierToGlobalValueMixin",
-          "modifierNameSteps": [
-            "Blank",
-            "Visible"
-          ],
-          "globalValueKey": "GV_Visible",
-          "valueSteps": [
-            -0.5,
-            0.5,
-            1.5
-          ],
-          "DEFOFMOIAAI": true
-        },
-        {
-          "$type": "AttachModifierToGlobalValueMixin",
-          "modifierNameSteps": [
-            "TalkStop"
-          ],
-          "globalValueKey": "GV_InTalk",
-          "valueSteps": [
-            0.5,
-            1.5
-          ],
-          "DEFOFMOIAAI": true
-        },
-        {
-          "$type": "DoActionOnGlobalValueChangeMixin",
-          "actions": [
-            {
-              "$type": "SetGlobalValueV2",
-              "minValue": 0.0,
-              "key": "GV_InTalk",
-              "maxValue": 0.0,
-              "CBOMLBFIPJM": 0.0
-            }
-          ],
-          "globalValueKey": "SGV_Talk_Done_Trigger"
-        },
-        {
-          "$type": "DoActionOnGlobalValueChangeMixin",
-          "actions": [
-            {
-              "$type": "SetAnimatorTrigger",
-              "triggerID": "AttackTrigger",
-              "doOffStage": true
-            }
-          ],
-          "globalValueKey": "SGV_Bullet_Trigger"
-        }
-      ],
-      "abilityName": "SceneObj_Area_BigWhale_Interact",
-      "onAdded": [
-        {
-          "$type": "ChangeTag",
-          "tag": "Whale_Wander",
-          "isAdd": true
-        },
-        {
-          "$type": "AttachModifier",
-          "modifierName": "HookMark"
-        },
-        {
-          "$type": "SetGlobalValueV2",
-          "minValue": 0.0,
-          "key": "GV_StopTrigger",
-          "maxValue": 0.0,
-          "CBOMLBFIPJM": 0.0
-        },
-        {
-          "$type": "AttachModifier",
-          "modifierName": "Controller"
-        },
-        {
-          "$type": "SetGlobalValueV2",
-          "minValue": 0.0,
-          "key": "GV_StopMove",
-          "maxValue": 0.0,
-          "CBOMLBFIPJM": 0.0
-        },
-        {
-          "$type": "SetGlobalValueV2",
-          "minValue": 0.0,
-          "key": "GV_Visible",
-          "maxValue": 0.0,
-          "CBOMLBFIPJM": 0.0
-        },
-        {
-          "$type": "SetGlobalValueV2",
-          "minValue": 0.0,
-          "key": "GV_InTalk",
-          "maxValue": 0.0,
-          "CBOMLBFIPJM": 0.0
-        },
-        {
-          "$type": "SetGlobalValueV2",
-          "minValue": 0.0,
-          "key": "GV_IsLerpStop",
-          "maxValue": 0.0,
-          "CBOMLBFIPJM": 0.0
-        },
-        {
-          "$type": "SetGlobalValueV2",
-          "minValue": 0.0,
-          "key": "GV_StopSpeed",
-          "maxValue": 0.0,
-          "CBOMLBFIPJM": 0.0
-        },
-        {
-          "$type": "SetGlobalValueV2",
-          "minValue": 0.0,
-          "key": "GV_InstantStopTime",
-          "maxValue": 0.0,
-          "CBOMLBFIPJM": 0.0
-        },
-        {
-          "$type": "SetGlobalValueV2",
-          "minValue": 0.0,
-          "key": "GV_LerpStopTime",
-          "maxValue": 0.0,
-          "CBOMLBFIPJM": 1.0
-        },
-        {
-          "$type": "SetGlobalValueV2",
-          "minValue": 0.0,
-          "key": "GV_StartMoveSpeed",
-          "maxValue": 0.0,
-          "CBOMLBFIPJM": 8.0
-        },
-        {
-          "$type": "SetGlobalValueV2",
-          "minValue": 0.0,
-          "key": "GV_StartMoveDur",
-          "maxValue": 0.0,
-          "CBOMLBFIPJM": 1.0
-        },
-        {
-          "$type": "FireEffect",
-          "effectPattern": "Eff_Monster_Ptahur_Devourer_02_Appear",
-          "scale": 1.0,
-          "ILLLPEOODKP": "",
-          "effectTempleteID": -1.0
-        },
-        {
-          "$type": "TriggerSetRenderersEnableV2",
-          "HLLMGLJLFKK": [
-            "Body"
-          ],
-          "doOffStage": true
-        },
-        {
-          "$type": "ApplyModifier",
-          "modifierName": "DelayAppear"
-        },
-        {
-          "$type": "SetAnimatorFloat",
-          "floatID": "BlendSpeed",
-          "LANICPKFKBF": 1.0,
-          "CBOMLBFIPJM": 1.0,
-          "predicates": [
-            {
-              "$type": "EOFDCELPGFO",
-              "CBOMLBFIPJM": 1.0,
-              "key": "SGV_Default_Move",
-              "target": "Self"
-            }
-          ]
+          "$type": "DebugLog",
+          "content": "#Whale_Cannon# n8"
         }
       ]
     }
   },
   {
     "Default": {
-      "modifiers": {
-        "Controller": {
-          "elementDurability": 100.0,
-          "modifierName": "",
-          "AIHNJLDFEGJ": 0.0
-        },
-        "OceanCurveEventHandler": {
-          "elementDurability": 100.0,
-          "modifierMixins": [
-            {
-              "$type": "LevelCurveMixin",
-              "EDFJOMKHLFM": [
-                [
-                  {
-                    "$type": "DebugLog",
-                    "content": "LevelCurveMixin > SetGroupVariable"
-                  },
-                  {
-                    "$type": "SetCurveProgressInfoToGlobalValue",
-                    "PFCIBLHFIAL": "TEST_GV_"
-                  },
-                  {
-                    "$type": "SetGlobalValueToOverrideMap",
-                    "globalValueKey": "TEST_GV_0",
-                    "abilityName": "",
-                    "overrideMapKey": "TEST_GV_0"
-                  },
-                  {
-                    "$type": "SetGlobalValueToOverrideMap",
-                    "globalValueKey": "TEST_GV_1",
-                    "abilityName": "",
-                    "overrideMapKey": "TEST_GV_1"
-                  },
-                  {
-                    "$type": "ServerLuaCall",
-                    "param1": "TEST_GV_0",
-                    "param2": "TEST_GV_1",
-                    "paramNum": 2,
-                    "funcName": "SLC_SetGroupVar",
-                    "AHCNJKIEMPP": 0.0,
-                    "NPNEPKILMEK": [
-                      511010002
-                    ],
-                    "luaCallType": "SpecificGroup"
-                  }
-                ]
-              ],
-              "HPFCGICMFMF": [
-                "GV_Curve_Key_0"
-              ],
-              "BEDOJLFENKK": [
-                "SetGroupVariable"
-              ],
-              "tag": "OceanCurrent"
-            }
-          ],
-          "modifierName": "",
-          "AIHNJLDFEGJ": 0.0
-        }
-      },
       "abilityMixins": [
         {
           "$type": "CurLocalAvatarMixinV2",
@@ -3137,11 +3077,7 @@
         }
       ],
       "abilityName": "Ability_Team_OceanCurveEventHandle_4_6",
-      "isDynamicAbility": true
-    }
-  },
-  {
-    "Default": {
+      "isDynamicAbility": true,
       "modifiers": {
         "Controller": {
           "elementDurability": 100.0,
@@ -3153,6 +3089,13 @@
           "modifierMixins": [
             {
               "$type": "LevelCurveMixin",
+              "tag": "OceanCurrent",
+              "BEDOJLFENKK": [
+                "SetGroupVariable"
+              ],
+              "HPFCGICMFMF": [
+                "GV_Curve_Key_0"
+              ],
               "EDFJOMKHLFM": [
                 [
                   {
@@ -3165,43 +3108,40 @@
                   },
                   {
                     "$type": "SetGlobalValueToOverrideMap",
-                    "globalValueKey": "TEST_GV_0",
                     "abilityName": "",
+                    "globalValueKey": "TEST_GV_0",
                     "overrideMapKey": "TEST_GV_0"
                   },
                   {
                     "$type": "SetGlobalValueToOverrideMap",
-                    "globalValueKey": "TEST_GV_1",
                     "abilityName": "",
+                    "globalValueKey": "TEST_GV_1",
                     "overrideMapKey": "TEST_GV_1"
                   },
                   {
                     "$type": "ServerLuaCall",
+                    "callParamList": [
+                      511010002
+                    ],
+                    "funcName": "SLC_SetGroupVar",
+                    "luaCallType": "SpecificGroup",
                     "param1": "TEST_GV_0",
                     "param2": "TEST_GV_1",
-                    "paramNum": 2,
-                    "funcName": "SLC_SetGroupVar",
-                    "AHCNJKIEMPP": 0.0,
-                    "NPNEPKILMEK": [
-                      133405057
-                    ],
-                    "luaCallType": "SpecificGroup"
+                    "param3": 0.0,
+                    "paramNum": 2
                   }
                 ]
-              ],
-              "HPFCGICMFMF": [
-                "GV_Curve_Key_0"
-              ],
-              "BEDOJLFENKK": [
-                "SetGroupVariable"
-              ],
-              "tag": "OceanCurrent"
+              ]
             }
           ],
           "modifierName": "",
           "AIHNJLDFEGJ": 0.0
         }
-      },
+      }
+    }
+  },
+  {
+    "Default": {
       "abilityMixins": [
         {
           "$type": "CurLocalAvatarMixinV2",
@@ -3209,119 +3149,180 @@
         }
       ],
       "abilityName": "Ability_Team_OceanCurveEventHandle_4_6_Scene3",
-      "isDynamicAbility": true
+      "isDynamicAbility": true,
+      "modifiers": {
+        "Controller": {
+          "elementDurability": 100.0,
+          "modifierName": "",
+          "AIHNJLDFEGJ": 0.0
+        },
+        "OceanCurveEventHandler": {
+          "elementDurability": 100.0,
+          "modifierMixins": [
+            {
+              "$type": "LevelCurveMixin",
+              "tag": "OceanCurrent",
+              "BEDOJLFENKK": [
+                "SetGroupVariable"
+              ],
+              "HPFCGICMFMF": [
+                "GV_Curve_Key_0"
+              ],
+              "EDFJOMKHLFM": [
+                [
+                  {
+                    "$type": "DebugLog",
+                    "content": "LevelCurveMixin > SetGroupVariable"
+                  },
+                  {
+                    "$type": "SetCurveProgressInfoToGlobalValue",
+                    "PFCIBLHFIAL": "TEST_GV_"
+                  },
+                  {
+                    "$type": "SetGlobalValueToOverrideMap",
+                    "abilityName": "",
+                    "globalValueKey": "TEST_GV_0",
+                    "overrideMapKey": "TEST_GV_0"
+                  },
+                  {
+                    "$type": "SetGlobalValueToOverrideMap",
+                    "abilityName": "",
+                    "globalValueKey": "TEST_GV_1",
+                    "overrideMapKey": "TEST_GV_1"
+                  },
+                  {
+                    "$type": "ServerLuaCall",
+                    "callParamList": [
+                      133405057
+                    ],
+                    "funcName": "SLC_SetGroupVar",
+                    "luaCallType": "SpecificGroup",
+                    "param1": "TEST_GV_0",
+                    "param2": "TEST_GV_1",
+                    "param3": 0.0,
+                    "paramNum": 2
+                  }
+                ]
+              ]
+            }
+          ],
+          "modifierName": "",
+          "AIHNJLDFEGJ": 0.0
+        }
+      }
     }
   },
   {
     "Default": {
+      "abilityMixins": [
+        {
+          "$type": "AttachToGadgetStateMixin",
+          "modifierName": "Controller"
+        }
+      ],
+      "abilityName": "SceneObj_LMS_Whale_Howl_Follow",
       "modifiers": {
         "Controller": {
+          "elementDurability": 100.0,
+          "modifierName": "",
           "onAdded": [
             {
               "$type": "TriggerAudio",
               "operation": {
-                "$type": "KLKMGHDGPIK",
+                "$type": "ConfigAudioEventOp",
                 "operation": {
                   "text": "Play_Sfx_Monster_Ptahur_Devourer_02_Vo_Old_01"
                 }
               }
             }
           ],
-          "elementDurability": 100.0,
-          "modifierName": "",
           "AIHNJLDFEGJ": 0.0
         }
-      },
+      }
+    }
+  },
+  {
+    "Default": {
       "abilityMixins": [
         {
           "$type": "AttachToGadgetStateMixin",
           "modifierName": "Controller"
         }
       ],
-      "abilityName": "SceneObj_LMS_Whale_Howl_Follow"
-    }
-  },
-  {
-    "Default": {
+      "abilityName": "SceneObj_DragonTheatre_Talk_Gadget_01",
       "modifiers": {
         "Controller": {
           "elementDurability": 100.0,
           "modifierName": "",
           "AIHNJLDFEGJ": 0.0
         }
-      },
+      }
+    }
+  },
+  {
+    "Default": {
       "abilityMixins": [
         {
           "$type": "AttachToGadgetStateMixin",
           "modifierName": "Controller"
         }
       ],
-      "abilityName": "SceneObj_DragonTheatre_Talk_Gadget_01"
-    }
-  },
-  {
-    "Default": {
+      "abilityName": "SceneObj_DeepSea_Fish_01",
       "modifiers": {
         "Controller": {
+          "elementDurability": 100.0,
+          "modifierName": "",
           "onAdded": [
             {
               "$type": "AttachEffect",
-              "ILLLPEOODKP": "",
-              "scale": 1.0,
               "effectPattern": "Eff_Stages_SceneObj_VABoids_DeepSeaIBlue_01",
-              "effectTempleteID": -1.0
+              "effectTempleteID": -1.0,
+              "scale": 1.0,
+              "ILLLPEOODKP": ""
             }
           ],
-          "elementDurability": 100.0,
-          "modifierName": "",
           "AIHNJLDFEGJ": 0.0
         }
       },
       "onKill": [
         {
           "$type": "SendEffectTrigger",
-          "parameter": "FadeOut",
-          "GGKIEIJLCJJ": 1,
-          "effectPattern": "Eff_Stages_SceneObj_VABoids_DeepSeaIBlue_01",
           "attachPoint": "",
-          "canBeHandledOnRecover": true
+          "canBeHandledOnRecover": true,
+          "effectPattern": "Eff_Stages_SceneObj_VABoids_DeepSeaIBlue_01",
+          "parameter": "FadeOut",
+          "value": 1
         }
-      ],
-      "abilityMixins": [
-        {
-          "$type": "AttachToGadgetStateMixin",
-          "modifierName": "Controller"
-        }
-      ],
-      "abilityName": "SceneObj_DeepSea_Fish_01"
+      ]
     }
   },
   {
     "Default": {
       "abilityName": "SceneObj_Invisible_Water_Current_Entrance_35",
-      "PFJMEMFDGOH": [
+      "onFieldEnter": [
         {
           "$type": "Predicated",
-          "successActions": [
-            {
-              "$type": "ServerLuaCall",
-              "param1": 0.0,
-              "param2": 0.0,
-              "funcName": "SLC_EnterOceanCurrent",
-              "AHCNJKIEMPP": 0.0,
-              "luaCallType": "FromGroup",
-              "target": "TargetTeam"
-            }
-          ],
           "failActions": [
             {
               "$type": "DebugLog",
               "content": "角色正在洋流中"
             }
           ],
+          "successActions": [
+            {
+              "$type": "ServerLuaCall",
+              "funcName": "SLC_EnterOceanCurrent",
+              "luaCallType": "FromGroup",
+              "param1": 0.0,
+              "param2": 0.0,
+              "param3": 0.0,
+              "target": "TargetTeam"
+            }
+          ],
+          "target": "Target",
           "targetPredicates": [
             {
-              "$type": "GKGBIPDLMMG",
+              "$type": "ByNot",
               "predicates": [
                 {
                   "$type": "ADGJCFLPIPK",
@@ -3330,54 +3331,22 @@
               ]
             },
             {
-              "$type": "GKGBIPDLMMG",
+              "$type": "ByNot",
               "predicates": [
                 {
-                  "$type": "NBMIFIMDPII",
+                  "$type": "ByTargetGadgetState",
                   "gadgetState": 201,
                   "target": "Self"
                 }
               ]
             }
-          ],
-          "target": "Target"
+          ]
         }
       ]
     }
   },
   {
     "Default": {
-      "modifiers": {
-        "Controller": {
-          "elementDurability": 100.0,
-          "modifierMixins": [
-            {
-              "$type": "ShaderStateMachineSwitchMixin",
-              "MGLMGICCHHK": "",
-              "HIJJCMPHDLA": true
-            }
-          ],
-          "modifierName": "",
-          "AIHNJLDFEGJ": 0.0
-        },
-        "PickedUp": {
-          "onAdded": [
-            {
-              "$type": "KillSelf"
-            }
-          ],
-          "elementDurability": 100.0,
-          "modifierMixins": [
-            {
-              "$type": "ShaderStateMachineSwitchMixin",
-              "MGLMGICCHHK": "",
-              "IKJPMDJLPLP": 1
-            }
-          ],
-          "modifierName": "",
-          "AIHNJLDFEGJ": 0.0
-        }
-      },
       "abilityMixins": [
         {
           "$type": "AttachToGadgetStateMixin",
@@ -3385,29 +3354,68 @@
         },
         {
           "$type": "AttachToGadgetStateMixin",
-          "modifierName": "PickedUp",
-          "gadgetState": 202
+          "gadgetState": 202,
+          "modifierName": "PickedUp"
         }
       ],
-      "abilityName": "SceneObj_Ani_Prop_RemusBookPickup_01"
+      "abilityName": "SceneObj_Ani_Prop_RemusBookPickup_01",
+      "modifiers": {
+        "Controller": {
+          "elementDurability": 100.0,
+          "modifierMixins": [
+            {
+              "$type": "ShaderStateMachineSwitchMixin",
+              "HIJJCMPHDLA": true,
+              "MGLMGICCHHK": ""
+            }
+          ],
+          "modifierName": "",
+          "AIHNJLDFEGJ": 0.0
+        },
+        "PickedUp": {
+          "elementDurability": 100.0,
+          "modifierMixins": [
+            {
+              "$type": "ShaderStateMachineSwitchMixin",
+              "IKJPMDJLPLP": 1,
+              "MGLMGICCHHK": ""
+            }
+          ],
+          "modifierName": "",
+          "onAdded": [
+            {
+              "$type": "KillSelf"
+            }
+          ],
+          "AIHNJLDFEGJ": 0.0
+        }
+      }
     }
   },
   {
     "Default": {
+      "abilityMixins": [
+        {
+          "$type": "CurLocalAvatarMixinV2",
+          "modifierName": "LookCheck"
+        }
+      ],
+      "abilityName": "Ability_Team_Camera_Check_4_6",
+      "isDynamicAbility": true,
       "modifiers": {
         "ActivateTarget": {
+          "elementDurability": 100.0,
+          "modifierName": "",
           "onAdded": [
             {
               "$type": "SetGlobalValueV2",
-              "minValue": 0.0,
+              "doOffStage": true,
               "key": "GV_IsActive",
               "maxValue": 0.0,
-              "CBOMLBFIPJM": 1.0,
-              "doOffStage": true
+              "minValue": 0.0,
+              "value": 1.0
             }
           ],
-          "elementDurability": 100.0,
-          "modifierName": "",
           "AIHNJLDFEGJ": 0.0
         },
         "LookCheck": {
@@ -3415,7 +3423,15 @@
           "modifierMixins": [
             {
               "$type": "CheckSubTagScanEntityMixin",
+              "activateSkillKey": "",
+              "tag": "WorldPlay_4_6",
               "MBDANNCNLFN": "WorldPlay_CameraLookCheck_4_6",
+              "IMEDGAOLLEM": [
+                {
+                  "$type": "DebugLog",
+                  "content": "Ability_Team_Camera_Check_4_6 > onSelectEnd"
+                }
+              ],
               "ILOOHKBIBJM": [
                 {
                   "$type": "DebugLog",
@@ -3424,28 +3440,28 @@
                 {
                   "$type": "ApplyModifier",
                   "modifierName": "ActivateTarget",
-                  "target": "Other",
                   "predicates": [
                     {
-                      "$type": "EOFDCELPGFO",
-                      "CBOMLBFIPJM": 0.0,
-                      "key": "GV_IsActive"
+                      "$type": "ByTargetGlobalValue",
+                      "key": "GV_IsActive",
+                      "value": 0.0
                     }
-                  ]
+                  ],
+                  "target": "Other"
                 }
-              ],
-              "activateSkillKey": "",
-              "IMEDGAOLLEM": [
-                {
-                  "$type": "DebugLog",
-                  "content": "Ability_Team_Camera_Check_4_6 > onSelectEnd"
-                }
-              ],
-              "tag": "WorldPlay_4_6"
+              ]
             },
             {
               "$type": "CheckSubTagScanEntityMixin",
+              "activateSkillKey": "",
+              "tag": "WorldPlay_4_6",
               "MBDANNCNLFN": "WorldPlay_CameraLookCheck_4_6_College",
+              "IMEDGAOLLEM": [
+                {
+                  "$type": "DebugLog",
+                  "content": "WorldPlay_CameraLookCheck_4_6_College > onSelectEnd"
+                }
+              ],
               "ILOOHKBIBJM": [
                 {
                   "$type": "DebugLog",
@@ -3454,52 +3470,62 @@
                 {
                   "$type": "ApplyModifier",
                   "modifierName": "ActivateTarget",
-                  "target": "Other",
                   "predicates": [
                     {
-                      "$type": "EOFDCELPGFO",
-                      "CBOMLBFIPJM": 0.0,
-                      "key": "GV_IsActive"
+                      "$type": "ByTargetGlobalValue",
+                      "key": "GV_IsActive",
+                      "value": 0.0
                     }
-                  ]
+                  ],
+                  "target": "Other"
                 }
-              ],
-              "activateSkillKey": "",
-              "IMEDGAOLLEM": [
-                {
-                  "$type": "DebugLog",
-                  "content": "WorldPlay_CameraLookCheck_4_6_College > onSelectEnd"
-                }
-              ],
-              "tag": "WorldPlay_4_6"
+              ]
             }
           ],
           "modifierName": "",
           "AIHNJLDFEGJ": 0.0
         }
-      },
-      "abilityMixins": [
-        {
-          "$type": "CurLocalAvatarMixinV2",
-          "modifierName": "LookCheck"
-        }
-      ],
-      "abilityName": "Ability_Team_Camera_Check_4_6",
-      "isDynamicAbility": true
+      }
     }
   },
   {
     "Default": {
+      "abilityMixins": [
+        {
+          "$type": "AttachToGadgetStateMixin",
+          "modifierName": "VillageState"
+        },
+        {
+          "$type": "AttachToGadgetStateMixin",
+          "gadgetState": 201,
+          "modifierName": "CollegeState"
+        },
+        {
+          "$type": "AttachModifierToGlobalValueMixin",
+          "globalValueKey": "GV_IsActive",
+          "modifierNameSteps": [
+            "Blank",
+            "Active"
+          ],
+          "valueSteps": [
+            -0.5,
+            0.5,
+            1.5
+          ],
+          "DEFOFMOIAAI": true
+        }
+      ],
+      "abilityName": "SceneObj_CamLook_Check_4_6",
       "modifiers": {
         "VillageState": {
           "elementDurability": 100.0,
           "modifierMixins": [
             {
               "$type": "SubTagScanEntityMixin",
-              "MBDANNCNLFN": "WorldPlay_CameraLookCheck_4_6",
-              "KFAOLPBMANI": "",
+              "namedTransform": "",
+              "tag": "WorldPlay_4_6",
               "PALEDMNLIID": true,
-              "tag": "WorldPlay_4_6"
+              "MBDANNCNLFN": "WorldPlay_CameraLookCheck_4_6"
             }
           ],
           "modifierName": "",
@@ -3510,10 +3536,10 @@
           "modifierMixins": [
             {
               "$type": "SubTagScanEntityMixin",
-              "MBDANNCNLFN": "WorldPlay_CameraLookCheck_4_6_College",
-              "KFAOLPBMANI": "",
+              "namedTransform": "",
+              "tag": "WorldPlay_4_6",
               "PALEDMNLIID": true,
-              "tag": "WorldPlay_4_6"
+              "MBDANNCNLFN": "WorldPlay_CameraLookCheck_4_6_College"
             }
           ],
           "modifierName": "",
@@ -3530,69 +3556,46 @@
           "AIHNJLDFEGJ": 0.0
         },
         "Active": {
+          "elementDurability": 100.0,
+          "modifierName": "",
           "onAdded": [
             {
               "$type": "ServerLuaTriggerEvent",
+              "luaCallType": "FromGroup",
               "param1": 0.0,
               "param2": 0.0,
-              "AHCNJKIEMPP": 0.0,
-              "sourceName": "CamLookTrigger",
-              "luaCallType": "FromGroup"
+              "param3": 0.0,
+              "sourceName": "CamLookTrigger"
             }
           ],
-          "elementDurability": 100.0,
-          "modifierName": "",
           "AIHNJLDFEGJ": 0.0
         }
       },
-      "abilityMixins": [
-        {
-          "$type": "AttachToGadgetStateMixin",
-          "modifierName": "VillageState"
-        },
-        {
-          "$type": "AttachToGadgetStateMixin",
-          "modifierName": "CollegeState",
-          "gadgetState": 201
-        },
-        {
-          "$type": "AttachModifierToGlobalValueMixin",
-          "modifierNameSteps": [
-            "Blank",
-            "Active"
-          ],
-          "globalValueKey": "GV_IsActive",
-          "valueSteps": [
-            -0.5,
-            0.5,
-            1.5
-          ],
-          "DEFOFMOIAAI": true
-        }
-      ],
-      "abilityName": "SceneObj_CamLook_Check_4_6",
       "onAdded": [
         {
           "$type": "SetGlobalValueV2",
-          "minValue": 0.0,
+          "doOffStage": true,
           "key": "GV_IsActive",
           "maxValue": 0.0,
-          "CBOMLBFIPJM": 0.0,
-          "doOffStage": true
+          "minValue": 0.0,
+          "value": 0.0
         },
         {
           "$type": "ChangeTag",
-          "tag": "CameraLookCheck_4_6",
-          "isAdd": true
+          "isAdd": true,
+          "tag": "CameraLookCheck_4_6"
         }
       ]
     }
   },
   {
     "Default": {
+      "abilityName": "SceneObj_Whale_Cannon_Bullet",
       "modifiers": {
         "StopCannonMove": {
           "duration": 0.1,
+          "elementDurability": 100.0,
+          "modifierName": "",
           "onAdded": [
             {
               "$type": "DebugLog",
@@ -3604,15 +3607,13 @@
             },
             {
               "$type": "SetGlobalValueV2",
-              "minValue": 0.0,
+              "doOffStage": true,
               "key": "_ABILITY_WhaleHookSkill_Step",
               "maxValue": 0.0,
-              "CBOMLBFIPJM": 0.0,
-              "doOffStage": true
+              "minValue": 0.0,
+              "value": 0.0
             }
           ],
-          "elementDurability": 100.0,
-          "modifierName": "",
           "AIHNJLDFEGJ": 0.0
         }
       },
@@ -3623,6 +3624,12 @@
         },
         {
           "$type": "Predicated",
+          "otherTargets": {
+            "$type": "SelectTargetsByShape",
+            "campTargetType": "AllExceptSelf",
+            "shapeName": "CircleR6H10",
+            "sizeRatio": 1.0
+          },
           "successActions": [
             {
               "$type": "ApplyModifier",
@@ -3636,58 +3643,16 @@
           "targetPredicates": [
             {
               "$type": "ILMHBGFOAJN",
-              "MBGFJOOIMOK": [
+              "configIdArray": [
                 70330487,
                 70291485,
                 70291489
               ]
             }
-          ],
-          "otherTargets": {
-            "$type": "INIACGFCEDH",
-            "sizeRatio": 1.0,
-            "campTargetType": "AllExceptSelf",
-            "shapeName": "CircleR6H10"
-          }
+          ]
         }
       ],
-      "onKill": [
-        {
-          "$type": "TriggerAttackEvent",
-          "targetType": "Enemy",
-          "attackEvent": {
-            "attackInfo": {
-              "attackProperty": {
-                "damagePercentageRatio": 0.0,
-                "strikeType": "Blunt",
-                "enBreak": 20.0,
-                "damagePercentage": 1.0,
-                "elementDurability": 50.0,
-                "arkheGrade": 0.0
-              },
-              "hitPattern": {
-                "FLFCIDDNMNA": "",
-                "onHitEffectName": "default",
-                "hitImpulseType": "LV2"
-              },
-              "attenuationGroup": "Skirmisher_Fat_SprayGun_Ice",
-              "attenuationTag": "LaserAttack",
-              "attackTag": "WhaleCannonAttack",
-              "canBeModifiedBy": "OriginOwner"
-            },
-            "attackPattern": {
-              "$type": "HCAGHMDHEGG",
-              "radius": 0.5,
-              "triggerType": "TriggerNoRepeat",
-              "born": {
-                "$type": "NHPKNMOMIFH"
-              }
-            }
-          }
-        }
-      ],
-      "abilityName": "SceneObj_Whale_Cannon_Bullet",
-      "PFJMEMFDGOH": [
+      "onFieldEnter": [
         {
           "$type": "DebugLog",
           "content": "SceneObj_Whale_Cannon_Bullet onFieldEnterIn"
@@ -3708,42 +3673,78 @@
               "$type": "KillSelf"
             }
           ],
+          "target": "Target",
           "targetPredicates": [
             {
               "$type": "ILMHBGFOAJN",
-              "MBGFJOOIMOK": [
+              "configIdArray": [
                 70330487,
                 70291485,
                 70291489
               ]
             }
-          ],
-          "target": "Target"
+          ]
+        }
+      ],
+      "onKill": [
+        {
+          "$type": "TriggerAttackEvent",
+          "attackEvent": {
+            "attackInfo": {
+              "attackProperty": {
+                "damagePercentage": 1.0,
+                "damagePercentageRatio": 0.0,
+                "elementDurability": 50.0,
+                "enBreak": 20.0,
+                "strikeType": "Blunt",
+                "IIPHCFEONLK": 0.0
+              },
+              "attackTag": "WhaleCannonAttack",
+              "attenuationGroup": "Skirmisher_Fat_SprayGun_Ice",
+              "attenuationTag": "LaserAttack",
+              "canBeModifiedBy": "OriginOwner",
+              "hitPattern": {
+                "hitImpulseType": "LV2",
+                "onHitEffectName": "default",
+                "FLFCIDDNMNA": ""
+              }
+            },
+            "attackPattern": {
+              "$type": "ConfigAttackSphere",
+              "born": {
+                "$type": "ConfigBornByCollisionPoint"
+              },
+              "radius": 0.5,
+              "triggerType": "TriggerNoRepeat"
+            }
+          },
+          "targetType": "Enemy"
         }
       ]
     }
   },
   {
     "Default": {
+      "abilityName": "SceneObj_Whale_Hook_Bullet",
       "modifiers": {
         "StopHookMove": {
           "duration": 0.1,
+          "elementDurability": 100.0,
+          "modifierName": "",
           "onAdded": [
             {
               "$type": "SetGlobalValueV2",
-              "minValue": 0.0,
+              "doOffStage": true,
               "key": "_ABILITY_WhaleHookSkill_Step",
               "maxValue": 0.0,
-              "CBOMLBFIPJM": 0.0,
-              "doOffStage": true
+              "minValue": 0.0,
+              "value": 0.0
             },
             {
               "$type": "DebugLog",
               "content": "WhaleCannonStop > BulletHit"
             }
           ],
-          "elementDurability": 100.0,
-          "modifierName": "",
           "AIHNJLDFEGJ": 0.0
         }
       },
@@ -3757,8 +3758,7 @@
           "$type": "KillSelf"
         }
       ],
-      "abilityName": "SceneObj_Whale_Hook_Bullet",
-      "PFJMEMFDGOH": [
+      "onFieldEnter": [
         {
           "$type": "Predicated",
           "successActions": [
@@ -3775,58 +3775,22 @@
               "$type": "KillSelf"
             }
           ],
+          "target": "Target",
           "targetPredicates": [
             {
-              "$type": "DEOFBICNFHF",
+              "$type": "ByEntityTypes",
               "entityTypes": [
                 "Gadget",
                 "Field"
               ]
             }
-          ],
-          "target": "Target"
+          ]
         }
       ]
     }
   },
   {
     "Default": {
-      "modifiers": {
-        "Effect": {
-          "onAdded": [
-            {
-              "$type": "AttachEffect",
-              "ILLLPEOODKP": "",
-              "scale": 1.0,
-              "effectPattern": "Eff_Stages_SceneObj_Fd_PSHY_LightChains_01",
-              "effectTempleteID": -1.0
-            }
-          ],
-          "elementDurability": 100.0,
-          "modifierName": "",
-          "AIHNJLDFEGJ": 0.0
-        },
-        "Controller": {
-          "elementDurability": 100.0,
-          "modifierName": "",
-          "AIHNJLDFEGJ": 0.0
-        },
-        "Disappear": {
-          "onAdded": [
-            {
-              "$type": "SendEffectTrigger",
-              "parameter": "FadeOut",
-              "GGKIEIJLCJJ": 1,
-              "effectPattern": "Eff_Stages_SceneObj_Fd_PSHY_LightChains_01",
-              "attachPoint": "",
-              "canBeHandledOnRecover": true
-            }
-          ],
-          "elementDurability": 100.0,
-          "modifierName": "",
-          "AIHNJLDFEGJ": 0.0
-        }
-      },
       "abilityMixins": [
         {
           "$type": "AttachToGadgetStateMixin",
@@ -3834,11 +3798,47 @@
         },
         {
           "$type": "AttachToGadgetStateMixin",
-          "modifierName": "Disappear",
-          "gadgetState": 202
+          "gadgetState": 202,
+          "modifierName": "Disappear"
         }
       ],
       "abilityName": "SceneObj_RemusChains_Main",
+      "modifiers": {
+        "Effect": {
+          "elementDurability": 100.0,
+          "modifierName": "",
+          "onAdded": [
+            {
+              "$type": "AttachEffect",
+              "effectPattern": "Eff_Stages_SceneObj_Fd_PSHY_LightChains_01",
+              "effectTempleteID": -1.0,
+              "scale": 1.0,
+              "ILLLPEOODKP": ""
+            }
+          ],
+          "AIHNJLDFEGJ": 0.0
+        },
+        "Controller": {
+          "elementDurability": 100.0,
+          "modifierName": "",
+          "AIHNJLDFEGJ": 0.0
+        },
+        "Disappear": {
+          "elementDurability": 100.0,
+          "modifierName": "",
+          "onAdded": [
+            {
+              "$type": "SendEffectTrigger",
+              "attachPoint": "",
+              "canBeHandledOnRecover": true,
+              "effectPattern": "Eff_Stages_SceneObj_Fd_PSHY_LightChains_01",
+              "parameter": "FadeOut",
+              "value": 1
+            }
+          ],
+          "AIHNJLDFEGJ": 0.0
+        }
+      },
       "onAdded": [
         {
           "$type": "AttachModifier",
@@ -3849,42 +3849,6 @@
   },
   {
     "Default": {
-      "modifiers": {
-        "Effect": {
-          "onAdded": [
-            {
-              "$type": "AttachEffect",
-              "ILLLPEOODKP": "",
-              "scale": 1.0,
-              "effectPattern": "Eff_Stages_SceneObj_Fd_PSHY_BaishatanTrail_01",
-              "effectTempleteID": -1.0
-            }
-          ],
-          "elementDurability": 100.0,
-          "modifierName": "",
-          "AIHNJLDFEGJ": 0.0
-        },
-        "Controller": {
-          "elementDurability": 100.0,
-          "modifierName": "",
-          "AIHNJLDFEGJ": 0.0
-        },
-        "Disappear": {
-          "onAdded": [
-            {
-              "$type": "SendEffectTrigger",
-              "parameter": "Fadeout_01",
-              "GGKIEIJLCJJ": 1,
-              "effectPattern": "Eff_Stages_SceneObj_Fd_PSHY_BaishatanTrail_01",
-              "attachPoint": "",
-              "canBeHandledOnRecover": true
-            }
-          ],
-          "elementDurability": 100.0,
-          "modifierName": "",
-          "AIHNJLDFEGJ": 0.0
-        }
-      },
       "abilityMixins": [
         {
           "$type": "AttachToGadgetStateMixin",
@@ -3892,11 +3856,47 @@
         },
         {
           "$type": "AttachToGadgetStateMixin",
-          "modifierName": "Disappear",
-          "gadgetState": 202
+          "gadgetState": 202,
+          "modifierName": "Disappear"
         }
       ],
       "abilityName": "SceneObj_RemusChains_01",
+      "modifiers": {
+        "Effect": {
+          "elementDurability": 100.0,
+          "modifierName": "",
+          "onAdded": [
+            {
+              "$type": "AttachEffect",
+              "effectPattern": "Eff_Stages_SceneObj_Fd_PSHY_BaishatanTrail_01",
+              "effectTempleteID": -1.0,
+              "scale": 1.0,
+              "ILLLPEOODKP": ""
+            }
+          ],
+          "AIHNJLDFEGJ": 0.0
+        },
+        "Controller": {
+          "elementDurability": 100.0,
+          "modifierName": "",
+          "AIHNJLDFEGJ": 0.0
+        },
+        "Disappear": {
+          "elementDurability": 100.0,
+          "modifierName": "",
+          "onAdded": [
+            {
+              "$type": "SendEffectTrigger",
+              "attachPoint": "",
+              "canBeHandledOnRecover": true,
+              "effectPattern": "Eff_Stages_SceneObj_Fd_PSHY_BaishatanTrail_01",
+              "parameter": "Fadeout_01",
+              "value": 1
+            }
+          ],
+          "AIHNJLDFEGJ": 0.0
+        }
+      },
       "onAdded": [
         {
           "$type": "AttachModifier",
@@ -3907,42 +3907,6 @@
   },
   {
     "Default": {
-      "modifiers": {
-        "Effect": {
-          "onAdded": [
-            {
-              "$type": "AttachEffect",
-              "ILLLPEOODKP": "",
-              "scale": 1.0,
-              "effectPattern": "Eff_Stages_SceneObj_Fd_PSHY_LightTrail_02",
-              "effectTempleteID": -1.0
-            }
-          ],
-          "elementDurability": 100.0,
-          "modifierName": "",
-          "AIHNJLDFEGJ": 0.0
-        },
-        "Controller": {
-          "elementDurability": 100.0,
-          "modifierName": "",
-          "AIHNJLDFEGJ": 0.0
-        },
-        "Disappear": {
-          "onAdded": [
-            {
-              "$type": "SendEffectTrigger",
-              "parameter": "Fadeout_02",
-              "GGKIEIJLCJJ": 1,
-              "effectPattern": "Eff_Stages_SceneObj_Fd_PSHY_LightTrail_02",
-              "attachPoint": "",
-              "canBeHandledOnRecover": true
-            }
-          ],
-          "elementDurability": 100.0,
-          "modifierName": "",
-          "AIHNJLDFEGJ": 0.0
-        }
-      },
       "abilityMixins": [
         {
           "$type": "AttachToGadgetStateMixin",
@@ -3950,11 +3914,47 @@
         },
         {
           "$type": "AttachToGadgetStateMixin",
-          "modifierName": "Disappear",
-          "gadgetState": 202
+          "gadgetState": 202,
+          "modifierName": "Disappear"
         }
       ],
       "abilityName": "SceneObj_RemusChains_02",
+      "modifiers": {
+        "Effect": {
+          "elementDurability": 100.0,
+          "modifierName": "",
+          "onAdded": [
+            {
+              "$type": "AttachEffect",
+              "effectPattern": "Eff_Stages_SceneObj_Fd_PSHY_LightTrail_02",
+              "effectTempleteID": -1.0,
+              "scale": 1.0,
+              "ILLLPEOODKP": ""
+            }
+          ],
+          "AIHNJLDFEGJ": 0.0
+        },
+        "Controller": {
+          "elementDurability": 100.0,
+          "modifierName": "",
+          "AIHNJLDFEGJ": 0.0
+        },
+        "Disappear": {
+          "elementDurability": 100.0,
+          "modifierName": "",
+          "onAdded": [
+            {
+              "$type": "SendEffectTrigger",
+              "attachPoint": "",
+              "canBeHandledOnRecover": true,
+              "effectPattern": "Eff_Stages_SceneObj_Fd_PSHY_LightTrail_02",
+              "parameter": "Fadeout_02",
+              "value": 1
+            }
+          ],
+          "AIHNJLDFEGJ": 0.0
+        }
+      },
       "onAdded": [
         {
           "$type": "AttachModifier",
@@ -3965,42 +3965,6 @@
   },
   {
     "Default": {
-      "modifiers": {
-        "Effect": {
-          "onAdded": [
-            {
-              "$type": "AttachEffect",
-              "ILLLPEOODKP": "",
-              "scale": 1.0,
-              "effectPattern": "Eff_Stages_SceneObj_Fd_PSHY_LightTrail_03",
-              "effectTempleteID": -1.0
-            }
-          ],
-          "elementDurability": 100.0,
-          "modifierName": "",
-          "AIHNJLDFEGJ": 0.0
-        },
-        "Controller": {
-          "elementDurability": 100.0,
-          "modifierName": "",
-          "AIHNJLDFEGJ": 0.0
-        },
-        "Disappear": {
-          "onAdded": [
-            {
-              "$type": "SendEffectTrigger",
-              "parameter": "Fadeout_02",
-              "GGKIEIJLCJJ": 1,
-              "effectPattern": "Eff_Stages_SceneObj_Fd_PSHY_LightTrail_03",
-              "attachPoint": "",
-              "canBeHandledOnRecover": true
-            }
-          ],
-          "elementDurability": 100.0,
-          "modifierName": "",
-          "AIHNJLDFEGJ": 0.0
-        }
-      },
       "abilityMixins": [
         {
           "$type": "AttachToGadgetStateMixin",
@@ -4008,11 +3972,47 @@
         },
         {
           "$type": "AttachToGadgetStateMixin",
-          "modifierName": "Disappear",
-          "gadgetState": 202
+          "gadgetState": 202,
+          "modifierName": "Disappear"
         }
       ],
       "abilityName": "SceneObj_RemusChains_03",
+      "modifiers": {
+        "Effect": {
+          "elementDurability": 100.0,
+          "modifierName": "",
+          "onAdded": [
+            {
+              "$type": "AttachEffect",
+              "effectPattern": "Eff_Stages_SceneObj_Fd_PSHY_LightTrail_03",
+              "effectTempleteID": -1.0,
+              "scale": 1.0,
+              "ILLLPEOODKP": ""
+            }
+          ],
+          "AIHNJLDFEGJ": 0.0
+        },
+        "Controller": {
+          "elementDurability": 100.0,
+          "modifierName": "",
+          "AIHNJLDFEGJ": 0.0
+        },
+        "Disappear": {
+          "elementDurability": 100.0,
+          "modifierName": "",
+          "onAdded": [
+            {
+              "$type": "SendEffectTrigger",
+              "attachPoint": "",
+              "canBeHandledOnRecover": true,
+              "effectPattern": "Eff_Stages_SceneObj_Fd_PSHY_LightTrail_03",
+              "parameter": "Fadeout_02",
+              "value": 1
+            }
+          ],
+          "AIHNJLDFEGJ": 0.0
+        }
+      },
       "onAdded": [
         {
           "$type": "AttachModifier",
@@ -4023,42 +4023,6 @@
   },
   {
     "Default": {
-      "modifiers": {
-        "Effect": {
-          "onAdded": [
-            {
-              "$type": "AttachEffect",
-              "ILLLPEOODKP": "",
-              "scale": 1.0,
-              "effectPattern": "Eff_Stages_SceneObj_Fd_PSHY_BaishatanTrail_02",
-              "effectTempleteID": -1.0
-            }
-          ],
-          "elementDurability": 100.0,
-          "modifierName": "",
-          "AIHNJLDFEGJ": 0.0
-        },
-        "Controller": {
-          "elementDurability": 100.0,
-          "modifierName": "",
-          "AIHNJLDFEGJ": 0.0
-        },
-        "Disappear": {
-          "onAdded": [
-            {
-              "$type": "SendEffectTrigger",
-              "parameter": "Fadeout_01",
-              "GGKIEIJLCJJ": 1,
-              "effectPattern": "Eff_Stages_SceneObj_Fd_PSHY_BaishatanTrail_02",
-              "attachPoint": "",
-              "canBeHandledOnRecover": true
-            }
-          ],
-          "elementDurability": 100.0,
-          "modifierName": "",
-          "AIHNJLDFEGJ": 0.0
-        }
-      },
       "abilityMixins": [
         {
           "$type": "AttachToGadgetStateMixin",
@@ -4066,34 +4030,24 @@
         },
         {
           "$type": "AttachToGadgetStateMixin",
-          "modifierName": "Disappear",
-          "gadgetState": 202
+          "gadgetState": 202,
+          "modifierName": "Disappear"
         }
       ],
       "abilityName": "SceneObj_RemusChains_Sub_02",
-      "onAdded": [
-        {
-          "$type": "AttachModifier",
-          "modifierName": "Effect"
-        }
-      ]
-    }
-  },
-  {
-    "Default": {
       "modifiers": {
         "Effect": {
+          "elementDurability": 100.0,
+          "modifierName": "",
           "onAdded": [
             {
               "$type": "AttachEffect",
-              "ILLLPEOODKP": "",
+              "effectPattern": "Eff_Stages_SceneObj_Fd_PSHY_BaishatanTrail_02",
+              "effectTempleteID": -1.0,
               "scale": 1.0,
-              "effectPattern": "Eff_Stages_SceneObj_Fd_PSHY_BaishatanTrail_03",
-              "effectTempleteID": -1.0
+              "ILLLPEOODKP": ""
             }
           ],
-          "elementDurability": 100.0,
-          "modifierName": "",
           "AIHNJLDFEGJ": 0.0
         },
         "Controller": {
@@ -4102,33 +4056,21 @@
           "AIHNJLDFEGJ": 0.0
         },
         "Disappear": {
+          "elementDurability": 100.0,
+          "modifierName": "",
           "onAdded": [
             {
               "$type": "SendEffectTrigger",
-              "parameter": "Fadeout_01",
-              "GGKIEIJLCJJ": 1,
-              "effectPattern": "Eff_Stages_SceneObj_Fd_PSHY_BaishatanTrail_03",
               "attachPoint": "",
-              "canBeHandledOnRecover": true
+              "canBeHandledOnRecover": true,
+              "effectPattern": "Eff_Stages_SceneObj_Fd_PSHY_BaishatanTrail_02",
+              "parameter": "Fadeout_01",
+              "value": 1
             }
           ],
-          "elementDurability": 100.0,
-          "modifierName": "",
           "AIHNJLDFEGJ": 0.0
         }
       },
-      "abilityMixins": [
-        {
-          "$type": "AttachToGadgetStateMixin",
-          "modifierName": "Controller"
-        },
-        {
-          "$type": "AttachToGadgetStateMixin",
-          "modifierName": "Disappear",
-          "gadgetState": 202
-        }
-      ],
-      "abilityName": "SceneObj_RemusChains_Sub_03",
       "onAdded": [
         {
           "$type": "AttachModifier",
@@ -4139,27 +4081,85 @@
   },
   {
     "Default": {
+      "abilityMixins": [
+        {
+          "$type": "AttachToGadgetStateMixin",
+          "modifierName": "Controller"
+        },
+        {
+          "$type": "AttachToGadgetStateMixin",
+          "gadgetState": 202,
+          "modifierName": "Disappear"
+        }
+      ],
+      "abilityName": "SceneObj_RemusChains_Sub_03",
       "modifiers": {
-        "GlideChampOrb_ReviveGlidingEnergy": {
-          "duration": 1.0,
+        "Effect": {
+          "elementDurability": 100.0,
+          "modifierName": "",
           "onAdded": [
             {
-              "$type": "AddGlobalValue",
-              "useLimitRange": true,
-              "key": "AVATAR_GLIDING_ENERGY",
-              "maxValue": 100.0,
-              "minValue": 0.0,
-              "CBOMLBFIPJM": 20.0,
-              "target": "Team"
+              "$type": "AttachEffect",
+              "effectPattern": "Eff_Stages_SceneObj_Fd_PSHY_BaishatanTrail_03",
+              "effectTempleteID": -1.0,
+              "scale": 1.0,
+              "ILLLPEOODKP": ""
             }
           ],
+          "AIHNJLDFEGJ": 0.0
+        },
+        "Controller": {
           "elementDurability": 100.0,
           "modifierName": "",
           "AIHNJLDFEGJ": 0.0
+        },
+        "Disappear": {
+          "elementDurability": 100.0,
+          "modifierName": "",
+          "onAdded": [
+            {
+              "$type": "SendEffectTrigger",
+              "attachPoint": "",
+              "canBeHandledOnRecover": true,
+              "effectPattern": "Eff_Stages_SceneObj_Fd_PSHY_BaishatanTrail_03",
+              "parameter": "Fadeout_01",
+              "value": 1
+            }
+          ],
+          "AIHNJLDFEGJ": 0.0
         }
       },
+      "onAdded": [
+        {
+          "$type": "AttachModifier",
+          "modifierName": "Effect"
+        }
+      ]
+    }
+  },
+  {
+    "Default": {
       "abilityName": "SceneObj_UnderSea_WaterGlideChampOrb_MovePlatform",
-      "PFJMEMFDGOH": [
+      "modifiers": {
+        "GlideChampOrb_ReviveGlidingEnergy": {
+          "duration": 1.0,
+          "elementDurability": 100.0,
+          "modifierName": "",
+          "onAdded": [
+            {
+              "$type": "AddGlobalValue",
+              "key": "AVATAR_GLIDING_ENERGY",
+              "maxValue": 100.0,
+              "minValue": 0.0,
+              "target": "Team",
+              "useLimitRange": true,
+              "value": 20.0
+            }
+          ],
+          "AIHNJLDFEGJ": 0.0
+        }
+      },
+      "onFieldEnter": [
         {
           "$type": "ApplyModifier",
           "modifierName": "GlideChampOrb_ReviveGlidingEnergy",
@@ -4168,9 +4168,9 @@
         {
           "$type": "FireEffect",
           "effectPattern": "Eff_SceneObj_FontaineGlideChampOrb_01_Smash_Follow",
+          "effectTempleteID": -1.0,
           "scale": 1.0,
-          "ILLLPEOODKP": "",
-          "effectTempleteID": -1.0
+          "ILLLPEOODKP": ""
         },
         {
           "$type": "KillSelf"
@@ -4180,13 +4180,6 @@
   },
   {
     "Default": {
-      "modifiers": {
-        "Controller": {
-          "elementDurability": 100.0,
-          "modifierName": "",
-          "AIHNJLDFEGJ": 0.0
-        }
-      },
       "abilityMixins": [
         {
           "$type": "AttachToGadgetStateMixin",
@@ -4194,17 +4187,41 @@
         }
       ],
       "abilityName": "SceneObj_Whale_Cannon_Scan_Route_Hint",
+      "modifiers": {
+        "Controller": {
+          "elementDurability": 100.0,
+          "modifierName": "",
+          "AIHNJLDFEGJ": 0.0
+        }
+      },
       "onAdded": [
         {
           "$type": "ChangeTag",
-          "tag": "IS_LMS_WHALE_SCAN_TARGET",
-          "isAdd": true
+          "isAdd": true,
+          "tag": "IS_LMS_WHALE_SCAN_TARGET"
         }
       ]
     }
   },
   {
     "Default": {
+      "abilityMixins": [
+        {
+          "$type": "AttachModifierToSelfGlobalValueMixin",
+          "defaultGlobalValueOnCreate": 0.0,
+          "globalValueKey": "BoatRaceV3_IsInVehicle",
+          "modifierNameSteps": [
+            "Stage1",
+            "Stage2"
+          ],
+          "valueSteps": [
+            -0.5,
+            0.5,
+            1.5
+          ]
+        }
+      ],
+      "abilityName": "SceneObj_Test_Caster_01",
       "modifiers": {
         "Controller": {
           "elementDurability": 100.0,
@@ -4216,8 +4233,8 @@
           "modifierMixins": [
             {
               "$type": "TimeTrackPlayerMixin",
-              "DDFJBMNNIKG": "",
-              "ONOLFOCMDHN": 1
+              "ONOLFOCMDHN": 1,
+              "DDFJBMNNIKG": ""
             }
           ],
           "modifierName": "",
@@ -4228,38 +4245,21 @@
           "modifierMixins": [
             {
               "$type": "TimeTrackPlayerMixin",
-              "DDFJBMNNIKG": "",
-              "ONOLFOCMDHN": 2
+              "ONOLFOCMDHN": 2,
+              "DDFJBMNNIKG": ""
             }
           ],
           "modifierName": "",
           "AIHNJLDFEGJ": 0.0
         }
       },
-      "abilityMixins": [
-        {
-          "$type": "AttachModifierToSelfGlobalValueMixin",
-          "modifierNameSteps": [
-            "Stage1",
-            "Stage2"
-          ],
-          "valueSteps": [
-            -0.5,
-            0.5,
-            1.5
-          ],
-          "globalValueKey": "BoatRaceV3_IsInVehicle",
-          "defaultGlobalValueOnCreate": 0.0
-        }
-      ],
-      "abilityName": "SceneObj_Test_Caster_01",
       "onAdded": [
         {
           "$type": "SetGlobalValueV2",
-          "minValue": 0.0,
           "key": "StageState",
           "maxValue": 0.0,
-          "CBOMLBFIPJM": 0.0
+          "minValue": 0.0,
+          "value": 0.0
         }
       ]
     }
@@ -4269,20 +4269,20 @@
       "abilityMixins": [
         {
           "$type": "TimeTrackEventReceiverMixin",
-          "LFMDDKPIMBE": "EventReceiver",
           "actionQueue": [
             {
               "$type": "FireEffect",
-              "effectPattern": "Eff_Monster_Oceanid_Frog_DeathWaterBallExplode",
-              "scale": 1.0,
               "born": {
-                "$type": "NABPLNFPHCK",
+                "$type": "ConfigBornBySelf",
                 "useRotation": true
               },
-              "ILLLPEOODKP": "",
-              "effectTempleteID": -1.0
+              "effectPattern": "Eff_Monster_Oceanid_Frog_DeathWaterBallExplode",
+              "effectTempleteID": -1.0,
+              "scale": 1.0,
+              "ILLLPEOODKP": ""
             }
-          ]
+          ],
+          "LFMDDKPIMBE": "EventReceiver"
         }
       ],
       "abilityName": "SceneObj_Test_Receiver_01"
@@ -4290,6 +4290,27 @@
   },
   {
     "Default": {
+      "abilityMixins": [
+        {
+          "$type": "TimeTrackValueReceiverMixin",
+          "modifierNameSteps": [
+            "TestModifier0",
+            "TestModifier1",
+            "TestModifier2",
+            "TestModifier3"
+          ],
+          "valueSteps": [
+            -1.0,
+            0.5,
+            1.5,
+            2.5,
+            3.5
+          ],
+          "MHODLGFPAJP": true,
+          "LFMDDKPIMBE": "VariableReceiver"
+        }
+      ],
+      "abilityName": "SceneObj_Test_Receiver_02",
       "modifiers": {
         "TestModifier0": {
           "elementDurability": 100.0,
@@ -4311,28 +4332,7 @@
           "modifierName": "",
           "AIHNJLDFEGJ": 0.0
         }
-      },
-      "abilityMixins": [
-        {
-          "$type": "TimeTrackValueReceiverMixin",
-          "modifierNameSteps": [
-            "TestModifier0",
-            "TestModifier1",
-            "TestModifier2",
-            "TestModifier3"
-          ],
-          "valueSteps": [
-            -1.0,
-            0.5,
-            1.5,
-            2.5,
-            3.5
-          ],
-          "LFMDDKPIMBE": "VariableReceiver",
-          "MHODLGFPAJP": true
-        }
-      ],
-      "abilityName": "SceneObj_Test_Receiver_02"
+      }
     }
   }
 ]

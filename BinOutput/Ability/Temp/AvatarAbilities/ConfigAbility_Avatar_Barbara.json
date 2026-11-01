@@ -1,131 +1,9 @@
 [
   {
     "Default": {
-      "modifiers": {
-        "ExtraAttack_StaminaCost": {
-          "onAdded": [
-            {
-              "$type": "AvatarSkillStart",
-              "skillID": 10003,
-              "BGNJBEPEJBO": 1.0,
-              "costStaminaRatio": [
-                "Barbara_ExtraAttack_StaminaCost",
-                "ExtraAttack_Catalyst_Stamina_Cost",
-                "MUL"
-              ],
-              "cdRatio": 1.0
-            }
-          ],
-          "elementDurability": 100.0,
-          "modifierName": "",
-          "AIHNJLDFEGJ": 0.0
-        }
-      },
       "abilityMixins": [
         {
           "$type": "ButtonHoldChargeMixin",
-          "skillID": 10070,
-          "OnReleaseCharged": [
-            {
-              "$type": "SetAnimatorBool",
-              "boolID": "IsCharging"
-            },
-            {
-              "$type": "SetAnimatorTrigger",
-              "triggerID": "DoSkill"
-            },
-            {
-              "$type": "SetAnimatorInt",
-              "intID": "SkillID",
-              "CBOMLBFIPJM": 1.0
-            }
-          ],
-          "OnBeginUncharged": [
-            {
-              "$type": "SetAnimatorTrigger",
-              "triggerID": "DoSkill",
-              "predicates": [
-                {
-                  "$type": "LDOPHDHPCHA",
-                  "CBOMLBFIPJM": 0,
-                  "parameter": "ComboCount",
-                  "logic": "Equal"
-                }
-              ]
-            },
-            {
-              "$type": "SetAnimatorInt",
-              "intID": "SkillID",
-              "CBOMLBFIPJM": 99.0,
-              "predicates": [
-                {
-                  "$type": "LDOPHDHPCHA",
-                  "CBOMLBFIPJM": 0,
-                  "parameter": "ComboCount",
-                  "logic": "Equal"
-                }
-              ]
-            },
-            {
-              "$type": "SetAnimatorBool",
-              "boolID": "IsCharging"
-            }
-          ],
-          "secondChargeTime": 0.1,
-          "chargeTime": 0.1,
-          "OnBeginCharged": [
-            {
-              "$type": "SetAnimatorBool",
-              "CBOMLBFIPJM": true,
-              "boolID": "IsCharging"
-            }
-          ],
-          "OnBeginSecondCharged": [
-            {
-              "$type": "SetAnimatorTrigger",
-              "triggerID": "DoSkill"
-            },
-            {
-              "$type": "SetAnimatorInt",
-              "intID": "SkillID",
-              "CBOMLBFIPJM": 6.0,
-              "predicates": [
-                {
-                  "$type": "OPLIAABFJGD",
-                  "stamina": [
-                    "ExtraAttack_Catalyst_Stamina_Cost",
-                    "Barbara_ExtraAttack_StaminaCost",
-                    "MUL",
-                    "Flexible_Stamina",
-                    "ADD"
-                  ],
-                  "logic": "GreaterOrEqual"
-                }
-              ]
-            },
-            {
-              "$type": "SetAnimatorInt",
-              "intID": "SkillID",
-              "CBOMLBFIPJM": 1.0,
-              "predicates": [
-                {
-                  "$type": "OPLIAABFJGD",
-                  "stamina": [
-                    "ExtraAttack_Catalyst_Stamina_Cost",
-                    "Barbara_ExtraAttack_StaminaCost",
-                    "MUL",
-                    "Flexible_Stamina",
-                    "ADD"
-                  ],
-                  "logic": "Lesser"
-                }
-              ]
-            },
-            {
-              "$type": "SetAnimatorBool",
-              "boolID": "IsCharging"
-            }
-          ],
           "chargeStateIDs": [
             "Attack01",
             "Attack02",
@@ -135,7 +13,15 @@
             "ExtraAttack",
             "ExtraAttack_AS"
           ],
-          "OnReleaseUncharged": [
+          "chargeTime": 0.1,
+          "onBeginCharged": [
+            {
+              "$type": "SetAnimatorBool",
+              "boolID": "IsCharging",
+              "value": true
+            }
+          ],
+          "onBeginSecondCharged": [
             {
               "$type": "SetAnimatorTrigger",
               "triggerID": "DoSkill"
@@ -143,17 +29,111 @@
             {
               "$type": "SetAnimatorInt",
               "intID": "SkillID",
-              "CBOMLBFIPJM": 1.0
+              "predicates": [
+                {
+                  "$type": "ByLocalAvatarStamina",
+                  "logic": "GreaterOrEqual",
+                  "stamina": [
+                    "ExtraAttack_Catalyst_Stamina_Cost",
+                    "Barbara_ExtraAttack_StaminaCost",
+                    "MUL",
+                    "Flexible_Stamina",
+                    "ADD"
+                  ]
+                }
+              ],
+              "value": 6.0
+            },
+            {
+              "$type": "SetAnimatorInt",
+              "intID": "SkillID",
+              "predicates": [
+                {
+                  "$type": "ByLocalAvatarStamina",
+                  "logic": "Lesser",
+                  "stamina": [
+                    "ExtraAttack_Catalyst_Stamina_Cost",
+                    "Barbara_ExtraAttack_StaminaCost",
+                    "MUL",
+                    "Flexible_Stamina",
+                    "ADD"
+                  ]
+                }
+              ],
+              "value": 1.0
+            },
+            {
+              "$type": "SetAnimatorBool",
+              "boolID": "IsCharging"
             }
-          ]
+          ],
+          "onBeginUncharged": [
+            {
+              "$type": "SetAnimatorTrigger",
+              "predicates": [
+                {
+                  "$type": "ByAnimatorInt",
+                  "logic": "Equal",
+                  "parameter": "ComboCount",
+                  "value": 0
+                }
+              ],
+              "triggerID": "DoSkill"
+            },
+            {
+              "$type": "SetAnimatorInt",
+              "intID": "SkillID",
+              "predicates": [
+                {
+                  "$type": "ByAnimatorInt",
+                  "logic": "Equal",
+                  "parameter": "ComboCount",
+                  "value": 0
+                }
+              ],
+              "value": 99.0
+            },
+            {
+              "$type": "SetAnimatorBool",
+              "boolID": "IsCharging"
+            }
+          ],
+          "onReleaseCharged": [
+            {
+              "$type": "SetAnimatorBool",
+              "boolID": "IsCharging"
+            },
+            {
+              "$type": "SetAnimatorTrigger",
+              "triggerID": "DoSkill"
+            },
+            {
+              "$type": "SetAnimatorInt",
+              "intID": "SkillID",
+              "value": 1.0
+            }
+          ],
+          "onReleaseUncharged": [
+            {
+              "$type": "SetAnimatorTrigger",
+              "triggerID": "DoSkill"
+            },
+            {
+              "$type": "SetAnimatorInt",
+              "intID": "SkillID",
+              "value": 1.0
+            }
+          ],
+          "secondChargeTime": 0.1,
+          "skillID": 10070
         },
         {
           "$type": "AttachToStateIDMixin",
-          "LJPPDIGCJMJ": "",
+          "modifierName": "ExtraAttack_StaminaCost",
           "stateIDs": [
             "ExtraAttack_Charge"
           ],
-          "modifierName": "ExtraAttack_StaminaCost"
+          "LJPPDIGCJMJ": ""
         }
       ],
       "abilityName": "Avatar_Barbara_ExtraAttack",
@@ -161,367 +141,391 @@
         "Barbara_ExtraAttack_StaminaCost": 1.0,
         "ExtraAttack_Catalyst_Stamina_Cost": 0.0,
         "Flexible_Stamina": -2.0
+      },
+      "modifiers": {
+        "ExtraAttack_StaminaCost": {
+          "elementDurability": 100.0,
+          "modifierName": "",
+          "onAdded": [
+            {
+              "$type": "AvatarSkillStart",
+              "cdRatio": 1.0,
+              "costStaminaRatio": [
+                "Barbara_ExtraAttack_StaminaCost",
+                "ExtraAttack_Catalyst_Stamina_Cost",
+                "MUL"
+              ],
+              "skillID": 10003,
+              "GIBAINFKPBO": 1.0
+            }
+          ],
+          "AIHNJLDFEGJ": 0.0
+        }
       }
     }
   },
   {
     "Default": {
-      "modifiers": {
-        "Barbara_ExtraAttack_FX": {
-          "onAdded": [
-            {
-              "$type": "SetGlobalPos",
-              "setTarget": false,
-              "key": "_ABILITY_Barbara_ExtraAttack_FX_Pos",
-              "born": {
-                "$type": "NGMIGLEAPEM",
-                "onGround": true,
-                "offset": {
-                  "x": 0.0,
-                  "z": 0.0,
-                  "y": 0.0
-                }
-              },
-              "target": "SelfAttackTarget"
-            },
-            {
-              "$type": "AttachEffect",
-              "ILLLPEOODKP": "",
-              "born": {
-                "$type": "LKIBKKFEOLJ",
-                "positionKey": "_ABILITY_Barbara_ExtraAttack_FX_Pos",
-                "directionKey": "",
-                "onGround": true,
-                "offset": {
-                  "x": 0.0,
-                  "z": 0.0,
-                  "y": 1.0
-                }
-              },
-              "scale": 1.0,
-              "effectPattern": "Eff_Barbara_ExtraAttack_Pre",
-              "effectTempleteID": -1.0,
-              "predicates": [
-                {
-                  "$type": "IGNCFICKOLO"
-                }
-              ]
-            },
-            {
-              "$type": "AttachEffect",
-              "ILLLPEOODKP": "",
-              "born": {
-                "$type": "BOJMMDAIGMM",
-                "onGround": true,
-                "offset": {
-                  "x": 0.0,
-                  "z": 5.0,
-                  "y": 1.0
-                }
-              },
-              "scale": 1.0,
-              "effectPattern": "Eff_Barbara_ExtraAttack_Pre",
-              "effectTempleteID": -1.0,
-              "predicates": [
-                {
-                  "$type": "GKGBIPDLMMG",
-                  "predicates": [
-                    {
-                      "$type": "IGNCFICKOLO"
-                    }
-                  ]
-                }
-              ]
-            },
-            {
-              "$type": "AttachEffect",
-              "ILLLPEOODKP": "",
-              "scale": 1.0,
-              "effectPattern": "Eff_Barbara_ExtraAttack_BS_HandR",
-              "effectTempleteID": -1.0
-            },
-            {
-              "$type": "AttachEffect",
-              "ILLLPEOODKP": "",
-              "scale": 1.0,
-              "effectPattern": "Eff_Barbara_ExtraAttack_BS_Root_Pre",
-              "effectTempleteID": -1.0
-            }
-          ],
-          "elementDurability": 100.0,
-          "modifierName": "",
-          "AIHNJLDFEGJ": 0.0
-        }
-      },
       "abilityMixins": [
         {
           "$type": "AttachToStateIDMixin",
-          "LJPPDIGCJMJ": "",
+          "modifierName": "Barbara_ExtraAttack_FX",
           "stateIDs": [
             "ExtraAttack_Charge",
             "ExtraAttack"
           ],
-          "modifierName": "Barbara_ExtraAttack_FX"
+          "LJPPDIGCJMJ": ""
         }
       ],
-      "abilityName": "Avatar_Barbara_ExtraAttack_FX"
-    }
-  },
-  {
-    "Default": {
-      "onAbilityStart": [
-        {
-          "$type": "FireEffect",
-          "effectPattern": "Eff_Barbara_ExtraAttack",
-          "scale": 1.0,
-          "born": {
-            "$type": "LKIBKKFEOLJ",
-            "positionKey": "_ABILITY_Barbara_ExtraAttack_FX_Pos",
-            "directionKey": "",
-            "onGround": true,
-            "offset": {
-              "x": 0.0,
-              "z": 0.0,
-              "y": 1.0
-            }
-          },
-          "ILLLPEOODKP": "",
-          "effectTempleteID": -1.0,
-          "predicates": [
+      "abilityName": "Avatar_Barbara_ExtraAttack_FX",
+      "modifiers": {
+        "Barbara_ExtraAttack_FX": {
+          "elementDurability": 100.0,
+          "modifierName": "",
+          "onAdded": [
             {
-              "$type": "IGNCFICKOLO"
-            }
-          ]
-        },
-        {
-          "$type": "FireEffect",
-          "effectPattern": "Eff_Barbara_ExtraAttack_BS_Root",
-          "scale": 1.0,
-          "ILLLPEOODKP": "",
-          "effectTempleteID": -1.0
-        },
-        {
-          "$type": "FireEffect",
-          "effectPattern": "Eff_Barbara_ExtraAttack",
-          "scale": 1.0,
-          "born": {
-            "$type": "BOJMMDAIGMM",
-            "onGround": true,
-            "offset": {
-              "x": 0.0,
-              "z": 5.0,
-              "y": 1.0
-            }
-          },
-          "ILLLPEOODKP": "",
-          "effectTempleteID": -1.0,
-          "predicates": [
-            {
-              "$type": "GKGBIPDLMMG",
-              "predicates": [
-                {
-                  "$type": "IGNCFICKOLO"
-                }
-              ]
-            }
-          ]
-        },
-        {
-          "$type": "SetGlobalPos",
-          "setTarget": false,
-          "key": "_ABILITY_Barbara_ExtraAttack_Damage_Pos",
-          "born": {
-            "$type": "NGMIGLEAPEM",
-            "onGround": true,
-            "offset": {
-              "x": 0.0,
-              "z": 0.0,
-              "y": 0.0
-            }
-          },
-          "target": "SelfAttackTarget"
-        },
-        {
-          "$type": "TriggerAttackEvent",
-          "targetType": "Enemy",
-          "attackEvent": {
-            "attackInfo": {
-              "attackProperty": {
-                "elementType": "Water",
-                "damagePercentageRatio": 0.0,
-                "strikeType": "Default",
-                "damagePercentage": "Barbara_ExtraAttack",
-                "elementDurability": 25.0,
-                "arkheGrade": 0.0
-              },
-              "cameraShake": {
-                "extension": {
-                  "rangeAttenuation": 0.3,
-                  "baseCycle": 0.72,
-                  "cycleDamping": 0.0
-                },
-                "shakeDir": {
-                  "y": -1.0
-                },
-                "shakeTime": 0.36,
-                "shakeType": "CustomVector",
-                "shakeDistance": 30.0,
-                "MNKFEFOKFKP": "",
-                "shakeRange": 0.12
-              },
-              "hitPattern": {
-                "FLFCIDDNMNA": "",
-                "onHitEffectName": "Eff_Barbara_ExtraAttack_Hit",
-                "hitHaltTimeScale": 0.05,
-                "hitImpulseType": "LV3"
-              },
-              "forceCameraShake": true,
-              "attenuationGroup": "default",
-              "attenuationTag": "",
-              "attackTag": "ExtraAttack",
-              "canBeModifiedBy": "OriginOwner"
-            },
-            "attackPattern": {
-              "$type": "HCAGHMDHEGG",
-              "radius": 3.0,
-              "triggerType": "TriggerNoRepeat",
+              "$type": "SetGlobalPos",
               "born": {
-                "$type": "NABPLNFPHCK",
+                "$type": "ConfigBornBySelectedPoint",
                 "offset": {
                   "x": 0.0,
-                  "z": 5.0,
-                  "y": 0.0
-                }
-              }
-            }
-          },
-          "predicates": [
-            {
-              "$type": "GKGBIPDLMMG",
-              "predicates": [
-                {
-                  "$type": "IGNCFICKOLO"
-                }
-              ]
-            }
-          ]
-        },
-        {
-          "$type": "TriggerAttackEvent",
-          "targetType": "Enemy",
-          "attackEvent": {
-            "attackInfo": {
-              "attackProperty": {
-                "elementType": "Water",
-                "damagePercentageRatio": 0.0,
-                "strikeType": "Default",
-                "damagePercentage": "Barbara_ExtraAttack",
-                "elementDurability": 25.0,
-                "arkheGrade": 0.0
-              },
-              "cameraShake": {
-                "extension": {
-                  "rangeAttenuation": 0.3,
-                  "baseCycle": 0.72,
-                  "cycleDamping": 0.0
+                  "y": 0.0,
+                  "z": 0.0
                 },
-                "shakeDir": {
-                  "y": -1.0
-                },
-                "shakeTime": 0.36,
-                "shakeType": "CustomVector",
-                "shakeDistance": 30.0,
-                "MNKFEFOKFKP": "",
-                "shakeRange": 0.12
+                "onGround": true
               },
-              "hitPattern": {
-                "FLFCIDDNMNA": "",
-                "onHitEffectName": "Eff_Barbara_ExtraAttack_Hit",
-                "hitHaltTimeScale": 0.05,
-                "hitImpulseType": "LV3"
-              },
-              "forceCameraShake": true,
-              "attenuationGroup": "default",
-              "attenuationTag": "",
-              "attackTag": "ExtraAttack",
-              "canBeModifiedBy": "OriginOwner"
+              "key": "_ABILITY_Barbara_ExtraAttack_FX_Pos",
+              "setTarget": false,
+              "target": "SelfAttackTarget"
             },
-            "attackPattern": {
-              "$type": "HCAGHMDHEGG",
-              "radius": 3.0,
-              "triggerType": "TriggerNoRepeat",
+            {
+              "$type": "AttachEffect",
               "born": {
-                "$type": "LKIBKKFEOLJ",
-                "positionKey": "_ABILITY_Barbara_ExtraAttack_Damage_Pos",
+                "$type": "ConfigBornByGlobalValue",
                 "directionKey": "",
-                "onGround": true,
                 "offset": {
                   "x": 0.0,
-                  "z": 0.0,
-                  "y": 1.0
+                  "y": 1.0,
+                  "z": 0.0
+                },
+                "onGround": true,
+                "positionKey": "_ABILITY_Barbara_ExtraAttack_FX_Pos"
+              },
+              "effectPattern": "Eff_Barbara_ExtraAttack_Pre",
+              "effectTempleteID": -1.0,
+              "predicates": [
+                {
+                  "$type": "ByHasAttackTarget"
                 }
-              }
-            }
-          },
-          "predicates": [
+              ],
+              "scale": 1.0,
+              "ILLLPEOODKP": ""
+            },
             {
-              "$type": "IGNCFICKOLO"
+              "$type": "AttachEffect",
+              "born": {
+                "$type": "ConfigBornByTarget",
+                "offset": {
+                  "x": 5.0,
+                  "y": 1.0,
+                  "z": 0.0
+                },
+                "onGround": true
+              },
+              "effectPattern": "Eff_Barbara_ExtraAttack_Pre",
+              "effectTempleteID": -1.0,
+              "predicates": [
+                {
+                  "$type": "ByNot",
+                  "predicates": [
+                    {
+                      "$type": "ByHasAttackTarget"
+                    }
+                  ]
+                }
+              ],
+              "scale": 1.0,
+              "ILLLPEOODKP": ""
+            },
+            {
+              "$type": "AttachEffect",
+              "effectPattern": "Eff_Barbara_ExtraAttack_BS_HandR",
+              "effectTempleteID": -1.0,
+              "scale": 1.0,
+              "ILLLPEOODKP": ""
+            },
+            {
+              "$type": "AttachEffect",
+              "effectPattern": "Eff_Barbara_ExtraAttack_BS_Root_Pre",
+              "effectTempleteID": -1.0,
+              "scale": 1.0,
+              "ILLLPEOODKP": ""
             }
-          ]
+          ],
+          "AIHNJLDFEGJ": 0.0
         }
-      ],
-      "abilityName": "Avatar_Barbara_ExtraAttack_Damage",
-      "abilitySpecials": {
-        "Barbara_ExtraAttack": 0.0
       }
     }
   },
   {
     "Default": {
+      "abilityName": "Avatar_Barbara_ExtraAttack_Damage",
+      "abilitySpecials": {
+        "Barbara_ExtraAttack": 0.0
+      },
+      "onAbilityStart": [
+        {
+          "$type": "FireEffect",
+          "born": {
+            "$type": "ConfigBornByGlobalValue",
+            "directionKey": "",
+            "offset": {
+              "x": 0.0,
+              "y": 1.0,
+              "z": 0.0
+            },
+            "onGround": true,
+            "positionKey": "_ABILITY_Barbara_ExtraAttack_FX_Pos"
+          },
+          "effectPattern": "Eff_Barbara_ExtraAttack",
+          "effectTempleteID": -1.0,
+          "predicates": [
+            {
+              "$type": "ByHasAttackTarget"
+            }
+          ],
+          "scale": 1.0,
+          "ILLLPEOODKP": ""
+        },
+        {
+          "$type": "FireEffect",
+          "effectPattern": "Eff_Barbara_ExtraAttack_BS_Root",
+          "effectTempleteID": -1.0,
+          "scale": 1.0,
+          "ILLLPEOODKP": ""
+        },
+        {
+          "$type": "FireEffect",
+          "born": {
+            "$type": "ConfigBornByTarget",
+            "offset": {
+              "x": 5.0,
+              "y": 1.0,
+              "z": 0.0
+            },
+            "onGround": true
+          },
+          "effectPattern": "Eff_Barbara_ExtraAttack",
+          "effectTempleteID": -1.0,
+          "predicates": [
+            {
+              "$type": "ByNot",
+              "predicates": [
+                {
+                  "$type": "ByHasAttackTarget"
+                }
+              ]
+            }
+          ],
+          "scale": 1.0,
+          "ILLLPEOODKP": ""
+        },
+        {
+          "$type": "SetGlobalPos",
+          "born": {
+            "$type": "ConfigBornBySelectedPoint",
+            "offset": {
+              "x": 0.0,
+              "y": 0.0,
+              "z": 0.0
+            },
+            "onGround": true
+          },
+          "key": "_ABILITY_Barbara_ExtraAttack_Damage_Pos",
+          "setTarget": false,
+          "target": "SelfAttackTarget"
+        },
+        {
+          "$type": "TriggerAttackEvent",
+          "attackEvent": {
+            "attackInfo": {
+              "attackProperty": {
+                "damagePercentage": "Barbara_ExtraAttack",
+                "damagePercentageRatio": 0.0,
+                "elementDurability": 25.0,
+                "elementType": "Water",
+                "strikeType": "Default",
+                "IIPHCFEONLK": 0.0
+              },
+              "attackTag": "ExtraAttack",
+              "attenuationGroup": "default",
+              "attenuationTag": "",
+              "cameraShake": {
+                "extension": {
+                  "baseCycle": 0.72,
+                  "cycleDamping": 0.0,
+                  "rangeAttenuation": 0.3
+                },
+                "shakeDir": {
+                  "y": -1.0
+                },
+                "shakeDistance": 30.0,
+                "shakeRange": 0.12,
+                "shakeTime": 0.36,
+                "shakeType": "CustomVector",
+                "MNKFEFOKFKP": ""
+              },
+              "canBeModifiedBy": "OriginOwner",
+              "forceCameraShake": true,
+              "hitPattern": {
+                "hitHaltTimeScale": 0.05,
+                "hitImpulseType": "LV3",
+                "onHitEffectName": "Eff_Barbara_ExtraAttack_Hit",
+                "FLFCIDDNMNA": ""
+              }
+            },
+            "attackPattern": {
+              "$type": "ConfigAttackSphere",
+              "born": {
+                "$type": "ConfigBornBySelf",
+                "offset": {
+                  "x": 5.0,
+                  "y": 0.0,
+                  "z": 0.0
+                }
+              },
+              "radius": 3.0,
+              "triggerType": "TriggerNoRepeat"
+            }
+          },
+          "predicates": [
+            {
+              "$type": "ByNot",
+              "predicates": [
+                {
+                  "$type": "ByHasAttackTarget"
+                }
+              ]
+            }
+          ],
+          "targetType": "Enemy"
+        },
+        {
+          "$type": "TriggerAttackEvent",
+          "attackEvent": {
+            "attackInfo": {
+              "attackProperty": {
+                "damagePercentage": "Barbara_ExtraAttack",
+                "damagePercentageRatio": 0.0,
+                "elementDurability": 25.0,
+                "elementType": "Water",
+                "strikeType": "Default",
+                "IIPHCFEONLK": 0.0
+              },
+              "attackTag": "ExtraAttack",
+              "attenuationGroup": "default",
+              "attenuationTag": "",
+              "cameraShake": {
+                "extension": {
+                  "baseCycle": 0.72,
+                  "cycleDamping": 0.0,
+                  "rangeAttenuation": 0.3
+                },
+                "shakeDir": {
+                  "y": -1.0
+                },
+                "shakeDistance": 30.0,
+                "shakeRange": 0.12,
+                "shakeTime": 0.36,
+                "shakeType": "CustomVector",
+                "MNKFEFOKFKP": ""
+              },
+              "canBeModifiedBy": "OriginOwner",
+              "forceCameraShake": true,
+              "hitPattern": {
+                "hitHaltTimeScale": 0.05,
+                "hitImpulseType": "LV3",
+                "onHitEffectName": "Eff_Barbara_ExtraAttack_Hit",
+                "FLFCIDDNMNA": ""
+              }
+            },
+            "attackPattern": {
+              "$type": "ConfigAttackSphere",
+              "born": {
+                "$type": "ConfigBornByGlobalValue",
+                "directionKey": "",
+                "offset": {
+                  "x": 0.0,
+                  "y": 1.0,
+                  "z": 0.0
+                },
+                "onGround": true,
+                "positionKey": "_ABILITY_Barbara_ExtraAttack_Damage_Pos"
+              },
+              "radius": 3.0,
+              "triggerType": "TriggerNoRepeat"
+            }
+          },
+          "predicates": [
+            {
+              "$type": "ByHasAttackTarget"
+            }
+          ],
+          "targetType": "Enemy"
+        }
+      ]
+    }
+  },
+  {
+    "Default": {
+      "abilityName": "Avatar_Barbara_Attack01",
+      "abilitySpecials": {
+        "Barbara_NormalAttack_01": 0.0
+      },
       "modifiers": {
         "Eff_Barbara_Attack01": {
           "duration": 0.3,
+          "elementDurability": 100.0,
+          "modifierName": "",
           "onAdded": [
             {
               "$type": "TriggerAttackEvent",
-              "targetType": "Enemy",
               "attackEvent": {
                 "attackInfo": {
                   "attackProperty": {
-                    "elementType": "Water",
-                    "damagePercentageRatio": 0.0,
-                    "strikeType": "Default",
-                    "enBreak": 7.35,
                     "damagePercentage": "Barbara_NormalAttack_01",
+                    "damagePercentageRatio": 0.0,
                     "elementDurability": 25.0,
-                    "arkheGrade": 0.0
+                    "elementType": "Water",
+                    "enBreak": 7.35,
+                    "strikeType": "Default",
+                    "IIPHCFEONLK": 0.0
                   },
-                  "hitPattern": {
-                    "FLFCIDDNMNA": "",
-                    "onHitEffectName": "Eff_Barbara_Attack_MagicHit_01",
-                    "hitHaltTimeScale": 0.05,
-                    "hitImpulseType": "LV1"
-                  },
+                  "attackTag": "NormalAttack_01",
                   "attenuationGroup": "default",
                   "attenuationTag": "Barbara_Water_Damage",
-                  "attackTag": "NormalAttack_01"
+                  "hitPattern": {
+                    "hitHaltTimeScale": 0.05,
+                    "hitImpulseType": "LV1",
+                    "onHitEffectName": "Eff_Barbara_Attack_MagicHit_01",
+                    "FLFCIDDNMNA": ""
+                  }
                 },
                 "attackPattern": {
-                  "$type": "HCAGHMDHEGG",
-                  "radius": 1.0,
-                  "triggerType": "TriggerNoRepeat",
+                  "$type": "ConfigAttackSphere",
                   "born": {
-                    "$type": "BGOLIIIHLMO",
+                    "$type": "ConfigBornByAttachPoint",
                     "attachPointName": "RootNode",
                     "attachPointTargetType": "Self"
-                  }
+                  },
+                  "radius": 1.0,
+                  "triggerType": "TriggerNoRepeat"
                 }
               },
-              "target": "Caster"
+              "target": "Caster",
+              "targetType": "Enemy"
             }
           ],
-          "elementDurability": 100.0,
-          "modifierName": "",
           "AIHNJLDFEGJ": 0.0
         }
       },
@@ -533,82 +537,82 @@
         },
         {
           "$type": "FireEffect",
-          "effectPattern": "Eff_Barbara_Attack_MagicHit_01",
-          "scale": 1.0,
           "born": {
-            "$type": "BOJMMDAIGMM",
+            "$type": "ConfigBornByTarget",
             "offset": {
-              "x": 0.0,
-              "z": 5.0,
-              "y": 1.0
+              "x": 5.0,
+              "y": 1.0,
+              "z": 0.0
             }
           },
-          "ILLLPEOODKP": "",
+          "effectPattern": "Eff_Barbara_Attack_MagicHit_01",
           "effectTempleteID": -1.0,
           "predicates": [
             {
-              "$type": "GKGBIPDLMMG",
+              "$type": "ByNot",
               "predicates": [
                 {
-                  "$type": "IGNCFICKOLO"
+                  "$type": "ByHasAttackTarget"
                 }
               ]
             }
-          ]
+          ],
+          "scale": 1.0,
+          "ILLLPEOODKP": ""
         }
-      ],
-      "abilityName": "Avatar_Barbara_Attack01",
-      "abilitySpecials": {
-        "Barbara_NormalAttack_01": 0.0
-      }
+      ]
     }
   },
   {
     "Default": {
+      "abilityName": "Avatar_Barbara_Attack02",
+      "abilitySpecials": {
+        "Barbara_NormalAttack_02": 0.0
+      },
       "modifiers": {
         "Eff_Barbara_Attack02": {
           "duration": 0.3,
+          "elementDurability": 100.0,
+          "modifierName": "",
           "onAdded": [
             {
               "$type": "TriggerAttackEvent",
-              "targetType": "Enemy",
               "attackEvent": {
                 "attackInfo": {
                   "attackProperty": {
-                    "elementType": "Water",
-                    "damagePercentageRatio": 0.0,
-                    "strikeType": "Default",
-                    "enBreak": 7.5,
                     "damagePercentage": "Barbara_NormalAttack_02",
+                    "damagePercentageRatio": 0.0,
                     "elementDurability": 25.0,
-                    "arkheGrade": 0.0
+                    "elementType": "Water",
+                    "enBreak": 7.5,
+                    "strikeType": "Default",
+                    "IIPHCFEONLK": 0.0
                   },
-                  "hitPattern": {
-                    "FLFCIDDNMNA": "",
-                    "onHitEffectName": "Eff_Barbara_Attack_MagicHit_01",
-                    "hitHaltTimeScale": 0.05,
-                    "hitImpulseType": "LV1"
-                  },
+                  "attackTag": "NormalAttack_02",
                   "attenuationGroup": "default",
                   "attenuationTag": "Barbara_Water_Damage",
-                  "attackTag": "NormalAttack_02"
+                  "hitPattern": {
+                    "hitHaltTimeScale": 0.05,
+                    "hitImpulseType": "LV1",
+                    "onHitEffectName": "Eff_Barbara_Attack_MagicHit_01",
+                    "FLFCIDDNMNA": ""
+                  }
                 },
                 "attackPattern": {
-                  "$type": "HCAGHMDHEGG",
-                  "radius": 1.0,
-                  "triggerType": "TriggerNoRepeat",
+                  "$type": "ConfigAttackSphere",
                   "born": {
-                    "$type": "BGOLIIIHLMO",
+                    "$type": "ConfigBornByAttachPoint",
                     "attachPointName": "RootNode",
                     "attachPointTargetType": "Self"
-                  }
+                  },
+                  "radius": 1.0,
+                  "triggerType": "TriggerNoRepeat"
                 }
               },
-              "target": "Caster"
+              "target": "Caster",
+              "targetType": "Enemy"
             }
           ],
-          "elementDurability": 100.0,
-          "modifierName": "",
           "AIHNJLDFEGJ": 0.0
         }
       },
@@ -620,81 +624,81 @@
         },
         {
           "$type": "FireEffect",
-          "effectPattern": "Eff_Barbara_Attack_MagicHit_01",
-          "scale": 1.0,
           "born": {
-            "$type": "BOJMMDAIGMM",
+            "$type": "ConfigBornByTarget",
             "offset": {
-              "x": 0.0,
-              "z": 5.0,
-              "y": 1.0
+              "x": 5.0,
+              "y": 1.0,
+              "z": 0.0
             }
           },
-          "ILLLPEOODKP": "",
+          "effectPattern": "Eff_Barbara_Attack_MagicHit_01",
           "effectTempleteID": -1.0,
           "predicates": [
             {
-              "$type": "GKGBIPDLMMG",
+              "$type": "ByNot",
               "predicates": [
                 {
-                  "$type": "IGNCFICKOLO"
+                  "$type": "ByHasAttackTarget"
                 }
               ]
             }
-          ]
+          ],
+          "scale": 1.0,
+          "ILLLPEOODKP": ""
         }
-      ],
-      "abilityName": "Avatar_Barbara_Attack02",
-      "abilitySpecials": {
-        "Barbara_NormalAttack_02": 0.0
-      }
+      ]
     }
   },
   {
     "Default": {
+      "abilityName": "Avatar_Barbara_Attack03",
+      "abilitySpecials": {
+        "Barbara_NormalAttack_03": 0.0
+      },
       "modifiers": {
         "Eff_Barbara_Attack03": {
           "duration": 0.3,
+          "elementDurability": 100.0,
+          "modifierName": "",
           "onAdded": [
             {
               "$type": "TriggerAttackEvent",
-              "targetType": "Enemy",
               "attackEvent": {
                 "attackInfo": {
                   "attackProperty": {
-                    "elementType": "Water",
-                    "damagePercentageRatio": 0.0,
-                    "strikeType": "Default",
-                    "enBreak": 7.5,
                     "damagePercentage": "Barbara_NormalAttack_03",
+                    "damagePercentageRatio": 0.0,
                     "elementDurability": 25.0,
-                    "arkheGrade": 0.0
+                    "elementType": "Water",
+                    "enBreak": 7.5,
+                    "strikeType": "Default",
+                    "IIPHCFEONLK": 0.0
                   },
-                  "hitPattern": {
-                    "FLFCIDDNMNA": "",
-                    "onHitEffectName": "Eff_Barbara_Attack_MagicHit_01",
-                    "hitImpulseType": "LV1"
-                  },
+                  "attackTag": "NormalAttack_03",
                   "attenuationGroup": "default",
                   "attenuationTag": "Barbara_Water_Damage",
-                  "attackTag": "NormalAttack_03"
+                  "hitPattern": {
+                    "hitImpulseType": "LV1",
+                    "onHitEffectName": "Eff_Barbara_Attack_MagicHit_01",
+                    "FLFCIDDNMNA": ""
+                  }
                 },
                 "attackPattern": {
-                  "$type": "HCAGHMDHEGG",
-                  "radius": 1.0,
-                  "triggerType": "TriggerNoRepeat",
+                  "$type": "ConfigAttackSphere",
                   "born": {
-                    "$type": "BGOLIIIHLMO",
+                    "$type": "ConfigBornByAttachPoint",
                     "attachPointName": "RootNode",
                     "attachPointTargetType": "Self"
-                  }
+                  },
+                  "radius": 1.0,
+                  "triggerType": "TriggerNoRepeat"
                 }
               },
-              "target": "Caster"
+              "target": "Caster",
+              "targetType": "Enemy"
             }
           ],
-          "elementDurability": 100.0,
-          "modifierName": "",
           "AIHNJLDFEGJ": 0.0
         }
       },
@@ -706,148 +710,149 @@
         },
         {
           "$type": "FireEffect",
-          "effectPattern": "Eff_Barbara_Attack_MagicHit_01",
-          "scale": 1.0,
           "born": {
-            "$type": "BOJMMDAIGMM",
+            "$type": "ConfigBornByTarget",
             "offset": {
-              "x": 0.0,
-              "z": 5.0,
-              "y": 1.0
+              "x": 5.0,
+              "y": 1.0,
+              "z": 0.0
             }
           },
-          "ILLLPEOODKP": "",
+          "effectPattern": "Eff_Barbara_Attack_MagicHit_01",
           "effectTempleteID": -1.0,
           "predicates": [
             {
-              "$type": "GKGBIPDLMMG",
+              "$type": "ByNot",
               "predicates": [
                 {
-                  "$type": "IGNCFICKOLO"
+                  "$type": "ByHasAttackTarget"
                 }
               ]
             }
-          ]
+          ],
+          "scale": 1.0,
+          "ILLLPEOODKP": ""
         }
-      ],
-      "abilityName": "Avatar_Barbara_Attack03",
-      "abilitySpecials": {
-        "Barbara_NormalAttack_03": 0.0
-      }
+      ]
     }
   },
   {
     "Default": {
+      "abilityName": "Avatar_Barbara_Attack04",
       "onAbilityStart": [
         {
           "$type": "CreateGadget",
-          "gadgetID": 41014002,
-          "campID": 1001,
-          "campTargetType": "Enemy",
           "born": {
-            "$type": "BOJMMDAIGMM",
+            "$type": "ConfigBornByTarget",
             "offset": {
-              "x": 0.0,
-              "z": 0.7,
-              "y": 0.8
+              "x": 0.7,
+              "y": 0.8,
+              "z": 0.0
             }
           },
-          "target": "SelfAttackTarget",
+          "campID": 1001,
+          "campTargetType": "Enemy",
+          "gadgetID": 41014002,
           "predicates": [
             {
-              "$type": "IGNCFICKOLO"
+              "$type": "ByHasAttackTarget"
             }
-          ]
+          ],
+          "target": "SelfAttackTarget"
         },
         {
           "$type": "CreateGadget",
-          "gadgetID": 41014002,
+          "born": {
+            "$type": "ConfigBornByTarget",
+            "offset": {
+              "x": 5.0,
+              "y": 1.2,
+              "z": 0.0
+            },
+            "onGround": true
+          },
           "campID": 1001,
           "campTargetType": "Enemy",
-          "born": {
-            "$type": "BOJMMDAIGMM",
-            "onGround": true,
-            "offset": {
-              "x": 0.0,
-              "z": 5.0,
-              "y": 1.2
-            }
-          },
+          "gadgetID": 41014002,
           "predicates": [
             {
-              "$type": "GKGBIPDLMMG",
+              "$type": "ByNot",
               "predicates": [
                 {
-                  "$type": "IGNCFICKOLO"
+                  "$type": "ByHasAttackTarget"
                 }
               ]
             }
           ]
         }
-      ],
-      "abilityName": "Avatar_Barbara_Attack04"
+      ]
     }
   },
   {
     "Default": {
+      "abilityName": "Avatar_Barbara_Attack04Damage",
+      "abilitySpecials": {
+        "Damage": 1.2,
+        "Radius": 2.0,
+        "Barbara_NormalAttack_04": 0.0
+      },
       "modifiers": {
         "Attack04_Timer": {
           "duration": 0.48,
+          "elementDurability": 100.0,
+          "modifierName": "",
           "onRemoved": [
             {
               "$type": "TriggerAttackEvent",
-              "targetType": "Enemy",
               "attackEvent": {
                 "attackInfo": {
                   "attackProperty": {
-                    "elementType": "Water",
-                    "damagePercentageRatio": 0.0,
-                    "strikeType": "Default",
-                    "enBreak": 9.45,
                     "damagePercentage": "Barbara_NormalAttack_04",
+                    "damagePercentageRatio": 0.0,
                     "elementDurability": 25.0,
-                    "arkheGrade": 0.0
+                    "elementType": "Water",
+                    "enBreak": 9.45,
+                    "strikeType": "Default",
+                    "IIPHCFEONLK": 0.0
                   },
-                  "cameraShake": {
-                    "shakeTime": 0.18,
-                    "shakeDistance": 30.0,
-                    "MNKFEFOKFKP": "",
-                    "shakeRange": 0.24
-                  },
-                  "hitPattern": {
-                    "FLFCIDDNMNA": "",
-                    "onHitEffectName": "default",
-                    "hitHaltTimeScale": 0.05,
-                    "hitImpulseType": "LV2"
-                  },
+                  "attackTag": "NormalAttack_04",
                   "attenuationGroup": "default",
                   "attenuationTag": "Barbara_Water_Damage",
-                  "attackTag": "NormalAttack_04",
-                  "canBeModifiedBy": "OriginOwner"
+                  "cameraShake": {
+                    "shakeDistance": 30.0,
+                    "shakeRange": 0.24,
+                    "shakeTime": 0.18,
+                    "MNKFEFOKFKP": ""
+                  },
+                  "canBeModifiedBy": "OriginOwner",
+                  "hitPattern": {
+                    "hitHaltTimeScale": 0.05,
+                    "hitImpulseType": "LV2",
+                    "onHitEffectName": "default",
+                    "FLFCIDDNMNA": ""
+                  }
                 },
                 "attackPattern": {
-                  "$type": "HCAGHMDHEGG",
-                  "radius": "Radius",
-                  "triggerType": "TriggerNoRepeat",
+                  "$type": "ConfigAttackSphere",
                   "born": {
-                    "$type": "NABPLNFPHCK",
+                    "$type": "ConfigBornBySelf",
                     "offset": {
                       "x": 0.0,
-                      "z": 0.0,
-                      "y": 0.0
+                      "y": 0.0,
+                      "z": 0.0
                     }
-                  }
+                  },
+                  "radius": "Radius",
+                  "triggerType": "TriggerNoRepeat"
                 }
               },
-              "doOffStage": true
+              "doOffStage": true,
+              "targetType": "Enemy"
             }
           ],
-          "elementDurability": 100.0,
-          "modifierName": "",
           "AIHNJLDFEGJ": 0.0
         }
       },
-      "abilityName": "Avatar_Barbara_Attack04Damage",
       "onAdded": [
         {
           "$type": "ApplyModifier",
@@ -856,20 +861,16 @@
         {
           "$type": "FireEffect",
           "effectPattern": "Eff_Barbara_Attack_MagicHit_02",
+          "effectTempleteID": -1.0,
           "scale": 1.0,
-          "ILLLPEOODKP": "",
-          "effectTempleteID": -1.0
+          "ILLLPEOODKP": ""
         }
-      ],
-      "abilitySpecials": {
-        "Damage": 1.2,
-        "Radius": 2.0,
-        "Barbara_NormalAttack_04": 0.0
-      }
+      ]
     }
   },
   {
     "Default": {
+      "abilityName": "Avatar_Barbara_WetShiled_Clear",
       "onAbilityStart": [
         {
           "$type": "KillGadget",
@@ -877,123 +878,16 @@
             "configID": 41014005
           }
         }
-      ],
-      "abilityName": "Avatar_Barbara_WetShiled_Clear"
+      ]
     }
   },
   {
     "Default": {
-      "modifiers": {
-        "WetShiled_Impact": {
-          "thinkInterval": 0.6,
-          "duration": 1.3,
-          "elementDurability": 100.0,
-          "modifierName": "",
-          "onThinkInterval": [
-            {
-              "$type": "TriggerAttackEvent",
-              "targetType": "Enemy",
-              "attackEvent": {
-                "attackInfo": {
-                  "attackProperty": {
-                    "elementType": "Water",
-                    "damagePercentageRatio": 0.0,
-                    "enBreak": 40.0,
-                    "damagePercentage": "Elemental_Art_Damage",
-                    "elementDurability": 25.0,
-                    "arkheGrade": 0.0
-                  },
-                  "cameraShake": {
-                    "MNKFEFOKFKP": ""
-                  },
-                  "hitPattern": {
-                    "FLFCIDDNMNA": "",
-                    "retreatType": "ByHitDirection",
-                    "onHitEffectName": "default",
-                    "hitHaltTimeScale": 0.05,
-                    "hitImpulseType": "LV4"
-                  },
-                  "attenuationGroup": "default",
-                  "attenuationTag": "Elemental_Art",
-                  "attackTag": "Elemental_Art",
-                  "canBeModifiedBy": "OriginOwner"
-                },
-                "attackPattern": {
-                  "$type": "DDLDAMKEKJD",
-                  "radius": 3.0,
-                  "triggerType": "TriggerNoRepeat",
-                  "born": {
-                    "$type": "NABPLNFPHCK",
-                    "offset": {
-                      "x": 0.0,
-                      "z": 0.0,
-                      "y": 0.0
-                    }
-                  }
-                }
-              }
-            }
-          ],
-          "AIHNJLDFEGJ": 0.0
-        },
-        "WetShiled_GetElementBall": {
-          "duration": 0.3,
-          "onRemoved": [
-            {
-              "$type": "AddGlobalValue",
-              "useLimitRange": true,
-              "key": "_IsEnhancedShield",
-              "maxValue": 1.0,
-              "minValue": 0.0,
-              "CBOMLBFIPJM": -1.0
-            }
-          ],
-          "onAdded": [
-            {
-              "$type": "AddGlobalValue",
-              "useLimitRange": true,
-              "key": "_IsEnhancedShield",
-              "maxValue": 1.0,
-              "minValue": 0.0,
-              "CBOMLBFIPJM": 1.0
-            }
-          ],
-          "elementDurability": 100.0,
-          "modifierName": "",
-          "AIHNJLDFEGJ": 0.0
-        }
-      },
-      "onAbilityStart": [
-        {
-          "$type": "AvatarSkillStart",
-          "skillID": 10071,
-          "BGNJBEPEJBO": 1.0,
-          "costStaminaRatio": 1.0,
-          "cdRatio": 1.0
-        },
-        {
-          "$type": "AttachModifier",
-          "modifierName": "WetShiled_Impact"
-        },
-        {
-          "$type": "TriggerBullet",
-          "born": {
-            "$type": "BGOLIIIHLMO",
-            "attachPointName": "RootNode",
-            "offset": {
-              "x": 0.0,
-              "z": 0.0,
-              "y": 0.0
-            }
-          },
-          "bulletID": 41014005
-        }
-      ],
       "abilityMixins": [
         {
           "$type": "DoActionByEnergyChangeMixin",
           "doWhenEnergyMax": true,
-          "NEPJJIJPDDP": [
+          "elementTypes": [
             "Water",
             "Rock",
             "Fire",
@@ -1002,25 +896,25 @@
             "Wind",
             "Ice"
           ],
-          "MLJLPAJBJHN": [
+          "onGainEnergyByBall": [
             {
               "$type": "ApplyModifier",
               "modifierName": "WetShiled_GetElementBall",
               "otherTargets": {
-                "$type": "INIACGFCEDH",
-                "sizeRatio": 1.0,
+                "$type": "SelectTargetsByShape",
                 "campTargetType": "Self",
-                "shapeName": "CircleR2"
+                "shapeName": "CircleR2",
+                "sizeRatio": 1.0
               },
               "predicates": [
                 {
-                  "$type": "DEOFBICNFHF",
+                  "$type": "ByEntityTypes",
                   "entityTypes": [
                     "Bullet"
                   ]
                 },
                 {
-                  "$type": "LCCNMKNDACG",
+                  "$type": "ByUnlockTalentParam",
                   "talentParam": "Barbara_ExpandShield"
                 }
               ]
@@ -1031,53 +925,173 @@
       "abilityName": "Avatar_Barbara_WetShiled",
       "abilitySpecials": {
         "Elemental_Art_Damage": 0.0
-      }
+      },
+      "modifiers": {
+        "WetShiled_Impact": {
+          "duration": 1.3,
+          "elementDurability": 100.0,
+          "modifierName": "",
+          "onThinkInterval": [
+            {
+              "$type": "TriggerAttackEvent",
+              "attackEvent": {
+                "attackInfo": {
+                  "attackProperty": {
+                    "damagePercentage": "Elemental_Art_Damage",
+                    "damagePercentageRatio": 0.0,
+                    "elementDurability": 25.0,
+                    "elementType": "Water",
+                    "enBreak": 40.0,
+                    "IIPHCFEONLK": 0.0
+                  },
+                  "attackTag": "Elemental_Art",
+                  "attenuationGroup": "default",
+                  "attenuationTag": "Elemental_Art",
+                  "cameraShake": {
+                    "MNKFEFOKFKP": ""
+                  },
+                  "canBeModifiedBy": "OriginOwner",
+                  "hitPattern": {
+                    "hitHaltTimeScale": 0.05,
+                    "hitImpulseType": "LV4",
+                    "onHitEffectName": "default",
+                    "retreatType": "ByHitDirection",
+                    "FLFCIDDNMNA": ""
+                  }
+                },
+                "attackPattern": {
+                  "$type": "ConfigAttackCircle",
+                  "born": {
+                    "$type": "ConfigBornBySelf",
+                    "offset": {
+                      "x": 0.0,
+                      "y": 0.0,
+                      "z": 0.0
+                    }
+                  },
+                  "radius": 3.0,
+                  "triggerType": "TriggerNoRepeat"
+                }
+              },
+              "targetType": "Enemy"
+            }
+          ],
+          "thinkInterval": 0.6,
+          "AIHNJLDFEGJ": 0.0
+        },
+        "WetShiled_GetElementBall": {
+          "duration": 0.3,
+          "elementDurability": 100.0,
+          "modifierName": "",
+          "onAdded": [
+            {
+              "$type": "AddGlobalValue",
+              "key": "_IsEnhancedShield",
+              "maxValue": 1.0,
+              "minValue": 0.0,
+              "useLimitRange": true,
+              "value": 1.0
+            }
+          ],
+          "onRemoved": [
+            {
+              "$type": "AddGlobalValue",
+              "key": "_IsEnhancedShield",
+              "maxValue": 1.0,
+              "minValue": 0.0,
+              "useLimitRange": true,
+              "value": -1.0
+            }
+          ],
+          "AIHNJLDFEGJ": 0.0
+        }
+      },
+      "onAbilityStart": [
+        {
+          "$type": "AvatarSkillStart",
+          "cdRatio": 1.0,
+          "costStaminaRatio": 1.0,
+          "skillID": 10071,
+          "GIBAINFKPBO": 1.0
+        },
+        {
+          "$type": "AttachModifier",
+          "modifierName": "WetShiled_Impact"
+        },
+        {
+          "$type": "TriggerBullet",
+          "born": {
+            "$type": "ConfigBornByAttachPoint",
+            "attachPointName": "RootNode",
+            "offset": {
+              "x": 0.0,
+              "y": 0.0,
+              "z": 0.0
+            }
+          },
+          "bulletID": 41014005
+        }
+      ]
     }
   },
   {
     "Default": {
+      "abilityName": "Avatar_Barbara_WetShiled_Heal",
+      "abilitySpecials": {
+        "HealHP": 0.0,
+        "HealHP_Const": 0.0,
+        "HealHPOnAdded": 0.0,
+        "HealHPOnAdded_Const": 0.0,
+        "HealHP_OnHittingOthers": 0.0,
+        "HealHP_Const_OnHittingOthers": 0.0,
+        "Square": 1.0,
+        "Barbara_CostStaminaDelta": -0.12,
+        "WaterAddHurtDelta": 0.15,
+        "Barbara_WetShiled_MaxHP_Heal": 0.1
+      },
       "modifiers": {
         "WetShiled_Buff": {
-          "thinkInterval": 5.0,
           "duration": 25.0,
+          "elementDurability": 100.0,
+          "modifierName": "",
           "onAdded": [
             {
               "$type": "HealHP",
               "amount": "HealHPOnAdded_Const",
-              "GJBFAJMJFOP": "HealHPOnAdded",
-              "FFNEJGGNAFF": "",
-              "target": "CurLocalAvatar"
+              "amountByCasterMaxHPRatio": "HealHPOnAdded",
+              "target": "CurLocalAvatar",
+              "FFNEJGGNAFF": ""
             }
           ],
-          "elementDurability": 100.0,
-          "modifierName": "",
           "onThinkInterval": [
             {
               "$type": "HealHP",
               "amount": "HealHP_Const",
-              "GJBFAJMJFOP": "HealHP",
-              "FFNEJGGNAFF": "",
-              "target": "CurLocalAvatar"
+              "amountByCasterMaxHPRatio": "HealHP",
+              "target": "CurLocalAvatar",
+              "FFNEJGGNAFF": ""
             }
           ],
+          "thinkInterval": 5.0,
           "AIHNJLDFEGJ": 0.0
         },
         "WetShiled_AvatarWet_Handler": {
-          "thinkInterval": 5.0,
           "duration": 25.0,
+          "elementDurability": 100.0,
+          "modifierName": "",
           "onAdded": [
             {
               "$type": "ApplyModifier",
               "modifierName": "WetShiled_AvatarWet",
               "otherTargets": {
-                "$type": "INIACGFCEDH",
-                "sizeRatio": 1.0,
+                "$type": "SelectTargetsByShape",
                 "campTargetType": "Alliance",
-                "shapeName": "CircleR2"
+                "shapeName": "CircleR2",
+                "sizeRatio": 1.0
               },
               "predicates": [
                 {
-                  "$type": "DEOFBICNFHF",
+                  "$type": "ByEntityTypes",
                   "entityTypes": [
                     "Avatar"
                   ]
@@ -1085,21 +1099,19 @@
               ]
             }
           ],
-          "elementDurability": 100.0,
-          "modifierName": "",
           "onThinkInterval": [
             {
               "$type": "ApplyModifier",
               "modifierName": "WetShiled_AvatarWet",
               "otherTargets": {
-                "$type": "INIACGFCEDH",
-                "sizeRatio": 1.0,
+                "$type": "SelectTargetsByShape",
                 "campTargetType": "Alliance",
-                "shapeName": "CircleR2"
+                "shapeName": "CircleR2",
+                "sizeRatio": 1.0
               },
               "predicates": [
                 {
-                  "$type": "DEOFBICNFHF",
+                  "$type": "ByEntityTypes",
                   "entityTypes": [
                     "Avatar"
                   ]
@@ -1107,6 +1119,7 @@
               ]
             }
           ],
+          "thinkInterval": 5.0,
           "AIHNJLDFEGJ": 0.0
         },
         "WetShiled_AvatarWet": {
@@ -1117,7 +1130,6 @@
           "AIHNJLDFEGJ": 0.0
         },
         "WetShiled_Stamina_Buff": {
-          "thinkInterval": 0.2,
           "duration": 25.0,
           "elementDurability": 100.0,
           "modifierName": "",
@@ -1126,14 +1138,14 @@
               "$type": "ApplyModifier",
               "modifierName": "UNIQUE_Barbara_CostStaminaDelta",
               "otherTargets": {
-                "$type": "INIACGFCEDH",
-                "sizeRatio": 1.0,
+                "$type": "SelectTargetsByShape",
                 "campTargetType": "Alliance",
-                "shapeName": "CircleR2"
+                "shapeName": "CircleR2",
+                "sizeRatio": 1.0
               },
               "predicates": [
                 {
-                  "$type": "DEOFBICNFHF",
+                  "$type": "ByEntityTypes",
                   "entityTypes": [
                     "Avatar"
                   ]
@@ -1141,20 +1153,24 @@
               ]
             }
           ],
+          "thinkInterval": 0.2,
           "AIHNJLDFEGJ": 0.0
         },
         "UNIQUE_Barbara_CostStaminaDelta": {
           "duration": 0.3,
+          "elementDurability": 100.0,
+          "isUnique": true,
+          "modifierName": "",
           "properties": {
             "Actor_CostStaminaRatio": "Barbara_CostStaminaDelta"
           },
-          "elementDurability": 100.0,
-          "modifierName": "",
-          "isUnique": true,
           "AIHNJLDFEGJ": 0.0
         },
         "UNIQUE_HealHp_Teammate_OnHittingOthers": {
           "duration": 26.0,
+          "elementDurability": 100.0,
+          "isUnique": true,
+          "modifierName": "",
           "onAttackLanded": [
             {
               "$type": "Predicated",
@@ -1167,14 +1183,15 @@
                   "$type": "TriggerAbility",
                   "abilityName": "Barbara_Eff_WetShiled_HittingOthers",
                   "otherTargets": {
-                    "$type": "HMFKEDOMDMA",
+                    "$type": "SelectTargetsByChildren",
                     "configID": 41014005
                   }
                 }
               ],
+              "target": "Other",
               "targetPredicates": [
                 {
-                  "$type": "CCHPEOBKOBO",
+                  "$type": "ByAttackTags",
                   "attackTags": [
                     "NormalAttack_01",
                     "NormalAttack_02",
@@ -1184,19 +1201,18 @@
                   ]
                 },
                 {
-                  "$type": "DEOFBICNFHF",
+                  "$type": "ByEntityTypes",
                   "entityTypes": [
                     "Monster"
                   ]
                 },
                 {
-                  "$type": "EOFDCELPGFO",
-                  "CBOMLBFIPJM": 0.0,
+                  "$type": "ByTargetGlobalValue",
                   "compareType": "NoneOrEqual",
-                  "key": "_ANIMAL_ENTITY_TYPE"
+                  "key": "_ANIMAL_ENTITY_TYPE",
+                  "value": 0.0
                 }
-              ],
-              "target": "Other"
+              ]
             },
             {
               "$type": "Predicated",
@@ -1209,87 +1225,86 @@
                   "$type": "TriggerAbility",
                   "abilityName": "Barbara_Eff_WetShiled_HittingOthers",
                   "otherTargets": {
-                    "$type": "HMFKEDOMDMA",
+                    "$type": "SelectTargetsByChildren",
                     "configID": 41014005
                   }
                 }
               ],
+              "target": "Other",
               "targetPredicates": [
                 {
-                  "$type": "CCHPEOBKOBO",
+                  "$type": "ByAttackTags",
                   "attackTags": [
                     "ExtraAttack"
                   ]
                 },
                 {
-                  "$type": "DEOFBICNFHF",
+                  "$type": "ByEntityTypes",
                   "entityTypes": [
                     "Monster"
                   ]
                 },
                 {
-                  "$type": "EOFDCELPGFO",
-                  "CBOMLBFIPJM": 0.0,
+                  "$type": "ByTargetGlobalValue",
                   "compareType": "NoneOrEqual",
-                  "key": "_ANIMAL_ENTITY_TYPE"
+                  "key": "_ANIMAL_ENTITY_TYPE",
+                  "value": 0.0
                 }
-              ],
-              "target": "Other"
+              ]
             }
           ],
-          "elementDurability": 100.0,
-          "modifierName": "",
-          "isUnique": true,
           "AIHNJLDFEGJ": 0.0
         },
         "NormalAttack_HealHp_Teammate_Modifier": {
           "duration": 0.2,
+          "elementDurability": 100.0,
+          "modifierName": "",
           "onAdded": [
             {
               "$type": "HealHP",
               "amount": "HealHP_Const_OnHittingOthers",
-              "GJBFAJMJFOP": "HealHP_OnHittingOthers",
-              "FFNEJGGNAFF": "",
-              "target": "AllPlayerAvatars",
+              "amountByCasterMaxHPRatio": "HealHP_OnHittingOthers",
               "doOffStage": true,
               "predicates": [
                 {
-                  "$type": "CNFMGJJEOPM",
-                  "NJICAELBCCB": "",
+                  "$type": "ByTargetPositionToSelfPosition",
+                  "logic": "LesserOrEqual",
+                  "value": 40.0,
                   "JBOGOHPICML": "",
-                  "CBOMLBFIPJM": 40.0,
-                  "logic": "LesserOrEqual"
+                  "NJICAELBCCB": ""
                 }
-              ]
+              ],
+              "target": "AllPlayerAvatars",
+              "FFNEJGGNAFF": ""
             },
             {
               "$type": "ApplyModifier",
               "modifierName": "HealHp_Teammate_RemoteAvatar_Fx",
-              "target": "AllPlayerAvatars",
               "predicates": [
                 {
-                  "$type": "CNFMGJJEOPM",
-                  "NJICAELBCCB": "",
+                  "$type": "ByTargetPositionToSelfPosition",
+                  "logic": "LesserOrEqual",
+                  "value": 40.0,
                   "JBOGOHPICML": "",
-                  "CBOMLBFIPJM": 40.0,
-                  "logic": "LesserOrEqual"
+                  "NJICAELBCCB": ""
                 },
                 {
-                  "$type": "DEOFBICNFHF",
-                  "isAuthority": 0,
+                  "$type": "ByEntityTypes",
                   "entityTypes": [
                     "Avatar"
-                  ]
+                  ],
+                  "isAuthority": 0
                 }
-              ]
+              ],
+              "target": "AllPlayerAvatars"
             }
           ],
-          "elementDurability": 100.0,
-          "modifierName": "",
           "AIHNJLDFEGJ": 0.0
         },
         "ExtraAttack_HealHp_Teammate_Modifier": {
           "duration": 0.2,
+          "elementDurability": 100.0,
+          "modifierName": "",
           "onAdded": [
             {
               "$type": "HealHP",
@@ -1298,63 +1313,61 @@
                 4.0,
                 "MUL"
               ],
-              "GJBFAJMJFOP": [
+              "amountByCasterMaxHPRatio": [
                 "HealHP_OnHittingOthers",
                 4.0,
                 "MUL"
               ],
-              "FFNEJGGNAFF": "",
-              "target": "AllPlayerAvatars",
               "doOffStage": true,
               "predicates": [
                 {
-                  "$type": "CNFMGJJEOPM",
-                  "NJICAELBCCB": "",
+                  "$type": "ByTargetPositionToSelfPosition",
+                  "logic": "LesserOrEqual",
+                  "value": 40.0,
                   "JBOGOHPICML": "",
-                  "CBOMLBFIPJM": 40.0,
-                  "logic": "LesserOrEqual"
+                  "NJICAELBCCB": ""
                 }
-              ]
+              ],
+              "target": "AllPlayerAvatars",
+              "FFNEJGGNAFF": ""
             },
             {
               "$type": "ApplyModifier",
               "modifierName": "HealHp_Teammate_RemoteAvatar_Fx",
-              "target": "AllPlayerAvatars",
               "predicates": [
                 {
-                  "$type": "CNFMGJJEOPM",
-                  "NJICAELBCCB": "",
+                  "$type": "ByTargetPositionToSelfPosition",
+                  "logic": "LesserOrEqual",
+                  "value": 40.0,
                   "JBOGOHPICML": "",
-                  "CBOMLBFIPJM": 40.0,
-                  "logic": "LesserOrEqual"
+                  "NJICAELBCCB": ""
                 },
                 {
-                  "$type": "DEOFBICNFHF",
-                  "isAuthority": 0,
+                  "$type": "ByEntityTypes",
                   "entityTypes": [
                     "Avatar"
-                  ]
+                  ],
+                  "isAuthority": 0
                 }
-              ]
+              ],
+              "target": "AllPlayerAvatars"
             }
           ],
-          "elementDurability": 100.0,
-          "modifierName": "",
           "AIHNJLDFEGJ": 0.0
         },
         "HealHp_Teammate_RemoteAvatar_Fx": {
           "duration": 0.2,
+          "elementDurability": 100.0,
+          "modifierName": "",
           "onAdded": [
             {
               "$type": "FireEffect",
               "effectPattern": "Eff_Barbara_WetShield_HealTeammate",
+              "effectTempleteID": -1.0,
               "scale": 1.0,
-              "ILLLPEOODKP": "",
-              "effectTempleteID": -1.0
+              "ILLLPEOODKP": ""
             }
           ],
-          "elementDurability": 100.0,
-          "modifierName": "",
           "AIHNJLDFEGJ": 0.0
         },
         "WetShiled_WaterAddHurtDelta_Handler": {
@@ -1370,30 +1383,17 @@
           "AIHNJLDFEGJ": 0.0
         },
         "WetShiled_WaterAddHurtDelta": {
+          "elementDurability": 100.0,
           "isLimitedProperties": true,
+          "modifierName": "",
           "properties": {
             "Actor_WaterAddHurtDelta": "WaterAddHurtDelta"
           },
           "stacking": "Unique",
-          "elementDurability": 100.0,
           "state": "AttackUp",
-          "modifierName": "",
           "AIHNJLDFEGJ": 0.0
         }
       },
-      "onKill": [
-        {
-          "$type": "RemoveModifier",
-          "modifierName": "WetShiled_WaterAddHurtDelta_Handler",
-          "predicates": [
-            {
-              "$type": "LCCNMKNDACG",
-              "talentParam": "Barbara_Constellation_2"
-            }
-          ]
-        }
-      ],
-      "abilityName": "Avatar_Barbara_WetShiled_Heal",
       "onAdded": [
         {
           "$type": "RemoveUniqueModifier",
@@ -1409,7 +1409,7 @@
           "modifierName": "WetShiled_WaterAddHurtDelta_Handler",
           "predicates": [
             {
-              "$type": "LCCNMKNDACG",
+              "$type": "ByUnlockTalentParam",
               "talentParam": "Barbara_Constellation_2"
             }
           ]
@@ -1428,39 +1428,39 @@
           "modifierName": "WetShiled_Stamina_Buff",
           "predicates": [
             {
-              "$type": "LCCNMKNDACG",
+              "$type": "ByUnlockTalentParam",
               "talentParam": "WetShiled_Stamina"
             }
           ]
         }
       ],
-      "abilitySpecials": {
-        "HealHP": 0.0,
-        "HealHP_Const": 0.0,
-        "HealHPOnAdded": 0.0,
-        "HealHPOnAdded_Const": 0.0,
-        "HealHP_OnHittingOthers": 0.0,
-        "HealHP_Const_OnHittingOthers": 0.0,
-        "Square": 1.0,
-        "Barbara_CostStaminaDelta": -0.12,
-        "WaterAddHurtDelta": 0.15,
-        "Barbara_WetShiled_MaxHP_Heal": 0.1
-      }
+      "onKill": [
+        {
+          "$type": "RemoveModifier",
+          "modifierName": "WetShiled_WaterAddHurtDelta_Handler",
+          "predicates": [
+            {
+              "$type": "ByUnlockTalentParam",
+              "talentParam": "Barbara_Constellation_2"
+            }
+          ]
+        }
+      ]
     }
   },
   {
     "Default": {
+      "abilityName": "Avatar_Barbara_WetShiled_Impact",
       "modifiers": {
         "Barbara_WetModifier": {
           "duration": 15.0,
-          "stacking": "Unique",
           "elementDurability": 25.0,
           "elementType": "Water",
           "modifierName": "",
+          "stacking": "Unique",
           "AIHNJLDFEGJ": 0.0
         },
         "WetShiled_OutFire": {
-          "thinkInterval": 0.5,
           "duration": 15.0,
           "elementDurability": 100.0,
           "modifierName": "",
@@ -1469,14 +1469,14 @@
               "$type": "ApplyModifier",
               "modifierName": "Barbara_WetModifier_test",
               "otherTargets": {
-                "$type": "INIACGFCEDH",
-                "sizeRatio": 1.0,
+                "$type": "SelectTargetsByShape",
                 "campTargetType": "All",
-                "shapeName": "CircleR3"
+                "shapeName": "CircleR3",
+                "sizeRatio": 1.0
               },
               "predicates": [
                 {
-                  "$type": "DEOFBICNFHF",
+                  "$type": "ByEntityTypes",
                   "entityTypes": [
                     "Grass"
                   ]
@@ -1484,14 +1484,15 @@
               ]
             }
           ],
+          "thinkInterval": 0.5,
           "AIHNJLDFEGJ": 0.0
         },
         "Barbara_WetModifier_test": {
           "duration": 8.0,
-          "stacking": "Unique",
           "elementDurability": 30.0,
           "elementType": "Water",
           "modifierName": "",
+          "stacking": "Unique",
           "AIHNJLDFEGJ": 0.0
         }
       },
@@ -1501,43 +1502,17 @@
           "successActions": [
             {
               "$type": "SendEffectTrigger",
-              "parameter": "onCollision",
-              "attachPoint": ""
+              "attachPoint": "",
+              "parameter": "onCollision"
             }
           ],
+          "target": "Target",
           "targetPredicates": [
             {
-              "$type": "GKGBIPDLMMG",
+              "$type": "ByNot",
               "predicates": [
                 {
-                  "$type": "DEOFBICNFHF",
-                  "entityTypes": [
-                    "Avatar",
-                    "Equip",
-                    "Field"
-                  ]
-                }
-              ]
-            }
-          ],
-          "target": "Target"
-        },
-        {
-          "$type": "FireEffect",
-          "effectPattern": "Eff_Barbara_WetShield_Collision_Self",
-          "scale": 1.0,
-          "born": {
-            "$type": "NHPKNMOMIFH"
-          },
-          "ILLLPEOODKP": "",
-          "effectTempleteID": -1.0,
-          "target": "Target",
-          "predicates": [
-            {
-              "$type": "GKGBIPDLMMG",
-              "predicates": [
-                {
-                  "$type": "DEOFBICNFHF",
+                  "$type": "ByEntityTypes",
                   "entityTypes": [
                     "Avatar",
                     "Equip",
@@ -1547,9 +1522,34 @@
               ]
             }
           ]
+        },
+        {
+          "$type": "FireEffect",
+          "born": {
+            "$type": "ConfigBornByCollisionPoint"
+          },
+          "effectPattern": "Eff_Barbara_WetShield_Collision_Self",
+          "effectTempleteID": -1.0,
+          "predicates": [
+            {
+              "$type": "ByNot",
+              "predicates": [
+                {
+                  "$type": "ByEntityTypes",
+                  "entityTypes": [
+                    "Avatar",
+                    "Equip",
+                    "Field"
+                  ]
+                }
+              ]
+            }
+          ],
+          "scale": 1.0,
+          "target": "Target",
+          "ILLLPEOODKP": ""
         }
       ],
-      "abilityName": "Avatar_Barbara_WetShiled_Impact",
       "onAdded": [
         {
           "$type": "AttachModifier",
@@ -1560,63 +1560,12 @@
   },
   {
     "Default": {
-      "modifiers": {
-        "Barbara_WetShiled_Timer": {
-          "duration": 1.8,
-          "onRemoved": [
-            {
-              "$type": "ApplyModifier",
-              "modifierName": "Barbara_WetShiled_FX"
-            }
-          ],
-          "elementDurability": 100.0,
-          "modifierName": "",
-          "AIHNJLDFEGJ": 0.0
-        },
-        "Barbara_WetShiled_FX": {
-          "duration": 25.0,
-          "onAdded": [
-            {
-              "$type": "AttachEffect",
-              "ILLLPEOODKP": "",
-              "scale": 1.0,
-              "effectPattern": "Eff_Barbara_WetShield",
-              "effectTempleteID": -1.0
-            }
-          ],
-          "elementDurability": 100.0,
-          "modifierName": "",
-          "AIHNJLDFEGJ": 0.0
-        },
-        "Barbara_WetShiled_GetElementBall": {
-          "thinkInterval": 0.3,
-          "duration": 25.0,
-          "elementDurability": 100.0,
-          "modifierName": "",
-          "onThinkInterval": [
-            {
-              "$type": "SendEffectTrigger",
-              "parameter": "GetElementBall",
-              "effectPattern": "Eff_Barbara_WetShield",
-              "attachPoint": "",
-              "predicates": [
-                {
-                  "$type": "EOFDCELPGFO",
-                  "CBOMLBFIPJM": 1.0,
-                  "key": "_IsEnhancedShield",
-                  "value": true
-                }
-              ]
-            }
-          ],
-          "AIHNJLDFEGJ": 0.0
-        }
-      },
       "abilityMixins": [
         {
           "$type": "ExtendLifetimeByPickedGadgetMixin",
-          "OGLGLGFJADO": "Delta",
-          "JAMLLMNEEMG": [
+          "extendLifeTime": "Delta",
+          "maxExtendLifeTime": "Max",
+          "pickedConfigIDs": [
             70610001,
             70610002,
             70610003,
@@ -1633,18 +1582,73 @@
             70610014,
             70610015,
             70610016
-          ],
-          "MFGGPENPJKG": "Max"
+          ]
         }
       ],
       "abilityName": "Barbara_Eff_WetShiled",
+      "abilitySpecials": {
+        "Delta": 0.0,
+        "Max": 0.0
+      },
+      "modifiers": {
+        "Barbara_WetShiled_Timer": {
+          "duration": 1.8,
+          "elementDurability": 100.0,
+          "modifierName": "",
+          "onRemoved": [
+            {
+              "$type": "ApplyModifier",
+              "modifierName": "Barbara_WetShiled_FX"
+            }
+          ],
+          "AIHNJLDFEGJ": 0.0
+        },
+        "Barbara_WetShiled_FX": {
+          "duration": 25.0,
+          "elementDurability": 100.0,
+          "modifierName": "",
+          "onAdded": [
+            {
+              "$type": "AttachEffect",
+              "effectPattern": "Eff_Barbara_WetShield",
+              "effectTempleteID": -1.0,
+              "scale": 1.0,
+              "ILLLPEOODKP": ""
+            }
+          ],
+          "AIHNJLDFEGJ": 0.0
+        },
+        "Barbara_WetShiled_GetElementBall": {
+          "duration": 25.0,
+          "elementDurability": 100.0,
+          "modifierName": "",
+          "onThinkInterval": [
+            {
+              "$type": "SendEffectTrigger",
+              "attachPoint": "",
+              "effectPattern": "Eff_Barbara_WetShield",
+              "parameter": "GetElementBall",
+              "predicates": [
+                {
+                  "$type": "ByTargetGlobalValue",
+                  "forceByCaster": true,
+                  "key": "_IsEnhancedShield",
+                  "value": 1.0
+                }
+              ]
+            }
+          ],
+          "thinkInterval": 0.3,
+          "AIHNJLDFEGJ": 0.0
+        }
+      },
       "onAdded": [
         {
           "$type": "FireEffect",
           "effectPattern": "Eff_Barbara_WetShield_BS",
+          "effectTempleteID": -1.0,
           "scale": 1.0,
-          "ILLLPEOODKP": "",
-          "effectTempleteID": -1.0
+          "ILLLPEOODKP": ""
         },
         {
           "$type": "AttachModifier",
@@ -1654,109 +1658,128 @@
           "$type": "AttachModifier",
           "modifierName": "Barbara_WetShiled_GetElementBall"
         }
-      ],
-      "abilitySpecials": {
-        "Delta": 0.0,
-        "Max": 0.0
-      }
+      ]
     }
   },
   {
     "Default": {
+      "abilityName": "Barbara_Eff_WetShiled_LifeOver",
       "onAbilityStart": [
         {
           "$type": "FireEffect",
           "effectPattern": "Eff_Barbara_WetShield_AS",
+          "effectTempleteID": -1.0,
           "scale": 1.0,
-          "ILLLPEOODKP": "",
-          "effectTempleteID": -1.0
+          "ILLLPEOODKP": ""
         }
-      ],
-      "abilityName": "Barbara_Eff_WetShiled_LifeOver"
+      ]
     }
   },
   {
     "Default": {
+      "abilityName": "Barbara_Eff_WetShiled_HittingOthers",
       "onAbilityStart": [
         {
           "$type": "SendEffectTrigger",
-          "parameter": "HittingOthers",
+          "attachPoint": "",
           "effectPattern": "Eff_Barbara_WetShield",
-          "attachPoint": ""
+          "parameter": "HittingOthers"
         },
         {
           "$type": "FireEffect",
           "effectPattern": "Eff_Barbara_WetShield_Kira",
+          "effectTempleteID": -1.0,
           "scale": 1.0,
-          "ILLLPEOODKP": "",
-          "effectTempleteID": -1.0
+          "ILLLPEOODKP": ""
         }
-      ],
-      "abilityName": "Barbara_Eff_WetShiled_HittingOthers"
+      ]
     }
   },
   {
     "Default": {
+      "abilityMixins": [
+        {
+          "$type": "AttachToStateIDMixin",
+          "modifierName": "IdolHeal_HeadControl",
+          "stateIDs": [
+            "Barbara_IdolHeal_BS",
+            "Barbara_IdolHeal"
+          ],
+          "LJPPDIGCJMJ": ""
+        },
+        {
+          "$type": "AttachToStateIDMixin",
+          "modifierName": "IdolHeal_CameraControl",
+          "stateIDs": [
+            "Barbara_IdolHeal_BS",
+            "Barbara_IdolHeal"
+          ],
+          "LJPPDIGCJMJ": ""
+        },
+        {
+          "$type": "AttachToNormalizedTimeMixin",
+          "modifierName": "IdolHeal_HideWeapon",
+          "stateID": "Barbara_IdolHeal_BS",
+          "LJPPDIGCJMJ": ""
+        }
+      ],
+      "abilityName": "Avatar_Barbara_IdolHeal",
+      "abilitySpecials": {
+        "HealHP": 0.0,
+        "HealHP_Const": 0.0,
+        "Time": 1.0
+      },
       "modifiers": {
         "Barbara_IdolHeal": {
           "duration": 1.167,
+          "elementDurability": 100.0,
+          "modifierName": "",
           "onRemoved": [
             {
               "$type": "HealHP",
               "amount": "HealHP_Const",
-              "GJBFAJMJFOP": "HealHP",
-              "FFNEJGGNAFF": "",
-              "target": "AllPlayerAvatars",
+              "amountByCasterMaxHPRatio": "HealHP",
               "doOffStage": true,
               "predicates": [
                 {
-                  "$type": "DEOFBICNFHF",
+                  "$type": "ByEntityTypes",
                   "entityTypes": [
                     "Avatar"
                   ]
                 },
                 {
-                  "$type": "CNFMGJJEOPM",
-                  "NJICAELBCCB": "",
+                  "$type": "ByTargetPositionToSelfPosition",
+                  "logic": "LesserOrEqual",
+                  "value": 40.0,
                   "JBOGOHPICML": "",
-                  "CBOMLBFIPJM": 40.0,
-                  "logic": "LesserOrEqual"
+                  "NJICAELBCCB": ""
                 }
-              ]
+              ],
+              "target": "AllPlayerAvatars",
+              "FFNEJGGNAFF": ""
             }
           ],
-          "elementDurability": 100.0,
-          "modifierName": "",
           "AIHNJLDFEGJ": 0.0
         },
         "IdolHeal_HeadControl": {
+          "elementDurability": 100.0,
+          "modifierName": "",
+          "onAdded": [
+            {
+              "$type": "EnableHeadControl"
+            }
+          ],
           "onRemoved": [
             {
               "$type": "EnableHeadControl",
               "enable": true
             }
           ],
-          "onAdded": [
-            {
-              "$type": "EnableHeadControl"
-            }
-          ],
-          "elementDurability": 100.0,
-          "modifierName": "",
           "AIHNJLDFEGJ": 0.0
         },
         "IdolHeal_HideWeapon": {
-          "onRemoved": [
-            {
-              "$type": "TriggerHideWeapon",
-              "partNames": [
-                "equip01",
-                "equip03"
-              ],
-              "visible": true,
-              "doOffStage": true
-            }
-          ],
+          "elementDurability": 100.0,
+          "modifierName": "",
           "onAdded": [
             {
               "$type": "TriggerHideWeapon",
@@ -1766,31 +1789,28 @@
               ]
             }
           ],
-          "elementDurability": 100.0,
-          "modifierName": "",
+          "onRemoved": [
+            {
+              "$type": "TriggerHideWeapon",
+              "doOffStage": true,
+              "partNames": [
+                "equip01",
+                "equip03"
+              ],
+              "visible": true
+            }
+          ],
           "AIHNJLDFEGJ": 0.0
         },
         "IdolHeal_CameraControl": {
-          "onRemoved": [
-            {
-              "$type": "ControlEmotion",
-              "doOffStage": true
-            },
-            {
-              "$type": "AvatarCameraParam",
-              "cameraParam": {
-                "shouldKeepForceRadius": true,
-                "forceRadiusDuration": 0.3,
-                "forceRadius": 6.0
-              }
-            }
-          ],
+          "elementDurability": 100.0,
+          "modifierName": "",
           "onAdded": [
             {
               "$type": "ControlEmotion",
+              "LIIHBLNMGAF": false,
               "MJCILBIAAJA": false,
-              "PIIDHCFMKEM": false,
-              "LIIHBLNMGAF": false
+              "PIIDHCFMKEM": false
             }
           ],
           "onAvatarOut": [
@@ -1801,15 +1821,27 @@
             {
               "$type": "AvatarCameraParam",
               "cameraParam": {
-                "shouldKeepForceRadius": true,
+                "forceRadius": 6.0,
                 "forceRadiusDuration": 0.3,
-                "forceRadius": 6.0
+                "shouldKeepForceRadius": true
               },
               "doOffStage": true
             }
           ],
-          "elementDurability": 100.0,
-          "modifierName": "",
+          "onRemoved": [
+            {
+              "$type": "ControlEmotion",
+              "doOffStage": true
+            },
+            {
+              "$type": "AvatarCameraParam",
+              "cameraParam": {
+                "forceRadius": 6.0,
+                "forceRadiusDuration": 0.3,
+                "shouldKeepForceRadius": true
+              }
+            }
+          ],
           "AIHNJLDFEGJ": 0.0
         }
       },
@@ -1820,58 +1852,74 @@
         },
         {
           "$type": "AvatarSkillStart",
-          "skillID": 10072,
-          "BGNJBEPEJBO": 1.0,
+          "cdRatio": 1.0,
           "costStaminaRatio": 1.0,
-          "cdRatio": 1.0
+          "skillID": 10072,
+          "GIBAINFKPBO": 1.0
         },
         {
           "$type": "AvatarCameraParam",
           "cameraParam": {
-            "shouldKeepForceRadius": true,
+            "forceRadius": 6.0,
             "forceRadiusDuration": 0.3,
-            "forceRadius": 6.0
+            "shouldKeepForceRadius": true
           }
         }
-      ],
-      "abilityMixins": [
-        {
-          "$type": "AttachToStateIDMixin",
-          "LJPPDIGCJMJ": "",
-          "stateIDs": [
-            "Barbara_IdolHeal_BS",
-            "Barbara_IdolHeal"
-          ],
-          "modifierName": "IdolHeal_HeadControl"
-        },
-        {
-          "$type": "AttachToStateIDMixin",
-          "LJPPDIGCJMJ": "",
-          "stateIDs": [
-            "Barbara_IdolHeal_BS",
-            "Barbara_IdolHeal"
-          ],
-          "modifierName": "IdolHeal_CameraControl"
-        },
-        {
-          "$type": "AttachToNormalizedTimeMixin",
-          "modifierName": "IdolHeal_HideWeapon",
-          "LJPPDIGCJMJ": "",
-          "stateID": "Barbara_IdolHeal_BS"
-        }
-      ],
-      "abilityName": "Avatar_Barbara_IdolHeal",
-      "abilitySpecials": {
-        "HealHP": 0.0,
-        "HealHP_Const": 0.0,
-        "Time": 1.0
-      }
+      ]
     }
   },
   {
     "Default": {
+      "abilityMixins": [
+        {
+          "$type": "AttachToStateIDMixin",
+          "modifierName": "IdolHeal_Mark",
+          "stateIDs": [
+            "Barbara_IdolHeal_BS",
+            "Barbara_IdolHeal"
+          ],
+          "LJPPDIGCJMJ": ""
+        },
+        {
+          "$type": "AttachToStateIDMixin",
+          "modifierName": "Barbara_Invincible",
+          "stateIDs": [
+            "Barbara_IdolHeal_BS",
+            "Barbara_IdolHeal"
+          ],
+          "LJPPDIGCJMJ": ""
+        },
+        {
+          "$type": "AttachToStateIDMixin",
+          "modifierName": "Barbara_IsGhostToEnemy",
+          "stateIDs": [
+            "Barbara_IdolHeal_BS",
+            "Barbara_IdolHeal"
+          ],
+          "LJPPDIGCJMJ": ""
+        }
+      ],
+      "abilityName": "Avatar_Barbara_Trigger_Weather",
       "modifiers": {
         "IdolHeal_Mark": {
+          "elementDurability": 100.0,
+          "modifierName": "",
+          "onAdded": [
+            {
+              "$type": "FireEffect",
+              "effectPattern": "Eff_Barbara_IdolHeal_01",
+              "effectTempleteID": -1.0,
+              "scale": 1.0,
+              "ILLLPEOODKP": ""
+            },
+            {
+              "$type": "FireEffect",
+              "effectPattern": "Eff_Barbara_IdolHeal_03",
+              "effectTempleteID": -1.0,
+              "scale": 1.0,
+              "ILLLPEOODKP": ""
+            }
+          ],
           "onRemoved": [
             {
               "$type": "RemoveUniqueModifier",
@@ -1881,29 +1929,12 @@
               "$type": "AvatarExitCameraShot"
             }
           ],
-          "onAdded": [
-            {
-              "$type": "FireEffect",
-              "effectPattern": "Eff_Barbara_IdolHeal_01",
-              "scale": 1.0,
-              "ILLLPEOODKP": "",
-              "effectTempleteID": -1.0
-            },
-            {
-              "$type": "FireEffect",
-              "effectPattern": "Eff_Barbara_IdolHeal_03",
-              "scale": 1.0,
-              "ILLLPEOODKP": "",
-              "effectTempleteID": -1.0
-            }
-          ],
-          "elementDurability": 100.0,
-          "modifierName": "",
           "AIHNJLDFEGJ": 0.0
         },
         "UNIQUE_IdolHeal_Weather": {
           "duration": 2.5,
           "elementDurability": 100.0,
+          "isUnique": true,
           "modifierMixins": [
             {
               "$type": "TriggerWeatherMixin",
@@ -1913,39 +1944,38 @@
             }
           ],
           "modifierName": "",
-          "isUnique": true,
           "AIHNJLDFEGJ": 0.0
         },
         "Barbara_Invincible": {
           "elementDurability": 100.0,
-          "state": "Invincible",
           "modifierName": "",
+          "state": "Invincible",
           "AIHNJLDFEGJ": 0.0
         },
         "Barbara_IsGhostToEnemy": {
+          "elementDurability": 100.0,
+          "modifierName": "",
           "onAdded": [
             {
               "$type": "AttachAbilityStateResistance",
               "resistanceListID": 11002
             }
           ],
-          "elementDurability": 100.0,
-          "modifierName": "",
           "AIHNJLDFEGJ": 0.0
         },
         "IdolHeal_Eff_Timer": {
           "duration": 0.3,
+          "elementDurability": 100.0,
+          "modifierName": "",
           "onRemoved": [
             {
               "$type": "FireEffect",
               "effectPattern": "Eff_Barbara_IdolHeal_02",
+              "effectTempleteID": -1.0,
               "scale": 1.0,
-              "ILLLPEOODKP": "",
-              "effectTempleteID": -1.0
+              "ILLLPEOODKP": ""
             }
           ],
-          "elementDurability": 100.0,
-          "modifierName": "",
           "AIHNJLDFEGJ": 0.0
         }
       },
@@ -1963,61 +1993,31 @@
           "cameraMoveCfgPath": "Camera_Barbara_IdolHeal",
           "predicates": [
             {
-              "$type": "COMAODKNDLC",
+              "$type": "ByAttackNotHitScene",
               "attackPattern": {
-                "$type": "DDLDAMKEKJD",
-                "radius": 1.4,
-                "height": 0.2,
-                "fanAngle": 30.0,
-                "triggerType": "TriggerNoRepeat",
+                "$type": "ConfigAttackCircle",
                 "born": {
-                  "$type": "NABPLNFPHCK",
+                  "$type": "ConfigBornBySelf",
                   "offset": {
                     "x": 0.0,
-                    "z": 0.0,
-                    "y": 1.2
+                    "y": 1.2,
+                    "z": 0.0
                   }
-                }
+                },
+                "fanAngle": 30.0,
+                "height": 0.2,
+                "radius": 1.4,
+                "triggerType": "TriggerNoRepeat"
               }
             },
             {
-              "$type": "KPDFJNNLHGG",
+              "$type": "ByAvatarInWaterDepth",
               "compareType": "LessAndEqual",
               "depth": 0.5
             }
           ]
         }
-      ],
-      "abilityMixins": [
-        {
-          "$type": "AttachToStateIDMixin",
-          "LJPPDIGCJMJ": "",
-          "stateIDs": [
-            "Barbara_IdolHeal_BS",
-            "Barbara_IdolHeal"
-          ],
-          "modifierName": "IdolHeal_Mark"
-        },
-        {
-          "$type": "AttachToStateIDMixin",
-          "LJPPDIGCJMJ": "",
-          "stateIDs": [
-            "Barbara_IdolHeal_BS",
-            "Barbara_IdolHeal"
-          ],
-          "modifierName": "Barbara_Invincible"
-        },
-        {
-          "$type": "AttachToStateIDMixin",
-          "LJPPDIGCJMJ": "",
-          "stateIDs": [
-            "Barbara_IdolHeal_BS",
-            "Barbara_IdolHeal"
-          ],
-          "modifierName": "Barbara_IsGhostToEnemy"
-        }
-      ],
-      "abilityName": "Avatar_Barbara_Trigger_Weather"
+      ]
     }
   },
   {
@@ -2025,16 +2025,16 @@
       "abilityMixins": [
         {
           "$type": "ReviveElemEnergyMixin",
-          "ratio": "Barbara_ReviveElemEnergy_Ratio",
-          "MMLCDDKFAFG": 1.0,
-          "JOCHKOPAECN": 10.0
+          "baseEnergy": 1.0,
+          "period": 10.0,
+          "ratio": "Barbara_ReviveElemEnergy_Ratio"
         }
       ],
       "abilityName": "Avatar_Barbara_ReviveElemEnergy",
-      "isDynamicAbility": true,
       "abilitySpecials": {
         "Barbara_ReviveElemEnergy_Ratio": 1.0
-      }
+      },
+      "isDynamicAbility": true
     }
   },
   {
@@ -2042,7 +2042,7 @@
       "abilityMixins": [
         {
           "$type": "DoReviveMixin",
-          "HCFAFEALFCI": [
+          "onKillActions": [
             {
               "$type": "DebugLog",
               "content": "onKillActions Start!!!!!!",
@@ -2050,28 +2050,28 @@
             },
             {
               "$type": "EntityDoSkill",
-              "skillID": 10076,
-              "doOffStage": true
+              "doOffStage": true,
+              "skillID": 10076
             }
           ],
-          "type": "OffStage",
-          "MMLFABGAGIK": [
+          "onReviveActions": [
             {
               "$type": "EntityDoSkill",
-              "skillID": 10079,
-              "doOffStage": true
+              "doOffStage": true,
+              "skillID": 10079
             },
             {
               "$type": "EntityDoSkill",
-              "skillID": 10080,
-              "doOffStage": true
+              "doOffStage": true,
+              "skillID": 10080
             },
             {
               "$type": "DebugLog",
               "content": "onReviveActions Start!!!!!!",
               "doOffStage": true
             }
-          ]
+          ],
+          "type": "OffStage"
         }
       ],
       "abilityName": "Avatar_Barbara_ReBorn_Pre",
@@ -2086,14 +2086,19 @@
   },
   {
     "Default": {
+      "abilityName": "Avatar_Barbara_ReBorn",
+      "abilitySpecials": {
+        "HealHP": 1.0
+      },
+      "isDynamicAbility": true,
       "onAbilityStart": [
         {
           "$type": "AvatarSkillStart",
-          "skillID": 10076,
-          "BGNJBEPEJBO": 1.0,
-          "costStaminaRatio": 1.0,
           "cdRatio": 1.0,
-          "doOffStage": true
+          "costStaminaRatio": 1.0,
+          "doOffStage": true,
+          "skillID": 10076,
+          "GIBAINFKPBO": 1.0
         },
         {
           "$type": "DebugLog",
@@ -2102,29 +2107,26 @@
         },
         {
           "$type": "ReviveAvatar",
-          "FPOCDLCHDPE": "HealHP",
-          "FFNEJGGNAFF": "",
+          "amountByTargetMaxHPRatio": "HealHP",
+          "doOffStage": true,
           "target": "AllPlayerAvatars",
-          "doOffStage": true
+          "FFNEJGGNAFF": ""
         }
-      ],
-      "abilityName": "Avatar_Barbara_ReBorn",
-      "isDynamicAbility": true,
-      "abilitySpecials": {
-        "HealHP": 1.0
-      }
+      ]
     }
   },
   {
     "Default": {
+      "abilityName": "Avatar_Barbara_ReBornEffect_01",
+      "isDynamicAbility": true,
       "onAbilityStart": [
         {
           "$type": "AvatarSkillStart",
-          "skillID": 10079,
-          "BGNJBEPEJBO": 1.0,
-          "costStaminaRatio": 1.0,
           "cdRatio": 1.0,
-          "doOffStage": true
+          "costStaminaRatio": 1.0,
+          "doOffStage": true,
+          "skillID": 10079,
+          "GIBAINFKPBO": 1.0
         },
         {
           "$type": "DebugLog",
@@ -2133,28 +2135,28 @@
         },
         {
           "$type": "FireEffect",
+          "doOffStage": true,
           "effectPattern": "Eff_Barbara_Heal_Spectator",
-          "scale": 1.0,
-          "ILLLPEOODKP": "",
           "effectTempleteID": -1.0,
+          "scale": 1.0,
           "target": "CurLocalAvatar",
-          "doOffStage": true
+          "ILLLPEOODKP": ""
         }
-      ],
-      "abilityName": "Avatar_Barbara_ReBornEffect_01",
-      "isDynamicAbility": true
+      ]
     }
   },
   {
     "Default": {
+      "abilityName": "Avatar_Barbara_ReBornEffect_02",
+      "isDynamicAbility": true,
       "onAbilityStart": [
         {
           "$type": "AvatarSkillStart",
-          "skillID": 10080,
-          "BGNJBEPEJBO": 1.0,
-          "costStaminaRatio": 1.0,
           "cdRatio": 1.0,
-          "doOffStage": true
+          "costStaminaRatio": 1.0,
+          "doOffStage": true,
+          "skillID": 10080,
+          "GIBAINFKPBO": 1.0
         },
         {
           "$type": "DebugLog",
@@ -2163,39 +2165,45 @@
         },
         {
           "$type": "FireEffect",
+          "doOffStage": true,
           "effectPattern": "Eff_Barbara_Heal_Spectator_Light",
-          "scale": 1.0,
-          "ILLLPEOODKP": "",
           "effectTempleteID": -1.0,
+          "scale": 1.0,
           "target": "CurLocalAvatar",
-          "doOffStage": true
+          "ILLLPEOODKP": ""
         }
-      ],
-      "abilityName": "Avatar_Barbara_ReBornEffect_02",
-      "isDynamicAbility": true
+      ]
     }
   },
   {
     "Default": {
+      "abilityName": "Avatar_Barbara_Constellation_4",
+      "abilitySpecials": {
+        "Barbara_Constellation_ReviveElemEnergy_Number": 1.0,
+        "ReviveElemEnergy": 1.0
+      },
+      "isDynamicAbility": true,
       "modifiers": {
         "Barbara_Constellation_ReviveElemEnergy_Handler": {
+          "elementDurability": 100.0,
+          "modifierName": "",
           "onAttackLanded": [
             {
               "$type": "Predicated",
               "successActions": [
                 {
                   "$type": "AddGlobalValue",
-                  "useLimitRange": true,
                   "key": "_ABILITY_Barbara_Constellation_ReviveElemEnergy_COUNT",
                   "maxValue": 5.0,
                   "minValue": 0.0,
-                  "CBOMLBFIPJM": 1.0,
-                  "target": "Caster"
+                  "target": "Caster",
+                  "useLimitRange": true,
+                  "value": 1.0
                 },
                 {
                   "$type": "SetGlobalValueToOverrideMap",
-                  "globalValueKey": "_ABILITY_Barbara_Constellation_ReviveElemEnergy_COUNT",
                   "abilityName": "",
+                  "globalValueKey": "_ABILITY_Barbara_Constellation_ReviveElemEnergy_COUNT",
                   "overrideMapKey": "Barbara_Constellation_ReviveElemEnergy_Number"
                 },
                 {
@@ -2204,809 +2212,187 @@
                   "target": "Caster"
                 }
               ],
+              "target": "Target",
               "targetPredicates": [
                 {
-                  "$type": "CCHPEOBKOBO",
+                  "$type": "ByAttackTags",
                   "attackTags": [
                     "ExtraAttack"
                   ]
                 },
                 {
-                  "$type": "DEOFBICNFHF",
+                  "$type": "ByEntityTypes",
                   "entityTypes": [
                     "Monster"
                   ]
                 },
                 {
-                  "$type": "EOFDCELPGFO",
-                  "CBOMLBFIPJM": 0.0,
+                  "$type": "ByTargetGlobalValue",
                   "compareType": "NoneOrEqual",
-                  "key": "_ANIMAL_ENTITY_TYPE"
+                  "key": "_ANIMAL_ENTITY_TYPE",
+                  "value": 0.0
                 }
-              ],
-              "target": "Target"
+              ]
             }
           ],
-          "elementDurability": 100.0,
-          "modifierName": "",
           "AIHNJLDFEGJ": 0.0
         },
         "ReviveElemEnergy_Trigger": {
           "duration": 0.3,
+          "elementDurability": 100.0,
+          "modifierName": "",
           "onRemoved": [
             {
               "$type": "ReviveElemEnergy",
-              "CBOMLBFIPJM": [
+              "doOffStage": true,
+              "value": [
                 "ReviveElemEnergy",
                 "Barbara_Constellation_ReviveElemEnergy_Number",
                 "MUL"
-              ],
-              "doOffStage": true
+              ]
             },
             {
               "$type": "AddGlobalValue",
-              "useLimitRange": true,
+              "doOffStage": true,
               "key": "_ABILITY_Barbara_Constellation_ReviveElemEnergy_COUNT",
               "maxValue": 5.0,
               "minValue": 0.0,
-              "CBOMLBFIPJM": -5.0,
-              "doOffStage": true
+              "useLimitRange": true,
+              "value": -5.0
             }
           ],
-          "elementDurability": 100.0,
-          "modifierName": "",
           "AIHNJLDFEGJ": 0.0
         }
       },
-      "abilityName": "Avatar_Barbara_Constellation_4",
-      "isDynamicAbility": true,
       "onAdded": [
         {
           "$type": "ApplyModifier",
           "modifierName": "Barbara_Constellation_ReviveElemEnergy_Handler"
         }
-      ],
-      "abilitySpecials": {
-        "Barbara_Constellation_ReviveElemEnergy_Number": 1.0,
-        "ReviveElemEnergy": 1.0
-      }
+      ]
     }
   },
   {
     "Default": {
-      "modifiers": {
-        "HideWeapon": {
-          "onRemoved": [
-            {
-              "$type": "TriggerHideWeapon",
-              "partNames": [
-                "equip01",
-                "equip02",
-                "sheathPoint"
-              ],
-              "visible": true
-            }
-          ],
-          "onAdded": [
-            {
-              "$type": "TriggerHideWeapon",
-              "partNames": [
-                "equip01",
-                "equip02",
-                "sheathPoint"
-              ]
-            }
-          ],
-          "elementDurability": 100.0,
-          "modifierName": "",
-          "AIHNJLDFEGJ": 0.0
-        },
-        "FallingAnthem_SetVisible": {
-          "onRemoved": [
-            {
-              "$type": "TriggerSetVisible",
-              "visible": true,
-              "doOffStage": true
-            }
-          ],
-          "onAdded": [
-            {
-              "$type": "TriggerSetVisible",
-              "doOffStage": true
-            }
-          ],
-          "elementDurability": 100.0,
-          "modifierName": "",
-          "AIHNJLDFEGJ": 0.0
-        },
-        "FallingAnthem_BS_Material": {
-          "onAdded": [
-            {
-              "$type": "FireEffect",
-              "effectPattern": "Eff_Avatar_Catalyst_FallAnthem_BS_Water",
-              "scale": 1.0,
-              "ILLLPEOODKP": "",
-              "effectTempleteID": -1.0
-            },
-            {
-              "$type": "ApplyModifier",
-              "modifierName": "FallingAnthem_BSCameraRadialBlur"
-            }
-          ],
-          "elementDurability": 100.0,
-          "modifierName": "",
-          "AIHNJLDFEGJ": 0.0
-        },
-        "FallingAnthem_BS_VelocityForce_Initialize": {
-          "onAdded": [
-            {
-              "$type": "RemoveVelocityForce",
-              "HALNPNMJJAN": [
-                "RushMoveType"
-              ]
-            }
-          ],
-          "properties": {
-            "Actor_AddGravityScale": -2.0
-          },
-          "elementDurability": 100.0,
-          "modifierName": "",
-          "AIHNJLDFEGJ": 0.0
-        },
-        "FallingAnthem_LoopDamage": {
-          "thinkInterval": 0.3,
-          "elementDurability": 100.0,
-          "modifierName": "",
-          "onThinkInterval": [
-            {
-              "$type": "TriggerAttackEvent",
-              "targetType": "Enemy",
-              "attackEvent": {
-                "attackInfo": {
-                  "attackProperty": {
-                    "elementType": "Water",
-                    "damagePercentageRatio": 0.0,
-                    "strikeType": "Default",
-                    "enBreak": 5.0,
-                    "damagePercentage": "FallingAnthem_Normal_Loop_Damage",
-                    "elementDurability": 0.0,
-                    "arkheGrade": 0.0
-                  },
-                  "hitPattern": {
-                    "FLFCIDDNMNA": "",
-                    "onHitEffectName": "default",
-                    "hitHaltTimeScale": 0.02,
-                    "hitImpulseType": "LV2"
-                  },
-                  "attenuationGroup": "default",
-                  "attenuationTag": "",
-                  "attackTag": "FallingAttack"
-                },
-                "attackPattern": {
-                  "$type": "HCAGHMDHEGG",
-                  "radius": 1.5,
-                  "triggerType": "TriggerNoRepeat",
-                  "born": {
-                    "$type": "NABPLNFPHCK",
-                    "offset": {
-                      "x": 0.0,
-                      "z": 0.0,
-                      "y": 0.0
-                    }
-                  }
-                }
-              }
-            }
-          ],
-          "AIHNJLDFEGJ": 0.0
-        },
-        "FallingAnthem_FallingDamageImmune_01": {
-          "onAdded": [
-            {
-              "$type": "ClearGlobalValue",
-              "key": "_ABILITY_FallingAttack_Altitude"
-            },
-            {
-              "$type": "AddGlobalValue",
-              "useLimitRange": true,
-              "key": "_ABILITY_FallingAttack_Altitude",
-              "maxValue": "FallingAnthem_FallingDamageRatio_Lv0",
-              "minValue": "FallingAnthem_FallingDamageRatio_Lv0",
-              "CBOMLBFIPJM": "FallingAnthem_FallingDamageRatio_Lv0",
-              "predicates": [
-                {
-                  "$type": "AKINJGNEPNO",
-                  "CBOMLBFIPJM": "FallingAnthem_Altitude_Lv0",
-                  "logic": "LesserOrEqual"
-                }
-              ]
-            },
-            {
-              "$type": "AddGlobalValue",
-              "useLimitRange": true,
-              "key": "_ABILITY_FallingAttack_Altitude",
-              "maxValue": "FallingAnthem_FallingDamageRatio_Lv1",
-              "minValue": "FallingAnthem_FallingDamageRatio_Lv1",
-              "CBOMLBFIPJM": "FallingAnthem_FallingDamageRatio_Lv1",
-              "predicates": [
-                {
-                  "$type": "AKINJGNEPNO",
-                  "CBOMLBFIPJM": "FallingAnthem_Altitude_Lv1",
-                  "logic": "LesserOrEqual"
-                },
-                {
-                  "$type": "AKINJGNEPNO",
-                  "CBOMLBFIPJM": "FallingAnthem_Altitude_Lv0"
-                }
-              ]
-            },
-            {
-              "$type": "AddGlobalValue",
-              "useLimitRange": true,
-              "key": "_ABILITY_FallingAttack_Altitude",
-              "maxValue": "FallingAnthem_FallingDamageRatio_Lv2",
-              "minValue": "FallingAnthem_FallingDamageRatio_Lv2",
-              "CBOMLBFIPJM": "FallingAnthem_FallingDamageRatio_Lv2",
-              "predicates": [
-                {
-                  "$type": "AKINJGNEPNO",
-                  "CBOMLBFIPJM": "FallingAnthem_Altitude_Lv2",
-                  "logic": "LesserOrEqual"
-                },
-                {
-                  "$type": "AKINJGNEPNO",
-                  "CBOMLBFIPJM": "FallingAnthem_Altitude_Lv1"
-                }
-              ]
-            },
-            {
-              "$type": "AddGlobalValue",
-              "useLimitRange": true,
-              "key": "_ABILITY_FallingAttack_Altitude",
-              "maxValue": "FallingAnthem_FallingDamageRatio_Lv3",
-              "minValue": "FallingAnthem_FallingDamageRatio_Lv3",
-              "CBOMLBFIPJM": "FallingAnthem_FallingDamageRatio_Lv3",
-              "predicates": [
-                {
-                  "$type": "AKINJGNEPNO",
-                  "CBOMLBFIPJM": "FallingAnthem_Altitude_Lv3",
-                  "logic": "LesserOrEqual"
-                },
-                {
-                  "$type": "AKINJGNEPNO",
-                  "CBOMLBFIPJM": "FallingAnthem_Altitude_Lv2"
-                }
-              ]
-            },
-            {
-              "$type": "AddGlobalValue",
-              "useLimitRange": true,
-              "key": "_ABILITY_FallingAttack_Altitude",
-              "maxValue": "FallingAnthem_FallingDamageRatio_Lv4",
-              "minValue": "FallingAnthem_FallingDamageRatio_Lv4",
-              "CBOMLBFIPJM": "FallingAnthem_FallingDamageRatio_Lv4",
-              "predicates": [
-                {
-                  "$type": "AKINJGNEPNO",
-                  "CBOMLBFIPJM": "FallingAnthem_Altitude_Lv3"
-                }
-              ]
-            },
-            {
-              "$type": "AttachModifier",
-              "modifierName": "FallingAnthem_FallingDamageImmune_02"
-            }
-          ],
-          "elementDurability": 100.0,
-          "modifierName": "",
-          "AIHNJLDFEGJ": 0.0
-        },
-        "FallingAnthem_FallingDamageImmune_02": {
-          "onAdded": [
-            {
-              "$type": "SetGlobalValueToOverrideMap",
-              "globalValueKey": "_ABILITY_FallingAttack_Altitude",
-              "abilityName": "",
-              "overrideMapKey": "FallingAnthem_FallingDamageRatio"
-            },
-            {
-              "$type": "AttachModifier",
-              "modifierName": "FallingAnthem_FallingDamageImmune_03"
-            }
-          ],
-          "elementDurability": 100.0,
-          "modifierName": "",
-          "AIHNJLDFEGJ": 0.0
-        },
-        "FallingAnthem_FallingDamageImmune_03": {
-          "properties": {
-            "Actor_FallingDamageRatio": "FallingAnthem_FallingDamageRatio"
-          },
-          "elementDurability": 100.0,
-          "modifierName": "",
-          "AIHNJLDFEGJ": 0.0
-        },
-        "Inertia": {
-          "elementDurability": 100.0,
-          "modifierMixins": [
-            {
-              "$type": "ApplyInertiaVelocityMixin",
-              "JOHELJNOOBE": false,
-              "useY": false
-            }
-          ],
-          "modifierName": "",
-          "AIHNJLDFEGJ": 0.0
-        },
-        "FallingAnthem_Height_Detect": {
-          "onRemoved": [
-            {
-              "$type": "SetAnimatorFloat",
-              "floatID": "FallingAnthem_UseCamera",
-              "CBOMLBFIPJM": 0.0
-            },
-            {
-              "$type": "AddGlobalValue",
-              "useLimitRange": true,
-              "key": "_ABILITY_FallingAnthem_UseCamera",
-              "maxValue": 0.0,
-              "minValue": 0.0,
-              "CBOMLBFIPJM": 0.0
-            }
-          ],
-          "onAdded": [
-            {
-              "$type": "AddGlobalValue",
-              "useLimitRange": true,
-              "key": "_ABILITY_FallingAnthem_UseCamera",
-              "maxValue": 0.0,
-              "minValue": 0.0,
-              "CBOMLBFIPJM": 0.0,
-              "predicates": [
-                {
-                  "$type": "AKINJGNEPNO",
-                  "CBOMLBFIPJM": 2.4,
-                  "logic": "LesserOrEqual"
-                }
-              ]
-            },
-            {
-              "$type": "AddGlobalValue",
-              "useLimitRange": true,
-              "key": "_ABILITY_FallingAnthem_UseCamera",
-              "maxValue": 1.0,
-              "minValue": 0.0,
-              "CBOMLBFIPJM": 5.0,
-              "predicates": [
-                {
-                  "$type": "AKINJGNEPNO",
-                  "CBOMLBFIPJM": 2.4
-                }
-              ]
-            },
-            {
-              "$type": "SetAnimatorFloat",
-              "floatID": "FallingAnthem_UseCamera",
-              "CBOMLBFIPJM": 0.0,
-              "predicates": [
-                {
-                  "$type": "AKINJGNEPNO",
-                  "CBOMLBFIPJM": 2.4,
-                  "logic": "LesserOrEqual"
-                }
-              ]
-            },
-            {
-              "$type": "SetAnimatorFloat",
-              "floatID": "FallingAnthem_UseCamera",
-              "CBOMLBFIPJM": 1.0,
-              "predicates": [
-                {
-                  "$type": "AKINJGNEPNO",
-                  "CBOMLBFIPJM": 2.4
-                }
-              ]
-            }
-          ],
-          "elementDurability": 100.0,
-          "modifierName": "",
-          "AIHNJLDFEGJ": 0.0
-        },
-        "FallingAnthem_OverHead_Camera": {
-          "onAdded": [
-            {
-              "$type": "AvatarCameraParam",
-              "cameraParam": {
-                "shouldKeepForceRadius": true,
-                "forceRadiusDuration": 0.2,
-                "forceRadius": 4.5
-              },
-              "predicates": [
-                {
-                  "$type": "GCFOJENHAMH",
-                  "parameter": "FallingAnthem_UseCamera",
-                  "CBOMLBFIPJM": 1.0,
-                  "logic": "Equal"
-                }
-              ]
-            }
-          ],
-          "elementDurability": 100.0,
-          "modifierName": "",
-          "AIHNJLDFEGJ": 0.0
-        },
-        "FallingAnthem_OverHead_Camera_Remover": {
-          "onAdded": [
-            {
-              "$type": "AvatarExitCameraShot",
-              "doOffStage": true
-            }
-          ],
-          "elementDurability": 100.0,
-          "modifierName": "",
-          "AIHNJLDFEGJ": 0.0
-        },
-        "FallingAnthem_Landed_Camera": {
-          "onAdded": [
-            {
-              "$type": "AvatarCameraParam",
-              "cameraParam": {
-                "shouldKeepForceRadius": true,
-                "forceRadiusDuration": 0.1,
-                "forceRadius": 6.0
-              },
-              "predicates": [
-                {
-                  "$type": "GCFOJENHAMH",
-                  "parameter": "FallingAnthem_UseCamera",
-                  "CBOMLBFIPJM": 1.0,
-                  "logic": "Equal"
-                }
-              ]
-            }
-          ],
-          "elementDurability": 100.0,
-          "modifierName": "",
-          "AIHNJLDFEGJ": 0.0
-        },
-        "FallingAnthem_ClearVelocityForce": {
-          "onAdded": [
-            {
-              "$type": "RemoveVelocityForce",
-              "HALNPNMJJAN": [
-                "RushMoveType",
-                "InertiaType"
-              ]
-            }
-          ],
-          "elementDurability": 100.0,
-          "modifierName": "",
-          "AIHNJLDFEGJ": 0.0
-        },
-        "FallingAnthem_Attach_SelfEffect": {
-          "onAdded": [
-            {
-              "$type": "AttachEffect",
-              "ILLLPEOODKP": "",
-              "scale": 1.0,
-              "effectPattern": "Eff_Avatar_Catalyst_FallAnthem_Self_Water",
-              "effectTempleteID": -1.0
-            }
-          ],
-          "elementDurability": 100.0,
-          "modifierName": "",
-          "AIHNJLDFEGJ": 0.0
-        },
-        "FallingAnthem_Remove_SelfEffect": {
-          "duration": 0.1,
-          "onRemoved": [
-            {
-              "$type": "RemoveModifier",
-              "modifierName": "FallingAnthem_Attach_SelfEffect"
-            }
-          ],
-          "elementDurability": 100.0,
-          "modifierName": "",
-          "AIHNJLDFEGJ": 0.0
-        },
-        "FallingAnthem_BSCameraRadialBlur": {
-          "duration": 0.3,
-          "elementDurability": 100.0,
-          "modifierMixins": [
-            {
-              "$type": "CameraBlurMixin",
-              "NFBFBAJDMPJ": {
-                "LCOPJHPGJCO": 0.15,
-                "LFMGJKCOGPI": 0.3
-              }
-            }
-          ],
-          "modifierName": "",
-          "AIHNJLDFEGJ": 0.0
-        }
-      },
-      "onAbilityStart": [
-        {
-          "$type": "TriggerAttackEvent",
-          "targetType": "Enemy",
-          "attackEvent": {
-            "attackInfo": {
-              "attackProperty": {
-                "elementType": "Water",
-                "damagePercentageRatio": 0.0,
-                "strikeType": "Default",
-                "enBreak": 50.0,
-                "damagePercentage": "FallingAnthem_Normal_Rank_1_Damage",
-                "elementDurability": 25.0,
-                "arkheGrade": 0.0
-              },
-              "cameraShake": {
-                "extension": {
-                  "rangeAttenuation": 0.3,
-                  "baseCycle": 0.24,
-                  "cycleDamping": 0.0
-                },
-                "shakeDir": {
-                  "y": 1.0
-                },
-                "shakeTime": 0.12,
-                "shakeType": "CustomVector",
-                "shakeDistance": 30.0,
-                "MNKFEFOKFKP": "",
-                "shakeRange": 0.24
-              },
-              "hitPattern": {
-                "FLFCIDDNMNA": "",
-                "onHitEffectName": "none",
-                "hitHaltTimeScale": 0.1,
-                "hitImpulseType": "LV3"
-              },
-              "forceCameraShake": true,
-              "attenuationGroup": "default",
-              "attenuationTag": "",
-              "attackTag": "FallingAttack"
-            },
-            "attackPattern": {
-              "$type": "DDLDAMKEKJD",
-              "radius": 3.0,
-              "height": 2.0,
-              "triggerType": "TriggerNoRepeat",
-              "born": {
-                "$type": "BOJMMDAIGMM",
-                "offset": {
-                  "x": 0.0,
-                  "z": 0.0,
-                  "y": -0.5
-                }
-              }
-            }
-          },
-          "predicates": [
-            {
-              "$type": "EOFDCELPGFO",
-              "CBOMLBFIPJM": 0.0,
-              "compareType": "NoneOrEqual",
-              "key": "_ABILITY_FallingAnthem_UseCamera",
-              "value": true
-            }
-          ]
-        },
-        {
-          "$type": "TriggerAttackEvent",
-          "targetType": "Enemy",
-          "attackEvent": {
-            "attackInfo": {
-              "attackProperty": {
-                "elementType": "Water",
-                "damagePercentageRatio": 0.0,
-                "strikeType": "Default",
-                "enBreak": 100.0,
-                "damagePercentage": "FallingAnthem_Normal_Rank_2_Damage",
-                "elementDurability": 25.0,
-                "arkheGrade": 0.0
-              },
-              "cameraShake": {
-                "extension": {
-                  "rangeAttenuation": 0.3,
-                  "baseCycle": 0.4,
-                  "cycleDamping": 0.0
-                },
-                "shakeDir": {
-                  "y": 1.0,
-                  "z": 1.0
-                },
-                "shakeTime": 0.2,
-                "shakeType": "CustomVector",
-                "shakeDistance": 30.0,
-                "MNKFEFOKFKP": "",
-                "shakeRange": 0.5
-              },
-              "hitPattern": {
-                "FLFCIDDNMNA": "",
-                "onHitEffectName": "none",
-                "hitHaltTimeScale": 0.1,
-                "hitImpulseType": "LV4"
-              },
-              "forceCameraShake": true,
-              "attenuationGroup": "default",
-              "attenuationTag": "",
-              "attackTag": "FallingAttack"
-            },
-            "attackPattern": {
-              "$type": "DDLDAMKEKJD",
-              "radius": 3.5,
-              "height": 2.0,
-              "triggerType": "TriggerNoRepeat",
-              "born": {
-                "$type": "BOJMMDAIGMM",
-                "offset": {
-                  "x": 0.0,
-                  "z": 0.0,
-                  "y": -0.5
-                }
-              }
-            }
-          },
-          "predicates": [
-            {
-              "$type": "EOFDCELPGFO",
-              "CBOMLBFIPJM": 1.0,
-              "key": "_ABILITY_FallingAnthem_UseCamera",
-              "value": true
-            }
-          ]
-        },
-        {
-          "$type": "FireEffect",
-          "effectPattern": "Eff_Avatar_Catalyst_FallAnthem_Strike_01_Water",
-          "scale": 1.0,
-          "ILLLPEOODKP": "",
-          "effectTempleteID": -1.0,
-          "predicates": [
-            {
-              "$type": "EOFDCELPGFO",
-              "CBOMLBFIPJM": 0.0,
-              "compareType": "NoneOrEqual",
-              "key": "_ABILITY_FallingAnthem_UseCamera",
-              "value": true
-            }
-          ]
-        },
-        {
-          "$type": "FireEffect",
-          "effectPattern": "Eff_Avatar_Catalyst_FallAnthem_Strike_02_Water",
-          "scale": 1.0,
-          "ILLLPEOODKP": "",
-          "effectTempleteID": -1.0,
-          "predicates": [
-            {
-              "$type": "EOFDCELPGFO",
-              "CBOMLBFIPJM": 1.0,
-              "key": "_ABILITY_FallingAnthem_UseCamera",
-              "value": true
-            }
-          ]
-        }
-      ],
       "abilityMixins": [
         {
           "$type": "AvatarChangeSkillMixin",
-          "OLDBNEGFONF": 5014010,
-          "flySkillID": 5014010
+          "flySkillID": 5014010,
+          "OLDBNEGFONF": 5014010
         },
         {
           "$type": "AttachToStateIDMixin",
-          "LJPPDIGCJMJ": "",
+          "modifierName": "FallingAnthem_BS_Material",
           "stateIDs": [
             "FallingAnthem_BS"
           ],
-          "modifierName": "FallingAnthem_BS_Material"
+          "LJPPDIGCJMJ": ""
         },
         {
           "$type": "AttachToAnimatorStateIDMixin",
-          "LJPPDIGCJMJ": "",
+          "modifierName": "FallingAnthem_LoopDamage",
           "stateIDs": [
             "FallingAnthem_BS_2",
             "FallingAnthem_Loop",
             "FallingAnthem_Loop_Low"
           ],
-          "modifierName": "FallingAnthem_LoopDamage"
+          "LJPPDIGCJMJ": ""
         },
         {
           "$type": "AttachToStateIDMixin",
-          "LJPPDIGCJMJ": "",
+          "modifierName": "FallingAnthem_BS_VelocityForce_Initialize",
           "stateIDs": [
             "FallingAnthem_BS"
           ],
-          "modifierName": "FallingAnthem_BS_VelocityForce_Initialize"
+          "LJPPDIGCJMJ": ""
         },
         {
           "$type": "AttachToStateIDMixin",
-          "LJPPDIGCJMJ": "",
+          "modifierName": "FallingAnthem_Height_Detect",
           "stateIDs": [
             "FallingAnthem_BS",
             "FallingAnthem_Loop",
             "FallingAnthem_AS_1",
             "FallingAnthem_AS_2"
           ],
-          "modifierName": "FallingAnthem_Height_Detect"
+          "LJPPDIGCJMJ": ""
         },
         {
           "$type": "AttachToStateIDMixin",
-          "LJPPDIGCJMJ": "",
+          "modifierName": "FallingAnthem_FallingDamageImmune_01",
           "stateIDs": [
             "FallingAnthem_BS",
             "FallingAnthem_Loop",
             "FallingAnthem_AS_1",
             "FallingAnthem_AS_2"
           ],
-          "modifierName": "FallingAnthem_FallingDamageImmune_01"
+          "LJPPDIGCJMJ": ""
         },
         {
           "$type": "AttachToStateIDMixin",
-          "LJPPDIGCJMJ": "",
+          "modifierName": "Inertia",
           "stateIDs": [
             "FallingAnthem_BS",
             "FallingAnthem_Loop"
           ],
-          "modifierName": "Inertia"
+          "LJPPDIGCJMJ": ""
         },
         {
           "$type": "AttachToStateIDMixin",
-          "LJPPDIGCJMJ": "",
+          "modifierName": "FallingAnthem_OverHead_Camera",
           "stateIDs": [
             "FallingAnthem_BS",
             "FallingAnthem_Loop",
             "FallingAnthem_AS_1",
             "FallingAnthem_AS_2"
           ],
-          "modifierName": "FallingAnthem_OverHead_Camera"
+          "LJPPDIGCJMJ": ""
         },
         {
           "$type": "AttachToStateIDMixin",
-          "LJPPDIGCJMJ": "",
+          "modifierName": "FallingAnthem_ClearVelocityForce",
           "stateIDs": [
             "FallingAnthem_BS"
           ],
-          "modifierName": "FallingAnthem_ClearVelocityForce"
+          "LJPPDIGCJMJ": ""
         },
         {
           "$type": "AttachToAnimatorStateIDMixin",
-          "LJPPDIGCJMJ": "",
+          "modifierName": "FallingAnthem_Attach_SelfEffect",
           "stateIDs": [
             "FallingAnthem_BS_2",
             "FallingAnthem_Loop",
             "FallingAnthem_Loop_Low",
             "FallingAnthem_AS_1"
           ],
-          "modifierName": "FallingAnthem_Attach_SelfEffect"
+          "LJPPDIGCJMJ": ""
         },
         {
           "$type": "AttachToAnimatorStateIDMixin",
-          "LJPPDIGCJMJ": "",
+          "modifierName": "FallingAnthem_Remove_SelfEffect",
           "stateIDs": [
             "FallingAnthem_AS_1"
           ],
-          "modifierName": "FallingAnthem_Remove_SelfEffect"
+          "LJPPDIGCJMJ": ""
         },
         {
           "$type": "AttachToAnimatorStateIDMixin",
-          "LJPPDIGCJMJ": "",
+          "modifierName": "FallingAnthem_SetVisible",
           "stateIDs": [
             "FallingAnthem_BS_2",
             "FallingAnthem_Loop"
           ],
-          "modifierName": "FallingAnthem_SetVisible"
+          "LJPPDIGCJMJ": ""
         },
         {
           "$type": "AttachToStateIDMixin",
-          "LJPPDIGCJMJ": "",
+          "modifierName": "HideWeapon",
           "stateIDs": [
             "FallingAnthem_BS",
             "FallingAnthem_Loop",
             "FallingAnthem_AS_1"
           ],
-          "modifierName": "HideWeapon"
+          "LJPPDIGCJMJ": ""
         }
       ],
       "abilityName": "Avatar_Barbara_FallingAnthem",
@@ -3025,7 +2411,621 @@
         "FallingAnthem_FallingDamageRatio_Lv3": -0.8,
         "FallingAnthem_FallingDamageRatio_Lv4": -0.6,
         "FallingAnthem_FallingDamageRatio": 0.0
-      }
+      },
+      "modifiers": {
+        "HideWeapon": {
+          "elementDurability": 100.0,
+          "modifierName": "",
+          "onAdded": [
+            {
+              "$type": "TriggerHideWeapon",
+              "partNames": [
+                "equip01",
+                "equip02",
+                "sheathPoint"
+              ]
+            }
+          ],
+          "onRemoved": [
+            {
+              "$type": "TriggerHideWeapon",
+              "partNames": [
+                "equip01",
+                "equip02",
+                "sheathPoint"
+              ],
+              "visible": true
+            }
+          ],
+          "AIHNJLDFEGJ": 0.0
+        },
+        "FallingAnthem_SetVisible": {
+          "elementDurability": 100.0,
+          "modifierName": "",
+          "onAdded": [
+            {
+              "$type": "TriggerSetVisible",
+              "doOffStage": true
+            }
+          ],
+          "onRemoved": [
+            {
+              "$type": "TriggerSetVisible",
+              "doOffStage": true,
+              "visible": true
+            }
+          ],
+          "AIHNJLDFEGJ": 0.0
+        },
+        "FallingAnthem_BS_Material": {
+          "elementDurability": 100.0,
+          "modifierName": "",
+          "onAdded": [
+            {
+              "$type": "FireEffect",
+              "effectPattern": "Eff_Avatar_Catalyst_FallAnthem_BS_Water",
+              "effectTempleteID": -1.0,
+              "scale": 1.0,
+              "ILLLPEOODKP": ""
+            },
+            {
+              "$type": "ApplyModifier",
+              "modifierName": "FallingAnthem_BSCameraRadialBlur"
+            }
+          ],
+          "AIHNJLDFEGJ": 0.0
+        },
+        "FallingAnthem_BS_VelocityForce_Initialize": {
+          "elementDurability": 100.0,
+          "modifierName": "",
+          "onAdded": [
+            {
+              "$type": "RemoveVelocityForce",
+              "forces": [
+                "RushMoveType"
+              ]
+            }
+          ],
+          "properties": {
+            "Actor_AddGravityScale": -2.0
+          },
+          "AIHNJLDFEGJ": 0.0
+        },
+        "FallingAnthem_LoopDamage": {
+          "elementDurability": 100.0,
+          "modifierName": "",
+          "onThinkInterval": [
+            {
+              "$type": "TriggerAttackEvent",
+              "attackEvent": {
+                "attackInfo": {
+                  "attackProperty": {
+                    "damagePercentage": "FallingAnthem_Normal_Loop_Damage",
+                    "damagePercentageRatio": 0.0,
+                    "elementDurability": 0.0,
+                    "elementType": "Water",
+                    "enBreak": 5.0,
+                    "strikeType": "Default",
+                    "IIPHCFEONLK": 0.0
+                  },
+                  "attackTag": "FallingAttack",
+                  "attenuationGroup": "default",
+                  "attenuationTag": "",
+                  "hitPattern": {
+                    "hitHaltTimeScale": 0.02,
+                    "hitImpulseType": "LV2",
+                    "onHitEffectName": "default",
+                    "FLFCIDDNMNA": ""
+                  }
+                },
+                "attackPattern": {
+                  "$type": "ConfigAttackSphere",
+                  "born": {
+                    "$type": "ConfigBornBySelf",
+                    "offset": {
+                      "x": 0.0,
+                      "y": 0.0,
+                      "z": 0.0
+                    }
+                  },
+                  "radius": 1.5,
+                  "triggerType": "TriggerNoRepeat"
+                }
+              },
+              "targetType": "Enemy"
+            }
+          ],
+          "thinkInterval": 0.3,
+          "AIHNJLDFEGJ": 0.0
+        },
+        "FallingAnthem_FallingDamageImmune_01": {
+          "elementDurability": 100.0,
+          "modifierName": "",
+          "onAdded": [
+            {
+              "$type": "ClearGlobalValue",
+              "key": "_ABILITY_FallingAttack_Altitude"
+            },
+            {
+              "$type": "AddGlobalValue",
+              "key": "_ABILITY_FallingAttack_Altitude",
+              "maxValue": "FallingAnthem_FallingDamageRatio_Lv0",
+              "minValue": "FallingAnthem_FallingDamageRatio_Lv0",
+              "predicates": [
+                {
+                  "$type": "ByTargetAltitude",
+                  "logic": "LesserOrEqual",
+                  "value": "FallingAnthem_Altitude_Lv0"
+                }
+              ],
+              "useLimitRange": true,
+              "value": "FallingAnthem_FallingDamageRatio_Lv0"
+            },
+            {
+              "$type": "AddGlobalValue",
+              "key": "_ABILITY_FallingAttack_Altitude",
+              "maxValue": "FallingAnthem_FallingDamageRatio_Lv1",
+              "minValue": "FallingAnthem_FallingDamageRatio_Lv1",
+              "predicates": [
+                {
+                  "$type": "ByTargetAltitude",
+                  "logic": "LesserOrEqual",
+                  "value": "FallingAnthem_Altitude_Lv1"
+                },
+                {
+                  "$type": "ByTargetAltitude",
+                  "value": "FallingAnthem_Altitude_Lv0"
+                }
+              ],
+              "useLimitRange": true,
+              "value": "FallingAnthem_FallingDamageRatio_Lv1"
+            },
+            {
+              "$type": "AddGlobalValue",
+              "key": "_ABILITY_FallingAttack_Altitude",
+              "maxValue": "FallingAnthem_FallingDamageRatio_Lv2",
+              "minValue": "FallingAnthem_FallingDamageRatio_Lv2",
+              "predicates": [
+                {
+                  "$type": "ByTargetAltitude",
+                  "logic": "LesserOrEqual",
+                  "value": "FallingAnthem_Altitude_Lv2"
+                },
+                {
+                  "$type": "ByTargetAltitude",
+                  "value": "FallingAnthem_Altitude_Lv1"
+                }
+              ],
+              "useLimitRange": true,
+              "value": "FallingAnthem_FallingDamageRatio_Lv2"
+            },
+            {
+              "$type": "AddGlobalValue",
+              "key": "_ABILITY_FallingAttack_Altitude",
+              "maxValue": "FallingAnthem_FallingDamageRatio_Lv3",
+              "minValue": "FallingAnthem_FallingDamageRatio_Lv3",
+              "predicates": [
+                {
+                  "$type": "ByTargetAltitude",
+                  "logic": "LesserOrEqual",
+                  "value": "FallingAnthem_Altitude_Lv3"
+                },
+                {
+                  "$type": "ByTargetAltitude",
+                  "value": "FallingAnthem_Altitude_Lv2"
+                }
+              ],
+              "useLimitRange": true,
+              "value": "FallingAnthem_FallingDamageRatio_Lv3"
+            },
+            {
+              "$type": "AddGlobalValue",
+              "key": "_ABILITY_FallingAttack_Altitude",
+              "maxValue": "FallingAnthem_FallingDamageRatio_Lv4",
+              "minValue": "FallingAnthem_FallingDamageRatio_Lv4",
+              "predicates": [
+                {
+                  "$type": "ByTargetAltitude",
+                  "value": "FallingAnthem_Altitude_Lv3"
+                }
+              ],
+              "useLimitRange": true,
+              "value": "FallingAnthem_FallingDamageRatio_Lv4"
+            },
+            {
+              "$type": "AttachModifier",
+              "modifierName": "FallingAnthem_FallingDamageImmune_02"
+            }
+          ],
+          "AIHNJLDFEGJ": 0.0
+        },
+        "FallingAnthem_FallingDamageImmune_02": {
+          "elementDurability": 100.0,
+          "modifierName": "",
+          "onAdded": [
+            {
+              "$type": "SetGlobalValueToOverrideMap",
+              "abilityName": "",
+              "globalValueKey": "_ABILITY_FallingAttack_Altitude",
+              "overrideMapKey": "FallingAnthem_FallingDamageRatio"
+            },
+            {
+              "$type": "AttachModifier",
+              "modifierName": "FallingAnthem_FallingDamageImmune_03"
+            }
+          ],
+          "AIHNJLDFEGJ": 0.0
+        },
+        "FallingAnthem_FallingDamageImmune_03": {
+          "elementDurability": 100.0,
+          "modifierName": "",
+          "properties": {
+            "Actor_FallingDamageRatio": "FallingAnthem_FallingDamageRatio"
+          },
+          "AIHNJLDFEGJ": 0.0
+        },
+        "Inertia": {
+          "elementDurability": 100.0,
+          "modifierMixins": [
+            {
+              "$type": "ApplyInertiaVelocityMixin",
+              "JOHELJNOOBE": false,
+              "LBKNDHDOIIG": false
+            }
+          ],
+          "modifierName": "",
+          "AIHNJLDFEGJ": 0.0
+        },
+        "FallingAnthem_Height_Detect": {
+          "elementDurability": 100.0,
+          "modifierName": "",
+          "onAdded": [
+            {
+              "$type": "AddGlobalValue",
+              "key": "_ABILITY_FallingAnthem_UseCamera",
+              "maxValue": 0.0,
+              "minValue": 0.0,
+              "predicates": [
+                {
+                  "$type": "ByTargetAltitude",
+                  "logic": "LesserOrEqual",
+                  "value": 2.4
+                }
+              ],
+              "useLimitRange": true,
+              "value": 0.0
+            },
+            {
+              "$type": "AddGlobalValue",
+              "key": "_ABILITY_FallingAnthem_UseCamera",
+              "maxValue": 1.0,
+              "minValue": 0.0,
+              "predicates": [
+                {
+                  "$type": "ByTargetAltitude",
+                  "value": 2.4
+                }
+              ],
+              "useLimitRange": true,
+              "value": 5.0
+            },
+            {
+              "$type": "SetAnimatorFloat",
+              "floatID": "FallingAnthem_UseCamera",
+              "predicates": [
+                {
+                  "$type": "ByTargetAltitude",
+                  "logic": "LesserOrEqual",
+                  "value": 2.4
+                }
+              ],
+              "value": 0.0
+            },
+            {
+              "$type": "SetAnimatorFloat",
+              "floatID": "FallingAnthem_UseCamera",
+              "predicates": [
+                {
+                  "$type": "ByTargetAltitude",
+                  "value": 2.4
+                }
+              ],
+              "value": 1.0
+            }
+          ],
+          "onRemoved": [
+            {
+              "$type": "SetAnimatorFloat",
+              "floatID": "FallingAnthem_UseCamera",
+              "value": 0.0
+            },
+            {
+              "$type": "AddGlobalValue",
+              "key": "_ABILITY_FallingAnthem_UseCamera",
+              "maxValue": 0.0,
+              "minValue": 0.0,
+              "useLimitRange": true,
+              "value": 0.0
+            }
+          ],
+          "AIHNJLDFEGJ": 0.0
+        },
+        "FallingAnthem_OverHead_Camera": {
+          "elementDurability": 100.0,
+          "modifierName": "",
+          "onAdded": [
+            {
+              "$type": "AvatarCameraParam",
+              "cameraParam": {
+                "forceRadius": 4.5,
+                "forceRadiusDuration": 0.2,
+                "shouldKeepForceRadius": true
+              },
+              "predicates": [
+                {
+                  "$type": "ByAnimatorFloat",
+                  "logic": "Equal",
+                  "parameter": "FallingAnthem_UseCamera",
+                  "value": 1.0
+                }
+              ]
+            }
+          ],
+          "AIHNJLDFEGJ": 0.0
+        },
+        "FallingAnthem_OverHead_Camera_Remover": {
+          "elementDurability": 100.0,
+          "modifierName": "",
+          "onAdded": [
+            {
+              "$type": "AvatarExitCameraShot",
+              "doOffStage": true
+            }
+          ],
+          "AIHNJLDFEGJ": 0.0
+        },
+        "FallingAnthem_Landed_Camera": {
+          "elementDurability": 100.0,
+          "modifierName": "",
+          "onAdded": [
+            {
+              "$type": "AvatarCameraParam",
+              "cameraParam": {
+                "forceRadius": 6.0,
+                "forceRadiusDuration": 0.1,
+                "shouldKeepForceRadius": true
+              },
+              "predicates": [
+                {
+                  "$type": "ByAnimatorFloat",
+                  "logic": "Equal",
+                  "parameter": "FallingAnthem_UseCamera",
+                  "value": 1.0
+                }
+              ]
+            }
+          ],
+          "AIHNJLDFEGJ": 0.0
+        },
+        "FallingAnthem_ClearVelocityForce": {
+          "elementDurability": 100.0,
+          "modifierName": "",
+          "onAdded": [
+            {
+              "$type": "RemoveVelocityForce",
+              "forces": [
+                "RushMoveType",
+                "InertiaType"
+              ]
+            }
+          ],
+          "AIHNJLDFEGJ": 0.0
+        },
+        "FallingAnthem_Attach_SelfEffect": {
+          "elementDurability": 100.0,
+          "modifierName": "",
+          "onAdded": [
+            {
+              "$type": "AttachEffect",
+              "effectPattern": "Eff_Avatar_Catalyst_FallAnthem_Self_Water",
+              "effectTempleteID": -1.0,
+              "scale": 1.0,
+              "ILLLPEOODKP": ""
+            }
+          ],
+          "AIHNJLDFEGJ": 0.0
+        },
+        "FallingAnthem_Remove_SelfEffect": {
+          "duration": 0.1,
+          "elementDurability": 100.0,
+          "modifierName": "",
+          "onRemoved": [
+            {
+              "$type": "RemoveModifier",
+              "modifierName": "FallingAnthem_Attach_SelfEffect"
+            }
+          ],
+          "AIHNJLDFEGJ": 0.0
+        },
+        "FallingAnthem_BSCameraRadialBlur": {
+          "duration": 0.3,
+          "elementDurability": 100.0,
+          "modifierMixins": [
+            {
+              "$type": "CameraBlurMixin",
+              "cameraRadialBlur": {
+                "fadeTime": 0.15,
+                "power": 0.3
+              }
+            }
+          ],
+          "modifierName": "",
+          "AIHNJLDFEGJ": 0.0
+        }
+      },
+      "onAbilityStart": [
+        {
+          "$type": "TriggerAttackEvent",
+          "attackEvent": {
+            "attackInfo": {
+              "attackProperty": {
+                "damagePercentage": "FallingAnthem_Normal_Rank_1_Damage",
+                "damagePercentageRatio": 0.0,
+                "elementDurability": 25.0,
+                "elementType": "Water",
+                "enBreak": 50.0,
+                "strikeType": "Default",
+                "IIPHCFEONLK": 0.0
+              },
+              "attackTag": "FallingAttack",
+              "attenuationGroup": "default",
+              "attenuationTag": "",
+              "cameraShake": {
+                "extension": {
+                  "baseCycle": 0.24,
+                  "cycleDamping": 0.0,
+                  "rangeAttenuation": 0.3
+                },
+                "shakeDir": {
+                  "y": 1.0
+                },
+                "shakeDistance": 30.0,
+                "shakeRange": 0.24,
+                "shakeTime": 0.12,
+                "shakeType": "CustomVector",
+                "MNKFEFOKFKP": ""
+              },
+              "forceCameraShake": true,
+              "hitPattern": {
+                "hitHaltTimeScale": 0.1,
+                "hitImpulseType": "LV3",
+                "onHitEffectName": "none",
+                "FLFCIDDNMNA": ""
+              }
+            },
+            "attackPattern": {
+              "$type": "ConfigAttackCircle",
+              "born": {
+                "$type": "ConfigBornByTarget",
+                "offset": {
+                  "x": 0.0,
+                  "y": -0.5,
+                  "z": 0.0
+                }
+              },
+              "height": 2.0,
+              "radius": 3.0,
+              "triggerType": "TriggerNoRepeat"
+            }
+          },
+          "predicates": [
+            {
+              "$type": "ByTargetGlobalValue",
+              "compareType": "NoneOrEqual",
+              "forceByCaster": true,
+              "key": "_ABILITY_FallingAnthem_UseCamera",
+              "value": 0.0
+            }
+          ],
+          "targetType": "Enemy"
+        },
+        {
+          "$type": "TriggerAttackEvent",
+          "attackEvent": {
+            "attackInfo": {
+              "attackProperty": {
+                "damagePercentage": "FallingAnthem_Normal_Rank_2_Damage",
+                "damagePercentageRatio": 0.0,
+                "elementDurability": 25.0,
+                "elementType": "Water",
+                "enBreak": 100.0,
+                "strikeType": "Default",
+                "IIPHCFEONLK": 0.0
+              },
+              "attackTag": "FallingAttack",
+              "attenuationGroup": "default",
+              "attenuationTag": "",
+              "cameraShake": {
+                "extension": {
+                  "baseCycle": 0.4,
+                  "cycleDamping": 0.0,
+                  "rangeAttenuation": 0.3
+                },
+                "shakeDir": {
+                  "y": 1.0,
+                  "z": 1.0
+                },
+                "shakeDistance": 30.0,
+                "shakeRange": 0.5,
+                "shakeTime": 0.2,
+                "shakeType": "CustomVector",
+                "MNKFEFOKFKP": ""
+              },
+              "forceCameraShake": true,
+              "hitPattern": {
+                "hitHaltTimeScale": 0.1,
+                "hitImpulseType": "LV4",
+                "onHitEffectName": "none",
+                "FLFCIDDNMNA": ""
+              }
+            },
+            "attackPattern": {
+              "$type": "ConfigAttackCircle",
+              "born": {
+                "$type": "ConfigBornByTarget",
+                "offset": {
+                  "x": 0.0,
+                  "y": -0.5,
+                  "z": 0.0
+                }
+              },
+              "height": 2.0,
+              "radius": 3.5,
+              "triggerType": "TriggerNoRepeat"
+            }
+          },
+          "predicates": [
+            {
+              "$type": "ByTargetGlobalValue",
+              "forceByCaster": true,
+              "key": "_ABILITY_FallingAnthem_UseCamera",
+              "value": 1.0
+            }
+          ],
+          "targetType": "Enemy"
+        },
+        {
+          "$type": "FireEffect",
+          "effectPattern": "Eff_Avatar_Catalyst_FallAnthem_Strike_01_Water",
+          "effectTempleteID": -1.0,
+          "predicates": [
+            {
+              "$type": "ByTargetGlobalValue",
+              "compareType": "NoneOrEqual",
+              "forceByCaster": true,
+              "key": "_ABILITY_FallingAnthem_UseCamera",
+              "value": 0.0
+            }
+          ],
+          "scale": 1.0,
+          "ILLLPEOODKP": ""
+        },
+        {
+          "$type": "FireEffect",
+          "effectPattern": "Eff_Avatar_Catalyst_FallAnthem_Strike_02_Water",
+          "effectTempleteID": -1.0,
+          "predicates": [
+            {
+              "$type": "ByTargetGlobalValue",
+              "forceByCaster": true,
+              "key": "_ABILITY_FallingAnthem_UseCamera",
+              "value": 1.0
+            }
+          ],
+          "scale": 1.0,
+          "ILLLPEOODKP": ""
+        }
+      ]
     }
   }
 ]

@@ -1,6 +1,13 @@
 [
   {
     "Default": {
+      "abilityMixins": [
+        {
+          "$type": "AttachToGadgetStateMixin",
+          "modifierName": "Controller"
+        }
+      ],
+      "abilityName": "SceneObj_PacMan_DeathTrigger",
       "modifiers": {
         "Controller": {
           "elementDurability": 100.0,
@@ -9,30 +16,23 @@
         },
         "UNIQUE_ChangeDieFlag": {
           "duration": 0.1,
+          "elementDurability": 100.0,
+          "isUnique": true,
+          "modifierName": "",
           "onAdded": [
             {
               "$type": "SetGlobalValue",
               "key": "Team_Is_Die_PacMan",
-              "minValue": 0.0,
               "maxValue": 0.0,
-              "CBOMLBFIPJM": 1.0
+              "minValue": 0.0,
+              "value": 1.0
             }
           ],
           "stacking": "Unique",
-          "elementDurability": 100.0,
-          "modifierName": "",
-          "isUnique": true,
           "AIHNJLDFEGJ": 0.0
         }
       },
-      "abilityMixins": [
-        {
-          "$type": "AttachToGadgetStateMixin",
-          "modifierName": "Controller"
-        }
-      ],
-      "abilityName": "SceneObj_PacMan_DeathTrigger",
-      "PFJMEMFDGOH": [
+      "onFieldEnter": [
         {
           "$type": "Predicated",
           "successActions": [
@@ -46,21 +46,46 @@
               "content": "PacMan DieTrigger Team Enter"
             }
           ],
+          "target": "Target",
           "targetPredicates": [
             {
-              "$type": "DEOFBICNFHF",
+              "$type": "ByEntityTypes",
               "entityTypes": [
                 "Avatar"
               ]
             }
-          ],
-          "target": "Target"
+          ]
         }
       ]
     }
   },
   {
     "Default": {
+      "abilityMixins": [
+        {
+          "$type": "AttachToGadgetStateMixin",
+          "modifierName": "Controller"
+        },
+        {
+          "$type": "AttachToGadgetStateMixin",
+          "gadgetState": 201,
+          "modifierName": "DelayKill"
+        },
+        {
+          "$type": "AttachModifierToSelfGlobalValueNoInitMixin",
+          "globalValueKey": "Is_Pacman_Bean_Die",
+          "modifierNameSteps": [
+            "Active",
+            "Inactive"
+          ],
+          "valueSteps": [
+            -0.5,
+            0.5,
+            1.5
+          ]
+        }
+      ],
+      "abilityName": "SceneObj_PacMan_Beans",
       "modifiers": {
         "Controller": {
           "elementDurability": 100.0,
@@ -69,59 +94,72 @@
         },
         "DelayKill": {
           "duration": 2.0,
+          "elementDurability": 100.0,
+          "modifierName": "",
           "onRemoved": [
             {
               "$type": "KillSelf"
             }
           ],
-          "elementDurability": 100.0,
-          "modifierName": "",
           "AIHNJLDFEGJ": 0.0
         },
         "Inactive": {
+          "elementDurability": 100.0,
+          "modifierName": "",
           "onAdded": [
             {
               "$type": "TriggerSetRenderersEnable",
-              "HLLMGLJLFKK": [
+              "doOffStage": true,
+              "renderNames": [
                 "Property_Ani_Prop_Ballon_01_01_Vo"
-              ],
-              "doOffStage": true
+              ]
             },
             {
               "$type": "ChangeGadgetState",
-              "ANIHOKMEKHK": 201
+              "state": 201
             },
             {
               "$type": "FireEffect",
               "effectPattern": "Eff_SceneObject_PacManBeans_Destroy",
+              "effectTempleteID": -1.0,
               "scale": 1.0,
-              "ILLLPEOODKP": "",
-              "effectTempleteID": -1.0
+              "ILLLPEOODKP": ""
             }
           ],
-          "elementDurability": 100.0,
-          "modifierName": "",
           "AIHNJLDFEGJ": 0.0
         },
         "Active": {
+          "elementDurability": 100.0,
+          "modifierName": "",
           "onAdded": [
             {
               "$type": "TriggerSetRenderersEnable",
-              "HLLMGLJLFKK": [
+              "doOffStage": true,
+              "renderNames": [
                 "Property_Ani_Prop_Ballon_01_01_Vo"
               ],
-              "setEnable": true,
-              "doOffStage": true
+              "setEnable": true
             },
             {
               "$type": "ChangeGadgetState"
             }
           ],
-          "elementDurability": 100.0,
-          "modifierName": "",
           "AIHNJLDFEGJ": 0.0
         }
       },
+      "onAdded": [
+        {
+          "$type": "SetGlobalValue",
+          "key": "Is_Pacman_Bean_Die",
+          "maxValue": 0.0,
+          "minValue": 0.0,
+          "value": 0.0
+        }
+      ]
+    }
+  },
+  {
+    "Default": {
       "abilityMixins": [
         {
           "$type": "AttachToGadgetStateMixin",
@@ -129,11 +167,12 @@
         },
         {
           "$type": "AttachToGadgetStateMixin",
-          "modifierName": "DelayKill",
-          "gadgetState": 201
+          "gadgetState": 201,
+          "modifierName": "DelayKill"
         },
         {
           "$type": "AttachModifierToSelfGlobalValueNoInitMixin",
+          "globalValueKey": "Is_Pacman_Bean_Die",
           "modifierNameSteps": [
             "Active",
             "Inactive"
@@ -142,24 +181,10 @@
             -0.5,
             0.5,
             1.5
-          ],
-          "globalValueKey": "Is_Pacman_Bean_Die"
+          ]
         }
       ],
-      "abilityName": "SceneObj_PacMan_Beans",
-      "onAdded": [
-        {
-          "$type": "SetGlobalValue",
-          "key": "Is_Pacman_Bean_Die",
-          "minValue": 0.0,
-          "maxValue": 0.0,
-          "CBOMLBFIPJM": 0.0
-        }
-      ]
-    }
-  },
-  {
-    "Default": {
+      "abilityName": "SceneObj_PacMan_Big_Beans",
       "modifiers": {
         "Controller": {
           "elementDurability": 100.0,
@@ -168,97 +193,92 @@
         },
         "DelayKill": {
           "duration": 2.0,
+          "elementDurability": 100.0,
+          "modifierName": "",
           "onRemoved": [
             {
               "$type": "KillSelf"
             }
           ],
-          "elementDurability": 100.0,
-          "modifierName": "",
           "AIHNJLDFEGJ": 0.0
         },
         "Inactive": {
+          "elementDurability": 100.0,
+          "modifierName": "",
           "onAdded": [
             {
               "$type": "TriggerSetRenderersEnable",
-              "HLLMGLJLFKK": [
+              "doOffStage": true,
+              "renderNames": [
                 "Property_Ani_Prop_Ballon_01_02_Vo"
-              ],
-              "doOffStage": true
+              ]
             },
             {
               "$type": "ChangeGadgetState",
-              "ANIHOKMEKHK": 201
+              "state": 201
             },
             {
               "$type": "FireEffect",
               "effectPattern": "Eff_SceneObj_Balloon_02_Disappear",
+              "effectTempleteID": -1.0,
               "scale": 1.0,
-              "ILLLPEOODKP": "",
-              "effectTempleteID": -1.0
+              "ILLLPEOODKP": ""
             }
           ],
-          "elementDurability": 100.0,
-          "modifierName": "",
           "AIHNJLDFEGJ": 0.0
         },
         "Active": {
+          "elementDurability": 100.0,
+          "modifierName": "",
           "onAdded": [
             {
               "$type": "TriggerSetRenderersEnable",
-              "HLLMGLJLFKK": [
+              "doOffStage": true,
+              "renderNames": [
                 "Property_Ani_Prop_Ballon_01_02_Vo"
               ],
-              "setEnable": true,
-              "doOffStage": true
+              "setEnable": true
             },
             {
               "$type": "ChangeGadgetState"
             }
           ],
-          "elementDurability": 100.0,
-          "modifierName": "",
           "AIHNJLDFEGJ": 0.0
         }
       },
-      "abilityMixins": [
-        {
-          "$type": "AttachToGadgetStateMixin",
-          "modifierName": "Controller"
-        },
-        {
-          "$type": "AttachToGadgetStateMixin",
-          "modifierName": "DelayKill",
-          "gadgetState": 201
-        },
-        {
-          "$type": "AttachModifierToSelfGlobalValueNoInitMixin",
-          "modifierNameSteps": [
-            "Active",
-            "Inactive"
-          ],
-          "valueSteps": [
-            -0.5,
-            0.5,
-            1.5
-          ],
-          "globalValueKey": "Is_Pacman_Bean_Die"
-        }
-      ],
-      "abilityName": "SceneObj_PacMan_Big_Beans",
       "onAdded": [
         {
           "$type": "SetGlobalValue",
           "key": "Is_Pacman_Bean_Die",
-          "minValue": 0.0,
           "maxValue": 0.0,
-          "CBOMLBFIPJM": 0.0
+          "minValue": 0.0,
+          "value": 0.0
         }
       ]
     }
   },
   {
     "Default": {
+      "abilityMixins": [
+        {
+          "$type": "AttachToGadgetStateMixin",
+          "modifierName": "Controller"
+        },
+        {
+          "$type": "AttachModifierToSelfGlobalValueNoInitMixin",
+          "globalValueKey": "Is_Pacman_BuffBall_Active",
+          "modifierNameSteps": [
+            "Inactive",
+            "Active"
+          ],
+          "valueSteps": [
+            -0.5,
+            0.5,
+            1.5
+          ]
+        }
+      ],
+      "abilityName": "SceneObj_PacMan_Super_Jump_Ball",
       "modifiers": {
         "Controller": {
           "elementDurability": 100.0,
@@ -267,83 +287,83 @@
         },
         "Inactive": {
           "duration": 20.0,
-          "onRemoved": [
-            {
-              "$type": "SetGlobalValue",
-              "key": "Is_Pacman_BuffBall_Active",
-              "minValue": 0.0,
-              "maxValue": 0.0,
-              "CBOMLBFIPJM": 1.0
-            }
-          ],
+          "elementDurability": 100.0,
+          "modifierName": "",
           "onAdded": [
             {
               "$type": "FireEffect",
               "effectPattern": "Eff_SceneObj_PropGoldShoes_01_Disappear",
+              "effectTempleteID": -1.0,
               "scale": 1.0,
-              "ILLLPEOODKP": "",
-              "effectTempleteID": -1.0
+              "ILLLPEOODKP": ""
             }
           ],
-          "elementDurability": 100.0,
-          "modifierName": "",
+          "onRemoved": [
+            {
+              "$type": "SetGlobalValue",
+              "key": "Is_Pacman_BuffBall_Active",
+              "maxValue": 0.0,
+              "minValue": 0.0,
+              "value": 1.0
+            }
+          ],
           "AIHNJLDFEGJ": 0.0
         },
         "Active": {
+          "elementDurability": 100.0,
+          "modifierName": "",
           "onAdded": [
             {
               "$type": "AttachEffect",
-              "ILLLPEOODKP": "",
-              "scale": 1.0,
               "effectPattern": "Eff_SceneObj_UGCjumpbuff_Idle",
-              "effectTempleteID": -1.0
+              "effectTempleteID": -1.0,
+              "scale": 1.0,
+              "ILLLPEOODKP": ""
             }
           ],
-          "elementDurability": 100.0,
-          "modifierName": "",
           "AIHNJLDFEGJ": 0.0
         }
       },
-      "abilityMixins": [
-        {
-          "$type": "AttachToGadgetStateMixin",
-          "modifierName": "Controller"
-        },
-        {
-          "$type": "AttachModifierToSelfGlobalValueNoInitMixin",
-          "modifierNameSteps": [
-            "Inactive",
-            "Active"
-          ],
-          "valueSteps": [
-            -0.5,
-            0.5,
-            1.5
-          ],
-          "globalValueKey": "Is_Pacman_BuffBall_Active"
-        }
-      ],
-      "abilityName": "SceneObj_PacMan_Super_Jump_Ball",
       "onAdded": [
         {
           "$type": "SetGlobalValue",
           "key": "Is_Pacman_BuffBall_Active",
-          "minValue": 0.0,
           "maxValue": 0.0,
-          "CBOMLBFIPJM": 1.0
+          "minValue": 0.0,
+          "value": 1.0
         },
         {
           "$type": "SetGlobalValue",
           "key": "Is_Pacman_Jump_Ball",
-          "minValue": 0.0,
           "maxValue": 0.0,
-          "CBOMLBFIPJM": 1.0
+          "minValue": 0.0,
+          "value": 1.0
         }
       ]
     }
   },
   {
     "Default": {
+      "abilityMixins": [
+        {
+          "$type": "AttachToGadgetStateMixin",
+          "modifierName": "Controller"
+        },
+        {
+          "$type": "AttachModifierToSelfGlobalValueNoInitMixin",
+          "globalValueKey": "Is_Pacman_BuffBall_Active",
+          "modifierNameSteps": [
+            "Inactive",
+            "Active"
+          ],
+          "valueSteps": [
+            -0.5,
+            0.5,
+            1.5
+          ]
+        }
+      ],
+      "abilityName": "SceneObj_PacMan_Speed_Up_Ball",
       "modifiers": {
         "Controller": {
           "elementDurability": 100.0,
@@ -352,54 +372,74 @@
         },
         "Inactive": {
           "duration": 10.0,
-          "onRemoved": [
-            {
-              "$type": "SetGlobalValue",
-              "key": "Is_Pacman_BuffBall_Active",
-              "minValue": 0.0,
-              "maxValue": 0.0,
-              "CBOMLBFIPJM": 1.0
-            }
-          ],
+          "elementDurability": 100.0,
+          "modifierName": "",
           "onAdded": [
             {
               "$type": "FireEffect",
               "effectPattern": "Eff_SceneObj_PropGoldShoes_01_Disappear",
+              "effectTempleteID": -1.0,
               "scale": 1.0,
-              "ILLLPEOODKP": "",
-              "effectTempleteID": -1.0
+              "ILLLPEOODKP": ""
             }
           ],
-          "elementDurability": 100.0,
-          "modifierName": "",
+          "onRemoved": [
+            {
+              "$type": "SetGlobalValue",
+              "key": "Is_Pacman_BuffBall_Active",
+              "maxValue": 0.0,
+              "minValue": 0.0,
+              "value": 1.0
+            }
+          ],
           "AIHNJLDFEGJ": 0.0
         },
         "Active": {
-          "onRemoved": [
-            {
-              "$type": "ServerLuaCall",
-              "param1": 70290840.0,
-              "param2": 0.0,
-              "paramNum": 1,
-              "funcName": "SLC_OnPlayerGetBuffBall",
-              "AHCNJKIEMPP": 0.0,
-              "luaCallType": "FromGroup"
-            }
-          ],
+          "elementDurability": 100.0,
+          "modifierName": "",
           "onAdded": [
             {
               "$type": "AttachEffect",
-              "ILLLPEOODKP": "",
-              "scale": 1.0,
               "effectPattern": "Eff_SceneObj_UGCjumpbuff_Idle",
-              "effectTempleteID": -1.0
+              "effectTempleteID": -1.0,
+              "scale": 1.0,
+              "ILLLPEOODKP": ""
             }
           ],
-          "elementDurability": 100.0,
-          "modifierName": "",
+          "onRemoved": [
+            {
+              "$type": "ServerLuaCall",
+              "funcName": "SLC_OnPlayerGetBuffBall",
+              "luaCallType": "FromGroup",
+              "param1": 70290840.0,
+              "param2": 0.0,
+              "param3": 0.0,
+              "paramNum": 1
+            }
+          ],
           "AIHNJLDFEGJ": 0.0
         }
       },
+      "onAdded": [
+        {
+          "$type": "SetGlobalValue",
+          "key": "Is_Pacman_BuffBall_Active",
+          "maxValue": 0.0,
+          "minValue": 0.0,
+          "value": 1.0
+        },
+        {
+          "$type": "SetGlobalValue",
+          "key": "Is_Pacman_Speed_Ball",
+          "maxValue": 0.0,
+          "minValue": 0.0,
+          "value": 1.0
+        }
+      ]
+    }
+  },
+  {
+    "Default": {
       "abilityMixins": [
         {
           "$type": "AttachToGadgetStateMixin",
@@ -407,6 +447,7 @@
         },
         {
           "$type": "AttachModifierToSelfGlobalValueNoInitMixin",
+          "globalValueKey": "Is_Pacman_BuffBall_Active",
           "modifierNameSteps": [
             "Inactive",
             "Active"
@@ -415,31 +456,10 @@
             -0.5,
             0.5,
             1.5
-          ],
-          "globalValueKey": "Is_Pacman_BuffBall_Active"
+          ]
         }
       ],
-      "abilityName": "SceneObj_PacMan_Speed_Up_Ball",
-      "onAdded": [
-        {
-          "$type": "SetGlobalValue",
-          "key": "Is_Pacman_BuffBall_Active",
-          "minValue": 0.0,
-          "maxValue": 0.0,
-          "CBOMLBFIPJM": 1.0
-        },
-        {
-          "$type": "SetGlobalValue",
-          "key": "Is_Pacman_Speed_Ball",
-          "minValue": 0.0,
-          "maxValue": 0.0,
-          "CBOMLBFIPJM": 1.0
-        }
-      ]
-    }
-  },
-  {
-    "Default": {
+      "abilityName": "SceneObj_PacMan_Magnetic_Ball",
       "modifiers": {
         "Controller": {
           "elementDurability": 100.0,
@@ -448,94 +468,75 @@
         },
         "Inactive": {
           "duration": 10.0,
-          "onRemoved": [
-            {
-              "$type": "SetGlobalValue",
-              "key": "Is_Pacman_BuffBall_Active",
-              "minValue": 0.0,
-              "maxValue": 0.0,
-              "CBOMLBFIPJM": 1.0
-            }
-          ],
+          "elementDurability": 100.0,
+          "modifierName": "",
           "onAdded": [
             {
               "$type": "FireEffect",
               "effectPattern": "Eff_SceneObj_ExpandAccessCoin_01_Dis",
+              "effectTempleteID": -1.0,
               "scale": 1.0,
-              "ILLLPEOODKP": "",
-              "effectTempleteID": -1.0
+              "ILLLPEOODKP": ""
             }
           ],
-          "elementDurability": 100.0,
-          "modifierName": "",
+          "onRemoved": [
+            {
+              "$type": "SetGlobalValue",
+              "key": "Is_Pacman_BuffBall_Active",
+              "maxValue": 0.0,
+              "minValue": 0.0,
+              "value": 1.0
+            }
+          ],
           "AIHNJLDFEGJ": 0.0
         },
         "Active": {
-          "onRemoved": [
-            {
-              "$type": "ServerLuaCall",
-              "param1": 70290840.0,
-              "param2": 0.0,
-              "paramNum": 1,
-              "funcName": "SLC_OnPlayerGetBuffBall",
-              "AHCNJKIEMPP": 0.0,
-              "luaCallType": "FromGroup"
-            }
-          ],
+          "elementDurability": 100.0,
+          "modifierName": "",
           "onAdded": [
             {
               "$type": "AttachEffect",
-              "ILLLPEOODKP": "",
-              "scale": 1.0,
               "effectPattern": "Eff_SceneObj_ExpandAccessCoin_03",
-              "effectTempleteID": -1.0
+              "effectTempleteID": -1.0,
+              "scale": 1.0,
+              "ILLLPEOODKP": ""
             }
           ],
-          "elementDurability": 100.0,
-          "modifierName": "",
+          "onRemoved": [
+            {
+              "$type": "ServerLuaCall",
+              "funcName": "SLC_OnPlayerGetBuffBall",
+              "luaCallType": "FromGroup",
+              "param1": 70290840.0,
+              "param2": 0.0,
+              "param3": 0.0,
+              "paramNum": 1
+            }
+          ],
           "AIHNJLDFEGJ": 0.0
         }
       },
-      "abilityMixins": [
-        {
-          "$type": "AttachToGadgetStateMixin",
-          "modifierName": "Controller"
-        },
-        {
-          "$type": "AttachModifierToSelfGlobalValueNoInitMixin",
-          "modifierNameSteps": [
-            "Inactive",
-            "Active"
-          ],
-          "valueSteps": [
-            -0.5,
-            0.5,
-            1.5
-          ],
-          "globalValueKey": "Is_Pacman_BuffBall_Active"
-        }
-      ],
-      "abilityName": "SceneObj_PacMan_Magnetic_Ball",
       "onAdded": [
         {
           "$type": "SetGlobalValue",
           "key": "Is_Pacman_BuffBall_Active",
-          "minValue": 0.0,
           "maxValue": 0.0,
-          "CBOMLBFIPJM": 1.0
+          "minValue": 0.0,
+          "value": 1.0
         },
         {
           "$type": "SetGlobalValue",
           "key": "Is_Pacman_Magnet_Ball",
-          "minValue": 0.0,
           "maxValue": 0.0,
-          "CBOMLBFIPJM": 1.0
+          "minValue": 0.0,
+          "value": 1.0
         }
       ]
     }
   },
   {
     "Default": {
+      "abilityName": "SceneObj_PacMan_Kill_Energy_Ball",
       "modifiers": {
         "Controller": {
           "elementDurability": 100.0,
@@ -546,43 +547,27 @@
             },
             {
               "$type": "AttachToGadgetStateMixin",
-              "modifierName": "Enable",
-              "gadgetState": 201
+              "gadgetState": 201,
+              "modifierName": "Enable"
             }
           ],
           "modifierName": "",
           "AIHNJLDFEGJ": 0.0
         },
         "Disable": {
+          "elementDurability": 100.0,
+          "modifierName": "",
           "onAdded": [
             {
               "$type": "DebugLog",
               "content": "PacManLog Disable in"
             }
           ],
-          "elementDurability": 100.0,
-          "modifierName": "",
           "AIHNJLDFEGJ": 0.0
         },
         "Enable": {
-          "onRemoved": [
-            {
-              "$type": "FireEffect",
-              "effectPattern": "Eff_Stages_Common_BigGlideChampOrb_Diss",
-              "scale": 1.0,
-              "ILLLPEOODKP": "",
-              "effectTempleteID": -1.0
-            },
-            {
-              "$type": "ServerLuaCall",
-              "param1": 70290840.0,
-              "param2": 0.0,
-              "paramNum": 1,
-              "funcName": "SLC_OnPlayerGetBuffBall",
-              "AHCNJKIEMPP": 0.0,
-              "luaCallType": "FromGroup"
-            }
-          ],
+          "elementDurability": 100.0,
+          "modifierName": "",
           "onAdded": [
             {
               "$type": "DebugLog",
@@ -590,25 +575,40 @@
             },
             {
               "$type": "AttachEffect",
-              "ILLLPEOODKP": "",
-              "scale": 1.0,
               "effectPattern": "Eff_Stages_Common_BigGlideChampOrb_03_Vo",
-              "effectTempleteID": -1.0
+              "effectTempleteID": -1.0,
+              "scale": 1.0,
+              "ILLLPEOODKP": ""
             }
           ],
-          "elementDurability": 100.0,
-          "modifierName": "",
+          "onRemoved": [
+            {
+              "$type": "FireEffect",
+              "effectPattern": "Eff_Stages_Common_BigGlideChampOrb_Diss",
+              "effectTempleteID": -1.0,
+              "scale": 1.0,
+              "ILLLPEOODKP": ""
+            },
+            {
+              "$type": "ServerLuaCall",
+              "funcName": "SLC_OnPlayerGetBuffBall",
+              "luaCallType": "FromGroup",
+              "param1": 70290840.0,
+              "param2": 0.0,
+              "param3": 0.0,
+              "paramNum": 1
+            }
+          ],
           "AIHNJLDFEGJ": 0.0
         }
       },
-      "abilityName": "SceneObj_PacMan_Kill_Energy_Ball",
       "onAdded": [
         {
           "$type": "SetGlobalValue",
           "key": "Is_Pacman_AntiKill_Ball",
-          "minValue": 0.0,
           "maxValue": 0.0,
-          "CBOMLBFIPJM": 1.0
+          "minValue": 0.0,
+          "value": 1.0
         },
         {
           "$type": "AttachModifier",
@@ -619,6 +619,18 @@
   },
   {
     "Default": {
+      "abilityMixins": [
+        {
+          "$type": "AttachToGadgetStateMixin",
+          "modifierName": "Controller"
+        },
+        {
+          "$type": "AttachToGadgetStateMixin",
+          "gadgetState": 201,
+          "modifierName": "Open"
+        }
+      ],
+      "abilityName": "SceneObj_PacMan_Library_Door",
       "modifiers": {
         "Controller": {
           "elementDurability": 100.0,
@@ -630,7 +642,11 @@
           "modifierName": "",
           "AIHNJLDFEGJ": 0.0
         }
-      },
+      }
+    }
+  },
+  {
+    "Default": {
       "abilityMixins": [
         {
           "$type": "AttachToGadgetStateMixin",
@@ -638,39 +654,35 @@
         },
         {
           "$type": "AttachToGadgetStateMixin",
-          "modifierName": "Open",
-          "gadgetState": 201
+          "gadgetState": 201,
+          "modifierName": "Open"
         }
       ],
-      "abilityName": "SceneObj_PacMan_Library_Door"
-    }
-  },
-  {
-    "Default": {
+      "abilityName": "SceneObj_PacMan_FinalPoint",
       "modifiers": {
         "Controller": {
+          "elementDurability": 100.0,
+          "modifierName": "",
           "onAdded": [
             {
               "$type": "AttachEffect",
-              "ILLLPEOODKP": "",
               "born": {
-                "$type": "BGOLIIIHLMO",
+                "$type": "ConfigBornByAttachPoint",
                 "attachPointName": "RootNode",
                 "attachPointTargetType": "Self",
-                "useRotation": true,
                 "offset": {
                   "x": 0.0,
-                  "z": 0.0,
-                  "y": 0.0
-                }
+                  "y": 0.0,
+                  "z": 0.0
+                },
+                "useRotation": true
               },
-              "scale": 1.0,
               "effectPattern": "Eff_SceneObj_Final_ReachPoint_Float",
-              "effectTempleteID": -1.0
+              "effectTempleteID": -1.0,
+              "scale": 1.0,
+              "ILLLPEOODKP": ""
             }
           ],
-          "elementDurability": 100.0,
-          "modifierName": "",
           "AIHNJLDFEGJ": 0.0
         },
         "Open": {
@@ -678,63 +690,60 @@
           "modifierName": "",
           "AIHNJLDFEGJ": 0.0
         }
-      },
-      "abilityMixins": [
-        {
-          "$type": "AttachToGadgetStateMixin",
-          "modifierName": "Controller"
-        },
-        {
-          "$type": "AttachToGadgetStateMixin",
-          "modifierName": "Open",
-          "gadgetState": 201
-        }
-      ],
-      "abilityName": "SceneObj_PacMan_FinalPoint"
+      }
     }
   },
   {
     "Default": {
+      "abilityMixins": [
+        {
+          "$type": "AttachToGadgetStateMixin",
+          "modifierName": "Controller"
+        }
+      ],
+      "abilityName": "SceneObj_PacMan_Portal",
       "modifiers": {
         "Controller": {
           "elementDurability": 100.0,
           "modifierName": "",
           "AIHNJLDFEGJ": 0.0
         }
-      },
+      }
+    }
+  },
+  {
+    "Default": {
       "abilityMixins": [
         {
           "$type": "AttachToGadgetStateMixin",
           "modifierName": "Controller"
         }
       ],
-      "abilityName": "SceneObj_PacMan_Portal"
-    }
-  },
-  {
-    "Default": {
+      "abilityName": "SceneObj_PacMan_SafeRoom",
       "modifiers": {
         "Controller": {
-          "thinkInterval": 0.5,
+          "elementDurability": 100.0,
+          "modifierName": "",
           "onAdded": [
             {
               "$type": "AttachEffect",
-              "ILLLPEOODKP": "",
               "born": {
-                "$type": "BGOLIIIHLMO",
+                "$type": "ConfigBornByAttachPoint",
                 "attachPointName": "RootNode",
                 "useRotation": true
               },
-              "scale": 1.0,
               "effectPattern": "Eff_SceneObject_SafeRoomAirWall_01_Loop",
-              "effectTempleteID": -1.0
+              "effectTempleteID": -1.0,
+              "scale": 1.0,
+              "ILLLPEOODKP": ""
             }
           ],
-          "elementDurability": 100.0,
-          "modifierName": "",
           "onThinkInterval": [
             {
               "$type": "Predicated",
+              "otherTargets": {
+                "$type": "SelectTargetsByLCTriggerAll"
+              },
               "successActions": [
                 {
                   "$type": "ApplyModifier",
@@ -744,85 +753,51 @@
               ],
               "targetPredicates": [
                 {
-                  "$type": "DEOFBICNFHF",
+                  "$type": "ByEntityTypes",
                   "entityTypes": [
                     "Avatar"
                   ]
                 }
-              ],
-              "otherTargets": {
-                "$type": "CEBMFAMGHGH"
-              }
+              ]
             }
           ],
+          "thinkInterval": 0.5,
           "AIHNJLDFEGJ": 0.0
         },
         "UNIQUE_SetAvatarInSafeRoom": {
           "duration": 1.0,
-          "onRemoved": [
-            {
-              "$type": "SetGlobalValue",
-              "useLimitRange": true,
-              "key": "Team_Is_In_SafeHouse",
-              "minValue": 0.0,
-              "maxValue": 1.0,
-              "CBOMLBFIPJM": 0.0,
-              "target": "Team",
-              "doOffStage": true
-            }
-          ],
+          "elementDurability": 100.0,
+          "isUnique": true,
+          "modifierName": "",
           "onAdded": [
             {
               "$type": "SetGlobalValue",
-              "useLimitRange": true,
+              "doOffStage": true,
               "key": "Team_Is_In_SafeHouse",
-              "minValue": 0.0,
               "maxValue": 1.0,
-              "CBOMLBFIPJM": 1.0,
+              "minValue": 0.0,
               "target": "Team",
-              "doOffStage": true
+              "useLimitRange": true,
+              "value": 1.0
+            }
+          ],
+          "onRemoved": [
+            {
+              "$type": "SetGlobalValue",
+              "doOffStage": true,
+              "key": "Team_Is_In_SafeHouse",
+              "maxValue": 1.0,
+              "minValue": 0.0,
+              "target": "Team",
+              "useLimitRange": true,
+              "value": 0.0
             }
           ],
           "stacking": "RefreshUniqueDurability",
-          "elementDurability": 100.0,
-          "modifierName": "",
-          "isUnique": true,
           "AIHNJLDFEGJ": 0.0
         }
       },
-      "MKDAOFGPAEM": [
-        {
-          "$type": "Predicated",
-          "successActions": [
-            {
-              "$type": "DebugLog",
-              "content": "PacMan SafeRoom Team Exit"
-            },
-            {
-              "$type": "RemoveUniqueModifier",
-              "modifierName": "UNIQUE_SetAvatarInSafeRoom",
-              "target": "TargetTeam"
-            }
-          ],
-          "targetPredicates": [
-            {
-              "$type": "DEOFBICNFHF",
-              "entityTypes": [
-                "Avatar"
-              ]
-            }
-          ],
-          "target": "Target"
-        }
-      ],
-      "abilityMixins": [
-        {
-          "$type": "AttachToGadgetStateMixin",
-          "modifierName": "Controller"
-        }
-      ],
-      "abilityName": "SceneObj_PacMan_SafeRoom",
-      "PFJMEMFDGOH": [
+      "onFieldEnter": [
         {
           "$type": "Predicated",
           "successActions": [
@@ -836,34 +811,71 @@
               "target": "TargetTeam"
             }
           ],
+          "target": "Target",
           "targetPredicates": [
             {
-              "$type": "DEOFBICNFHF",
+              "$type": "ByEntityTypes",
               "entityTypes": [
                 "Avatar"
               ]
             }
+          ]
+        }
+      ],
+      "onFieldExit": [
+        {
+          "$type": "Predicated",
+          "successActions": [
+            {
+              "$type": "DebugLog",
+              "content": "PacMan SafeRoom Team Exit"
+            },
+            {
+              "$type": "RemoveUniqueModifier",
+              "modifierName": "UNIQUE_SetAvatarInSafeRoom",
+              "target": "TargetTeam"
+            }
           ],
-          "target": "Target"
+          "target": "Target",
+          "targetPredicates": [
+            {
+              "$type": "ByEntityTypes",
+              "entityTypes": [
+                "Avatar"
+              ]
+            }
+          ]
         }
       ]
     }
   },
   {
     "Default": {
+      "abilityMixins": [
+        {
+          "$type": "AttachToGadgetStateMixin",
+          "modifierName": "Normal"
+        },
+        {
+          "$type": "AttachToGadgetStateMixin",
+          "gadgetState": 201,
+          "modifierName": "Active"
+        }
+      ],
+      "abilityName": "SceneObj_PacMan_Operator",
       "modifiers": {
         "Controller": {
+          "elementDurability": 100.0,
+          "modifierName": "",
           "onAdded": [
             {
               "$type": "AttachEffect",
-              "ILLLPEOODKP": "",
-              "scale": 1.0,
               "effectPattern": "Eff_SceneObj_LibraryOperate_Default",
-              "effectTempleteID": -1.0
+              "effectTempleteID": -1.0,
+              "scale": 1.0,
+              "ILLLPEOODKP": ""
             }
           ],
-          "elementDurability": 100.0,
-          "modifierName": "",
           "AIHNJLDFEGJ": 0.0
         },
         "Normal": {
@@ -872,38 +884,26 @@
           "AIHNJLDFEGJ": 0.0
         },
         "Active": {
+          "elementDurability": 100.0,
+          "modifierName": "",
           "onAdded": [
             {
               "$type": "AttachEffect",
-              "ILLLPEOODKP": "",
               "born": {
-                "$type": "BGOLIIIHLMO",
+                "$type": "ConfigBornByAttachPoint",
                 "attachPointName": "Rot",
                 "attachPointTargetType": "Self",
                 "useRotation": true
               },
-              "scale": 1.0,
               "effectPattern": "Eff_SceneObj_LibraryOperate_Active",
-              "effectTempleteID": -1.0
+              "effectTempleteID": -1.0,
+              "scale": 1.0,
+              "ILLLPEOODKP": ""
             }
           ],
-          "elementDurability": 100.0,
-          "modifierName": "",
           "AIHNJLDFEGJ": 0.0
         }
       },
-      "abilityMixins": [
-        {
-          "$type": "AttachToGadgetStateMixin",
-          "modifierName": "Normal"
-        },
-        {
-          "$type": "AttachToGadgetStateMixin",
-          "modifierName": "Active",
-          "gadgetState": 201
-        }
-      ],
-      "abilityName": "SceneObj_PacMan_Operator",
       "onAdded": [
         {
           "$type": "AttachModifier",
@@ -914,40 +914,6 @@
   },
   {
     "Default": {
-      "modifiers": {
-        "Normal": {
-          "onAdded": [
-            {
-              "$type": "SetMaterialParamFloatByTransform",
-              "lerpCurveIndex": 1,
-              "useCurve": true,
-              "CBOMLBFIPJM": 0.0,
-              "patternName": "_EmissionStrength",
-              "lerpTime": 0.5,
-              "matName": "GlowMat"
-            }
-          ],
-          "elementDurability": 100.0,
-          "modifierName": "",
-          "AIHNJLDFEGJ": 0.0
-        },
-        "Active": {
-          "onAdded": [
-            {
-              "$type": "SetMaterialParamFloatByTransform",
-              "lerpCurveIndex": 1,
-              "useCurve": true,
-              "CBOMLBFIPJM": 6.0,
-              "patternName": "_EmissionStrength",
-              "lerpTime": 0.5,
-              "matName": "GlowMat"
-            }
-          ],
-          "elementDurability": 100.0,
-          "modifierName": "",
-          "AIHNJLDFEGJ": 0.0
-        }
-      },
       "abilityMixins": [
         {
           "$type": "AttachToGadgetStateMixin",
@@ -955,112 +921,103 @@
         },
         {
           "$type": "AttachToGadgetStateMixin",
-          "modifierName": "Active",
-          "gadgetState": 201
+          "gadgetState": 201,
+          "modifierName": "Active"
         }
       ],
-      "abilityName": "SceneObj_PacMan_Light"
-    }
-  },
-  {
-    "Default": {
-      "modifiers": {
-        "Controller": {
-          "onAdded": [
-            {
-              "$type": "AttachEffect",
-              "ILLLPEOODKP": "",
-              "scale": 0.6,
-              "effectPattern": "Eff_SceneObject_Indoor_ChandelierFire_02",
-              "effectTempleteID": -1.0
-            }
-          ],
-          "elementDurability": 100.0,
-          "modifierName": "",
-          "AIHNJLDFEGJ": 0.0
-        }
-      },
-      "abilityMixins": [
-        {
-          "$type": "AttachToGadgetStateMixin",
-          "modifierName": "Controller"
-        }
-      ],
-      "abilityName": "SceneObj_PacMan_Light_Eff_02"
-    }
-  },
-  {
-    "Default": {
-      "modifiers": {
-        "Controller": {
-          "onAdded": [
-            {
-              "$type": "AttachEffect",
-              "ILLLPEOODKP": "",
-              "scale": 0.78,
-              "effectPattern": "Eff_SceneObject_Indoor_ChandelierFire_02",
-              "effectTempleteID": -1.0
-            }
-          ],
-          "elementDurability": 100.0,
-          "modifierName": "",
-          "AIHNJLDFEGJ": 0.0
-        }
-      },
-      "abilityMixins": [
-        {
-          "$type": "AttachToGadgetStateMixin",
-          "modifierName": "Controller"
-        }
-      ],
-      "abilityName": "SceneObj_PacMan_Light_Eff_03"
-    }
-  },
-  {
-    "Default": {
+      "abilityName": "SceneObj_PacMan_Light",
       "modifiers": {
         "Normal": {
+          "elementDurability": 100.0,
+          "modifierName": "",
+          "onAdded": [
+            {
+              "$type": "SetMaterialParamFloatByTransform",
+              "lerpCurveIndex": 1,
+              "lerpTime": 0.5,
+              "matName": "GlowMat",
+              "patternName": "_EmissionStrength",
+              "useCurve": true,
+              "value": 0.0
+            }
+          ],
+          "AIHNJLDFEGJ": 0.0
+        },
+        "Active": {
+          "elementDurability": 100.0,
+          "modifierName": "",
+          "onAdded": [
+            {
+              "$type": "SetMaterialParamFloatByTransform",
+              "lerpCurveIndex": 1,
+              "lerpTime": 0.5,
+              "matName": "GlowMat",
+              "patternName": "_EmissionStrength",
+              "useCurve": true,
+              "value": 6.0
+            }
+          ],
+          "AIHNJLDFEGJ": 0.0
+        }
+      }
+    }
+  },
+  {
+    "Default": {
+      "abilityMixins": [
+        {
+          "$type": "AttachToGadgetStateMixin",
+          "modifierName": "Controller"
+        }
+      ],
+      "abilityName": "SceneObj_PacMan_Light_Eff_02",
+      "modifiers": {
+        "Controller": {
+          "elementDurability": 100.0,
+          "modifierName": "",
           "onAdded": [
             {
               "$type": "AttachEffect",
-              "ILLLPEOODKP": "",
-              "isPlatformDependent": true,
-              "scale": 1.0,
-              "effectPattern": "Eff_Level_ActivityPacMan_01_Room_02_Light_01",
-              "effectTempleteID": -1.0
+              "effectPattern": "Eff_SceneObject_Indoor_ChandelierFire_02",
+              "effectTempleteID": -1.0,
+              "scale": 0.6,
+              "ILLLPEOODKP": ""
             }
           ],
-          "elementDurability": 100.0,
-          "modifierName": "",
-          "AIHNJLDFEGJ": 0.0
-        },
-        "Activate": {
-          "onRemoved": [
-            {
-              "$type": "SendEffectTrigger",
-              "parameter": "GadgetState",
-              "GGKIEIJLCJJ": 202,
-              "effectPattern": "Eff_Level_ActivityPacMan_01_Room_02_Light_01",
-              "type": "Int",
-              "attachPoint": "",
-              "isPlatformDependent": true
-            }
-          ],
-          "onAdded": [
-            {
-              "$type": "SendEffectTrigger",
-              "parameter": "GadgetState",
-              "effectPattern": "Eff_Level_ActivityPacMan_01_Room_02_Light_01",
-              "type": "Int",
-              "attachPoint": "",
-              "isPlatformDependent": true
-            }
-          ],
-          "elementDurability": 100.0,
-          "modifierName": "",
           "AIHNJLDFEGJ": 0.0
         }
-      },
+      }
+    }
+  },
+  {
+    "Default": {
+      "abilityMixins": [
+        {
+          "$type": "AttachToGadgetStateMixin",
+          "modifierName": "Controller"
+        }
+      ],
+      "abilityName": "SceneObj_PacMan_Light_Eff_03",
+      "modifiers": {
+        "Controller": {
+          "elementDurability": 100.0,
+          "modifierName": "",
+          "onAdded": [
+            {
+              "$type": "AttachEffect",
+              "effectPattern": "Eff_SceneObject_Indoor_ChandelierFire_02",
+              "effectTempleteID": -1.0,
+              "scale": 0.78,
+              "ILLLPEOODKP": ""
+            }
+          ],
+          "AIHNJLDFEGJ": 0.0
+        }
+      }
+    }
+  },
+  {
+    "Default": {
       "abilityMixins": [
         {
           "$type": "AttachToGadgetStateMixin",
@@ -1068,6 +1025,49 @@
         }
       ],
       "abilityName": "SceneObj_PacMan_Room_Light_01",
+      "modifiers": {
+        "Normal": {
+          "elementDurability": 100.0,
+          "modifierName": "",
+          "onAdded": [
+            {
+              "$type": "AttachEffect",
+              "effectPattern": "Eff_Level_ActivityPacMan_01_Room_02_Light_01",
+              "effectTempleteID": -1.0,
+              "isPlatformDependent": true,
+              "scale": 1.0,
+              "ILLLPEOODKP": ""
+            }
+          ],
+          "AIHNJLDFEGJ": 0.0
+        },
+        "Activate": {
+          "elementDurability": 100.0,
+          "modifierName": "",
+          "onAdded": [
+            {
+              "$type": "SendEffectTrigger",
+              "attachPoint": "",
+              "effectPattern": "Eff_Level_ActivityPacMan_01_Room_02_Light_01",
+              "isPlatformDependent": true,
+              "parameter": "GadgetState",
+              "type": "Int"
+            }
+          ],
+          "onRemoved": [
+            {
+              "$type": "SendEffectTrigger",
+              "attachPoint": "",
+              "effectPattern": "Eff_Level_ActivityPacMan_01_Room_02_Light_01",
+              "isPlatformDependent": true,
+              "parameter": "GadgetState",
+              "type": "Int",
+              "value": 202
+            }
+          ],
+          "AIHNJLDFEGJ": 0.0
+        }
+      },
       "onAdded": [
         {
           "$type": "AttachModifier",
@@ -1078,49 +1078,6 @@
   },
   {
     "Default": {
-      "modifiers": {
-        "Normal": {
-          "onAdded": [
-            {
-              "$type": "AttachEffect",
-              "ILLLPEOODKP": "",
-              "isPlatformDependent": true,
-              "scale": 1.0,
-              "effectPattern": "Eff_Level_ActivityPacMan_01_Room_05_Light_01",
-              "effectTempleteID": -1.0
-            }
-          ],
-          "elementDurability": 100.0,
-          "modifierName": "",
-          "AIHNJLDFEGJ": 0.0
-        },
-        "Activate": {
-          "onRemoved": [
-            {
-              "$type": "SendEffectTrigger",
-              "parameter": "GadgetState",
-              "GGKIEIJLCJJ": 202,
-              "effectPattern": "Eff_Level_ActivityPacMan_01_Room_05_Light_01",
-              "type": "Int",
-              "attachPoint": "",
-              "isPlatformDependent": true
-            }
-          ],
-          "onAdded": [
-            {
-              "$type": "SendEffectTrigger",
-              "parameter": "GadgetState",
-              "effectPattern": "Eff_Level_ActivityPacMan_01_Room_05_Light_01",
-              "type": "Int",
-              "attachPoint": "",
-              "isPlatformDependent": true
-            }
-          ],
-          "elementDurability": 100.0,
-          "modifierName": "",
-          "AIHNJLDFEGJ": 0.0
-        }
-      },
       "abilityMixins": [
         {
           "$type": "AttachToGadgetStateMixin",
@@ -1128,6 +1085,49 @@
         }
       ],
       "abilityName": "SceneObj_PacMan_Room_Light_02",
+      "modifiers": {
+        "Normal": {
+          "elementDurability": 100.0,
+          "modifierName": "",
+          "onAdded": [
+            {
+              "$type": "AttachEffect",
+              "effectPattern": "Eff_Level_ActivityPacMan_01_Room_05_Light_01",
+              "effectTempleteID": -1.0,
+              "isPlatformDependent": true,
+              "scale": 1.0,
+              "ILLLPEOODKP": ""
+            }
+          ],
+          "AIHNJLDFEGJ": 0.0
+        },
+        "Activate": {
+          "elementDurability": 100.0,
+          "modifierName": "",
+          "onAdded": [
+            {
+              "$type": "SendEffectTrigger",
+              "attachPoint": "",
+              "effectPattern": "Eff_Level_ActivityPacMan_01_Room_05_Light_01",
+              "isPlatformDependent": true,
+              "parameter": "GadgetState",
+              "type": "Int"
+            }
+          ],
+          "onRemoved": [
+            {
+              "$type": "SendEffectTrigger",
+              "attachPoint": "",
+              "effectPattern": "Eff_Level_ActivityPacMan_01_Room_05_Light_01",
+              "isPlatformDependent": true,
+              "parameter": "GadgetState",
+              "type": "Int",
+              "value": 202
+            }
+          ],
+          "AIHNJLDFEGJ": 0.0
+        }
+      },
       "onAdded": [
         {
           "$type": "AttachModifier",
@@ -1138,49 +1138,6 @@
   },
   {
     "Default": {
-      "modifiers": {
-        "Normal": {
-          "onAdded": [
-            {
-              "$type": "AttachEffect",
-              "ILLLPEOODKP": "",
-              "isPlatformDependent": true,
-              "scale": 1.0,
-              "effectPattern": "Eff_Level_ActivityPacMan_01_Room_06_Light_01",
-              "effectTempleteID": -1.0
-            }
-          ],
-          "elementDurability": 100.0,
-          "modifierName": "",
-          "AIHNJLDFEGJ": 0.0
-        },
-        "Activate": {
-          "onRemoved": [
-            {
-              "$type": "SendEffectTrigger",
-              "parameter": "GadgetState",
-              "GGKIEIJLCJJ": 202,
-              "effectPattern": "Eff_Level_ActivityPacMan_01_Room_06_Light_01",
-              "type": "Int",
-              "attachPoint": "",
-              "isPlatformDependent": true
-            }
-          ],
-          "onAdded": [
-            {
-              "$type": "SendEffectTrigger",
-              "parameter": "GadgetState",
-              "effectPattern": "Eff_Level_ActivityPacMan_01_Room_06_Light_01",
-              "type": "Int",
-              "attachPoint": "",
-              "isPlatformDependent": true
-            }
-          ],
-          "elementDurability": 100.0,
-          "modifierName": "",
-          "AIHNJLDFEGJ": 0.0
-        }
-      },
       "abilityMixins": [
         {
           "$type": "AttachToGadgetStateMixin",
@@ -1188,6 +1145,49 @@
         }
       ],
       "abilityName": "SceneObj_PacMan_Room_Light_03",
+      "modifiers": {
+        "Normal": {
+          "elementDurability": 100.0,
+          "modifierName": "",
+          "onAdded": [
+            {
+              "$type": "AttachEffect",
+              "effectPattern": "Eff_Level_ActivityPacMan_01_Room_06_Light_01",
+              "effectTempleteID": -1.0,
+              "isPlatformDependent": true,
+              "scale": 1.0,
+              "ILLLPEOODKP": ""
+            }
+          ],
+          "AIHNJLDFEGJ": 0.0
+        },
+        "Activate": {
+          "elementDurability": 100.0,
+          "modifierName": "",
+          "onAdded": [
+            {
+              "$type": "SendEffectTrigger",
+              "attachPoint": "",
+              "effectPattern": "Eff_Level_ActivityPacMan_01_Room_06_Light_01",
+              "isPlatformDependent": true,
+              "parameter": "GadgetState",
+              "type": "Int"
+            }
+          ],
+          "onRemoved": [
+            {
+              "$type": "SendEffectTrigger",
+              "attachPoint": "",
+              "effectPattern": "Eff_Level_ActivityPacMan_01_Room_06_Light_01",
+              "isPlatformDependent": true,
+              "parameter": "GadgetState",
+              "type": "Int",
+              "value": 202
+            }
+          ],
+          "AIHNJLDFEGJ": 0.0
+        }
+      },
       "onAdded": [
         {
           "$type": "AttachModifier",
@@ -1198,6 +1198,18 @@
   },
   {
     "Default": {
+      "abilityMixins": [
+        {
+          "$type": "AttachToGadgetStateMixin",
+          "modifierName": "Normal"
+        },
+        {
+          "$type": "AttachToGadgetStateMixin",
+          "gadgetState": 201,
+          "modifierName": "Rotating"
+        }
+      ],
+      "abilityName": "SceneObj_PacMan_Rotate_Stair",
       "modifiers": {
         "Normal": {
           "elementDurability": 100.0,
@@ -1209,7 +1221,11 @@
           "modifierName": "",
           "AIHNJLDFEGJ": 0.0
         }
-      },
+      }
+    }
+  },
+  {
+    "Default": {
       "abilityMixins": [
         {
           "$type": "AttachToGadgetStateMixin",
@@ -1217,92 +1233,60 @@
         },
         {
           "$type": "AttachToGadgetStateMixin",
-          "modifierName": "Rotating",
-          "gadgetState": 201
+          "gadgetState": 202,
+          "modifierName": "Hide"
         }
       ],
-      "abilityName": "SceneObj_PacMan_Rotate_Stair"
-    }
-  },
-  {
-    "Default": {
+      "abilityName": "SceneObj_PacMan_Rotate_Stair_Connect",
       "modifiers": {
         "Normal": {
+          "elementDurability": 100.0,
+          "modifierName": "",
           "onAdded": [
             {
               "$type": "SetMaterialParamFloatByTransform",
-              "useCurve": true,
-              "CBOMLBFIPJM": 0.0,
-              "patternName": "_DissolveVal",
               "lerpTime": 2.0,
-              "matName": "Dissolve"
+              "matName": "Dissolve",
+              "patternName": "_DissolveVal",
+              "useCurve": true,
+              "value": 0.0
             },
             {
               "$type": "EnablePushColliderName",
-              "setEnable": true,
-              "EFOJFJDLLMK": [
+              "pushColliderNames": [
                 "collider"
-              ]
+              ],
+              "setEnable": true
             }
           ],
-          "elementDurability": 100.0,
-          "modifierName": "",
           "AIHNJLDFEGJ": 0.0
         },
         "Hide": {
+          "elementDurability": 100.0,
+          "modifierName": "",
           "onAdded": [
             {
               "$type": "SetMaterialParamFloatByTransform",
-              "useCurve": true,
-              "CBOMLBFIPJM": 1.5,
-              "patternName": "_DissolveVal",
               "lerpTime": 2.0,
-              "matName": "Dissolve"
+              "matName": "Dissolve",
+              "patternName": "_DissolveVal",
+              "useCurve": true,
+              "value": 1.5
             },
             {
               "$type": "EnablePushColliderName",
-              "EFOJFJDLLMK": [
+              "pushColliderNames": [
                 "collider"
               ]
             }
           ],
-          "elementDurability": 100.0,
-          "modifierName": "",
           "AIHNJLDFEGJ": 0.0
         }
-      },
-      "abilityMixins": [
-        {
-          "$type": "AttachToGadgetStateMixin",
-          "modifierName": "Normal"
-        },
-        {
-          "$type": "AttachToGadgetStateMixin",
-          "modifierName": "Hide",
-          "gadgetState": 202
-        }
-      ],
-      "abilityName": "SceneObj_PacMan_Rotate_Stair_Connect"
+      }
     }
   },
   {
     "Default": {
-      "modifiers": {
-        "Controller": {
-          "elementDurability": 100.0,
-          "modifierName": "",
-          "AIHNJLDFEGJ": 0.0
-        }
-      },
-      "onKill": [
-        {
-          "$type": "FireEffect",
-          "effectPattern": "Eff_SceneObj_LibraryMovingWall_Disappear_01",
-          "scale": 1.0,
-          "ILLLPEOODKP": "",
-          "effectTempleteID": -1.0
-        }
-      ],
       "abilityMixins": [
         {
           "$type": "AttachToGadgetStateMixin",
@@ -1310,20 +1294,36 @@
         }
       ],
       "abilityName": "SceneObj_PacMan_MoveWall",
+      "modifiers": {
+        "Controller": {
+          "elementDurability": 100.0,
+          "modifierName": "",
+          "AIHNJLDFEGJ": 0.0
+        }
+      },
       "onAdded": [
         {
           "$type": "SetGlobalValue",
           "key": "Is_PacMan_Move_Wall",
-          "minValue": 0.0,
           "maxValue": 0.0,
-          "CBOMLBFIPJM": 1.0
+          "minValue": 0.0,
+          "value": 1.0
         },
         {
           "$type": "FireEffect",
           "effectPattern": "Eff_SceneObj_LibraryMovingWall_Appear_01",
+          "effectTempleteID": -1.0,
           "scale": 1.0,
-          "ILLLPEOODKP": "",
-          "effectTempleteID": -1.0
+          "ILLLPEOODKP": ""
+        }
+      ],
+      "onKill": [
+        {
+          "$type": "FireEffect",
+          "effectPattern": "Eff_SceneObj_LibraryMovingWall_Disappear_01",
+          "effectTempleteID": -1.0,
+          "scale": 1.0,
+          "ILLLPEOODKP": ""
         }
       ]
     }

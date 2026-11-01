@@ -1,26 +1,52 @@
 [
   {
     "Default": {
+      "abilityMixins": [
+        {
+          "$type": "AttachModifierToSelfGlobalValueMixin",
+          "defaultGlobalValueOnCreate": 0.0,
+          "globalValueKey": "_CURRENT_AMMO_NUMBER",
+          "modifierNameSteps": [
+            "TargetShooting_MaterialStateSwitch_LackAmmo",
+            "TargetShooting_MaterialStateSwitch_EnoughAmmoMaterial"
+          ],
+          "valueSteps": [
+            -0.5,
+            5.5,
+            30.5
+          ]
+        },
+        {
+          "$type": "RotationFollowCameraMixin",
+          "ELMGLAJAEKD": -12.0,
+          "DACCMDDFMMF": "HorizontalRotateBone",
+          "EIMPBGKFPCN": "VerticalRotateBone",
+          "LMMEOLFOKMH": [
+            "Cannon"
+          ]
+        }
+      ],
+      "abilityName": "TargetShootingV2_Cannon_Init",
       "modifiers": {
         "TargetShooting_MaterialStateSwitch_LackAmmo": {
-          "onAdded": [
-            {
-              "$type": "AttachEffect",
-              "ILLLPEOODKP": "",
-              "scale": 1.0,
-              "effectPattern": "Eff_SceneObj_Cannon_09",
-              "effectTempleteID": -1.0
-            }
-          ],
           "elementDurability": 100.0,
           "modifierMixins": [
             {
               "$type": "ShaderStateMachineSwitchMixin",
-              "MGLMGICCHHK": "",
-              "IKJPMDJLPLP": 1
+              "IKJPMDJLPLP": 1,
+              "MGLMGICCHHK": ""
             }
           ],
           "modifierName": "",
+          "onAdded": [
+            {
+              "$type": "AttachEffect",
+              "effectPattern": "Eff_SceneObj_Cannon_09",
+              "effectTempleteID": -1.0,
+              "scale": 1.0,
+              "ILLLPEOODKP": ""
+            }
+          ],
           "AIHNJLDFEGJ": 0.0
         },
         "TargetShooting_MaterialStateSwitch_EnoughAmmoMaterial": {
@@ -35,35 +61,6 @@
           "AIHNJLDFEGJ": 0.0
         }
       },
-      "ANHJPOLNHIG": [
-        "SGV_Current_BulletType_01"
-      ],
-      "abilityMixins": [
-        {
-          "$type": "AttachModifierToSelfGlobalValueMixin",
-          "modifierNameSteps": [
-            "TargetShooting_MaterialStateSwitch_LackAmmo",
-            "TargetShooting_MaterialStateSwitch_EnoughAmmoMaterial"
-          ],
-          "valueSteps": [
-            -0.5,
-            5.5,
-            30.5
-          ],
-          "globalValueKey": "_CURRENT_AMMO_NUMBER",
-          "defaultGlobalValueOnCreate": 0.0
-        },
-        {
-          "$type": "RotationFollowCameraMixin",
-          "EIMPBGKFPCN": "VerticalRotateBone",
-          "DACCMDDFMMF": "HorizontalRotateBone",
-          "ELMGLAJAEKD": -12.0,
-          "LMMEOLFOKMH": [
-            "Cannon"
-          ]
-        }
-      ],
-      "abilityName": "TargetShootingV2_Cannon_Init",
       "onAdded": [
         {
           "$type": "Predicated",
@@ -71,246 +68,68 @@
             {
               "$type": "SetGlobalValue",
               "key": "_LOCAL_MAX_AMMO",
-              "minValue": 0.0,
               "maxValue": 0.0,
-              "CBOMLBFIPJM": 30.0
+              "minValue": 0.0,
+              "value": 30.0
             },
             {
               "$type": "SetGlobalValue",
               "key": "_CURRENT_AMMO_NUMBER",
-              "minValue": 0.0,
               "maxValue": 0.0,
-              "CBOMLBFIPJM": 30.0
+              "minValue": 0.0,
+              "value": 30.0
             }
           ],
           "targetPredicates": [
             {
-              "$type": "EOFDCELPGFO",
-              "CBOMLBFIPJM": 0.0,
+              "$type": "ByTargetGlobalValue",
               "compareType": "NoneOrEqual",
-              "key": "_LOCAL_MAX_AMMO"
+              "key": "_LOCAL_MAX_AMMO",
+              "value": 0.0
             }
           ]
         },
         {
           "$type": "SetGlobalValue",
           "key": "_AMMO_CHANGING",
-          "minValue": 0.0,
           "maxValue": 0.0,
-          "CBOMLBFIPJM": 0.0
+          "minValue": 0.0,
+          "value": 0.0
         },
         {
           "$type": "SetGlobalValue",
           "key": "_CURRENT_BULLET_INDEX",
-          "minValue": 0.0,
           "maxValue": 0.0,
-          "CBOMLBFIPJM": 1.0
+          "minValue": 0.0,
+          "value": 1.0
         },
         {
           "$type": "CopyGlobalValue",
-          "srcKey": "SGV_Current_BulletType_01",
+          "dstKey": "_CURRENT_BULLET_TYPE",
           "dstTarget": "Self",
-          "srcTarget": "Team",
-          "dstKey": "_CURRENT_BULLET_TYPE"
+          "srcKey": "SGV_Current_BulletType_01",
+          "srcTarget": "Team"
         },
         {
           "$type": "ApplyModifier",
           "modifierName": "TargetShooting_MaterialStateSwitch_EnoughAmmoMaterial"
         }
+      ],
+      "ANHJPOLNHIG": [
+        "SGV_Current_BulletType_01"
       ]
     }
   },
   {
     "Default": {
-      "modifiers": {
-        "TryToChangeBulletType": {
-          "duration": 0.3,
-          "onRemoved": [
-            {
-              "$type": "SetGlobalValue",
-              "key": "_AMMO_CHANGING",
-              "minValue": 0.0,
-              "maxValue": 0.0,
-              "CBOMLBFIPJM": 0.0
-            }
-          ],
-          "onAdded": [
-            {
-              "$type": "SetGlobalValue",
-              "key": "_AMMO_CHANGING",
-              "minValue": 0.0,
-              "maxValue": 0.0,
-              "CBOMLBFIPJM": 1.0
-            },
-            {
-              "$type": "Predicated",
-              "successActions": [
-                {
-                  "$type": "CopyGlobalValue",
-                  "srcKey": "SGV_Current_BulletType_02",
-                  "dstTarget": "Self",
-                  "srcTarget": "Team",
-                  "dstKey": "_CURRENT_BULLET_TYPE"
-                },
-                {
-                  "$type": "SetGlobalValue",
-                  "key": "_CURRENT_BULLET_INDEX",
-                  "minValue": 0.0,
-                  "maxValue": 0.0,
-                  "CBOMLBFIPJM": 2.0
-                }
-              ],
-              "failActions": [
-                {
-                  "$type": "CopyGlobalValue",
-                  "srcKey": "SGV_Current_BulletType_01",
-                  "dstTarget": "Self",
-                  "srcTarget": "Team",
-                  "dstKey": "_CURRENT_BULLET_TYPE"
-                },
-                {
-                  "$type": "SetGlobalValue",
-                  "key": "_CURRENT_BULLET_INDEX",
-                  "minValue": 0.0,
-                  "maxValue": 0.0,
-                  "CBOMLBFIPJM": 1.0
-                }
-              ],
-              "targetPredicates": [
-                {
-                  "$type": "EOFDCELPGFO",
-                  "CBOMLBFIPJM": 1.0,
-                  "key": "_CURRENT_BULLET_INDEX",
-                  "target": "Self"
-                }
-              ]
-            },
-            {
-              "$type": "FireEffect",
-              "effectPattern": "Eff_SceneObj_Cannon_08",
-              "scale": 1.0,
-              "ILLLPEOODKP": "",
-              "effectTempleteID": -1.0
-            }
-          ],
-          "elementDurability": 100.0,
-          "modifierName": "",
-          "AIHNJLDFEGJ": 0.0
-        },
-        "SGV_Current_BulletType_01_Blank": {
-          "onAdded": [
-            {
-              "$type": "SetGlobalValue",
-              "key": "_CURRENT_BULLET_INDEX",
-              "minValue": 0.0,
-              "maxValue": 0.0,
-              "CBOMLBFIPJM": 1.0
-            },
-            {
-              "$type": "CopyGlobalValue",
-              "srcKey": "SGV_Current_BulletType_01",
-              "dstTarget": "Self",
-              "srcTarget": "Team",
-              "dstKey": "_CURRENT_BULLET_TYPE"
-            }
-          ],
-          "elementDurability": 100.0,
-          "modifierName": "",
-          "AIHNJLDFEGJ": 0.0
-        },
-        "SGV_Current_BulletType_02_Blank": {
-          "elementDurability": 100.0,
-          "modifierName": "",
-          "AIHNJLDFEGJ": 0.0
-        },
-        "Cost01": {
-          "onAdded": [
-            {
-              "$type": "SetGlobalValue",
-              "key": "_CURRENT_BULLET_COST",
-              "minValue": 0.0,
-              "maxValue": 0.0,
-              "CBOMLBFIPJM": "Bullet01_Cost"
-            }
-          ],
-          "elementDurability": 100.0,
-          "modifierName": "",
-          "AIHNJLDFEGJ": 0.0
-        },
-        "Cost02": {
-          "onAdded": [
-            {
-              "$type": "SetGlobalValue",
-              "key": "_CURRENT_BULLET_COST",
-              "minValue": 0.0,
-              "maxValue": 0.0,
-              "CBOMLBFIPJM": "Bullet02_Cost"
-            }
-          ],
-          "elementDurability": 100.0,
-          "modifierName": "",
-          "AIHNJLDFEGJ": 0.0
-        },
-        "Cost03": {
-          "onAdded": [
-            {
-              "$type": "SetGlobalValue",
-              "key": "_CURRENT_BULLET_COST",
-              "minValue": 0.0,
-              "maxValue": 0.0,
-              "CBOMLBFIPJM": "Bullet03_Cost"
-            }
-          ],
-          "elementDurability": 100.0,
-          "modifierName": "",
-          "AIHNJLDFEGJ": 0.0
-        },
-        "Cost04": {
-          "onAdded": [
-            {
-              "$type": "SetGlobalValue",
-              "key": "_CURRENT_BULLET_COST",
-              "minValue": 0.0,
-              "maxValue": 0.0,
-              "CBOMLBFIPJM": "Bullet04_Cost"
-            }
-          ],
-          "elementDurability": 100.0,
-          "modifierName": "",
-          "AIHNJLDFEGJ": 0.0
-        }
-      },
-      "onAbilityStart": [
-        {
-          "$type": "ApplyModifier",
-          "modifierName": "TryToChangeBulletType",
-          "predicates": [
-            {
-              "$type": "EOFDCELPGFO",
-              "CBOMLBFIPJM": 0.0,
-              "compareType": "MoreThan",
-              "key": "SGV_Current_BulletType_02",
-              "target": "Team"
-            }
-          ]
-        }
-      ],
-      "ANHJPOLNHIG": [
-        "SGV_Current_BulletType_01",
-        "SGV_Current_BulletType_02",
-        "Bullet01_Cost",
-        "Bullet02_Cost",
-        "Bullet03_Cost",
-        "Bullet04_Cost"
-      ],
       "abilityMixins": [
         {
           "$type": "AttachModifierToGlobalValueMixin",
+          "globalValueKey": "SGV_Current_BulletType_01",
+          "globalValueTarget": "Team",
           "modifierNameSteps": [
             "SGV_Current_BulletType_01_Blank"
           ],
-          "globalValueTarget": "Team",
-          "globalValueKey": "SGV_Current_BulletType_01",
           "valueSteps": [
             0.5,
             4.5
@@ -319,11 +138,11 @@
         },
         {
           "$type": "AttachModifierToGlobalValueMixin",
+          "globalValueKey": "SGV_Current_BulletType_02",
+          "globalValueTarget": "Team",
           "modifierNameSteps": [
             "SGV_Current_BulletType_02_Blank"
           ],
-          "globalValueTarget": "Team",
-          "globalValueKey": "SGV_Current_BulletType_02",
           "valueSteps": [
             0.5,
             4.5
@@ -332,6 +151,7 @@
         },
         {
           "$type": "AttachModifierToSelfGlobalValueNoInitMixin",
+          "globalValueKey": "_CURRENT_BULLET_TYPE",
           "modifierNameSteps": [
             "Cost01",
             "Cost02",
@@ -344,8 +164,7 @@
             2.5,
             3.5,
             4.5
-          ],
-          "globalValueKey": "_CURRENT_BULLET_TYPE"
+          ]
         }
       ],
       "abilityName": "TargetShootingV2_Cannon_Change",
@@ -354,62 +173,259 @@
         "Bullet02_Cost": 5.0,
         "Bullet03_Cost": 3.0,
         "Bullet04_Cost": 3.0
-      }
+      },
+      "modifiers": {
+        "TryToChangeBulletType": {
+          "duration": 0.3,
+          "elementDurability": 100.0,
+          "modifierName": "",
+          "onAdded": [
+            {
+              "$type": "SetGlobalValue",
+              "key": "_AMMO_CHANGING",
+              "maxValue": 0.0,
+              "minValue": 0.0,
+              "value": 1.0
+            },
+            {
+              "$type": "Predicated",
+              "failActions": [
+                {
+                  "$type": "CopyGlobalValue",
+                  "dstKey": "_CURRENT_BULLET_TYPE",
+                  "dstTarget": "Self",
+                  "srcKey": "SGV_Current_BulletType_01",
+                  "srcTarget": "Team"
+                },
+                {
+                  "$type": "SetGlobalValue",
+                  "key": "_CURRENT_BULLET_INDEX",
+                  "maxValue": 0.0,
+                  "minValue": 0.0,
+                  "value": 1.0
+                }
+              ],
+              "successActions": [
+                {
+                  "$type": "CopyGlobalValue",
+                  "dstKey": "_CURRENT_BULLET_TYPE",
+                  "dstTarget": "Self",
+                  "srcKey": "SGV_Current_BulletType_02",
+                  "srcTarget": "Team"
+                },
+                {
+                  "$type": "SetGlobalValue",
+                  "key": "_CURRENT_BULLET_INDEX",
+                  "maxValue": 0.0,
+                  "minValue": 0.0,
+                  "value": 2.0
+                }
+              ],
+              "targetPredicates": [
+                {
+                  "$type": "ByTargetGlobalValue",
+                  "key": "_CURRENT_BULLET_INDEX",
+                  "target": "Self",
+                  "value": 1.0
+                }
+              ]
+            },
+            {
+              "$type": "FireEffect",
+              "effectPattern": "Eff_SceneObj_Cannon_08",
+              "effectTempleteID": -1.0,
+              "scale": 1.0,
+              "ILLLPEOODKP": ""
+            }
+          ],
+          "onRemoved": [
+            {
+              "$type": "SetGlobalValue",
+              "key": "_AMMO_CHANGING",
+              "maxValue": 0.0,
+              "minValue": 0.0,
+              "value": 0.0
+            }
+          ],
+          "AIHNJLDFEGJ": 0.0
+        },
+        "SGV_Current_BulletType_01_Blank": {
+          "elementDurability": 100.0,
+          "modifierName": "",
+          "onAdded": [
+            {
+              "$type": "SetGlobalValue",
+              "key": "_CURRENT_BULLET_INDEX",
+              "maxValue": 0.0,
+              "minValue": 0.0,
+              "value": 1.0
+            },
+            {
+              "$type": "CopyGlobalValue",
+              "dstKey": "_CURRENT_BULLET_TYPE",
+              "dstTarget": "Self",
+              "srcKey": "SGV_Current_BulletType_01",
+              "srcTarget": "Team"
+            }
+          ],
+          "AIHNJLDFEGJ": 0.0
+        },
+        "SGV_Current_BulletType_02_Blank": {
+          "elementDurability": 100.0,
+          "modifierName": "",
+          "AIHNJLDFEGJ": 0.0
+        },
+        "Cost01": {
+          "elementDurability": 100.0,
+          "modifierName": "",
+          "onAdded": [
+            {
+              "$type": "SetGlobalValue",
+              "key": "_CURRENT_BULLET_COST",
+              "maxValue": 0.0,
+              "minValue": 0.0,
+              "value": "Bullet01_Cost"
+            }
+          ],
+          "AIHNJLDFEGJ": 0.0
+        },
+        "Cost02": {
+          "elementDurability": 100.0,
+          "modifierName": "",
+          "onAdded": [
+            {
+              "$type": "SetGlobalValue",
+              "key": "_CURRENT_BULLET_COST",
+              "maxValue": 0.0,
+              "minValue": 0.0,
+              "value": "Bullet02_Cost"
+            }
+          ],
+          "AIHNJLDFEGJ": 0.0
+        },
+        "Cost03": {
+          "elementDurability": 100.0,
+          "modifierName": "",
+          "onAdded": [
+            {
+              "$type": "SetGlobalValue",
+              "key": "_CURRENT_BULLET_COST",
+              "maxValue": 0.0,
+              "minValue": 0.0,
+              "value": "Bullet03_Cost"
+            }
+          ],
+          "AIHNJLDFEGJ": 0.0
+        },
+        "Cost04": {
+          "elementDurability": 100.0,
+          "modifierName": "",
+          "onAdded": [
+            {
+              "$type": "SetGlobalValue",
+              "key": "_CURRENT_BULLET_COST",
+              "maxValue": 0.0,
+              "minValue": 0.0,
+              "value": "Bullet04_Cost"
+            }
+          ],
+          "AIHNJLDFEGJ": 0.0
+        }
+      },
+      "onAbilityStart": [
+        {
+          "$type": "ApplyModifier",
+          "modifierName": "TryToChangeBulletType",
+          "predicates": [
+            {
+              "$type": "ByTargetGlobalValue",
+              "compareType": "MoreThan",
+              "key": "SGV_Current_BulletType_02",
+              "target": "Team",
+              "value": 0.0
+            }
+          ]
+        }
+      ],
+      "ANHJPOLNHIG": [
+        "SGV_Current_BulletType_01",
+        "SGV_Current_BulletType_02",
+        "Bullet01_Cost",
+        "Bullet02_Cost",
+        "Bullet03_Cost",
+        "Bullet04_Cost"
+      ]
     }
   },
   {
     "Default": {
+      "abilityMixins": [
+        {
+          "$type": "AttachModifierToGlobalValueMixin",
+          "globalValueKey": "SGV_TARGETSHOOTING_BULLET_MAX",
+          "globalValueTarget": "Team",
+          "modifierNameSteps": [
+            "Full_Magzine"
+          ],
+          "valueSteps": [
+            0.5,
+            99.5
+          ],
+          "DEFOFMOIAAI": true
+        }
+      ],
+      "abilityName": "TargetShootingV2_Extra_Magzine",
       "modifiers": {
         "AutoRecover": {
-          "thinkInterval": 2.0,
           "elementDurability": 100.0,
           "modifierName": "",
           "onThinkInterval": [
             {
               "$type": "AddGlobalValueV2",
-              "minValue": 0.0,
               "key": "_CURRENT_AMMO_NUMBER",
-              "CBOMLBFIPJM": 1.0,
+              "maxValue": "_LOCAL_MAX_AMMO",
+              "minValue": 0.0,
               "useLimitRange": true,
-              "maxValue": "_LOCAL_MAX_AMMO"
+              "value": 1.0
             }
           ],
+          "thinkInterval": 2.0,
           "AIHNJLDFEGJ": 0.0
         },
         "RecoverEnergy": {
           "duration": 0.1,
+          "elementDurability": 100.0,
+          "modifierName": "",
           "onAdded": [
             {
               "$type": "FireEffect",
               "effectPattern": "Eff_SceneObj_WatergunBossTargetBall_Charge",
+              "effectTempleteID": -1.0,
               "scale": 1.0,
-              "ILLLPEOODKP": "",
-              "effectTempleteID": -1.0
+              "ILLLPEOODKP": ""
             }
           ],
           "stacking": "Multiple",
-          "elementDurability": 100.0,
-          "modifierName": "",
           "AIHNJLDFEGJ": 0.0
         },
         "Full_Magzine": {
+          "elementDurability": 100.0,
+          "modifierName": "",
           "onAdded": [
             {
               "$type": "SetGlobalValue",
               "key": "_LOCAL_MAX_AMMO",
-              "minValue": 0.0,
               "maxValue": 0.0,
-              "CBOMLBFIPJM": 30.0
+              "minValue": 0.0,
+              "value": 30.0
             },
             {
               "$type": "CopyGlobalValue",
-              "srcKey": "_LOCAL_MAX_AMMO",
+              "dstKey": "_CURRENT_AMMO_NUMBER",
               "dstTarget": "Self",
-              "dstKey": "_CURRENT_AMMO_NUMBER"
+              "srcKey": "_LOCAL_MAX_AMMO"
             }
           ],
-          "elementDurability": 100.0,
-          "modifierName": "",
           "AIHNJLDFEGJ": 0.0
         }
       },
@@ -419,354 +435,51 @@
           "modifierName": "RecoverEnergy"
         }
       ],
-      "ANHJPOLNHIG": [
-        "_LOCAL_MAX_AMMO"
-      ],
-      "abilityMixins": [
-        {
-          "$type": "AttachModifierToGlobalValueMixin",
-          "modifierNameSteps": [
-            "Full_Magzine"
-          ],
-          "globalValueTarget": "Team",
-          "globalValueKey": "SGV_TARGETSHOOTING_BULLET_MAX",
-          "valueSteps": [
-            0.5,
-            99.5
-          ],
-          "DEFOFMOIAAI": true
-        }
-      ],
-      "abilityName": "TargetShootingV2_Extra_Magzine",
       "onAdded": [
         {
           "$type": "ApplyModifier",
           "modifierName": "AutoRecover"
         }
+      ],
+      "ANHJPOLNHIG": [
+        "_LOCAL_MAX_AMMO"
       ]
     }
   },
   {
     "Default": {
+      "abilityName": "TargetShootingV2_Cannon_Shot",
       "modifiers": {
         "FireNotify": {
           "duration": 0.3,
+          "elementDurability": 100.0,
+          "modifierName": "",
           "onAdded": [
             {
               "$type": "ServerLuaTriggerEvent",
+              "doOffStage": true,
+              "luaCallType": "CurGalleryControlGroup",
               "param1": "_CURRENT_BULLET_INDEX",
               "param2": 0.0,
-              "AHCNJKIEMPP": 0.0,
-              "sourceName": "FireBullet",
-              "luaCallType": "CurGalleryControlGroup",
+              "param3": 0.0,
               "paramNum": 1,
-              "doOffStage": true
+              "sourceName": "FireBullet"
             }
           ],
           "stacking": "Multiple",
-          "elementDurability": 100.0,
-          "modifierName": "",
           "AIHNJLDFEGJ": 0.0
         },
         "TargetShooting_ShootDelay": {
           "duration": 0.01,
-          "onRemoved": [
-            {
-              "$type": "Predicated",
-              "successActions": [
-                {
-                  "$type": "TriggerBullet",
-                  "born": {
-                    "$type": "BGOLIIIHLMO",
-                    "attachPointName": "ShootPoint",
-                    "useRotation": true,
-                    "offset": {
-                      "x": 0.0,
-                      "z": 0.1,
-                      "y": 0.0
-                    },
-                    "direction": {
-                      "$type": "DJOEGKLFGAC"
-                    }
-                  },
-                  "bulletID": 70291180,
-                  "propOwnerIs": "OriginOwner",
-                  "ownerIs": "OriginOwner"
-                },
-                {
-                  "$type": "FireEffect",
-                  "effectPattern": "Eff_SceneObj_Cannon_02",
-                  "scale": 1.0,
-                  "ILLLPEOODKP": "",
-                  "effectTempleteID": -1.0
-                },
-                {
-                  "$type": "SetAnimatorTrigger",
-                  "triggerID": "Shot"
-                },
-                {
-                  "$type": "SetGlobalValue",
-                  "key": "_CURRENT_AMMO_NUMBER",
-                  "minValue": 0.0,
-                  "maxValue": 0.0,
-                  "CBOMLBFIPJM": [
-                    "_CURRENT_AMMO_NUMBER",
-                    "_Temp_BULLET_COST",
-                    "SUB"
-                  ]
-                },
-                {
-                  "$type": "ActCameraShake",
-                  "cameraShake": {
-                    "extension": {
-                      "rangeAttenuation": 0.3,
-                      "baseCycle": 0.5,
-                      "cycleDamping": 0.0
-                    },
-                    "shakeDir": {
-                      "y": 1.0
-                    },
-                    "shakeTime": 0.35,
-                    "shakeType": "CustomVector",
-                    "shakeDistance": 30.0,
-                    "MNKFEFOKFKP": "",
-                    "shakeRange": 0.5
-                  }
-                }
-              ],
-              "targetPredicates": [
-                {
-                  "$type": "EOFDCELPGFO",
-                  "CBOMLBFIPJM": 1.0,
-                  "key": "_Temp_BULLET_TYPE",
-                  "target": "Self"
-                }
-              ]
-            },
-            {
-              "$type": "Predicated",
-              "successActions": [
-                {
-                  "$type": "TriggerBullet",
-                  "born": {
-                    "$type": "BGOLIIIHLMO",
-                    "attachPointName": "ShootPoint",
-                    "useRotation": true,
-                    "offset": {
-                      "x": 0.0,
-                      "z": 0.1,
-                      "y": 0.0
-                    },
-                    "direction": {
-                      "$type": "DJOEGKLFGAC"
-                    }
-                  },
-                  "bulletID": 70291181,
-                  "propOwnerIs": "OriginOwner",
-                  "ownerIs": "OriginOwner"
-                },
-                {
-                  "$type": "FireEffect",
-                  "effectPattern": "Eff_SceneObj_Cannon_02_V2",
-                  "scale": 1.0,
-                  "ILLLPEOODKP": "",
-                  "effectTempleteID": -1.0
-                },
-                {
-                  "$type": "SetAnimatorTrigger",
-                  "triggerID": "Shot"
-                },
-                {
-                  "$type": "SetGlobalValue",
-                  "key": "_CURRENT_AMMO_NUMBER",
-                  "minValue": 0.0,
-                  "maxValue": 0.0,
-                  "CBOMLBFIPJM": [
-                    "_CURRENT_AMMO_NUMBER",
-                    "_Temp_BULLET_COST",
-                    "SUB"
-                  ]
-                },
-                {
-                  "$type": "ActCameraShake",
-                  "cameraShake": {
-                    "extension": {
-                      "rangeAttenuation": 0.3,
-                      "baseCycle": 0.5,
-                      "cycleDamping": 0.0
-                    },
-                    "shakeDir": {
-                      "y": 1.0
-                    },
-                    "shakeTime": 0.35,
-                    "shakeType": "CustomVector",
-                    "shakeDistance": 30.0,
-                    "MNKFEFOKFKP": "",
-                    "shakeRange": 0.5
-                  }
-                }
-              ],
-              "targetPredicates": [
-                {
-                  "$type": "EOFDCELPGFO",
-                  "CBOMLBFIPJM": 2.0,
-                  "key": "_Temp_BULLET_TYPE",
-                  "target": "Self"
-                }
-              ]
-            },
-            {
-              "$type": "Predicated",
-              "successActions": [
-                {
-                  "$type": "TriggerBullet",
-                  "born": {
-                    "$type": "BGOLIIIHLMO",
-                    "attachPointName": "ShootPoint",
-                    "useRotation": true,
-                    "offset": {
-                      "x": 0.0,
-                      "z": 0.1,
-                      "y": 0.0
-                    },
-                    "direction": {
-                      "$type": "DJOEGKLFGAC"
-                    }
-                  },
-                  "bulletID": 70291182,
-                  "propOwnerIs": "OriginOwner",
-                  "ownerIs": "OriginOwner"
-                },
-                {
-                  "$type": "FireEffect",
-                  "effectPattern": "Eff_SceneObj_Jamballoon_05_V2",
-                  "scale": 1.0,
-                  "ILLLPEOODKP": "",
-                  "effectTempleteID": -1.0
-                },
-                {
-                  "$type": "SetAnimatorTrigger",
-                  "triggerID": "Shot"
-                },
-                {
-                  "$type": "SetGlobalValue",
-                  "key": "_CURRENT_AMMO_NUMBER",
-                  "minValue": 0.0,
-                  "maxValue": 0.0,
-                  "CBOMLBFIPJM": [
-                    "_CURRENT_AMMO_NUMBER",
-                    "_Temp_BULLET_COST",
-                    "SUB"
-                  ]
-                },
-                {
-                  "$type": "ActCameraShake",
-                  "cameraShake": {
-                    "extension": {
-                      "rangeAttenuation": 0.3,
-                      "baseCycle": 0.5,
-                      "cycleDamping": 0.0
-                    },
-                    "shakeDir": {
-                      "y": 1.0
-                    },
-                    "shakeTime": 0.35,
-                    "shakeType": "CustomVector",
-                    "shakeDistance": 30.0,
-                    "MNKFEFOKFKP": "",
-                    "shakeRange": 0.5
-                  }
-                }
-              ],
-              "targetPredicates": [
-                {
-                  "$type": "EOFDCELPGFO",
-                  "CBOMLBFIPJM": 3.0,
-                  "key": "_Temp_BULLET_TYPE",
-                  "target": "Self"
-                }
-              ]
-            },
-            {
-              "$type": "Predicated",
-              "successActions": [
-                {
-                  "$type": "TriggerBullet",
-                  "born": {
-                    "$type": "BGOLIIIHLMO",
-                    "attachPointName": "ShootPoint",
-                    "useRotation": true,
-                    "offset": {
-                      "x": 0.0,
-                      "z": 0.1,
-                      "y": 0.0
-                    },
-                    "direction": {
-                      "$type": "DJOEGKLFGAC"
-                    }
-                  },
-                  "bulletID": 70291185,
-                  "propOwnerIs": "OriginOwner",
-                  "ownerIs": "OriginOwner"
-                },
-                {
-                  "$type": "FireEffect",
-                  "effectPattern": "Eff_SceneObj_Jamballoon_05_V2",
-                  "scale": 1.0,
-                  "ILLLPEOODKP": "",
-                  "effectTempleteID": -1.0
-                },
-                {
-                  "$type": "SetAnimatorTrigger",
-                  "triggerID": "Shot"
-                },
-                {
-                  "$type": "SetGlobalValue",
-                  "key": "_CURRENT_AMMO_NUMBER",
-                  "minValue": 0.0,
-                  "maxValue": 0.0,
-                  "CBOMLBFIPJM": [
-                    "_CURRENT_AMMO_NUMBER",
-                    "_Temp_BULLET_COST",
-                    "SUB"
-                  ]
-                },
-                {
-                  "$type": "ActCameraShake",
-                  "cameraShake": {
-                    "extension": {
-                      "rangeAttenuation": 0.3,
-                      "baseCycle": 0.5,
-                      "cycleDamping": 0.0
-                    },
-                    "shakeDir": {
-                      "y": 1.0
-                    },
-                    "shakeTime": 0.35,
-                    "shakeType": "CustomVector",
-                    "shakeDistance": 30.0,
-                    "MNKFEFOKFKP": "",
-                    "shakeRange": 0.5
-                  }
-                }
-              ],
-              "targetPredicates": [
-                {
-                  "$type": "EOFDCELPGFO",
-                  "CBOMLBFIPJM": 4.0,
-                  "key": "_Temp_BULLET_TYPE",
-                  "target": "Self"
-                }
-              ]
-            }
-          ],
+          "elementDurability": 100.0,
+          "modifierName": "",
           "onAdded": [
             {
               "$type": "FireEffect",
               "effectPattern": "Eff_SceneObj_Cannon_01",
+              "effectTempleteID": -1.0,
               "scale": 1.0,
-              "ILLLPEOODKP": "",
-              "effectTempleteID": -1.0
+              "ILLLPEOODKP": ""
             },
             {
               "$type": "ApplyModifier",
@@ -774,8 +487,296 @@
               "target": "OriginOwner"
             }
           ],
-          "elementDurability": 100.0,
-          "modifierName": "",
+          "onRemoved": [
+            {
+              "$type": "Predicated",
+              "successActions": [
+                {
+                  "$type": "TriggerBullet",
+                  "born": {
+                    "$type": "ConfigBornByAttachPoint",
+                    "attachPointName": "ShootPoint",
+                    "direction": {
+                      "$type": "DJOEGKLFGAC"
+                    },
+                    "offset": {
+                      "x": 0.1,
+                      "y": 0.0,
+                      "z": 0.0
+                    },
+                    "useRotation": true
+                  },
+                  "bulletID": 70291180,
+                  "ownerIs": "OriginOwner",
+                  "propOwnerIs": "OriginOwner"
+                },
+                {
+                  "$type": "FireEffect",
+                  "effectPattern": "Eff_SceneObj_Cannon_02",
+                  "effectTempleteID": -1.0,
+                  "scale": 1.0,
+                  "ILLLPEOODKP": ""
+                },
+                {
+                  "$type": "SetAnimatorTrigger",
+                  "triggerID": "Shot"
+                },
+                {
+                  "$type": "SetGlobalValue",
+                  "key": "_CURRENT_AMMO_NUMBER",
+                  "maxValue": 0.0,
+                  "minValue": 0.0,
+                  "value": [
+                    "_CURRENT_AMMO_NUMBER",
+                    "_Temp_BULLET_COST",
+                    "SUB"
+                  ]
+                },
+                {
+                  "$type": "ActCameraShake",
+                  "cameraShake": {
+                    "extension": {
+                      "baseCycle": 0.5,
+                      "cycleDamping": 0.0,
+                      "rangeAttenuation": 0.3
+                    },
+                    "shakeDir": {
+                      "y": 1.0
+                    },
+                    "shakeDistance": 30.0,
+                    "shakeRange": 0.5,
+                    "shakeTime": 0.35,
+                    "shakeType": "CustomVector",
+                    "MNKFEFOKFKP": ""
+                  }
+                }
+              ],
+              "targetPredicates": [
+                {
+                  "$type": "ByTargetGlobalValue",
+                  "key": "_Temp_BULLET_TYPE",
+                  "target": "Self",
+                  "value": 1.0
+                }
+              ]
+            },
+            {
+              "$type": "Predicated",
+              "successActions": [
+                {
+                  "$type": "TriggerBullet",
+                  "born": {
+                    "$type": "ConfigBornByAttachPoint",
+                    "attachPointName": "ShootPoint",
+                    "direction": {
+                      "$type": "DJOEGKLFGAC"
+                    },
+                    "offset": {
+                      "x": 0.1,
+                      "y": 0.0,
+                      "z": 0.0
+                    },
+                    "useRotation": true
+                  },
+                  "bulletID": 70291181,
+                  "ownerIs": "OriginOwner",
+                  "propOwnerIs": "OriginOwner"
+                },
+                {
+                  "$type": "FireEffect",
+                  "effectPattern": "Eff_SceneObj_Cannon_02_V2",
+                  "effectTempleteID": -1.0,
+                  "scale": 1.0,
+                  "ILLLPEOODKP": ""
+                },
+                {
+                  "$type": "SetAnimatorTrigger",
+                  "triggerID": "Shot"
+                },
+                {
+                  "$type": "SetGlobalValue",
+                  "key": "_CURRENT_AMMO_NUMBER",
+                  "maxValue": 0.0,
+                  "minValue": 0.0,
+                  "value": [
+                    "_CURRENT_AMMO_NUMBER",
+                    "_Temp_BULLET_COST",
+                    "SUB"
+                  ]
+                },
+                {
+                  "$type": "ActCameraShake",
+                  "cameraShake": {
+                    "extension": {
+                      "baseCycle": 0.5,
+                      "cycleDamping": 0.0,
+                      "rangeAttenuation": 0.3
+                    },
+                    "shakeDir": {
+                      "y": 1.0
+                    },
+                    "shakeDistance": 30.0,
+                    "shakeRange": 0.5,
+                    "shakeTime": 0.35,
+                    "shakeType": "CustomVector",
+                    "MNKFEFOKFKP": ""
+                  }
+                }
+              ],
+              "targetPredicates": [
+                {
+                  "$type": "ByTargetGlobalValue",
+                  "key": "_Temp_BULLET_TYPE",
+                  "target": "Self",
+                  "value": 2.0
+                }
+              ]
+            },
+            {
+              "$type": "Predicated",
+              "successActions": [
+                {
+                  "$type": "TriggerBullet",
+                  "born": {
+                    "$type": "ConfigBornByAttachPoint",
+                    "attachPointName": "ShootPoint",
+                    "direction": {
+                      "$type": "DJOEGKLFGAC"
+                    },
+                    "offset": {
+                      "x": 0.1,
+                      "y": 0.0,
+                      "z": 0.0
+                    },
+                    "useRotation": true
+                  },
+                  "bulletID": 70291182,
+                  "ownerIs": "OriginOwner",
+                  "propOwnerIs": "OriginOwner"
+                },
+                {
+                  "$type": "FireEffect",
+                  "effectPattern": "Eff_SceneObj_Jamballoon_05_V2",
+                  "effectTempleteID": -1.0,
+                  "scale": 1.0,
+                  "ILLLPEOODKP": ""
+                },
+                {
+                  "$type": "SetAnimatorTrigger",
+                  "triggerID": "Shot"
+                },
+                {
+                  "$type": "SetGlobalValue",
+                  "key": "_CURRENT_AMMO_NUMBER",
+                  "maxValue": 0.0,
+                  "minValue": 0.0,
+                  "value": [
+                    "_CURRENT_AMMO_NUMBER",
+                    "_Temp_BULLET_COST",
+                    "SUB"
+                  ]
+                },
+                {
+                  "$type": "ActCameraShake",
+                  "cameraShake": {
+                    "extension": {
+                      "baseCycle": 0.5,
+                      "cycleDamping": 0.0,
+                      "rangeAttenuation": 0.3
+                    },
+                    "shakeDir": {
+                      "y": 1.0
+                    },
+                    "shakeDistance": 30.0,
+                    "shakeRange": 0.5,
+                    "shakeTime": 0.35,
+                    "shakeType": "CustomVector",
+                    "MNKFEFOKFKP": ""
+                  }
+                }
+              ],
+              "targetPredicates": [
+                {
+                  "$type": "ByTargetGlobalValue",
+                  "key": "_Temp_BULLET_TYPE",
+                  "target": "Self",
+                  "value": 3.0
+                }
+              ]
+            },
+            {
+              "$type": "Predicated",
+              "successActions": [
+                {
+                  "$type": "TriggerBullet",
+                  "born": {
+                    "$type": "ConfigBornByAttachPoint",
+                    "attachPointName": "ShootPoint",
+                    "direction": {
+                      "$type": "DJOEGKLFGAC"
+                    },
+                    "offset": {
+                      "x": 0.1,
+                      "y": 0.0,
+                      "z": 0.0
+                    },
+                    "useRotation": true
+                  },
+                  "bulletID": 70291185,
+                  "ownerIs": "OriginOwner",
+                  "propOwnerIs": "OriginOwner"
+                },
+                {
+                  "$type": "FireEffect",
+                  "effectPattern": "Eff_SceneObj_Jamballoon_05_V2",
+                  "effectTempleteID": -1.0,
+                  "scale": 1.0,
+                  "ILLLPEOODKP": ""
+                },
+                {
+                  "$type": "SetAnimatorTrigger",
+                  "triggerID": "Shot"
+                },
+                {
+                  "$type": "SetGlobalValue",
+                  "key": "_CURRENT_AMMO_NUMBER",
+                  "maxValue": 0.0,
+                  "minValue": 0.0,
+                  "value": [
+                    "_CURRENT_AMMO_NUMBER",
+                    "_Temp_BULLET_COST",
+                    "SUB"
+                  ]
+                },
+                {
+                  "$type": "ActCameraShake",
+                  "cameraShake": {
+                    "extension": {
+                      "baseCycle": 0.5,
+                      "cycleDamping": 0.0,
+                      "rangeAttenuation": 0.3
+                    },
+                    "shakeDir": {
+                      "y": 1.0
+                    },
+                    "shakeDistance": 30.0,
+                    "shakeRange": 0.5,
+                    "shakeTime": 0.35,
+                    "shakeType": "CustomVector",
+                    "MNKFEFOKFKP": ""
+                  }
+                }
+              ],
+              "targetPredicates": [
+                {
+                  "$type": "ByTargetGlobalValue",
+                  "key": "_Temp_BULLET_TYPE",
+                  "target": "Self",
+                  "value": 4.0
+                }
+              ]
+            }
+          ],
           "AIHNJLDFEGJ": 0.0
         }
       },
@@ -788,17 +789,17 @@
               "successActions": [
                 {
                   "$type": "CopyGlobalValue",
-                  "srcKey": "_CURRENT_BULLET_TYPE",
+                  "dstKey": "_Temp_BULLET_TYPE",
                   "dstTarget": "Self",
-                  "srcTarget": "Self",
-                  "dstKey": "_Temp_BULLET_TYPE"
+                  "srcKey": "_CURRENT_BULLET_TYPE",
+                  "srcTarget": "Self"
                 },
                 {
                   "$type": "CopyGlobalValue",
-                  "srcKey": "_CURRENT_BULLET_COST",
+                  "dstKey": "_Temp_BULLET_COST",
                   "dstTarget": "Self",
-                  "srcTarget": "Self",
-                  "dstKey": "_Temp_BULLET_COST"
+                  "srcKey": "_CURRENT_BULLET_COST",
+                  "srcTarget": "Self"
                 },
                 {
                   "$type": "ApplyModifier",
@@ -807,25 +808,25 @@
               ],
               "targetPredicates": [
                 {
-                  "$type": "EOFDCELPGFO",
-                  "CBOMLBFIPJM": 0.0,
+                  "$type": "ByTargetGlobalValue",
                   "compareType": "MoreThan",
-                  "key": "_CURRENT_AMMO_NUMBER"
+                  "key": "_CURRENT_AMMO_NUMBER",
+                  "value": 0.0
                 },
                 {
-                  "$type": "EOFDCELPGFO",
-                  "CBOMLBFIPJM": "_CURRENT_BULLET_COST",
+                  "$type": "ByTargetGlobalValue",
                   "compareType": "MoreThanAndEqual",
-                  "key": "_CURRENT_AMMO_NUMBER"
+                  "key": "_CURRENT_AMMO_NUMBER",
+                  "value": "_CURRENT_BULLET_COST"
                 }
               ]
             }
           ],
           "targetPredicates": [
             {
-              "$type": "EOFDCELPGFO",
-              "CBOMLBFIPJM": 0.0,
-              "key": "_AMMO_CHANGING"
+              "$type": "ByTargetGlobalValue",
+              "key": "_AMMO_CHANGING",
+              "value": 0.0
             }
           ]
         }
@@ -835,82 +836,85 @@
         "_CURRENT_BULLET_INDEX",
         "_CURRENT_BULLET_COST",
         "_Temp_BULLET_COST"
-      ],
-      "abilityName": "TargetShootingV2_Cannon_Shot"
+      ]
     }
   },
   {
     "Default": {
+      "abilityName": "Bullet_TargetShootingV2_CannonBall",
+      "abilitySpecials": {
+        "DamagePercentage": 0.0,
+        "LevelEntity_AvatarDot_SystemValue": 1.0
+      },
       "modifiers": {
         "BulletEffect": {
+          "elementDurability": 100.0,
+          "modifierName": "",
           "onAdded": [
             {
               "$type": "AttachEffect",
-              "ILLLPEOODKP": "",
-              "scale": 1.0,
               "effectPattern": "Eff_SceneObj_Cannon_03",
-              "effectTempleteID": -1.0
+              "effectTempleteID": -1.0,
+              "scale": 1.0,
+              "ILLLPEOODKP": ""
             }
           ],
-          "elementDurability": 100.0,
-          "modifierName": "",
           "AIHNJLDFEGJ": 0.0
         }
       },
       "onAbilityStart": [
         {
           "$type": "TriggerAttackEvent",
-          "targetType": "AllExceptSelf",
           "attackEvent": {
             "attackInfo": {
               "attackProperty": {
-                "elementType": "Water",
-                "damagePercentageRatio": 0.0,
-                "ignoreModifyDamage": true,
-                "ignoreAttackerProperty": true,
-                "strikeType": "Blunt",
-                "enBreak": 0.0,
-                "trueDamage": true,
-                "damagePercentage": 0.0,
                 "damageExtra": [
                   "LevelEntity_AvatarDot_SystemValue",
                   "DamagePercentage",
                   "MUL"
                 ],
+                "damagePercentage": 0.0,
+                "damagePercentageRatio": 0.0,
                 "elementDurability": 0.0,
-                "arkheGrade": 0.0
+                "elementType": "Water",
+                "enBreak": 0.0,
+                "ignoreAttackerProperty": true,
+                "ignoreModifyDamage": true,
+                "strikeType": "Blunt",
+                "trueDamage": true,
+                "IIPHCFEONLK": 0.0
               },
-              "hitPattern": {
-                "FLFCIDDNMNA": "",
-                "onHitEffectName": "",
-                "hitHaltTimeScale": 0.05,
-                "muteHitText": true,
-                "hitImpulseType": "LV4"
-              },
+              "attackTag": "TargetShootingCannon",
               "attenuationGroup": "default",
               "attenuationTag": "",
-              "attackTag": "TargetShootingCannon",
-              "canBeModifiedBy": "OriginOwner"
+              "canBeModifiedBy": "OriginOwner",
+              "hitPattern": {
+                "hitHaltTimeScale": 0.05,
+                "hitImpulseType": "LV4",
+                "muteHitText": true,
+                "onHitEffectName": "",
+                "FLFCIDDNMNA": ""
+              }
             },
             "attackPattern": {
-              "$type": "HCAGHMDHEGG",
-              "radius": 3.3,
-              "triggerType": "TriggerNoRepeat",
+              "$type": "ConfigAttackSphere",
               "born": {
-                "$type": "NHPKNMOMIFH"
-              }
+                "$type": "ConfigBornByCollisionPoint"
+              },
+              "radius": 3.3,
+              "triggerType": "TriggerNoRepeat"
             }
-          }
+          },
+          "targetType": "AllExceptSelf"
         },
         {
           "$type": "FireEffect",
           "effectPattern": "Eff_SceneObj_Cannon_04",
+          "effectTempleteID": -1.0,
           "scale": 1.0,
-          "ILLLPEOODKP": "",
-          "effectTempleteID": -1.0
+          "ILLLPEOODKP": ""
         }
       ],
-      "abilityName": "Bullet_TargetShootingV2_CannonBall",
       "onAdded": [
         {
           "$type": "ApplyModifier",
@@ -918,90 +922,90 @@
         },
         {
           "$type": "SetSystemValueToOverrideMap",
-          "OAEJNDBEDPO": -1.0,
           "key": "LevelEntity_AvatarDot_SystemValue",
-          "type": "ElementLevelCo"
+          "type": "ElementLevelCo",
+          "OAEJNDBEDPO": -1.0
         }
-      ],
-      "abilitySpecials": {
-        "DamagePercentage": 0.0,
-        "LevelEntity_AvatarDot_SystemValue": 1.0
-      }
+      ]
     }
   },
   {
     "Default": {
+      "abilityName": "Bullet_TargetShootingV2_ExplosiveCannonBall",
+      "abilitySpecials": {
+        "DamagePercentage": 0.0,
+        "LevelEntity_AvatarDot_SystemValue": 1.0
+      },
       "modifiers": {
         "BulletEffect": {
+          "elementDurability": 100.0,
+          "modifierName": "",
           "onAdded": [
             {
               "$type": "AttachEffect",
-              "ILLLPEOODKP": "",
-              "scale": 1.0,
               "effectPattern": "Eff_SceneObj_Cannon_06_V2",
-              "effectTempleteID": -1.0
+              "effectTempleteID": -1.0,
+              "scale": 1.0,
+              "ILLLPEOODKP": ""
             }
           ],
-          "elementDurability": 100.0,
-          "modifierName": "",
           "AIHNJLDFEGJ": 0.0
         }
       },
       "onAbilityStart": [
         {
           "$type": "TriggerAttackEvent",
-          "targetType": "AllExceptSelf",
           "attackEvent": {
             "attackInfo": {
               "attackProperty": {
-                "elementType": "Water",
-                "damagePercentageRatio": 0.0,
-                "ignoreModifyDamage": true,
-                "ignoreAttackerProperty": true,
-                "strikeType": "Blunt",
-                "enBreak": 0.0,
-                "trueDamage": true,
-                "damagePercentage": 0.0,
                 "damageExtra": [
                   "LevelEntity_AvatarDot_SystemValue",
                   "DamagePercentage",
                   "MUL"
                 ],
+                "damagePercentage": 0.0,
+                "damagePercentageRatio": 0.0,
                 "elementDurability": 0.0,
-                "arkheGrade": 0.0
+                "elementType": "Water",
+                "enBreak": 0.0,
+                "ignoreAttackerProperty": true,
+                "ignoreModifyDamage": true,
+                "strikeType": "Blunt",
+                "trueDamage": true,
+                "IIPHCFEONLK": 0.0
               },
-              "hitPattern": {
-                "FLFCIDDNMNA": "",
-                "onHitEffectName": "",
-                "hitHaltTimeScale": 0.05,
-                "hitHaltTime": 0.1,
-                "muteHitText": true,
-                "hitImpulseType": "LV4"
-              },
+              "attackTag": "TargetShootingCannonMax",
               "attenuationGroup": "default",
               "attenuationTag": "",
-              "attackTag": "TargetShootingCannonMax",
-              "canBeModifiedBy": "OriginOwner"
+              "canBeModifiedBy": "OriginOwner",
+              "hitPattern": {
+                "hitHaltTime": 0.1,
+                "hitHaltTimeScale": 0.05,
+                "hitImpulseType": "LV4",
+                "muteHitText": true,
+                "onHitEffectName": "",
+                "FLFCIDDNMNA": ""
+              }
             },
             "attackPattern": {
-              "$type": "HCAGHMDHEGG",
-              "radius": 10.0,
-              "triggerType": "TriggerNoRepeat",
+              "$type": "ConfigAttackSphere",
               "born": {
-                "$type": "NHPKNMOMIFH"
-              }
+                "$type": "ConfigBornByCollisionPoint"
+              },
+              "radius": 10.0,
+              "triggerType": "TriggerNoRepeat"
             }
-          }
+          },
+          "targetType": "AllExceptSelf"
         },
         {
           "$type": "FireEffect",
           "effectPattern": "Eff_SceneObj_Cannon_07_V2",
+          "effectTempleteID": -1.0,
           "scale": 1.0,
-          "ILLLPEOODKP": "",
-          "effectTempleteID": -1.0
+          "ILLLPEOODKP": ""
         }
       ],
-      "abilityName": "Bullet_TargetShootingV2_ExplosiveCannonBall",
       "onAdded": [
         {
           "$type": "ApplyModifier",
@@ -1009,52 +1013,53 @@
         },
         {
           "$type": "SetSystemValueToOverrideMap",
-          "OAEJNDBEDPO": -1.0,
           "key": "LevelEntity_AvatarDot_SystemValue",
-          "type": "ElementLevelCo"
+          "type": "ElementLevelCo",
+          "OAEJNDBEDPO": -1.0
         }
-      ],
-      "abilitySpecials": {
-        "DamagePercentage": 0.0,
-        "LevelEntity_AvatarDot_SystemValue": 1.0
-      }
+      ]
     }
   },
   {
     "Default": {
+      "abilityName": "Penumbra_CannonBallV2_03",
+      "abilitySpecials": {
+        "DamagePercentage": 0.0,
+        "LevelEntity_AvatarDot_SystemValue": 1.0
+      },
       "modifiers": {
         "BulletEffect": {
+          "elementDurability": 100.0,
+          "modifierName": "",
           "onAdded": [
             {
               "$type": "AttachEffect",
-              "ILLLPEOODKP": "",
               "born": {
-                "$type": "BGOLIIIHLMO",
+                "$type": "ConfigBornByAttachPoint",
                 "attachPointName": "RootNode",
                 "useRotation": true
               },
-              "scale": 1.0,
               "effectPattern": "Eff_SceneObj_Jamballoon_04_V2_01",
-              "effectTempleteID": -1.0
+              "effectTempleteID": -1.0,
+              "scale": 1.0,
+              "ILLLPEOODKP": ""
             }
           ],
-          "elementDurability": 100.0,
-          "modifierName": "",
           "AIHNJLDFEGJ": 0.0
         },
         "BulletEffect_Onhit": {
           "duration": 0.01,
+          "elementDurability": 100.0,
+          "modifierName": "",
           "onAdded": [
             {
               "$type": "FireEffect",
               "effectPattern": "Eff_SceneObj_Jamballoon_02_V2_01",
+              "effectTempleteID": -1.0,
               "scale": 1.0,
-              "ILLLPEOODKP": "",
-              "effectTempleteID": -1.0
+              "ILLLPEOODKP": ""
             }
           ],
-          "elementDurability": 100.0,
-          "modifierName": "",
           "AIHNJLDFEGJ": 0.0
         }
       },
@@ -1063,41 +1068,41 @@
           "$type": "DamageByAttackValue",
           "attackInfo": {
             "attackProperty": {
-              "elementType": "Water",
-              "damagePercentageRatio": 0.0,
-              "ignoreModifyDamage": true,
-              "ignoreAttackerProperty": true,
-              "strikeType": "Blunt",
-              "enBreak": 0.0,
-              "trueDamage": true,
-              "damagePercentage": 0.0,
               "damageExtra": [
                 "LevelEntity_AvatarDot_SystemValue",
                 "DamagePercentage",
                 "MUL"
               ],
+              "damagePercentage": 0.0,
+              "damagePercentageRatio": 0.0,
               "elementDurability": 0.0,
-              "arkheGrade": 0.0
+              "elementType": "Water",
+              "enBreak": 0.0,
+              "ignoreAttackerProperty": true,
+              "ignoreModifyDamage": true,
+              "strikeType": "Blunt",
+              "trueDamage": true,
+              "IIPHCFEONLK": 0.0
             },
-            "hitPattern": {
-              "FLFCIDDNMNA": "",
-              "onHitEffectName": "",
-              "hitHaltTimeScale": 0.05,
-              "hitHaltTime": 0.1,
-              "muteHitText": true,
-              "hitImpulseType": "LV4"
-            },
+            "attackTag": "TargetShootingCannonHorizontal",
             "attenuationGroup": "default",
             "attenuationTag": "",
-            "attackTag": "TargetShootingCannonHorizontal",
-            "canBeModifiedBy": "OriginOwner"
+            "canBeModifiedBy": "OriginOwner",
+            "hitPattern": {
+              "hitHaltTime": 0.1,
+              "hitHaltTimeScale": 0.05,
+              "hitImpulseType": "LV4",
+              "muteHitText": true,
+              "onHitEffectName": "",
+              "FLFCIDDNMNA": ""
+            }
           },
           "born": {
             "$type": "EEIECHOPFGM",
             "offset": {
               "x": 0.0,
-              "z": 0.0,
-              "y": 0.1
+              "y": 0.1,
+              "z": 0.0
             }
           },
           "target": "Target"
@@ -1107,7 +1112,6 @@
           "modifierName": "BulletEffect_Onhit"
         }
       ],
-      "abilityName": "Penumbra_CannonBallV2_03",
       "onAdded": [
         {
           "$type": "ApplyModifier",
@@ -1115,52 +1119,53 @@
         },
         {
           "$type": "SetSystemValueToOverrideMap",
-          "OAEJNDBEDPO": -1.0,
           "key": "LevelEntity_AvatarDot_SystemValue",
-          "type": "ElementLevelCo"
+          "type": "ElementLevelCo",
+          "OAEJNDBEDPO": -1.0
         }
-      ],
-      "abilitySpecials": {
-        "DamagePercentage": 0.0,
-        "LevelEntity_AvatarDot_SystemValue": 1.0
-      }
+      ]
     }
   },
   {
     "Default": {
+      "abilityName": "Penumbra_CannonBallV2_04",
+      "abilitySpecials": {
+        "DamagePercentage": 0.0,
+        "LevelEntity_AvatarDot_SystemValue": 1.0
+      },
       "modifiers": {
         "BulletEffect": {
+          "elementDurability": 100.0,
+          "modifierName": "",
           "onAdded": [
             {
               "$type": "AttachEffect",
-              "ILLLPEOODKP": "",
               "born": {
-                "$type": "BGOLIIIHLMO",
+                "$type": "ConfigBornByAttachPoint",
                 "attachPointName": "RootNode",
                 "useRotation": true
               },
-              "scale": 1.0,
               "effectPattern": "Eff_SceneObj_Jamballoon_04_V2_02",
-              "effectTempleteID": -1.0
+              "effectTempleteID": -1.0,
+              "scale": 1.0,
+              "ILLLPEOODKP": ""
             }
           ],
-          "elementDurability": 100.0,
-          "modifierName": "",
           "AIHNJLDFEGJ": 0.0
         },
         "BulletEffect_Onhit": {
           "duration": 0.01,
+          "elementDurability": 100.0,
+          "modifierName": "",
           "onAdded": [
             {
               "$type": "FireEffect",
               "effectPattern": "Eff_SceneObj_Jamballoon_02_V2_02",
+              "effectTempleteID": -1.0,
               "scale": 1.0,
-              "ILLLPEOODKP": "",
-              "effectTempleteID": -1.0
+              "ILLLPEOODKP": ""
             }
           ],
-          "elementDurability": 100.0,
-          "modifierName": "",
           "AIHNJLDFEGJ": 0.0
         }
       },
@@ -1169,41 +1174,41 @@
           "$type": "DamageByAttackValue",
           "attackInfo": {
             "attackProperty": {
-              "elementType": "Water",
-              "damagePercentageRatio": 0.0,
-              "ignoreModifyDamage": true,
-              "ignoreAttackerProperty": true,
-              "strikeType": "Blunt",
-              "enBreak": 0.0,
-              "trueDamage": true,
-              "damagePercentage": 0.0,
               "damageExtra": [
                 "LevelEntity_AvatarDot_SystemValue",
                 "DamagePercentage",
                 "MUL"
               ],
+              "damagePercentage": 0.0,
+              "damagePercentageRatio": 0.0,
               "elementDurability": 0.0,
-              "arkheGrade": 0.0
+              "elementType": "Water",
+              "enBreak": 0.0,
+              "ignoreAttackerProperty": true,
+              "ignoreModifyDamage": true,
+              "strikeType": "Blunt",
+              "trueDamage": true,
+              "IIPHCFEONLK": 0.0
             },
-            "hitPattern": {
-              "FLFCIDDNMNA": "",
-              "onHitEffectName": "",
-              "hitHaltTimeScale": 0.05,
-              "hitHaltTime": 0.1,
-              "muteHitText": true,
-              "hitImpulseType": "LV4"
-            },
+            "attackTag": "TargetShootingCannonVertical",
             "attenuationGroup": "default",
             "attenuationTag": "",
-            "attackTag": "TargetShootingCannonVertical",
-            "canBeModifiedBy": "OriginOwner"
+            "canBeModifiedBy": "OriginOwner",
+            "hitPattern": {
+              "hitHaltTime": 0.1,
+              "hitHaltTimeScale": 0.05,
+              "hitImpulseType": "LV4",
+              "muteHitText": true,
+              "onHitEffectName": "",
+              "FLFCIDDNMNA": ""
+            }
           },
           "born": {
             "$type": "EEIECHOPFGM",
             "offset": {
               "x": 0.0,
-              "z": 0.0,
-              "y": 0.1
+              "y": 0.1,
+              "z": 0.0
             }
           },
           "target": "Target"
@@ -1213,7 +1218,6 @@
           "modifierName": "BulletEffect_Onhit"
         }
       ],
-      "abilityName": "Penumbra_CannonBallV2_04",
       "onAdded": [
         {
           "$type": "ApplyModifier",
@@ -1221,15 +1225,11 @@
         },
         {
           "$type": "SetSystemValueToOverrideMap",
-          "OAEJNDBEDPO": -1.0,
           "key": "LevelEntity_AvatarDot_SystemValue",
-          "type": "ElementLevelCo"
+          "type": "ElementLevelCo",
+          "OAEJNDBEDPO": -1.0
         }
-      ],
-      "abilitySpecials": {
-        "DamagePercentage": 0.0,
-        "LevelEntity_AvatarDot_SystemValue": 1.0
-      }
+      ]
     }
   }
 ]

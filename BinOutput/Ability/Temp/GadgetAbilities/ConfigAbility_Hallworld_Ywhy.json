@@ -1,42 +1,44 @@
 [
   {
     "Default": {
+      "abilityName": "AvatarAbility_Ywhy_TriggerYuanweihua_SwitchSkill",
+      "isDynamicAbility": true,
       "modifiers": {
         "UNIQUE_Ywhy_TriggerYuanweihua_AddSkillInfo": {
-          "onRemoved": [
-            {
-              "$type": "RemoveModifier",
-              "modifierName": "SwitchSkill",
-              "doOffStage": true
-            },
-            {
-              "$type": "RemoveAvatarSkillInfo",
-              "skillID": 20671,
-              "doOffStage": true
-            }
-          ],
+          "elementDurability": 100.0,
+          "isUnique": true,
+          "modifierName": "",
           "onAdded": [
             {
               "$type": "AddAvatarSkillInfo",
-              "skillID": 20671,
-              "doOffStage": true
+              "doOffStage": true,
+              "skillID": 20671
             },
             {
               "$type": "AvatarSkillStart",
-              "skillID": 20671,
-              "BGNJBEPEJBO": 0.05,
+              "cdRatio": 0.05,
               "costStaminaRatio": 1.0,
-              "cdRatio": 1.0
+              "skillID": 20671,
+              "GIBAINFKPBO": 1.0
             },
             {
               "$type": "ApplyModifier",
-              "modifierName": "SwitchSkill",
-              "doOffStage": true
+              "doOffStage": true,
+              "modifierName": "SwitchSkill"
             }
           ],
-          "elementDurability": 100.0,
-          "modifierName": "",
-          "isUnique": true,
+          "onRemoved": [
+            {
+              "$type": "RemoveModifier",
+              "doOffStage": true,
+              "modifierName": "SwitchSkill"
+            },
+            {
+              "$type": "RemoveAvatarSkillInfo",
+              "doOffStage": true,
+              "skillID": 20671
+            }
+          ],
           "AIHNJLDFEGJ": 0.0
         },
         "SwitchSkill": {
@@ -44,29 +46,183 @@
           "modifierMixins": [
             {
               "$type": "SwitchSkillIDMixin",
-              "skillIndex": 1,
               "priority": "Playmode",
-              "skillID": 20671
+              "skillID": 20671,
+              "skillIndex": 1
             }
           ],
           "modifierName": "",
           "AIHNJLDFEGJ": 0.0
         }
       },
-      "EPGDGGEIHCC": true,
-      "abilityName": "AvatarAbility_Ywhy_TriggerYuanweihua_SwitchSkill",
-      "isDynamicAbility": true,
       "onAdded": [
         {
           "$type": "AttachModifier",
-          "modifierName": "UNIQUE_Ywhy_TriggerYuanweihua_AddSkillInfo",
-          "doOffStage": true
+          "doOffStage": true,
+          "modifierName": "UNIQUE_Ywhy_TriggerYuanweihua_AddSkillInfo"
         }
-      ]
+      ],
+      "EPGDGGEIHCC": true
     }
   },
   {
     "Default": {
+      "abilityMixins": [
+        {
+          "$type": "AttachToStateIDMixin",
+          "modifierName": "CheckChannelLoop",
+          "stateIDs": [
+            "Channel_BS",
+            "Channel_Loop"
+          ],
+          "LJPPDIGCJMJ": ""
+        },
+        {
+          "$type": "AttachToStateIDMixin",
+          "modifierName": "Trigger_OnExit",
+          "stateIDs": [
+            "Channel_BS",
+            "Channel_Loop",
+            "Channel_AS"
+          ],
+          "LJPPDIGCJMJ": ""
+        },
+        {
+          "$type": "ButtonHoldChargeMixin",
+          "chargeStateIDs": [
+            "Channel_Loop"
+          ],
+          "onBeginCharged": [
+            {
+              "$type": "ApplyModifier",
+              "modifierName": "ActionPanelController"
+            },
+            {
+              "$type": "SetGlobalValue",
+              "doOffStage": true,
+              "key": "_ABILITY_Common_Channel_IsTrigger",
+              "maxValue": 0.0,
+              "minValue": 0.0,
+              "value": 0.0
+            },
+            {
+              "$type": "DebugLog",
+              "content": "Drxg_按键按下_1"
+            }
+          ],
+          "onBeginSecondCharged": [
+            {
+              "$type": "AttachModifier",
+              "modifierName": "Focus"
+            },
+            {
+              "$type": "DebugLog",
+              "content": "Drxg_按键按下_2"
+            }
+          ],
+          "onCancelCharged": [
+            {
+              "$type": "SetAnimatorTrigger",
+              "doOffStage": true,
+              "triggerID": "EndChannelTrigger"
+            },
+            {
+              "$type": "SetGlobalValue",
+              "doOffStage": true,
+              "key": "_ABILITY_Common_Channel_IsTrigger",
+              "maxValue": 0.0,
+              "minValue": 0.0,
+              "value": 1.0
+            },
+            {
+              "$type": "RemoveModifier",
+              "modifierName": "ActionPanelController"
+            }
+          ],
+          "onReleaseCharged": [
+            {
+              "$type": "ApplyModifier",
+              "doOffStage": true,
+              "modifierName": "Shoot_Short",
+              "predicates": [
+                {
+                  "$type": "ByTargetGlobalValue",
+                  "key": "_ABILITY_Common_Channel_IsTrigger",
+                  "value": 0.0
+                },
+                {
+                  "$type": "ByTargetGlobalValue",
+                  "compareType": "NoneOrEqual",
+                  "key": "_ActivityAbility_Endora_IsFocus",
+                  "value": 0.0
+                }
+              ]
+            },
+            {
+              "$type": "SetGlobalValue",
+              "doOffStage": true,
+              "key": "_ABILITY_Common_Channel_IsTrigger",
+              "maxValue": 0.0,
+              "minValue": 0.0,
+              "predicates": [
+                {
+                  "$type": "ByTargetGlobalValue",
+                  "compareType": "NoneOrEqual",
+                  "key": "_ActivityAbility_Endora_IsFocus",
+                  "value": 0.0
+                }
+              ],
+              "value": 1.0
+            },
+            {
+              "$type": "DebugLog",
+              "content": "Drxg_按键松开_1"
+            },
+            {
+              "$type": "RemoveModifier",
+              "modifierName": "ActionPanelController"
+            }
+          ],
+          "onReleaseSecondCharged": [
+            {
+              "$type": "ApplyModifier",
+              "doOffStage": true,
+              "modifierName": "Shoot",
+              "predicates": [
+                {
+                  "$type": "ByTargetGlobalValue",
+                  "key": "_ABILITY_Common_Channel_IsTrigger",
+                  "value": 0.0
+                }
+              ]
+            },
+            {
+              "$type": "SetGlobalValue",
+              "doOffStage": true,
+              "key": "_ABILITY_Common_Channel_IsTrigger",
+              "maxValue": 0.0,
+              "minValue": 0.0,
+              "value": 1.0
+            },
+            {
+              "$type": "SetAnimatorTrigger",
+              "doOffStage": true,
+              "triggerID": "EndChannelTrigger"
+            },
+            {
+              "$type": "DebugLog",
+              "content": "Drxg_按键松开_2"
+            }
+          ],
+          "secondChargeTime": 0.12,
+          "skillID": 20671
+        }
+      ],
+      "abilityName": "AvatarAbility_Ywhy_TriggerYuanweihua_Serve",
+      "abilitySpecials": {
+        "Ywhy_Avatar_ButterFly_DisappearDuration": 2.0
+      },
+      "isDynamicAbility": true,
       "modifiers": {
         "ActionPanelController": {
           "elementDurability": 100.0,
@@ -87,40 +243,76 @@
           "AIHNJLDFEGJ": 0.0
         },
         "Trigger_OnExit": {
+          "elementDurability": 100.0,
+          "modifierName": "",
           "onRemoved": [
             {
               "$type": "ApplyModifier",
-              "modifierName": "Shoot_Short",
               "doOffStage": true,
+              "modifierName": "Shoot_Short",
               "predicates": [
                 {
-                  "$type": "EOFDCELPGFO",
-                  "CBOMLBFIPJM": 0.0,
-                  "key": "_ABILITY_Common_Channel_IsTrigger"
+                  "$type": "ByTargetGlobalValue",
+                  "key": "_ABILITY_Common_Channel_IsTrigger",
+                  "value": 0.0
                 },
                 {
-                  "$type": "EOFDCELPGFO",
-                  "CBOMLBFIPJM": 0.0,
+                  "$type": "ByTargetGlobalValue",
                   "compareType": "NoneOrEqual",
-                  "key": "_ActivityAbility_Endora_IsFocus"
+                  "key": "_ActivityAbility_Endora_IsFocus",
+                  "value": 0.0
                 }
               ]
             },
             {
               "$type": "SetGlobalValue",
+              "doOffStage": true,
               "key": "_ABILITY_Common_Channel_IsTrigger",
-              "minValue": 0.0,
               "maxValue": 0.0,
-              "CBOMLBFIPJM": 1.0,
-              "doOffStage": true
+              "minValue": 0.0,
+              "value": 1.0
             }
           ],
-          "elementDurability": 100.0,
-          "modifierName": "",
           "AIHNJLDFEGJ": 0.0
         },
         "Ywhy_Avatar_PrevButterflyDisappearDriver_01": {
           "duration": 0.25,
+          "elementDurability": 100.0,
+          "modifierName": "",
+          "onAdded": [
+            {
+              "$type": "SetGlobalValueV2",
+              "key": "GV_Ywhy_ButterFly_Disappear",
+              "maxValue": 0.0,
+              "minValue": 0.0,
+              "otherTargets": {
+                "$type": "GENFIIMMOOJ",
+                "targetKey": "_ABILITY_Ywhy_Butterfly_DisappearVictim_"
+              },
+              "value": 1.0
+            },
+            {
+              "$type": "FireEffect",
+              "born": {
+                "$type": "ConfigBornByAttachPoint",
+                "attachPointName": "SubEffectPoint",
+                "offset": {
+                  "x": 0.0,
+                  "y": 0.0,
+                  "z": 0.0
+                },
+                "useRotation": true
+              },
+              "effectPattern": "Beyd_Eff_Hallworld_Ywhy_Butterfly_Disappear",
+              "effectTempleteID": -1.0,
+              "otherTargets": {
+                "$type": "GENFIIMMOOJ",
+                "targetKey": "_ABILITY_Ywhy_Butterfly_DisappearVictim_"
+              },
+              "scale": 1.0,
+              "ILLLPEOODKP": ""
+            }
+          ],
           "onRemoved": [
             {
               "$type": "ApplyModifier",
@@ -131,86 +323,56 @@
               }
             }
           ],
-          "onAdded": [
-            {
-              "$type": "SetGlobalValueV2",
-              "minValue": 0.0,
-              "key": "GV_Ywhy_ButterFly_Disappear",
-              "maxValue": 0.0,
-              "CBOMLBFIPJM": 1.0,
-              "otherTargets": {
-                "$type": "GENFIIMMOOJ",
-                "targetKey": "_ABILITY_Ywhy_Butterfly_DisappearVictim_"
-              }
-            },
-            {
-              "$type": "FireEffect",
-              "effectPattern": "Beyd_Eff_Hallworld_Ywhy_Butterfly_Disappear",
-              "scale": 1.0,
-              "born": {
-                "$type": "BGOLIIIHLMO",
-                "attachPointName": "SubEffectPoint",
-                "useRotation": true,
-                "offset": {
-                  "x": 0.0,
-                  "z": 0.0,
-                  "y": 0.0
-                }
-              },
-              "ILLLPEOODKP": "",
-              "effectTempleteID": -1.0,
-              "otherTargets": {
-                "$type": "GENFIIMMOOJ",
-                "targetKey": "_ABILITY_Ywhy_Butterfly_DisappearVictim_"
-              }
-            }
-          ],
-          "elementDurability": 100.0,
-          "modifierName": "",
           "AIHNJLDFEGJ": 0.0
         },
         "Ywhy_Avatar_PrevButterflyDisappearDriver_02": {
           "duration": "Ywhy_Avatar_ButterFly_DisappearDuration",
+          "elementDurability": 100.0,
+          "modifierName": "",
+          "onAdded": [
+            {
+              "$type": "RemoveEffect",
+              "CCOEKFAPHGD": true,
+              "ILLLPEOODKP": "Im_Butterfly"
+            }
+          ],
           "onRemoved": [
             {
               "$type": "KillSelf",
-              "MBGFJOOIMOK": [
+              "configIdArray": [
                 77401723
               ]
             }
           ],
-          "onAdded": [
-            {
-              "$type": "RemoveEffect",
-              "ILLLPEOODKP": "Im_Butterfly",
-              "CCOEKFAPHGD": true
-            }
-          ],
-          "elementDurability": 100.0,
-          "modifierName": "",
           "AIHNJLDFEGJ": 0.0
         },
         "Shoot_Short": {
           "duration": 0.1,
+          "elementDurability": 100.0,
+          "modifierName": "",
           "onAdded": [
             {
               "$type": "AvatarSkillStart",
-              "skillID": 20671,
-              "BGNJBEPEJBO": 1.0,
+              "cdRatio": 1.0,
               "costStaminaRatio": 1.0,
-              "cdRatio": 1.0
+              "skillID": 20671,
+              "GIBAINFKPBO": 1.0
             },
             {
               "$type": "SetTargetToTargetKey",
-              "targetKey": "_ABILITY_Ywhy_Butterfly_DisappearVictim_",
               "otherTargets": {
-                "$type": "HMFKEDOMDMA",
+                "$type": "SelectTargetsByChildren",
                 "configID": 77401723,
                 "topLimit": 1
-              }
+              },
+              "targetKey": "_ABILITY_Ywhy_Butterfly_DisappearVictim_"
             },
             {
               "$type": "Predicated",
+              "otherTargets": {
+                "$type": "GENFIIMMOOJ",
+                "targetKey": "_ABILITY_Ywhy_Butterfly_DisappearVictim_"
+              },
               "successActions": [
                 {
                   "$type": "ApplyModifier",
@@ -219,63 +381,63 @@
               ],
               "targetPredicates": [
                 {
-                  "$type": "EOFDCELPGFO",
-                  "CBOMLBFIPJM": 0.0,
+                  "$type": "ByTargetGlobalValue",
                   "compareType": "NoneOrEqual",
-                  "key": "GV_Ywhy_ButterFly_Disappear"
+                  "key": "GV_Ywhy_ButterFly_Disappear",
+                  "value": 0.0
                 }
-              ],
-              "otherTargets": {
-                "$type": "GENFIIMMOOJ",
-                "targetKey": "_ABILITY_Ywhy_Butterfly_DisappearVictim_"
-              }
+              ]
             },
             {
               "$type": "CreateGadget",
-              "gadgetID": 77401723,
               "born": {
-                "$type": "BGOLIIIHLMO",
+                "$type": "ConfigBornByAttachPoint",
                 "attachPointName": "FocusAnchor",
                 "attachPointTargetType": "Self",
-                "useRotation": true,
                 "offset": {
-                  "x": 0.0,
-                  "z": 0.8,
-                  "y": 0.0
-                }
-              }
+                  "x": 0.8,
+                  "y": 0.0,
+                  "z": 0.0
+                },
+                "useRotation": true
+              },
+              "gadgetID": 77401723
             }
           ],
-          "elementDurability": 100.0,
-          "modifierName": "",
           "AIHNJLDFEGJ": 0.0
         },
         "Shoot": {
           "duration": 0.1,
+          "elementDurability": 100.0,
+          "modifierName": "",
           "onAdded": [
             {
               "$type": "AvatarSkillStart",
-              "skillID": 20671,
-              "BGNJBEPEJBO": 1.0,
+              "cdRatio": 1.0,
               "costStaminaRatio": 1.0,
-              "cdRatio": 1.0
+              "skillID": 20671,
+              "GIBAINFKPBO": 1.0
             },
             {
               "$type": "RemoveModifier",
-              "modifierName": "Focus",
-              "doOffStage": true
+              "doOffStage": true,
+              "modifierName": "Focus"
             },
             {
               "$type": "SetTargetToTargetKey",
-              "targetKey": "_ABILITY_Ywhy_Butterfly_DisappearVictim_",
               "otherTargets": {
-                "$type": "HMFKEDOMDMA",
+                "$type": "SelectTargetsByChildren",
                 "configID": 77401723,
                 "topLimit": 1
-              }
+              },
+              "targetKey": "_ABILITY_Ywhy_Butterfly_DisappearVictim_"
             },
             {
               "$type": "Predicated",
+              "otherTargets": {
+                "$type": "GENFIIMMOOJ",
+                "targetKey": "_ABILITY_Ywhy_Butterfly_DisappearVictim_"
+              },
               "successActions": [
                 {
                   "$type": "ApplyModifier",
@@ -284,39 +446,35 @@
               ],
               "targetPredicates": [
                 {
-                  "$type": "EOFDCELPGFO",
-                  "CBOMLBFIPJM": 0.0,
+                  "$type": "ByTargetGlobalValue",
                   "compareType": "NoneOrEqual",
-                  "key": "GV_Ywhy_ButterFly_Disappear"
+                  "key": "GV_Ywhy_ButterFly_Disappear",
+                  "value": 0.0
                 }
-              ],
-              "otherTargets": {
-                "$type": "GENFIIMMOOJ",
-                "targetKey": "_ABILITY_Ywhy_Butterfly_DisappearVictim_"
-              }
+              ]
             },
             {
               "$type": "CreateGadget",
-              "gadgetID": 77401723,
               "born": {
-                "$type": "LKIBKKFEOLJ",
-                "KBOBCHGAMFB": "Self",
-                "useGlobalUp": true,
-                "positionKey": "GV_Ywhy_Butterfly_Mark_Pos",
+                "$type": "ConfigBornByGlobalValue",
                 "directionKey": "",
                 "offset": {
                   "x": 0.0,
-                  "z": 0.0,
-                  "y": 1.0
-                }
+                  "y": 1.0,
+                  "z": 0.0
+                },
+                "positionKey": "GV_Ywhy_Butterfly_Mark_Pos",
+                "useGlobalUp": true,
+                "KBOBCHGAMFB": "Self"
               },
+              "gadgetID": 77401723,
               "predicates": [
                 {
-                  "$type": "GKGBIPDLMMG",
+                  "$type": "ByNot",
                   "predicates": [
                     {
-                      "$type": "EIBIHNJLLFH",
-                      "GDONICCLGCO": [
+                      "$type": "ByAvatarWeaponType",
+                      "weaponTypes": [
                         "WEAPON_BOW"
                       ]
                     }
@@ -326,47 +484,107 @@
             },
             {
               "$type": "CreateGadget",
-              "gadgetID": 77401723,
               "born": {
-                "$type": "LKIBKKFEOLJ",
-                "KBOBCHGAMFB": "Self",
-                "useGlobalUp": true,
-                "positionKey": "GV_Ywhy_Butterfly_Mark_Pos",
+                "$type": "ConfigBornByGlobalValue",
                 "directionKey": "",
                 "offset": {
                   "x": 0.0,
-                  "z": 0.0,
-                  "y": 1.0
-                }
+                  "y": 1.0,
+                  "z": 0.0
+                },
+                "positionKey": "GV_Ywhy_Butterfly_Mark_Pos",
+                "useGlobalUp": true,
+                "KBOBCHGAMFB": "Self"
               },
+              "gadgetID": 77401723,
               "predicates": [
                 {
-                  "$type": "EIBIHNJLLFH",
-                  "GDONICCLGCO": [
+                  "$type": "ByAvatarWeaponType",
+                  "weaponTypes": [
                     "WEAPON_BOW"
                   ]
                 }
               ]
             }
           ],
-          "elementDurability": 100.0,
-          "modifierName": "",
           "AIHNJLDFEGJ": 0.0
         },
         "Focus": {
-          "thinkInterval": 0.015,
-          "onRemoved": [
+          "elementDurability": 100.0,
+          "modifierName": "",
+          "onAdded": [
             {
-              "$type": "AvatarExitFocus",
-              "keepRotation": true,
-              "exitCameraRadius": 4.8,
-              "doOffStage": true
+              "$type": "AttachEffect",
+              "effectPattern": "Beyd_Eff_Hallworld_Ywhy_Butterfly_Charge",
+              "effectTempleteID": -1.0,
+              "scale": 1.0,
+              "ILLLPEOODKP": ""
             },
             {
               "$type": "SetAnimatorTrigger",
-              "MPTriggerOnRemote": true,
-              "triggerID": "EndChannelTrigger",
-              "doOffStage": true
+              "doOffStage": true,
+              "mpTriggerOnRemote": true,
+              "triggerID": "StartChannelTrigger"
+            },
+            {
+              "$type": "AvatarEnterFocus",
+              "assistance": {
+                "other": {
+                  "useGyro": true
+                },
+                "ps4": {},
+                "ps5": {},
+                "IJDKCJGBBII": {}
+              },
+              "cameraFastFocusMode": true,
+              "cameraFollowLower": {
+                "x": 0.555,
+                "y": 0.17,
+                "z": -2.5
+              },
+              "cameraFollowMaxDegree": 0.0,
+              "cameraFollowMinDegree": -30.0,
+              "cameraFollowUpper": {
+                "x": 0.755,
+                "y": 0.37,
+                "z": -1.6
+              },
+              "canMove": false,
+              "dragButtonName": "Skill2",
+              "showCrosshair": false,
+              "OJAOIECDBGL": true,
+              "FDEONAODDDM": "",
+              "GPNAODGIDCF": "",
+              "OINODICCCCO": ""
+            },
+            {
+              "$type": "SetAnimatorBool",
+              "boolID": "LockMotionFlagExitChannel",
+              "value": true
+            },
+            {
+              "$type": "SetGlobalValue",
+              "key": "_ActivityAbility_Endora_IsFocus",
+              "maxValue": 0.0,
+              "minValue": 0.0,
+              "value": 1.0
+            },
+            {
+              "$type": "DummyAction"
+            }
+          ],
+          "onRemoved": [
+            {
+              "$type": "AvatarExitFocus",
+              "doOffStage": true,
+              "exitCameraRadius": 4.8,
+              "keepRotation": true
+            },
+            {
+              "$type": "SetAnimatorTrigger",
+              "doOffStage": true,
+              "mpTriggerOnRemote": true,
+              "triggerID": "EndChannelTrigger"
             },
             {
               "$type": "SetAnimatorBool",
@@ -375,194 +593,134 @@
             },
             {
               "$type": "ApplyModifier",
-              "modifierName": "RemovedFocusStateDelay",
-              "doOffStage": true
+              "doOffStage": true,
+              "modifierName": "RemovedFocusStateDelay"
             },
             {
               "$type": "ClearGlobalValue",
-              "key": "_ActivityAbility_Endora_IsFocus",
-              "doOffStage": true
+              "doOffStage": true,
+              "key": "_ActivityAbility_Endora_IsFocus"
             }
           ],
-          "onAdded": [
-            {
-              "$type": "AttachEffect",
-              "ILLLPEOODKP": "",
-              "scale": 1.0,
-              "effectPattern": "Beyd_Eff_Hallworld_Ywhy_Butterfly_Charge",
-              "effectTempleteID": -1.0
-            },
-            {
-              "$type": "SetAnimatorTrigger",
-              "MPTriggerOnRemote": true,
-              "triggerID": "StartChannelTrigger",
-              "doOffStage": true
-            },
-            {
-              "$type": "AvatarEnterFocus",
-              "dragButtonName": "Skill2",
-              "cameraFastFocusMode": true,
-              "canMove": false,
-              "DDBIFFPGNGN": {
-                "BFMJIOFDCLF": {},
-                "KFIOILLKPCF": {
-                  "GMHNBMJHEGP": true
-                },
-                "IKEDPKIGLON": {},
-                "IJDKCJGBBII": {}
-              },
-              "showCrosshair": false,
-              "CJLPHHDCNDI": {
-                "y": 0.37,
-                "z": -1.6,
-                "x": 0.755
-              },
-              "OJAOIECDBGL": true,
-              "OINODICCCCO": "",
-              "GPNAODGIDCF": "",
-              "cameraFollowMinDegree": -30.0,
-              "FDEONAODDDM": "",
-              "cameraFollowMaxDegree": 0.0,
-              "assistance": {
-                "y": 0.17,
-                "z": -2.5,
-                "x": 0.555
-              }
-            },
-            {
-              "$type": "SetAnimatorBool",
-              "CBOMLBFIPJM": true,
-              "boolID": "LockMotionFlagExitChannel"
-            },
-            {
-              "$type": "SetGlobalValue",
-              "key": "_ActivityAbility_Endora_IsFocus",
-              "minValue": 0.0,
-              "maxValue": 0.0,
-              "CBOMLBFIPJM": 1.0
-            },
-            {
-              "$type": "DummyAction"
-            }
-          ],
-          "elementDurability": 100.0,
-          "modifierName": "",
           "onThinkInterval": [
             {
               "$type": "SetCollisionPointToGlobalPos",
-              "LANEADNAMOA": {
-                "$type": "CEJIEPKNPBN",
-                "useRotation": true,
-                "direction": {
-                  "$type": "CHHJODLLMHA",
-                  "useCorrectDir": true
-                }
-              },
-              "GIIKFCBIECE": 8.5,
               "key": "GV_Ywhy_Butterfly_Mark_Pos",
+              "muteRemoteAction": true,
+              "origin": {
+                "$type": "ConfigBornByCamera",
+                "direction": {
+                  "$type": "ConfigDirectionByCamera",
+                  "useCorrectDir": true
+                },
+                "useRotation": true
+              },
+              "raycastLength": 8.5,
               "setTarget": false,
-              "target": "CurLocalAvatar",
-              "BDPFBBFKKAH": true
+              "target": "CurLocalAvatar"
             },
             {
               "$type": "RemoveEffect",
-              "ILLLPEOODKP": "Im_Butterfly_Mark",
-              "CCOEKFAPHGD": true
+              "CCOEKFAPHGD": true,
+              "ILLLPEOODKP": "Im_Butterfly_Mark"
             },
             {
               "$type": "AttachEffect",
-              "ILLLPEOODKP": "Im_Butterfly_Mark",
               "born": {
-                "$type": "LKIBKKFEOLJ",
-                "KBOBCHGAMFB": "Self",
-                "useGlobalUp": true,
+                "$type": "ConfigBornByGlobalValue",
+                "directionKey": "",
                 "positionKey": "GV_Ywhy_Butterfly_Mark_Pos",
-                "directionKey": ""
+                "useGlobalUp": true,
+                "KBOBCHGAMFB": "Self"
               },
-              "scale": 1.0,
               "effectPattern": "Beyd_Eff_Hallworld_Ywhy_Butterfly_Mark",
-              "effectTempleteID": -1.0
+              "effectTempleteID": -1.0,
+              "scale": 1.0,
+              "ILLLPEOODKP": "Im_Butterfly_Mark"
             }
           ],
+          "thinkInterval": 0.015,
           "AIHNJLDFEGJ": 0.0
         },
         "CheckChannelLoop": {
-          "thinkInterval": 0.1,
-          "onRemoved": [
-            {
-              "$type": "ApplyModifier",
-              "modifierName": "RemovedFocusState",
-              "doOffStage": true
-            }
-          ],
+          "elementDurability": 100.0,
+          "modifierName": "",
           "onAdded": [
             {
               "$type": "AvatarEnterFocus",
-              "dragButtonName": "Skill2",
-              "canMove": false,
-              "DDBIFFPGNGN": {
-                "BFMJIOFDCLF": {},
-                "KFIOILLKPCF": {},
-                "IKEDPKIGLON": {},
+              "assistance": {
+                "other": {},
+                "ps4": {},
+                "ps5": {},
                 "IJDKCJGBBII": {}
               },
-              "CJLPHHDCNDI": {
-                "y": -0.2,
-                "x": 0.5
-              },
-              "OINODICCCCO": "",
-              "GPNAODGIDCF": "",
-              "vcam_fov": 30.0,
-              "disableAnim": true,
-              "FDEONAODDDM": "",
-              "assistance": {
+              "cameraFollowLower": {
+                "x": 0.8,
                 "y": 0.2,
-                "z": -1.5,
-                "x": 0.8
-              }
+                "z": -1.5
+              },
+              "cameraFollowUpper": {
+                "x": 0.5,
+                "y": -0.2
+              },
+              "canMove": false,
+              "disableAnim": true,
+              "dragButtonName": "Skill2",
+              "vcamFov": 30.0,
+              "FDEONAODDDM": "",
+              "GPNAODGIDCF": "",
+              "OINODICCCCO": ""
             }
           ],
-          "elementDurability": 100.0,
-          "modifierName": "",
+          "onRemoved": [
+            {
+              "$type": "ApplyModifier",
+              "doOffStage": true,
+              "modifierName": "RemovedFocusState"
+            }
+          ],
           "onThinkInterval": [
             {
               "$type": "SetAnimatorTrigger",
-              "MPTriggerOnRemote": true,
-              "triggerID": "EndChannelTrigger",
               "doOffStage": true,
+              "mpTriggerOnRemote": true,
               "predicates": [
                 {
-                  "$type": "EOFDCELPGFO",
-                  "CBOMLBFIPJM": 0.0,
+                  "$type": "ByTargetGlobalValue",
                   "compareType": "NoneOrEqual",
-                  "key": "_ActivityAbility_Endora_IsFocus"
+                  "key": "_ActivityAbility_Endora_IsFocus",
+                  "value": 0.0
                 }
-              ]
+              ],
+              "triggerID": "EndChannelTrigger"
             }
           ],
+          "thinkInterval": 0.1,
           "AIHNJLDFEGJ": 0.0
         },
         "RemovedFocusState": {
           "duration": 0.1,
+          "elementDurability": 100.0,
+          "modifierName": "",
           "onAdded": [
             {
               "$type": "RemoveModifier",
-              "modifierName": "Focus",
-              "doOffStage": true
+              "doOffStage": true,
+              "modifierName": "Focus"
             },
             {
               "$type": "RemoveModifier",
-              "modifierName": "RemovedFocusStateDelay",
-              "doOffStage": true
+              "doOffStage": true,
+              "modifierName": "RemovedFocusStateDelay"
             }
           ],
           "stacking": "Multiple",
-          "elementDurability": 100.0,
-          "modifierName": "",
           "AIHNJLDFEGJ": 0.0
         },
         "RemovedFocusStateDelay": {
           "duration": 0.6,
+          "elementDurability": 100.0,
+          "modifierName": "",
           "onRemoved": [
             {
               "$type": "RemoveModifier",
@@ -573,50 +731,27 @@
               "doOffStage": true
             }
           ],
-          "elementDurability": 100.0,
-          "modifierName": "",
           "AIHNJLDFEGJ": 0.0
         }
       },
-      "onRemoved": [
+      "onAvatarOut": [
         {
-          "$type": "RemoveModifier",
-          "modifierName": "ActionPanelController",
-          "predicates": [
-            {
-              "$type": "GKGBIPDLMMG",
-              "predicates": [
-                {
-                  "$type": "PGFCIHEOOAB",
-                  "NLNHHFEGFNJ": [
-                    47101,
-                    47102,
-                    47103,
-                    47401,
-                    47402,
-                    47403,
-                    47404,
-                    47405,
-                    47406
-                  ]
-                }
-              ]
-            }
-          ]
+          "$type": "ApplyModifier",
+          "doOffStage": true,
+          "modifierName": "RemovedFocusState"
         }
       ],
-      "EPGDGGEIHCC": true,
       "onKill": [
         {
           "$type": "RemoveModifier",
           "modifierName": "ActionPanelController",
           "predicates": [
             {
-              "$type": "GKGBIPDLMMG",
+              "$type": "ByNot",
               "predicates": [
                 {
-                  "$type": "PGFCIHEOOAB",
-                  "NLNHHFEGFNJ": [
+                  "$type": "ByCurrentSceneId",
+                  "sceneIds": [
                     47101,
                     47102,
                     47103,
@@ -633,282 +768,67 @@
           ]
         }
       ],
-      "abilityMixins": [
+      "onRemoved": [
         {
-          "$type": "AttachToStateIDMixin",
-          "LJPPDIGCJMJ": "",
-          "stateIDs": [
-            "Channel_BS",
-            "Channel_Loop"
-          ],
-          "modifierName": "CheckChannelLoop"
-        },
-        {
-          "$type": "AttachToStateIDMixin",
-          "LJPPDIGCJMJ": "",
-          "stateIDs": [
-            "Channel_BS",
-            "Channel_Loop",
-            "Channel_AS"
-          ],
-          "modifierName": "Trigger_OnExit"
-        },
-        {
-          "$type": "ButtonHoldChargeMixin",
-          "skillID": 20671,
-          "OnReleaseCharged": [
+          "$type": "RemoveModifier",
+          "modifierName": "ActionPanelController",
+          "predicates": [
             {
-              "$type": "ApplyModifier",
-              "modifierName": "Shoot_Short",
-              "doOffStage": true,
+              "$type": "ByNot",
               "predicates": [
                 {
-                  "$type": "EOFDCELPGFO",
-                  "CBOMLBFIPJM": 0.0,
-                  "key": "_ABILITY_Common_Channel_IsTrigger"
-                },
-                {
-                  "$type": "EOFDCELPGFO",
-                  "CBOMLBFIPJM": 0.0,
-                  "compareType": "NoneOrEqual",
-                  "key": "_ActivityAbility_Endora_IsFocus"
+                  "$type": "ByCurrentSceneId",
+                  "sceneIds": [
+                    47101,
+                    47102,
+                    47103,
+                    47401,
+                    47402,
+                    47403,
+                    47404,
+                    47405,
+                    47406
+                  ]
                 }
               ]
-            },
-            {
-              "$type": "SetGlobalValue",
-              "key": "_ABILITY_Common_Channel_IsTrigger",
-              "minValue": 0.0,
-              "maxValue": 0.0,
-              "CBOMLBFIPJM": 1.0,
-              "doOffStage": true,
-              "predicates": [
-                {
-                  "$type": "EOFDCELPGFO",
-                  "CBOMLBFIPJM": 0.0,
-                  "compareType": "NoneOrEqual",
-                  "key": "_ActivityAbility_Endora_IsFocus"
-                }
-              ]
-            },
-            {
-              "$type": "DebugLog",
-              "content": "Drxg_按键松开_1"
-            },
-            {
-              "$type": "RemoveModifier",
-              "modifierName": "ActionPanelController"
             }
-          ],
-          "secondChargeTime": 0.12,
-          "OnReleaseSecondCharged": [
-            {
-              "$type": "ApplyModifier",
-              "modifierName": "Shoot",
-              "doOffStage": true,
-              "predicates": [
-                {
-                  "$type": "EOFDCELPGFO",
-                  "CBOMLBFIPJM": 0.0,
-                  "key": "_ABILITY_Common_Channel_IsTrigger"
-                }
-              ]
-            },
-            {
-              "$type": "SetGlobalValue",
-              "key": "_ABILITY_Common_Channel_IsTrigger",
-              "minValue": 0.0,
-              "maxValue": 0.0,
-              "CBOMLBFIPJM": 1.0,
-              "doOffStage": true
-            },
-            {
-              "$type": "SetAnimatorTrigger",
-              "triggerID": "EndChannelTrigger",
-              "doOffStage": true
-            },
-            {
-              "$type": "DebugLog",
-              "content": "Drxg_按键松开_2"
-            }
-          ],
-          "OnBeginCharged": [
-            {
-              "$type": "ApplyModifier",
-              "modifierName": "ActionPanelController"
-            },
-            {
-              "$type": "SetGlobalValue",
-              "key": "_ABILITY_Common_Channel_IsTrigger",
-              "minValue": 0.0,
-              "maxValue": 0.0,
-              "CBOMLBFIPJM": 0.0,
-              "doOffStage": true
-            },
-            {
-              "$type": "DebugLog",
-              "content": "Drxg_按键按下_1"
-            }
-          ],
-          "OnBeginSecondCharged": [
-            {
-              "$type": "AttachModifier",
-              "modifierName": "Focus"
-            },
-            {
-              "$type": "DebugLog",
-              "content": "Drxg_按键按下_2"
-            }
-          ],
-          "LGCNONHNMIH": [
-            {
-              "$type": "SetAnimatorTrigger",
-              "triggerID": "EndChannelTrigger",
-              "doOffStage": true
-            },
-            {
-              "$type": "SetGlobalValue",
-              "key": "_ABILITY_Common_Channel_IsTrigger",
-              "minValue": 0.0,
-              "maxValue": 0.0,
-              "CBOMLBFIPJM": 1.0,
-              "doOffStage": true
-            },
-            {
-              "$type": "RemoveModifier",
-              "modifierName": "ActionPanelController"
-            }
-          ],
-          "chargeStateIDs": [
-            "Channel_Loop"
           ]
         }
       ],
-      "abilityName": "AvatarAbility_Ywhy_TriggerYuanweihua_Serve",
-      "isDynamicAbility": true,
-      "abilitySpecials": {
-        "Ywhy_Avatar_ButterFly_DisappearDuration": 2.0
-      },
-      "onAvatarOut": [
-        {
-          "$type": "ApplyModifier",
-          "modifierName": "RemovedFocusState",
-          "doOffStage": true
-        }
-      ]
+      "EPGDGGEIHCC": true
     }
   },
   {
     "Default": {
-      "modifiers": {
-        "Active": {
-          "onAdded": [
-            {
-              "$type": "ChangeGadgetState"
-            }
-          ],
-          "elementDurability": 100.0,
-          "modifierName": "",
-          "AIHNJLDFEGJ": 0.0
-        },
-        "DeActive": {
-          "onAdded": [
-            {
-              "$type": "ChangeGadgetState",
-              "ANIHOKMEKHK": 202
-            }
-          ],
-          "elementDurability": 100.0,
-          "modifierName": "",
-          "AIHNJLDFEGJ": 0.0
-        },
-        "CannotInteract": {
-          "duration": "Yuanweihua_AdvancedEffect_Protect_Duration",
-          "onRemoved": [
-            {
-              "$type": "SetGlobalValueV2",
-              "minValue": 0.0,
-              "key": "_EnableInteract",
-              "maxValue": 0.0,
-              "CBOMLBFIPJM": 1.0
-            }
-          ],
-          "onAdded": [
-            {
-              "$type": "AttachModifier",
-              "modifierName": "Yuanweihua_Advcanced_Effect"
-            },
-            {
-              "$type": "SetGlobalValueV2",
-              "minValue": 0.0,
-              "key": "_EnableInteract",
-              "maxValue": 0.0,
-              "CBOMLBFIPJM": 2.0
-            }
-          ],
-          "elementDurability": 100.0,
-          "modifierName": "",
-          "AIHNJLDFEGJ": 0.0
-        },
-        "EnableInteract": {
-          "onAdded": [
-            {
-              "$type": "SetGlobalValueV2",
-              "minValue": 0.0,
-              "key": "_EnableInteract",
-              "maxValue": 0.0,
-              "CBOMLBFIPJM": 1.0
-            }
-          ],
-          "elementDurability": 100.0,
-          "modifierName": "",
-          "AIHNJLDFEGJ": 0.0
-        },
-        "Yuanweihua_Advcanced_Effect": {
-          "onAdded": [
-            {
-              "$type": "FireEffect",
-              "effectPattern": "Beyd_Eff_Hallworld_Ywhy_Petal_Explode_01",
-              "scale": 1.0,
-              "ILLLPEOODKP": "",
-              "effectTempleteID": -1.0
-            }
-          ],
-          "elementDurability": 100.0,
-          "modifierName": "",
-          "AIHNJLDFEGJ": 0.0
-        }
-      },
-      "EPGDGGEIHCC": true,
       "abilityMixins": [
         {
           "$type": "WidgetMpSupportMixin",
           "predicates": [
             {
-              "$type": "NBMIFIMDPII",
+              "$type": "ByTargetGadgetState",
               "target": "Self"
             }
           ],
-          "CMEPEHIJMPL": [
+          "succActions": [
             {
               "$type": "ChangeGadgetState",
-              "ANIHOKMEKHK": 202
+              "state": 202
             }
           ]
         },
         {
           "$type": "AttachModifierToSelfGlobalValueNoInitMixin",
+          "globalValueKey": "_EnableInteract",
           "modifierNameSteps": [
             "Active",
             "DeActive"
           ],
-          "DEFOFMOIAAI": true,
           "valueSteps": [
             0.5,
             1.5,
             2.5
           ],
-          "globalValueKey": "_EnableInteract"
+          "DEFOFMOIAAI": true
         },
         {
           "$type": "AttachToGadgetStateMixin",
@@ -916,31 +836,112 @@
         },
         {
           "$type": "AttachToGadgetStateMixin",
-          "modifierName": "CannotInteract",
-          "gadgetState": 202
+          "gadgetState": 202,
+          "modifierName": "CannotInteract"
         }
       ],
       "abilityName": "SceneObject_Hallworld_Ani_Ywhy_Grass_Yuanweihua_02",
       "abilitySpecials": {
         "Yuanweihua_AdvancedEffect_Protect_Duration": 3.0
-      }
+      },
+      "modifiers": {
+        "Active": {
+          "elementDurability": 100.0,
+          "modifierName": "",
+          "onAdded": [
+            {
+              "$type": "ChangeGadgetState"
+            }
+          ],
+          "AIHNJLDFEGJ": 0.0
+        },
+        "DeActive": {
+          "elementDurability": 100.0,
+          "modifierName": "",
+          "onAdded": [
+            {
+              "$type": "ChangeGadgetState",
+              "state": 202
+            }
+          ],
+          "AIHNJLDFEGJ": 0.0
+        },
+        "CannotInteract": {
+          "duration": "Yuanweihua_AdvancedEffect_Protect_Duration",
+          "elementDurability": 100.0,
+          "modifierName": "",
+          "onAdded": [
+            {
+              "$type": "AttachModifier",
+              "modifierName": "Yuanweihua_Advcanced_Effect"
+            },
+            {
+              "$type": "SetGlobalValueV2",
+              "key": "_EnableInteract",
+              "maxValue": 0.0,
+              "minValue": 0.0,
+              "value": 2.0
+            }
+          ],
+          "onRemoved": [
+            {
+              "$type": "SetGlobalValueV2",
+              "key": "_EnableInteract",
+              "maxValue": 0.0,
+              "minValue": 0.0,
+              "value": 1.0
+            }
+          ],
+          "AIHNJLDFEGJ": 0.0
+        },
+        "EnableInteract": {
+          "elementDurability": 100.0,
+          "modifierName": "",
+          "onAdded": [
+            {
+              "$type": "SetGlobalValueV2",
+              "key": "_EnableInteract",
+              "maxValue": 0.0,
+              "minValue": 0.0,
+              "value": 1.0
+            }
+          ],
+          "AIHNJLDFEGJ": 0.0
+        },
+        "Yuanweihua_Advcanced_Effect": {
+          "elementDurability": 100.0,
+          "modifierName": "",
+          "onAdded": [
+            {
+              "$type": "FireEffect",
+              "effectPattern": "Beyd_Eff_Hallworld_Ywhy_Petal_Explode_01",
+              "effectTempleteID": -1.0,
+              "scale": 1.0,
+              "ILLLPEOODKP": ""
+            }
+          ],
+          "AIHNJLDFEGJ": 0.0
+        }
+      },
+      "EPGDGGEIHCC": true
     }
   },
   {
     "Default": {
+      "abilityName": "SceneObject_Hallworld_Ywhy_Shooting_Bullet_01",
       "modifiers": {
         "YwhyFireBullet_Effect": {
+          "elementDurability": 100.0,
+          "modifierName": "",
           "onAdded": [
             {
               "$type": "AttachEffect",
-              "ILLLPEOODKP": "",
-              "scale": 1.0,
               "effectPattern": "Beyd_Eff_Hallworld_Ywhy_Butterfly",
-              "effectTempleteID": -1.0
+              "effectTempleteID": -1.0,
+              "scale": 1.0,
+              "ILLLPEOODKP": ""
             }
           ],
-          "elementDurability": 100.0,
-          "modifierName": "",
           "AIHNJLDFEGJ": 0.0
         },
         "ExtraHitSound": {
@@ -950,83 +951,104 @@
           "AIHNJLDFEGJ": 0.0
         }
       },
-      "EPGDGGEIHCC": true,
-      "abilityName": "SceneObject_Hallworld_Ywhy_Shooting_Bullet_01",
       "onAdded": [
         {
           "$type": "AttachModifier",
           "modifierName": "YwhyFireBullet_Effect"
         }
-      ]
+      ],
+      "EPGDGGEIHCC": true
     }
   },
   {
     "Default": {
+      "abilityMixins": [
+        {
+          "$type": "AttachModifierToSelfGlobalValueNoInitMixin",
+          "globalValueKey": "LineGadget_Length",
+          "modifierNameSteps": [
+            "PF_Retrun_Start"
+          ],
+          "valueSteps": [
+            "PF_MaxLength",
+            99.0
+          ],
+          "DEFOFMOIAAI": true
+        }
+      ],
+      "abilityName": "SceneObject_Hallworld_Ani_Ywhy_Prop_ButterFly_01",
+      "abilitySpecials": {
+        "PF_followSpeed": 3.0,
+        "PF_returnSpeed": 3.0,
+        "PF_MaxLength": 6.0,
+        "PF_thinkInterval": 2.0
+      },
+      "isDynamicAbility": true,
       "modifiers": {
         "Ywhy_ButterFly_Effect": {
+          "elementDurability": 100.0,
+          "modifierName": "",
           "onAdded": [
             {
               "$type": "AttachEffect",
-              "ILLLPEOODKP": "Im_Butterfly",
               "born": {
-                "$type": "BGOLIIIHLMO",
+                "$type": "ConfigBornByAttachPoint",
                 "attachPointName": "SubEffectPoint",
-                "useRotation": true,
                 "offset": {
                   "x": 0.0,
-                  "z": 0.0,
-                  "y": 0.0
-                }
+                  "y": 0.0,
+                  "z": 0.0
+                },
+                "useRotation": true
               },
-              "scale": 1.0,
               "effectPattern": "Beyd_Eff_Hallworld_Ywhy_Butterfly",
-              "effectTempleteID": -1.0
+              "effectTempleteID": -1.0,
+              "scale": 1.0,
+              "ILLLPEOODKP": "Im_Butterfly"
             }
           ],
-          "elementDurability": 100.0,
-          "modifierName": "",
           "AIHNJLDFEGJ": 0.0
         },
         "PF_GV_Init": {
+          "elementDurability": 100.0,
+          "modifierName": "",
           "onAdded": [
             {
               "$type": "SetGlobalValueV2",
-              "minValue": 0.0,
               "key": "GV_Start_PartFollow",
               "maxValue": 0.0,
-              "CBOMLBFIPJM": 0.0
+              "minValue": 0.0,
+              "value": 0.0
             },
             {
               "$type": "SetGlobalValueV2",
-              "minValue": 0.0,
               "key": "PF_GV_FollowState",
               "maxValue": 0.0,
-              "CBOMLBFIPJM": 0.0
+              "minValue": 0.0,
+              "value": 0.0
             },
             {
               "$type": "SetGlobalValueV2",
-              "minValue": 0.0,
               "key": "LineGadget_Length",
               "maxValue": 0.0,
-              "CBOMLBFIPJM": 0.0
+              "minValue": 0.0,
+              "value": 0.0
             }
           ],
-          "elementDurability": 100.0,
-          "modifierName": "",
           "AIHNJLDFEGJ": 0.0
         },
         "PF_Retrun_Start": {
+          "elementDurability": 100.0,
+          "modifierName": "",
           "onAdded": [
             {
               "$type": "SetGlobalValueV2",
-              "minValue": 0.0,
               "key": "GV_Start_PartFollow",
               "maxValue": 0.0,
-              "CBOMLBFIPJM": 0.0
+              "minValue": 0.0,
+              "value": 0.0
             }
           ],
-          "elementDurability": 100.0,
-          "modifierName": "",
           "AIHNJLDFEGJ": 0.0
         },
         "PartFollowMixin_Handler": {
@@ -1034,14 +1056,31 @@
           "modifierMixins": [
             {
               "$type": "PartFollowMixin",
+              "maxSpeed": "PF_followSpeed",
+              "moveType": "TargetRadiusOffset",
+              "JKHIHFMENHC": 0.0,
+              "KIKPLDBHHLB": 0.05,
+              "EPLELBLGJHH": true,
               "CJCLNNCKJCN": "",
               "EHFHCOICHEG": "",
-              "CILHNDOPMCA": "PF_returnSpeed",
+              "KBGLDPNOLGL": "GV_Start_PartFollow",
+              "MMEHDLLJPEO": "LineGadget_Length",
+              "BKIKMGBCBDL": "PF_FollowRuntimeId",
+              "EEHJBNCFDHE": "PF_GV_FollowState",
               "BDDIPDJGNPL": "PF_followSpeed",
-              "KIKPLDBHHLB": 0.05,
+              "CILHNDOPMCA": "PF_returnSpeed",
+              "IEFFCMKGLFF": "RootNode",
               "PGPLFFJAHEA": "RootNode",
               "FPHCLCBJKFN": "SubEffectPoint",
-              "moveType": "TargetRadiusOffset",
+              "CBJKGAOIEOF": [
+                0
+              ],
+              "BKKGGDMCONM": [
+                {
+                  "$type": "DebugLog",
+                  "content": "PF_onRetrunStart"
+                }
+              ],
               "CDACIDHFACP": [
                 {
                   "$type": "DebugLog",
@@ -1054,7 +1093,11 @@
                   "content": "PF_onFollowEnd"
                 }
               ],
-              "MMEHDLLJPEO": "LineGadget_Length",
+              "GMKHFMNMGCF": [
+                "PF_MaxLength",
+                1.0,
+                "ADD"
+              ],
               "IJNCJHOPAOE": [
                 {
                   "$type": "DebugLog",
@@ -1065,121 +1108,83 @@
                   "modifierName": "Ywhy_ButterFly_Move"
                 }
               ],
-              "CBJKGAOIEOF": [
-                0
-              ],
-              "GMKHFMNMGCF": [
-                "PF_MaxLength",
-                1.0,
-                "ADD"
-              ],
-              "IEFFCMKGLFF": "RootNode",
-              "EPLELBLGJHH": true,
-              "KBGLDPNOLGL": "GV_Start_PartFollow",
-              "JLBCKKLJKEF": "PF_followSpeed",
-              "JKHIHFMENHC": 0.0,
-              "BKKGGDMCONM": [
-                {
-                  "$type": "DebugLog",
-                  "content": "PF_onRetrunStart"
-                }
-              ],
               "FDJJFKGBNIL": {
                 "x": 0.0,
-                "z": 0.0,
-                "y": 0.0
-              },
-              "EEHJBNCFDHE": "PF_GV_FollowState",
-              "BKIKMGBCBDL": "PF_FollowRuntimeId"
+                "y": 0.0,
+                "z": 0.0
+              }
             }
           ],
           "modifierName": "",
           "AIHNJLDFEGJ": 0.0
         },
         "Ywhy_ButterFly_01_Detect_Handler": {
-          "thinkInterval": "PF_thinkInterval",
           "elementDurability": 100.0,
           "modifierName": "",
           "onThinkInterval": [
             {
               "$type": "Predicated",
+              "otherTargets": {
+                "$type": "SelectTargetsByShape",
+                "campTargetType": "All",
+                "entityTypePriority": [
+                  "Avatar"
+                ],
+                "shapeName": "CircleR5H5HC",
+                "sizeRatio": 1.0,
+                "topLimit": 1
+              },
+              "predicatesForeach": [
+                {
+                  "$type": "ByEntityTypes",
+                  "entityTypes": [
+                    "Avatar"
+                  ]
+                }
+              ],
               "successActions": [
                 {
                   "$type": "SetTargetToTargetKey",
-                  "targetKey": "PF_FollowRuntimeId",
-                  "target": "Target"
+                  "target": "Target",
+                  "targetKey": "PF_FollowRuntimeId"
                 },
                 {
                   "$type": "SetPartControlTarget",
-                  "EAGOHJHLJEH": [
+                  "attachPoint": "",
+                  "partRootNames": [
                     "SubEffectPoint"
-                  ],
-                  "attachPoint": ""
+                  ]
                 },
                 {
                   "$type": "ApplyModifier",
                   "modifierName": "Ywhy_ButterFly_Move"
                 }
-              ],
-              "otherTargets": {
-                "$type": "INIACGFCEDH",
-                "sizeRatio": 1.0,
-                "campTargetType": "All",
-                "shapeName": "CircleR5H5HC",
-                "topLimit": 1,
-                "entityTypePriority": [
-                  "Avatar"
-                ]
-              },
-              "DNMKCEFIAPB": [
-                {
-                  "$type": "DEOFBICNFHF",
-                  "entityTypes": [
-                    "Avatar"
-                  ]
-                }
               ]
             }
           ],
+          "thinkInterval": "PF_thinkInterval",
           "AIHNJLDFEGJ": 0.0
         },
         "Ywhy_ButterFly_Move": {
+          "elementDurability": 100.0,
+          "modifierName": "",
           "onAdded": [
             {
               "$type": "SetGlobalValueV2",
-              "minValue": 0.0,
               "key": "GV_Start_PartFollow",
               "maxValue": 0.0,
-              "CBOMLBFIPJM": 1.0
+              "minValue": 0.0,
+              "value": 1.0
             }
           ],
-          "elementDurability": 100.0,
-          "modifierName": "",
           "AIHNJLDFEGJ": 0.0
         }
       },
-      "EPGDGGEIHCC": true,
-      "abilityMixins": [
-        {
-          "$type": "AttachModifierToSelfGlobalValueNoInitMixin",
-          "modifierNameSteps": [
-            "PF_Retrun_Start"
-          ],
-          "DEFOFMOIAAI": true,
-          "valueSteps": [
-            "PF_MaxLength",
-            99.0
-          ],
-          "globalValueKey": "LineGadget_Length"
-        }
-      ],
-      "abilityName": "SceneObject_Hallworld_Ani_Ywhy_Prop_ButterFly_01",
-      "isDynamicAbility": true,
       "onAdded": [
         {
           "$type": "AttachModifier",
-          "modifierName": "Ywhy_ButterFly_Effect",
-          "doOffStage": true
+          "doOffStage": true,
+          "modifierName": "Ywhy_ButterFly_Effect"
         },
         {
           "$type": "ApplyModifier",
@@ -1191,23 +1196,44 @@
         },
         {
           "$type": "AttachModifier",
-          "modifierName": "Ywhy_ButterFly_01_Detect_Handler",
-          "doOffStage": true
+          "doOffStage": true,
+          "modifierName": "Ywhy_ButterFly_01_Detect_Handler"
         }
       ],
-      "abilitySpecials": {
-        "PF_followSpeed": 3.0,
-        "PF_returnSpeed": 3.0,
-        "PF_MaxLength": 6.0,
-        "PF_thinkInterval": 2.0
-      }
+      "EPGDGGEIHCC": true
     }
   },
   {
     "Default": {
+      "abilityMixins": [
+        {
+          "$type": "AttachModifierToSelfGlobalValueNoInitMixin",
+          "globalValueKey": "LineGadget_Length",
+          "modifierNameSteps": [
+            "PF_Retrun_Start"
+          ],
+          "valueSteps": [
+            "PF_MaxLength",
+            99.0
+          ],
+          "DEFOFMOIAAI": true
+        }
+      ],
+      "abilityName": "SceneObject_Hallworld_Ani_Ywhy_Prop_ButterFly_02",
+      "abilitySpecials": {
+        "PF_followSpeed": 3.0,
+        "PF_returnSpeed": 3.0,
+        "PF_MaxLength": 6.0,
+        "PF_thinkInterval": 2.0,
+        "Ywhy_ButterFly_LifeDuration": 60.0,
+        "Ywhy_ButterFly_DisappearDuration": 2.0
+      },
+      "isDynamicAbility": true,
       "modifiers": {
         "Ywhy_ButterFly_LifeTimer": {
           "duration": "Ywhy_ButterFly_LifeDuration",
+          "elementDurability": 100.0,
+          "modifierName": "",
           "onRemoved": [
             {
               "$type": "Predicated",
@@ -1219,152 +1245,150 @@
               ],
               "targetPredicates": [
                 {
-                  "$type": "EOFDCELPGFO",
-                  "CBOMLBFIPJM": 0.0,
+                  "$type": "ByTargetGlobalValue",
                   "compareType": "NoneOrEqual",
-                  "key": "GV_Ywhy_ButterFly_Disappear"
+                  "key": "GV_Ywhy_ButterFly_Disappear",
+                  "value": 0.0
                 }
               ]
             }
           ],
-          "elementDurability": 100.0,
-          "modifierName": "",
           "AIHNJLDFEGJ": 0.0
         },
         "Ywhy_ButterFly_DisappearThenKill_01": {
           "duration": 0.25,
-          "onRemoved": [
-            {
-              "$type": "ApplyModifier",
-              "modifierName": "Ywhy_ButterFly_DisappearThenKill_02"
-            }
-          ],
+          "elementDurability": 100.0,
+          "modifierName": "",
           "onAdded": [
             {
               "$type": "SetGlobalValueV2",
-              "minValue": 0.0,
               "key": "GV_Ywhy_ButterFly_Disappear",
               "maxValue": 0.0,
-              "CBOMLBFIPJM": 1.0
+              "minValue": 0.0,
+              "value": 1.0
             },
             {
               "$type": "FireEffect",
-              "effectPattern": "Beyd_Eff_Hallworld_Ywhy_Butterfly_Disappear",
-              "scale": 1.0,
               "born": {
-                "$type": "BGOLIIIHLMO",
+                "$type": "ConfigBornByAttachPoint",
                 "attachPointName": "SubEffectPoint",
-                "useRotation": true,
                 "offset": {
                   "x": 0.0,
-                  "z": 0.0,
-                  "y": 0.0
-                }
+                  "y": 0.0,
+                  "z": 0.0
+                },
+                "useRotation": true
               },
-              "ILLLPEOODKP": "",
-              "effectTempleteID": -1.0
+              "effectPattern": "Beyd_Eff_Hallworld_Ywhy_Butterfly_Disappear",
+              "effectTempleteID": -1.0,
+              "scale": 1.0,
+              "ILLLPEOODKP": ""
             },
             {
               "$type": "RemoveModifier",
               "modifierName": "Ywhy_ButterFly_LifeTimer"
             }
           ],
-          "elementDurability": 100.0,
-          "modifierName": "",
+          "onRemoved": [
+            {
+              "$type": "ApplyModifier",
+              "modifierName": "Ywhy_ButterFly_DisappearThenKill_02"
+            }
+          ],
           "AIHNJLDFEGJ": 0.0
         },
         "Ywhy_ButterFly_DisappearThenKill_02": {
           "duration": "Ywhy_ButterFly_DisappearDuration",
+          "elementDurability": 100.0,
+          "modifierName": "",
+          "onAdded": [
+            {
+              "$type": "RemoveEffect",
+              "CCOEKFAPHGD": true,
+              "ILLLPEOODKP": "Im_Butterfly"
+            }
+          ],
           "onRemoved": [
             {
               "$type": "KillSelf",
-              "MBGFJOOIMOK": [
+              "configIdArray": [
                 77401723
               ]
             }
           ],
-          "onAdded": [
-            {
-              "$type": "RemoveEffect",
-              "ILLLPEOODKP": "Im_Butterfly",
-              "CCOEKFAPHGD": true
-            }
-          ],
-          "elementDurability": 100.0,
-          "modifierName": "",
           "AIHNJLDFEGJ": 0.0
         },
         "Ywhy_ButterFly_Effect": {
+          "elementDurability": 100.0,
+          "modifierName": "",
           "onAdded": [
             {
               "$type": "AttachEffect",
-              "ILLLPEOODKP": "Im_Butterfly",
               "born": {
-                "$type": "BGOLIIIHLMO",
+                "$type": "ConfigBornByAttachPoint",
                 "attachPointName": "SubEffectPoint",
-                "useRotation": true,
                 "offset": {
                   "x": 0.0,
-                  "z": 0.0,
-                  "y": 0.0
-                }
+                  "y": 0.0,
+                  "z": 0.0
+                },
+                "useRotation": true
               },
-              "scale": 1.0,
               "effectPattern": "Beyd_Eff_Hallworld_Ywhy_Butterfly",
-              "effectTempleteID": -1.0
+              "effectTempleteID": -1.0,
+              "scale": 1.0,
+              "ILLLPEOODKP": "Im_Butterfly"
             }
           ],
-          "elementDurability": 100.0,
-          "modifierName": "",
           "AIHNJLDFEGJ": 0.0
         },
         "PF_GV_Init": {
+          "elementDurability": 100.0,
+          "modifierName": "",
           "onAdded": [
             {
               "$type": "SetGlobalValueV2",
-              "minValue": 0.0,
               "key": "GV_Start_PartFollow",
               "maxValue": 0.0,
-              "CBOMLBFIPJM": 0.0
+              "minValue": 0.0,
+              "value": 0.0
             },
             {
               "$type": "SetGlobalValueV2",
-              "minValue": 0.0,
               "key": "PF_GV_FollowState",
               "maxValue": 0.0,
-              "CBOMLBFIPJM": 0.0
+              "minValue": 0.0,
+              "value": 0.0
             },
             {
               "$type": "SetGlobalValueV2",
-              "minValue": 0.0,
               "key": "LineGadget_Length",
               "maxValue": 0.0,
-              "CBOMLBFIPJM": 0.0
+              "minValue": 0.0,
+              "value": 0.0
             },
             {
               "$type": "SetGlobalValueV2",
-              "minValue": 0.0,
               "key": "GV_Ywhy_ButterFly_Disappear",
               "maxValue": 0.0,
-              "CBOMLBFIPJM": 0.0
+              "minValue": 0.0,
+              "value": 0.0
             }
           ],
-          "elementDurability": 100.0,
-          "modifierName": "",
           "AIHNJLDFEGJ": 0.0
         },
         "PF_Retrun_Start": {
+          "elementDurability": 100.0,
+          "modifierName": "",
           "onAdded": [
             {
               "$type": "SetGlobalValueV2",
-              "minValue": 0.0,
               "key": "GV_Start_PartFollow",
               "maxValue": 0.0,
-              "CBOMLBFIPJM": 0.0
+              "minValue": 0.0,
+              "value": 0.0
             }
           ],
-          "elementDurability": 100.0,
-          "modifierName": "",
           "AIHNJLDFEGJ": 0.0
         },
         "PartFollowMixin_Handler": {
@@ -1372,137 +1396,120 @@
           "modifierMixins": [
             {
               "$type": "PartFollowMixin",
+              "maxSpeed": "PF_followSpeed",
+              "moveType": "TargetRadiusOffset",
+              "JKHIHFMENHC": 0.0,
+              "KIKPLDBHHLB": 0.05,
+              "EPLELBLGJHH": true,
               "CJCLNNCKJCN": "",
               "EHFHCOICHEG": "",
-              "CILHNDOPMCA": "PF_returnSpeed",
+              "KBGLDPNOLGL": "GV_Start_PartFollow",
+              "MMEHDLLJPEO": "LineGadget_Length",
+              "BKIKMGBCBDL": "PF_FollowRuntimeId",
+              "EEHJBNCFDHE": "PF_GV_FollowState",
               "BDDIPDJGNPL": "PF_followSpeed",
-              "KIKPLDBHHLB": 0.05,
+              "CILHNDOPMCA": "PF_returnSpeed",
+              "IEFFCMKGLFF": "RootNode",
               "PGPLFFJAHEA": "RootNode",
               "FPHCLCBJKFN": "SubEffectPoint",
-              "moveType": "TargetRadiusOffset",
-              "MMEHDLLJPEO": "LineGadget_Length",
+              "CBJKGAOIEOF": [
+                0
+              ],
               "IJNCJHOPAOE": [
                 {
                   "$type": "RemoveModifier",
                   "modifierName": "Ywhy_ButterFly_Move"
                 }
               ],
-              "CBJKGAOIEOF": [
-                0
-              ],
               "GMKHFMNMGCF": [
                 "PF_MaxLength",
                 1.0,
                 "ADD"
               ],
-              "IEFFCMKGLFF": "RootNode",
-              "EPLELBLGJHH": true,
-              "KBGLDPNOLGL": "GV_Start_PartFollow",
-              "JLBCKKLJKEF": "PF_followSpeed",
-              "JKHIHFMENHC": 0.0,
               "FDJJFKGBNIL": {
                 "x": 0.0,
-                "z": 0.0,
-                "y": 0.0
-              },
-              "EEHJBNCFDHE": "PF_GV_FollowState",
-              "BKIKMGBCBDL": "PF_FollowRuntimeId"
+                "y": 0.0,
+                "z": 0.0
+              }
             }
           ],
           "modifierName": "",
           "AIHNJLDFEGJ": 0.0
         },
         "Ywhy_ButterFly_02_Detect_Handler": {
-          "thinkInterval": "PF_thinkInterval",
           "elementDurability": 100.0,
           "modifierName": "",
           "onThinkInterval": [
             {
               "$type": "Predicated",
+              "otherTargets": {
+                "$type": "SelectTargetsByShape",
+                "campTargetType": "All",
+                "entityTypePriority": [
+                  "Avatar"
+                ],
+                "shapeName": "CircleR5H5HC",
+                "sizeRatio": 1.0,
+                "topLimit": 1
+              },
+              "predicatesForeach": [
+                {
+                  "$type": "ByEntityTypes",
+                  "entityTypes": [
+                    "Avatar"
+                  ]
+                }
+              ],
               "successActions": [
                 {
                   "$type": "SetTargetToTargetKey",
-                  "targetKey": "PF_FollowRuntimeId",
-                  "target": "Target"
+                  "target": "Target",
+                  "targetKey": "PF_FollowRuntimeId"
                 },
                 {
                   "$type": "SetPartControlTarget",
-                  "EAGOHJHLJEH": [
+                  "attachPoint": "",
+                  "partRootNames": [
                     "SubEffectPoint"
-                  ],
-                  "attachPoint": ""
+                  ]
                 },
                 {
                   "$type": "ApplyModifier",
                   "modifierName": "Ywhy_ButterFly_Move"
                 }
-              ],
-              "otherTargets": {
-                "$type": "INIACGFCEDH",
-                "sizeRatio": 1.0,
-                "campTargetType": "All",
-                "shapeName": "CircleR5H5HC",
-                "topLimit": 1,
-                "entityTypePriority": [
-                  "Avatar"
-                ]
-              },
-              "DNMKCEFIAPB": [
-                {
-                  "$type": "DEOFBICNFHF",
-                  "entityTypes": [
-                    "Avatar"
-                  ]
-                }
               ]
             }
           ],
+          "thinkInterval": "PF_thinkInterval",
           "AIHNJLDFEGJ": 0.0
         },
         "Ywhy_ButterFly_Move": {
+          "elementDurability": 100.0,
+          "modifierName": "",
           "onAdded": [
             {
               "$type": "SetGlobalValueV2",
-              "minValue": 0.0,
               "key": "GV_Start_PartFollow",
               "maxValue": 0.0,
-              "CBOMLBFIPJM": 1.0
+              "minValue": 0.0,
+              "value": 1.0
             }
           ],
-          "elementDurability": 100.0,
-          "modifierName": "",
           "AIHNJLDFEGJ": 0.0
         }
       },
-      "EPGDGGEIHCC": true,
-      "abilityMixins": [
-        {
-          "$type": "AttachModifierToSelfGlobalValueNoInitMixin",
-          "modifierNameSteps": [
-            "PF_Retrun_Start"
-          ],
-          "DEFOFMOIAAI": true,
-          "valueSteps": [
-            "PF_MaxLength",
-            99.0
-          ],
-          "globalValueKey": "LineGadget_Length"
-        }
-      ],
-      "abilityName": "SceneObject_Hallworld_Ani_Ywhy_Prop_ButterFly_02",
-      "isDynamicAbility": true,
       "onAdded": [
         {
           "$type": "FireEffect",
           "effectPattern": "Beyd_Eff_Hallworld_Ywhy_Butterfly_Appear",
+          "effectTempleteID": -1.0,
           "scale": 1.0,
-          "ILLLPEOODKP": "",
-          "effectTempleteID": -1.0
+          "ILLLPEOODKP": ""
         },
         {
           "$type": "AttachModifier",
-          "modifierName": "Ywhy_ButterFly_Effect",
-          "doOffStage": true
+          "doOffStage": true,
+          "modifierName": "Ywhy_ButterFly_Effect"
         },
         {
           "$type": "ApplyModifier",
@@ -1514,59 +1521,52 @@
         },
         {
           "$type": "AttachModifier",
-          "modifierName": "Ywhy_ButterFly_02_Detect_Handler",
-          "doOffStage": true
+          "doOffStage": true,
+          "modifierName": "Ywhy_ButterFly_02_Detect_Handler"
         },
         {
           "$type": "ApplyModifier",
           "modifierName": "Ywhy_ButterFly_LifeTimer"
         }
       ],
-      "abilitySpecials": {
-        "PF_followSpeed": 3.0,
-        "PF_returnSpeed": 3.0,
-        "PF_MaxLength": 6.0,
-        "PF_thinkInterval": 2.0,
-        "Ywhy_ButterFly_LifeDuration": 60.0,
-        "Ywhy_ButterFly_DisappearDuration": 2.0
-      }
+      "EPGDGGEIHCC": true
     }
   },
   {
     "Default": {
+      "abilityName": "SceneObject_Hallworld_Ywhy_Prop_Petal_Fall_01",
+      "abilitySpecials": {
+        "Ywhy_Petal_Fall_thinkInterval": 20.0
+      },
       "modifiers": {
         "Ywhy_Petal_Fall_Effect_Handler": {
-          "thinkInterval": "Ywhy_Petal_Fall_thinkInterval",
           "elementDurability": 100.0,
           "modifierName": "",
           "onThinkInterval": [
             {
               "$type": "FireEffect",
-              "effectPattern": "Beyd_Eff_Hallworld_Ywhy_Petal_Fall_01",
-              "scale": 1.0,
               "born": {
-                "$type": "NABPLNFPHCK",
+                "$type": "ConfigBornBySelf",
                 "useRotation": true
               },
-              "ILLLPEOODKP": "",
-              "effectTempleteID": -1.0
+              "effectPattern": "Beyd_Eff_Hallworld_Ywhy_Petal_Fall_01",
+              "effectTempleteID": -1.0,
+              "scale": 1.0,
+              "ILLLPEOODKP": ""
             }
           ],
+          "thinkInterval": "Ywhy_Petal_Fall_thinkInterval",
           "AIHNJLDFEGJ": 0.0
         }
       },
-      "EPGDGGEIHCC": true,
-      "abilityName": "SceneObject_Hallworld_Ywhy_Prop_Petal_Fall_01",
       "onAdded": [
         {
           "$type": "AttachModifier",
-          "modifierName": "Ywhy_Petal_Fall_Effect_Handler",
-          "doOffStage": true
+          "doOffStage": true,
+          "modifierName": "Ywhy_Petal_Fall_Effect_Handler"
         }
       ],
-      "abilitySpecials": {
-        "Ywhy_Petal_Fall_thinkInterval": 20.0
-      }
+      "EPGDGGEIHCC": true
     }
   }
 ]

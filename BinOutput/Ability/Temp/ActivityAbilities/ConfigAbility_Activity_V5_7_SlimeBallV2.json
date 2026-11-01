@@ -1,19 +1,52 @@
 [
   {
     "Default": {
+      "abilityName": "Activity_V5_7_SlimeBallV2_BottomlineSuicide",
       "modifiers": {
         "KillSelf_Delay": {
           "duration": 1.0,
+          "elementDurability": 100.0,
+          "modifierName": "",
+          "onAdded": [
+            {
+              "$type": "StartDither",
+              "duration": 2.0
+            },
+            {
+              "$type": "HideUIBillBoard",
+              "hide": true
+            },
+            {
+              "$type": "EnableHitBoxByName",
+              "hitBoxNames": [
+                "HitBox",
+                "HeadBox",
+                "HitBoxShield",
+                "HitBox_ElementShield"
+              ]
+            },
+            {
+              "$type": "SetGlobalPos",
+              "born": {
+                "$type": "ConfigBornBySelf",
+                "offset": {
+                  "x": 30.0,
+                  "y": 30.0
+                },
+                "useRotation": true
+              },
+              "key": "Activity_V5_7_SlimeBallV2_SuicidePoint"
+            }
+          ],
           "onRemoved": [
             {
               "$type": "DoBlinkByGlobalPos",
-              "positionKey": "Activity_V5_7_SlimeBallV2_SuicidePoint",
-              "directionKey": ""
+              "directionKey": "",
+              "positionKey": "Activity_V5_7_SlimeBallV2_SuicidePoint"
             },
             {
               "$type": "KillSelf",
-              "killSelfType": "Disappear",
-              "MBGFJOOIMOK": [
+              "configIdArray": [
                 20010506,
                 20010607,
                 20010807,
@@ -30,42 +63,10 @@
                 21030404,
                 22010306,
                 22010208
-              ]
+              ],
+              "killSelfType": "Disappear"
             }
           ],
-          "onAdded": [
-            {
-              "$type": "StartDither",
-              "duration": 2.0
-            },
-            {
-              "$type": "HideUIBillBoard",
-              "hide": true
-            },
-            {
-              "$type": "EnableHitBoxByName",
-              "MPHBGGFPBII": [
-                "HitBox",
-                "HeadBox",
-                "HitBoxShield",
-                "HitBox_ElementShield"
-              ]
-            },
-            {
-              "$type": "SetGlobalPos",
-              "key": "Activity_V5_7_SlimeBallV2_SuicidePoint",
-              "born": {
-                "$type": "NABPLNFPHCK",
-                "useRotation": true,
-                "offset": {
-                  "z": 30.0,
-                  "y": 30.0
-                }
-              }
-            }
-          ],
-          "elementDurability": 100.0,
-          "modifierName": "",
           "AIHNJLDFEGJ": 0.0
         }
       },
@@ -74,20 +75,20 @@
           "$type": "ApplyModifier",
           "modifierName": "KillSelf_Delay"
         }
-      ],
-      "abilityName": "Activity_V5_7_SlimeBallV2_BottomlineSuicide"
+      ]
     }
   },
   {
     "Default": {
+      "abilityName": "Activity_V5_7_SlimeBallV2_NormalSuicide",
       "onAbilityStart": [
         {
           "$type": "ServerLuaCall",
+          "funcName": "SLC_SlimeCannonV2_MonsterKilled",
+          "luaCallType": "CurGalleryControlGroup",
           "param1": 0.0,
           "param2": 0.0,
-          "funcName": "SLC_SlimeCannonV2_MonsterKilled",
-          "AHCNJKIEMPP": 0.0,
-          "luaCallType": "CurGalleryControlGroup",
+          "param3": 0.0,
           "MEOIHEAEOHB": "Start"
         },
         {
@@ -95,21 +96,21 @@
           "key": "GV_SlimeBallV2_MultiKillNum",
           "maxValue": 0.0,
           "minValue": 0.0,
-          "CBOMLBFIPJM": 1.0,
-          "target": "Team",
           "predicates": [
             {
-              "$type": "EOFDCELPGFO",
-              "CBOMLBFIPJM": 0.0,
+              "$type": "ByTargetGlobalValue",
               "compareType": "NoneOrEqual",
               "key": "GV_SlimeBallV2_DeathReason",
-              "target": "Self"
+              "target": "Self",
+              "value": 0.0
             }
-          ]
+          ],
+          "target": "Team",
+          "value": 1.0
         },
         {
           "$type": "KillSelf",
-          "MBGFJOOIMOK": [
+          "configIdArray": [
             20010506,
             20010607,
             20010807,
@@ -130,40 +131,153 @@
           "MEOIHEAEOHB": "End"
         }
       ],
-      "abilityName": "Activity_V5_7_SlimeBallV2_NormalSuicide",
       "onAdded": [
         {
           "$type": "SetGlobalValueV2",
-          "minValue": 0.0,
           "key": "GV_SlimeBallV2_DeathReason",
           "maxValue": 0.0,
-          "CBOMLBFIPJM": 0.0
+          "minValue": 0.0,
+          "value": 0.0
         }
       ]
     }
   },
   {
     "Default": {
+      "abilityMixins": [
+        {
+          "$type": "DoActionBySelfElementReactionMixin",
+          "actionQueue": [
+            {
+              "$type": "Predicated",
+              "successActions": [
+                {
+                  "$type": "AddGlobalValue",
+                  "key": "_BREAKOUT_BOSS_HP",
+                  "maxValue": 0.0,
+                  "minValue": 0.0,
+                  "value": -1.0
+                }
+              ],
+              "targetPredicates": [
+                {
+                  "$type": "ByNot",
+                  "predicates": [
+                    {
+                      "$type": "ByHasModifier",
+                      "modifierName": "NormalDefend"
+                    },
+                    {
+                      "$type": "ByHasModifier",
+                      "modifierName": "UNIQUE_Abyss_Water_ElementShield_SlimBallV2"
+                    },
+                    {
+                      "$type": "ByHasModifier",
+                      "modifierName": "UNIQUE_Abyss_Ice_ElementShield_SlimBallV2"
+                    },
+                    {
+                      "$type": "ByTargetGlobalValue",
+                      "compareType": "MoreThan",
+                      "key": "_Has_Shield_SlimBallV2",
+                      "target": "Self",
+                      "value": 0.0
+                    }
+                  ],
+                  "target": "Self"
+                }
+              ]
+            }
+          ],
+          "reactionTypes": [
+            "Melt"
+          ]
+        },
+        {
+          "$type": "DoActionBySelfElementReactionMixin",
+          "actionQueue": [
+            {
+              "$type": "Predicated",
+              "successActions": [
+                {
+                  "$type": "AddGlobalValue",
+                  "key": "_BREAKOUT_BOSS_HP",
+                  "maxValue": 0.0,
+                  "minValue": 0.0,
+                  "value": -2.0
+                }
+              ],
+              "targetPredicates": [
+                {
+                  "$type": "ByNot",
+                  "predicates": [
+                    {
+                      "$type": "ByHasModifier",
+                      "modifierName": "NormalDefend"
+                    },
+                    {
+                      "$type": "ByHasModifier",
+                      "modifierName": "UNIQUE_Abyss_Water_ElementShield_SlimBallV2"
+                    },
+                    {
+                      "$type": "ByHasModifier",
+                      "modifierName": "UNIQUE_Abyss_Ice_ElementShield_SlimBallV2"
+                    },
+                    {
+                      "$type": "ByTargetGlobalValue",
+                      "compareType": "MoreThan",
+                      "key": "_Has_Shield_SlimBallV2",
+                      "target": "Self",
+                      "value": 0.0
+                    }
+                  ],
+                  "target": "Self"
+                }
+              ]
+            }
+          ],
+          "reactionTypes": [
+            "FrozenBroken"
+          ]
+        },
+        {
+          "$type": "AttachModifierToSelfGlobalValueNoInitMixin",
+          "globalValueKey": "_Has_Shield_SlimBallV2",
+          "modifierNameSteps": [
+            "ShieldOn"
+          ],
+          "valueSteps": [
+            0.5,
+            1.5
+          ]
+        }
+      ],
+      "abilityName": "Activity_V5_7_SlimeBallV2_HPManager",
+      "abilitySpecials": {
+        "Slime_02_Hp": 2.0,
+        "Slime_03_Hp": 4.0,
+        "Hili_Hp": 2.0,
+        "Brute_Hp": 6.0,
+        "Shaman_Hp": 3.0,
+        "Abyss_Hp": 3.0
+      },
       "modifiers": {
         "BeHit_Damage": {
           "elementDurability": 100.0,
           "modifierMixins": [
             {
               "$type": "AttachModifierToSelfGlobalValueMixin",
+              "defaultGlobalValueOnCreate": 0.0,
+              "globalValueKey": "_BREAKOUT_BOSS_HP",
               "modifierNameSteps": [
                 "Suicide"
               ],
               "valueSteps": [
                 -99.5,
                 0.5
-              ],
-              "globalValueKey": "_BREAKOUT_BOSS_HP",
-              "defaultGlobalValueOnCreate": 0.0
+              ]
             }
           ],
-          "state": "DenyLockOn",
           "modifierName": "",
-          "AIHNJLDFEGJ": 0.0,
           "onBeingHit": [
             {
               "$type": "Predicated",
@@ -173,52 +287,52 @@
                   "key": "_BREAKOUT_BOSS_HP",
                   "maxValue": 0.0,
                   "minValue": 0.0,
-                  "CBOMLBFIPJM": -1.0,
                   "predicates": [
                     {
-                      "$type": "EOFDCELPGFO",
-                      "CBOMLBFIPJM": 0.0,
+                      "$type": "ByTargetGlobalValue",
                       "compareType": "NoneOrEqual",
                       "key": "SlimeBallV2_FireMuteHurt",
-                      "target": "Self"
+                      "target": "Self",
+                      "value": 0.0
                     }
-                  ]
+                  ],
+                  "value": -1.0
                 }
               ],
+              "target": "Other",
               "targetPredicates": [
                 {
-                  "$type": "CCHPEOBKOBO",
+                  "$type": "ByAttackTags",
                   "attackTags": [
                     "ExplodeDamage"
                   ]
                 },
                 {
-                  "$type": "GKGBIPDLMMG",
+                  "$type": "ByNot",
                   "predicates": [
                     {
-                      "$type": "LJBLAFGJKGI",
+                      "$type": "ByHasModifier",
                       "modifierName": "NormalDefend"
                     },
                     {
-                      "$type": "LJBLAFGJKGI",
+                      "$type": "ByHasModifier",
                       "modifierName": "UNIQUE_Abyss_Water_ElementShield_SlimBallV2"
                     },
                     {
-                      "$type": "LJBLAFGJKGI",
+                      "$type": "ByHasModifier",
                       "modifierName": "UNIQUE_Abyss_Ice_ElementShield_SlimBallV2"
                     },
                     {
-                      "$type": "EOFDCELPGFO",
-                      "CBOMLBFIPJM": 0.0,
+                      "$type": "ByTargetGlobalValue",
                       "compareType": "MoreThan",
                       "key": "_Has_Shield_SlimBallV2",
-                      "target": "Self"
+                      "target": "Self",
+                      "value": 0.0
                     }
                   ],
                   "target": "Self"
                 }
-              ],
-              "target": "Other"
+              ]
             },
             {
               "$type": "Predicated",
@@ -228,52 +342,52 @@
                   "key": "_BREAKOUT_BOSS_HP",
                   "maxValue": 0.0,
                   "minValue": 0.0,
-                  "CBOMLBFIPJM": -1.0,
                   "predicates": [
                     {
-                      "$type": "EOFDCELPGFO",
-                      "CBOMLBFIPJM": 0.0,
+                      "$type": "ByTargetGlobalValue",
                       "compareType": "NoneOrEqual",
                       "key": "SlimeBallV2_IceMuteHurt",
-                      "target": "Self"
+                      "target": "Self",
+                      "value": 0.0
                     }
-                  ]
+                  ],
+                  "value": -1.0
                 }
               ],
+              "target": "Other",
               "targetPredicates": [
                 {
-                  "$type": "CCHPEOBKOBO",
+                  "$type": "ByAttackTags",
                   "attackTags": [
                     "SuperconductorDamage"
                   ]
                 },
                 {
-                  "$type": "GKGBIPDLMMG",
+                  "$type": "ByNot",
                   "predicates": [
                     {
-                      "$type": "LJBLAFGJKGI",
+                      "$type": "ByHasModifier",
                       "modifierName": "NormalDefend"
                     },
                     {
-                      "$type": "LJBLAFGJKGI",
+                      "$type": "ByHasModifier",
                       "modifierName": "UNIQUE_Abyss_Water_ElementShield_SlimBallV2"
                     },
                     {
-                      "$type": "LJBLAFGJKGI",
+                      "$type": "ByHasModifier",
                       "modifierName": "UNIQUE_Abyss_Ice_ElementShield_SlimBallV2"
                     },
                     {
-                      "$type": "EOFDCELPGFO",
-                      "CBOMLBFIPJM": 0.0,
+                      "$type": "ByTargetGlobalValue",
                       "compareType": "MoreThan",
                       "key": "_Has_Shield_SlimBallV2",
-                      "target": "Self"
+                      "target": "Self",
+                      "value": 0.0
                     }
                   ],
                   "target": "Self"
                 }
-              ],
-              "target": "Other"
+              ]
             },
             {
               "$type": "Predicated",
@@ -283,44 +397,44 @@
                   "key": "_BREAKOUT_BOSS_HP",
                   "maxValue": 0.0,
                   "minValue": 0.0,
-                  "CBOMLBFIPJM": -1.0
+                  "value": -1.0
                 }
               ],
+              "target": "Other",
               "targetPredicates": [
                 {
-                  "$type": "CCHPEOBKOBO",
+                  "$type": "ByAttackTags",
                   "attackTags": [
                     "Activity_SlimeCannonV2_Bullet",
                     "Activity_SlimeCannonV2_SpinTrap"
                   ]
                 },
                 {
-                  "$type": "GKGBIPDLMMG",
+                  "$type": "ByNot",
                   "predicates": [
                     {
-                      "$type": "LJBLAFGJKGI",
+                      "$type": "ByHasModifier",
                       "modifierName": "NormalDefend"
                     },
                     {
-                      "$type": "LJBLAFGJKGI",
+                      "$type": "ByHasModifier",
                       "modifierName": "UNIQUE_Abyss_Water_ElementShield_SlimBallV2"
                     },
                     {
-                      "$type": "LJBLAFGJKGI",
+                      "$type": "ByHasModifier",
                       "modifierName": "UNIQUE_Abyss_Ice_ElementShield_SlimBallV2"
                     },
                     {
-                      "$type": "EOFDCELPGFO",
-                      "CBOMLBFIPJM": 0.0,
+                      "$type": "ByTargetGlobalValue",
                       "compareType": "MoreThan",
                       "key": "_Has_Shield_SlimBallV2",
-                      "target": "Self"
+                      "target": "Self",
+                      "value": 0.0
                     }
                   ],
                   "target": "Self"
                 }
-              ],
-              "target": "Other"
+              ]
             },
             {
               "$type": "Predicated",
@@ -330,85 +444,85 @@
                   "successActions": [
                     {
                       "$type": "SetGlobalValueV2",
-                      "minValue": 0.0,
                       "key": "GV_SlimeBallV2_DeathReason",
                       "maxValue": 0.0,
-                      "CBOMLBFIPJM": 2.0,
+                      "minValue": 0.0,
                       "predicates": [
                         {
-                          "$type": "EOFDCELPGFO",
-                          "CBOMLBFIPJM": 1.0,
+                          "$type": "ByTargetGlobalValue",
                           "key": "_BREAKOUT_BOSS_HP",
-                          "target": "Caster"
+                          "target": "Caster",
+                          "value": 1.0
                         }
-                      ]
+                      ],
+                      "value": 2.0
                     },
                     {
                       "$type": "ApplyModifier",
                       "modifierName": "Add_APKillNum",
-                      "target": "Target",
                       "predicates": [
                         {
-                          "$type": "EOFDCELPGFO",
-                          "CBOMLBFIPJM": 1.0,
+                          "$type": "ByTargetGlobalValue",
                           "key": "_BREAKOUT_BOSS_HP",
-                          "target": "Caster"
+                          "target": "Caster",
+                          "value": 1.0
                         }
-                      ]
+                      ],
+                      "target": "Target"
                     }
                   ],
+                  "target": "Other",
                   "targetPredicates": [
                     {
-                      "$type": "EOFDCELPGFO",
-                      "CBOMLBFIPJM": 0.0,
+                      "$type": "ByTargetGlobalValue",
                       "compareType": "MoreThanAndEqual",
-                      "key": "GV_SlimeBallV2_APKillNum"
+                      "key": "GV_SlimeBallV2_APKillNum",
+                      "value": 0.0
                     }
-                  ],
-                  "target": "Other"
+                  ]
                 },
                 {
                   "$type": "AddGlobalValue",
                   "key": "_BREAKOUT_BOSS_HP",
                   "maxValue": 0.0,
                   "minValue": 0.0,
-                  "CBOMLBFIPJM": -1.0
+                  "value": -1.0
                 }
               ],
+              "target": "Other",
               "targetPredicates": [
                 {
-                  "$type": "CCHPEOBKOBO",
+                  "$type": "ByAttackTags",
                   "attackTags": [
                     "Activity_SlimeCannonV2_Penetration"
                   ]
                 },
                 {
-                  "$type": "GKGBIPDLMMG",
+                  "$type": "ByNot",
                   "predicates": [
                     {
-                      "$type": "LJBLAFGJKGI",
+                      "$type": "ByHasModifier",
                       "modifierName": "NormalDefend"
                     },
                     {
-                      "$type": "LJBLAFGJKGI",
+                      "$type": "ByHasModifier",
                       "modifierName": "UNIQUE_Abyss_Water_ElementShield_SlimBallV2"
                     },
                     {
-                      "$type": "LJBLAFGJKGI",
+                      "$type": "ByHasModifier",
                       "modifierName": "UNIQUE_Abyss_Ice_ElementShield_SlimBallV2"
                     },
                     {
-                      "$type": "EOFDCELPGFO",
-                      "CBOMLBFIPJM": 0.0,
+                      "$type": "ByTargetGlobalValue",
                       "compareType": "MoreThan",
                       "key": "_Has_Shield_SlimBallV2",
-                      "target": "Self"
+                      "target": "Self",
+                      "value": 0.0
                     }
                   ],
                   "target": "Self"
                 }
-              ],
-              "target": "Other"
+              ]
             },
             {
               "$type": "Predicated",
@@ -418,83 +532,83 @@
                   "key": "_BREAKOUT_BOSS_HP",
                   "maxValue": 0.0,
                   "minValue": 0.0,
-                  "CBOMLBFIPJM": -2.0,
                   "predicates": [
                     {
-                      "$type": "EOFDCELPGFO",
-                      "CBOMLBFIPJM": 0.0,
+                      "$type": "ByTargetGlobalValue",
                       "compareType": "NoneOrEqual",
                       "key": "SlimeBallV2_FireMuteHurt",
-                      "target": "Self"
+                      "target": "Self",
+                      "value": 0.0
                     },
                     {
-                      "$type": "DHJDIBHFDKB",
+                      "$type": "ByHasElement",
                       "element": "Water",
                       "target": "Self"
                     }
-                  ]
+                  ],
+                  "value": -2.0
                 },
                 {
                   "$type": "AddGlobalValue",
                   "key": "_BREAKOUT_BOSS_HP",
                   "maxValue": 0.0,
                   "minValue": 0.0,
-                  "CBOMLBFIPJM": -1.0,
                   "predicates": [
                     {
-                      "$type": "EOFDCELPGFO",
-                      "CBOMLBFIPJM": 0.0,
+                      "$type": "ByTargetGlobalValue",
                       "compareType": "NoneOrEqual",
                       "key": "SlimeBallV2_FireMuteHurt",
-                      "target": "Self"
+                      "target": "Self",
+                      "value": 0.0
                     },
                     {
-                      "$type": "GKGBIPDLMMG",
+                      "$type": "ByNot",
                       "predicates": [
                         {
-                          "$type": "DHJDIBHFDKB",
+                          "$type": "ByHasElement",
                           "element": "Water",
                           "target": "Self"
                         }
                       ]
                     }
-                  ]
+                  ],
+                  "value": -1.0
                 }
               ],
+              "target": "Other",
               "targetPredicates": [
                 {
-                  "$type": "CCHPEOBKOBO",
+                  "$type": "ByAttackTags",
                   "attackTags": [
                     "Activity_SlimeCannonV2_Fire"
                   ]
                 },
                 {
-                  "$type": "GKGBIPDLMMG",
+                  "$type": "ByNot",
                   "predicates": [
                     {
-                      "$type": "LJBLAFGJKGI",
+                      "$type": "ByHasModifier",
                       "modifierName": "NormalDefend"
                     },
                     {
-                      "$type": "LJBLAFGJKGI",
+                      "$type": "ByHasModifier",
                       "modifierName": "UNIQUE_Abyss_Water_ElementShield_SlimBallV2"
                     },
                     {
-                      "$type": "LJBLAFGJKGI",
+                      "$type": "ByHasModifier",
                       "modifierName": "UNIQUE_Abyss_Ice_ElementShield_SlimBallV2"
                     },
                     {
-                      "$type": "EOFDCELPGFO",
-                      "CBOMLBFIPJM": 0.0,
+                      "$type": "ByTargetGlobalValue",
                       "compareType": "MoreThan",
                       "key": "_Has_Shield_SlimBallV2",
-                      "target": "Self"
+                      "target": "Self",
+                      "value": 0.0
                     }
                   ],
                   "target": "Self"
                 }
-              ],
-              "target": "Other"
+              ]
             },
             {
               "$type": "Predicated",
@@ -504,83 +618,83 @@
                   "key": "_BREAKOUT_BOSS_HP",
                   "maxValue": 0.0,
                   "minValue": 0.0,
-                  "CBOMLBFIPJM": -4.0,
                   "predicates": [
                     {
-                      "$type": "EOFDCELPGFO",
-                      "CBOMLBFIPJM": 0.0,
+                      "$type": "ByTargetGlobalValue",
                       "compareType": "NoneOrEqual",
                       "key": "SlimeBallV2_FireMuteHurt",
-                      "target": "Self"
+                      "target": "Self",
+                      "value": 0.0
                     },
                     {
-                      "$type": "DHJDIBHFDKB",
+                      "$type": "ByHasElement",
                       "element": "Water",
                       "target": "Self"
                     }
-                  ]
+                  ],
+                  "value": -4.0
                 },
                 {
                   "$type": "AddGlobalValue",
                   "key": "_BREAKOUT_BOSS_HP",
                   "maxValue": 0.0,
                   "minValue": 0.0,
-                  "CBOMLBFIPJM": -2.0,
                   "predicates": [
                     {
-                      "$type": "EOFDCELPGFO",
-                      "CBOMLBFIPJM": 0.0,
+                      "$type": "ByTargetGlobalValue",
                       "compareType": "NoneOrEqual",
                       "key": "SlimeBallV2_FireMuteHurt",
-                      "target": "Self"
+                      "target": "Self",
+                      "value": 0.0
                     },
                     {
-                      "$type": "GKGBIPDLMMG",
+                      "$type": "ByNot",
                       "predicates": [
                         {
-                          "$type": "DHJDIBHFDKB",
+                          "$type": "ByHasElement",
                           "element": "Water",
                           "target": "Self"
                         }
                       ]
                     }
-                  ]
+                  ],
+                  "value": -2.0
                 }
               ],
+              "target": "Other",
               "targetPredicates": [
                 {
-                  "$type": "CCHPEOBKOBO",
+                  "$type": "ByAttackTags",
                   "attackTags": [
                     "Activity_SlimeCannonV2_Explode"
                   ]
                 },
                 {
-                  "$type": "GKGBIPDLMMG",
+                  "$type": "ByNot",
                   "predicates": [
                     {
-                      "$type": "LJBLAFGJKGI",
+                      "$type": "ByHasModifier",
                       "modifierName": "NormalDefend"
                     },
                     {
-                      "$type": "LJBLAFGJKGI",
+                      "$type": "ByHasModifier",
                       "modifierName": "UNIQUE_Abyss_Water_ElementShield_SlimBallV2"
                     },
                     {
-                      "$type": "LJBLAFGJKGI",
+                      "$type": "ByHasModifier",
                       "modifierName": "UNIQUE_Abyss_Ice_ElementShield_SlimBallV2"
                     },
                     {
-                      "$type": "EOFDCELPGFO",
-                      "CBOMLBFIPJM": 0.0,
+                      "$type": "ByTargetGlobalValue",
                       "compareType": "MoreThan",
                       "key": "_Has_Shield_SlimBallV2",
-                      "target": "Self"
+                      "target": "Self",
+                      "value": 0.0
                     }
                   ],
                   "target": "Self"
                 }
-              ],
-              "target": "Other"
+              ]
             },
             {
               "$type": "Predicated",
@@ -590,52 +704,52 @@
                   "key": "_BREAKOUT_BOSS_HP",
                   "maxValue": 0.0,
                   "minValue": 0.0,
-                  "CBOMLBFIPJM": -1.0,
                   "predicates": [
                     {
-                      "$type": "EOFDCELPGFO",
-                      "CBOMLBFIPJM": 0.0,
+                      "$type": "ByTargetGlobalValue",
                       "compareType": "NoneOrEqual",
                       "key": "SlimeBallV2_IceMuteHurt",
-                      "target": "Self"
+                      "target": "Self",
+                      "value": 0.0
                     }
-                  ]
+                  ],
+                  "value": -1.0
                 }
               ],
+              "target": "Other",
               "targetPredicates": [
                 {
-                  "$type": "CCHPEOBKOBO",
+                  "$type": "ByAttackTags",
                   "attackTags": [
                     "Activity_SlimeCannonV2_Ice"
                   ]
                 },
                 {
-                  "$type": "GKGBIPDLMMG",
+                  "$type": "ByNot",
                   "predicates": [
                     {
-                      "$type": "LJBLAFGJKGI",
+                      "$type": "ByHasModifier",
                       "modifierName": "NormalDefend"
                     },
                     {
-                      "$type": "LJBLAFGJKGI",
+                      "$type": "ByHasModifier",
                       "modifierName": "UNIQUE_Abyss_Water_ElementShield_SlimBallV2"
                     },
                     {
-                      "$type": "LJBLAFGJKGI",
+                      "$type": "ByHasModifier",
                       "modifierName": "UNIQUE_Abyss_Ice_ElementShield_SlimBallV2"
                     },
                     {
-                      "$type": "EOFDCELPGFO",
-                      "CBOMLBFIPJM": 0.0,
+                      "$type": "ByTargetGlobalValue",
                       "compareType": "MoreThan",
                       "key": "_Has_Shield_SlimBallV2",
-                      "target": "Self"
+                      "target": "Self",
+                      "value": 0.0
                     }
                   ],
                   "target": "Self"
                 }
-              ],
-              "target": "Other"
+              ]
             },
             {
               "$type": "Predicated",
@@ -643,14 +757,15 @@
                 {
                   "$type": "SetGlobalValue",
                   "key": "_Has_Shield_SlimBallV2",
-                  "minValue": 0.0,
                   "maxValue": 0.0,
-                  "CBOMLBFIPJM": 0.0
+                  "minValue": 0.0,
+                  "value": 0.0
                 }
               ],
+              "target": "Other",
               "targetPredicates": [
                 {
-                  "$type": "CCHPEOBKOBO",
+                  "$type": "ByAttackTags",
                   "attackTags": [
                     "Activity_SlimeCannonV2_Bullet",
                     "Activity_SlimeCannonV2_SpinTrap",
@@ -661,304 +776,189 @@
                   ]
                 },
                 {
-                  "$type": "GKGBIPDLMMG",
+                  "$type": "ByNot",
                   "predicates": [
                     {
-                      "$type": "LJBLAFGJKGI",
+                      "$type": "ByHasModifier",
                       "modifierName": "NormalDefend"
                     },
                     {
-                      "$type": "LJBLAFGJKGI",
+                      "$type": "ByHasModifier",
                       "modifierName": "UNIQUE_Abyss_Water_ElementShield_SlimBallV2"
                     },
                     {
-                      "$type": "LJBLAFGJKGI",
+                      "$type": "ByHasModifier",
                       "modifierName": "UNIQUE_Abyss_Ice_ElementShield_SlimBallV2"
                     }
                   ],
                   "target": "Self"
                 }
-              ],
-              "target": "Other"
+              ]
             }
-          ]
+          ],
+          "state": "DenyLockOn",
+          "AIHNJLDFEGJ": 0.0
         },
         "Suicide": {
+          "elementDurability": 100.0,
+          "modifierName": "",
+          "onAdded": [
+            {
+              "$type": "TriggerAbility",
+              "abilityName": "Activity_V5_7_SlimeBallV2_NormalSuicide"
+            }
+          ],
           "onReconnect": [
             {
               "$type": "TriggerAbility",
               "abilityName": "Activity_V5_7_SlimeBallV2_NormalSuicide"
             }
           ],
-          "onAdded": [
-            {
-              "$type": "TriggerAbility",
-              "abilityName": "Activity_V5_7_SlimeBallV2_NormalSuicide"
-            }
-          ],
-          "elementDurability": 100.0,
-          "modifierName": "",
           "AIHNJLDFEGJ": 0.0
         },
         "ShieldOn": {
+          "elementDurability": 100.0,
+          "modifierName": "",
+          "onAdded": [
+            {
+              "$type": "AttachEffect",
+              "effectPattern": "Eff_Monster_Shaman_Rock_Shield_SlimeCannonV2",
+              "effectTempleteID": -1.0,
+              "scale": 1.0,
+              "ILLLPEOODKP": ""
+            }
+          ],
           "onRemoved": [
             {
               "$type": "FireEffect",
               "effectPattern": "Eff_Monster_Shaman_Rock_ShieldDestroyed_SlimeCannonV2",
+              "effectTempleteID": -1.0,
               "scale": 1.0,
-              "ILLLPEOODKP": "",
-              "effectTempleteID": -1.0
+              "ILLLPEOODKP": ""
             }
           ],
-          "onAdded": [
-            {
-              "$type": "AttachEffect",
-              "ILLLPEOODKP": "",
-              "scale": 1.0,
-              "effectPattern": "Eff_Monster_Shaman_Rock_Shield_SlimeCannonV2",
-              "effectTempleteID": -1.0
-            }
-          ],
-          "elementDurability": 100.0,
-          "modifierName": "",
           "AIHNJLDFEGJ": 0.0
         },
         "Add_APKillNum": {
           "duration": 0.1,
+          "elementDurability": 100.0,
+          "modifierName": "",
           "onAdded": [
             {
               "$type": "AddGlobalValue",
               "key": "GV_SlimeBallV2_APKillNum",
               "maxValue": 0.0,
               "minValue": 0.0,
-              "CBOMLBFIPJM": 1.0
+              "value": 1.0
             }
           ],
           "stacking": "Multiple",
-          "elementDurability": 100.0,
-          "modifierName": "",
           "AIHNJLDFEGJ": 0.0
         }
       },
-      "abilityMixins": [
-        {
-          "$type": "DoActionBySelfElementReactionMixin",
-          "IGAMNNAADJB": [
-            "Melt"
-          ],
-          "actionQueue": [
-            {
-              "$type": "Predicated",
-              "successActions": [
-                {
-                  "$type": "AddGlobalValue",
-                  "key": "_BREAKOUT_BOSS_HP",
-                  "maxValue": 0.0,
-                  "minValue": 0.0,
-                  "CBOMLBFIPJM": -1.0
-                }
-              ],
-              "targetPredicates": [
-                {
-                  "$type": "GKGBIPDLMMG",
-                  "predicates": [
-                    {
-                      "$type": "LJBLAFGJKGI",
-                      "modifierName": "NormalDefend"
-                    },
-                    {
-                      "$type": "LJBLAFGJKGI",
-                      "modifierName": "UNIQUE_Abyss_Water_ElementShield_SlimBallV2"
-                    },
-                    {
-                      "$type": "LJBLAFGJKGI",
-                      "modifierName": "UNIQUE_Abyss_Ice_ElementShield_SlimBallV2"
-                    },
-                    {
-                      "$type": "EOFDCELPGFO",
-                      "CBOMLBFIPJM": 0.0,
-                      "compareType": "MoreThan",
-                      "key": "_Has_Shield_SlimBallV2",
-                      "target": "Self"
-                    }
-                  ],
-                  "target": "Self"
-                }
-              ]
-            }
-          ]
-        },
-        {
-          "$type": "DoActionBySelfElementReactionMixin",
-          "IGAMNNAADJB": [
-            "FrozenBroken"
-          ],
-          "actionQueue": [
-            {
-              "$type": "Predicated",
-              "successActions": [
-                {
-                  "$type": "AddGlobalValue",
-                  "key": "_BREAKOUT_BOSS_HP",
-                  "maxValue": 0.0,
-                  "minValue": 0.0,
-                  "CBOMLBFIPJM": -2.0
-                }
-              ],
-              "targetPredicates": [
-                {
-                  "$type": "GKGBIPDLMMG",
-                  "predicates": [
-                    {
-                      "$type": "LJBLAFGJKGI",
-                      "modifierName": "NormalDefend"
-                    },
-                    {
-                      "$type": "LJBLAFGJKGI",
-                      "modifierName": "UNIQUE_Abyss_Water_ElementShield_SlimBallV2"
-                    },
-                    {
-                      "$type": "LJBLAFGJKGI",
-                      "modifierName": "UNIQUE_Abyss_Ice_ElementShield_SlimBallV2"
-                    },
-                    {
-                      "$type": "EOFDCELPGFO",
-                      "CBOMLBFIPJM": 0.0,
-                      "compareType": "MoreThan",
-                      "key": "_Has_Shield_SlimBallV2",
-                      "target": "Self"
-                    }
-                  ],
-                  "target": "Self"
-                }
-              ]
-            }
-          ]
-        },
-        {
-          "$type": "AttachModifierToSelfGlobalValueNoInitMixin",
-          "modifierNameSteps": [
-            "ShieldOn"
-          ],
-          "valueSteps": [
-            0.5,
-            1.5
-          ],
-          "globalValueKey": "_Has_Shield_SlimBallV2"
-        }
-      ],
-      "abilityName": "Activity_V5_7_SlimeBallV2_HPManager",
       "onAdded": [
         {
           "$type": "SetGlobalValue",
           "key": "_BREAKOUT_BOSS_HP",
-          "minValue": 0.0,
           "maxValue": 0.0,
-          "CBOMLBFIPJM": "Slime_02_Hp",
+          "minValue": 0.0,
           "predicates": [
             {
-              "$type": "EOFDCELPGFO",
-              "CBOMLBFIPJM": 1.0,
+              "$type": "ByTargetGlobalValue",
               "key": "Activity_V5_7_Slime_Identification",
-              "target": "Self"
+              "target": "Self",
+              "value": 1.0
             }
-          ]
+          ],
+          "value": "Slime_02_Hp"
         },
         {
           "$type": "SetGlobalValue",
           "key": "_BREAKOUT_BOSS_HP",
-          "minValue": 0.0,
           "maxValue": 0.0,
-          "CBOMLBFIPJM": "Slime_03_Hp",
+          "minValue": 0.0,
           "predicates": [
             {
-              "$type": "EOFDCELPGFO",
-              "CBOMLBFIPJM": 2.0,
+              "$type": "ByTargetGlobalValue",
               "key": "Activity_V5_7_Slime_Identification",
-              "target": "Self"
+              "target": "Self",
+              "value": 2.0
             }
-          ]
+          ],
+          "value": "Slime_03_Hp"
         },
         {
           "$type": "SetGlobalValue",
           "key": "_BREAKOUT_BOSS_HP",
-          "minValue": 0.0,
           "maxValue": 0.0,
-          "CBOMLBFIPJM": "Hili_Hp",
+          "minValue": 0.0,
           "predicates": [
             {
-              "$type": "EOFDCELPGFO",
-              "CBOMLBFIPJM": 1.0,
+              "$type": "ByTargetGlobalValue",
               "key": "Activity_V5_7_Hili_Identification",
-              "target": "Self"
+              "target": "Self",
+              "value": 1.0
             }
-          ]
+          ],
+          "value": "Hili_Hp"
         },
         {
           "$type": "SetGlobalValue",
           "key": "_BREAKOUT_BOSS_HP",
-          "minValue": 0.0,
           "maxValue": 0.0,
-          "CBOMLBFIPJM": "Brute_Hp",
+          "minValue": 0.0,
           "predicates": [
             {
-              "$type": "EOFDCELPGFO",
-              "CBOMLBFIPJM": 1.0,
+              "$type": "ByTargetGlobalValue",
               "key": "Activity_V5_7_Brute_Identification",
-              "target": "Self"
+              "target": "Self",
+              "value": 1.0
             }
-          ]
+          ],
+          "value": "Brute_Hp"
         },
         {
           "$type": "SetGlobalValue",
           "key": "_BREAKOUT_BOSS_HP",
-          "minValue": 0.0,
           "maxValue": 0.0,
-          "CBOMLBFIPJM": "Shaman_Hp",
+          "minValue": 0.0,
           "predicates": [
             {
-              "$type": "EOFDCELPGFO",
-              "CBOMLBFIPJM": 1.0,
+              "$type": "ByTargetGlobalValue",
               "key": "Activity_V5_7_Shaman_Identification",
-              "target": "Self"
+              "target": "Self",
+              "value": 1.0
             }
-          ]
+          ],
+          "value": "Shaman_Hp"
         },
         {
           "$type": "SetGlobalValue",
           "key": "_BREAKOUT_BOSS_HP",
-          "minValue": 0.0,
           "maxValue": 0.0,
-          "CBOMLBFIPJM": "Abyss_Hp",
+          "minValue": 0.0,
           "predicates": [
             {
-              "$type": "EOFDCELPGFO",
-              "CBOMLBFIPJM": 1.0,
+              "$type": "ByTargetGlobalValue",
               "key": "Activity_V5_7_Abyss_Identification",
-              "target": "Self"
+              "target": "Self",
+              "value": 1.0
             }
-          ]
+          ],
+          "value": "Abyss_Hp"
         },
         {
           "$type": "SetGlobalValue",
           "key": "_BREAKOUT_BOSS_HP_UI_CELL",
-          "minValue": 0.0,
           "maxValue": 0.0,
-          "CBOMLBFIPJM": 1.0
+          "minValue": 0.0,
+          "value": 1.0
         },
         {
           "$type": "ApplyModifier",
           "modifierName": "BeHit_Damage"
         }
-      ],
-      "abilitySpecials": {
-        "Slime_02_Hp": 2.0,
-        "Slime_03_Hp": 4.0,
-        "Hili_Hp": 2.0,
-        "Brute_Hp": 6.0,
-        "Shaman_Hp": 3.0,
-        "Abyss_Hp": 3.0
-      }
+      ]
     }
   },
   {
@@ -968,9 +968,9 @@
         {
           "$type": "SetGlobalValue",
           "key": "SlimeBallV2_FireMuteHurt",
-          "minValue": 0.0,
           "maxValue": 0.0,
-          "CBOMLBFIPJM": 1.0
+          "minValue": 0.0,
+          "value": 1.0
         }
       ]
     }
@@ -982,9 +982,9 @@
         {
           "$type": "SetGlobalValue",
           "key": "SlimeBallV2_IceMuteHurt",
-          "minValue": 0.0,
           "maxValue": 0.0,
-          "CBOMLBFIPJM": 1.0
+          "minValue": 0.0,
+          "value": 1.0
         }
       ]
     }
@@ -996,16 +996,16 @@
         {
           "$type": "SetGlobalValue",
           "key": "Activity_V5_7_Slime_Identification",
-          "minValue": 0.0,
           "maxValue": 0.0,
-          "CBOMLBFIPJM": 1.0
+          "minValue": 0.0,
+          "value": 1.0
         },
         {
           "$type": "SetGlobalValue",
           "key": "_MONSTER_Slime_SimpleStick",
-          "minValue": 0.0,
           "maxValue": 0.0,
-          "CBOMLBFIPJM": 1.0
+          "minValue": 0.0,
+          "value": 1.0
         },
         {
           "$type": "KillServerGadget",
@@ -1015,10 +1015,10 @@
         },
         {
           "$type": "CreateGadget",
-          "gadgetID": 42001040,
           "byServer": true,
-          "FGNHCAEHEJK": true,
-          "CEMJCDOPCGG": true
+          "gadgetID": 42001040,
+          "sightGroupWithOwner": true,
+          "FGNHCAEHEJK": true
         }
       ]
     }
@@ -1030,16 +1030,16 @@
         {
           "$type": "SetGlobalValue",
           "key": "Activity_V5_7_Slime_Identification",
-          "minValue": 0.0,
           "maxValue": 0.0,
-          "CBOMLBFIPJM": 2.0
+          "minValue": 0.0,
+          "value": 2.0
         },
         {
           "$type": "SetGlobalValue",
           "key": "_MONSTER_Slime_SimpleStick",
-          "minValue": 0.0,
           "maxValue": 0.0,
-          "CBOMLBFIPJM": 1.0
+          "minValue": 0.0,
+          "value": 1.0
         }
       ]
     }
@@ -1051,14 +1051,14 @@
         {
           "$type": "SetGlobalValue",
           "key": "Activity_V5_7_Hili_Identification",
-          "minValue": 0.0,
           "maxValue": 0.0,
-          "CBOMLBFIPJM": 1.0
+          "minValue": 0.0,
+          "value": 1.0
         },
         {
           "$type": "SetAnimatorBool",
-          "CBOMLBFIPJM": true,
-          "boolID": "Affix_Defend"
+          "boolID": "Affix_Defend",
+          "value": true
         }
       ]
     }
@@ -1070,46 +1070,46 @@
         {
           "$type": "SetGlobalValue",
           "key": "Activity_V5_7_Brute_Identification",
-          "minValue": 0.0,
           "maxValue": 0.0,
-          "CBOMLBFIPJM": 1.0
+          "minValue": 0.0,
+          "value": 1.0
         }
       ]
     }
   },
   {
     "Default": {
+      "abilityName": "Activity_V5_7_Shaman_Identification",
       "modifiers": {
         "FootCircle": {
+          "elementDurability": 100.0,
+          "modifierName": "",
           "onAdded": [
             {
               "$type": "AttachEffect",
-              "ILLLPEOODKP": "",
-              "scale": 1.0,
               "effectPattern": "Eff_Monster_5_2_MVM_EnemyBottom_Lv2",
-              "effectTempleteID": -1.0
+              "effectTempleteID": -1.0,
+              "scale": 1.0,
+              "ILLLPEOODKP": ""
             },
             {
               "$type": "AttachEffect",
-              "ILLLPEOODKP": "",
-              "scale": 1.0,
               "effectPattern": "Eff_UI_BillBoard_FixedMark_HighAlert",
-              "effectTempleteID": -1.0
+              "effectTempleteID": -1.0,
+              "scale": 1.0,
+              "ILLLPEOODKP": ""
             }
           ],
-          "elementDurability": 100.0,
-          "modifierName": "",
           "AIHNJLDFEGJ": 0.0
         }
       },
-      "abilityName": "Activity_V5_7_Shaman_Identification",
       "onAdded": [
         {
           "$type": "SetGlobalValue",
           "key": "Activity_V5_7_Shaman_Identification",
-          "minValue": 0.0,
           "maxValue": 0.0,
-          "CBOMLBFIPJM": 1.0
+          "minValue": 0.0,
+          "value": 1.0
         },
         {
           "$type": "AttachModifier",
@@ -1125,60 +1125,60 @@
         {
           "$type": "SetGlobalValue",
           "key": "Activity_V5_7_Abyss_Identification",
-          "minValue": 0.0,
           "maxValue": 0.0,
-          "CBOMLBFIPJM": 1.0
+          "minValue": 0.0,
+          "value": 1.0
         }
       ]
     }
   },
   {
     "Default": {
+      "abilityName": "Activity_V5_7_SlimeBallV2_MoveSpeedRatioDown",
       "modifiers": {
         "SlowDown_Hili": {
+          "elementDurability": 100.0,
+          "modifierName": "",
           "properties": {
             "Animator_MoveSpeedRatio": -0.9
           },
-          "elementDurability": 100.0,
-          "modifierName": "",
           "AIHNJLDFEGJ": 0.0
         },
         "SlowDown_Brute": {
+          "elementDurability": 100.0,
+          "modifierName": "",
           "properties": {
             "Animator_MoveSpeedRatio": -0.9
           },
-          "elementDurability": 100.0,
-          "modifierName": "",
           "AIHNJLDFEGJ": 0.0
         },
         "SlowDown_Shaman": {
+          "elementDurability": 100.0,
+          "modifierName": "",
           "properties": {
             "Animator_MoveSpeedRatio": 0.0
           },
-          "elementDurability": 100.0,
-          "modifierName": "",
           "AIHNJLDFEGJ": 0.0
         },
         "SlowDown_Abyss": {
+          "elementDurability": 100.0,
+          "modifierName": "",
           "properties": {
             "Animator_MoveSpeedRatio": -0.7
           },
-          "elementDurability": 100.0,
-          "modifierName": "",
           "AIHNJLDFEGJ": 0.0
         }
       },
-      "abilityName": "Activity_V5_7_SlimeBallV2_MoveSpeedRatioDown",
       "onAdded": [
         {
           "$type": "ApplyModifier",
           "modifierName": "SlowDown_Hili",
           "predicates": [
             {
-              "$type": "EOFDCELPGFO",
-              "CBOMLBFIPJM": 1.0,
+              "$type": "ByTargetGlobalValue",
               "key": "Activity_V5_7_Hili_Identification",
-              "target": "Self"
+              "target": "Self",
+              "value": 1.0
             }
           ]
         },
@@ -1187,10 +1187,10 @@
           "modifierName": "SlowDown_Brute",
           "predicates": [
             {
-              "$type": "EOFDCELPGFO",
-              "CBOMLBFIPJM": 1.0,
+              "$type": "ByTargetGlobalValue",
               "key": "Activity_V5_7_Brute_Identification",
-              "target": "Self"
+              "target": "Self",
+              "value": 1.0
             }
           ]
         },
@@ -1199,10 +1199,10 @@
           "modifierName": "SlowDown_Shaman",
           "predicates": [
             {
-              "$type": "EOFDCELPGFO",
-              "CBOMLBFIPJM": 1.0,
+              "$type": "ByTargetGlobalValue",
               "key": "Activity_V5_7_Shaman_Identification",
-              "target": "Self"
+              "target": "Self",
+              "value": 1.0
             }
           ]
         },
@@ -1211,10 +1211,10 @@
           "modifierName": "SlowDown_Abyss",
           "predicates": [
             {
-              "$type": "EOFDCELPGFO",
-              "CBOMLBFIPJM": 1.0,
+              "$type": "ByTargetGlobalValue",
               "key": "Activity_V5_7_Abyss_Identification",
-              "target": "Self"
+              "target": "Self",
+              "value": 1.0
             }
           ]
         }
@@ -1223,13 +1223,13 @@
   },
   {
     "Default": {
+      "abilityName": "Activity_V5_7_SlimeBallV2_Slime_Water_02_ElementState",
       "modifiers": {
         "ElementState": {
           "elementDurability": 712.5,
           "elementType": "Water",
+          "isElementDurabilityMutable": false,
           "modifierName": "",
-          "MGNAPCNBGEB": false,
-          "AIHNJLDFEGJ": 0.0,
           "onBeingHit": [
             {
               "$type": "Predicated",
@@ -1238,14 +1238,14 @@
                   "$type": "ApplyModifier",
                   "modifierName": "Slime_Water_02_WetModifier_BeHit",
                   "otherTargets": {
-                    "$type": "INIACGFCEDH",
-                    "sizeRatio": 1.0,
+                    "$type": "SelectTargetsByShape",
                     "campTargetType": "AllExceptSelf",
-                    "shapeName": "CircleR1H2"
+                    "shapeName": "CircleR1H2",
+                    "sizeRatio": 1.0
                   },
                   "predicates": [
                     {
-                      "$type": "DEOFBICNFHF",
+                      "$type": "ByEntityTypes",
                       "entityTypes": [
                         "Equip"
                       ],
@@ -1255,27 +1255,28 @@
                 },
                 {
                   "$type": "FireEffect",
-                  "effectPattern": "Eff_Monster_Slime_Water_Pressed",
-                  "scale": 1.0,
                   "born": {
-                    "$type": "MBOEKFDLCGB",
+                    "$type": "ConfigBornByHitPoint",
                     "alongGround": true,
                     "direction": {
-                      "$type": "BDODHIJDMCE"
+                      "$type": "ConfigDirectionByBackToHitBoxCenter"
                     }
                   },
-                  "ILLLPEOODKP": "",
-                  "effectTempleteID": -1.0
+                  "effectPattern": "Eff_Monster_Slime_Water_Pressed",
+                  "effectTempleteID": -1.0,
+                  "scale": 1.0,
+                  "ILLLPEOODKP": ""
                 }
               ],
               "targetPredicates": [
                 {
-                  "$type": "BPJIAOAPBHL",
+                  "$type": "ByHasAbilityState",
                   "abilityState": "ElementFreeze"
                 }
               ]
             }
-          ]
+          ],
+          "AIHNJLDFEGJ": 0.0
         },
         "Slime_Water_02_WetModifier_BeHit": {
           "duration": 10.0,
@@ -1285,7 +1286,6 @@
           "AIHNJLDFEGJ": 0.0
         }
       },
-      "abilityName": "Activity_V5_7_SlimeBallV2_Slime_Water_02_ElementState",
       "onAdded": [
         {
           "$type": "ApplyModifier",
@@ -1296,13 +1296,13 @@
   },
   {
     "Default": {
+      "abilityName": "Activity_V5_7_SlimeBallV2_Slime_Water_03_ElementState",
       "modifiers": {
         "ElementState": {
           "elementDurability": 712.5,
           "elementType": "Water",
+          "isElementDurabilityMutable": false,
           "modifierName": "",
-          "MGNAPCNBGEB": false,
-          "AIHNJLDFEGJ": 0.0,
           "onBeingHit": [
             {
               "$type": "Predicated",
@@ -1311,14 +1311,14 @@
                   "$type": "ApplyModifier",
                   "modifierName": "Slime_Water_03_WetModifier_BeHit",
                   "otherTargets": {
-                    "$type": "INIACGFCEDH",
-                    "sizeRatio": 1.0,
+                    "$type": "SelectTargetsByShape",
                     "campTargetType": "AllExceptSelf",
-                    "shapeName": "CircleR2H4"
+                    "shapeName": "CircleR2H4",
+                    "sizeRatio": 1.0
                   },
                   "predicates": [
                     {
-                      "$type": "DEOFBICNFHF",
+                      "$type": "ByEntityTypes",
                       "entityTypes": [
                         "Equip"
                       ],
@@ -1328,27 +1328,28 @@
                 },
                 {
                   "$type": "FireEffect",
-                  "effectPattern": "Eff_Monster_Slime_Water_Pressed",
-                  "scale": 1.0,
                   "born": {
-                    "$type": "MBOEKFDLCGB",
+                    "$type": "ConfigBornByHitPoint",
                     "alongGround": true,
                     "direction": {
-                      "$type": "BDODHIJDMCE"
+                      "$type": "ConfigDirectionByBackToHitBoxCenter"
                     }
                   },
-                  "ILLLPEOODKP": "",
-                  "effectTempleteID": -1.0
+                  "effectPattern": "Eff_Monster_Slime_Water_Pressed",
+                  "effectTempleteID": -1.0,
+                  "scale": 1.0,
+                  "ILLLPEOODKP": ""
                 }
               ],
               "targetPredicates": [
                 {
-                  "$type": "BPJIAOAPBHL",
+                  "$type": "ByHasAbilityState",
                   "abilityState": "ElementFreeze"
                 }
               ]
             }
-          ]
+          ],
+          "AIHNJLDFEGJ": 0.0
         },
         "Slime_Water_03_WetModifier_BeHit": {
           "duration": 10.0,
@@ -1358,7 +1359,6 @@
           "AIHNJLDFEGJ": 0.0
         }
       },
-      "abilityName": "Activity_V5_7_SlimeBallV2_Slime_Water_03_ElementState",
       "onAdded": [
         {
           "$type": "ApplyModifier",
@@ -1369,6 +1369,7 @@
   },
   {
     "Default": {
+      "abilityName": "Activity_V5_7_SlimeBallV2_Slime_Water_02_Wet",
       "modifiers": {
         "Slime_Water_02_WetModifier": {
           "duration": 10.0,
@@ -1383,14 +1384,14 @@
           "$type": "ApplyModifier",
           "modifierName": "Slime_Water_02_WetModifier",
           "otherTargets": {
-            "$type": "INIACGFCEDH",
-            "sizeRatio": 1.0,
+            "$type": "SelectTargetsByShape",
             "campTargetType": "AllExceptSelf",
-            "shapeName": "CircleR1H2"
+            "shapeName": "CircleR1H2",
+            "sizeRatio": 1.0
           },
           "predicates": [
             {
-              "$type": "DEOFBICNFHF",
+              "$type": "ByEntityTypes",
               "entityTypes": [
                 "Equip"
               ],
@@ -1401,16 +1402,16 @@
         {
           "$type": "FireEffect",
           "effectPattern": "Eff_Monster_Slime_Water_Pressed_Ground",
+          "effectTempleteID": -1.0,
           "scale": 1.0,
-          "ILLLPEOODKP": "",
-          "effectTempleteID": -1.0
+          "ILLLPEOODKP": ""
         }
-      ],
-      "abilityName": "Activity_V5_7_SlimeBallV2_Slime_Water_02_Wet"
+      ]
     }
   },
   {
     "Default": {
+      "abilityName": "Activity_V5_7_SlimeBallV2_Slime_Water_03_Wet",
       "modifiers": {
         "Slime_Water_03_WetModifier": {
           "duration": 10.0,
@@ -1425,14 +1426,14 @@
           "$type": "ApplyModifier",
           "modifierName": "Slime_Water_03_WetModifier",
           "otherTargets": {
-            "$type": "INIACGFCEDH",
-            "sizeRatio": 1.0,
+            "$type": "SelectTargetsByShape",
             "campTargetType": "AllExceptSelf",
-            "shapeName": "CircleR2H4"
+            "shapeName": "CircleR2H4",
+            "sizeRatio": 1.0
           },
           "predicates": [
             {
-              "$type": "DEOFBICNFHF",
+              "$type": "ByEntityTypes",
               "entityTypes": [
                 "Equip"
               ],
@@ -1443,16 +1444,16 @@
         {
           "$type": "FireEffect",
           "effectPattern": "Eff_Monster_Slime_Water_Pressed_Ground",
+          "effectTempleteID": -1.0,
           "scale": 1.0,
-          "ILLLPEOODKP": "",
-          "effectTempleteID": -1.0
+          "ILLLPEOODKP": ""
         }
-      ],
-      "abilityName": "Activity_V5_7_SlimeBallV2_Slime_Water_03_Wet"
+      ]
     }
   },
   {
     "Default": {
+      "abilityName": "Activity_V5_7_SlimeBallV2_Slime_Water_02_Dead",
       "modifiers": {
         "Slime_Water_02_Dead_WetModifier": {
           "duration": 15.0,
@@ -1467,14 +1468,14 @@
           "$type": "ApplyModifier",
           "modifierName": "Slime_Water_02_Dead_WetModifier",
           "otherTargets": {
-            "$type": "INIACGFCEDH",
-            "sizeRatio": 1.0,
+            "$type": "SelectTargetsByShape",
             "campTargetType": "AllExceptSelf",
-            "shapeName": "CircleR1H2"
+            "shapeName": "CircleR1H2",
+            "sizeRatio": 1.0
           },
           "predicates": [
             {
-              "$type": "DEOFBICNFHF",
+              "$type": "ByEntityTypes",
               "entityTypes": [
                 "Equip"
               ],
@@ -1485,16 +1486,16 @@
         {
           "$type": "FireEffect",
           "effectPattern": "Eff_Monster_Slime_Water_Die",
+          "effectTempleteID": -1.0,
           "scale": 1.0,
-          "ILLLPEOODKP": "",
-          "effectTempleteID": -1.0
+          "ILLLPEOODKP": ""
         }
-      ],
-      "abilityName": "Activity_V5_7_SlimeBallV2_Slime_Water_02_Dead"
+      ]
     }
   },
   {
     "Default": {
+      "abilityName": "Activity_V5_7_SlimeBallV2_Slime_Water_03_Dead",
       "modifiers": {
         "Slime_Water_03_Dead_WetModifier": {
           "duration": 15.0,
@@ -1509,14 +1510,14 @@
           "$type": "ApplyModifier",
           "modifierName": "Slime_Water_03_Dead_WetModifier",
           "otherTargets": {
-            "$type": "INIACGFCEDH",
-            "sizeRatio": 1.0,
+            "$type": "SelectTargetsByShape",
             "campTargetType": "AllExceptSelf",
-            "shapeName": "CircleR2H4"
+            "shapeName": "CircleR2H4",
+            "sizeRatio": 1.0
           },
           "predicates": [
             {
-              "$type": "DEOFBICNFHF",
+              "$type": "ByEntityTypes",
               "entityTypes": [
                 "Equip"
               ],
@@ -1527,147 +1528,147 @@
         {
           "$type": "FireEffect",
           "effectPattern": "Eff_Monster_Slime_Water_Die",
+          "effectTempleteID": -1.0,
           "scale": 1.0,
-          "ILLLPEOODKP": "",
-          "effectTempleteID": -1.0
+          "ILLLPEOODKP": ""
         }
-      ],
-      "abilityName": "Activity_V5_7_SlimeBallV2_Slime_Water_03_Dead"
+      ]
     }
   },
   {
     "Default": {
+      "abilityName": "Monster_Weapon_ShieldDefendAttack_SlimBallV2",
       "modifiers": {
         "ShieldBroken_Attack": {
           "duration": 1.0,
+          "elementDurability": 100.0,
+          "modifierName": "",
           "onAdded": [
             {
               "$type": "DamageByAttackValue",
               "attackInfo": {
                 "attackProperty": {
-                  "damagePercentageRatio": 0.0,
-                  "strikeType": "Default",
-                  "enBreak": 1000.0,
                   "damagePercentage": 0.0,
+                  "damagePercentageRatio": 0.0,
                   "elementDurability": 100.0,
-                  "arkheGrade": 0.0
+                  "enBreak": 1000.0,
+                  "strikeType": "Default",
+                  "IIPHCFEONLK": 0.0
                 },
-                "hitPattern": {
-                  "FLFCIDDNMNA": "",
-                  "onHitEffectName": "default",
-                  "hitHaltTimeScale": 0.05,
-                  "hitImpulseType": "LV4"
-                },
+                "attackTag": "",
                 "attenuationGroup": "default",
                 "attenuationTag": "",
-                "attackTag": ""
+                "hitPattern": {
+                  "hitHaltTimeScale": 0.05,
+                  "hitImpulseType": "LV4",
+                  "onHitEffectName": "default",
+                  "FLFCIDDNMNA": ""
+                }
               }
             }
           ],
-          "elementDurability": 100.0,
-          "modifierName": "",
           "AIHNJLDFEGJ": 0.0
         },
         "UNIQUE_Monster_Weapon_GrassMatrial_SlimBallV2": {
-          "onRemoved": [
-            {
-              "$type": "FireEffect",
-              "effectPattern": "Eff_Monster_Undead_01_Shield_Broken",
-              "scale": 1.0,
-              "ILLLPEOODKP": "",
-              "effectTempleteID": -1.0
-            },
-            {
-              "$type": "KillSelf",
-              "MBGFJOOIMOK": [
-                50004146
-              ]
-            }
-          ],
-          "stacking": "Unique",
           "elementDurability": 120.0,
+          "elementType": "Wood",
+          "isUnique": true,
           "modifierMixins": [
             {
               "$type": "ElementShieldMixin",
-              "GPIBKOHGEIJ": "",
-              "shieldHPRatio": 1.0,
-              "shieldAngle": 360.0,
+              "damageRatio": 0.0,
               "elementType": "Grass",
+              "shieldAngle": 360.0,
+              "shieldHPRatio": 1.0,
               "showDamageText": "",
-              "EBCOGOJCLAE": 0.0
+              "GPIBKOHGEIJ": ""
             }
           ],
-          "elementType": "Wood",
           "modifierName": "",
-          "isUnique": true,
-          "AIHNJLDFEGJ": 0.0,
           "onBeingHit": [
             {
               "$type": "Predicated",
               "successActions": [
                 {
                   "$type": "AddElementDurability",
-                  "CBOMLBFIPJM": -110.0,
-                  "useLimitRange": true,
-                  "minValue": 0.0,
                   "maxValue": 120.0,
-                  "modifierName": "UNIQUE_Monster_Weapon_GrassMatrial_SlimBallV2"
+                  "minValue": 0.0,
+                  "modifierName": "UNIQUE_Monster_Weapon_GrassMatrial_SlimBallV2",
+                  "useLimitRange": true,
+                  "value": -110.0
                 }
               ],
+              "target": "Other",
               "targetPredicates": [
                 {
-                  "$type": "CCHPEOBKOBO",
+                  "$type": "ByAttackTags",
                   "attackTags": [
                     "Activity_SlimeCannonV2_Fire",
                     "Activity_SlimeCannonV2_Explode"
                   ]
                 }
-              ],
-              "target": "Other"
+              ]
             }
-          ]
+          ],
+          "onRemoved": [
+            {
+              "$type": "FireEffect",
+              "effectPattern": "Eff_Monster_Undead_01_Shield_Broken",
+              "effectTempleteID": -1.0,
+              "scale": 1.0,
+              "ILLLPEOODKP": ""
+            },
+            {
+              "$type": "KillSelf",
+              "configIdArray": [
+                50004146
+              ]
+            }
+          ],
+          "stacking": "Unique",
+          "AIHNJLDFEGJ": 0.0
         },
         "FreezeDetect": {
           "elementDurability": 100.0,
           "modifierMixins": [
             {
               "$type": "AttachToAbilityStateMixin",
-              "modifierName": "BeFreezed",
               "abilityStates": [
                 "ElementFreeze"
-              ]
+              ],
+              "modifierName": "BeFreezed"
             }
           ],
           "modifierName": "",
           "AIHNJLDFEGJ": 0.0
         },
         "BeFreezed": {
-          "onRemoved": [
-            {
-              "$type": "ApplyModifier",
-              "modifierName": "ReDefend",
-              "otherTargets": {
-                "$type": "IHJCDAEBAME",
-                "equipPartNames": [
-                  "equip02"
-                ]
-              },
-              "predicates": [
-                {
-                  "$type": "DHJDIBHFDKB",
-                  "element": "Grass"
-                }
-              ]
-            }
-          ],
+          "elementDurability": 100.0,
+          "modifierName": "",
           "onAdded": [
             {
               "$type": "RemoveModifier",
               "modifierName": "InDefend"
             }
           ],
-          "elementDurability": 100.0,
-          "modifierName": "",
+          "onRemoved": [
+            {
+              "$type": "ApplyModifier",
+              "modifierName": "ReDefend",
+              "otherTargets": {
+                "$type": "SelectTargetsByEquipParts",
+                "equipPartNames": [
+                  "equip02"
+                ]
+              },
+              "predicates": [
+                {
+                  "$type": "ByHasElement",
+                  "element": "Grass"
+                }
+              ]
+            }
+          ],
           "AIHNJLDFEGJ": 0.0
         },
         "BurningDetect": {
@@ -1675,16 +1676,31 @@
           "modifierMixins": [
             {
               "$type": "AttachToAbilityStateMixin",
-              "modifierName": "WeaponOnFire",
               "abilityStates": [
                 "ElementBurning"
-              ]
+              ],
+              "modifierName": "WeaponOnFire"
             }
           ],
           "modifierName": "",
           "AIHNJLDFEGJ": 0.0
         },
         "WeaponOnFire": {
+          "elementDurability": 100.0,
+          "modifierName": "",
+          "onAdded": [
+            {
+              "$type": "SetPoseBool",
+              "boolID": "WeaponOnFire",
+              "target": "Owner",
+              "value": true
+            },
+            {
+              "$type": "RemoveModifier",
+              "modifierName": "InDefend",
+              "target": "Owner"
+            }
+          ],
           "onRemoved": [
             {
               "$type": "SetPoseBool",
@@ -1696,31 +1712,18 @@
               "modifierName": "ReDefend",
               "predicates": [
                 {
-                  "$type": "DHJDIBHFDKB",
+                  "$type": "ByHasElement",
                   "element": "Grass"
                 }
               ]
             }
           ],
-          "onAdded": [
-            {
-              "$type": "SetPoseBool",
-              "CBOMLBFIPJM": true,
-              "boolID": "WeaponOnFire",
-              "target": "Owner"
-            },
-            {
-              "$type": "RemoveModifier",
-              "modifierName": "InDefend",
-              "target": "Owner"
-            }
-          ],
-          "elementDurability": 100.0,
-          "modifierName": "",
           "AIHNJLDFEGJ": 0.0
         },
         "ReDefend": {
           "duration": 0.1,
+          "elementDurability": 100.0,
+          "modifierName": "",
           "onAdded": [
             {
               "$type": "ApplyModifier",
@@ -1728,11 +1731,11 @@
               "target": "Owner"
             }
           ],
-          "elementDurability": 100.0,
-          "modifierName": "",
           "AIHNJLDFEGJ": 0.0
         },
         "InDefend": {
+          "elementDurability": 100.0,
+          "modifierName": "",
           "onAdded": [
             {
               "$type": "AttachModifier",
@@ -1743,122 +1746,98 @@
               "modifierName": "ForceDefend"
             }
           ],
-          "elementDurability": 100.0,
-          "modifierName": "",
           "AIHNJLDFEGJ": 0.0
         },
         "NormalDefend": {
-          "properties": {
-            "Actor_EndureDelta": 0.5
-          },
           "elementDurability": 100.0,
           "modifierMixins": [
             {
               "$type": "MonsterDefendMixin",
-              "EJNDEONFFDL": [
+              "defendCountInterval": 0,
+              "defendProbability": 1.0,
+              "defendProbabilityDelta": 0.0,
+              "defendTimeInterval": 0.0,
+              "defendTriggerID": "DefendTrigger",
+              "doNotTurnDirection": true,
+              "onDefendSucceded": [
                 {
                   "$type": "FireEffect",
                   "effectPattern": "Eff_Monster_Hili_None_Block",
+                  "effectTempleteID": -1.0,
                   "scale": 1.0,
-                  "ILLLPEOODKP": "",
-                  "effectTempleteID": -1.0
+                  "ILLLPEOODKP": ""
                 },
                 {
                   "$type": "ActCameraShake",
                   "cameraShake": {
+                    "shakeRange": 0.04,
                     "shakeTime": 0.18,
-                    "MNKFEFOKFKP": "",
-                    "shakeRange": 0.04
+                    "MNKFEFOKFKP": ""
                   }
                 },
                 {
                   "$type": "AddGlobalValue",
-                  "useLimitRange": true,
                   "key": "_ABILITY_WEAPON_SHIELD_DEFEND_COUNT",
                   "maxValue": 4.0,
                   "minValue": 0.0,
-                  "CBOMLBFIPJM": 1.0
+                  "useLimitRange": true,
+                  "value": 1.0
                 }
               ],
-              "JENJIBMODCM": true,
-              "FAGKFEPJMKC": "",
-              "HMFJHBFIBDM": 0,
               "stateIDs": [
                 "NormalIdle",
                 "NormalMove",
                 "Defend",
                 "DefendAttack"
               ],
-              "GAEIKEPNHLO": 0.0,
-              "FNCDEGGDPKJ": 1.0,
               "MFFCENLCFBH": true,
-              "KJGGJNIHACD": 0.0,
-              "defendTriggerID": "DefendTrigger",
+              "FAGKFEPJMKC": "",
               "LJPPDIGCJMJ": ""
             }
           ],
           "modifierName": "",
+          "properties": {
+            "Actor_EndureDelta": 0.5
+          },
           "AIHNJLDFEGJ": 0.0
         },
         "DefendAttack": {
-          "onRemoved": [
-            {
-              "$type": "FireEffect",
-              "effectPattern": "Eff_Monster_Hili_None_ShieldDestroy",
-              "scale": 1.0,
-              "ILLLPEOODKP": "",
-              "effectTempleteID": -1.0
-            }
-          ],
-          "onAdded": [
-            {
-              "$type": "AttachEffect",
-              "ILLLPEOODKP": "",
-              "scale": 1.0,
-              "effectPattern": "Eff_Monster_Hili_None_Shield",
-              "effectTempleteID": -1.0
-            },
-            {
-              "$type": "AttachEffect",
-              "ILLLPEOODKP": "",
-              "scale": 1.0,
-              "effectPattern": "Eff_Monster_Hili_None_ShieldCreate",
-              "effectTempleteID": -1.0
-            }
-          ],
           "elementDurability": 100.0,
           "modifierMixins": [
             {
               "$type": "MonsterDefendMixin",
               "attackType": "Melee",
-              "EJNDEONFFDL": [
+              "defendCountInterval": 0,
+              "defendProbability": 1.0,
+              "defendProbabilityDelta": 0.0,
+              "defendTimeInterval": 0.0,
+              "defendTriggerID": "DefendAttackTrigger",
+              "doNotTurnDirection": true,
+              "onDefendSucceded": [
                 {
                   "$type": "FireEffect",
                   "effectPattern": "Eff_Monster_Hili_None_Block",
+                  "effectTempleteID": -1.0,
                   "scale": 1.0,
-                  "ILLLPEOODKP": "",
-                  "effectTempleteID": -1.0
+                  "ILLLPEOODKP": ""
                 },
                 {
                   "$type": "ActCameraShake",
                   "cameraShake": {
+                    "shakeRange": 0.04,
                     "shakeTime": 0.18,
-                    "MNKFEFOKFKP": "",
-                    "shakeRange": 0.04
+                    "MNKFEFOKFKP": ""
                   }
                 },
                 {
                   "$type": "AddGlobalValue",
-                  "useLimitRange": true,
                   "key": "_ABILITY_WEAPON_SHIELD_DEFEND_COUNT",
                   "maxValue": 4.0,
                   "minValue": 0.0,
-                  "CBOMLBFIPJM": -5.0
+                  "useLimitRange": true,
+                  "value": -5.0
                 }
               ],
-              "JENJIBMODCM": true,
-              "FAGKFEPJMKC": "",
-              "HMFJHBFIBDM": 0,
               "stateIDs": [
                 "NormalIdle",
                 "NormalMove",
@@ -1866,64 +1845,115 @@
                 "DefendAttack",
                 "BeHit"
               ],
-              "GAEIKEPNHLO": 0.0,
-              "FNCDEGGDPKJ": 1.0,
               "MFFCENLCFBH": true,
-              "KJGGJNIHACD": 0.0,
-              "defendTriggerID": "DefendAttackTrigger",
+              "FAGKFEPJMKC": "",
               "LJPPDIGCJMJ": ""
             }
           ],
           "modifierName": "",
+          "onAdded": [
+            {
+              "$type": "AttachEffect",
+              "effectPattern": "Eff_Monster_Hili_None_Shield",
+              "effectTempleteID": -1.0,
+              "scale": 1.0,
+              "ILLLPEOODKP": ""
+            },
+            {
+              "$type": "AttachEffect",
+              "effectPattern": "Eff_Monster_Hili_None_ShieldCreate",
+              "effectTempleteID": -1.0,
+              "scale": 1.0,
+              "ILLLPEOODKP": ""
+            }
+          ],
+          "onRemoved": [
+            {
+              "$type": "FireEffect",
+              "effectPattern": "Eff_Monster_Hili_None_ShieldDestroy",
+              "effectTempleteID": -1.0,
+              "scale": 1.0,
+              "ILLLPEOODKP": ""
+            }
+          ],
           "AIHNJLDFEGJ": 0.0
         },
         "ForceDefend": {
-          "properties": {
-            "Actor_EndureDelta": 0.5
-          },
           "elementDurability": 100.0,
           "modifierMixins": [
             {
               "$type": "MonsterDefendMixin",
-              "EJNDEONFFDL": [
+              "alwaysRecover": false,
+              "defendCountInterval": 0,
+              "defendProbability": 1.0,
+              "defendProbabilityDelta": 0.0,
+              "defendTimeInterval": 4.0,
+              "defendTriggerID": "DefendTrigger",
+              "doNotTurnDirection": true,
+              "onDefendSucceded": [
                 {
                   "$type": "ActCameraShake",
                   "cameraShake": {
+                    "shakeRange": 0.04,
                     "shakeTime": 0.18,
-                    "MNKFEFOKFKP": "",
-                    "shakeRange": 0.04
+                    "MNKFEFOKFKP": ""
                   }
                 },
                 {
                   "$type": "AddGlobalValue",
-                  "useLimitRange": true,
                   "key": "_ABILITY_WEAPON_SHIELD_DEFEND_COUNT",
                   "maxValue": 4.0,
                   "minValue": 0.0,
-                  "CBOMLBFIPJM": 1.0
+                  "useLimitRange": true,
+                  "value": 1.0
                 }
               ],
-              "JENJIBMODCM": true,
-              "FAGKFEPJMKC": "",
-              "HMFJHBFIBDM": 0,
               "stateIDs": [
                 "BeHit",
                 "BeHitThrow"
               ],
-              "GAEIKEPNHLO": 4.0,
-              "FNCDEGGDPKJ": 1.0,
               "MFFCENLCFBH": true,
-              "GNLEIPCJFOC": false,
-              "KJGGJNIHACD": 0.0,
-              "defendTriggerID": "DefendTrigger",
+              "FAGKFEPJMKC": "",
               "LJPPDIGCJMJ": ""
             }
           ],
           "modifierName": "",
+          "properties": {
+            "Actor_EndureDelta": 0.5
+          },
           "AIHNJLDFEGJ": 0.0
         }
       },
-      "KHCFCFACICO": [
+      "onAdded": [
+        {
+          "$type": "ApplyModifier",
+          "modifierName": "UNIQUE_Monster_Weapon_GrassMatrial_SlimBallV2"
+        },
+        {
+          "$type": "ApplyModifier",
+          "modifierName": "InDefend",
+          "target": "Owner"
+        },
+        {
+          "$type": "ApplyModifier",
+          "modifierName": "BurningDetect"
+        },
+        {
+          "$type": "ApplyModifier",
+          "modifierName": "FreezeDetect",
+          "target": "Owner"
+        },
+        {
+          "$type": "AddGlobalValue",
+          "key": "_ABILITY_WEAPON_SHIELD_DEFEND_COUNT",
+          "maxValue": 4.0,
+          "minValue": 0.0,
+          "target": "Owner",
+          "useLimitRange": true,
+          "value": 0.0
+        }
+      ],
+      "onAttach": [
         {
           "$type": "ApplyModifier",
           "modifierName": "InDefend",
@@ -1940,16 +1970,15 @@
         },
         {
           "$type": "AddGlobalValue",
-          "useLimitRange": true,
           "key": "_ABILITY_WEAPON_SHIELD_DEFEND_COUNT",
           "maxValue": 4.0,
           "minValue": 0.0,
-          "CBOMLBFIPJM": 0.0,
-          "target": "Target"
+          "target": "Target",
+          "useLimitRange": true,
+          "value": 0.0
         }
       ],
-      "abilityName": "Monster_Weapon_ShieldDefendAttack_SlimBallV2",
-      "FOJPBCNDLNE": [
+      "onDetach": [
         {
           "$type": "RemoveModifier",
           "modifierName": "InDefend",
@@ -1976,67 +2005,41 @@
         },
         {
           "$type": "ResetAnimatorTrigger",
-          "triggerID": "DefendTrigger",
-          "target": "Target"
-        }
-      ],
-      "onAdded": [
-        {
-          "$type": "ApplyModifier",
-          "modifierName": "UNIQUE_Monster_Weapon_GrassMatrial_SlimBallV2"
-        },
-        {
-          "$type": "ApplyModifier",
-          "modifierName": "InDefend",
-          "target": "Owner"
-        },
-        {
-          "$type": "ApplyModifier",
-          "modifierName": "BurningDetect"
-        },
-        {
-          "$type": "ApplyModifier",
-          "modifierName": "FreezeDetect",
-          "target": "Owner"
-        },
-        {
-          "$type": "AddGlobalValue",
-          "useLimitRange": true,
-          "key": "_ABILITY_WEAPON_SHIELD_DEFEND_COUNT",
-          "maxValue": 4.0,
-          "minValue": 0.0,
-          "CBOMLBFIPJM": 0.0,
-          "target": "Owner"
+          "target": "Target",
+          "triggerID": "DefendTrigger"
         }
       ]
     }
   },
   {
     "Default": {
+      "abilityName": "Brute_Shield_Defend_SlimBallV2",
       "modifiers": {
         "ShieldBroken_Attack": {
           "duration": 1.0,
+          "elementDurability": 100.0,
+          "modifierName": "",
           "onAdded": [
             {
               "$type": "DamageByAttackValue",
               "attackInfo": {
                 "attackProperty": {
-                  "damagePercentageRatio": 0.0,
-                  "strikeType": "Default",
-                  "enBreak": 1000.0,
                   "damagePercentage": 0.0,
+                  "damagePercentageRatio": 0.0,
                   "elementDurability": 100.0,
-                  "arkheGrade": 0.0
+                  "enBreak": 1000.0,
+                  "strikeType": "Default",
+                  "IIPHCFEONLK": 0.0
                 },
-                "hitPattern": {
-                  "FLFCIDDNMNA": "",
-                  "onHitEffectName": "default",
-                  "hitHaltTimeScale": 0.05,
-                  "hitImpulseType": "LV4"
-                },
+                "attackTag": "",
                 "attenuationGroup": "default",
                 "attenuationTag": "",
-                "attackTag": ""
+                "hitPattern": {
+                  "hitHaltTimeScale": 0.05,
+                  "hitImpulseType": "LV4",
+                  "onHitEffectName": "default",
+                  "FLFCIDDNMNA": ""
+                }
               }
             },
             {
@@ -2046,130 +2049,109 @@
                   "y": 1.0,
                   "z": 0.5
                 },
+                "shakeDistance": 25.0,
+                "shakeRange": 0.2,
                 "shakeTime": 0.15,
                 "shakeType": "CustomVector",
-                "shakeDistance": 25.0,
-                "MNKFEFOKFKP": "",
-                "shakeRange": 0.2
+                "MNKFEFOKFKP": ""
               }
             }
           ],
-          "elementDurability": 100.0,
-          "modifierName": "",
           "AIHNJLDFEGJ": 0.0
         },
         "UNIQUE_Brute_Shield_GrassMaterial_SlimBallV2": {
-          "onRemoved": [
-            {
-              "$type": "FireEffect",
-              "effectPattern": "Eff_Monster_Brute_Shield_ShieldBroken",
-              "scale": 1.0,
-              "ILLLPEOODKP": "",
-              "effectTempleteID": -1.0
-            },
-            {
-              "$type": "KillSelf",
-              "MBGFJOOIMOK": [
-                50004145
-              ]
-            }
-          ],
-          "stacking": "Unique",
           "elementDurability": 120.0,
+          "elementType": "Wood",
+          "isUnique": true,
           "modifierMixins": [
             {
               "$type": "ElementShieldMixin",
-              "GPIBKOHGEIJ": "",
-              "shieldHPRatio": 1.0,
-              "shieldAngle": 360.0,
+              "damageRatio": 0.0,
               "elementType": "Grass",
+              "shieldAngle": 360.0,
+              "shieldHPRatio": 1.0,
               "showDamageText": "",
-              "EBCOGOJCLAE": 0.0
+              "GPIBKOHGEIJ": ""
             }
           ],
-          "elementType": "Wood",
           "modifierName": "",
-          "isUnique": true,
-          "AIHNJLDFEGJ": 0.0,
           "onBeingHit": [
             {
               "$type": "Predicated",
               "successActions": [
                 {
                   "$type": "AddElementDurability",
-                  "CBOMLBFIPJM": -110.0,
-                  "useLimitRange": true,
-                  "minValue": 0.0,
                   "maxValue": 120.0,
-                  "modifierName": "UNIQUE_Brute_Shield_GrassMaterial_SlimBallV2"
+                  "minValue": 0.0,
+                  "modifierName": "UNIQUE_Brute_Shield_GrassMaterial_SlimBallV2",
+                  "useLimitRange": true,
+                  "value": -110.0
                 }
               ],
+              "target": "Other",
               "targetPredicates": [
                 {
-                  "$type": "CCHPEOBKOBO",
+                  "$type": "ByAttackTags",
                   "attackTags": [
                     "Activity_SlimeCannonV2_Fire",
                     "Activity_SlimeCannonV2_Explode"
                   ]
                 }
-              ],
-              "target": "Other"
+              ]
             }
-          ]
-        },
-        "NormalDefend": {
+          ],
           "onRemoved": [
             {
-              "$type": "EnablePushColliderName",
-              "EFOJFJDLLMK": [
-                "PushColliderShield",
-                "PushColliderShieldExtra"
-              ]
-            }
-          ],
-          "onAdded": [
+              "$type": "FireEffect",
+              "effectPattern": "Eff_Monster_Brute_Shield_ShieldBroken",
+              "effectTempleteID": -1.0,
+              "scale": 1.0,
+              "ILLLPEOODKP": ""
+            },
             {
-              "$type": "EnablePushColliderName",
-              "setEnable": true,
-              "EFOJFJDLLMK": [
-                "PushColliderShield",
-                "PushColliderShieldExtra"
+              "$type": "KillSelf",
+              "configIdArray": [
+                50004145
               ]
             }
           ],
-          "properties": {
-            "Actor_EndureDelta": 0.65
-          },
+          "stacking": "Unique",
+          "AIHNJLDFEGJ": 0.0
+        },
+        "NormalDefend": {
           "elementDurability": 100.0,
           "modifierMixins": [
             {
               "$type": "MonsterDefendMixin",
-              "EJNDEONFFDL": [
-                {
-                  "$type": "FireEffect",
-                  "effectPattern": "Eff_Monster_Brute_None_Shield_Defend",
-                  "scale": 1.0,
-                  "born": {
-                    "$type": "BOJMMDAIGMM",
-                    "offset": {
-                      "x": 0.0,
-                      "z": 1.2,
-                      "y": 1.5
-                    }
-                  },
-                  "ILLLPEOODKP": "",
-                  "effectTempleteID": -1.0
-                }
-              ],
-              "JENJIBMODCM": true,
-              "DGLPNICOHAM": {
-                "EJNDEONFFDL": {
+              "defendAngle": 180.0,
+              "defendAudioConfig": {
+                "onDefendSucceded": {
                   "text": "Play_sfx_impact_shield"
                 }
               },
-              "FAGKFEPJMKC": "",
-              "HMFJHBFIBDM": 0,
-              "defendAngle": 180.0,
+              "defendCountInterval": 0,
+              "defendProbability": 1.0,
+              "defendProbabilityDelta": 0.0,
+              "defendTimeInterval": 0.0,
+              "defendTriggerID": "DefendTrigger",
+              "doNotTurnDirection": true,
+              "onDefendSucceded": [
+                {
+                  "$type": "FireEffect",
+                  "born": {
+                    "$type": "ConfigBornByTarget",
+                    "offset": {
+                      "x": 1.2,
+                      "y": 1.5,
+                      "z": 0.0
+                    }
+                  },
+                  "effectPattern": "Eff_Monster_Brute_None_Shield_Defend",
+                  "effectTempleteID": -1.0,
+                  "scale": 1.0,
+                  "ILLLPEOODKP": ""
+                }
+              ],
               "stateIDs": [
                 "NormalIdle",
                 "NormalMove",
@@ -2180,62 +2162,81 @@
                 "Defend_AS",
                 "ShieldFlap"
               ],
-              "GAEIKEPNHLO": 0.0,
-              "FNCDEGGDPKJ": 1.0,
-              "KJGGJNIHACD": 0.0,
-              "defendTriggerID": "DefendTrigger",
+              "FAGKFEPJMKC": "",
               "LJPPDIGCJMJ": ""
             }
           ],
           "modifierName": "",
-          "AIHNJLDFEGJ": 0.0
-        },
-        "ForceDefend": {
+          "onAdded": [
+            {
+              "$type": "EnablePushColliderName",
+              "pushColliderNames": [
+                "PushColliderShield",
+                "PushColliderShieldExtra"
+              ],
+              "setEnable": true
+            }
+          ],
+          "onRemoved": [
+            {
+              "$type": "EnablePushColliderName",
+              "pushColliderNames": [
+                "PushColliderShield",
+                "PushColliderShieldExtra"
+              ]
+            }
+          ],
           "properties": {
             "Actor_EndureDelta": 0.65
           },
+          "AIHNJLDFEGJ": 0.0
+        },
+        "ForceDefend": {
           "elementDurability": 100.0,
           "modifierMixins": [
             {
               "$type": "MonsterDefendMixin",
-              "EJNDEONFFDL": [
-                {
-                  "$type": "FireEffect",
-                  "effectPattern": "Eff_Monster_Brute_None_Shield_Defend",
-                  "scale": 1.0,
-                  "born": {
-                    "$type": "BOJMMDAIGMM",
-                    "offset": {
-                      "x": 0.0,
-                      "z": 1.2,
-                      "y": 1.5
-                    }
-                  },
-                  "ILLLPEOODKP": "",
-                  "effectTempleteID": -1.0
-                }
-              ],
-              "JENJIBMODCM": true,
-              "DGLPNICOHAM": {
-                "EJNDEONFFDL": {
+              "alwaysRecover": false,
+              "defendAudioConfig": {
+                "onDefendSucceded": {
                   "text": "Play_sfx_impact_shield"
                 }
               },
-              "FAGKFEPJMKC": "",
-              "HMFJHBFIBDM": 0,
+              "defendCountInterval": 0,
+              "defendProbability": 1.0,
+              "defendProbabilityDelta": 0.0,
+              "defendTimeInterval": 2.0,
+              "defendTriggerID": "DefendTrigger",
+              "doNotTurnDirection": true,
+              "onDefendSucceded": [
+                {
+                  "$type": "FireEffect",
+                  "born": {
+                    "$type": "ConfigBornByTarget",
+                    "offset": {
+                      "x": 1.2,
+                      "y": 1.5,
+                      "z": 0.0
+                    }
+                  },
+                  "effectPattern": "Eff_Monster_Brute_None_Shield_Defend",
+                  "effectTempleteID": -1.0,
+                  "scale": 1.0,
+                  "ILLLPEOODKP": ""
+                }
+              ],
               "stateIDs": [
                 "BeHit",
                 "BeHitThrow"
               ],
-              "GAEIKEPNHLO": 2.0,
-              "FNCDEGGDPKJ": 1.0,
-              "GNLEIPCJFOC": false,
-              "KJGGJNIHACD": 0.0,
-              "defendTriggerID": "DefendTrigger",
+              "FAGKFEPJMKC": "",
               "LJPPDIGCJMJ": ""
             }
           ],
           "modifierName": "",
+          "properties": {
+            "Actor_EndureDelta": 0.65
+          },
           "AIHNJLDFEGJ": 0.0
         },
         "DetectFire": {
@@ -2243,16 +2244,31 @@
           "modifierMixins": [
             {
               "$type": "AttachToAbilityStateMixin",
-              "modifierName": "ShieldOnFire",
               "abilityStates": [
                 "ElementBurning"
-              ]
+              ],
+              "modifierName": "ShieldOnFire"
             }
           ],
           "modifierName": "",
           "AIHNJLDFEGJ": 0.0
         },
         "ShieldOnFire": {
+          "elementDurability": 100.0,
+          "modifierName": "",
+          "onAdded": [
+            {
+              "$type": "SetPoseBool",
+              "boolID": "ShieldOnFire",
+              "target": "Owner",
+              "value": true
+            },
+            {
+              "$type": "ApplyModifier",
+              "modifierName": "WatcherSuccess",
+              "target": "Owner"
+            }
+          ],
           "onRemoved": [
             {
               "$type": "SetPoseBool",
@@ -2265,21 +2281,6 @@
               "target": "Owner"
             }
           ],
-          "onAdded": [
-            {
-              "$type": "SetPoseBool",
-              "CBOMLBFIPJM": true,
-              "boolID": "ShieldOnFire",
-              "target": "Owner"
-            },
-            {
-              "$type": "ApplyModifier",
-              "modifierName": "WatcherSuccess",
-              "target": "Owner"
-            }
-          ],
-          "elementDurability": 100.0,
-          "modifierName": "",
           "AIHNJLDFEGJ": 0.0
         },
         "WatcherSuccess": {
@@ -2288,74 +2289,21 @@
           "AIHNJLDFEGJ": 0.0
         }
       },
-      "KHCFCFACICO": [
-        {
-          "$type": "ApplyModifier",
-          "modifierName": "NormalDefend",
-          "target": "Target"
-        },
-        {
-          "$type": "ApplyModifier",
-          "modifierName": "ForceDefend",
-          "target": "Target"
-        },
-        {
-          "$type": "EnableHeadControl",
-          "target": "Target"
-        }
-      ],
-      "abilityName": "Brute_Shield_Defend_SlimBallV2",
-      "FOJPBCNDLNE": [
-        {
-          "$type": "RemoveModifier",
-          "modifierName": "NormalDefend",
-          "target": "Target"
-        },
-        {
-          "$type": "RemoveModifier",
-          "modifierName": "ForceDefend",
-          "target": "Target"
-        },
-        {
-          "$type": "EnableHeadControl",
-          "enable": true,
-          "target": "Target"
-        },
-        {
-          "$type": "ReTriggerAISkillInitialCD",
-          "BKAONOKDMLG": [
-            251
-          ],
-          "target": "Target"
-        },
-        {
-          "$type": "ReTriggerAISkillInitialCD",
-          "BKAONOKDMLG": [
-            252
-          ],
-          "target": "Target"
-        },
-        {
-          "$type": "ApplyModifier",
-          "modifierName": "ShieldBroken_Attack",
-          "target": "Target"
-        }
-      ],
       "onAdded": [
         {
           "$type": "SetPoseInt",
-          "GGKIEIJLCJJ": 1,
           "intID": "ShieldType",
-          "target": "Owner"
+          "target": "Owner",
+          "value": 1
         },
         {
           "$type": "AddGlobalValue",
-          "useLimitRange": true,
           "key": "_MONSTER_BRUNT_SHIELDTYPE_GRASS",
           "maxValue": 1.0,
           "minValue": 0.0,
-          "CBOMLBFIPJM": 1.0,
-          "target": "Owner"
+          "target": "Owner",
+          "useLimitRange": true,
+          "value": 1.0
         },
         {
           "$type": "ApplyModifier",
@@ -2379,95 +2327,289 @@
           "$type": "EnableHeadControl",
           "target": "Owner"
         }
+      ],
+      "onAttach": [
+        {
+          "$type": "ApplyModifier",
+          "modifierName": "NormalDefend",
+          "target": "Target"
+        },
+        {
+          "$type": "ApplyModifier",
+          "modifierName": "ForceDefend",
+          "target": "Target"
+        },
+        {
+          "$type": "EnableHeadControl",
+          "target": "Target"
+        }
+      ],
+      "onDetach": [
+        {
+          "$type": "RemoveModifier",
+          "modifierName": "NormalDefend",
+          "target": "Target"
+        },
+        {
+          "$type": "RemoveModifier",
+          "modifierName": "ForceDefend",
+          "target": "Target"
+        },
+        {
+          "$type": "EnableHeadControl",
+          "enable": true,
+          "target": "Target"
+        },
+        {
+          "$type": "ReTriggerAISkillInitialCD",
+          "skillIDs": [
+            251
+          ],
+          "target": "Target"
+        },
+        {
+          "$type": "ReTriggerAISkillInitialCD",
+          "skillIDs": [
+            252
+          ],
+          "target": "Target"
+        },
+        {
+          "$type": "ApplyModifier",
+          "modifierName": "ShieldBroken_Attack",
+          "target": "Target"
+        }
       ]
     }
   },
   {
     "Default": {
+      "abilityMixins": [
+        {
+          "$type": "AttachToPoseIDMixin",
+          "modifierName": "Abyss_Water_ElementShield_RecoverHandler",
+          "poseIDs": [
+            300,
+            301,
+            302
+          ]
+        }
+      ],
+      "abilityName": "Abyss_Water_ElementShield_SlimBallV2",
       "modifiers": {
         "Abyss_Water_ElementShield_RecoverHandler": {
+          "elementDurability": 100.0,
+          "modifierName": "",
           "onReconnect": [
             {
               "$type": "ApplyModifier",
               "modifierName": "UNIQUE_Abyss_Water_ElementShield_SlimBallV2"
             }
           ],
-          "elementDurability": 100.0,
-          "modifierName": "",
           "AIHNJLDFEGJ": 0.0
         },
         "UNIQUE_MonsterEliteAffix_DefaultState": {
+          "elementDurability": 100.0,
+          "isUnique": true,
+          "modifierName": "",
           "onAdded": [
             {
               "$type": "UseSkillEliteSet",
               "skillEliteSetID": 1
             }
           ],
-          "elementDurability": 100.0,
-          "modifierName": "",
-          "isUnique": true,
           "AIHNJLDFEGJ": 0.0
         },
         "UNIQUE_Abyss_Water_ElementShield_SlimBallV2": {
-          "onRemoved": [
+          "elementDurability": 1000.0,
+          "elementType": "Water",
+          "isUnique": true,
+          "modifierMixins": [
             {
-              "$type": "SetAnimatorTrigger",
-              "triggerID": "ShiledBrokenTrigger"
-            },
-            {
-              "$type": "SetPoseInt",
-              "intID": "ElementState"
-            },
-            {
-              "$type": "AddGlobalValue",
-              "useLimitRange": true,
-              "key": "_ABILITY_ABYSS_WATER_ELEMENTSHIELD",
-              "maxValue": 1.0,
-              "minValue": 0.0,
-              "CBOMLBFIPJM": -1.0
-            },
-            {
-              "$type": "ServerLuaCall",
-              "param1": 0.0,
-              "param2": 0.0,
-              "funcName": "SLC_BuffDungeon_50_Add_Counter",
-              "AHCNJKIEMPP": 0.0,
-              "luaCallType": "FromGroup",
-              "predicates": [
+              "$type": "ElementShieldMixin",
+              "damageRatio": 0.0,
+              "elementType": "Water",
+              "onShieldBroken": [
                 {
-                  "$type": "EOFDCELPGFO",
-                  "CBOMLBFIPJM": 0.0,
-                  "compareType": "MoreThan",
-                  "key": "ShieldActivity",
-                  "target": "Self"
+                  "$type": "ServerLuaCall",
+                  "funcName": "SLC_TriggerWatcher",
+                  "luaCallType": "FromGroup",
+                  "param1": 1.0,
+                  "param2": 0.0,
+                  "param3": 0.0,
+                  "paramNum": 1,
+                  "predicates": [
+                    {
+                      "$type": "ByTargetGlobalValue",
+                      "key": "_MONSTER_MonsterTag_ForNatlanArena_",
+                      "target": "Self",
+                      "value": 1.0
+                    }
+                  ]
                 }
-              ]
-            },
-            {
-              "$type": "RemoveUniqueModifier",
-              "modifierName": "UNIQUE_Abyss_Water_MoveOnWaterHandler_SlimBallV2",
-              "predicates": [
+              ],
+              "onShieldFailed": [
                 {
-                  "$type": "EOFDCELPGFO",
-                  "CBOMLBFIPJM": 0.0,
-                  "compareType": "NoneOrEqual",
-                  "key": "_RETURNTOBORN_TAG_"
+                  "$type": "Predicated",
+                  "failActions": [
+                    {
+                      "$type": "SetGlobalDir",
+                      "born": {
+                        "$type": "ConfigBornBySelf",
+                        "direction": {
+                          "$type": "ConfigDirectionByLookAtEntity",
+                          "namedTransform": ""
+                        },
+                        "useRotation": true
+                      },
+                      "key": "_ABILITY_ABYSS_WATER_ELEMENTSHIELD_HIT",
+                      "setTarget": false,
+                      "target": "TargetOriginOwner"
+                    }
+                  ],
+                  "successActions": [
+                    {
+                      "$type": "SetGlobalDir",
+                      "born": {
+                        "$type": "ConfigBornBySelf",
+                        "direction": {
+                          "$type": "ConfigDirectionByLookAtEntity",
+                          "namedTransform": ""
+                        },
+                        "useRotation": true
+                      },
+                      "key": "_ABILITY_ABYSS_WATER_ELEMENTSHIELD_HIT",
+                      "setTarget": false,
+                      "target": "Target"
+                    }
+                  ],
+                  "target": "Target",
+                  "targetPredicates": [
+                    {
+                      "$type": "ByEntityTypes",
+                      "entityTypes": [
+                        "Avatar",
+                        "Partner",
+                        "Vehicle"
+                      ]
+                    }
+                  ]
+                },
+                {
+                  "$type": "FireEffect",
+                  "born": {
+                    "$type": "ConfigBornByTarget",
+                    "direction": {
+                      "$type": "ConfigDirectionByGlobalValue",
+                      "directionKey": "_ABILITY_ABYSS_WATER_ELEMENTSHIELD_HIT"
+                    },
+                    "useRotation": true
+                  },
+                  "effectPattern": "Eff_Monster_Abyss_Water_ElementShield_Hit",
+                  "effectTempleteID": -1.0,
+                  "scale": 1.0,
+                  "ILLLPEOODKP": ""
+                },
+                {
+                  "$type": "SendEffectTrigger",
+                  "attachPoint": "",
+                  "effectPattern": "Eff_Monster_Abyss_Water_ElementShield_BS",
+                  "parameter": "BeHit"
                 }
-              ]
+              ],
+              "onShieldSuccess": [
+                {
+                  "$type": "Predicated",
+                  "failActions": [
+                    {
+                      "$type": "SetGlobalDir",
+                      "born": {
+                        "$type": "ConfigBornBySelf",
+                        "direction": {
+                          "$type": "ConfigDirectionByLookAtEntity",
+                          "namedTransform": ""
+                        },
+                        "useRotation": true
+                      },
+                      "key": "_ABILITY_ABYSS_WATER_ELEMENTSHIELD_HIT",
+                      "setTarget": false,
+                      "target": "TargetOriginOwner"
+                    }
+                  ],
+                  "successActions": [
+                    {
+                      "$type": "SetGlobalDir",
+                      "born": {
+                        "$type": "ConfigBornBySelf",
+                        "direction": {
+                          "$type": "ConfigDirectionByLookAtEntity",
+                          "namedTransform": ""
+                        },
+                        "useRotation": true
+                      },
+                      "key": "_ABILITY_ABYSS_WATER_ELEMENTSHIELD_HIT",
+                      "setTarget": false,
+                      "target": "Target"
+                    }
+                  ],
+                  "target": "Target",
+                  "targetPredicates": [
+                    {
+                      "$type": "ByEntityTypes",
+                      "entityTypes": [
+                        "Avatar",
+                        "Partner",
+                        "Vehicle"
+                      ]
+                    }
+                  ]
+                },
+                {
+                  "$type": "FireEffect",
+                  "born": {
+                    "$type": "ConfigBornByTarget",
+                    "direction": {
+                      "$type": "ConfigDirectionByGlobalValue",
+                      "directionKey": "_ABILITY_ABYSS_WATER_ELEMENTSHIELD_HIT"
+                    },
+                    "useRotation": true
+                  },
+                  "effectPattern": "Eff_Monster_Abyss_Water_ElementShield_Hit_Invalid",
+                  "effectTempleteID": -1.0,
+                  "scale": 1.0,
+                  "ILLLPEOODKP": ""
+                },
+                {
+                  "$type": "SendEffectTrigger",
+                  "attachPoint": "",
+                  "effectPattern": "Eff_Monster_Abyss_Water_ElementShield_BS",
+                  "parameter": "BeHitInvalid"
+                }
+              ],
+              "shieldAngle": 360.0,
+              "shieldHPRatio": 1.0,
+              "showDamageText": "",
+              "updateShieldByMaxHp": true,
+              "useMutiPlayerFixData": true,
+              "AMMMDCMOAPF": true,
+              "GPIBKOHGEIJ": ""
             },
             {
-              "$type": "RemoveUniqueModifier",
-              "modifierName": "UNIQUE_Abyss_Water_ElementShield_Effect"
+              "$type": "VelocityForceMixin",
+              "excludeForces": [
+                "WindZoneType"
+              ]
             }
           ],
+          "modifierName": "",
           "onAdded": [
             {
               "$type": "AddGlobalValue",
-              "useLimitRange": true,
               "key": "_ABILITY_ABYSS_WATER_ELEMENTSHIELD",
               "maxValue": 1.0,
               "minValue": 0.0,
-              "CBOMLBFIPJM": 1.0
+              "useLimitRange": true,
+              "value": 1.0
             },
             {
               "$type": "ApplyModifier",
@@ -2478,230 +2620,37 @@
               "resistanceListID": 14001
             }
           ],
-          "properties": {
-            "Actor_EndureDelta": 0.0
-          },
-          "stacking": "Unique",
-          "onKill": [
-            {
-              "$type": "RemoveUniqueModifier",
-              "modifierName": "UNIQUE_Abyss_Water_ElementShield_SlimBallV2"
-            }
-          ],
-          "elementDurability": 1000.0,
-          "modifierMixins": [
-            {
-              "$type": "ElementShieldMixin",
-              "ICHIGPDKIHG": true,
-              "AMMMDCMOAPF": true,
-              "GPIBKOHGEIJ": "",
-              "shieldHPRatio": 1.0,
-              "AFDNNPEEDFI": [
-                {
-                  "$type": "Predicated",
-                  "successActions": [
-                    {
-                      "$type": "SetGlobalDir",
-                      "key": "_ABILITY_ABYSS_WATER_ELEMENTSHIELD_HIT",
-                      "born": {
-                        "$type": "NABPLNFPHCK",
-                        "useRotation": true,
-                        "direction": {
-                          "$type": "ELLFELLPBME",
-                          "KFAOLPBMANI": ""
-                        }
-                      },
-                      "setTarget": false,
-                      "target": "Target"
-                    }
-                  ],
-                  "failActions": [
-                    {
-                      "$type": "SetGlobalDir",
-                      "key": "_ABILITY_ABYSS_WATER_ELEMENTSHIELD_HIT",
-                      "born": {
-                        "$type": "NABPLNFPHCK",
-                        "useRotation": true,
-                        "direction": {
-                          "$type": "ELLFELLPBME",
-                          "KFAOLPBMANI": ""
-                        }
-                      },
-                      "setTarget": false,
-                      "target": "TargetOriginOwner"
-                    }
-                  ],
-                  "targetPredicates": [
-                    {
-                      "$type": "DEOFBICNFHF",
-                      "entityTypes": [
-                        "Avatar",
-                        "Partner",
-                        "Vehicle"
-                      ]
-                    }
-                  ],
-                  "target": "Target"
-                },
-                {
-                  "$type": "FireEffect",
-                  "effectPattern": "Eff_Monster_Abyss_Water_ElementShield_Hit",
-                  "scale": 1.0,
-                  "born": {
-                    "$type": "BOJMMDAIGMM",
-                    "useRotation": true,
-                    "direction": {
-                      "$type": "KMEAEFMPHKB",
-                      "directionKey": "_ABILITY_ABYSS_WATER_ELEMENTSHIELD_HIT"
-                    }
-                  },
-                  "ILLLPEOODKP": "",
-                  "effectTempleteID": -1.0
-                },
-                {
-                  "$type": "SendEffectTrigger",
-                  "parameter": "BeHit",
-                  "effectPattern": "Eff_Monster_Abyss_Water_ElementShield_BS",
-                  "attachPoint": ""
-                }
-              ],
-              "shieldAngle": 360.0,
-              "useMutiPlayerFixData": true,
-              "elementType": "Water",
-              "IGJGKGPDDBG": [
-                {
-                  "$type": "Predicated",
-                  "successActions": [
-                    {
-                      "$type": "SetGlobalDir",
-                      "key": "_ABILITY_ABYSS_WATER_ELEMENTSHIELD_HIT",
-                      "born": {
-                        "$type": "NABPLNFPHCK",
-                        "useRotation": true,
-                        "direction": {
-                          "$type": "ELLFELLPBME",
-                          "KFAOLPBMANI": ""
-                        }
-                      },
-                      "setTarget": false,
-                      "target": "Target"
-                    }
-                  ],
-                  "failActions": [
-                    {
-                      "$type": "SetGlobalDir",
-                      "key": "_ABILITY_ABYSS_WATER_ELEMENTSHIELD_HIT",
-                      "born": {
-                        "$type": "NABPLNFPHCK",
-                        "useRotation": true,
-                        "direction": {
-                          "$type": "ELLFELLPBME",
-                          "KFAOLPBMANI": ""
-                        }
-                      },
-                      "setTarget": false,
-                      "target": "TargetOriginOwner"
-                    }
-                  ],
-                  "targetPredicates": [
-                    {
-                      "$type": "DEOFBICNFHF",
-                      "entityTypes": [
-                        "Avatar",
-                        "Partner",
-                        "Vehicle"
-                      ]
-                    }
-                  ],
-                  "target": "Target"
-                },
-                {
-                  "$type": "FireEffect",
-                  "effectPattern": "Eff_Monster_Abyss_Water_ElementShield_Hit_Invalid",
-                  "scale": 1.0,
-                  "born": {
-                    "$type": "BOJMMDAIGMM",
-                    "useRotation": true,
-                    "direction": {
-                      "$type": "KMEAEFMPHKB",
-                      "directionKey": "_ABILITY_ABYSS_WATER_ELEMENTSHIELD_HIT"
-                    }
-                  },
-                  "ILLLPEOODKP": "",
-                  "effectTempleteID": -1.0
-                },
-                {
-                  "$type": "SendEffectTrigger",
-                  "parameter": "BeHitInvalid",
-                  "effectPattern": "Eff_Monster_Abyss_Water_ElementShield_BS",
-                  "attachPoint": ""
-                }
-              ],
-              "showDamageText": "",
-              "EBCOGOJCLAE": 0.0,
-              "onShieldBroken": [
-                {
-                  "$type": "ServerLuaCall",
-                  "param1": 1.0,
-                  "param2": 0.0,
-                  "paramNum": 1,
-                  "funcName": "SLC_TriggerWatcher",
-                  "AHCNJKIEMPP": 0.0,
-                  "luaCallType": "FromGroup",
-                  "predicates": [
-                    {
-                      "$type": "EOFDCELPGFO",
-                      "CBOMLBFIPJM": 1.0,
-                      "key": "_MONSTER_MonsterTag_ForNatlanArena_",
-                      "target": "Self"
-                    }
-                  ]
-                }
-              ]
-            },
-            {
-              "$type": "VelocityForceMixin",
-              "EANEEIEOBAJ": [
-                "WindZoneType"
-              ]
-            }
-          ],
-          "elementType": "Water",
-          "modifierName": "",
-          "isUnique": true,
-          "AIHNJLDFEGJ": 0.0,
           "onBeingHit": [
             {
               "$type": "DamageByAttackValue",
               "attackInfo": {
                 "attackProperty": {
-                  "elementType": "Water",
-                  "damagePercentageRatio": 0.0,
-                  "enBreak": 0.0,
                   "damagePercentage": 0.0,
+                  "damagePercentageRatio": 0.0,
                   "elementDurability": 25.0,
-                  "arkheGrade": 0.0
+                  "elementType": "Water",
+                  "enBreak": 0.0,
+                  "IIPHCFEONLK": 0.0
                 },
-                "hitPattern": {
-                  "FLFCIDDNMNA": "",
-                  "onHitEffectName": "none",
-                  "muteHitText": true,
-                  "hitImpulseType": "LV0"
-                },
+                "attackTag": "",
                 "attenuationGroup": "default",
                 "attenuationTag": "",
-                "attackTag": ""
+                "hitPattern": {
+                  "hitImpulseType": "LV0",
+                  "muteHitText": true,
+                  "onHitEffectName": "none",
+                  "FLFCIDDNMNA": ""
+                }
               },
-              "target": "Target",
               "predicates": [
                 {
-                  "$type": "EOFDCELPGFO",
-                  "CBOMLBFIPJM": 1.0,
+                  "$type": "ByTargetGlobalValue",
+                  "forceByCaster": true,
                   "key": "_ELITEAFFIX_DEFENCE_ENHANCE",
-                  "value": true
+                  "value": 1.0
                 },
                 {
-                  "$type": "DEOFBICNFHF",
+                  "$type": "ByEntityTypes",
                   "entityTypes": [
                     "Avatar",
                     "Vehicle",
@@ -2709,45 +2658,45 @@
                   ]
                 },
                 {
-                  "$type": "GCFOJENHAMH",
-                  "parameter": "PoseID",
-                  "CBOMLBFIPJM": 301.0,
+                  "$type": "ByAnimatorFloat",
                   "logic": "GreaterOrEqual",
-                  "target": "Caster"
+                  "parameter": "PoseID",
+                  "target": "Caster",
+                  "value": 301.0
                 }
-              ]
+              ],
+              "target": "Target"
             },
             {
               "$type": "DamageByAttackValue",
               "attackInfo": {
                 "attackProperty": {
-                  "elementType": "Water",
-                  "damagePercentageRatio": 0.0,
-                  "enBreak": 0.0,
                   "damagePercentage": 0.0,
+                  "damagePercentageRatio": 0.0,
                   "elementDurability": 25.0,
-                  "arkheGrade": 0.0
+                  "elementType": "Water",
+                  "enBreak": 0.0,
+                  "IIPHCFEONLK": 0.0
                 },
-                "hitPattern": {
-                  "FLFCIDDNMNA": "",
-                  "onHitEffectName": "none",
-                  "muteHitText": true,
-                  "hitImpulseType": "LV0"
-                },
+                "attackTag": "",
                 "attenuationGroup": "default",
                 "attenuationTag": "",
-                "attackTag": ""
+                "hitPattern": {
+                  "hitImpulseType": "LV0",
+                  "muteHitText": true,
+                  "onHitEffectName": "none",
+                  "FLFCIDDNMNA": ""
+                }
               },
-              "target": "TargetOwner",
               "predicates": [
                 {
-                  "$type": "EOFDCELPGFO",
-                  "CBOMLBFIPJM": 1.0,
+                  "$type": "ByTargetGlobalValue",
+                  "forceByCaster": true,
                   "key": "_ELITEAFFIX_DEFENCE_ENHANCE",
-                  "value": true
+                  "value": 1.0
                 },
                 {
-                  "$type": "DEOFBICNFHF",
+                  "$type": "ByEntityTypes",
                   "entityTypes": [
                     "Avatar",
                     "Vehicle",
@@ -2755,157 +2704,69 @@
                   ]
                 },
                 {
-                  "$type": "GCFOJENHAMH",
-                  "parameter": "PoseID",
-                  "CBOMLBFIPJM": 301.0,
+                  "$type": "ByAnimatorFloat",
                   "logic": "GreaterOrEqual",
-                  "target": "Caster"
+                  "parameter": "PoseID",
+                  "target": "Caster",
+                  "value": 301.0
                 }
-              ]
+              ],
+              "target": "TargetOwner"
             },
             {
               "$type": "Predicated",
-              "successActions": [
-                {
-                  "$type": "AddElementDurability",
-                  "CBOMLBFIPJM": -500.0,
-                  "useLimitRange": true,
-                  "minValue": 0.0,
-                  "maxValue": 1000.0,
-                  "modifierName": "UNIQUE_Abyss_Water_ElementShield_SlimBallV2"
-                }
-              ],
               "failActions": [
                 {
                   "$type": "Predicated",
                   "successActions": [
                     {
                       "$type": "AddElementDurability",
-                      "CBOMLBFIPJM": -1000.0,
-                      "useLimitRange": true,
-                      "minValue": 0.0,
                       "maxValue": 1000.0,
-                      "modifierName": "UNIQUE_Abyss_Water_ElementShield_SlimBallV2"
+                      "minValue": 0.0,
+                      "modifierName": "UNIQUE_Abyss_Water_ElementShield_SlimBallV2",
+                      "useLimitRange": true,
+                      "value": -1000.0
                     }
                   ],
+                  "target": "Other",
                   "targetPredicates": [
                     {
-                      "$type": "CCHPEOBKOBO",
+                      "$type": "ByAttackTags",
                       "attackTags": [
                         "Activity_SlimeCannonV2_Ice"
                       ]
                     }
-                  ],
-                  "target": "Other"
+                  ]
                 }
               ],
+              "successActions": [
+                {
+                  "$type": "AddElementDurability",
+                  "maxValue": 1000.0,
+                  "minValue": 0.0,
+                  "modifierName": "UNIQUE_Abyss_Water_ElementShield_SlimBallV2",
+                  "useLimitRange": true,
+                  "value": -500.0
+                }
+              ],
+              "target": "Other",
               "targetPredicates": [
                 {
-                  "$type": "CCHPEOBKOBO",
+                  "$type": "ByAttackTags",
                   "attackTags": [
                     "Activity_SlimeCannonV2_Fire",
                     "Activity_SlimeCannonV2_Explode"
                   ]
                 }
-              ],
-              "target": "Other"
-            }
-          ]
-        },
-        "UNIQUE_Abyss_Water_MoveOnWaterHandler_SlimBallV2": {
-          "elementDurability": 100.0,
-          "modifierMixins": [
-            {
-              "$type": "EnableCharacterMoveOnWaterMixin"
+              ]
             }
           ],
-          "modifierName": "",
-          "isUnique": true,
-          "AIHNJLDFEGJ": 0.0
-        }
-      },
-      "onAbilityStart": [
-        {
-          "$type": "SetPoseInt",
-          "GGKIEIJLCJJ": 2,
-          "intID": "ElementState"
-        },
-        {
-          "$type": "ApplyModifier",
-          "modifierName": "UNIQUE_Abyss_Water_ElementShield_SlimBallV2"
-        }
-      ],
-      "abilityMixins": [
-        {
-          "$type": "AttachToPoseIDMixin",
-          "GGOLBNPLGJH": [
-            300,
-            301,
-            302
-          ],
-          "modifierName": "Abyss_Water_ElementShield_RecoverHandler"
-        }
-      ],
-      "abilityName": "Abyss_Water_ElementShield_SlimBallV2",
-      "onAdded": [
-        {
-          "$type": "ApplyModifier",
-          "modifierName": "UNIQUE_MonsterEliteAffix_DefaultState",
-          "predicates": [
+          "onKill": [
             {
-              "$type": "EOFDCELPGFO",
-              "CBOMLBFIPJM": 0.0,
-              "compareType": "NoneOrEqual",
-              "key": "_ELITEAFFIX_TAG"
-            }
-          ]
-        },
-        {
-          "$type": "SetPoseInt",
-          "GGKIEIJLCJJ": 2,
-          "intID": "ElementState"
-        },
-        {
-          "$type": "ApplyModifier",
-          "modifierName": "UNIQUE_Abyss_Water_ElementShield_SlimBallV2"
-        }
-      ]
-    }
-  },
-  {
-    "Default": {
-      "modifiers": {
-        "Abyss_Ice_ElementShield_RecoverHandler": {
-          "onReconnect": [
-            {
-              "$type": "ApplyModifier",
-              "modifierName": "UNIQUE_Abyss_Ice_ElementShield_SlimBallV2"
+              "$type": "RemoveUniqueModifier",
+              "modifierName": "UNIQUE_Abyss_Water_ElementShield_SlimBallV2"
             }
           ],
-          "elementDurability": 100.0,
-          "modifierName": "",
-          "AIHNJLDFEGJ": 0.0
-        },
-        "UNIQUE_MonsterEliteAffix_DefaultState": {
-          "onAdded": [
-            {
-              "$type": "UseSkillEliteSet",
-              "skillEliteSetID": 1
-            }
-          ],
-          "elementDurability": 100.0,
-          "modifierName": "",
-          "isUnique": true,
-          "AIHNJLDFEGJ": 0.0
-        },
-        "UNIQUE_IceSurface": {
-          "elementDurability": 80.0,
-          "elementType": "Ice",
-          "modifierName": "",
-          "isUnique": true,
-          "AIHNJLDFEGJ": 0.0
-        },
-        "UNIQUE_Abyss_Ice_ElementShield_SlimBallV2": {
           "onRemoved": [
             {
               "$type": "SetAnimatorTrigger",
@@ -2917,54 +2778,345 @@
             },
             {
               "$type": "AddGlobalValue",
-              "useLimitRange": true,
-              "key": "_ABILITY_ABYSS_ICE_ELEMENTSHIELD",
+              "key": "_ABILITY_ABYSS_WATER_ELEMENTSHIELD",
               "maxValue": 1.0,
               "minValue": 0.0,
-              "CBOMLBFIPJM": -1.0
+              "useLimitRange": true,
+              "value": -1.0
             },
             {
               "$type": "ServerLuaCall",
+              "funcName": "SLC_BuffDungeon_50_Add_Counter",
+              "luaCallType": "FromGroup",
               "param1": 0.0,
               "param2": 0.0,
-              "funcName": "SLC_BuffDungeon_50_Add_Counter",
-              "AHCNJKIEMPP": 0.0,
-              "luaCallType": "FromGroup",
+              "param3": 0.0,
               "predicates": [
                 {
-                  "$type": "EOFDCELPGFO",
-                  "CBOMLBFIPJM": 0.0,
+                  "$type": "ByTargetGlobalValue",
                   "compareType": "MoreThan",
                   "key": "ShieldActivity",
-                  "target": "Self"
+                  "target": "Self",
+                  "value": 0.0
                 }
               ]
             },
             {
               "$type": "RemoveUniqueModifier",
-              "modifierName": "UNIQUE_Abyss_Ice_MoveOnWaterHandler_SlimBallV2",
+              "modifierName": "UNIQUE_Abyss_Water_MoveOnWaterHandler_SlimBallV2",
               "predicates": [
                 {
-                  "$type": "EOFDCELPGFO",
-                  "CBOMLBFIPJM": 0.0,
+                  "$type": "ByTargetGlobalValue",
                   "compareType": "NoneOrEqual",
-                  "key": "_RETURNTOBORN_TAG_"
+                  "key": "_RETURNTOBORN_TAG_",
+                  "value": 0.0
                 }
               ]
             },
             {
               "$type": "RemoveUniqueModifier",
-              "modifierName": "UNIQUE_Abyss_Ice_ElementShield_Effect"
+              "modifierName": "UNIQUE_Abyss_Water_ElementShield_Effect"
             }
           ],
+          "properties": {
+            "Actor_EndureDelta": 0.0
+          },
+          "stacking": "Unique",
+          "AIHNJLDFEGJ": 0.0
+        },
+        "UNIQUE_Abyss_Water_MoveOnWaterHandler_SlimBallV2": {
+          "elementDurability": 100.0,
+          "isUnique": true,
+          "modifierMixins": [
+            {
+              "$type": "EnableCharacterMoveOnWaterMixin"
+            }
+          ],
+          "modifierName": "",
+          "AIHNJLDFEGJ": 0.0
+        }
+      },
+      "onAbilityStart": [
+        {
+          "$type": "SetPoseInt",
+          "intID": "ElementState",
+          "value": 2
+        },
+        {
+          "$type": "ApplyModifier",
+          "modifierName": "UNIQUE_Abyss_Water_ElementShield_SlimBallV2"
+        }
+      ],
+      "onAdded": [
+        {
+          "$type": "ApplyModifier",
+          "modifierName": "UNIQUE_MonsterEliteAffix_DefaultState",
+          "predicates": [
+            {
+              "$type": "ByTargetGlobalValue",
+              "compareType": "NoneOrEqual",
+              "key": "_ELITEAFFIX_TAG",
+              "value": 0.0
+            }
+          ]
+        },
+        {
+          "$type": "SetPoseInt",
+          "intID": "ElementState",
+          "value": 2
+        },
+        {
+          "$type": "ApplyModifier",
+          "modifierName": "UNIQUE_Abyss_Water_ElementShield_SlimBallV2"
+        }
+      ]
+    }
+  },
+  {
+    "Default": {
+      "abilityMixins": [
+        {
+          "$type": "IceFloorMixin",
+          "doAction": {
+            "$type": "AttachModifier",
+            "modifierName": "UNIQUE_IceSurface",
+            "target": "Other"
+          },
+          "height": 1.25,
+          "width": 1.25
+        },
+        {
+          "$type": "AttachToPoseIDMixin",
+          "modifierName": "Abyss_Ice_ElementShield_RecoverHandler",
+          "poseIDs": [
+            300,
+            301,
+            302
+          ]
+        }
+      ],
+      "abilityName": "Abyss_Ice_ElementShield_SlimBallV2",
+      "modifiers": {
+        "Abyss_Ice_ElementShield_RecoverHandler": {
+          "elementDurability": 100.0,
+          "modifierName": "",
+          "onReconnect": [
+            {
+              "$type": "ApplyModifier",
+              "modifierName": "UNIQUE_Abyss_Ice_ElementShield_SlimBallV2"
+            }
+          ],
+          "AIHNJLDFEGJ": 0.0
+        },
+        "UNIQUE_MonsterEliteAffix_DefaultState": {
+          "elementDurability": 100.0,
+          "isUnique": true,
+          "modifierName": "",
+          "onAdded": [
+            {
+              "$type": "UseSkillEliteSet",
+              "skillEliteSetID": 1
+            }
+          ],
+          "AIHNJLDFEGJ": 0.0
+        },
+        "UNIQUE_IceSurface": {
+          "elementDurability": 80.0,
+          "elementType": "Ice",
+          "isUnique": true,
+          "modifierName": "",
+          "AIHNJLDFEGJ": 0.0
+        },
+        "UNIQUE_Abyss_Ice_ElementShield_SlimBallV2": {
+          "elementDurability": 1000.0,
+          "elementType": "Frozen",
+          "isUnique": true,
+          "modifierMixins": [
+            {
+              "$type": "ElementShieldMixin",
+              "damageRatio": 0.0,
+              "elementType": "Frozen",
+              "onShieldBroken": [
+                {
+                  "$type": "ServerLuaCall",
+                  "funcName": "SLC_TriggerWatcher",
+                  "luaCallType": "FromGroup",
+                  "param1": 1.0,
+                  "param2": 0.0,
+                  "param3": 0.0,
+                  "paramNum": 1,
+                  "predicates": [
+                    {
+                      "$type": "ByTargetGlobalValue",
+                      "key": "_MONSTER_MonsterTag_ForNatlanArena_",
+                      "target": "Self",
+                      "value": 1.0
+                    }
+                  ]
+                }
+              ],
+              "onShieldFailed": [
+                {
+                  "$type": "Predicated",
+                  "failActions": [
+                    {
+                      "$type": "SetGlobalDir",
+                      "born": {
+                        "$type": "ConfigBornBySelf",
+                        "direction": {
+                          "$type": "ConfigDirectionByLookAtEntity",
+                          "namedTransform": ""
+                        },
+                        "useRotation": true
+                      },
+                      "key": "_ABILITY_ABYSS_ICE_ELEMENTSHIELD_HIT",
+                      "setTarget": false,
+                      "target": "TargetOriginOwner"
+                    }
+                  ],
+                  "successActions": [
+                    {
+                      "$type": "SetGlobalDir",
+                      "born": {
+                        "$type": "ConfigBornBySelf",
+                        "direction": {
+                          "$type": "ConfigDirectionByLookAtEntity",
+                          "namedTransform": ""
+                        },
+                        "useRotation": true
+                      },
+                      "key": "_ABILITY_ABYSS_ICE_ELEMENTSHIELD_HIT",
+                      "setTarget": false,
+                      "target": "Target"
+                    }
+                  ],
+                  "target": "Target",
+                  "targetPredicates": [
+                    {
+                      "$type": "ByEntityTypes",
+                      "entityTypes": [
+                        "Avatar",
+                        "Partner",
+                        "Vehicle"
+                      ]
+                    }
+                  ]
+                },
+                {
+                  "$type": "FireEffect",
+                  "born": {
+                    "$type": "ConfigBornByTarget",
+                    "direction": {
+                      "$type": "ConfigDirectionByGlobalValue",
+                      "directionKey": "_ABILITY_ABYSS_ICE_ELEMENTSHIELD_HIT"
+                    },
+                    "useRotation": true
+                  },
+                  "effectPattern": "Eff_Monster_Abyss_Ice_ElementShield_Hit",
+                  "effectTempleteID": -1.0,
+                  "scale": 1.0,
+                  "ILLLPEOODKP": ""
+                },
+                {
+                  "$type": "SendEffectTrigger",
+                  "attachPoint": "",
+                  "effectPattern": "Eff_Monster_Abyss_Ice_ElementShield_BS",
+                  "parameter": "BeHit"
+                }
+              ],
+              "onShieldSuccess": [
+                {
+                  "$type": "Predicated",
+                  "failActions": [
+                    {
+                      "$type": "SetGlobalDir",
+                      "born": {
+                        "$type": "ConfigBornBySelf",
+                        "direction": {
+                          "$type": "ConfigDirectionByLookAtEntity",
+                          "namedTransform": ""
+                        },
+                        "useRotation": true
+                      },
+                      "key": "_ABILITY_ABYSS_ICE_ELEMENTSHIELD_HIT",
+                      "setTarget": false,
+                      "target": "TargetOriginOwner"
+                    }
+                  ],
+                  "successActions": [
+                    {
+                      "$type": "SetGlobalDir",
+                      "born": {
+                        "$type": "ConfigBornBySelf",
+                        "direction": {
+                          "$type": "ConfigDirectionByLookAtEntity",
+                          "namedTransform": ""
+                        },
+                        "useRotation": true
+                      },
+                      "key": "_ABILITY_ABYSS_ICE_ELEMENTSHIELD_HIT",
+                      "setTarget": false,
+                      "target": "Target"
+                    }
+                  ],
+                  "target": "Target",
+                  "targetPredicates": [
+                    {
+                      "$type": "ByEntityTypes",
+                      "entityTypes": [
+                        "Avatar",
+                        "Partner",
+                        "Vehicle"
+                      ]
+                    }
+                  ]
+                },
+                {
+                  "$type": "FireEffect",
+                  "born": {
+                    "$type": "ConfigBornByTarget",
+                    "direction": {
+                      "$type": "ConfigDirectionByGlobalValue",
+                      "directionKey": "_ABILITY_ABYSS_ICE_ELEMENTSHIELD_HIT"
+                    },
+                    "useRotation": true
+                  },
+                  "effectPattern": "Eff_Monster_Abyss_Ice_ElementShield_Hit_Invalid",
+                  "effectTempleteID": -1.0,
+                  "scale": 1.0,
+                  "ILLLPEOODKP": ""
+                },
+                {
+                  "$type": "SendEffectTrigger",
+                  "attachPoint": "",
+                  "effectPattern": "Eff_Monster_Abyss_Ice_ElementShield_BS",
+                  "parameter": "BeHitInvalid"
+                }
+              ],
+              "shieldAngle": 360.0,
+              "shieldHPRatio": 1.0,
+              "showDamageText": "",
+              "updateShieldByMaxHp": true,
+              "useMutiPlayerFixData": true,
+              "AMMMDCMOAPF": true,
+              "GPIBKOHGEIJ": ""
+            },
+            {
+              "$type": "VelocityForceMixin",
+              "excludeForces": [
+                "WindZoneType"
+              ]
+            }
+          ],
+          "modifierName": "",
           "onAdded": [
             {
               "$type": "AddGlobalValue",
-              "useLimitRange": true,
               "key": "_ABILITY_ABYSS_ICE_ELEMENTSHIELD",
               "maxValue": 1.0,
               "minValue": 0.0,
-              "CBOMLBFIPJM": 1.0
+              "useLimitRange": true,
+              "value": 1.0
             },
             {
               "$type": "AttachAbilityStateResistance",
@@ -2979,230 +3131,37 @@
               "resistanceListID": 14001
             }
           ],
-          "properties": {
-            "Actor_EndureDelta": 0.0
-          },
-          "stacking": "Unique",
-          "onKill": [
-            {
-              "$type": "RemoveUniqueModifier",
-              "modifierName": "UNIQUE_Abyss_Ice_ElementShield"
-            }
-          ],
-          "elementDurability": 1000.0,
-          "modifierMixins": [
-            {
-              "$type": "ElementShieldMixin",
-              "ICHIGPDKIHG": true,
-              "AMMMDCMOAPF": true,
-              "GPIBKOHGEIJ": "",
-              "shieldHPRatio": 1.0,
-              "AFDNNPEEDFI": [
-                {
-                  "$type": "Predicated",
-                  "successActions": [
-                    {
-                      "$type": "SetGlobalDir",
-                      "key": "_ABILITY_ABYSS_ICE_ELEMENTSHIELD_HIT",
-                      "born": {
-                        "$type": "NABPLNFPHCK",
-                        "useRotation": true,
-                        "direction": {
-                          "$type": "ELLFELLPBME",
-                          "KFAOLPBMANI": ""
-                        }
-                      },
-                      "setTarget": false,
-                      "target": "Target"
-                    }
-                  ],
-                  "failActions": [
-                    {
-                      "$type": "SetGlobalDir",
-                      "key": "_ABILITY_ABYSS_ICE_ELEMENTSHIELD_HIT",
-                      "born": {
-                        "$type": "NABPLNFPHCK",
-                        "useRotation": true,
-                        "direction": {
-                          "$type": "ELLFELLPBME",
-                          "KFAOLPBMANI": ""
-                        }
-                      },
-                      "setTarget": false,
-                      "target": "TargetOriginOwner"
-                    }
-                  ],
-                  "targetPredicates": [
-                    {
-                      "$type": "DEOFBICNFHF",
-                      "entityTypes": [
-                        "Avatar",
-                        "Partner",
-                        "Vehicle"
-                      ]
-                    }
-                  ],
-                  "target": "Target"
-                },
-                {
-                  "$type": "FireEffect",
-                  "effectPattern": "Eff_Monster_Abyss_Ice_ElementShield_Hit",
-                  "scale": 1.0,
-                  "born": {
-                    "$type": "BOJMMDAIGMM",
-                    "useRotation": true,
-                    "direction": {
-                      "$type": "KMEAEFMPHKB",
-                      "directionKey": "_ABILITY_ABYSS_ICE_ELEMENTSHIELD_HIT"
-                    }
-                  },
-                  "ILLLPEOODKP": "",
-                  "effectTempleteID": -1.0
-                },
-                {
-                  "$type": "SendEffectTrigger",
-                  "parameter": "BeHit",
-                  "effectPattern": "Eff_Monster_Abyss_Ice_ElementShield_BS",
-                  "attachPoint": ""
-                }
-              ],
-              "shieldAngle": 360.0,
-              "useMutiPlayerFixData": true,
-              "elementType": "Frozen",
-              "IGJGKGPDDBG": [
-                {
-                  "$type": "Predicated",
-                  "successActions": [
-                    {
-                      "$type": "SetGlobalDir",
-                      "key": "_ABILITY_ABYSS_ICE_ELEMENTSHIELD_HIT",
-                      "born": {
-                        "$type": "NABPLNFPHCK",
-                        "useRotation": true,
-                        "direction": {
-                          "$type": "ELLFELLPBME",
-                          "KFAOLPBMANI": ""
-                        }
-                      },
-                      "setTarget": false,
-                      "target": "Target"
-                    }
-                  ],
-                  "failActions": [
-                    {
-                      "$type": "SetGlobalDir",
-                      "key": "_ABILITY_ABYSS_ICE_ELEMENTSHIELD_HIT",
-                      "born": {
-                        "$type": "NABPLNFPHCK",
-                        "useRotation": true,
-                        "direction": {
-                          "$type": "ELLFELLPBME",
-                          "KFAOLPBMANI": ""
-                        }
-                      },
-                      "setTarget": false,
-                      "target": "TargetOriginOwner"
-                    }
-                  ],
-                  "targetPredicates": [
-                    {
-                      "$type": "DEOFBICNFHF",
-                      "entityTypes": [
-                        "Avatar",
-                        "Partner",
-                        "Vehicle"
-                      ]
-                    }
-                  ],
-                  "target": "Target"
-                },
-                {
-                  "$type": "FireEffect",
-                  "effectPattern": "Eff_Monster_Abyss_Ice_ElementShield_Hit_Invalid",
-                  "scale": 1.0,
-                  "born": {
-                    "$type": "BOJMMDAIGMM",
-                    "useRotation": true,
-                    "direction": {
-                      "$type": "KMEAEFMPHKB",
-                      "directionKey": "_ABILITY_ABYSS_ICE_ELEMENTSHIELD_HIT"
-                    }
-                  },
-                  "ILLLPEOODKP": "",
-                  "effectTempleteID": -1.0
-                },
-                {
-                  "$type": "SendEffectTrigger",
-                  "parameter": "BeHitInvalid",
-                  "effectPattern": "Eff_Monster_Abyss_Ice_ElementShield_BS",
-                  "attachPoint": ""
-                }
-              ],
-              "showDamageText": "",
-              "EBCOGOJCLAE": 0.0,
-              "onShieldBroken": [
-                {
-                  "$type": "ServerLuaCall",
-                  "param1": 1.0,
-                  "param2": 0.0,
-                  "paramNum": 1,
-                  "funcName": "SLC_TriggerWatcher",
-                  "AHCNJKIEMPP": 0.0,
-                  "luaCallType": "FromGroup",
-                  "predicates": [
-                    {
-                      "$type": "EOFDCELPGFO",
-                      "CBOMLBFIPJM": 1.0,
-                      "key": "_MONSTER_MonsterTag_ForNatlanArena_",
-                      "target": "Self"
-                    }
-                  ]
-                }
-              ]
-            },
-            {
-              "$type": "VelocityForceMixin",
-              "EANEEIEOBAJ": [
-                "WindZoneType"
-              ]
-            }
-          ],
-          "elementType": "Frozen",
-          "modifierName": "",
-          "isUnique": true,
-          "AIHNJLDFEGJ": 0.0,
           "onBeingHit": [
             {
               "$type": "DamageByAttackValue",
               "attackInfo": {
                 "attackProperty": {
-                  "elementType": "Ice",
-                  "damagePercentageRatio": 0.0,
-                  "enBreak": 0.0,
                   "damagePercentage": 0.0,
+                  "damagePercentageRatio": 0.0,
                   "elementDurability": 25.0,
-                  "arkheGrade": 0.0
+                  "elementType": "Ice",
+                  "enBreak": 0.0,
+                  "IIPHCFEONLK": 0.0
                 },
-                "hitPattern": {
-                  "FLFCIDDNMNA": "",
-                  "onHitEffectName": "none",
-                  "muteHitText": true,
-                  "hitImpulseType": "LV0"
-                },
+                "attackTag": "",
                 "attenuationGroup": "default",
                 "attenuationTag": "",
-                "attackTag": ""
+                "hitPattern": {
+                  "hitImpulseType": "LV0",
+                  "muteHitText": true,
+                  "onHitEffectName": "none",
+                  "FLFCIDDNMNA": ""
+                }
               },
-              "target": "Target",
               "predicates": [
                 {
-                  "$type": "EOFDCELPGFO",
-                  "CBOMLBFIPJM": 1.0,
+                  "$type": "ByTargetGlobalValue",
+                  "forceByCaster": true,
                   "key": "_ELITEAFFIX_DEFENCE_ENHANCE",
-                  "value": true
+                  "value": 1.0
                 },
                 {
-                  "$type": "DEOFBICNFHF",
+                  "$type": "ByEntityTypes",
                   "entityTypes": [
                     "Avatar",
                     "Vehicle",
@@ -3210,45 +3169,45 @@
                   ]
                 },
                 {
-                  "$type": "GCFOJENHAMH",
-                  "parameter": "PoseID",
-                  "CBOMLBFIPJM": 301.0,
+                  "$type": "ByAnimatorFloat",
                   "logic": "GreaterOrEqual",
-                  "target": "Caster"
+                  "parameter": "PoseID",
+                  "target": "Caster",
+                  "value": 301.0
                 }
-              ]
+              ],
+              "target": "Target"
             },
             {
               "$type": "DamageByAttackValue",
               "attackInfo": {
                 "attackProperty": {
-                  "elementType": "Ice",
-                  "damagePercentageRatio": 0.0,
-                  "enBreak": 0.0,
                   "damagePercentage": 0.0,
+                  "damagePercentageRatio": 0.0,
                   "elementDurability": 25.0,
-                  "arkheGrade": 0.0
+                  "elementType": "Ice",
+                  "enBreak": 0.0,
+                  "IIPHCFEONLK": 0.0
                 },
-                "hitPattern": {
-                  "FLFCIDDNMNA": "",
-                  "onHitEffectName": "none",
-                  "muteHitText": true,
-                  "hitImpulseType": "LV0"
-                },
+                "attackTag": "",
                 "attenuationGroup": "default",
                 "attenuationTag": "",
-                "attackTag": ""
+                "hitPattern": {
+                  "hitImpulseType": "LV0",
+                  "muteHitText": true,
+                  "onHitEffectName": "none",
+                  "FLFCIDDNMNA": ""
+                }
               },
-              "target": "TargetOwner",
               "predicates": [
                 {
-                  "$type": "EOFDCELPGFO",
-                  "CBOMLBFIPJM": 1.0,
+                  "$type": "ByTargetGlobalValue",
+                  "forceByCaster": true,
                   "key": "_ELITEAFFIX_DEFENCE_ENHANCE",
-                  "value": true
+                  "value": 1.0
                 },
                 {
-                  "$type": "DEOFBICNFHF",
+                  "$type": "ByEntityTypes",
                   "entityTypes": [
                     "Avatar",
                     "Vehicle",
@@ -3256,101 +3215,142 @@
                   ]
                 },
                 {
-                  "$type": "GCFOJENHAMH",
-                  "parameter": "PoseID",
-                  "CBOMLBFIPJM": 301.0,
+                  "$type": "ByAnimatorFloat",
                   "logic": "GreaterOrEqual",
-                  "target": "Caster"
+                  "parameter": "PoseID",
+                  "target": "Caster",
+                  "value": 301.0
                 }
-              ]
+              ],
+              "target": "TargetOwner"
             },
             {
               "$type": "Predicated",
               "successActions": [
                 {
                   "$type": "AddElementDurability",
-                  "CBOMLBFIPJM": -1000.0,
-                  "useLimitRange": true,
-                  "minValue": 0.0,
                   "maxValue": 1000.0,
-                  "modifierName": "UNIQUE_Abyss_Ice_ElementShield_SlimBallV2"
+                  "minValue": 0.0,
+                  "modifierName": "UNIQUE_Abyss_Ice_ElementShield_SlimBallV2",
+                  "useLimitRange": true,
+                  "value": -1000.0
                 }
               ],
+              "target": "Other",
               "targetPredicates": [
                 {
-                  "$type": "CCHPEOBKOBO",
+                  "$type": "ByAttackTags",
                   "attackTags": [
                     "Activity_SlimeCannonV2_Fire",
                     "Activity_SlimeCannonV2_Explode"
                   ]
                 }
-              ],
-              "target": "Other"
+              ]
             }
-          ]
+          ],
+          "onKill": [
+            {
+              "$type": "RemoveUniqueModifier",
+              "modifierName": "UNIQUE_Abyss_Ice_ElementShield"
+            }
+          ],
+          "onRemoved": [
+            {
+              "$type": "SetAnimatorTrigger",
+              "triggerID": "ShiledBrokenTrigger"
+            },
+            {
+              "$type": "SetPoseInt",
+              "intID": "ElementState"
+            },
+            {
+              "$type": "AddGlobalValue",
+              "key": "_ABILITY_ABYSS_ICE_ELEMENTSHIELD",
+              "maxValue": 1.0,
+              "minValue": 0.0,
+              "useLimitRange": true,
+              "value": -1.0
+            },
+            {
+              "$type": "ServerLuaCall",
+              "funcName": "SLC_BuffDungeon_50_Add_Counter",
+              "luaCallType": "FromGroup",
+              "param1": 0.0,
+              "param2": 0.0,
+              "param3": 0.0,
+              "predicates": [
+                {
+                  "$type": "ByTargetGlobalValue",
+                  "compareType": "MoreThan",
+                  "key": "ShieldActivity",
+                  "target": "Self",
+                  "value": 0.0
+                }
+              ]
+            },
+            {
+              "$type": "RemoveUniqueModifier",
+              "modifierName": "UNIQUE_Abyss_Ice_MoveOnWaterHandler_SlimBallV2",
+              "predicates": [
+                {
+                  "$type": "ByTargetGlobalValue",
+                  "compareType": "NoneOrEqual",
+                  "key": "_RETURNTOBORN_TAG_",
+                  "value": 0.0
+                }
+              ]
+            },
+            {
+              "$type": "RemoveUniqueModifier",
+              "modifierName": "UNIQUE_Abyss_Ice_ElementShield_Effect"
+            }
+          ],
+          "properties": {
+            "Actor_EndureDelta": 0.0
+          },
+          "stacking": "Unique",
+          "AIHNJLDFEGJ": 0.0
         },
         "UNIQUE_Abyss_Ice_MoveOnWaterHandler_SlimBallV2": {
           "elementDurability": 100.0,
+          "isUnique": true,
           "modifierMixins": [
             {
               "$type": "EnableCharacterMoveOnWaterMixin"
             }
           ],
           "modifierName": "",
-          "isUnique": true,
           "AIHNJLDFEGJ": 0.0
         }
       },
       "onAbilityStart": [
         {
           "$type": "SetPoseInt",
-          "GGKIEIJLCJJ": 2,
-          "intID": "ElementState"
+          "intID": "ElementState",
+          "value": 2
         },
         {
           "$type": "ApplyModifier",
           "modifierName": "UNIQUE_Abyss_Ice_ElementShield_SlimBallV2"
         }
       ],
-      "abilityMixins": [
-        {
-          "$type": "IceFloorMixin",
-          "PEMJNDBLPEP": 1.25,
-          "FFCAFKGLLDF": {
-            "$type": "AttachModifier",
-            "modifierName": "UNIQUE_IceSurface",
-            "target": "Other"
-          },
-          "height": 1.25
-        },
-        {
-          "$type": "AttachToPoseIDMixin",
-          "GGOLBNPLGJH": [
-            300,
-            301,
-            302
-          ],
-          "modifierName": "Abyss_Ice_ElementShield_RecoverHandler"
-        }
-      ],
-      "abilityName": "Abyss_Ice_ElementShield_SlimBallV2",
       "onAdded": [
         {
           "$type": "ApplyModifier",
           "modifierName": "UNIQUE_MonsterEliteAffix_DefaultState",
           "predicates": [
             {
-              "$type": "EOFDCELPGFO",
-              "CBOMLBFIPJM": 0.0,
+              "$type": "ByTargetGlobalValue",
               "compareType": "NoneOrEqual",
-              "key": "_ELITEAFFIX_TAG"
+              "key": "_ELITEAFFIX_TAG",
+              "value": 0.0
             }
           ]
         },
         {
           "$type": "SetPoseInt",
-          "GGKIEIJLCJJ": 2,
-          "intID": "ElementState"
+          "intID": "ElementState",
+          "value": 2
         },
         {
           "$type": "ApplyModifier",
@@ -3361,16 +3361,22 @@
   },
   {
     "Default": {
+      "abilityMixins": [
+        {
+          "$type": "AttachToStateIDMixin",
+          "modifierName": "SupportAttack_SlimBallV2",
+          "stateIDs": [
+            "SupportAttack"
+          ],
+          "LJPPDIGCJMJ": ""
+        }
+      ],
+      "abilityName": "Monster_Shaman_Rock_SupportAttack_SlimBallV2",
       "modifiers": {
         "SupportAttack_SlimBallV2": {
-          "thinkInterval": 2.5,
           "duration": 5.0,
-          "onRemoved": [
-            {
-              "$type": "SetAnimatorTrigger",
-              "triggerID": "StopSupportAtk"
-            }
-          ],
+          "elementDurability": 100.0,
+          "modifierName": "",
           "onAdded": [
             {
               "$type": "AttachModifier",
@@ -3380,11 +3386,29 @@
               "$type": "TriggerThinkInterval"
             }
           ],
-          "elementDurability": 100.0,
-          "modifierName": "",
+          "onRemoved": [
+            {
+              "$type": "SetAnimatorTrigger",
+              "triggerID": "StopSupportAtk"
+            }
+          ],
           "onThinkInterval": [
             {
               "$type": "Predicated",
+              "otherTargets": {
+                "$type": "SelectTargetsByShape",
+                "campTargetType": "Alliance",
+                "shapeName": "CircleR50",
+                "sizeRatio": 1.0
+              },
+              "predicates": [
+                {
+                  "$type": "ByEntityTypes",
+                  "entityTypes": [
+                    "Monster"
+                  ]
+                }
+              ],
               "successActions": [
                 {
                   "$type": "ApplyModifier",
@@ -3394,85 +3418,86 @@
               ],
               "targetPredicates": [
                 {
-                  "$type": "EOFDCELPGFO",
-                  "CBOMLBFIPJM": 0.0,
+                  "$type": "ByTargetGlobalValue",
                   "compareType": "NoneOrEqual",
-                  "key": "_Has_Shield_SlimBallV2"
-                }
-              ],
-              "otherTargets": {
-                "$type": "INIACGFCEDH",
-                "sizeRatio": 1.0,
-                "campTargetType": "Alliance",
-                "shapeName": "CircleR50"
-              },
-              "predicates": [
-                {
-                  "$type": "DEOFBICNFHF",
-                  "entityTypes": [
-                    "Monster"
-                  ]
+                  "key": "_Has_Shield_SlimBallV2",
+                  "value": 0.0
                 }
               ]
             }
           ],
+          "thinkInterval": 2.5,
           "AIHNJLDFEGJ": 0.0
         },
         "WeaponEffect_SupportAttack": {
+          "elementDurability": 100.0,
+          "modifierName": "",
           "onAdded": [
             {
               "$type": "AttachEffect",
-              "ILLLPEOODKP": "",
-              "scale": 1.0,
               "effectPattern": "Eff_Monster_Shaman_Rock_WeaponElement_Resonance",
-              "effectTempleteID": -1.0
+              "effectTempleteID": -1.0,
+              "scale": 1.0,
+              "ILLLPEOODKP": ""
             },
             {
               "$type": "AttachEffect",
-              "ILLLPEOODKP": "",
-              "scale": 1.0,
               "effectPattern": "Eff_Monster_Shaman_Rock_SupportAttack_Gather",
-              "effectTempleteID": -1.0
+              "effectTempleteID": -1.0,
+              "scale": 1.0,
+              "ILLLPEOODKP": ""
             }
           ],
-          "elementDurability": 100.0,
-          "modifierName": "",
           "AIHNJLDFEGJ": 0.0
         },
         "CreateShield_SlimBallV2": {
           "duration": 1.0,
+          "elementDurability": 100.0,
+          "modifierName": "",
           "onAdded": [
             {
               "$type": "SetGlobalValue",
               "key": "_Has_Shield_SlimBallV2",
-              "minValue": 0.0,
               "maxValue": 0.0,
-              "CBOMLBFIPJM": 1.0
+              "minValue": 0.0,
+              "value": 1.0
             }
           ],
           "stacking": "Unique",
-          "elementDurability": 100.0,
-          "modifierName": "",
           "AIHNJLDFEGJ": 0.0
         },
         "DestroyShield_SlimBallV2": {
+          "elementDurability": 100.0,
+          "modifierName": "",
           "onAdded": [
             {
               "$type": "SetGlobalValue",
               "key": "_Has_Shield_SlimBallV2",
-              "minValue": 0.0,
               "maxValue": 0.0,
-              "CBOMLBFIPJM": 0.0
+              "minValue": 0.0,
+              "value": 0.0
             }
           ],
-          "elementDurability": 100.0,
-          "modifierName": "",
           "AIHNJLDFEGJ": 0.0
         }
       },
       "onKill": [
         {
           "$type": "Predicated",
+          "otherTargets": {
+            "$type": "SelectTargetsByShape",
+            "campTargetType": "Alliance",
+            "shapeName": "CircleR50",
+            "sizeRatio": 1.0
+          },
+          "predicates": [
+            {
+              "$type": "ByEntityTypes",
+              "entityTypes": [
+                "Monster"
+              ]
+            }
+          ],
           "successActions": [
             {
               "$type": "ApplyModifier",
@@ -3482,38 +3507,13 @@
           ],
           "targetPredicates": [
             {
-              "$type": "EOFDCELPGFO",
-              "CBOMLBFIPJM": 1.0,
-              "key": "_Has_Shield_SlimBallV2"
-            }
-          ],
-          "otherTargets": {
-            "$type": "INIACGFCEDH",
-            "sizeRatio": 1.0,
-            "campTargetType": "Alliance",
-            "shapeName": "CircleR50"
-          },
-          "predicates": [
-            {
-              "$type": "DEOFBICNFHF",
-              "entityTypes": [
-                "Monster"
-              ]
+              "$type": "ByTargetGlobalValue",
+              "key": "_Has_Shield_SlimBallV2",
+              "value": 1.0
             }
           ]
         }
-      ],
-      "abilityMixins": [
-        {
-          "$type": "AttachToStateIDMixin",
-          "LJPPDIGCJMJ": "",
-          "stateIDs": [
-            "SupportAttack"
-          ],
-          "modifierName": "SupportAttack_SlimBallV2"
-        }
-      ],
-      "abilityName": "Monster_Shaman_Rock_SupportAttack_SlimBallV2"
+      ]
     }
   }
 ]

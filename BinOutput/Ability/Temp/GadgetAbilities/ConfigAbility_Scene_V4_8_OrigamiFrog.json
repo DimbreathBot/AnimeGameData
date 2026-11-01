@@ -1,9 +1,30 @@
 [
   {
     "Default": {
+      "abilityMixins": [
+        {
+          "$type": "AttachToGadgetStateMixin",
+          "gadgetState": 206,
+          "modifierName": "State_206_Finish"
+        }
+      ],
+      "abilityName": "V4_8_FairyBook_OrigamiFrog_01",
+      "abilitySpecials": {
+        "Avatar_MaxDis_op": 4.2,
+        "Avatar_MinDis_op": 1.0,
+        "Frog_MaxDis_op": 8.0,
+        "Frog_MinDis_op": 0.45,
+        "fault_tolerant_op": 1.0,
+        "Buff_Ratio_op": 1.5,
+        "Buff_Radius_op": 2.0,
+        "LimitDestination_Check_Radius": 1.5,
+        "Ratio_op": 0.0
+      },
       "modifiers": {
         "Delay_Create_LineGadget": {
           "duration": 0.2,
+          "elementDurability": 100.0,
+          "modifierName": "",
           "onRemoved": [
             {
               "$type": "DebugLog",
@@ -11,40 +32,40 @@
             },
             {
               "$type": "ServerLuaCall",
-              "EJDAJPOKJIP": {
-                "FrogType": 0.0
-              },
+              "funcName": "SLC_CreateLineGadget_Req",
+              "luaCallType": "FromGroup",
               "param1": 0.0,
               "param2": 0.0,
-              "funcName": "SLC_CreateLineGadget_Req",
-              "AHCNJKIEMPP": 0.0,
-              "FLMNNLGPCCH": true,
-              "luaCallType": "FromGroup",
+              "param3": 0.0,
               "predicates": [
                 {
-                  "$type": "EOFDCELPGFO",
-                  "CBOMLBFIPJM": 0.0,
+                  "$type": "ByTargetGlobalValue",
                   "key": "is_Arrived_Destination",
-                  "target": "Self"
+                  "target": "Self",
+                  "value": 0.0
                 }
-              ]
+              ],
+              "FLMNNLGPCCH": true,
+              "EJDAJPOKJIP": {
+                "FrogType": 0.0
+              }
             }
           ],
-          "elementDurability": 100.0,
-          "modifierName": "",
           "AIHNJLDFEGJ": 0.0
         },
         "LineGadget_CreateSLC_Handler": {
+          "elementDurability": 100.0,
+          "modifierName": "",
           "onAdded": [
             {
               "$type": "ApplyModifier",
               "modifierName": "Delay_Create_LineGadget",
               "predicates": [
                 {
-                  "$type": "EOFDCELPGFO",
-                  "CBOMLBFIPJM": 0.0,
+                  "$type": "ByTargetGlobalValue",
                   "key": "SGV_Frog_Type",
-                  "target": "Self"
+                  "target": "Self",
+                  "value": 0.0
                 }
               ]
             },
@@ -53,16 +74,14 @@
               "abilityName": "V4_8_FairyBook_OrigamiFrog_FollowMove_Logic",
               "predicates": [
                 {
-                  "$type": "EOFDCELPGFO",
-                  "CBOMLBFIPJM": 1.0,
+                  "$type": "ByTargetGlobalValue",
                   "key": "SGV_Frog_Type",
-                  "target": "Self"
+                  "target": "Self",
+                  "value": 1.0
                 }
               ]
             }
           ],
-          "elementDurability": 100.0,
-          "modifierName": "",
           "AIHNJLDFEGJ": 0.0
         },
         "Handle_State_By_GV_V2": {
@@ -70,6 +89,8 @@
           "modifierMixins": [
             {
               "$type": "AttachModifierToGlobalValueMixin",
+              "globalValueKey": "LineGadget_CurState",
+              "globalValueTarget": "Target",
               "modifierNameSteps": [
                 "LineCurState_0",
                 "LineCurState_201",
@@ -77,14 +98,6 @@
                 "LineCurState_203",
                 "LineCurState_204",
                 "LineCurState_205"
-              ],
-              "globalValueTarget": "Target",
-              "globalValueKey": "LineGadget_CurState",
-              "BCNFPODJAGP": [
-                {
-                  "$type": "DebugLog",
-                  "content": "LineGadget_On"
-                }
               ],
               "otherTargets": {
                 "$type": "GENFIIMMOOJ",
@@ -104,6 +117,12 @@
                   "$type": "DebugLog",
                   "content": "LineGadget_Off"
                 }
+              ],
+              "BCNFPODJAGP": [
+                {
+                  "$type": "DebugLog",
+                  "content": "LineGadget_On"
+                }
               ]
             }
           ],
@@ -115,6 +134,7 @@
           "modifierMixins": [
             {
               "$type": "AttachModifierToSelfGlobalValueNoInitMixin",
+              "globalValueKey": "Has_Jump_Buff",
               "modifierNameSteps": [
                 "JumpBuff_Check",
                 "JumpBuff_StopCheck"
@@ -123,8 +143,7 @@
                 -0.5,
                 0.5,
                 1.5
-              ],
-              "globalValueKey": "Has_Jump_Buff"
+              ]
             }
           ],
           "modifierName": "",
@@ -136,19 +155,34 @@
           "AIHNJLDFEGJ": 0.0
         },
         "JumpBuff_Check": {
-          "thinkInterval": 0.2,
           "elementDurability": 100.0,
           "modifierName": "",
           "onThinkInterval": [
             {
               "$type": "Predicated",
+              "otherTargets": {
+                "$type": "SelectTargetsByTag",
+                "sortType": "Nearest",
+                "tag": "Origami_Frog_JumpBuff",
+                "topLimit": 1
+              },
+              "predicates": [
+                {
+                  "$type": "ByTargetPositionToSelfPosition",
+                  "compareType": "XYZ",
+                  "logic": "LesserOrEqual",
+                  "value": "Buff_Radius",
+                  "JBOGOHPICML": "",
+                  "NJICAELBCCB": ""
+                }
+              ],
               "successActions": [
                 {
                   "$type": "SetGlobalValueV2",
-                  "minValue": 0.0,
                   "key": "Ratio",
                   "maxValue": 0.0,
-                  "CBOMLBFIPJM": "Buff_Ratio"
+                  "minValue": 0.0,
+                  "value": "Buff_Ratio"
                 },
                 {
                   "$type": "TriggerAbility",
@@ -160,163 +194,153 @@
                 },
                 {
                   "$type": "SetGlobalValueV2",
-                  "minValue": 0.0,
                   "key": "Has_Jump_Buff",
                   "maxValue": 0.0,
-                  "CBOMLBFIPJM": 1.0
+                  "minValue": 0.0,
+                  "value": 1.0
                 },
                 {
                   "$type": "RemoveModifier",
                   "modifierName": "JumpBuff_Check"
                 }
               ],
-              "target": "Target",
-              "otherTargets": {
-                "$type": "DBPHPMIHBCO",
-                "tag": "Origami_Frog_JumpBuff",
-                "topLimit": 1,
-                "sortType": "Nearest"
+              "target": "Target"
+            }
+          ],
+          "thinkInterval": 0.2,
+          "AIHNJLDFEGJ": 0.0
+        },
+        "JumpBuff_Eff_Add": {
+          "elementDurability": 100.0,
+          "modifierName": "",
+          "onAdded": [
+            {
+              "$type": "AttachEffect",
+              "born": {
+                "$type": "ConfigBornByAttachPoint",
+                "attachPointName": "RootNode",
+                "offset": {
+                  "x": 0.0,
+                  "y": 0.5,
+                  "z": 0.0
+                },
+                "useRotation": true
               },
-              "predicates": [
+              "effectPattern": "Eff_ScenObj_BlowingStone_01_Buff",
+              "effectTempleteID": -1.0,
+              "scale": 1.0,
+              "ILLLPEOODKP": ""
+            }
+          ],
+          "AIHNJLDFEGJ": 0.0
+        },
+        "LimitDestination_Check_Handler": {
+          "elementDurability": 100.0,
+          "modifierName": "",
+          "onAdded": [
+            {
+              "$type": "Predicated",
+              "otherTargets": {
+                "$type": "SelectTargetsByTag",
+                "sortType": "Nearest",
+                "tag": "is_Frog_LimitDestination",
+                "topLimit": 1
+              },
+              "successActions": [
                 {
-                  "$type": "CNFMGJJEOPM",
-                  "NJICAELBCCB": "",
-                  "JBOGOHPICML": "",
+                  "$type": "ChangeGadgetState",
+                  "state": 206
+                },
+                {
+                  "$type": "SetGlobalValueV2",
+                  "key": "is_Arrived_Destination",
+                  "maxValue": 0.0,
+                  "minValue": 0.0,
+                  "value": 1.0
+                }
+              ],
+              "target": "Target",
+              "targetPredicates": [
+                {
+                  "$type": "ByTargetPositionToSelfPosition",
                   "compareType": "XYZ",
-                  "CBOMLBFIPJM": "Buff_Radius",
-                  "logic": "LesserOrEqual"
+                  "logic": "LesserOrEqual",
+                  "value": "LimitDestination_Check_Radius",
+                  "JBOGOHPICML": "",
+                  "NJICAELBCCB": ""
+                }
+              ]
+            },
+            {
+              "$type": "Predicated",
+              "otherTargets": {
+                "$type": "SelectTargetsByTag",
+                "sortType": "Nearest",
+                "tag": "is_Frog_CourseDestination",
+                "topLimit": 1
+              },
+              "successActions": [
+                {
+                  "$type": "TriggerAbility",
+                  "abilityName": "V4_8_FairyBook_OrigamiFrog_CourseDestination_01",
+                  "target": "Target"
+                }
+              ],
+              "target": "Target",
+              "targetPredicates": [
+                {
+                  "$type": "ByTargetPositionToSelfPosition",
+                  "compareType": "XYZ",
+                  "logic": "LesserOrEqual",
+                  "value": "LimitDestination_Check_Radius",
+                  "JBOGOHPICML": "",
+                  "NJICAELBCCB": ""
                 }
               ]
             }
           ],
-          "AIHNJLDFEGJ": 0.0
-        },
-        "JumpBuff_Eff_Add": {
-          "onAdded": [
-            {
-              "$type": "AttachEffect",
-              "ILLLPEOODKP": "",
-              "born": {
-                "$type": "BGOLIIIHLMO",
-                "attachPointName": "RootNode",
-                "useRotation": true,
-                "offset": {
-                  "x": 0.0,
-                  "z": 0.0,
-                  "y": 0.5
-                }
-              },
-              "scale": 1.0,
-              "effectPattern": "Eff_ScenObj_BlowingStone_01_Buff",
-              "effectTempleteID": -1.0
-            }
-          ],
-          "elementDurability": 100.0,
-          "modifierName": "",
-          "AIHNJLDFEGJ": 0.0
-        },
-        "LimitDestination_Check_Handler": {
-          "thinkInterval": 0.3,
-          "onAdded": [
-            {
-              "$type": "Predicated",
-              "successActions": [
-                {
-                  "$type": "ChangeGadgetState",
-                  "ANIHOKMEKHK": 206
-                },
-                {
-                  "$type": "SetGlobalValueV2",
-                  "minValue": 0.0,
-                  "key": "is_Arrived_Destination",
-                  "maxValue": 0.0,
-                  "CBOMLBFIPJM": 1.0
-                }
-              ],
-              "targetPredicates": [
-                {
-                  "$type": "CNFMGJJEOPM",
-                  "NJICAELBCCB": "",
-                  "JBOGOHPICML": "",
-                  "compareType": "XYZ",
-                  "CBOMLBFIPJM": "LimitDestination_Check_Radius",
-                  "logic": "LesserOrEqual"
-                }
-              ],
-              "target": "Target",
-              "otherTargets": {
-                "$type": "DBPHPMIHBCO",
-                "tag": "is_Frog_LimitDestination",
-                "topLimit": 1,
-                "sortType": "Nearest"
-              }
-            },
-            {
-              "$type": "Predicated",
-              "successActions": [
-                {
-                  "$type": "TriggerAbility",
-                  "abilityName": "V4_8_FairyBook_OrigamiFrog_CourseDestination_01",
-                  "target": "Target"
-                }
-              ],
-              "targetPredicates": [
-                {
-                  "$type": "CNFMGJJEOPM",
-                  "NJICAELBCCB": "",
-                  "JBOGOHPICML": "",
-                  "compareType": "XYZ",
-                  "CBOMLBFIPJM": "LimitDestination_Check_Radius",
-                  "logic": "LesserOrEqual"
-                }
-              ],
-              "target": "Target",
-              "otherTargets": {
-                "$type": "DBPHPMIHBCO",
-                "tag": "is_Frog_CourseDestination",
-                "topLimit": 1,
-                "sortType": "Nearest"
-              }
-            }
-          ],
-          "elementDurability": 100.0,
-          "modifierName": "",
           "onThinkInterval": [
             {
               "$type": "Predicated",
+              "otherTargets": {
+                "$type": "SelectTargetsByTag",
+                "sortType": "Nearest",
+                "tag": "is_Frog_LimitDestination",
+                "topLimit": 1
+              },
               "successActions": [
                 {
                   "$type": "ChangeGadgetState",
-                  "ANIHOKMEKHK": 206
+                  "state": 206
                 },
                 {
                   "$type": "SetGlobalValueV2",
-                  "minValue": 0.0,
                   "key": "is_Arrived_Destination",
                   "maxValue": 0.0,
-                  "CBOMLBFIPJM": 1.0
-                }
-              ],
-              "targetPredicates": [
-                {
-                  "$type": "CNFMGJJEOPM",
-                  "NJICAELBCCB": "",
-                  "JBOGOHPICML": "",
-                  "compareType": "XYZ",
-                  "CBOMLBFIPJM": "LimitDestination_Check_Radius",
-                  "logic": "LesserOrEqual"
+                  "minValue": 0.0,
+                  "value": 1.0
                 }
               ],
               "target": "Target",
-              "otherTargets": {
-                "$type": "DBPHPMIHBCO",
-                "tag": "is_Frog_LimitDestination",
-                "topLimit": 1,
-                "sortType": "Nearest"
-              }
+              "targetPredicates": [
+                {
+                  "$type": "ByTargetPositionToSelfPosition",
+                  "compareType": "XYZ",
+                  "logic": "LesserOrEqual",
+                  "value": "LimitDestination_Check_Radius",
+                  "JBOGOHPICML": "",
+                  "NJICAELBCCB": ""
+                }
+              ]
             },
             {
               "$type": "Predicated",
+              "otherTargets": {
+                "$type": "SelectTargetsByTag",
+                "sortType": "Nearest",
+                "tag": "is_Frog_CourseDestination",
+                "topLimit": 1
+              },
               "successActions": [
                 {
                   "$type": "TriggerAbility",
@@ -324,25 +348,20 @@
                   "target": "Target"
                 }
               ],
+              "target": "Target",
               "targetPredicates": [
                 {
-                  "$type": "CNFMGJJEOPM",
-                  "NJICAELBCCB": "",
-                  "JBOGOHPICML": "",
+                  "$type": "ByTargetPositionToSelfPosition",
                   "compareType": "XYZ",
-                  "CBOMLBFIPJM": "LimitDestination_Check_Radius",
-                  "logic": "LesserOrEqual"
+                  "logic": "LesserOrEqual",
+                  "value": "LimitDestination_Check_Radius",
+                  "JBOGOHPICML": "",
+                  "NJICAELBCCB": ""
                 }
-              ],
-              "target": "Target",
-              "otherTargets": {
-                "$type": "DBPHPMIHBCO",
-                "tag": "is_Frog_CourseDestination",
-                "topLimit": 1,
-                "sortType": "Nearest"
-              }
+              ]
             }
           ],
+          "thinkInterval": 0.3,
           "AIHNJLDFEGJ": 0.0
         },
         "LineCurState_0": {
@@ -351,94 +370,38 @@
           "AIHNJLDFEGJ": 0.0
         },
         "LineCurState_201": {
+          "elementDurability": 100.0,
+          "modifierName": "",
           "onAdded": [
             {
               "$type": "SetPartControlTarget",
-              "EAGOHJHLJEH": [
-                "RootNode"
-              ],
               "attachPoint": "",
-              "doOffStage": true
+              "doOffStage": true,
+              "partRootNames": [
+                "RootNode"
+              ]
             },
             {
               "$type": "EnablePartControl",
-              "DPMMJNDONLO": "Stay",
-              "EAGOHJHLJEH": [
+              "doOffStage": true,
+              "doOnUnEabled": "Stay",
+              "partRootNames": [
                 "RootNode"
-              ],
-              "doOffStage": true
+              ]
             }
           ],
-          "elementDurability": 100.0,
-          "modifierName": "",
           "AIHNJLDFEGJ": 0.0
         },
         "LineCurState_202": {
-          "thinkInterval": 0.1,
-          "onRemoved": [
-            {
-              "$type": "SetGlobalValueV2",
-              "minValue": 0.0,
-              "key": "Blend",
-              "maxValue": 0.0,
-              "CBOMLBFIPJM": 0.0
-            },
-            {
-              "$type": "SetAnimatorFloat",
-              "floatID": "Blend",
-              "LANICPKFKBF": 0.1,
-              "CBOMLBFIPJM": 0.0
-            }
-          ],
-          "onAdded": [
-            {
-              "$type": "EnablePartControl",
-              "enable": true,
-              "DPMMJNDONLO": "Stay",
-              "EAGOHJHLJEH": [
-                "RootNode"
-              ],
-              "doOffStage": true
-            },
-            {
-              "$type": "SetPartControlTarget",
-              "EAGOHJHLJEH": [
-                "RootNode"
-              ],
-              "attachPoint": "",
-              "target": "Target",
-              "doOffStage": true,
-              "otherTargets": {
-                "$type": "GENFIIMMOOJ",
-                "targetKey": "Player_Runtime_Id"
-              }
-            },
-            {
-              "$type": "AttachEffect",
-              "ILLLPEOODKP": "",
-              "scale": 1.0,
-              "effectPattern": "Eff_SceneObj_OrigamiFrog_03",
-              "effectTempleteID": -1.0
-            },
-            {
-              "$type": "SetEffectFollowPath",
-              "DPNPNCGKIMP": "AnchorPoint",
-              "attachPoint": "",
-              "effectPattern": "Eff_SceneObj_OrigamiFrog_03"
-            },
-            {
-              "$type": "TriggerThinkInterval"
-            }
-          ],
           "elementDurability": 100.0,
           "modifierMixins": [
             {
               "$type": "AttachModifierToGlobalValueMixin",
+              "globalValueKey": "Avatar_LineDistance",
               "modifierNameSteps": [
                 "Empty",
                 "Limit_Range"
               ],
-              "globalValueKey": "Avatar_LineDistance",
               "valueSteps": [
                 -0.5,
                 "Avatar_Max_Limit",
@@ -447,24 +410,79 @@
             }
           ],
           "modifierName": "",
-          "onThinkInterval": [
+          "onAdded": [
             {
-              "$type": "SetGlobalValueByTargetDistance",
-              "IBKILAJPLPP": "",
-              "key": "Avatar_LineDistance",
-              "target": "Target",
+              "$type": "EnablePartControl",
+              "doOffStage": true,
+              "doOnUnEabled": "Stay",
+              "enable": true,
+              "partRootNames": [
+                "RootNode"
+              ]
+            },
+            {
+              "$type": "SetPartControlTarget",
+              "attachPoint": "",
+              "doOffStage": true,
               "otherTargets": {
                 "$type": "GENFIIMMOOJ",
                 "targetKey": "Player_Runtime_Id"
-              }
+              },
+              "partRootNames": [
+                "RootNode"
+              ],
+              "target": "Target"
+            },
+            {
+              "$type": "AttachEffect",
+              "effectPattern": "Eff_SceneObj_OrigamiFrog_03",
+              "effectTempleteID": -1.0,
+              "scale": 1.0,
+              "ILLLPEOODKP": ""
+            },
+            {
+              "$type": "SetEffectFollowPath",
+              "attachPoint": "",
+              "effectPattern": "Eff_SceneObj_OrigamiFrog_03",
+              "followPath": "AnchorPoint"
+            },
+            {
+              "$type": "TriggerThinkInterval"
+            }
+          ],
+          "onRemoved": [
+            {
+              "$type": "SetGlobalValueV2",
+              "key": "Blend",
+              "maxValue": 0.0,
+              "minValue": 0.0,
+              "value": 0.0
+            },
+            {
+              "$type": "SetAnimatorFloat",
+              "floatID": "Blend",
+              "transitionTime": 0.1,
+              "value": 0.0
+            }
+          ],
+          "onThinkInterval": [
+            {
+              "$type": "SetGlobalValueByTargetDistance",
+              "key": "Avatar_LineDistance",
+              "otherTargets": {
+                "$type": "GENFIIMMOOJ",
+                "targetKey": "Player_Runtime_Id"
+              },
+              "target": "Target",
+              "IBKILAJPLPP": ""
             },
             {
               "$type": "SetGlobalValueV2",
-              "minValue": 0.0,
               "key": "Avatar_Dis_Calc_Temp",
               "maxValue": "Avatar_MaxDis_Calc",
+              "minValue": 0.0,
               "useLimitRange": true,
-              "CBOMLBFIPJM": [
+              "value": [
                 "Avatar_LineDistance",
                 "Avatar_MinDis",
                 "SUB"
@@ -472,10 +490,10 @@
             },
             {
               "$type": "SetGlobalValueV2",
-              "minValue": 0.0,
               "key": "Avatar_Dis_ClampValue",
               "maxValue": 0.0,
-              "CBOMLBFIPJM": [
+              "minValue": 0.0,
+              "value": [
                 "Avatar_Dis_Calc_Temp",
                 "Avatar_MaxDis_Calc",
                 "DIV"
@@ -483,10 +501,10 @@
             },
             {
               "$type": "SetGlobalValueV2",
-              "minValue": 0.0,
               "key": "_DUMMY_THROW_RANGE",
               "maxValue": 0.0,
-              "CBOMLBFIPJM": [
+              "minValue": 0.0,
+              "value": [
                 "Frog_MinDis",
                 "Avatar_Dis_ClampValue",
                 "Frog_MaxDis_Calc",
@@ -496,10 +514,10 @@
             },
             {
               "$type": "SetGlobalValueV2",
-              "minValue": 0.0,
               "key": "Blend",
               "maxValue": 0.0,
-              "CBOMLBFIPJM": [
+              "minValue": 0.0,
+              "value": [
                 "Avatar_LineDistance",
                 "Avatar_Max_Limit",
                 "DIV"
@@ -508,83 +526,86 @@
             {
               "$type": "SetAnimatorFloat",
               "floatID": "Blend",
-              "LANICPKFKBF": 0.1,
-              "CBOMLBFIPJM": "Blend"
+              "transitionTime": 0.1,
+              "value": "Blend"
             }
           ],
+          "thinkInterval": 0.1,
           "AIHNJLDFEGJ": 0.0
         },
         "LineCurState_203": {
+          "elementDurability": 100.0,
+          "modifierName": "",
           "onAdded": [
             {
               "$type": "SetPartControlTarget",
-              "EAGOHJHLJEH": [
-                "RootNode"
-              ],
               "attachPoint": "",
-              "doOffStage": true
+              "doOffStage": true,
+              "partRootNames": [
+                "RootNode"
+              ]
             },
             {
               "$type": "EnablePartControl",
-              "DPMMJNDONLO": "Stay",
-              "EAGOHJHLJEH": [
+              "doOffStage": true,
+              "doOnUnEabled": "Stay",
+              "partRootNames": [
                 "RootNode"
-              ],
-              "doOffStage": true
+              ]
             },
             {
               "$type": "EnableSceneTransformByName",
-              "PLDFIIMNOCD": [
+              "transformNames": [
                 "Model"
               ]
             },
             {
               "$type": "SetGlobalPos",
-              "setTarget": false,
-              "key": "Frog_Global_Pos",
               "born": {
-                "$type": "BGOLIIIHLMO",
+                "$type": "ConfigBornByAttachPoint",
                 "attachPointName": "AnchorPoint",
                 "useRotation": true
-              }
-            },
-            {
-              "$type": "SetGlobalDir",
-              "key": "Frog_Global_Dir",
-              "born": {
-                "$type": "BGOLIIIHLMO",
-                "attachPointName": "AnchorPoint",
-                "attachPointTargetType": "Self",
-                "useRotation": true,
-                "direction": {
-                  "$type": "INAGPEEFHGG",
-                  "attachPointName": "AnchorPoint",
-                  "attachPointTargetType": "Self",
-                  "OOKIMPBMBCN": {
-                    "x": 0.0,
-                    "z": 0.0,
-                    "y": 0.0
-                  }
-                }
               },
+              "key": "Frog_Global_Pos",
               "setTarget": false
             },
             {
               "$type": "SetGlobalDir",
-              "key": "Frog_BulletPre_Dir",
               "born": {
-                "$type": "NABPLNFPHCK",
-                "useRotation": true,
+                "$type": "ConfigBornByAttachPoint",
+                "attachPointName": "AnchorPoint",
+                "attachPointTargetType": "Self",
                 "direction": {
-                  "$type": "FPLAJGOAOHH",
-                  "OOKIMPBMBCN": {
+                  "$type": "ConfigDirectionByAttachPoint",
+                  "angleOffset": {
                     "x": 0.0,
-                    "z": 0.0,
-                    "y": 0.0
+                    "y": 0.0,
+                    "z": 0.0
+                  },
+                  "attachPointName": "AnchorPoint",
+                  "attachPointTargetType": "Self"
+                },
+                "useRotation": true
+              },
+              "key": "Frog_Global_Dir",
+              "setTarget": false
+            },
+            {
+              "$type": "SetGlobalDir",
+              "born": {
+                "$type": "ConfigBornBySelf",
+                "direction": {
+                  "$type": "ConfigDirectionByEntity",
+                  "angleOffset": {
+                    "x": 0.0,
+                    "y": 0.0,
+                    "z": 0.0
                   },
                   "useCorrectDir": true
-                }
-              }
+                },
+                "useRotation": true
+              },
+              "key": "Frog_BulletPre_Dir"
             },
             {
               "$type": "TriggerAudioV2",
@@ -593,60 +614,58 @@
             {
               "$type": "TriggerBullet",
               "born": {
-                "$type": "LKIBKKFEOLJ",
-                "positionKey": "Frog_Global_Pos",
+                "$type": "ConfigBornByGlobalValue",
                 "directionKey": "Frog_Global_Dir",
                 "offset": {
                   "x": 0.0,
-                  "z": 0.0,
-                  "y": 0.0
-                }
+                  "y": 0.0,
+                  "z": 0.0
+                },
+                "positionKey": "Frog_Global_Pos"
               },
               "bulletID": 70293174,
               "predicates": [
                 {
-                  "$type": "EOFDCELPGFO",
-                  "CBOMLBFIPJM": 0.0,
+                  "$type": "ByTargetGlobalValue",
                   "compareType": "NoneOrEqual",
                   "key": "SGV_Is_WQ_Frog",
-                  "target": "Self"
+                  "target": "Self",
+                  "value": 0.0
                 }
               ]
             },
             {
               "$type": "TriggerBullet",
               "born": {
-                "$type": "LKIBKKFEOLJ",
-                "positionKey": "Frog_Global_Pos",
+                "$type": "ConfigBornByGlobalValue",
                 "directionKey": "Frog_Global_Dir",
                 "offset": {
                   "x": 0.0,
-                  "z": 0.0,
-                  "y": 0.0
-                }
+                  "y": 0.0,
+                  "z": 0.0
+                },
+                "positionKey": "Frog_Global_Pos"
               },
               "bulletID": 70293177,
               "predicates": [
                 {
-                  "$type": "EOFDCELPGFO",
-                  "CBOMLBFIPJM": 1.0,
+                  "$type": "ByTargetGlobalValue",
                   "key": "SGV_Is_WQ_Frog",
-                  "target": "Self"
+                  "target": "Self",
+                  "value": 1.0
                 }
               ]
             },
             {
               "$type": "TriggerAbility",
               "abilityName": "V4_8_FairyBook_LineGadget_Link_Remove_SLC",
-              "target": "Target",
               "otherTargets": {
                 "$type": "GENFIIMMOOJ",
                 "targetKey": "LineGadget_Runtime_Id"
-              }
+              },
+              "target": "Target"
             }
           ],
-          "elementDurability": 100.0,
-          "modifierName": "",
           "AIHNJLDFEGJ": 0.0
         },
         "LineCurState_204": {
@@ -665,34 +684,34 @@
           "AIHNJLDFEGJ": 0.0
         },
         "Limit_Range": {
+          "elementDurability": 100.0,
+          "modifierName": "",
           "onAdded": [
             {
               "$type": "TriggerAbility",
               "abilityName": "LineType_2_Avatar_Cancel",
-              "target": "Target",
               "otherTargets": {
                 "$type": "GENFIIMMOOJ",
                 "targetKey": "Player_Runtime_Id"
-              }
+              },
+              "target": "Target"
             }
           ],
-          "elementDurability": 100.0,
-          "modifierName": "",
           "AIHNJLDFEGJ": 0.0
         },
         "State_206_Finish": {
+          "elementDurability": 100.0,
+          "modifierName": "",
           "onAdded": [
             {
               "$type": "ServerLuaCall",
+              "funcName": "SLC_Frog_Jump_Challenge_Finish_Req",
+              "luaCallType": "FromGroup",
               "param1": 0.0,
               "param2": 0.0,
-              "funcName": "SLC_Frog_Jump_Challenge_Finish_Req",
-              "AHCNJKIEMPP": 0.0,
-              "luaCallType": "FromGroup"
+              "param3": 0.0
             }
           ],
-          "elementDurability": 100.0,
-          "modifierName": "",
           "AIHNJLDFEGJ": 0.0
         },
         "Blend_Param_Listener": {
@@ -700,41 +719,194 @@
           "modifierMixins": [
             {
               "$type": "AttachModifierToSelfGlobalValueNoInitMixin",
+              "globalValueKey": "Blend",
               "modifierNameSteps": [
                 "Max_Blend_View"
               ],
-              "DEFOFMOIAAI": true,
               "valueSteps": [
                 0.6,
                 1.0
               ],
-              "globalValueKey": "Blend"
+              "DEFOFMOIAAI": true
             }
           ],
           "modifierName": "",
           "AIHNJLDFEGJ": 0.0
         },
         "Max_Blend_View": {
+          "elementDurability": 100.0,
+          "modifierName": "",
           "onAdded": [
             {
               "$type": "AttachEffect",
-              "ILLLPEOODKP": "",
-              "scale": 1.0,
               "effectPattern": "Eff_SceneObj_OrigamiFrog_01_Warning",
-              "effectTempleteID": -1.0
+              "effectTempleteID": -1.0,
+              "scale": 1.0,
+              "ILLLPEOODKP": ""
             },
             {
               "$type": "SetEffectFollowPath",
-              "DPNPNCGKIMP": "RootNode",
               "attachPoint": "",
-              "effectPattern": "Eff_SceneObj_OrigamiFrog_01_Warning"
+              "effectPattern": "Eff_SceneObj_OrigamiFrog_01_Warning",
+              "followPath": "RootNode"
             }
           ],
-          "elementDurability": 100.0,
-          "modifierName": "",
           "AIHNJLDFEGJ": 0.0
         }
       },
+      "onAdded": [
+        {
+          "$type": "SetPartControlTarget",
+          "attachPoint": "",
+          "doOffStage": true,
+          "partRootNames": [
+            "RootNode"
+          ]
+        },
+        {
+          "$type": "EnablePartControl",
+          "doOffStage": true,
+          "doOnUnEabled": "Stay",
+          "partRootNames": [
+            "RootNode"
+          ]
+        },
+        {
+          "$type": "EnableSceneTransformByName",
+          "setEnable": true,
+          "transformNames": [
+            "Model"
+          ]
+        },
+        {
+          "$type": "ApplyModifier",
+          "modifierName": "Handle_State_By_GV_V2"
+        },
+        {
+          "$type": "SetGlobalValueV2",
+          "key": "Ratio",
+          "maxValue": 0.0,
+          "minValue": 0.0,
+          "value": "Ratio_op"
+        },
+        {
+          "$type": "SetGlobalValueV2",
+          "key": "Buff_Ratio",
+          "maxValue": 0.0,
+          "minValue": 0.0,
+          "value": "Buff_Ratio_op"
+        },
+        {
+          "$type": "SetGlobalValueV2",
+          "key": "Buff_Radius",
+          "maxValue": 0.0,
+          "minValue": 0.0,
+          "value": "Buff_Radius_op"
+        },
+        {
+          "$type": "SetGlobalValueV2",
+          "key": "Avatar_MaxDis",
+          "maxValue": 0.0,
+          "minValue": 0.0,
+          "value": "Avatar_MaxDis_op"
+        },
+        {
+          "$type": "SetGlobalValueV2",
+          "key": "Avatar_MinDis",
+          "maxValue": 0.0,
+          "minValue": 0.0,
+          "value": "Avatar_MinDis_op"
+        },
+        {
+          "$type": "SetGlobalValueV2",
+          "key": "fault_tolerant",
+          "maxValue": 0.0,
+          "minValue": 0.0,
+          "value": "fault_tolerant_op"
+        },
+        {
+          "$type": "SetGlobalValueV2",
+          "key": "Frog_MaxDis",
+          "maxValue": 0.0,
+          "minValue": 0.0,
+          "value": "Frog_MaxDis_op"
+        },
+        {
+          "$type": "SetGlobalValueV2",
+          "key": "Frog_MinDis",
+          "maxValue": 0.0,
+          "minValue": 0.0,
+          "value": "Frog_MinDis_op"
+        },
+        {
+          "$type": "SetGlobalValueV2",
+          "key": "Avatar_Dis_Calc_Temp",
+          "maxValue": 0.0,
+          "minValue": 0.0,
+          "value": 0.0
+        },
+        {
+          "$type": "SetGlobalValueV2",
+          "key": "Avatar_LineDistance",
+          "maxValue": 0.0,
+          "minValue": 0.0,
+          "value": 0.0
+        },
+        {
+          "$type": "SetGlobalValueV2",
+          "key": "Avatar_Dis_ClampValue",
+          "maxValue": 0.0,
+          "minValue": 0.0,
+          "value": 0.0
+        },
+        {
+          "$type": "SetGlobalValueV2",
+          "key": "is_Arrived_Destination",
+          "maxValue": 0.0,
+          "minValue": 0.0,
+          "value": 0.0
+        },
+        {
+          "$type": "ApplyModifier",
+          "modifierName": "JumpBuff_Check_Handler",
+          "predicates": [
+            {
+              "$type": "ByTargetGlobalValue",
+              "key": "SGV_Need_Buff_Check",
+              "target": "Self",
+              "value": 1.0
+            }
+          ]
+        },
+        {
+          "$type": "ApplyModifier",
+          "modifierName": "LimitDestination_Check_Handler",
+          "predicates": [
+            {
+              "$type": "ByTargetGlobalValue",
+              "key": "SGV_Need_LimitDestination_Check",
+              "target": "Self",
+              "value": 1.0
+            }
+          ]
+        },
+        {
+          "$type": "ApplyModifier",
+          "modifierName": "LineGadget_CreateSLC_Handler"
+        },
+        {
+          "$type": "TriggerAbility",
+          "abilityName": "V4_8_FairyBook_OrigamiFrog_Update_GV"
+        },
+        {
+          "$type": "SetTargetToTargetKey",
+          "targetKey": "Self_RunTime_ID"
+        },
+        {
+          "$type": "AttachModifier",
+          "modifierName": "Blend_Param_Listener"
+        }
+      ],
       "ANHJPOLNHIG": [
         "Avatar_LineDistance",
         "Avatar_Dis_Calc_Temp",
@@ -762,179 +934,7 @@
         "Frog_BulletPre_Dir_1",
         "Frog_BulletPre_Dir_2",
         "Blend"
-      ],
-      "abilityMixins": [
-        {
-          "$type": "AttachToGadgetStateMixin",
-          "modifierName": "State_206_Finish",
-          "gadgetState": 206
-        }
-      ],
-      "abilityName": "V4_8_FairyBook_OrigamiFrog_01",
-      "onAdded": [
-        {
-          "$type": "SetPartControlTarget",
-          "EAGOHJHLJEH": [
-            "RootNode"
-          ],
-          "attachPoint": "",
-          "doOffStage": true
-        },
-        {
-          "$type": "EnablePartControl",
-          "DPMMJNDONLO": "Stay",
-          "EAGOHJHLJEH": [
-            "RootNode"
-          ],
-          "doOffStage": true
-        },
-        {
-          "$type": "EnableSceneTransformByName",
-          "setEnable": true,
-          "PLDFIIMNOCD": [
-            "Model"
-          ]
-        },
-        {
-          "$type": "ApplyModifier",
-          "modifierName": "Handle_State_By_GV_V2"
-        },
-        {
-          "$type": "SetGlobalValueV2",
-          "minValue": 0.0,
-          "key": "Ratio",
-          "maxValue": 0.0,
-          "CBOMLBFIPJM": "Ratio_op"
-        },
-        {
-          "$type": "SetGlobalValueV2",
-          "minValue": 0.0,
-          "key": "Buff_Ratio",
-          "maxValue": 0.0,
-          "CBOMLBFIPJM": "Buff_Ratio_op"
-        },
-        {
-          "$type": "SetGlobalValueV2",
-          "minValue": 0.0,
-          "key": "Buff_Radius",
-          "maxValue": 0.0,
-          "CBOMLBFIPJM": "Buff_Radius_op"
-        },
-        {
-          "$type": "SetGlobalValueV2",
-          "minValue": 0.0,
-          "key": "Avatar_MaxDis",
-          "maxValue": 0.0,
-          "CBOMLBFIPJM": "Avatar_MaxDis_op"
-        },
-        {
-          "$type": "SetGlobalValueV2",
-          "minValue": 0.0,
-          "key": "Avatar_MinDis",
-          "maxValue": 0.0,
-          "CBOMLBFIPJM": "Avatar_MinDis_op"
-        },
-        {
-          "$type": "SetGlobalValueV2",
-          "minValue": 0.0,
-          "key": "fault_tolerant",
-          "maxValue": 0.0,
-          "CBOMLBFIPJM": "fault_tolerant_op"
-        },
-        {
-          "$type": "SetGlobalValueV2",
-          "minValue": 0.0,
-          "key": "Frog_MaxDis",
-          "maxValue": 0.0,
-          "CBOMLBFIPJM": "Frog_MaxDis_op"
-        },
-        {
-          "$type": "SetGlobalValueV2",
-          "minValue": 0.0,
-          "key": "Frog_MinDis",
-          "maxValue": 0.0,
-          "CBOMLBFIPJM": "Frog_MinDis_op"
-        },
-        {
-          "$type": "SetGlobalValueV2",
-          "minValue": 0.0,
-          "key": "Avatar_Dis_Calc_Temp",
-          "maxValue": 0.0,
-          "CBOMLBFIPJM": 0.0
-        },
-        {
-          "$type": "SetGlobalValueV2",
-          "minValue": 0.0,
-          "key": "Avatar_LineDistance",
-          "maxValue": 0.0,
-          "CBOMLBFIPJM": 0.0
-        },
-        {
-          "$type": "SetGlobalValueV2",
-          "minValue": 0.0,
-          "key": "Avatar_Dis_ClampValue",
-          "maxValue": 0.0,
-          "CBOMLBFIPJM": 0.0
-        },
-        {
-          "$type": "SetGlobalValueV2",
-          "minValue": 0.0,
-          "key": "is_Arrived_Destination",
-          "maxValue": 0.0,
-          "CBOMLBFIPJM": 0.0
-        },
-        {
-          "$type": "ApplyModifier",
-          "modifierName": "JumpBuff_Check_Handler",
-          "predicates": [
-            {
-              "$type": "EOFDCELPGFO",
-              "CBOMLBFIPJM": 1.0,
-              "key": "SGV_Need_Buff_Check",
-              "target": "Self"
-            }
-          ]
-        },
-        {
-          "$type": "ApplyModifier",
-          "modifierName": "LimitDestination_Check_Handler",
-          "predicates": [
-            {
-              "$type": "EOFDCELPGFO",
-              "CBOMLBFIPJM": 1.0,
-              "key": "SGV_Need_LimitDestination_Check",
-              "target": "Self"
-            }
-          ]
-        },
-        {
-          "$type": "ApplyModifier",
-          "modifierName": "LineGadget_CreateSLC_Handler"
-        },
-        {
-          "$type": "TriggerAbility",
-          "abilityName": "V4_8_FairyBook_OrigamiFrog_Update_GV"
-        },
-        {
-          "$type": "SetTargetToTargetKey",
-          "targetKey": "Self_RunTime_ID"
-        },
-        {
-          "$type": "AttachModifier",
-          "modifierName": "Blend_Param_Listener"
-        }
-      ],
-      "abilitySpecials": {
-        "Avatar_MaxDis_op": 4.2,
-        "Avatar_MinDis_op": 1.0,
-        "Frog_MaxDis_op": 8.0,
-        "Frog_MinDis_op": 0.45,
-        "fault_tolerant_op": 1.0,
-        "Buff_Ratio_op": 1.5,
-        "Buff_Radius_op": 2.0,
-        "LimitDestination_Check_Radius": 1.5,
-        "Ratio_op": 0.0
-      }
+      ]
     }
   },
   {
@@ -944,49 +944,50 @@
         {
           "$type": "FireEffect",
           "effectPattern": "Eff_SceneObj_OrigamiFrog_05",
-          "scale": 1.0,
-          "ILLLPEOODKP": "",
           "effectTempleteID": -1.0,
           "predicates": [
             {
-              "$type": "EOFDCELPGFO",
-              "CBOMLBFIPJM": 1.0,
+              "$type": "ByTargetGlobalValue",
               "key": "SGV_Need_Fire_Create_Eff",
-              "target": "Self"
+              "target": "Self",
+              "value": 1.0
             }
-          ]
+          ],
+          "scale": 1.0,
+          "ILLLPEOODKP": ""
         }
       ]
     }
   },
   {
     "Default": {
+      "abilityName": "V4_8_FairyBook_OrigamiFrog_Update_GV",
       "onAbilityStart": [
         {
           "$type": "SetGlobalValueV2",
-          "minValue": 0.0,
           "key": "Frog_MaxDis",
           "maxValue": 0.0,
-          "CBOMLBFIPJM": [
+          "minValue": 0.0,
+          "predicates": [
+            {
+              "$type": "ByTargetGlobalValue",
+              "compareType": "MoreThan",
+              "key": "Ratio",
+              "value": 0.0
+            }
+          ],
+          "value": [
             "Frog_MaxDis",
             "Ratio",
             "MUL"
-          ],
-          "predicates": [
-            {
-              "$type": "EOFDCELPGFO",
-              "CBOMLBFIPJM": 0.0,
-              "compareType": "MoreThan",
-              "key": "Ratio"
-            }
           ]
         },
         {
           "$type": "SetGlobalValueV2",
-          "minValue": 0.0,
           "key": "Avatar_MaxDis_Calc",
           "maxValue": 0.0,
-          "CBOMLBFIPJM": [
+          "minValue": 0.0,
+          "value": [
             "Avatar_MaxDis",
             "Avatar_MinDis",
             "SUB"
@@ -994,10 +995,10 @@
         },
         {
           "$type": "SetGlobalValueV2",
-          "minValue": 0.0,
           "key": "Frog_MaxDis_Calc",
           "maxValue": 0.0,
-          "CBOMLBFIPJM": [
+          "minValue": 0.0,
+          "value": [
             "Frog_MaxDis",
             "Frog_MinDis",
             "SUB"
@@ -1005,10 +1006,10 @@
         },
         {
           "$type": "SetGlobalValueV2",
-          "minValue": 0.0,
           "key": "Avatar_Max_Limit",
           "maxValue": 0.0,
-          "CBOMLBFIPJM": [
+          "minValue": 0.0,
+          "value": [
             "Avatar_MaxDis",
             "fault_tolerant",
             "ADD"
@@ -1016,10 +1017,10 @@
         },
         {
           "$type": "SetGlobalValueV2",
-          "minValue": 0.0,
           "key": "Charge_Phase_1",
           "maxValue": 0.0,
-          "CBOMLBFIPJM": [
+          "minValue": 0.0,
+          "value": [
             "Frog_MinDis",
             "Frog_MaxDis_Calc",
             3.0,
@@ -1029,10 +1030,10 @@
         },
         {
           "$type": "SetGlobalValueV2",
-          "minValue": 0.0,
           "key": "Charge_Phase_2",
           "maxValue": 0.0,
-          "CBOMLBFIPJM": [
+          "minValue": 0.0,
+          "value": [
             "Frog_MinDis",
             "Frog_MaxDis_Calc",
             3.0,
@@ -1058,20 +1059,20 @@
         "Charge_Phase_1",
         "Charge_Phase_2",
         "Ratio"
-      ],
-      "abilityName": "V4_8_FairyBook_OrigamiFrog_Update_GV"
+      ]
     }
   },
   {
     "Default": {
+      "abilityName": "V4_8_FairyBook_OrigamiFrog_FollowMove_Logic",
       "modifiers": {
         "FastFollow_Handler": {
           "elementDurability": 100.0,
           "modifierMixins": [
             {
               "$type": "FollowMoveParamOverrideMixin",
-              "CIFADBDOAFI": 999.0,
               "attachPoint": "",
+              "speed": 999.0,
               "PLGIPDCMDLG": [
                 "speed"
               ]
@@ -1081,66 +1082,65 @@
           "AIHNJLDFEGJ": 0.0
         },
         "FollowTargetSelecter": {
+          "elementDurability": 100.0,
+          "modifierName": "",
           "onAdded": [
             {
               "$type": "SetAnimatorTrigger",
-              "MPTriggerOnRemote": true,
+              "mpTriggerOnRemote": true,
               "triggerID": "TriggerJump"
             },
             {
               "$type": "SetTargetToTargetKey",
-              "targetKey": "FollowRuntimeID",
-              "target": "Target",
               "otherTargets": {
                 "$type": "GENFIIMMOOJ",
                 "targetKey": "SGV_FollowTarget"
-              }
+              },
+              "target": "Target",
+              "targetKey": "FollowRuntimeID"
             },
             {
               "$type": "ApplyModifier",
               "modifierName": "Delay_Send_SLC"
             }
           ],
-          "elementDurability": 100.0,
-          "modifierName": "",
           "AIHNJLDFEGJ": 0.0
         },
         "Delay_Send_SLC": {
           "duration": 1.0,
+          "elementDurability": 100.0,
+          "modifierName": "",
           "onRemoved": [
             {
               "$type": "ServerLuaCall",
-              "EJDAJPOKJIP": {
-                "FrogType": 1.0
-              },
+              "funcName": "SLC_CreateLineGadget_Req",
+              "luaCallType": "FromGroup",
               "param1": 0.0,
               "param2": 0.0,
-              "funcName": "SLC_CreateLineGadget_Req",
-              "AHCNJKIEMPP": 0.0,
-              "FLMNNLGPCCH": true,
-              "luaCallType": "FromGroup",
+              "param3": 0.0,
               "predicates": [
                 {
-                  "$type": "EOFDCELPGFO",
-                  "CBOMLBFIPJM": 1.0,
+                  "$type": "ByTargetGlobalValue",
                   "key": "SGV_Frog_Type",
-                  "target": "Self"
+                  "target": "Self",
+                  "value": 1.0
                 },
                 {
-                  "$type": "EOFDCELPGFO",
-                  "CBOMLBFIPJM": 0.0,
+                  "$type": "ByTargetGlobalValue",
                   "key": "is_Arrived_Destination",
-                  "target": "Self"
+                  "target": "Self",
+                  "value": 0.0
                 }
-              ]
+              ],
+              "FLMNNLGPCCH": true,
+              "EJDAJPOKJIP": {
+                "FrogType": 1.0
+              }
             }
           ],
-          "elementDurability": 100.0,
-          "modifierName": "",
           "AIHNJLDFEGJ": 0.0
         }
       },
-      "abilityName": "V4_8_FairyBook_OrigamiFrog_FollowMove_Logic",
       "onAdded": [
         {
           "$type": "ApplyModifier",
@@ -1151,9 +1151,9 @@
           "modifierName": "FastFollow_Handler",
           "predicates": [
             {
-              "$type": "EOFDCELPGFO",
-              "CBOMLBFIPJM": 1.0,
-              "key": "SGV_FastFollow"
+              "$type": "ByTargetGlobalValue",
+              "key": "SGV_FastFollow",
+              "value": 1.0
             }
           ]
         }
@@ -1162,139 +1162,75 @@
   },
   {
     "Default": {
+      "abilityName": "V4_8_FairyBook_OrigamiFrog_Bullet_Ability",
       "onAbilityStart": [
         {
           "$type": "SetGlobalPos",
-          "key": "Self_Global_Pos",
           "born": {
-            "$type": "NHPKNMOMIFH"
-          }
+            "$type": "ConfigBornByCollisionPoint"
+          },
+          "key": "Self_Global_Pos"
         },
         {
           "$type": "SetGlobalDir",
-          "key": "Self_Global_Dir",
           "born": {
-            "$type": "NHPKNMOMIFH",
+            "$type": "ConfigBornByCollisionPoint",
             "direction": {
-              "$type": "FPLAJGOAOHH"
+              "$type": "ConfigDirectionByEntity"
             }
           },
+          "key": "Self_Global_Dir",
           "AEJEDPACKLB": true
         },
         {
           "$type": "FireEffect",
-          "effectPattern": "Eff_SceneObj_OrigamiFrog_SplashMedium",
-          "scale": 1.0,
           "born": {
-            "$type": "NHPKNMOMIFH",
+            "$type": "ConfigBornByCollisionPoint",
             "direction": {
-              "$type": "MDPBKHELKEC",
-              "BNLNKEHECDP": {
+              "$type": "ConfigDirectionByWorld",
+              "eularAngles": {
+                "x": 0.1,
                 "y": 0.1,
-                "z": 0.1,
-                "x": 0.1
+                "z": 0.1
               }
             }
           },
-          "ILLLPEOODKP": "",
+          "effectPattern": "Eff_SceneObj_OrigamiFrog_SplashMedium",
           "effectTempleteID": -1.0,
           "predicates": [
             {
               "$type": "GEDIGIEDBCJ",
-              "LOEMJGDGEAD": [
+              "filters": [
                 "Water"
               ],
               "target": "Self"
             }
-          ]
+          ],
+          "scale": 1.0,
+          "ILLLPEOODKP": ""
         },
         {
           "$type": "FireEffect",
           "effectPattern": "Eff_SceneObj_OrigamiFrog_05",
-          "scale": 1.0,
-          "ILLLPEOODKP": "",
           "effectTempleteID": -1.0,
           "predicates": [
             {
               "$type": "GEDIGIEDBCJ",
-              "include": false,
-              "LOEMJGDGEAD": [
+              "filters": [
                 "Water"
               ],
+              "include": false,
               "target": "Self"
             }
-          ]
+          ],
+          "scale": 1.0,
+          "ILLLPEOODKP": ""
         },
         {
           "$type": "Predicated",
-          "successActions": [
-            {
-              "$type": "DebugLog",
-              "content": "V4_8_FairyBook_OrigamiFrog_Bullet_Ability -> Hit Water"
-            },
-            {
-              "$type": "ServerLuaCall",
-              "EJDAJPOKJIP": {
-                "rotY": "Self_Global_Dir_1"
-              },
-              "param1": 0.0,
-              "param2": 0.0,
-              "funcName": "SLC_FrogHitWrongType",
-              "AHCNJKIEMPP": 0.0,
-              "FLMNNLGPCCH": true,
-              "luaCallType": "OwnerFromGroup",
-              "target": "Owner"
-            },
-            {
-              "$type": "KillSelf",
-              "MBGFJOOIMOK": [
-                70293174,
-                70293177
-              ]
-            }
-          ],
           "failActions": [
             {
               "$type": "Predicated",
-              "successActions": [
-                {
-                  "$type": "DebugLog",
-                  "content": "V4_8_FairyBook_OrigamiFrog_Bullet_Ability -> Hit Platform"
-                },
-                {
-                  "$type": "SetTargetToTargetKey",
-                  "targetKey": "Platform_Runtime_Id",
-                  "target": "Target"
-                },
-                {
-                  "$type": "ServerLuaCall",
-                  "EJDAJPOKJIP": {
-                    "HitPlatform": 1.0,
-                    "posX": "Self_Global_Pos_0",
-                    "posY": "Self_Global_Pos_1",
-                    "posZ": "Self_Global_Pos_2",
-                    "rotX": "Self_Global_Dir_0",
-                    "rotY": "Self_Global_Dir_1",
-                    "rotZ": "Self_Global_Dir_2",
-                    "Tar_0": "Platform_Runtime_Id_0",
-                    "Tar_1": "Platform_Runtime_Id_1"
-                  },
-                  "param1": 0.0,
-                  "param2": 0.0,
-                  "funcName": "SLC_Frog_Jump_Over",
-                  "AHCNJKIEMPP": 0.0,
-                  "FLMNNLGPCCH": true,
-                  "luaCallType": "OwnerFromGroup",
-                  "target": "Owner"
-                },
-                {
-                  "$type": "KillSelf",
-                  "MBGFJOOIMOK": [
-                    70293174,
-                    70293177
-                  ]
-                }
-              ],
               "failActions": [
                 {
                   "$type": "DebugLog",
@@ -1302,31 +1238,16 @@
                 },
                 {
                   "$type": "Predicated",
-                  "successActions": [
-                    {
-                      "$type": "ServerLuaCall",
-                      "EJDAJPOKJIP": {
-                        "rotY": "Self_Global_Dir_1"
-                      },
-                      "param1": 0.0,
-                      "param2": 0.0,
-                      "funcName": "SLC_FrogHitWrongType",
-                      "AHCNJKIEMPP": 0.0,
-                      "FLMNNLGPCCH": true,
-                      "luaCallType": "OwnerFromGroup",
-                      "target": "Owner"
-                    },
-                    {
-                      "$type": "KillSelf",
-                      "MBGFJOOIMOK": [
-                        70293174,
-                        70293177
-                      ]
-                    }
-                  ],
                   "failActions": [
                     {
                       "$type": "ServerLuaCall",
+                      "funcName": "SLC_Frog_Jump_Over",
+                      "luaCallType": "OwnerFromGroup",
+                      "param1": 0.0,
+                      "param2": 0.0,
+                      "param3": 0.0,
+                      "target": "Owner",
+                      "FLMNNLGPCCH": true,
                       "EJDAJPOKJIP": {
                         "HitPlatform": 0.0,
                         "posX": "Self_Global_Pos_0",
@@ -1337,59 +1258,139 @@
                         "rotZ": "Self_Global_Dir_2",
                         "Tar_0": 0.0,
                         "Tar_1": 0.0
-                      },
-                      "param1": 0.0,
-                      "param2": 0.0,
-                      "funcName": "SLC_Frog_Jump_Over",
-                      "AHCNJKIEMPP": 0.0,
-                      "FLMNNLGPCCH": true,
-                      "luaCallType": "OwnerFromGroup",
-                      "target": "Owner"
+                      }
                     },
                     {
                       "$type": "KillSelf",
-                      "MBGFJOOIMOK": [
+                      "configIdArray": [
                         70293174,
                         70293177
                       ]
                     }
                   ],
-                  "targetPredicates": [
+                  "successActions": [
                     {
-                      "$type": "EOFDCELPGFO",
-                      "CBOMLBFIPJM": 1.0,
-                      "key": "SGV_Accept_Die_When_Hit_Level",
-                      "target": "Owner"
+                      "$type": "ServerLuaCall",
+                      "funcName": "SLC_FrogHitWrongType",
+                      "luaCallType": "OwnerFromGroup",
+                      "param1": 0.0,
+                      "param2": 0.0,
+                      "param3": 0.0,
+                      "target": "Owner",
+                      "FLMNNLGPCCH": true,
+                      "EJDAJPOKJIP": {
+                        "rotY": "Self_Global_Dir_1"
+                      }
+                    },
+                    {
+                      "$type": "KillSelf",
+                      "configIdArray": [
+                        70293174,
+                        70293177
+                      ]
                     }
                   ],
-                  "target": "Owner"
+                  "target": "Owner",
+                  "targetPredicates": [
+                    {
+                      "$type": "ByTargetGlobalValue",
+                      "key": "SGV_Accept_Die_When_Hit_Level",
+                      "target": "Owner",
+                      "value": 1.0
+                    }
+                  ]
                 }
               ],
+              "successActions": [
+                {
+                  "$type": "DebugLog",
+                  "content": "V4_8_FairyBook_OrigamiFrog_Bullet_Ability -> Hit Platform"
+                },
+                {
+                  "$type": "SetTargetToTargetKey",
+                  "target": "Target",
+                  "targetKey": "Platform_Runtime_Id"
+                },
+                {
+                  "$type": "ServerLuaCall",
+                  "funcName": "SLC_Frog_Jump_Over",
+                  "luaCallType": "OwnerFromGroup",
+                  "param1": 0.0,
+                  "param2": 0.0,
+                  "param3": 0.0,
+                  "target": "Owner",
+                  "FLMNNLGPCCH": true,
+                  "EJDAJPOKJIP": {
+                    "HitPlatform": 1.0,
+                    "posX": "Self_Global_Pos_0",
+                    "posY": "Self_Global_Pos_1",
+                    "posZ": "Self_Global_Pos_2",
+                    "rotX": "Self_Global_Dir_0",
+                    "rotY": "Self_Global_Dir_1",
+                    "rotZ": "Self_Global_Dir_2",
+                    "Tar_0": "Platform_Runtime_Id_0",
+                    "Tar_1": "Platform_Runtime_Id_1"
+                  }
+                },
+                {
+                  "$type": "KillSelf",
+                  "configIdArray": [
+                    70293174,
+                    70293177
+                  ]
+                }
+              ],
+              "target": "Other",
               "targetPredicates": [
                 {
-                  "$type": "NNPOHKNOJBI",
+                  "$type": "ByHasTag",
                   "tag": "_IS_Frog_Platform"
                 }
-              ],
-              "target": "Other"
+              ]
             }
           ],
+          "successActions": [
+            {
+              "$type": "DebugLog",
+              "content": "V4_8_FairyBook_OrigamiFrog_Bullet_Ability -> Hit Water"
+            },
+            {
+              "$type": "ServerLuaCall",
+              "funcName": "SLC_FrogHitWrongType",
+              "luaCallType": "OwnerFromGroup",
+              "param1": 0.0,
+              "param2": 0.0,
+              "param3": 0.0,
+              "target": "Owner",
+              "FLMNNLGPCCH": true,
+              "EJDAJPOKJIP": {
+                "rotY": "Self_Global_Dir_1"
+              }
+            },
+            {
+              "$type": "KillSelf",
+              "configIdArray": [
+                70293174,
+                70293177
+              ]
+            }
+          ],
+          "target": "Target",
           "targetPredicates": [
             {
               "$type": "GEDIGIEDBCJ",
-              "LOEMJGDGEAD": [
+              "filters": [
                 "Water"
               ],
               "target": "Self"
             },
             {
-              "$type": "EOFDCELPGFO",
-              "CBOMLBFIPJM": 1.0,
+              "$type": "ByTargetGlobalValue",
               "key": "SGV_Fall_Into_Water_Check",
-              "target": "Owner"
+              "target": "Owner",
+              "value": 1.0
             }
-          ],
-          "target": "Target"
+          ]
         }
       ],
       "ANHJPOLNHIG": [
@@ -1401,43 +1402,43 @@
         "Self_Global_Dir_2",
         "Platform_Runtime_Id_0",
         "Platform_Runtime_Id_1"
-      ],
-      "abilityName": "V4_8_FairyBook_OrigamiFrog_Bullet_Ability"
+      ]
     }
   },
   {
     "Default": {
+      "abilityName": "V4_8_FairyBook_OrigamiButterFly_Frog_JumpBuff_01",
       "modifiers": {
         "EffectHandler": {
-          "onRemoved": [
-            {
-              "$type": "FireEffect",
-              "effectPattern": "Eff_SceneObj_OrigamiButterfly_01_Dis",
-              "scale": 1.0,
-              "ILLLPEOODKP": "",
-              "effectTempleteID": -1.0
-            }
-          ],
+          "elementDurability": 100.0,
+          "modifierName": "",
           "onAdded": [
             {
               "$type": "AttachEffect",
-              "ILLLPEOODKP": "",
-              "scale": 1.0,
               "effectPattern": "Eff_SceneObj_OrigamiButterfly_01",
-              "effectTempleteID": -1.0
+              "effectTempleteID": -1.0,
+              "scale": 1.0,
+              "ILLLPEOODKP": ""
             }
           ],
           "onKill": [
             {
               "$type": "FireEffect",
               "effectPattern": "Eff_SceneObj_OrigamiButterfly_01_Dis",
+              "effectTempleteID": -1.0,
               "scale": 1.0,
-              "ILLLPEOODKP": "",
-              "effectTempleteID": -1.0
+              "ILLLPEOODKP": ""
             }
           ],
-          "elementDurability": 100.0,
-          "modifierName": "",
+          "onRemoved": [
+            {
+              "$type": "FireEffect",
+              "effectPattern": "Eff_SceneObj_OrigamiButterfly_01_Dis",
+              "effectTempleteID": -1.0,
+              "scale": 1.0,
+              "ILLLPEOODKP": ""
+            }
+          ],
           "AIHNJLDFEGJ": 0.0
         },
         "FindAvatar": {
@@ -1448,6 +1449,12 @@
               "onThinkInterval": [
                 {
                   "$type": "Predicated",
+                  "otherTargets": {
+                    "$type": "SelectTargetsByShape",
+                    "campTargetType": "All",
+                    "shapeName": "CircleR1.5H3",
+                    "sizeRatio": 1.0
+                  },
                   "successActions": [
                     {
                       "$type": "ApplyModifier",
@@ -1457,18 +1464,12 @@
                   ],
                   "targetPredicates": [
                     {
-                      "$type": "DEOFBICNFHF",
+                      "$type": "ByEntityTypes",
                       "entityTypes": [
                         "Avatar"
                       ]
                     }
-                  ],
-                  "otherTargets": {
-                    "$type": "INIACGFCEDH",
-                    "sizeRatio": 1.0,
-                    "campTargetType": "All",
-                    "shapeName": "CircleR1.5H3"
-                  }
+                  ]
                 }
               ],
               "thinkInterval": 0.1
@@ -1480,6 +1481,7 @@
         "UNIQUE_OrigamiButterFlySuperJump_Controller_Team": {
           "duration": 3.0,
           "elementDurability": 100.0,
+          "isUnique": true,
           "modifierMixins": [
             {
               "$type": "CurLocalAvatarMixinV2",
@@ -1487,49 +1489,30 @@
             }
           ],
           "modifierName": "",
-          "isUnique": true,
           "AIHNJLDFEGJ": 0.0
         },
         "UNIQUE_OrigamiButterFlySuperJump_Controller": {
-          "onReconnect": [
-            {
-              "$type": "RemoveUniqueModifier",
-              "modifierName": "UNIQUE_OrigamiButterFlySuperJump_Controller",
-              "doOffStage": true,
-              "predicates": [
-                {
-                  "$type": "LMBKGJGNFMF"
-                }
-              ]
-            }
-          ],
-          "onAdded": [
-            {
-              "$type": "AttachModifier",
-              "modifierName": "UNIQUE_OrigamiButterFlySuperJump_StandEff"
-            }
-          ],
-          "stacking": "Unique",
           "elementDurability": 100.0,
+          "isUnique": true,
           "modifierMixins": [
             {
               "$type": "RocketJumpMixin",
-              "uiEffect": true,
+              "extention": {
+                "xzMultiplier": 4.0,
+                "yMultiplier": 10.0
+              },
               "type": "GearSpring",
-              "DBJGIPKJIPC": {
-                "GPNCELCLCIM": 4.0,
-                "JGONFOJBCMD": 10.0
-              }
+              "uiEffect": true
             },
             {
               "$type": "OverrideAvatarMoveSpeedRatioMixin",
               "maxValue": 0.7,
-              "KNGHJCDONAJ": -0.7
+              "minValue": -0.7
             },
             {
               "$type": "AttachToStateIDMixin",
               "isCheckOnAttach": true,
-              "LJPPDIGCJMJ": "",
+              "modifierName": "JumpHandler_Avatar",
               "stateIDs": [
                 "JumpForRun",
                 "JumpForWalk",
@@ -1539,34 +1522,41 @@
                 "SpecialJumpForRun",
                 "SpecialJumpForSprint"
               ],
-              "modifierName": "JumpHandler_Avatar"
+              "LJPPDIGCJMJ": ""
             }
           ],
           "modifierName": "",
-          "isUnique": true,
+          "onAdded": [
+            {
+              "$type": "AttachModifier",
+              "modifierName": "UNIQUE_OrigamiButterFlySuperJump_StandEff"
+            }
+          ],
+          "onReconnect": [
+            {
+              "$type": "RemoveUniqueModifier",
+              "doOffStage": true,
+              "modifierName": "UNIQUE_OrigamiButterFlySuperJump_Controller",
+              "predicates": [
+                {
+                  "$type": "ByIsInReconnect"
+                }
+              ]
+            }
+          ],
+          "stacking": "Unique",
           "AIHNJLDFEGJ": 0.0
         },
         "JumpHandler_Avatar": {
-          "thinkInterval": 0.2,
-          "onRemoved": [
-            {
-              "$type": "SetCameraEntityDampRatio",
-              "dampRatio": 1.0
-            },
-            {
-              "$type": "RemoveModifier",
-              "modifierName": "UNIQUE_OrigamiButterFlySuperJump_Controller_Team",
-              "target": "Team",
-              "doOffStage": true
-            }
-          ],
+          "elementDurability": 100.0,
+          "modifierName": "",
           "onAdded": [
             {
               "$type": "FireEffect",
               "effectPattern": "Eff_ScenObj_BlowingStone_01_Active",
+              "effectTempleteID": -1.0,
               "scale": 1.0,
-              "ILLLPEOODKP": "",
-              "effectTempleteID": -1.0
+              "ILLLPEOODKP": ""
             },
             {
               "$type": "SetCameraEntityDampRatio",
@@ -1581,14 +1571,25 @@
               "modifierName": "FallingDamageController_Avatar"
             }
           ],
-          "elementDurability": 100.0,
-          "modifierName": "",
+          "onRemoved": [
+            {
+              "$type": "SetCameraEntityDampRatio",
+              "dampRatio": 1.0
+            },
+            {
+              "$type": "RemoveModifier",
+              "doOffStage": true,
+              "modifierName": "UNIQUE_OrigamiButterFlySuperJump_Controller_Team",
+              "target": "Team"
+            }
+          ],
           "onThinkInterval": [
             {
               "$type": "RemoveModifier",
               "modifierName": "UNIQUE_OrigamiButterFlySuperJump_StandEff"
             }
           ],
+          "thinkInterval": 0.2,
           "AIHNJLDFEGJ": 0.0
         },
         "FallingDamageController_Avatar": {
@@ -1597,7 +1598,7 @@
             {
               "$type": "AttachToStateIDMixin",
               "isCheckOnAttach": true,
-              "LJPPDIGCJMJ": "",
+              "modifierName": "FallingDamageImmune_Avatar",
               "stateIDs": [
                 "Jump",
                 "Fall",
@@ -1606,13 +1607,15 @@
                 "SpecialJumpForSprint",
                 "SpecialFall"
               ],
-              "modifierName": "FallingDamageImmune_Avatar"
+              "LJPPDIGCJMJ": ""
             }
           ],
           "modifierName": "",
           "AIHNJLDFEGJ": 0.0
         },
         "FallingDamageImmune_Avatar": {
+          "elementDurability": 100.0,
+          "modifierName": "",
           "onRemoved": [
             {
               "$type": "RemoveModifier",
@@ -1622,45 +1625,42 @@
           "properties": {
             "Actor_FallingDamageRatio": -1.0
           },
-          "elementDurability": 100.0,
-          "modifierName": "",
           "AIHNJLDFEGJ": 0.0
         },
         "UNIQUE_OrigamiButterFlySuperJump_StandEff": {
+          "elementDurability": 100.0,
+          "isUnique": true,
+          "modifierName": "",
+          "onAdded": [
+            {
+              "$type": "AttachEffect",
+              "effectPattern": "Eff_ScenObj_BlowingStone_01_Buff",
+              "effectTempleteID": -1.0,
+              "scale": 1.0,
+              "ILLLPEOODKP": ""
+            }
+          ],
           "onReconnect": [
             {
               "$type": "RemoveUniqueModifier",
-              "modifierName": "UNIQUE_OrigamiButterFlySuperJump_StandEff",
               "doOffStage": true,
+              "modifierName": "UNIQUE_OrigamiButterFlySuperJump_StandEff",
               "predicates": [
                 {
-                  "$type": "LMBKGJGNFMF"
+                  "$type": "ByIsInReconnect"
                 }
               ]
             }
           ],
-          "onAdded": [
-            {
-              "$type": "AttachEffect",
-              "ILLLPEOODKP": "",
-              "scale": 1.0,
-              "effectPattern": "Eff_ScenObj_BlowingStone_01_Buff",
-              "effectTempleteID": -1.0
-            }
-          ],
           "stacking": "Unique",
-          "elementDurability": 100.0,
-          "modifierName": "",
-          "isUnique": true,
           "AIHNJLDFEGJ": 0.0
         }
       },
-      "abilityName": "V4_8_FairyBook_OrigamiButterFly_Frog_JumpBuff_01",
       "onAdded": [
         {
           "$type": "ChangeTag",
-          "tag": "Origami_Frog_JumpBuff",
-          "isAdd": true
+          "isAdd": true,
+          "tag": "Origami_Frog_JumpBuff"
         },
         {
           "$type": "ApplyModifier",
@@ -1675,19 +1675,36 @@
   },
   {
     "Default": {
+      "abilityMixins": [
+        {
+          "$type": "PlatformMoveMixin",
+          "moveModifiers": [
+            "Move_WaterSurface"
+          ],
+          "stopModifiers": [
+            "Stop_WaterSurface"
+          ]
+        },
+        {
+          "$type": "AttachToGadgetStateMixin",
+          "gadgetState": 201,
+          "modifierName": "Fire_Impact_Eff"
+        }
+      ],
+      "abilityName": "V4_8_FairyBook_OrigamiLotus_Normal_Platform",
       "modifiers": {
         "Create_Eff": {
+          "elementDurability": 100.0,
+          "modifierName": "",
           "onAdded": [
             {
               "$type": "FireEffect",
               "effectPattern": "Eff_SceneObj_OrigamiLotus_Appear",
+              "effectTempleteID": -1.0,
               "scale": "SGV_Eff_Scale",
-              "ILLLPEOODKP": "",
-              "effectTempleteID": -1.0
+              "ILLLPEOODKP": ""
             }
           ],
-          "elementDurability": 100.0,
-          "modifierName": "",
           "AIHNJLDFEGJ": 0.0
         },
         "Move_WaterSurface": {
@@ -1695,13 +1712,13 @@
           "modifierMixins": [
             {
               "$type": "WaterSurfaceEffectMixin",
-              "NNOBMBCOOAK": "",
-              "JBBMCLGBLFF": "Top",
-              "scale": "SGV_Eff_Scale",
-              "HONFJPMIBGE": "WaterSurface",
               "attachEffect": "Eff_SceneObj_OrigamiLotus_Ripple_Move",
+              "scale": "SGV_Eff_Scale",
               "MONNMAKDGPA": "",
-              "DFNMEPLOMAO": "Bottom"
+              "NNOBMBCOOAK": "",
+              "DFNMEPLOMAO": "Bottom",
+              "JBBMCLGBLFF": "Top",
+              "HONFJPMIBGE": "WaterSurface"
             }
           ],
           "modifierName": "",
@@ -1712,13 +1729,13 @@
           "modifierMixins": [
             {
               "$type": "WaterSurfaceEffectMixin",
-              "NNOBMBCOOAK": "",
-              "JBBMCLGBLFF": "Top",
-              "scale": "SGV_Eff_Scale",
-              "HONFJPMIBGE": "WaterSurface",
               "attachEffect": "Eff_SceneObj_OrigamiLotus_Ripple",
+              "scale": "SGV_Eff_Scale",
               "MONNMAKDGPA": "",
-              "DFNMEPLOMAO": "Bottom"
+              "NNOBMBCOOAK": "",
+              "DFNMEPLOMAO": "Bottom",
+              "JBBMCLGBLFF": "Top",
+              "HONFJPMIBGE": "WaterSurface"
             }
           ],
           "modifierName": "",
@@ -1726,94 +1743,78 @@
         },
         "Fire_Impact_Eff": {
           "duration": 0.2,
+          "elementDurability": 100.0,
+          "modifierName": "",
+          "onAdded": [
+            {
+              "$type": "FireEffect",
+              "effectPattern": "Eff_SceneObj_OrigamiLotus_Splash",
+              "effectTempleteID": -1.0,
+              "scale": "SGV_Eff_Scale",
+              "ILLLPEOODKP": ""
+            }
+          ],
           "onRemoved": [
             {
               "$type": "ChangeGadgetState"
             }
           ],
-          "onAdded": [
-            {
-              "$type": "FireEffect",
-              "effectPattern": "Eff_SceneObj_OrigamiLotus_Splash",
-              "scale": "SGV_Eff_Scale",
-              "ILLLPEOODKP": "",
-              "effectTempleteID": -1.0
-            }
-          ],
-          "elementDurability": 100.0,
-          "modifierName": "",
           "AIHNJLDFEGJ": 0.0
         }
       },
-      "ANHJPOLNHIG": [
-        "SGV_Eff_Scale"
-      ],
-      "abilityMixins": [
-        {
-          "$type": "PlatformMoveMixin",
-          "BHHBACICHKK": [
-            "Move_WaterSurface"
-          ],
-          "NIKMDDNEIBE": [
-            "Stop_WaterSurface"
-          ]
-        },
-        {
-          "$type": "AttachToGadgetStateMixin",
-          "modifierName": "Fire_Impact_Eff",
-          "gadgetState": 201
-        }
-      ],
-      "abilityName": "V4_8_FairyBook_OrigamiLotus_Normal_Platform",
       "onAdded": [
         {
           "$type": "ChangeTag",
-          "tag": "_IS_Frog_Platform",
-          "isAdd": true
+          "isAdd": true,
+          "tag": "_IS_Frog_Platform"
         },
         {
           "$type": "ApplyModifier",
           "modifierName": "Create_Eff"
         }
+      ],
+      "ANHJPOLNHIG": [
+        "SGV_Eff_Scale"
       ]
     }
   },
   {
     "Default": {
+      "abilityName": "V4_8_FairyBook_OrigamiForest_Waterspout_01",
       "modifiers": {
         "Add_WaterSpout_Eff": {
+          "elementDurability": 100.0,
+          "modifierName": "",
           "onAdded": [
             {
               "$type": "AttachEffect",
-              "ILLLPEOODKP": "",
-              "scale": 1.0,
               "effectPattern": "Eff_SceneObj_OrigamiLotus_Pilar",
               "effectTempleteID": -1.0,
               "predicates": [
                 {
-                  "$type": "EOFDCELPGFO",
-                  "CBOMLBFIPJM": 6.0,
-                  "key": "SGV_Size"
+                  "$type": "ByTargetGlobalValue",
+                  "key": "SGV_Size",
+                  "value": 6.0
                 }
-              ]
+              ],
+              "scale": 1.0,
+              "ILLLPEOODKP": ""
             },
             {
               "$type": "AttachEffect",
-              "ILLLPEOODKP": "",
-              "scale": 1.0,
               "effectPattern": "Eff_SceneObj_OrigamiLotus_Pilar_01",
               "effectTempleteID": -1.0,
               "predicates": [
                 {
-                  "$type": "EOFDCELPGFO",
-                  "CBOMLBFIPJM": 3.0,
-                  "key": "SGV_Size"
+                  "$type": "ByTargetGlobalValue",
+                  "key": "SGV_Size",
+                  "value": 3.0
                 }
-              ]
+              ],
+              "scale": 1.0,
+              "ILLLPEOODKP": ""
             }
           ],
-          "elementDurability": 100.0,
-          "modifierName": "",
           "AIHNJLDFEGJ": 0.0
         },
         "State_Listener": {
@@ -1825,138 +1826,137 @@
             },
             {
               "$type": "AttachToGadgetStateMixin",
-              "modifierName": "State_201",
-              "gadgetState": 201
+              "gadgetState": 201,
+              "modifierName": "State_201"
             }
           ],
           "modifierName": "",
           "AIHNJLDFEGJ": 0.0
         },
         "State_0": {
+          "elementDurability": 100.0,
+          "modifierName": "",
           "onAdded": [
             {
               "$type": "EnableSceneTransformByName",
-              "PLDFIIMNOCD": [
+              "canBeHandledOnRecover": true,
+              "transformNames": [
                 "Col"
-              ],
-              "canBeHandledOnRecover": true
+              ]
             },
             {
               "$type": "SendEffectTrigger",
-              "parameter": "GadgetState",
-              "GGKIEIJLCJJ": 202,
+              "attachPoint": "",
+              "canBeHandledOnRecover": true,
               "effectPattern": "Eff_SceneObj_OrigamiLotus_Pilar",
-              "type": "Int",
-              "attachPoint": "",
-              "canBeHandledOnRecover": true,
+              "parameter": "GadgetState",
               "predicates": [
                 {
-                  "$type": "EOFDCELPGFO",
-                  "CBOMLBFIPJM": 6.0,
-                  "key": "SGV_Size"
+                  "$type": "ByTargetGlobalValue",
+                  "key": "SGV_Size",
+                  "value": 6.0
                 }
-              ]
+              ],
+              "type": "Int",
+              "value": 202
             },
             {
               "$type": "SendEffectTrigger",
-              "parameter": "GadgetState",
-              "GGKIEIJLCJJ": 202,
-              "effectPattern": "Eff_SceneObj_OrigamiLotus_Pilar_01",
-              "type": "Int",
               "attachPoint": "",
               "canBeHandledOnRecover": true,
+              "effectPattern": "Eff_SceneObj_OrigamiLotus_Pilar_01",
+              "parameter": "GadgetState",
               "predicates": [
                 {
-                  "$type": "EOFDCELPGFO",
-                  "CBOMLBFIPJM": 3.0,
-                  "key": "SGV_Size"
+                  "$type": "ByTargetGlobalValue",
+                  "key": "SGV_Size",
+                  "value": 3.0
                 }
-              ]
+              ],
+              "type": "Int",
+              "value": 202
             }
           ],
-          "elementDurability": 100.0,
-          "modifierName": "",
           "AIHNJLDFEGJ": 0.0
         },
         "State_201": {
+          "elementDurability": 100.0,
+          "modifierName": "",
+          "onAdded": [
+            {
+              "$type": "EnableSceneTransformByName",
+              "canBeHandledOnRecover": true,
+              "setEnable": true,
+              "transformNames": [
+                "Col"
+              ]
+            },
+            {
+              "$type": "SendEffectTrigger",
+              "attachPoint": "",
+              "canBeHandledOnRecover": true,
+              "effectPattern": "Eff_SceneObj_OrigamiLotus_Pilar",
+              "parameter": "GadgetState",
+              "predicates": [
+                {
+                  "$type": "ByTargetGlobalValue",
+                  "key": "SGV_Size",
+                  "value": 6.0
+                }
+              ],
+              "type": "Int",
+              "value": 201
+            },
+            {
+              "$type": "SendEffectTrigger",
+              "attachPoint": "",
+              "canBeHandledOnRecover": true,
+              "effectPattern": "Eff_SceneObj_OrigamiLotus_Pilar_01",
+              "parameter": "GadgetState",
+              "predicates": [
+                {
+                  "$type": "ByTargetGlobalValue",
+                  "key": "SGV_Size",
+                  "value": 3.0
+                }
+              ],
+              "type": "Int",
+              "value": 201
+            }
+          ],
           "onRemoved": [
             {
               "$type": "FireEffect",
               "effectPattern": "Eff_SceneObj_OrigamiLotus_Pilar_Disappear",
-              "scale": 1.0,
-              "ILLLPEOODKP": "",
               "effectTempleteID": -1.0,
               "predicates": [
                 {
-                  "$type": "EOFDCELPGFO",
-                  "CBOMLBFIPJM": 6.0,
-                  "key": "SGV_Size"
+                  "$type": "ByTargetGlobalValue",
+                  "key": "SGV_Size",
+                  "value": 6.0
                 }
-              ]
+              ],
+              "scale": 1.0,
+              "ILLLPEOODKP": ""
             },
             {
               "$type": "FireEffect",
               "effectPattern": "Eff_SceneObj_OrigamiLotus_Pilar_Disappear_01",
-              "scale": 1.0,
-              "ILLLPEOODKP": "",
               "effectTempleteID": -1.0,
               "predicates": [
                 {
-                  "$type": "EOFDCELPGFO",
-                  "CBOMLBFIPJM": 3.0,
-                  "key": "SGV_Size"
+                  "$type": "ByTargetGlobalValue",
+                  "key": "SGV_Size",
+                  "value": 3.0
                 }
-              ]
-            }
-          ],
-          "onAdded": [
-            {
-              "$type": "EnableSceneTransformByName",
-              "setEnable": true,
-              "PLDFIIMNOCD": [
-                "Col"
               ],
-              "canBeHandledOnRecover": true
-            },
-            {
-              "$type": "SendEffectTrigger",
-              "parameter": "GadgetState",
-              "GGKIEIJLCJJ": 201,
-              "effectPattern": "Eff_SceneObj_OrigamiLotus_Pilar",
-              "type": "Int",
-              "attachPoint": "",
-              "canBeHandledOnRecover": true,
-              "predicates": [
-                {
-                  "$type": "EOFDCELPGFO",
-                  "CBOMLBFIPJM": 6.0,
-                  "key": "SGV_Size"
-                }
-              ]
-            },
-            {
-              "$type": "SendEffectTrigger",
-              "parameter": "GadgetState",
-              "GGKIEIJLCJJ": 201,
-              "effectPattern": "Eff_SceneObj_OrigamiLotus_Pilar_01",
-              "type": "Int",
-              "attachPoint": "",
-              "canBeHandledOnRecover": true,
-              "predicates": [
-                {
-                  "$type": "EOFDCELPGFO",
-                  "CBOMLBFIPJM": 3.0,
-                  "key": "SGV_Size"
-                }
-              ]
+              "scale": 1.0,
+              "ILLLPEOODKP": ""
             }
           ],
-          "elementDurability": 100.0,
-          "modifierName": "",
           "AIHNJLDFEGJ": 0.0
         }
       },
-      "abilityName": "V4_8_FairyBook_OrigamiForest_Waterspout_01",
       "onAdded": [
         {
           "$type": "AttachModifier",
@@ -1971,36 +1971,37 @@
   },
   {
     "Default": {
+      "abilityName": "V4_8_FairyBook_OrigamiLotus_ColliderMove",
       "modifiers": {
         "WaterSurfaceEffect": {
           "elementDurability": 100.0,
           "modifierMixins": [
             {
               "$type": "WaterSurfaceEffectMixin",
-              "NNOBMBCOOAK": "",
-              "JBBMCLGBLFF": "Top",
-              "scale": 1.5,
-              "HONFJPMIBGE": "WaterSurface",
               "attachEffect": "Eff_SceneObj_OrigamiLotus_Ripple",
+              "scale": 1.5,
+              "NNOBMBCOOAK": "",
+              "DFNMEPLOMAO": "Bottom",
               "MONNMAKDGPA": "Eff_SceneObj_OrigamiLotus_Splash",
-              "DFNMEPLOMAO": "Bottom"
+              "JBBMCLGBLFF": "Top",
+              "HONFJPMIBGE": "WaterSurface"
             }
           ],
           "modifierName": "",
           "AIHNJLDFEGJ": 0.0
         },
         "Add_WaterSpout_Eff": {
+          "elementDurability": 100.0,
+          "modifierName": "",
           "onAdded": [
             {
               "$type": "AttachEffect",
-              "ILLLPEOODKP": "",
-              "scale": 1.0,
               "effectPattern": "Eff_SceneObj_OrigamiLotus_Pilar",
-              "effectTempleteID": -1.0
+              "effectTempleteID": -1.0,
+              "scale": 1.0,
+              "ILLLPEOODKP": ""
             }
           ],
-          "elementDurability": 100.0,
-          "modifierName": "",
           "AIHNJLDFEGJ": 0.0
         },
         "State_Listener": {
@@ -2012,94 +2013,93 @@
             },
             {
               "$type": "AttachToGadgetStateMixin",
-              "modifierName": "State_201",
-              "gadgetState": 201
+              "gadgetState": 201,
+              "modifierName": "State_201"
             }
           ],
           "modifierName": "",
           "AIHNJLDFEGJ": 0.0
         },
         "State_0": {
+          "elementDurability": 100.0,
+          "modifierName": "",
           "onAdded": [
             {
               "$type": "EnableSceneTransformByName",
-              "PLDFIIMNOCD": [
+              "canBeHandledOnRecover": true,
+              "transformNames": [
                 "Col"
-              ],
-              "canBeHandledOnRecover": true
+              ]
             },
             {
               "$type": "SendEffectTrigger",
-              "parameter": "GadgetState",
-              "effectPattern": "Eff_SceneObj_OrigamiLotus_Pilar",
-              "type": "Int",
               "attachPoint": "",
-              "canBeHandledOnRecover": true
+              "canBeHandledOnRecover": true,
+              "effectPattern": "Eff_SceneObj_OrigamiLotus_Pilar",
+              "parameter": "GadgetState",
+              "type": "Int"
             },
             {
               "$type": "SetAnimatorInt",
               "intID": "GadgetState",
-              "CBOMLBFIPJM": 0.0
+              "value": 0.0
             }
           ],
-          "elementDurability": 100.0,
-          "modifierName": "",
           "AIHNJLDFEGJ": 0.0
         },
         "State_201": {
+          "elementDurability": 100.0,
+          "modifierName": "",
           "onAdded": [
             {
               "$type": "AttachEffect",
-              "ILLLPEOODKP": "",
               "born": {
-                "$type": "BGOLIIIHLMO",
+                "$type": "ConfigBornByAttachPoint",
                 "attachPointName": "Bottom_EffPoint",
                 "useRotation": true
               },
-              "scale": 1.0,
               "effectPattern": "Eff_SceneObj_OrigamiLotus_Impact",
-              "effectTempleteID": -1.0
+              "effectTempleteID": -1.0,
+              "scale": 1.0,
+              "ILLLPEOODKP": ""
             },
             {
               "$type": "SetEffectFollowPath",
-              "DPNPNCGKIMP": "Bottom_EffPoint",
               "attachPoint": "",
-              "effectPattern": "Eff_SceneObj_OrigamiLotus_Impact"
+              "effectPattern": "Eff_SceneObj_OrigamiLotus_Impact",
+              "followPath": "Bottom_EffPoint"
             },
             {
               "$type": "EnableSceneTransformByName",
+              "canBeHandledOnRecover": true,
               "setEnable": true,
-              "PLDFIIMNOCD": [
+              "transformNames": [
                 "Col"
-              ],
-              "canBeHandledOnRecover": true
+              ]
             },
             {
               "$type": "SendEffectTrigger",
-              "parameter": "GadgetState",
-              "GGKIEIJLCJJ": 201,
-              "effectPattern": "Eff_SceneObj_OrigamiLotus_Pilar",
-              "type": "Int",
               "attachPoint": "",
-              "canBeHandledOnRecover": true
+              "canBeHandledOnRecover": true,
+              "effectPattern": "Eff_SceneObj_OrigamiLotus_Pilar",
+              "parameter": "GadgetState",
+              "type": "Int",
+              "value": 201
             },
             {
               "$type": "SetAnimatorInt",
               "intID": "GadgetState",
-              "CBOMLBFIPJM": 201.0
+              "value": 201.0
             }
           ],
-          "elementDurability": 100.0,
-          "modifierName": "",
           "AIHNJLDFEGJ": 0.0
         }
       },
-      "abilityName": "V4_8_FairyBook_OrigamiLotus_ColliderMove",
       "onAdded": [
         {
           "$type": "ChangeTag",
-          "tag": "_IS_Frog_Platform",
-          "isAdd": true
+          "isAdd": true,
+          "tag": "_IS_Frog_Platform"
         },
         {
           "$type": "AttachModifier",
@@ -2118,35 +2118,6 @@
   },
   {
     "Default": {
-      "modifiers": {
-        "Default": {
-          "onAdded": [
-            {
-              "$type": "AttachEffect",
-              "ILLLPEOODKP": "",
-              "scale": 1.0,
-              "effectPattern": "Eff_Time_LimitPosition_01",
-              "effectTempleteID": -1.0
-            }
-          ],
-          "onKill": [
-            {
-              "$type": "FireEffect",
-              "effectPattern": "Eff_LimitPosition_Disappear",
-              "scale": 1.0,
-              "ILLLPEOODKP": "",
-              "effectTempleteID": -1.0
-            },
-            {
-              "$type": "RemoveModifier",
-              "modifierName": "Default"
-            }
-          ],
-          "elementDurability": 100.0,
-          "modifierName": "",
-          "AIHNJLDFEGJ": 0.0
-        }
-      },
       "abilityMixins": [
         {
           "$type": "AttachToGadgetStateMixin",
@@ -2154,66 +2125,58 @@
         }
       ],
       "abilityName": "V4_8_FairyBook_OrigamiFrog_LimitDestination_01",
-      "onAdded": [
-        {
-          "$type": "ChangeTag",
-          "tag": "is_Frog_LimitDestination",
-          "isAdd": true
-        },
-        {
-          "$type": "ChangeTag",
-          "tag": "_IS_Frog_Platform",
-          "isAdd": true,
-          "predicates": [
-            {
-              "$type": "EOFDCELPGFO",
-              "CBOMLBFIPJM": 1.0,
-              "key": "SGV_Has_Hitbox"
-            }
-          ]
-        }
-      ]
-    }
-  },
-  {
-    "Default": {
       "modifiers": {
         "Default": {
+          "elementDurability": 100.0,
+          "modifierName": "",
           "onAdded": [
             {
               "$type": "AttachEffect",
-              "ILLLPEOODKP": "",
-              "scale": 1.0,
               "effectPattern": "Eff_Time_LimitPosition_01",
-              "effectTempleteID": -1.0
+              "effectTempleteID": -1.0,
+              "scale": 1.0,
+              "ILLLPEOODKP": ""
             }
           ],
           "onKill": [
             {
               "$type": "FireEffect",
               "effectPattern": "Eff_LimitPosition_Disappear",
+              "effectTempleteID": -1.0,
               "scale": 1.0,
-              "ILLLPEOODKP": "",
-              "effectTempleteID": -1.0
+              "ILLLPEOODKP": ""
             },
             {
               "$type": "RemoveModifier",
               "modifierName": "Default"
             }
           ],
-          "elementDurability": 100.0,
-          "modifierName": "",
           "AIHNJLDFEGJ": 0.0
         }
       },
-      "onAbilityStart": [
+      "onAdded": [
         {
-          "$type": "KillSelf",
-          "MBGFJOOIMOK": [
-            70293473
-          ]
+          "$type": "ChangeTag",
+          "isAdd": true,
+          "tag": "is_Frog_LimitDestination"
+        },
+        {
+          "$type": "ChangeTag",
+          "isAdd": true,
+          "predicates": [
+            {
+              "$type": "ByTargetGlobalValue",
+              "key": "SGV_Has_Hitbox",
+              "value": 1.0
+            }
+          ],
+          "tag": "_IS_Frog_Platform"
         }
-      ],
+      ]
+    }
+  },
+  {
+    "Default": {
       "abilityMixins": [
         {
           "$type": "AttachToGadgetStateMixin",
@@ -2221,31 +2184,85 @@
         }
       ],
       "abilityName": "V4_8_FairyBook_OrigamiFrog_CourseDestination_01",
+      "modifiers": {
+        "Default": {
+          "elementDurability": 100.0,
+          "modifierName": "",
+          "onAdded": [
+            {
+              "$type": "AttachEffect",
+              "effectPattern": "Eff_Time_LimitPosition_01",
+              "effectTempleteID": -1.0,
+              "scale": 1.0,
+              "ILLLPEOODKP": ""
+            }
+          ],
+          "onKill": [
+            {
+              "$type": "FireEffect",
+              "effectPattern": "Eff_LimitPosition_Disappear",
+              "effectTempleteID": -1.0,
+              "scale": 1.0,
+              "ILLLPEOODKP": ""
+            },
+            {
+              "$type": "RemoveModifier",
+              "modifierName": "Default"
+            }
+          ],
+          "AIHNJLDFEGJ": 0.0
+        }
+      },
+      "onAbilityStart": [
+        {
+          "$type": "KillSelf",
+          "configIdArray": [
+            70293473
+          ]
+        }
+      ],
       "onAdded": [
         {
           "$type": "ChangeTag",
-          "tag": "is_Frog_CourseDestination",
-          "isAdd": true
+          "isAdd": true,
+          "tag": "is_Frog_CourseDestination"
         }
       ]
     }
   },
   {
     "Default": {
+      "abilityMixins": [
+        {
+          "$type": "PlatformMoveMixin",
+          "moveModifiers": [
+            "Move_WaterSurface"
+          ],
+          "stopModifiers": [
+            "Stop_WaterSurface"
+          ]
+        },
+        {
+          "$type": "AttachToGadgetStateMixin",
+          "gadgetState": 201,
+          "modifierName": "Fire_Impact_Eff"
+        }
+      ],
+      "abilityName": "V4_8_FairyBook_TorrentBrave_OrigamiLotus",
       "modifiers": {
         "Reconnect_Handler": {
+          "elementDurability": 100.0,
+          "modifierName": "",
           "onReconnect": [
             {
               "$type": "ServerLuaTriggerEvent",
+              "luaCallType": "FromGroup",
               "param1": 0.0,
               "param2": 0.0,
-              "AHCNJKIEMPP": 0.0,
-              "sourceName": "OrigamFrog_ExitField",
-              "luaCallType": "FromGroup"
+              "param3": 0.0,
+              "sourceName": "OrigamFrog_ExitField"
             }
           ],
-          "elementDurability": 100.0,
-          "modifierName": "",
           "AIHNJLDFEGJ": 0.0
         },
         "Idle_State_Handler": {
@@ -2253,11 +2270,11 @@
           "modifierMixins": [
             {
               "$type": "AttachModifierToGlobalValueMixin",
+              "globalValueKey": "Idle_State",
               "modifierNameSteps": [
                 "Idle_Slow",
                 "Idle_Fast"
               ],
-              "globalValueKey": "Idle_State",
               "otherTargets": {
                 "$type": "FODOKCBNJJH",
                 "FJBNBOOHNBG": 0.0
@@ -2274,26 +2291,26 @@
           "AIHNJLDFEGJ": 0.0
         },
         "Idle_Slow": {
+          "elementDurability": 100.0,
+          "modifierName": "",
           "onAdded": [
             {
               "$type": "SetAnimatorBool",
               "boolID": "FastIdle"
             }
           ],
-          "elementDurability": 100.0,
-          "modifierName": "",
           "AIHNJLDFEGJ": 0.0
         },
         "Idle_Fast": {
+          "elementDurability": 100.0,
+          "modifierName": "",
           "onAdded": [
             {
               "$type": "SetAnimatorBool",
-              "CBOMLBFIPJM": true,
-              "boolID": "FastIdle"
+              "boolID": "FastIdle",
+              "value": true
             }
           ],
-          "elementDurability": 100.0,
-          "modifierName": "",
           "AIHNJLDFEGJ": 0.0
         },
         "SafeCol_Handler": {
@@ -2301,70 +2318,70 @@
           "modifierMixins": [
             {
               "$type": "AttachModifierToSelfGlobalValueNoInitMixin",
+              "globalValueKey": "SGV_SafeCol_State",
               "modifierNameSteps": [
                 "SafeCol_On"
               ],
-              "DEFOFMOIAAI": true,
               "valueSteps": [
                 0.5,
                 1.5
               ],
-              "globalValueKey": "SGV_SafeCol_State"
+              "DEFOFMOIAAI": true
             }
           ],
           "modifierName": "",
           "AIHNJLDFEGJ": 0.0
         },
         "SafeCol_On": {
-          "onRemoved": [
-            {
-              "$type": "EnableSceneTransformByName",
-              "PLDFIIMNOCD": [
-                "SafeCol",
-                "BottomCol"
-              ]
-            }
-          ],
+          "elementDurability": 100.0,
+          "modifierName": "",
           "onAdded": [
             {
               "$type": "EnableSceneTransformByName",
               "setEnable": true,
-              "PLDFIIMNOCD": [
+              "transformNames": [
                 "SafeCol",
                 "BottomCol"
               ]
             },
             {
               "$type": "AttachEffect",
-              "ILLLPEOODKP": "",
-              "scale": 1.0,
               "effectPattern": "Eff_SceneObj_OrigamiLotus_Wall",
-              "effectTempleteID": -1.0
+              "effectTempleteID": -1.0,
+              "scale": 1.0,
+              "ILLLPEOODKP": ""
             }
           ],
-          "elementDurability": 100.0,
-          "modifierName": "",
+          "onRemoved": [
+            {
+              "$type": "EnableSceneTransformByName",
+              "transformNames": [
+                "SafeCol",
+                "BottomCol"
+              ]
+            }
+          ],
           "AIHNJLDFEGJ": 0.0
         },
         "Create_Eff": {
+          "elementDurability": 100.0,
+          "modifierName": "",
           "onAdded": [
             {
               "$type": "FireEffect",
               "effectPattern": "Eff_SceneObj_OrigamiLotus_Appear",
+              "effectTempleteID": -1.0,
               "scale": "SGV_Eff_Scale",
-              "ILLLPEOODKP": "",
-              "effectTempleteID": -1.0
+              "ILLLPEOODKP": ""
             },
             {
               "$type": "AttachEffect",
-              "ILLLPEOODKP": "",
-              "scale": 1.0,
               "effectPattern": "Eff_SceneObj_OrigamiDrum_01",
-              "effectTempleteID": -1.0
+              "effectTempleteID": -1.0,
+              "scale": 1.0,
+              "ILLLPEOODKP": ""
             }
           ],
-          "elementDurability": 100.0,
-          "modifierName": "",
           "AIHNJLDFEGJ": 0.0
         },
         "Move_WaterSurface": {
@@ -2372,13 +2389,13 @@
           "modifierMixins": [
             {
               "$type": "WaterSurfaceEffectMixin",
-              "NNOBMBCOOAK": "",
-              "JBBMCLGBLFF": "Top",
-              "scale": "SGV_Eff_Scale",
-              "HONFJPMIBGE": "WaterSurface",
               "attachEffect": "Eff_SceneObj_OrigamiLotus_Ripple_Move",
+              "scale": "SGV_Eff_Scale",
               "MONNMAKDGPA": "",
-              "DFNMEPLOMAO": "Bottom"
+              "NNOBMBCOOAK": "",
+              "DFNMEPLOMAO": "Bottom",
+              "JBBMCLGBLFF": "Top",
+              "HONFJPMIBGE": "WaterSurface"
             }
           ],
           "modifierName": "",
@@ -2389,13 +2406,13 @@
           "modifierMixins": [
             {
               "$type": "WaterSurfaceEffectMixin",
-              "NNOBMBCOOAK": "",
-              "JBBMCLGBLFF": "Top",
-              "scale": "SGV_Eff_Scale",
-              "HONFJPMIBGE": "WaterSurface",
               "attachEffect": "Eff_SceneObj_OrigamiLotus_Ripple",
+              "scale": "SGV_Eff_Scale",
               "MONNMAKDGPA": "",
-              "DFNMEPLOMAO": "Bottom"
+              "NNOBMBCOOAK": "",
+              "DFNMEPLOMAO": "Bottom",
+              "JBBMCLGBLFF": "Top",
+              "HONFJPMIBGE": "WaterSurface"
             }
           ],
           "modifierName": "",
@@ -2403,77 +2420,25 @@
         },
         "Fire_Impact_Eff": {
           "duration": 0.2,
+          "elementDurability": 100.0,
+          "modifierName": "",
+          "onAdded": [
+            {
+              "$type": "FireEffect",
+              "effectPattern": "Eff_SceneObj_OrigamiLotus_Splash",
+              "effectTempleteID": -1.0,
+              "scale": "SGV_Eff_Scale",
+              "ILLLPEOODKP": ""
+            }
+          ],
           "onRemoved": [
             {
               "$type": "ChangeGadgetState"
             }
           ],
-          "onAdded": [
-            {
-              "$type": "FireEffect",
-              "effectPattern": "Eff_SceneObj_OrigamiLotus_Splash",
-              "scale": "SGV_Eff_Scale",
-              "ILLLPEOODKP": "",
-              "effectTempleteID": -1.0
-            }
-          ],
-          "elementDurability": 100.0,
-          "modifierName": "",
           "AIHNJLDFEGJ": 0.0
         }
       },
-      "MKDAOFGPAEM": [
-        {
-          "$type": "Predicated",
-          "successActions": [
-            {
-              "$type": "DebugLog",
-              "content": "Avatar_Exit_Field"
-            },
-            {
-              "$type": "ServerLuaTriggerEvent",
-              "param1": 0.0,
-              "param2": 0.0,
-              "AHCNJKIEMPP": 0.0,
-              "sourceName": "OrigamFrog_ExitField",
-              "luaCallType": "FromGroup"
-            }
-          ],
-          "targetPredicates": [
-            {
-              "$type": "DEOFBICNFHF",
-              "entityTypes": [
-                "Avatar"
-              ]
-            },
-            {
-              "$type": "FPLEKBFMKOC"
-            }
-          ],
-          "target": "Other"
-        }
-      ],
-      "ANHJPOLNHIG": [
-        "SGV_Eff_Scale",
-        "SGV_SafeCol_State"
-      ],
-      "abilityMixins": [
-        {
-          "$type": "PlatformMoveMixin",
-          "BHHBACICHKK": [
-            "Move_WaterSurface"
-          ],
-          "NIKMDDNEIBE": [
-            "Stop_WaterSurface"
-          ]
-        },
-        {
-          "$type": "AttachToGadgetStateMixin",
-          "modifierName": "Fire_Impact_Eff",
-          "gadgetState": 201
-        }
-      ],
-      "abilityName": "V4_8_FairyBook_TorrentBrave_OrigamiLotus",
       "onAdded": [
         {
           "$type": "ApplyModifier",
@@ -2485,7 +2450,7 @@
         },
         {
           "$type": "EnableSceneTransformByName",
-          "PLDFIIMNOCD": [
+          "transformNames": [
             "SafeCol"
           ]
         },
@@ -2497,66 +2462,102 @@
           "$type": "AttachModifier",
           "modifierName": "Reconnect_Handler"
         }
+      ],
+      "onFieldExit": [
+        {
+          "$type": "Predicated",
+          "successActions": [
+            {
+              "$type": "DebugLog",
+              "content": "Avatar_Exit_Field"
+            },
+            {
+              "$type": "ServerLuaTriggerEvent",
+              "luaCallType": "FromGroup",
+              "param1": 0.0,
+              "param2": 0.0,
+              "param3": 0.0,
+              "sourceName": "OrigamFrog_ExitField"
+            }
+          ],
+          "target": "Other",
+          "targetPredicates": [
+            {
+              "$type": "ByEntityTypes",
+              "entityTypes": [
+                "Avatar"
+              ]
+            },
+            {
+              "$type": "ByAvatarIsHost"
+            }
+          ]
+        }
+      ],
+      "ANHJPOLNHIG": [
+        "SGV_Eff_Scale",
+        "SGV_SafeCol_State"
       ]
     }
   },
   {
     "Default": {
+      "abilityName": "V4_8_FairyBook_TorrentBrave_OrigamiLotus_HeavyShake",
       "onAbilityStart": [
         {
           "$type": "SetAnimatorTrigger",
-          "MPTriggerOnRemote": true,
+          "mpTriggerOnRemote": true,
           "triggerID": "Shake01"
         }
-      ],
-      "abilityName": "V4_8_FairyBook_TorrentBrave_OrigamiLotus_HeavyShake"
+      ]
     }
   },
   {
     "Default": {
+      "abilityName": "V4_8_FairyBook_TorrentBrave_OrigamiLotus_LightShake",
       "onAbilityStart": [
         {
           "$type": "SetAnimatorTrigger",
-          "MPTriggerOnRemote": true,
+          "mpTriggerOnRemote": true,
           "triggerID": "Shake02"
         }
-      ],
-      "abilityName": "V4_8_FairyBook_TorrentBrave_OrigamiLotus_LightShake"
+      ]
     }
   },
   {
     "Default": {
+      "abilityName": "V4_8_FairyBook_TorrentBrave_OrigamiLotus_Splash",
       "onAbilityStart": [
         {
           "$type": "FireEffect",
           "effectPattern": "Eff_SceneObj_OrigamiLotus_Splash",
+          "effectTempleteID": -1.0,
           "scale": "SGV_Eff_Scale",
-          "ILLLPEOODKP": "",
-          "effectTempleteID": -1.0
+          "ILLLPEOODKP": ""
         }
       ],
       "ANHJPOLNHIG": [
         "SGV_Eff_Scale"
-      ],
-      "abilityName": "V4_8_FairyBook_TorrentBrave_OrigamiLotus_Splash"
+      ]
     }
   },
   {
     "Default": {
+      "abilityName": "V4_8_FairyBook_TorrentBrave_OrigamiFrogOPT_PlayEmote",
       "modifiers": {
         "Attach_Sad_Eff": {
           "duration": 2.0,
+          "elementDurability": 100.0,
+          "modifierName": "",
           "onAdded": [
             {
               "$type": "AttachEffect",
-              "ILLLPEOODKP": "",
-              "scale": 1.0,
               "effectPattern": "Eff_SceneObj_FairyToy_Emote_Sad",
-              "effectTempleteID": -1.0
+              "effectTempleteID": -1.0,
+              "scale": 1.0,
+              "ILLLPEOODKP": ""
             }
           ],
-          "elementDurability": 100.0,
-          "modifierName": "",
           "AIHNJLDFEGJ": 0.0
         }
       },
@@ -2565,23 +2566,63 @@
           "$type": "ApplyModifier",
           "modifierName": "Attach_Sad_Eff"
         }
-      ],
-      "abilityName": "V4_8_FairyBook_TorrentBrave_OrigamiFrogOPT_PlayEmote"
+      ]
     }
   },
   {
     "Default": {
+      "abilityMixins": [
+        {
+          "$type": "WidgetMpSupportMixin",
+          "succActions": [
+            {
+              "$type": "ServerLuaTriggerEvent",
+              "luaCallType": "FromGroup",
+              "param1": 0.0,
+              "param2": 0.0,
+              "param3": 0.0,
+              "predicates": [
+                {
+                  "$type": "ByTargetGlobalValue",
+                  "compareType": "NoneOrEqual",
+                  "key": "Is_In_CD",
+                  "target": "Self",
+                  "value": 0.0
+                }
+              ],
+              "sourceName": "OrigamFrogOption"
+            },
+            {
+              "$type": "SetAnimatorTrigger",
+              "mpTriggerOnRemote": true,
+              "triggerID": "TriggerJump"
+            },
+            {
+              "$type": "SetGlobalValueV2",
+              "key": "Is_In_CD",
+              "maxValue": 0.0,
+              "minValue": 0.0,
+              "value": 1.0
+            },
+            {
+              "$type": "ApplyModifier",
+              "modifierName": "TriggerCD"
+            }
+          ]
+        }
+      ],
+      "abilityName": "V4_8_FairyBook_TorrentBrave_OrigamFrogOption",
       "modifiers": {
         "Intee_State_Handler": {
           "elementDurability": 100.0,
           "modifierMixins": [
             {
               "$type": "AttachModifierToGlobalValueMixin",
+              "globalValueKey": "Intee_State",
               "modifierNameSteps": [
                 "Intee_Off",
                 "Intee_On"
               ],
-              "globalValueKey": "Intee_State",
               "otherTargets": {
                 "$type": "FODOKCBNJJH",
                 "FJBNBOOHNBG": 0.0
@@ -2598,81 +2639,81 @@
           "AIHNJLDFEGJ": 0.0
         },
         "Intee_Off": {
+          "elementDurability": 100.0,
+          "modifierName": "",
           "onAdded": [
             {
               "$type": "EnableGadgetIntee"
             }
           ],
-          "elementDurability": 100.0,
-          "modifierName": "",
           "AIHNJLDFEGJ": 0.0
         },
         "Intee_On": {
+          "elementDurability": 100.0,
+          "modifierName": "",
           "onAdded": [
             {
               "$type": "EnableGadgetIntee",
               "enable": true
             }
           ],
-          "elementDurability": 100.0,
-          "modifierName": "",
           "AIHNJLDFEGJ": 0.0
         },
         "TriggerCD": {
           "duration": 1.3,
+          "elementDurability": 100.0,
+          "modifierName": "",
           "onRemoved": [
             {
               "$type": "SetGlobalValueV2",
-              "minValue": 0.0,
               "key": "Is_In_CD",
               "maxValue": 0.0,
-              "CBOMLBFIPJM": 0.0
+              "minValue": 0.0,
+              "value": 0.0
             }
           ],
-          "elementDurability": 100.0,
-          "modifierName": "",
           "AIHNJLDFEGJ": 0.0
         },
         "TurnDir_By_PartControl": {
           "duration": 0.2,
-          "onRemoved": [
-            {
-              "$type": "EnablePartControl",
-              "EAGOHJHLJEH": [
-                "FrogModel"
-              ]
-            },
-            {
-              "$type": "SetPartControlTarget",
-              "EAGOHJHLJEH": [
-                "FrogModel"
-              ],
-              "attachPoint": ""
-            }
-          ],
+          "elementDurability": 100.0,
+          "modifierName": "",
           "onAdded": [
             {
               "$type": "EnablePartControl",
               "enable": true,
-              "EAGOHJHLJEH": [
+              "partRootNames": [
                 "FrogModel"
               ]
             },
             {
               "$type": "SetPartControlTarget",
-              "EAGOHJHLJEH": [
-                "FrogModel"
-              ],
               "attachPoint": "",
-              "target": "Target",
               "otherTargets": {
                 "$type": "FODOKCBNJJH",
                 "FJBNBOOHNBG": 0.0
-              }
+              },
+              "partRootNames": [
+                "FrogModel"
+              ],
+              "target": "Target"
             }
           ],
-          "elementDurability": 100.0,
-          "modifierName": "",
+          "onRemoved": [
+            {
+              "$type": "EnablePartControl",
+              "partRootNames": [
+                "FrogModel"
+              ]
+            },
+            {
+              "$type": "SetPartControlTarget",
+              "attachPoint": "",
+              "partRootNames": [
+                "FrogModel"
+              ]
+            }
+          ],
           "AIHNJLDFEGJ": 0.0
         }
       },
@@ -2682,74 +2723,33 @@
           "modifierName": "TurnDir_By_PartControl"
         }
       ],
-      "abilityMixins": [
-        {
-          "$type": "WidgetMpSupportMixin",
-          "CMEPEHIJMPL": [
-            {
-              "$type": "ServerLuaTriggerEvent",
-              "param1": 0.0,
-              "param2": 0.0,
-              "AHCNJKIEMPP": 0.0,
-              "sourceName": "OrigamFrogOption",
-              "luaCallType": "FromGroup",
-              "predicates": [
-                {
-                  "$type": "EOFDCELPGFO",
-                  "CBOMLBFIPJM": 0.0,
-                  "compareType": "NoneOrEqual",
-                  "key": "Is_In_CD",
-                  "target": "Self"
-                }
-              ]
-            },
-            {
-              "$type": "SetAnimatorTrigger",
-              "MPTriggerOnRemote": true,
-              "triggerID": "TriggerJump"
-            },
-            {
-              "$type": "SetGlobalValueV2",
-              "minValue": 0.0,
-              "key": "Is_In_CD",
-              "maxValue": 0.0,
-              "CBOMLBFIPJM": 1.0
-            },
-            {
-              "$type": "ApplyModifier",
-              "modifierName": "TriggerCD"
-            }
-          ]
-        }
-      ],
-      "abilityName": "V4_8_FairyBook_TorrentBrave_OrigamFrogOption",
       "onAdded": [
         {
           "$type": "SetGlobalValueV2",
-          "minValue": 0.0,
           "key": "Started",
           "maxValue": 0.0,
-          "CBOMLBFIPJM": 0.0
+          "minValue": 0.0,
+          "value": 0.0
         },
         {
           "$type": "SetGlobalValueV2",
-          "minValue": 0.0,
           "key": "Is_In_CD",
           "maxValue": 0.0,
-          "CBOMLBFIPJM": 0.0
+          "minValue": 0.0,
+          "value": 0.0
         },
         {
           "$type": "EnablePartControl",
-          "EAGOHJHLJEH": [
+          "partRootNames": [
             "FrogModel"
           ]
         },
         {
           "$type": "SetPartControlTarget",
-          "EAGOHJHLJEH": [
+          "attachPoint": "",
+          "partRootNames": [
             "FrogModel"
-          ],
-          "attachPoint": ""
+          ]
         },
         {
           "$type": "AttachModifier",
@@ -2760,67 +2760,68 @@
   },
   {
     "Default": {
+      "abilityName": "V4_8_FairyBook_TorrentBrave_OrigamFrog_SingleJump",
       "onAbilityStart": [
         {
           "$type": "SetAnimatorTrigger",
-          "MPTriggerOnRemote": true,
+          "mpTriggerOnRemote": true,
           "triggerID": "TriggerJump"
         }
-      ],
-      "abilityName": "V4_8_FairyBook_TorrentBrave_OrigamFrog_SingleJump"
+      ]
     }
   },
   {
     "Default": {
+      "abilityName": "V4_8_FairyBook_TorrentBrave_OrigamFrogOption_JumpEndEff",
       "onAbilityStart": [
         {
           "$type": "FireEffect",
           "effectPattern": "Eff_SceneObj_OrigamiDrum_02",
+          "effectTempleteID": -1.0,
           "scale": 1.0,
-          "ILLLPEOODKP": "",
-          "effectTempleteID": -1.0
+          "ILLLPEOODKP": ""
         }
-      ],
-      "abilityName": "V4_8_FairyBook_TorrentBrave_OrigamFrogOption_JumpEndEff"
+      ]
     }
   },
   {
     "Default": {
+      "abilityName": "V4_8_FairyBook_TorrentBrave_CurveAxis",
       "modifiers": {
         "Init_GV": {
+          "elementDurability": 100.0,
+          "modifierName": "",
           "onAdded": [
             {
               "$type": "SetGlobalValueList",
               "BGGHGEAHCGN": [
                 {
-                  "maxValue": 0.0,
-                  "CBOMLBFIPJM": 0.0,
                   "key": "EVENT_GV_0",
-                  "minValue": 0.0
+                  "maxValue": 0.0,
+                  "minValue": 0.0,
+                  "value": 0.0
                 },
                 {
-                  "maxValue": 0.0,
-                  "CBOMLBFIPJM": 0.0,
                   "key": "EVENT_GV_1",
-                  "minValue": 0.0
+                  "maxValue": 0.0,
+                  "minValue": 0.0,
+                  "value": 0.0
                 },
                 {
-                  "maxValue": 0.0,
-                  "CBOMLBFIPJM": 0.0,
                   "key": "Check_Target_Value_GV",
-                  "minValue": 0.0
+                  "maxValue": 0.0,
+                  "minValue": 0.0,
+                  "value": 0.0
                 },
                 {
-                  "maxValue": 0.0,
-                  "CBOMLBFIPJM": 0.0,
                   "key": "Idle_State",
-                  "minValue": 0.0
+                  "maxValue": 0.0,
+                  "minValue": 0.0,
+                  "value": 0.0
                 }
               ]
             }
           ],
-          "elementDurability": 100.0,
-          "modifierName": "",
           "AIHNJLDFEGJ": 0.0
         },
         "CurveEvent_Handler": {
@@ -2828,6 +2829,21 @@
           "modifierMixins": [
             {
               "$type": "LevelCurveMixin",
+              "tag": "Origami_Frog_TorrentBrave",
+              "HPFCGICMFMF": [
+                "EVENT_GV_0",
+                "EVENT_GV_1"
+              ],
+              "BEDOJLFENKK": [
+                "4.8_SetGroupVariable",
+                "4.8_TorrentBrave_PauseCheck",
+                "4.8_TorrentBrave_AxisShake",
+                "4.8_TorrentBrave_ResetFrogDir",
+                "4.8_TorrentBrave_Intee_Control",
+                "4.8_TorrentBrave_Idle_State_Control",
+                "4.8_TorrentBrave_Frog_Jump",
+                "4.8_TorrentBrave_Lotus_Splash"
+              ],
               "EDFJOMKHLFM": [
                 [
                   {
@@ -2840,12 +2856,12 @@
                   },
                   {
                     "$type": "ServerLuaCall",
+                    "funcName": "SLC_LevelCurveEvent_SetGroupVariable",
+                    "luaCallType": "FromGroup",
                     "param1": "EVENT_GV_0",
                     "param2": "EVENT_GV_1",
-                    "paramNum": 2,
-                    "funcName": "SLC_LevelCurveEvent_SetGroupVariable",
-                    "AHCNJKIEMPP": 0.0,
-                    "luaCallType": "FromGroup"
+                    "param3": 0.0,
+                    "paramNum": 2
                   }
                 ],
                 [
@@ -2859,19 +2875,19 @@
                   },
                   {
                     "$type": "SetGlobalValueV2",
-                    "minValue": 0.0,
                     "key": "Check_Target_Value_GV",
                     "maxValue": 0.0,
-                    "CBOMLBFIPJM": "EVENT_GV_0"
+                    "minValue": 0.0,
+                    "value": "EVENT_GV_0"
                   },
                   {
                     "$type": "ServerLuaCall",
+                    "funcName": "SLC_Lua_Log",
+                    "luaCallType": "FromGroup",
                     "param1": "EVENT_GV_0",
                     "param2": 0.0,
-                    "paramNum": 2,
-                    "funcName": "SLC_Lua_Log",
-                    "AHCNJKIEMPP": 0.0,
-                    "luaCallType": "FromGroup"
+                    "param3": 0.0,
+                    "paramNum": 2
                   },
                   {
                     "$type": "ApplyModifier",
@@ -2900,11 +2916,11 @@
                   {
                     "$type": "TriggerAbility",
                     "abilityName": "V4_8_FairyBook_TorrentBrave_OrigamFrogOption",
-                    "target": "Target",
                     "otherTargets": {
                       "$type": "FODOKCBNJJH",
                       "FJBNBOOHNBG": 0.0
-                    }
+                    },
+                    "target": "Target"
                   }
                 ],
                 [
@@ -2918,10 +2934,10 @@
                   },
                   {
                     "$type": "SetGlobalValueV2",
-                    "minValue": 0.0,
                     "key": "Intee_State",
                     "maxValue": 0.0,
-                    "CBOMLBFIPJM": "EVENT_GV_0"
+                    "minValue": 0.0,
+                    "value": "EVENT_GV_0"
                   }
                 ],
                 [
@@ -2935,10 +2951,10 @@
                   },
                   {
                     "$type": "SetGlobalValueV2",
-                    "minValue": 0.0,
                     "key": "Idle_State",
                     "maxValue": 0.0,
-                    "CBOMLBFIPJM": "EVENT_GV_0"
+                    "minValue": 0.0,
+                    "value": "EVENT_GV_0"
                   }
                 ],
                 [
@@ -2949,11 +2965,11 @@
                   {
                     "$type": "TriggerAbility",
                     "abilityName": "V4_8_FairyBook_TorrentBrave_OrigamFrog_SingleJump",
-                    "target": "Target",
                     "otherTargets": {
                       "$type": "FODOKCBNJJH",
                       "FJBNBOOHNBG": 0.0
-                    }
+                    },
+                    "target": "Target"
                   }
                 ],
                 [
@@ -2970,22 +2986,7 @@
                     }
                   }
                 ]
-              ],
-              "HPFCGICMFMF": [
-                "EVENT_GV_0",
-                "EVENT_GV_1"
-              ],
-              "BEDOJLFENKK": [
-                "4.8_SetGroupVariable",
-                "4.8_TorrentBrave_PauseCheck",
-                "4.8_TorrentBrave_AxisShake",
-                "4.8_TorrentBrave_ResetFrogDir",
-                "4.8_TorrentBrave_Intee_Control",
-                "4.8_TorrentBrave_Idle_State_Control",
-                "4.8_TorrentBrave_Frog_Jump",
-                "4.8_TorrentBrave_Lotus_Splash"
-              ],
-              "tag": "Origami_Frog_TorrentBrave"
+              ]
             }
           ],
           "modifierName": "",
@@ -2993,15 +2994,11 @@
         },
         "Gameplay_Variable_Check": {
           "duration": 0.1,
+          "elementDurability": 100.0,
+          "modifierName": "",
           "onAdded": [
             {
               "$type": "Predicated",
-              "successActions": [
-                {
-                  "$type": "DebugLog",
-                  "content": "LevelCurveMixin > 4.8_TorrentBrave_PauseCheck -- Succ"
-                }
-              ],
               "failActions": [
                 {
                   "$type": "DebugLog",
@@ -3025,35 +3022,33 @@
                 },
                 {
                   "$type": "ServerLuaTriggerEvent",
+                  "luaCallType": "FromGroup",
                   "param1": 0.0,
                   "param2": 0.0,
-                  "AHCNJKIEMPP": 0.0,
-                  "sourceName": "OrigamiLotus_LightShake",
-                  "luaCallType": "FromGroup"
+                  "param3": 0.0,
+                  "sourceName": "OrigamiLotus_LightShake"
+                }
+              ],
+              "successActions": [
+                {
+                  "$type": "DebugLog",
+                  "content": "LevelCurveMixin > 4.8_TorrentBrave_PauseCheck -- Succ"
                 }
               ],
               "targetPredicates": [
                 {
-                  "$type": "EOFDCELPGFO",
-                  "CBOMLBFIPJM": "Check_Target_Value_GV",
+                  "$type": "ByTargetGlobalValue",
                   "compareType": "MoreThanAndEqual",
                   "key": "SGV_GamePlay_Variable",
-                  "target": "Self"
+                  "target": "Self",
+                  "value": "Check_Target_Value_GV"
                 }
               ]
             }
           ],
-          "elementDurability": 100.0,
-          "modifierName": "",
           "AIHNJLDFEGJ": 0.0
         }
       },
-      "ANHJPOLNHIG": [
-        "EVENT_GV_0",
-        "EVENT_GV_1",
-        "Check_Target_Value_GV"
-      ],
-      "abilityName": "V4_8_FairyBook_TorrentBrave_CurveAxis",
       "onAdded": [
         {
           "$type": "ApplyModifier",
@@ -3065,23 +3060,30 @@
         },
         {
           "$type": "SetGlobalValueV2",
-          "minValue": 0.0,
           "key": "Intee_State",
           "maxValue": 0.0,
-          "CBOMLBFIPJM": 0.0
+          "minValue": 0.0,
+          "value": 0.0
         },
         {
           "$type": "SetGlobalValueV2",
-          "minValue": 0.0,
           "key": "Idle_State",
           "maxValue": 0.0,
-          "CBOMLBFIPJM": 0.0
+          "minValue": 0.0,
+          "value": 0.0
         }
+      ],
+      "ANHJPOLNHIG": [
+        "EVENT_GV_0",
+        "EVENT_GV_1",
+        "Check_Target_Value_GV"
       ]
     }
   },
   {
     "Default": {
+      "abilityName": "V4_8_FairyBook_TorrentBrave_SpecialForbid_Ability",
+      "isDynamicAbility": true,
       "modifiers": {
         "Forbid_SpecialState": {
           "elementDurability": 100.0,
@@ -3098,8 +3100,6 @@
           "AIHNJLDFEGJ": 0.0
         }
       },
-      "abilityName": "V4_8_FairyBook_TorrentBrave_SpecialForbid_Ability",
-      "isDynamicAbility": true,
       "onAdded": [
         {
           "$type": "AttachModifier",
@@ -3110,19 +3110,41 @@
   },
   {
     "Default": {
+      "abilityMixins": [
+        {
+          "$type": "AttachToGadgetStateMixin",
+          "modifierName": "State_0"
+        },
+        {
+          "$type": "AttachToGadgetStateMixin",
+          "gadgetState": 201,
+          "modifierName": "State_201"
+        },
+        {
+          "$type": "AttachToGadgetStateMixin",
+          "gadgetState": 202,
+          "modifierName": "State_202"
+        },
+        {
+          "$type": "AttachToGadgetStateMixin",
+          "gadgetState": 203,
+          "modifierName": "State_203"
+        }
+      ],
+      "abilityName": "V4_8_FairyBook_OrigamiFrog_Scene_Moveable_01",
       "modifiers": {
         "Create_Eff": {
+          "elementDurability": 100.0,
+          "modifierName": "",
           "onAdded": [
             {
               "$type": "FireEffect",
               "effectPattern": "Eff_SceneObj_OrigamiAlpacat_01_As",
+              "effectTempleteID": -1.0,
               "scale": "SGV_Emote_Scale",
-              "ILLLPEOODKP": "",
-              "effectTempleteID": -1.0
+              "ILLLPEOODKP": ""
             }
           ],
-          "elementDurability": 100.0,
-          "modifierName": "",
           "AIHNJLDFEGJ": 0.0
         },
         "Interactor_Square_Controller": {
@@ -3130,66 +3152,66 @@
           "modifierMixins": [
             {
               "$type": "AttachModifierToSelfGlobalValueNoInitMixin",
+              "globalValueKey": "SGV_Interactor_Square_On",
               "modifierNameSteps": [
                 "Interactor_Square_On"
               ],
-              "DEFOFMOIAAI": true,
               "valueSteps": [
                 0.5,
                 1.5
               ],
-              "globalValueKey": "SGV_Interactor_Square_On"
+              "DEFOFMOIAAI": true
             }
           ],
           "modifierName": "",
           "AIHNJLDFEGJ": 0.0
         },
         "Interactor_Square_On": {
-          "onRemoved": [
-            {
-              "$type": "EnableSceneTransformByName",
-              "PLDFIIMNOCD": [
-                "Interactor_Square"
-              ]
-            }
-          ],
+          "elementDurability": 100.0,
+          "modifierName": "",
           "onAdded": [
             {
               "$type": "EnableSceneTransformByName",
               "setEnable": true,
-              "PLDFIIMNOCD": [
+              "transformNames": [
                 "Interactor_Square"
               ]
             }
           ],
-          "elementDurability": 100.0,
-          "modifierName": "",
+          "onRemoved": [
+            {
+              "$type": "EnableSceneTransformByName",
+              "transformNames": [
+                "Interactor_Square"
+              ]
+            }
+          ],
           "AIHNJLDFEGJ": 0.0
         },
         "StartMove": {
           "duration": 0.7,
-          "onAdded": [
-            {
-              "$type": "SetTargetToTargetKey",
-              "targetKey": "FollowRuntimeID",
-              "otherTargets": {
-                "$type": "FODOKCBNJJH",
-                "FJBNBOOHNBG": "SGV_Jump_Move_TargetSlot"
-              }
-            }
-          ],
           "elementDurability": 100.0,
           "modifierMixins": [
             {
               "$type": "FollowMoveParamOverrideMixin",
-              "CIFADBDOAFI": "calced_Speed",
               "attachPoint": "",
+              "speed": "calced_Speed",
               "PLGIPDCMDLG": [
                 "speed"
               ]
             }
           ],
           "modifierName": "",
+          "onAdded": [
+            {
+              "$type": "SetTargetToTargetKey",
+              "otherTargets": {
+                "$type": "FODOKCBNJJH",
+                "FJBNBOOHNBG": "SGV_Jump_Move_TargetSlot"
+              },
+              "targetKey": "FollowRuntimeID"
+            }
+          ],
           "AIHNJLDFEGJ": 0.0
         },
         "State_0": {
@@ -3198,42 +3220,38 @@
           "AIHNJLDFEGJ": 0.0
         },
         "State_201": {
-          "onRemoved": [
-            {
-              "$type": "ResetAnimatorTrigger",
-              "triggerID": "Jump"
-            }
-          ],
+          "elementDurability": 100.0,
+          "modifierName": "",
           "onAdded": [
             {
               "$type": "SetGlobalPos",
-              "setTarget": false,
-              "key": "RushMove_TargetPoint",
               "born": {
-                "$type": "BOJMMDAIGMM",
+                "$type": "ConfigBornByTarget",
                 "useRotation": true
               },
-              "target": "Target",
+              "key": "RushMove_TargetPoint",
               "otherTargets": {
                 "$type": "FODOKCBNJJH",
                 "FJBNBOOHNBG": "SGV_Jump_Move_TargetSlot"
-              }
+              },
+              "setTarget": false,
+              "target": "Target"
             },
             {
               "$type": "SetGlobalValueByTargetDistance",
-              "IBKILAJPLPP": "",
               "key": "toPos_Distance",
               "otherTargets": {
                 "$type": "FODOKCBNJJH",
                 "FJBNBOOHNBG": "SGV_Jump_Move_TargetSlot"
-              }
+              },
+              "IBKILAJPLPP": ""
             },
             {
               "$type": "SetGlobalValueV2",
-              "minValue": 0.0,
               "key": "calced_Speed",
               "maxValue": 0.0,
-              "CBOMLBFIPJM": [
+              "minValue": 0.0,
+              "value": [
                 "toPos_Distance",
                 "move_time",
                 "DIV"
@@ -3242,18 +3260,18 @@
             {
               "$type": "TurnDirectionToPos",
               "toPos": {
-                "$type": "LKIBKKFEOLJ",
-                "positionKey": "RushMove_TargetPoint",
-                "directionKey": "",
+                "$type": "ConfigBornByGlobalValue",
                 "direction": {
-                  "$type": "FPLAJGOAOHH",
-                  "OOKIMPBMBCN": {
+                  "$type": "ConfigDirectionByEntity",
+                  "angleOffset": {
                     "x": 0.0,
-                    "z": 0.0,
-                    "y": 0.0
+                    "y": 0.0,
+                    "z": 0.0
                   },
                   "useCorrectDir": true
-                }
+                },
+                "directionKey": "",
+                "positionKey": "RushMove_TargetPoint"
               }
             },
             {
@@ -3261,48 +3279,52 @@
             },
             {
               "$type": "SetAnimatorTrigger",
-              "MPTriggerOnRemote": true,
+              "mpTriggerOnRemote": true,
               "triggerID": "Jump"
             }
           ],
-          "elementDurability": 100.0,
-          "modifierName": "",
+          "onRemoved": [
+            {
+              "$type": "ResetAnimatorTrigger",
+              "triggerID": "Jump"
+            }
+          ],
           "AIHNJLDFEGJ": 0.0
         },
         "State_202": {
           "duration": 3.8,
+          "elementDurability": 100.0,
+          "modifierName": "",
+          "onAdded": [
+            {
+              "$type": "SetAnimatorTrigger",
+              "mpTriggerOnRemote": true,
+              "triggerID": "Talk"
+            }
+          ],
           "onRemoved": [
             {
               "$type": "ChangeGadgetState"
             }
           ],
-          "onAdded": [
-            {
-              "$type": "SetAnimatorTrigger",
-              "MPTriggerOnRemote": true,
-              "triggerID": "Talk"
-            }
-          ],
-          "elementDurability": 100.0,
-          "modifierName": "",
           "AIHNJLDFEGJ": 0.0
         },
         "State_203": {
           "duration": 1.8,
+          "elementDurability": 100.0,
+          "modifierName": "",
+          "onAdded": [
+            {
+              "$type": "SetAnimatorTrigger",
+              "mpTriggerOnRemote": true,
+              "triggerID": "Talk2"
+            }
+          ],
           "onRemoved": [
             {
               "$type": "ChangeGadgetState"
             }
           ],
-          "onAdded": [
-            {
-              "$type": "SetAnimatorTrigger",
-              "MPTriggerOnRemote": true,
-              "triggerID": "Talk2"
-            }
-          ],
-          "elementDurability": 100.0,
-          "modifierName": "",
           "AIHNJLDFEGJ": 0.0
         }
       },
@@ -3316,79 +3338,41 @@
           "modifierName": "StartMove"
         }
       ],
-      "ANHJPOLNHIG": [
-        "SGV_Jump_Move_TargetSlot",
-        "toPos_Distance",
-        "move_time",
-        "calced_Speed",
-        "SGV_Emote_Scale"
-      ],
-      "onKill": [
-        {
-          "$type": "FireEffect",
-          "effectPattern": "Eff_SceneObj_OrigamiAlpacat_01_Ds",
-          "scale": "SGV_Emote_Scale",
-          "ILLLPEOODKP": "",
-          "effectTempleteID": -1.0
-        }
-      ],
-      "abilityMixins": [
-        {
-          "$type": "AttachToGadgetStateMixin",
-          "modifierName": "State_0"
-        },
-        {
-          "$type": "AttachToGadgetStateMixin",
-          "modifierName": "State_201",
-          "gadgetState": 201
-        },
-        {
-          "$type": "AttachToGadgetStateMixin",
-          "modifierName": "State_202",
-          "gadgetState": 202
-        },
-        {
-          "$type": "AttachToGadgetStateMixin",
-          "modifierName": "State_203",
-          "gadgetState": 203
-        }
-      ],
-      "abilityName": "V4_8_FairyBook_OrigamiFrog_Scene_Moveable_01",
       "onAdded": [
         {
           "$type": "SetGlobalValueV2",
-          "minValue": 0.0,
           "key": "toPos_Distance",
           "maxValue": 0.0,
-          "CBOMLBFIPJM": 0.0
+          "minValue": 0.0,
+          "value": 0.0
         },
         {
           "$type": "SetGlobalValueV2",
-          "minValue": 0.0,
           "key": "move_time",
           "maxValue": 0.0,
-          "CBOMLBFIPJM": 0.43333
+          "minValue": 0.0,
+          "value": 0.43333
         },
         {
           "$type": "SetGlobalValueV2",
-          "minValue": 0.0,
           "key": "calced_Speed",
           "maxValue": 0.0,
-          "CBOMLBFIPJM": 1.0
+          "minValue": 0.0,
+          "value": 1.0
         },
         {
           "$type": "SetGlobalValueV2",
-          "minValue": 0.0,
           "key": "FollowRuntimeID_0",
           "maxValue": 0.0,
-          "CBOMLBFIPJM": 0.0
+          "minValue": 0.0,
+          "value": 0.0
         },
         {
           "$type": "SetGlobalValueV2",
-          "minValue": 0.0,
           "key": "FollowRuntimeID_1",
           "maxValue": 0.0,
-          "CBOMLBFIPJM": 0.0
+          "minValue": 0.0,
+          "value": 0.0
         },
         {
           "$type": "AttachModifier",
@@ -3398,18 +3382,37 @@
           "$type": "AttachModifier",
           "modifierName": "Create_Eff"
         }
+      ],
+      "onKill": [
+        {
+          "$type": "FireEffect",
+          "effectPattern": "Eff_SceneObj_OrigamiAlpacat_01_Ds",
+          "effectTempleteID": -1.0,
+          "scale": "SGV_Emote_Scale",
+          "ILLLPEOODKP": ""
+        }
+      ],
+      "ANHJPOLNHIG": [
+        "SGV_Jump_Move_TargetSlot",
+        "toPos_Distance",
+        "move_time",
+        "calced_Speed",
+        "SGV_Emote_Scale"
       ]
     }
   },
   {
     "Default": {
+      "abilityName": "V4_8_FairyBook_OrigamiFrog_Scene_Moveable_SPJump",
       "modifiers": {
         "Drum_LightJump": {
           "duration": 0.2,
+          "elementDurability": 100.0,
+          "modifierName": "",
           "onAdded": [
             {
               "$type": "SetAnimatorTrigger",
-              "MPTriggerOnRemote": true,
+              "mpTriggerOnRemote": true,
               "triggerID": "LightJump"
             },
             {
@@ -3421,39 +3424,39 @@
               }
             }
           ],
-          "elementDurability": 100.0,
-          "modifierName": "",
           "AIHNJLDFEGJ": 0.0
         },
         "TriggerDurmPlayAnim": {
           "duration": 0.2,
+          "elementDurability": 100.0,
+          "modifierName": "",
           "onAdded": [
             {
               "$type": "SetAnimatorTrigger",
-              "MPTriggerOnRemote": true,
+              "mpTriggerOnRemote": true,
               "triggerID": "Play"
             },
             {
               "$type": "FireEffect",
               "effectPattern": "Eff_SceneObj_OrigamiDrum_02",
+              "effectTempleteID": -1.0,
               "scale": 1.0,
-              "ILLLPEOODKP": "",
-              "effectTempleteID": -1.0
+              "ILLLPEOODKP": ""
             }
           ],
-          "elementDurability": 100.0,
-          "modifierName": "",
           "AIHNJLDFEGJ": 0.0
         },
         "Drum_SPJump": {
           "duration": 0.7,
+          "elementDurability": 100.0,
+          "modifierName": "",
           "onAdded": [
             {
               "$type": "SetGlobalValueV2",
-              "minValue": 0.0,
               "key": "SP_calced_Speed",
               "maxValue": 0.0,
-              "CBOMLBFIPJM": [
+              "minValue": 0.0,
+              "value": [
                 "Drum_Distance",
                 "sp_move_time",
                 "DIV"
@@ -3462,145 +3465,143 @@
             {
               "$type": "TurnDirectionToPos",
               "toPos": {
-                "$type": "LKIBKKFEOLJ",
-                "positionKey": "Drum_PosKey",
-                "directionKey": "",
+                "$type": "ConfigBornByGlobalValue",
                 "direction": {
-                  "$type": "FPLAJGOAOHH",
-                  "OOKIMPBMBCN": {
+                  "$type": "ConfigDirectionByEntity",
+                  "angleOffset": {
                     "x": 0.0,
-                    "z": 0.0,
-                    "y": 0.0
+                    "y": 0.0,
+                    "z": 0.0
                   },
                   "useCorrectDir": true
-                }
+                },
+                "directionKey": "",
+                "positionKey": "Drum_PosKey"
               }
             },
             {
               "$type": "SetAnimatorTrigger",
-              "MPTriggerOnRemote": true,
+              "mpTriggerOnRemote": true,
               "triggerID": "JumpSP"
             }
           ],
-          "elementDurability": 100.0,
-          "modifierName": "",
           "AIHNJLDFEGJ": 0.0
         }
       },
       "onAbilityStart": [
         {
           "$type": "SetTargetToTargetKey",
-          "targetKey": "OrigamiDrum_Runtime_Id",
-          "target": "Target"
+          "target": "Target",
+          "targetKey": "OrigamiDrum_Runtime_Id"
         },
         {
           "$type": "SetGlobalValueByTargetDistance",
-          "IBKILAJPLPP": "",
+          "isXZ": true,
           "key": "Drum_Distance",
-          "GAMCOPIHDFI": true,
-          "target": "Target"
+          "target": "Target",
+          "IBKILAJPLPP": ""
         },
         {
           "$type": "SetGlobalPos",
-          "setTarget": false,
-          "key": "Drum_PosKey",
           "born": {
-            "$type": "BOJMMDAIGMM",
+            "$type": "ConfigBornByTarget",
             "useRotation": true
           },
+          "key": "Drum_PosKey",
+          "setTarget": false,
           "target": "Target"
         },
         {
           "$type": "Predicated",
-          "successActions": [
-            {
-              "$type": "SetTargetToTargetKey",
-              "targetKey": "FollowRuntimeID",
-              "otherTargets": {
-                "$type": "GENFIIMMOOJ",
-                "targetKey": "OrigamiDrum_Runtime_Id"
-              }
-            },
-            {
-              "$type": "ApplyModifier",
-              "modifierName": "Drum_LightJump"
-            }
-          ],
           "failActions": [
             {
               "$type": "ApplyModifier",
               "modifierName": "Drum_SPJump"
             }
           ],
+          "successActions": [
+            {
+              "$type": "SetTargetToTargetKey",
+              "otherTargets": {
+                "$type": "GENFIIMMOOJ",
+                "targetKey": "OrigamiDrum_Runtime_Id"
+              },
+              "targetKey": "FollowRuntimeID"
+            },
+            {
+              "$type": "ApplyModifier",
+              "modifierName": "Drum_LightJump"
+            }
+          ],
           "targetPredicates": [
             {
-              "$type": "EOFDCELPGFO",
-              "CBOMLBFIPJM": 0.3,
+              "$type": "ByTargetGlobalValue",
               "compareType": "LessAndEqual",
               "key": "Drum_Distance",
-              "target": "Self"
+              "target": "Self",
+              "value": 0.3
             }
           ]
+        }
+      ],
+      "onAdded": [
+        {
+          "$type": "SetGlobalValueV2",
+          "key": "Drum_Distance",
+          "maxValue": 0.0,
+          "minValue": 0.0,
+          "value": 0.0
+        },
+        {
+          "$type": "SetGlobalValueV2",
+          "key": "sp_move_time",
+          "maxValue": 0.0,
+          "minValue": 0.0,
+          "value": 0.41
+        },
+        {
+          "$type": "SetGlobalValueV2",
+          "key": "SP_calced_Speed",
+          "maxValue": 0.0,
+          "minValue": 0.0,
+          "value": 1.0
         }
       ],
       "ANHJPOLNHIG": [
         "Drum_Distance",
         "sp_move_time",
         "SP_calced_Speed"
-      ],
-      "abilityName": "V4_8_FairyBook_OrigamiFrog_Scene_Moveable_SPJump",
-      "onAdded": [
-        {
-          "$type": "SetGlobalValueV2",
-          "minValue": 0.0,
-          "key": "Drum_Distance",
-          "maxValue": 0.0,
-          "CBOMLBFIPJM": 0.0
-        },
-        {
-          "$type": "SetGlobalValueV2",
-          "minValue": 0.0,
-          "key": "sp_move_time",
-          "maxValue": 0.0,
-          "CBOMLBFIPJM": 0.41
-        },
-        {
-          "$type": "SetGlobalValueV2",
-          "minValue": 0.0,
-          "key": "SP_calced_Speed",
-          "maxValue": 0.0,
-          "CBOMLBFIPJM": 1.0
-        }
       ]
     }
   },
   {
     "Default": {
+      "abilityName": "V4_8_FairyBook_OrigamiFrog_Scene_Moveable_SPJumpStart",
       "modifiers": {
         "StartMoveSP": {
           "duration": 0.7,
-          "onAdded": [
-            {
-              "$type": "SetTargetToTargetKey",
-              "targetKey": "FollowRuntimeID",
-              "otherTargets": {
-                "$type": "GENFIIMMOOJ",
-                "targetKey": "OrigamiDrum_Runtime_Id"
-              }
-            }
-          ],
           "elementDurability": 100.0,
           "modifierMixins": [
             {
               "$type": "FollowMoveParamOverrideMixin",
-              "CIFADBDOAFI": "SP_calced_Speed",
               "attachPoint": "",
+              "speed": "SP_calced_Speed",
               "PLGIPDCMDLG": [
                 "speed"
               ]
             }
           ],
           "modifierName": "",
+          "onAdded": [
+            {
+              "$type": "SetTargetToTargetKey",
+              "otherTargets": {
+                "$type": "GENFIIMMOOJ",
+                "targetKey": "OrigamiDrum_Runtime_Id"
+              },
+              "targetKey": "FollowRuntimeID"
+            }
+          ],
           "AIHNJLDFEGJ": 0.0
         }
       },
@@ -3612,45 +3613,45 @@
       ],
       "ANHJPOLNHIG": [
         "SP_calced_Speed"
-      ],
-      "abilityName": "V4_8_FairyBook_OrigamiFrog_Scene_Moveable_SPJumpStart"
+      ]
     }
   },
   {
     "Default": {
+      "abilityName": "V4_8_FairyBook_OrigamiFrog_Scene_Moveable_SPJump_PartControl_Handler",
       "modifiers": {
         "PartControl_Handler": {
           "duration": 1.0,
-          "onRemoved": [
-            {
-              "$type": "EnablePartControl",
-              "EAGOHJHLJEH": [
-                "RootNode"
-              ]
-            }
-          ],
+          "elementDurability": 100.0,
+          "modifierName": "",
           "onAdded": [
             {
               "$type": "EnablePartControl",
               "enable": true,
-              "EAGOHJHLJEH": [
+              "partRootNames": [
                 "RootNode"
               ]
             },
             {
               "$type": "SetPartControlTarget",
-              "EAGOHJHLJEH": [
-                "RootNode"
-              ],
               "attachPoint": "",
               "otherTargets": {
                 "$type": "GENFIIMMOOJ",
                 "targetKey": "OrigamiDrum_Runtime_Id"
-              }
+              },
+              "partRootNames": [
+                "RootNode"
+              ]
             }
           ],
-          "elementDurability": 100.0,
-          "modifierName": "",
+          "onRemoved": [
+            {
+              "$type": "EnablePartControl",
+              "partRootNames": [
+                "RootNode"
+              ]
+            }
+          ],
           "AIHNJLDFEGJ": 0.0
         }
       },
@@ -3660,11 +3661,10 @@
           "modifierName": "PartControl_Handler"
         }
       ],
-      "abilityName": "V4_8_FairyBook_OrigamiFrog_Scene_Moveable_SPJump_PartControl_Handler",
       "onAdded": [
         {
           "$type": "EnablePartControl",
-          "EAGOHJHLJEH": [
+          "partRootNames": [
             "RootNode"
           ]
         }
@@ -3673,29 +3673,30 @@
   },
   {
     "Default": {
+      "abilityName": "V4_8_FairyBook_OrigamiFrog_Scene_Moveable_SPJumpOver",
       "modifiers": {
         "Trigger_Drum_Play": {
           "duration": 0.2,
+          "elementDurability": 100.0,
+          "modifierName": "",
           "onAdded": [
             {
               "$type": "FireEffect",
               "effectPattern": "Eff_SceneObj_OrigamiDrum_02",
+              "effectTempleteID": -1.0,
               "scale": 1.0,
-              "ILLLPEOODKP": "",
-              "effectTempleteID": -1.0
+              "ILLLPEOODKP": ""
             },
             {
               "$type": "ChangeGadgetState",
-              "ANIHOKMEKHK": 201
+              "state": 201
             },
             {
               "$type": "SetAnimatorTrigger",
-              "MPTriggerOnRemote": true,
+              "mpTriggerOnRemote": true,
               "triggerID": "PlayLight"
             }
           ],
-          "elementDurability": 100.0,
-          "modifierName": "",
           "AIHNJLDFEGJ": 0.0
         }
       },
@@ -3708,23 +3709,23 @@
             "targetKey": "OrigamiDrum_Runtime_Id"
           }
         }
-      ],
-      "abilityName": "V4_8_FairyBook_OrigamiFrog_Scene_Moveable_SPJumpOver"
+      ]
     }
   },
   {
     "Default": {
+      "abilityName": "V4_8_FairyBook_OrigamiFrog_Scene_Moveable_SPLightJumpOver",
       "modifiers": {
         "Trigger_Drum_Play": {
           "duration": 0.2,
+          "elementDurability": 100.0,
+          "modifierName": "",
           "onAdded": [
             {
               "$type": "ChangeGadgetState",
-              "ANIHOKMEKHK": 201
+              "state": 201
             }
           ],
-          "elementDurability": 100.0,
-          "modifierName": "",
           "AIHNJLDFEGJ": 0.0
         }
       },
@@ -3737,141 +3738,152 @@
             "targetKey": "OrigamiDrum_Runtime_Id"
           }
         }
-      ],
-      "abilityName": "V4_8_FairyBook_OrigamiFrog_Scene_Moveable_SPLightJumpOver"
+      ]
     }
   },
   {
     "Default": {
-      "modifiers": {
-        "shakeState": {
-          "thinkInterval": "ShakeCooldown",
-          "onAdded": [
-            {
-              "$type": "ActCameraShake",
-              "cameraShake": {
-                "extension": {
-                  "baseCycle": 0.25,
-                  "cycleDamping": -0.1
-                },
-                "shakeDir": {
-                  "y": 10.0
-                },
-                "shakeTime": 0.4,
-                "shakeDistance": 15.0,
-                "MNKFEFOKFKP": "",
-                "shakeRange": 1.5
-              }
-            }
-          ],
-          "elementDurability": 100.0,
-          "modifierName": "",
-          "onThinkInterval": [
-            {
-              "$type": "ActCameraShake",
-              "cameraShake": {
-                "extension": {
-                  "baseCycle": 0.25,
-                  "cycleDamping": -0.1
-                },
-                "shakeDir": {
-                  "y": 10.0
-                },
-                "shakeTime": 0.4,
-                "shakeDistance": 15.0,
-                "MNKFEFOKFKP": "",
-                "shakeRange": 1.5
-              }
-            }
-          ],
-          "AIHNJLDFEGJ": 0.0
-        }
-      },
       "abilityMixins": [
         {
           "$type": "AttachToGadgetStateMixin",
-          "modifierName": "shakeState",
-          "gadgetState": 201
+          "gadgetState": 201,
+          "modifierName": "shakeState"
         }
       ],
       "abilityName": "V4_8_FairyBook_OrigamiForest_LevelCameraShake_01",
-      "onAdded": [
-        {
-          "$type": "SetGlobalValueToOverrideMap",
-          "globalValueKey": "SGV_Shake_Cooldown",
-          "abilityName": "",
-          "overrideMapKey": "ShakeCooldown"
-        }
-      ],
       "abilitySpecials": {
         "ShakeCooldown": 8.0
-      }
-    }
-  },
-  {
-    "Default": {
+      },
       "modifiers": {
         "shakeState": {
-          "thinkInterval": "ShakeCooldown",
+          "elementDurability": 100.0,
+          "modifierName": "",
           "onAdded": [
             {
               "$type": "ActCameraShake",
               "cameraShake": {
                 "extension": {
-                  "baseCycle": 0.3,
+                  "baseCycle": 0.25,
                   "cycleDamping": -0.1
                 },
-                "shakeTime": 0.8,
-                "MNKFEFOKFKP": "",
-                "shakeRange": 0.5
+                "shakeDir": {
+                  "y": 10.0
+                },
+                "shakeDistance": 15.0,
+                "shakeRange": 1.5,
+                "shakeTime": 0.4,
+                "MNKFEFOKFKP": ""
               }
             }
           ],
-          "elementDurability": 100.0,
-          "modifierName": "",
           "onThinkInterval": [
             {
               "$type": "ActCameraShake",
               "cameraShake": {
                 "extension": {
-                  "baseCycle": 0.3,
+                  "baseCycle": 0.25,
                   "cycleDamping": -0.1
                 },
-                "shakeTime": 0.8,
-                "MNKFEFOKFKP": "",
-                "shakeRange": 0.5
+                "shakeDir": {
+                  "y": 10.0
+                },
+                "shakeDistance": 15.0,
+                "shakeRange": 1.5,
+                "shakeTime": 0.4,
+                "MNKFEFOKFKP": ""
               }
             }
           ],
+          "thinkInterval": "ShakeCooldown",
           "AIHNJLDFEGJ": 0.0
         }
       },
+      "onAdded": [
+        {
+          "$type": "SetGlobalValueToOverrideMap",
+          "abilityName": "",
+          "globalValueKey": "SGV_Shake_Cooldown",
+          "overrideMapKey": "ShakeCooldown"
+        }
+      ]
+    }
+  },
+  {
+    "Default": {
       "abilityMixins": [
         {
           "$type": "AttachToGadgetStateMixin",
-          "modifierName": "shakeState",
-          "gadgetState": 201
+          "gadgetState": 201,
+          "modifierName": "shakeState"
         }
       ],
       "abilityName": "V4_8_FairyBook_OrigamiForest_LevelCameraShake_02",
+      "abilitySpecials": {
+        "ShakeCooldown": 8.0
+      },
+      "modifiers": {
+        "shakeState": {
+          "elementDurability": 100.0,
+          "modifierName": "",
+          "onAdded": [
+            {
+              "$type": "ActCameraShake",
+              "cameraShake": {
+                "extension": {
+                  "baseCycle": 0.3,
+                  "cycleDamping": -0.1
+                },
+                "shakeRange": 0.5,
+                "shakeTime": 0.8,
+                "MNKFEFOKFKP": ""
+              }
+            }
+          ],
+          "onThinkInterval": [
+            {
+              "$type": "ActCameraShake",
+              "cameraShake": {
+                "extension": {
+                  "baseCycle": 0.3,
+                  "cycleDamping": -0.1
+                },
+                "shakeRange": 0.5,
+                "shakeTime": 0.8,
+                "MNKFEFOKFKP": ""
+              }
+            }
+          ],
+          "thinkInterval": "ShakeCooldown",
+          "AIHNJLDFEGJ": 0.0
+        }
+      },
       "onAdded": [
         {
           "$type": "SetGlobalValueToOverrideMap",
-          "globalValueKey": "SGV_Shake_Cooldown",
           "abilityName": "",
+          "globalValueKey": "SGV_Shake_Cooldown",
           "overrideMapKey": "ShakeCooldown"
         }
-      ],
-      "abilitySpecials": {
-        "ShakeCooldown": 8.0
-      }
+      ]
     }
   },
   {
     "Default": {
+      "abilityMixins": [
+        {
+          "$type": "AttachToGadgetStateMixin",
+          "gadgetState": 201,
+          "modifierName": "shakeState"
+        }
+      ],
+      "abilityName": "V4_8_FairyBook_OrigamiForest_LevelCameraShake_03",
+      "abilitySpecials": {
+        "ShakeCooldown": 8.0
+      },
       "modifiers": {
         "shakeState": {
-          "thinkInterval": "ShakeCooldown",
+          "elementDurability": 100.0,
+          "modifierName": "",
           "onAdded": [
             {
               "$type": "ActCameraShake",
@@ -3880,15 +3892,13 @@
                   "baseCycle": 0.08,
                   "cycleDamping": -0.04
                 },
-                "shakeTime": 0.7,
                 "shakeDistance": 30.0,
-                "MNKFEFOKFKP": "",
-                "shakeRange": 1.0
+                "shakeRange": 1.0,
+                "shakeTime": 0.7,
+                "MNKFEFOKFKP": ""
               }
             }
           ],
-          "elementDurability": 100.0,
-          "modifierName": "",
           "onThinkInterval": [
             {
               "$type": "ActCameraShake",
@@ -3897,35 +3907,25 @@
                   "baseCycle": 0.08,
                   "cycleDamping": -0.04
                 },
-                "shakeTime": 0.7,
                 "shakeDistance": 30.0,
-                "MNKFEFOKFKP": "",
-                "shakeRange": 1.0
+                "shakeRange": 1.0,
+                "shakeTime": 0.7,
+                "MNKFEFOKFKP": ""
               }
             }
           ],
+          "thinkInterval": "ShakeCooldown",
           "AIHNJLDFEGJ": 0.0
         }
       },
-      "abilityMixins": [
-        {
-          "$type": "AttachToGadgetStateMixin",
-          "modifierName": "shakeState",
-          "gadgetState": 201
-        }
-      ],
-      "abilityName": "V4_8_FairyBook_OrigamiForest_LevelCameraShake_03",
       "onAdded": [
         {
           "$type": "SetGlobalValueToOverrideMap",
-          "globalValueKey": "SGV_Shake_Cooldown",
           "abilityName": "",
+          "globalValueKey": "SGV_Shake_Cooldown",
           "overrideMapKey": "ShakeCooldown"
         }
-      ],
-      "abilitySpecials": {
-        "ShakeCooldown": 8.0
-      }
+      ]
     }
   },
   {
@@ -3934,8 +3934,8 @@
       "onAdded": [
         {
           "$type": "EnableGadgetSpecialCamera",
-          "enable": true,
-          "canBeHandledOnRecover": true
+          "canBeHandledOnRecover": true,
+          "enable": true
         }
       ]
     }

@@ -1,38 +1,61 @@
 [
   {
     "Default": {
-      "modifiers": {
-        "ExtraAttack_StaminaCost": {
-          "onAdded": [
-            {
-              "$type": "AvatarSkillStart",
-              "skillID": 10001,
-              "BGNJBEPEJBO": 1.0,
-              "costStaminaRatio": "ExtraAttack_Sword_Stamina_Cost",
-              "cdRatio": 1.0
-            }
-          ],
-          "elementDurability": 100.0,
-          "modifierName": "",
-          "AIHNJLDFEGJ": 0.0
-        }
-      },
       "abilityMixins": [
         {
           "$type": "ButtonHoldChargeMixin",
-          "skillID": 11151,
-          "OnReleaseCharged": [
+          "chargeStateIDs": [
+            "Attack01",
+            "Attack02",
+            "Attack03",
+            "Run"
+          ],
+          "chargeTime": 0.12,
+          "onBeginCharged": [
             {
               "$type": "SetAnimatorBool",
-              "boolID": "IsCharging"
+              "boolID": "IsCharging",
+              "value": true
+            }
+          ],
+          "onBeginSecondCharged": [
+            {
+              "$type": "SetAnimatorTrigger",
+              "predicates": [
+                {
+                  "$type": "ByLocalAvatarStamina",
+                  "logic": "GreaterOrEqual",
+                  "stamina": [
+                    "ExtraAttack_Sword_Stamina_Cost",
+                    "Flexible_Stamina",
+                    "ADD"
+                  ]
+                }
+              ],
+              "triggerID": "DoSkill"
             },
             {
               "$type": "SetAnimatorInt",
               "intID": "SkillID",
-              "CBOMLBFIPJM": 1.0
+              "predicates": [
+                {
+                  "$type": "ByLocalAvatarStamina",
+                  "logic": "GreaterOrEqual",
+                  "stamina": [
+                    "ExtraAttack_Sword_Stamina_Cost",
+                    "Flexible_Stamina",
+                    "ADD"
+                  ]
+                }
+              ],
+              "value": 6.0
+            },
+            {
+              "$type": "SetAnimatorBool",
+              "boolID": "IsCharging"
             }
           ],
-          "OnBeginUncharged": [
+          "onBeginUncharged": [
             {
               "$type": "SetAnimatorTrigger",
               "triggerID": "DoSkill"
@@ -40,136 +63,97 @@
             {
               "$type": "SetAnimatorInt",
               "intID": "SkillID",
-              "CBOMLBFIPJM": 99.0
+              "value": 99.0
             },
             {
               "$type": "SetAnimatorBool",
               "boolID": "IsCharging"
+            }
+          ],
+          "onReleaseCharged": [
+            {
+              "$type": "SetAnimatorBool",
+              "boolID": "IsCharging"
+            },
+            {
+              "$type": "SetAnimatorInt",
+              "intID": "SkillID",
+              "value": 1.0
+            }
+          ],
+          "onReleaseUncharged": [
+            {
+              "$type": "SetAnimatorInt",
+              "intID": "SkillID",
+              "value": 1.0
             }
           ],
           "secondChargeTime": 0.2,
-          "chargeTime": 0.12,
-          "OnBeginCharged": [
-            {
-              "$type": "SetAnimatorBool",
-              "CBOMLBFIPJM": true,
-              "boolID": "IsCharging"
-            }
-          ],
-          "OnBeginSecondCharged": [
-            {
-              "$type": "SetAnimatorTrigger",
-              "triggerID": "DoSkill",
-              "predicates": [
-                {
-                  "$type": "OPLIAABFJGD",
-                  "stamina": [
-                    "ExtraAttack_Sword_Stamina_Cost",
-                    "Flexible_Stamina",
-                    "ADD"
-                  ],
-                  "logic": "GreaterOrEqual"
-                }
-              ]
-            },
-            {
-              "$type": "SetAnimatorInt",
-              "intID": "SkillID",
-              "CBOMLBFIPJM": 6.0,
-              "predicates": [
-                {
-                  "$type": "OPLIAABFJGD",
-                  "stamina": [
-                    "ExtraAttack_Sword_Stamina_Cost",
-                    "Flexible_Stamina",
-                    "ADD"
-                  ],
-                  "logic": "GreaterOrEqual"
-                }
-              ]
-            },
-            {
-              "$type": "SetAnimatorBool",
-              "boolID": "IsCharging"
-            }
-          ],
-          "chargeStateIDs": [
-            "Attack01",
-            "Attack02",
-            "Attack03",
-            "Run"
-          ],
-          "OnReleaseUncharged": [
-            {
-              "$type": "SetAnimatorInt",
-              "intID": "SkillID",
-              "CBOMLBFIPJM": 1.0
-            }
-          ]
+          "skillID": 11151
         },
         {
           "$type": "AttachToStateIDMixin",
-          "LJPPDIGCJMJ": "",
+          "modifierName": "ExtraAttack_StaminaCost",
           "stateIDs": [
             "ExtraAttack"
           ],
-          "modifierName": "ExtraAttack_StaminaCost"
+          "LJPPDIGCJMJ": ""
         },
         {
           "$type": "ModifyDamageMixin",
-          "damagePercentageRatio": 0.0,
-          "damagePercentage": "Attack_01",
           "animEventNames": [
             "ATK01"
-          ]
+          ],
+          "damagePercentage": "Attack_01",
+          "damagePercentageRatio": 0.0
         },
         {
           "$type": "ModifyDamageMixin",
-          "damagePercentageRatio": 0.0,
-          "damagePercentage": "Attack_02",
           "animEventNames": [
             "ATK02"
-          ]
+          ],
+          "damagePercentage": "Attack_02",
+          "damagePercentageRatio": 0.0
         },
         {
           "$type": "ModifyDamageMixin",
-          "damagePercentageRatio": 0.0,
-          "damagePercentage": "Attack_03_01",
           "animEventNames": [
             "ATK03_01"
-          ]
+          ],
+          "damagePercentage": "Attack_03_01",
+          "damagePercentageRatio": 0.0
         },
         {
           "$type": "ModifyDamageMixin",
-          "damagePercentageRatio": 0.0,
-          "damagePercentage": "Attack_03_02",
           "animEventNames": [
             "ATK03_02"
-          ]
+          ],
+          "damagePercentage": "Attack_03_02",
+          "damagePercentageRatio": 0.0
         },
         {
           "$type": "ModifyDamageMixin",
-          "damagePercentageRatio": 0.0,
-          "damagePercentage": "Attack_04",
           "animEventNames": [
             "ATK04"
-          ]
+          ],
+          "damagePercentage": "Attack_04",
+          "damagePercentageRatio": 0.0
         },
         {
           "$type": "ModifyDamageMixin",
-          "damagePercentageRatio": 0.0,
-          "damagePercentage": "ExtraAttack_01",
           "animEventNames": [
             "ExtraAttack_1"
-          ]
+          ],
+          "damagePercentage": "ExtraAttack_01",
+          "damagePercentageRatio": 0.0
         },
         {
           "$type": "ModifyDamageMixin",
-          "damagePercentageRatio": 0.0,
-          "damagePercentage": "ExtraAttack_02",
           "animEventNames": [
             "ExtraAttack_2"
-          ]
+          ],
+          "damagePercentage": "ExtraAttack_02",
+          "damagePercentageRatio": 0.0
         }
       ],
       "abilityName": "Avatar_Dahlia_ExtraAttack",
@@ -183,11 +167,39 @@
         "Attack_04": 0.0,
         "ExtraAttack_01": 0.0,
         "ExtraAttack_02": 0.0
+      },
+      "modifiers": {
+        "ExtraAttack_StaminaCost": {
+          "elementDurability": 100.0,
+          "modifierName": "",
+          "onAdded": [
+            {
+              "$type": "AvatarSkillStart",
+              "cdRatio": 1.0,
+              "costStaminaRatio": "ExtraAttack_Sword_Stamina_Cost",
+              "skillID": 10001,
+              "GIBAINFKPBO": 1.0
+            }
+          ],
+          "AIHNJLDFEGJ": 0.0
+        }
       }
     }
   },
   {
     "Default": {
+      "abilityMixins": [
+        {
+          "$type": "AttachToStateIDMixin",
+          "modifierName": "Dahlia_HideWeapon",
+          "stateIDs": [
+            "Dahlia_ElementalBurst",
+            "Dahlia_ElementalBurst_AS"
+          ],
+          "LJPPDIGCJMJ": ""
+        }
+      ],
+      "abilityName": "Avatar_Dahlia_Weapon_Handler",
       "modifiers": {
         "Dahlia_HideWeapon": {
           "elementDurability": 100.0,
@@ -197,26 +209,26 @@
               "onAdded": [
                 {
                   "$type": "TriggerHideWeapon",
+                  "canBeHandledOnRecover": true,
+                  "doOffStage": true,
                   "partNames": [
                     "equip01",
                     "equip02",
                     "sheathPoint"
-                  ],
-                  "canBeHandledOnRecover": true,
-                  "doOffStage": true
+                  ]
                 }
               ],
               "onRemoved": [
                 {
                   "$type": "TriggerHideWeapon",
+                  "canBeHandledOnRecover": true,
+                  "doOffStage": true,
                   "partNames": [
                     "equip01",
                     "equip02",
                     "sheathPoint"
                   ],
-                  "visible": true,
-                  "canBeHandledOnRecover": true,
-                  "doOffStage": true
+                  "visible": true
                 }
               ]
             }
@@ -224,759 +236,126 @@
           "modifierName": "",
           "AIHNJLDFEGJ": 0.0
         }
-      },
-      "abilityMixins": [
-        {
-          "$type": "AttachToStateIDMixin",
-          "LJPPDIGCJMJ": "",
-          "stateIDs": [
-            "Dahlia_ElementalBurst",
-            "Dahlia_ElementalBurst_AS"
-          ],
-          "modifierName": "Dahlia_HideWeapon"
-        }
-      ],
-      "abilityName": "Avatar_Dahlia_Weapon_Handler"
+      }
     }
   },
   {
     "Default": {
-      "modifiers": {
-        "FallingAnthem_AttachWeaponEffect": {
-          "onAdded": [
-            {
-              "$type": "AttachEffect",
-              "ILLLPEOODKP": "",
-              "scale": 1.0,
-              "effectPattern": "Eff_Avatar_Sword_FallAnthem_Self_01",
-              "effectTempleteID": -1.0
-            }
-          ],
-          "elementDurability": 100.0,
-          "modifierName": "",
-          "AIHNJLDFEGJ": 0.0
-        },
-        "FallingAnthem_CameraRadialBlur": {
-          "duration": 0.23,
-          "elementDurability": 100.0,
-          "modifierMixins": [
-            {
-              "$type": "CameraBlurMixin",
-              "NFBFBAJDMPJ": {
-                "LCOPJHPGJCO": 0.15,
-                "LFMGJKCOGPI": 0.3
-              }
-            }
-          ],
-          "modifierName": "",
-          "AIHNJLDFEGJ": 0.0
-        },
-        "FallingAnthem_BS_Material": {
-          "onAdded": [
-            {
-              "$type": "FireEffect",
-              "effectPattern": "Eff_Avatar_Sword_FallAnthem_BS",
-              "scale": 1.0,
-              "ILLLPEOODKP": "",
-              "effectTempleteID": -1.0
-            }
-          ],
-          "elementDurability": 100.0,
-          "modifierName": "",
-          "AIHNJLDFEGJ": 0.0
-        },
-        "FallingAnthem_BS_VelocityForce_Initialize": {
-          "onAdded": [
-            {
-              "$type": "RemoveVelocityForce",
-              "HALNPNMJJAN": [
-                "RushMoveType"
-              ]
-            }
-          ],
-          "properties": {
-            "Actor_AddGravityScale": -2.0
-          },
-          "elementDurability": 100.0,
-          "modifierName": "",
-          "AIHNJLDFEGJ": 0.0
-        },
-        "FallingAnthem_LoopDamage": {
-          "thinkInterval": 0.3,
-          "elementDurability": 100.0,
-          "modifierName": "",
-          "onThinkInterval": [
-            {
-              "$type": "TriggerAttackEvent",
-              "targetType": "Enemy",
-              "attackEvent": {
-                "attackInfo": {
-                  "attackProperty": {
-                    "attackType": "Melee",
-                    "damagePercentageRatio": 0.0,
-                    "strikeType": "Slash",
-                    "enBreak": 25.0,
-                    "damagePercentage": "FallingAnthem_Normal_Loop_Damage",
-                    "elementDurability": 0.0,
-                    "overrideByWeapon": true,
-                    "arkheGrade": 0.0
-                  },
-                  "hitPattern": {
-                    "FLFCIDDNMNA": "",
-                    "onHitEffectName": "default",
-                    "hitHaltTimeScale": 0.02,
-                    "hitImpulseType": "LV2"
-                  },
-                  "attenuationGroup": "default",
-                  "attenuationTag": "",
-                  "attackTag": "FallingAttack"
-                },
-                "attackPattern": {
-                  "$type": "HCAGHMDHEGG",
-                  "radius": 1.0,
-                  "triggerType": "TriggerNoRepeat",
-                  "born": {
-                    "$type": "NABPLNFPHCK",
-                    "useRotation": true,
-                    "offset": {
-                      "x": 0.0,
-                      "z": 1.0,
-                      "y": 0.0
-                    }
-                  }
-                }
-              }
-            }
-          ],
-          "AIHNJLDFEGJ": 0.0
-        },
-        "FallingAnthem_FallingDamageImmune_01": {
-          "onAdded": [
-            {
-              "$type": "ClearGlobalValue",
-              "key": "_ABILITY_FallingAttack_Altitude"
-            },
-            {
-              "$type": "AddGlobalValue",
-              "useLimitRange": true,
-              "key": "_ABILITY_FallingAttack_Altitude",
-              "maxValue": "FallingAnthem_FallingDamageRatio_Lv0",
-              "minValue": "FallingAnthem_FallingDamageRatio_Lv0",
-              "CBOMLBFIPJM": "FallingAnthem_FallingDamageRatio_Lv0",
-              "predicates": [
-                {
-                  "$type": "AKINJGNEPNO",
-                  "CBOMLBFIPJM": "FallingAnthem_Altitude_Lv0",
-                  "logic": "LesserOrEqual"
-                }
-              ]
-            },
-            {
-              "$type": "AddGlobalValue",
-              "useLimitRange": true,
-              "key": "_ABILITY_FallingAttack_Altitude",
-              "maxValue": "FallingAnthem_FallingDamageRatio_Lv1",
-              "minValue": "FallingAnthem_FallingDamageRatio_Lv1",
-              "CBOMLBFIPJM": "FallingAnthem_FallingDamageRatio_Lv1",
-              "predicates": [
-                {
-                  "$type": "AKINJGNEPNO",
-                  "CBOMLBFIPJM": "FallingAnthem_Altitude_Lv1",
-                  "logic": "LesserOrEqual"
-                },
-                {
-                  "$type": "AKINJGNEPNO",
-                  "CBOMLBFIPJM": "FallingAnthem_Altitude_Lv0"
-                }
-              ]
-            },
-            {
-              "$type": "AddGlobalValue",
-              "useLimitRange": true,
-              "key": "_ABILITY_FallingAttack_Altitude",
-              "maxValue": "FallingAnthem_FallingDamageRatio_Lv2",
-              "minValue": "FallingAnthem_FallingDamageRatio_Lv2",
-              "CBOMLBFIPJM": "FallingAnthem_FallingDamageRatio_Lv2",
-              "predicates": [
-                {
-                  "$type": "AKINJGNEPNO",
-                  "CBOMLBFIPJM": "FallingAnthem_Altitude_Lv2",
-                  "logic": "LesserOrEqual"
-                },
-                {
-                  "$type": "AKINJGNEPNO",
-                  "CBOMLBFIPJM": "FallingAnthem_Altitude_Lv1"
-                }
-              ]
-            },
-            {
-              "$type": "AddGlobalValue",
-              "useLimitRange": true,
-              "key": "_ABILITY_FallingAttack_Altitude",
-              "maxValue": "FallingAnthem_FallingDamageRatio_Lv3",
-              "minValue": "FallingAnthem_FallingDamageRatio_Lv3",
-              "CBOMLBFIPJM": "FallingAnthem_FallingDamageRatio_Lv3",
-              "predicates": [
-                {
-                  "$type": "AKINJGNEPNO",
-                  "CBOMLBFIPJM": "FallingAnthem_Altitude_Lv3",
-                  "logic": "LesserOrEqual"
-                },
-                {
-                  "$type": "AKINJGNEPNO",
-                  "CBOMLBFIPJM": "FallingAnthem_Altitude_Lv2"
-                }
-              ]
-            },
-            {
-              "$type": "AddGlobalValue",
-              "useLimitRange": true,
-              "key": "_ABILITY_FallingAttack_Altitude",
-              "maxValue": "FallingAnthem_FallingDamageRatio_Lv4",
-              "minValue": "FallingAnthem_FallingDamageRatio_Lv4",
-              "CBOMLBFIPJM": "FallingAnthem_FallingDamageRatio_Lv4",
-              "predicates": [
-                {
-                  "$type": "AKINJGNEPNO",
-                  "CBOMLBFIPJM": "FallingAnthem_Altitude_Lv3"
-                }
-              ]
-            },
-            {
-              "$type": "AttachModifier",
-              "modifierName": "FallingAnthem_FallingDamageImmune_02"
-            }
-          ],
-          "elementDurability": 100.0,
-          "modifierName": "",
-          "AIHNJLDFEGJ": 0.0
-        },
-        "FallingAnthem_FallingDamageImmune_02": {
-          "onAdded": [
-            {
-              "$type": "SetGlobalValueToOverrideMap",
-              "globalValueKey": "_ABILITY_FallingAttack_Altitude",
-              "abilityName": "",
-              "overrideMapKey": "FallingAnthem_FallingDamageRatio"
-            },
-            {
-              "$type": "AttachModifier",
-              "modifierName": "FallingAnthem_FallingDamageImmune_03"
-            }
-          ],
-          "elementDurability": 100.0,
-          "modifierName": "",
-          "AIHNJLDFEGJ": 0.0
-        },
-        "FallingAnthem_FallingDamageImmune_03": {
-          "properties": {
-            "Actor_FallingDamageRatio": "FallingAnthem_FallingDamageRatio"
-          },
-          "elementDurability": 100.0,
-          "modifierName": "",
-          "AIHNJLDFEGJ": 0.0
-        },
-        "FallingAnthem_Loop_Normal": {
-          "elementDurability": 100.0,
-          "modifierMixins": [
-            {
-              "$type": "AttachModifierToSelfGlobalValueMixin",
-              "modifierNameSteps": [
-                "FallingAnthem_Loop_Normal_Rank_1",
-                "FallingAnthem_Loop_Normal_Rank_2"
-              ],
-              "valueSteps": [
-                -1.0,
-                0.5,
-                1.5
-              ],
-              "globalValueKey": "_ABILITY_FallingAnthem_UseCamera",
-              "defaultGlobalValueOnCreate": 0.0
-            }
-          ],
-          "modifierName": "",
-          "AIHNJLDFEGJ": 0.0
-        },
-        "FallingAnthem_Loop_Normal_Rank_1": {
-          "onAdded": [
-            {
-              "$type": "AttachEffect",
-              "ILLLPEOODKP": "",
-              "scale": 1.0,
-              "effectPattern": "Eff_Avatar_Sword_FallAnthem_Loop_01",
-              "effectTempleteID": -1.0
-            }
-          ],
-          "elementDurability": 100.0,
-          "modifierName": "",
-          "AIHNJLDFEGJ": 0.0
-        },
-        "FallingAnthem_Loop_Normal_Rank_2": {
-          "onAdded": [
-            {
-              "$type": "AttachEffect",
-              "ILLLPEOODKP": "",
-              "scale": 1.0,
-              "effectPattern": "Eff_Avatar_Sword_FallAnthem_Loop_02",
-              "effectTempleteID": -1.0
-            }
-          ],
-          "elementDurability": 100.0,
-          "modifierName": "",
-          "AIHNJLDFEGJ": 0.0
-        },
-        "Inertia": {
-          "elementDurability": 100.0,
-          "modifierMixins": [
-            {
-              "$type": "ApplyInertiaVelocityMixin",
-              "JOHELJNOOBE": false,
-              "useY": false
-            }
-          ],
-          "modifierName": "",
-          "AIHNJLDFEGJ": 0.0
-        },
-        "FallingAnthem_Height_Detect": {
-          "onRemoved": [
-            {
-              "$type": "SetAnimatorFloat",
-              "floatID": "FallingAnthem_UseCamera",
-              "CBOMLBFIPJM": 0.0
-            },
-            {
-              "$type": "AddGlobalValue",
-              "useLimitRange": true,
-              "key": "_ABILITY_FallingAnthem_UseCamera",
-              "maxValue": 0.0,
-              "minValue": 0.0,
-              "CBOMLBFIPJM": 0.0
-            }
-          ],
-          "onAdded": [
-            {
-              "$type": "AddGlobalValue",
-              "useLimitRange": true,
-              "key": "_ABILITY_FallingAnthem_UseCamera",
-              "maxValue": 0.0,
-              "minValue": 0.0,
-              "CBOMLBFIPJM": 0.0,
-              "predicates": [
-                {
-                  "$type": "AKINJGNEPNO",
-                  "CBOMLBFIPJM": 2.4,
-                  "logic": "LesserOrEqual"
-                }
-              ]
-            },
-            {
-              "$type": "AddGlobalValue",
-              "useLimitRange": true,
-              "key": "_ABILITY_FallingAnthem_UseCamera",
-              "maxValue": 1.0,
-              "minValue": 0.0,
-              "CBOMLBFIPJM": 5.0,
-              "predicates": [
-                {
-                  "$type": "AKINJGNEPNO",
-                  "CBOMLBFIPJM": 2.4
-                }
-              ]
-            },
-            {
-              "$type": "SetAnimatorFloat",
-              "floatID": "FallingAnthem_UseCamera",
-              "CBOMLBFIPJM": 0.0,
-              "predicates": [
-                {
-                  "$type": "AKINJGNEPNO",
-                  "CBOMLBFIPJM": 2.4,
-                  "logic": "LesserOrEqual"
-                }
-              ]
-            },
-            {
-              "$type": "SetAnimatorFloat",
-              "floatID": "FallingAnthem_UseCamera",
-              "CBOMLBFIPJM": 1.0,
-              "predicates": [
-                {
-                  "$type": "AKINJGNEPNO",
-                  "CBOMLBFIPJM": 2.4
-                }
-              ]
-            }
-          ],
-          "elementDurability": 100.0,
-          "modifierName": "",
-          "AIHNJLDFEGJ": 0.0
-        },
-        "FallingAnthem_OverHead_Camera": {
-          "onAdded": [
-            {
-              "$type": "AvatarCameraParam",
-              "cameraParam": {
-                "shouldKeepForceRadius": true,
-                "forceRadiusDuration": 0.2,
-                "forceRadius": 4.5
-              },
-              "predicates": [
-                {
-                  "$type": "GCFOJENHAMH",
-                  "parameter": "FallingAnthem_UseCamera",
-                  "CBOMLBFIPJM": 1.0,
-                  "logic": "Equal"
-                }
-              ]
-            }
-          ],
-          "elementDurability": 100.0,
-          "modifierName": "",
-          "AIHNJLDFEGJ": 0.0
-        },
-        "FallingAnthem_OverHead_Camera_Remover": {
-          "onAdded": [
-            {
-              "$type": "AvatarExitCameraShot",
-              "doOffStage": true
-            }
-          ],
-          "elementDurability": 100.0,
-          "modifierName": "",
-          "AIHNJLDFEGJ": 0.0
-        },
-        "FallingAnthem_Landed_Camera": {
-          "onAdded": [
-            {
-              "$type": "AvatarCameraParam",
-              "cameraParam": {
-                "shouldKeepForceRadius": true,
-                "forceRadiusDuration": 0.1,
-                "forceRadius": 6.0
-              },
-              "predicates": [
-                {
-                  "$type": "GCFOJENHAMH",
-                  "parameter": "FallingAnthem_UseCamera",
-                  "CBOMLBFIPJM": 1.0,
-                  "logic": "Equal"
-                }
-              ]
-            }
-          ],
-          "elementDurability": 100.0,
-          "modifierName": "",
-          "AIHNJLDFEGJ": 0.0
-        },
-        "FallingAnthem_ClearVelocityForce": {
-          "onAdded": [
-            {
-              "$type": "RemoveVelocityForce",
-              "HALNPNMJJAN": [
-                "RushMoveType",
-                "InertiaType"
-              ]
-            }
-          ],
-          "elementDurability": 100.0,
-          "modifierName": "",
-          "AIHNJLDFEGJ": 0.0
-        },
-        "FallingAnthem_ClearVelocityForce_AS": {
-          "onAdded": [
-            {
-              "$type": "RemoveVelocityForce",
-              "HALNPNMJJAN": [
-                "RushMoveType",
-                "InertiaType"
-              ]
-            }
-          ],
-          "elementDurability": 100.0,
-          "modifierName": "",
-          "AIHNJLDFEGJ": 0.0
-        }
-      },
-      "onAbilityStart": [
-        {
-          "$type": "TriggerAttackEvent",
-          "targetType": "Enemy",
-          "attackEvent": {
-            "attackInfo": {
-              "attackProperty": {
-                "attackType": "Melee",
-                "damagePercentageRatio": 0.0,
-                "strikeType": "Blunt",
-                "enBreak": 100.0,
-                "damagePercentage": "FallingAnthem_Normal_Rank_1_Damage",
-                "elementDurability": 25.0,
-                "overrideByWeapon": true,
-                "arkheGrade": 0.0
-              },
-              "cameraShake": {
-                "extension": {
-                  "rangeAttenuation": 0.3,
-                  "baseCycle": 0.24,
-                  "cycleDamping": 0.0
-                },
-                "shakeDir": {
-                  "y": 1.0
-                },
-                "shakeTime": 0.12,
-                "shakeType": "CustomVector",
-                "shakeDistance": 30.0,
-                "MNKFEFOKFKP": "",
-                "shakeRange": 0.24
-              },
-              "hitPattern": {
-                "FLFCIDDNMNA": "",
-                "onHitEffectName": "none",
-                "hitHaltTimeScale": 0.1,
-                "hitImpulseType": "LV4"
-              },
-              "forceCameraShake": true,
-              "attenuationGroup": "default",
-              "attenuationTag": "",
-              "attackTag": "FallingAttack"
-            },
-            "attackPattern": {
-              "$type": "DDLDAMKEKJD",
-              "radius": 3.0,
-              "height": 2.0,
-              "triggerType": "TriggerNoRepeat",
-              "born": {
-                "$type": "BOJMMDAIGMM",
-                "offset": {
-                  "x": 0.0,
-                  "z": 1.0,
-                  "y": -0.5
-                }
-              }
-            }
-          },
-          "predicates": [
-            {
-              "$type": "EOFDCELPGFO",
-              "CBOMLBFIPJM": 0.0,
-              "compareType": "NoneOrEqual",
-              "key": "_ABILITY_FallingAnthem_UseCamera",
-              "value": true
-            }
-          ]
-        },
-        {
-          "$type": "TriggerAttackEvent",
-          "targetType": "Enemy",
-          "attackEvent": {
-            "attackInfo": {
-              "attackProperty": {
-                "attackType": "Melee",
-                "damagePercentageRatio": 0.0,
-                "strikeType": "Blunt",
-                "enBreak": 150.0,
-                "damagePercentage": "FallingAnthem_Normal_Rank_2_Damage",
-                "elementDurability": 25.0,
-                "overrideByWeapon": true,
-                "arkheGrade": 0.0
-              },
-              "cameraShake": {
-                "extension": {
-                  "rangeAttenuation": 0.3,
-                  "baseCycle": 0.4,
-                  "cycleDamping": 0.0
-                },
-                "shakeDir": {
-                  "y": 1.0,
-                  "z": 1.0
-                },
-                "shakeTime": 0.2,
-                "shakeType": "CustomVector",
-                "shakeDistance": 30.0,
-                "MNKFEFOKFKP": "",
-                "shakeRange": 0.5
-              },
-              "hitPattern": {
-                "FLFCIDDNMNA": "",
-                "onHitEffectName": "none",
-                "hitHaltTimeScale": 0.1,
-                "hitImpulseType": "LV7"
-              },
-              "forceCameraShake": true,
-              "attenuationGroup": "default",
-              "attenuationTag": "",
-              "attackTag": "FallingAttack"
-            },
-            "attackPattern": {
-              "$type": "DDLDAMKEKJD",
-              "radius": 5.0,
-              "height": 2.0,
-              "triggerType": "TriggerNoRepeat",
-              "born": {
-                "$type": "BOJMMDAIGMM",
-                "offset": {
-                  "x": 0.0,
-                  "z": 1.0,
-                  "y": -0.5
-                }
-              }
-            }
-          },
-          "predicates": [
-            {
-              "$type": "EOFDCELPGFO",
-              "CBOMLBFIPJM": 1.0,
-              "key": "_ABILITY_FallingAnthem_UseCamera",
-              "value": true
-            }
-          ]
-        },
-        {
-          "$type": "FireEffect",
-          "effectPattern": "Eff_Avatar_Sword_FallAnthem_Strike_01",
-          "scale": 1.0,
-          "ILLLPEOODKP": "",
-          "effectTempleteID": -1.0,
-          "predicates": [
-            {
-              "$type": "EOFDCELPGFO",
-              "CBOMLBFIPJM": 0.0,
-              "compareType": "NoneOrEqual",
-              "key": "_ABILITY_FallingAnthem_UseCamera",
-              "value": true
-            }
-          ]
-        },
-        {
-          "$type": "FireEffect",
-          "effectPattern": "Eff_Avatar_Sword_FallAnthem_Strike_02",
-          "scale": 1.0,
-          "ILLLPEOODKP": "",
-          "effectTempleteID": -1.0,
-          "predicates": [
-            {
-              "$type": "EOFDCELPGFO",
-              "CBOMLBFIPJM": 1.0,
-              "key": "_ABILITY_FallingAnthem_UseCamera",
-              "value": true
-            }
-          ]
-        }
-      ],
       "abilityMixins": [
         {
           "$type": "AvatarChangeSkillMixin",
-          "OLDBNEGFONF": 5115010,
-          "flySkillID": 5115010
+          "flySkillID": 5115010,
+          "OLDBNEGFONF": 5115010
         },
         {
           "$type": "AttachToStateIDMixin",
-          "LJPPDIGCJMJ": "",
+          "modifierName": "FallingAnthem_BS_Material",
           "stateIDs": [
             "FallingAnthem_BS"
           ],
-          "modifierName": "FallingAnthem_BS_Material"
+          "LJPPDIGCJMJ": ""
         },
         {
           "$type": "AttachToStateIDMixin",
-          "LJPPDIGCJMJ": "",
+          "modifierName": "FallingAnthem_Loop_Normal",
           "stateIDs": [
             "FallingAnthem_BS"
           ],
-          "modifierName": "FallingAnthem_Loop_Normal"
+          "LJPPDIGCJMJ": ""
         },
         {
           "$type": "AttachToAnimatorStateIDMixin",
-          "LJPPDIGCJMJ": "",
+          "modifierName": "FallingAnthem_LoopDamage",
           "stateIDs": [
             "FallingAnthem_BS_2",
             "FallingAnthem_Loop",
             "FallingAnthem_Loop_Low"
           ],
-          "modifierName": "FallingAnthem_LoopDamage"
+          "LJPPDIGCJMJ": ""
         },
         {
           "$type": "AttachToStateIDMixin",
-          "LJPPDIGCJMJ": "",
+          "modifierName": "FallingAnthem_BS_VelocityForce_Initialize",
           "stateIDs": [
             "FallingAnthem_BS"
           ],
-          "modifierName": "FallingAnthem_BS_VelocityForce_Initialize"
+          "LJPPDIGCJMJ": ""
         },
         {
           "$type": "AttachToStateIDMixin",
-          "LJPPDIGCJMJ": "",
+          "modifierName": "FallingAnthem_Height_Detect",
           "stateIDs": [
             "FallingAnthem_BS",
             "FallingAnthem_Loop",
             "FallingAnthem_AS_1",
             "FallingAnthem_AS_2"
           ],
-          "modifierName": "FallingAnthem_Height_Detect"
+          "LJPPDIGCJMJ": ""
         },
         {
           "$type": "AttachToStateIDMixin",
-          "LJPPDIGCJMJ": "",
+          "modifierName": "FallingAnthem_FallingDamageImmune_01",
           "stateIDs": [
             "FallingAnthem_BS",
             "FallingAnthem_Loop",
             "FallingAnthem_AS_1",
             "FallingAnthem_AS_2"
           ],
-          "modifierName": "FallingAnthem_FallingDamageImmune_01"
+          "LJPPDIGCJMJ": ""
         },
         {
           "$type": "AttachToStateIDMixin",
-          "LJPPDIGCJMJ": "",
+          "modifierName": "Inertia",
           "stateIDs": [
             "FallingAnthem_BS",
             "FallingAnthem_Loop"
           ],
-          "modifierName": "Inertia"
+          "LJPPDIGCJMJ": ""
         },
         {
           "$type": "AttachToStateIDMixin",
-          "LJPPDIGCJMJ": "",
+          "modifierName": "FallingAnthem_OverHead_Camera",
           "stateIDs": [
             "FallingAnthem_BS",
             "FallingAnthem_Loop",
             "FallingAnthem_AS_1",
             "FallingAnthem_AS_2"
           ],
-          "modifierName": "FallingAnthem_OverHead_Camera"
+          "LJPPDIGCJMJ": ""
         },
         {
           "$type": "AttachToStateIDMixin",
-          "LJPPDIGCJMJ": "",
+          "modifierName": "FallingAnthem_ClearVelocityForce",
           "stateIDs": [
             "FallingAnthem_BS"
           ],
-          "modifierName": "FallingAnthem_ClearVelocityForce"
+          "LJPPDIGCJMJ": ""
         },
         {
           "$type": "AttachToStateIDMixin",
-          "LJPPDIGCJMJ": "",
+          "modifierName": "FallingAnthem_ClearVelocityForce_AS",
           "stateIDs": [
             "FallingAnthem_AS_1",
             "FallingAnthem_AS_2"
           ],
-          "modifierName": "FallingAnthem_ClearVelocityForce_AS"
+          "LJPPDIGCJMJ": ""
         },
         {
           "$type": "AttachToStateIDMixin",
-          "LJPPDIGCJMJ": "",
+          "modifierName": "FallingAnthem_AttachWeaponEffect",
           "stateIDs": [
             "FallingAnthem_BS",
             "FallingAnthem_Loop"
           ],
-          "modifierName": "FallingAnthem_AttachWeaponEffect"
+          "LJPPDIGCJMJ": ""
         },
         {
           "$type": "AttachToAnimatorStateIDMixin",
-          "LJPPDIGCJMJ": "",
+          "modifierName": "FallingAnthem_CameraRadialBlur",
           "stateIDs": [
             "FallingAnthem_BS_2"
           ],
-          "modifierName": "FallingAnthem_CameraRadialBlur"
+          "LJPPDIGCJMJ": ""
         }
       ],
       "abilityName": "Avatar_Dahlia_FallingAnthem",
@@ -995,212 +374,660 @@
         "FallingAnthem_FallingDamageRatio_Lv3": -0.8,
         "FallingAnthem_FallingDamageRatio_Lv4": -0.6,
         "FallingAnthem_FallingDamageRatio": 0.0
-      }
-    }
-  },
-  {
-    "Default": {
+      },
       "modifiers": {
-        "Avatar_Dahlia_ElementalArt_DropBall_Handler": {
-          "onHittingOther": [
-            {
-              "$type": "Predicated",
-              "successActions": [
-                {
-                  "$type": "ApplyModifier",
-                  "modifierName": "Avatar_Dahlia_ElementalArt_DropBall",
-                  "doOffStage": true
-                }
-              ],
-              "targetPredicates": [
-                {
-                  "$type": "CCHPEOBKOBO",
-                  "attackTags": [
-                    "Elemental_Art"
-                  ]
-                },
-                {
-                  "$type": "DEOFBICNFHF",
-                  "entityTypes": [
-                    "Monster"
-                  ]
-                },
-                {
-                  "$type": "EOFDCELPGFO",
-                  "CBOMLBFIPJM": 0.0,
-                  "compareType": "NoneOrEqual",
-                  "key": "_ANIMAL_ENTITY_TYPE"
-                }
-              ],
-              "target": "Target",
-              "doOffStage": true
-            }
-          ],
+        "FallingAnthem_AttachWeaponEffect": {
           "elementDurability": 100.0,
           "modifierName": "",
-          "AIHNJLDFEGJ": 0.0
-        },
-        "Avatar_Dahlia_ElementalArt_DropBall": {
-          "duration": 0.5,
           "onAdded": [
             {
-              "$type": "GenerateElemBall",
-              "ratio": 1.0,
-              "born": {
-                "$type": "NABPLNFPHCK",
-                "useRotation": true,
-                "offset": {
-                  "x": 0.0,
-                  "z": 1.0,
-                  "y": 0.3
-                }
-              },
-              "configID": 2018,
-              "baseEnergy": 9.0,
-              "doOffStage": true
+              "$type": "AttachEffect",
+              "effectPattern": "Eff_Avatar_Sword_FallAnthem_Self_01",
+              "effectTempleteID": -1.0,
+              "scale": 1.0,
+              "ILLLPEOODKP": ""
             }
           ],
-          "stacking": "Unique",
-          "elementDurability": 100.0,
-          "modifierName": "",
           "AIHNJLDFEGJ": 0.0
         },
-        "Focus": {
-          "onRemoved": [
-            {
-              "$type": "AvatarExitFocus",
-              "keepRotation": true
-            }
-          ],
-          "onAdded": [
-            {
-              "$type": "AvatarEnterFocus",
-              "dragButtonName": "Skill2",
-              "cameraFastFocusMode": true,
-              "canMove": false,
-              "DDBIFFPGNGN": {
-                "BFMJIOFDCLF": {},
-                "KFIOILLKPCF": {
-                  "GMHNBMJHEGP": true
-                },
-                "IKEDPKIGLON": {},
-                "IJDKCJGBBII": {}
-              },
-              "showCrosshair": false,
-              "CJLPHHDCNDI": {
-                "y": -0.2,
-                "x": 0.5
-              },
-              "OINODICCCCO": "",
-              "GPNAODGIDCF": "",
-              "cameraFollowMinDegree": -45.0,
-              "FDEONAODDDM": "",
-              "cameraFollowMaxDegree": 20.0,
-              "assistance": {
-                "y": 0.2,
-                "z": -2.5,
-                "x": 0.8
-              }
-            }
-          ],
+        "FallingAnthem_CameraRadialBlur": {
+          "duration": 0.23,
           "elementDurability": 100.0,
           "modifierMixins": [
             {
-              "$type": "EffectChangeAlphaMixin",
-              "target": "Team",
-              "endDuration": 0.3,
-              "startDuration": 0.2,
-              "EPJMODHHJFD": true,
-              "OICKODAIFCA": 0.0,
-              "JCBNNDNGDNN": "GV_EffectChangeAlphaMixin_Team"
+              "$type": "CameraBlurMixin",
+              "cameraRadialBlur": {
+                "fadeTime": 0.15,
+                "power": 0.3
+              }
             }
           ],
           "modifierName": "",
           "AIHNJLDFEGJ": 0.0
         },
-        "Charge_FX": {
+        "FallingAnthem_BS_Material": {
+          "elementDurability": 100.0,
+          "modifierName": "",
           "onAdded": [
             {
-              "$type": "SetGlobalValue",
-              "key": "_FURIOUSMONOLITH_THROW_RANGE",
-              "minValue": 0.0,
-              "maxValue": 0.0,
-              "CBOMLBFIPJM": 10.0
+              "$type": "FireEffect",
+              "effectPattern": "Eff_Avatar_Sword_FallAnthem_BS",
+              "effectTempleteID": -1.0,
+              "scale": 1.0,
+              "ILLLPEOODKP": ""
+            }
+          ],
+          "AIHNJLDFEGJ": 0.0
+        },
+        "FallingAnthem_BS_VelocityForce_Initialize": {
+          "elementDurability": 100.0,
+          "modifierName": "",
+          "onAdded": [
+            {
+              "$type": "RemoveVelocityForce",
+              "forces": [
+                "RushMoveType"
+              ]
+            }
+          ],
+          "properties": {
+            "Actor_AddGravityScale": -2.0
+          },
+          "AIHNJLDFEGJ": 0.0
+        },
+        "FallingAnthem_LoopDamage": {
+          "elementDurability": 100.0,
+          "modifierName": "",
+          "onThinkInterval": [
+            {
+              "$type": "TriggerAttackEvent",
+              "attackEvent": {
+                "attackInfo": {
+                  "attackProperty": {
+                    "attackType": "Melee",
+                    "damagePercentage": "FallingAnthem_Normal_Loop_Damage",
+                    "damagePercentageRatio": 0.0,
+                    "elementDurability": 0.0,
+                    "enBreak": 25.0,
+                    "overrideByWeapon": true,
+                    "strikeType": "Slash",
+                    "IIPHCFEONLK": 0.0
+                  },
+                  "attackTag": "FallingAttack",
+                  "attenuationGroup": "default",
+                  "attenuationTag": "",
+                  "hitPattern": {
+                    "hitHaltTimeScale": 0.02,
+                    "hitImpulseType": "LV2",
+                    "onHitEffectName": "default",
+                    "FLFCIDDNMNA": ""
+                  }
+                },
+                "attackPattern": {
+                  "$type": "ConfigAttackSphere",
+                  "born": {
+                    "$type": "ConfigBornBySelf",
+                    "offset": {
+                      "x": 1.0,
+                      "y": 0.0,
+                      "z": 0.0
+                    },
+                    "useRotation": true
+                  },
+                  "radius": 1.0,
+                  "triggerType": "TriggerNoRepeat"
+                }
+              },
+              "targetType": "Enemy"
+            }
+          ],
+          "thinkInterval": 0.3,
+          "AIHNJLDFEGJ": 0.0
+        },
+        "FallingAnthem_FallingDamageImmune_01": {
+          "elementDurability": 100.0,
+          "modifierName": "",
+          "onAdded": [
+            {
+              "$type": "ClearGlobalValue",
+              "key": "_ABILITY_FallingAttack_Altitude"
             },
             {
-              "$type": "AttachEffect",
-              "ILLLPEOODKP": "",
-              "scale": 1.0,
-              "effectPattern": "Eff_Avatar_Boy_Sword_Dahlia_ElementalArt_Aim_Line",
-              "effectTempleteID": -1.0
+              "$type": "AddGlobalValue",
+              "key": "_ABILITY_FallingAttack_Altitude",
+              "maxValue": "FallingAnthem_FallingDamageRatio_Lv0",
+              "minValue": "FallingAnthem_FallingDamageRatio_Lv0",
+              "predicates": [
+                {
+                  "$type": "ByTargetAltitude",
+                  "logic": "LesserOrEqual",
+                  "value": "FallingAnthem_Altitude_Lv0"
+                }
+              ],
+              "useLimitRange": true,
+              "value": "FallingAnthem_FallingDamageRatio_Lv0"
+            },
+            {
+              "$type": "AddGlobalValue",
+              "key": "_ABILITY_FallingAttack_Altitude",
+              "maxValue": "FallingAnthem_FallingDamageRatio_Lv1",
+              "minValue": "FallingAnthem_FallingDamageRatio_Lv1",
+              "predicates": [
+                {
+                  "$type": "ByTargetAltitude",
+                  "logic": "LesserOrEqual",
+                  "value": "FallingAnthem_Altitude_Lv1"
+                },
+                {
+                  "$type": "ByTargetAltitude",
+                  "value": "FallingAnthem_Altitude_Lv0"
+                }
+              ],
+              "useLimitRange": true,
+              "value": "FallingAnthem_FallingDamageRatio_Lv1"
+            },
+            {
+              "$type": "AddGlobalValue",
+              "key": "_ABILITY_FallingAttack_Altitude",
+              "maxValue": "FallingAnthem_FallingDamageRatio_Lv2",
+              "minValue": "FallingAnthem_FallingDamageRatio_Lv2",
+              "predicates": [
+                {
+                  "$type": "ByTargetAltitude",
+                  "logic": "LesserOrEqual",
+                  "value": "FallingAnthem_Altitude_Lv2"
+                },
+                {
+                  "$type": "ByTargetAltitude",
+                  "value": "FallingAnthem_Altitude_Lv1"
+                }
+              ],
+              "useLimitRange": true,
+              "value": "FallingAnthem_FallingDamageRatio_Lv2"
+            },
+            {
+              "$type": "AddGlobalValue",
+              "key": "_ABILITY_FallingAttack_Altitude",
+              "maxValue": "FallingAnthem_FallingDamageRatio_Lv3",
+              "minValue": "FallingAnthem_FallingDamageRatio_Lv3",
+              "predicates": [
+                {
+                  "$type": "ByTargetAltitude",
+                  "logic": "LesserOrEqual",
+                  "value": "FallingAnthem_Altitude_Lv3"
+                },
+                {
+                  "$type": "ByTargetAltitude",
+                  "value": "FallingAnthem_Altitude_Lv2"
+                }
+              ],
+              "useLimitRange": true,
+              "value": "FallingAnthem_FallingDamageRatio_Lv3"
+            },
+            {
+              "$type": "AddGlobalValue",
+              "key": "_ABILITY_FallingAttack_Altitude",
+              "maxValue": "FallingAnthem_FallingDamageRatio_Lv4",
+              "minValue": "FallingAnthem_FallingDamageRatio_Lv4",
+              "predicates": [
+                {
+                  "$type": "ByTargetAltitude",
+                  "value": "FallingAnthem_Altitude_Lv3"
+                }
+              ],
+              "useLimitRange": true,
+              "value": "FallingAnthem_FallingDamageRatio_Lv4"
+            },
+            {
+              "$type": "AttachModifier",
+              "modifierName": "FallingAnthem_FallingDamageImmune_02"
             }
           ],
+          "AIHNJLDFEGJ": 0.0
+        },
+        "FallingAnthem_FallingDamageImmune_02": {
           "elementDurability": 100.0,
+          "modifierName": "",
+          "onAdded": [
+            {
+              "$type": "SetGlobalValueToOverrideMap",
+              "abilityName": "",
+              "globalValueKey": "_ABILITY_FallingAttack_Altitude",
+              "overrideMapKey": "FallingAnthem_FallingDamageRatio"
+            },
+            {
+              "$type": "AttachModifier",
+              "modifierName": "FallingAnthem_FallingDamageImmune_03"
+            }
+          ],
+          "AIHNJLDFEGJ": 0.0
+        },
+        "FallingAnthem_FallingDamageImmune_03": {
+          "elementDurability": 100.0,
+          "modifierName": "",
+          "properties": {
+            "Actor_FallingDamageRatio": "FallingAnthem_FallingDamageRatio"
+          },
+          "AIHNJLDFEGJ": 0.0
+        },
+        "FallingAnthem_Loop_Normal": {
+          "elementDurability": 100.0,
+          "modifierMixins": [
+            {
+              "$type": "AttachModifierToSelfGlobalValueMixin",
+              "defaultGlobalValueOnCreate": 0.0,
+              "globalValueKey": "_ABILITY_FallingAnthem_UseCamera",
+              "modifierNameSteps": [
+                "FallingAnthem_Loop_Normal_Rank_1",
+                "FallingAnthem_Loop_Normal_Rank_2"
+              ],
+              "valueSteps": [
+                -1.0,
+                0.5,
+                1.5
+              ]
+            }
+          ],
           "modifierName": "",
           "AIHNJLDFEGJ": 0.0
         },
-        "AimingAlertFX": {
+        "FallingAnthem_Loop_Normal_Rank_1": {
+          "elementDurability": 100.0,
+          "modifierName": "",
           "onAdded": [
             {
               "$type": "AttachEffect",
-              "ILLLPEOODKP": "",
+              "effectPattern": "Eff_Avatar_Sword_FallAnthem_Loop_01",
+              "effectTempleteID": -1.0,
               "scale": 1.0,
-              "effectPattern": "Eff_Avatar_Boy_Sword_Dahlia_ElementalArt_OnAvatar",
-              "effectTempleteID": -1.0
+              "ILLLPEOODKP": ""
             }
           ],
+          "AIHNJLDFEGJ": 0.0
+        },
+        "FallingAnthem_Loop_Normal_Rank_2": {
           "elementDurability": 100.0,
           "modifierName": "",
+          "onAdded": [
+            {
+              "$type": "AttachEffect",
+              "effectPattern": "Eff_Avatar_Sword_FallAnthem_Loop_02",
+              "effectTempleteID": -1.0,
+              "scale": 1.0,
+              "ILLLPEOODKP": ""
+            }
+          ],
+          "AIHNJLDFEGJ": 0.0
+        },
+        "Inertia": {
+          "elementDurability": 100.0,
+          "modifierMixins": [
+            {
+              "$type": "ApplyInertiaVelocityMixin",
+              "JOHELJNOOBE": false,
+              "LBKNDHDOIIG": false
+            }
+          ],
+          "modifierName": "",
+          "AIHNJLDFEGJ": 0.0
+        },
+        "FallingAnthem_Height_Detect": {
+          "elementDurability": 100.0,
+          "modifierName": "",
+          "onAdded": [
+            {
+              "$type": "AddGlobalValue",
+              "key": "_ABILITY_FallingAnthem_UseCamera",
+              "maxValue": 0.0,
+              "minValue": 0.0,
+              "predicates": [
+                {
+                  "$type": "ByTargetAltitude",
+                  "logic": "LesserOrEqual",
+                  "value": 2.4
+                }
+              ],
+              "useLimitRange": true,
+              "value": 0.0
+            },
+            {
+              "$type": "AddGlobalValue",
+              "key": "_ABILITY_FallingAnthem_UseCamera",
+              "maxValue": 1.0,
+              "minValue": 0.0,
+              "predicates": [
+                {
+                  "$type": "ByTargetAltitude",
+                  "value": 2.4
+                }
+              ],
+              "useLimitRange": true,
+              "value": 5.0
+            },
+            {
+              "$type": "SetAnimatorFloat",
+              "floatID": "FallingAnthem_UseCamera",
+              "predicates": [
+                {
+                  "$type": "ByTargetAltitude",
+                  "logic": "LesserOrEqual",
+                  "value": 2.4
+                }
+              ],
+              "value": 0.0
+            },
+            {
+              "$type": "SetAnimatorFloat",
+              "floatID": "FallingAnthem_UseCamera",
+              "predicates": [
+                {
+                  "$type": "ByTargetAltitude",
+                  "value": 2.4
+                }
+              ],
+              "value": 1.0
+            }
+          ],
+          "onRemoved": [
+            {
+              "$type": "SetAnimatorFloat",
+              "floatID": "FallingAnthem_UseCamera",
+              "value": 0.0
+            },
+            {
+              "$type": "AddGlobalValue",
+              "key": "_ABILITY_FallingAnthem_UseCamera",
+              "maxValue": 0.0,
+              "minValue": 0.0,
+              "useLimitRange": true,
+              "value": 0.0
+            }
+          ],
+          "AIHNJLDFEGJ": 0.0
+        },
+        "FallingAnthem_OverHead_Camera": {
+          "elementDurability": 100.0,
+          "modifierName": "",
+          "onAdded": [
+            {
+              "$type": "AvatarCameraParam",
+              "cameraParam": {
+                "forceRadius": 4.5,
+                "forceRadiusDuration": 0.2,
+                "shouldKeepForceRadius": true
+              },
+              "predicates": [
+                {
+                  "$type": "ByAnimatorFloat",
+                  "logic": "Equal",
+                  "parameter": "FallingAnthem_UseCamera",
+                  "value": 1.0
+                }
+              ]
+            }
+          ],
+          "AIHNJLDFEGJ": 0.0
+        },
+        "FallingAnthem_OverHead_Camera_Remover": {
+          "elementDurability": 100.0,
+          "modifierName": "",
+          "onAdded": [
+            {
+              "$type": "AvatarExitCameraShot",
+              "doOffStage": true
+            }
+          ],
+          "AIHNJLDFEGJ": 0.0
+        },
+        "FallingAnthem_Landed_Camera": {
+          "elementDurability": 100.0,
+          "modifierName": "",
+          "onAdded": [
+            {
+              "$type": "AvatarCameraParam",
+              "cameraParam": {
+                "forceRadius": 6.0,
+                "forceRadiusDuration": 0.1,
+                "shouldKeepForceRadius": true
+              },
+              "predicates": [
+                {
+                  "$type": "ByAnimatorFloat",
+                  "logic": "Equal",
+                  "parameter": "FallingAnthem_UseCamera",
+                  "value": 1.0
+                }
+              ]
+            }
+          ],
+          "AIHNJLDFEGJ": 0.0
+        },
+        "FallingAnthem_ClearVelocityForce": {
+          "elementDurability": 100.0,
+          "modifierName": "",
+          "onAdded": [
+            {
+              "$type": "RemoveVelocityForce",
+              "forces": [
+                "RushMoveType",
+                "InertiaType"
+              ]
+            }
+          ],
+          "AIHNJLDFEGJ": 0.0
+        },
+        "FallingAnthem_ClearVelocityForce_AS": {
+          "elementDurability": 100.0,
+          "modifierName": "",
+          "onAdded": [
+            {
+              "$type": "RemoveVelocityForce",
+              "forces": [
+                "RushMoveType",
+                "InertiaType"
+              ]
+            }
+          ],
           "AIHNJLDFEGJ": 0.0
         }
       },
       "onAbilityStart": [
         {
-          "$type": "AvatarSkillStart",
-          "skillID": 11152,
-          "BGNJBEPEJBO": 1.0,
-          "costStaminaRatio": 1.0,
-          "cdRatio": 1.0
+          "$type": "TriggerAttackEvent",
+          "attackEvent": {
+            "attackInfo": {
+              "attackProperty": {
+                "attackType": "Melee",
+                "damagePercentage": "FallingAnthem_Normal_Rank_1_Damage",
+                "damagePercentageRatio": 0.0,
+                "elementDurability": 25.0,
+                "enBreak": 100.0,
+                "overrideByWeapon": true,
+                "strikeType": "Blunt",
+                "IIPHCFEONLK": 0.0
+              },
+              "attackTag": "FallingAttack",
+              "attenuationGroup": "default",
+              "attenuationTag": "",
+              "cameraShake": {
+                "extension": {
+                  "baseCycle": 0.24,
+                  "cycleDamping": 0.0,
+                  "rangeAttenuation": 0.3
+                },
+                "shakeDir": {
+                  "y": 1.0
+                },
+                "shakeDistance": 30.0,
+                "shakeRange": 0.24,
+                "shakeTime": 0.12,
+                "shakeType": "CustomVector",
+                "MNKFEFOKFKP": ""
+              },
+              "forceCameraShake": true,
+              "hitPattern": {
+                "hitHaltTimeScale": 0.1,
+                "hitImpulseType": "LV4",
+                "onHitEffectName": "none",
+                "FLFCIDDNMNA": ""
+              }
+            },
+            "attackPattern": {
+              "$type": "ConfigAttackCircle",
+              "born": {
+                "$type": "ConfigBornByTarget",
+                "offset": {
+                  "x": 1.0,
+                  "y": -0.5,
+                  "z": 0.0
+                }
+              },
+              "height": 2.0,
+              "radius": 3.0,
+              "triggerType": "TriggerNoRepeat"
+            }
+          },
+          "predicates": [
+            {
+              "$type": "ByTargetGlobalValue",
+              "compareType": "NoneOrEqual",
+              "forceByCaster": true,
+              "key": "_ABILITY_FallingAnthem_UseCamera",
+              "value": 0.0
+            }
+          ],
+          "targetType": "Enemy"
         },
         {
-          "$type": "TriggerBullet",
-          "born": {
-            "$type": "BGOLIIIHLMO",
-            "attachPointName": "FocusAnchor",
-            "useRotation": true
+          "$type": "TriggerAttackEvent",
+          "attackEvent": {
+            "attackInfo": {
+              "attackProperty": {
+                "attackType": "Melee",
+                "damagePercentage": "FallingAnthem_Normal_Rank_2_Damage",
+                "damagePercentageRatio": 0.0,
+                "elementDurability": 25.0,
+                "enBreak": 150.0,
+                "overrideByWeapon": true,
+                "strikeType": "Blunt",
+                "IIPHCFEONLK": 0.0
+              },
+              "attackTag": "FallingAttack",
+              "attenuationGroup": "default",
+              "attenuationTag": "",
+              "cameraShake": {
+                "extension": {
+                  "baseCycle": 0.4,
+                  "cycleDamping": 0.0,
+                  "rangeAttenuation": 0.3
+                },
+                "shakeDir": {
+                  "y": 1.0,
+                  "z": 1.0
+                },
+                "shakeDistance": 30.0,
+                "shakeRange": 0.5,
+                "shakeTime": 0.2,
+                "shakeType": "CustomVector",
+                "MNKFEFOKFKP": ""
+              },
+              "forceCameraShake": true,
+              "hitPattern": {
+                "hitHaltTimeScale": 0.1,
+                "hitImpulseType": "LV7",
+                "onHitEffectName": "none",
+                "FLFCIDDNMNA": ""
+              }
+            },
+            "attackPattern": {
+              "$type": "ConfigAttackCircle",
+              "born": {
+                "$type": "ConfigBornByTarget",
+                "offset": {
+                  "x": 1.0,
+                  "y": -0.5,
+                  "z": 0.0
+                }
+              },
+              "height": 2.0,
+              "radius": 5.0,
+              "triggerType": "TriggerNoRepeat"
+            }
           },
-          "bulletID": 42115002
+          "predicates": [
+            {
+              "$type": "ByTargetGlobalValue",
+              "forceByCaster": true,
+              "key": "_ABILITY_FallingAnthem_UseCamera",
+              "value": 1.0
+            }
+          ],
+          "targetType": "Enemy"
+        },
+        {
+          "$type": "FireEffect",
+          "effectPattern": "Eff_Avatar_Sword_FallAnthem_Strike_01",
+          "effectTempleteID": -1.0,
+          "predicates": [
+            {
+              "$type": "ByTargetGlobalValue",
+              "compareType": "NoneOrEqual",
+              "forceByCaster": true,
+              "key": "_ABILITY_FallingAnthem_UseCamera",
+              "value": 0.0
+            }
+          ],
+          "scale": 1.0,
+          "ILLLPEOODKP": ""
+        },
+        {
+          "$type": "FireEffect",
+          "effectPattern": "Eff_Avatar_Sword_FallAnthem_Strike_02",
+          "effectTempleteID": -1.0,
+          "predicates": [
+            {
+              "$type": "ByTargetGlobalValue",
+              "forceByCaster": true,
+              "key": "_ABILITY_FallingAnthem_UseCamera",
+              "value": 1.0
+            }
+          ],
+          "scale": 1.0,
+          "ILLLPEOODKP": ""
         }
-      ],
+      ]
+    }
+  },
+  {
+    "Default": {
       "abilityMixins": [
         {
           "$type": "SkillButtonHoldChargeMixin",
-          "JPEKCGKKAID": [
+          "beforeStateIDs": [
             "Dahlia_ElementalArt_BS"
           ],
-          "endHoldTrigger": "EndHoldTrigger",
-          "LMBNECOHFFE": [
-            "Dahlia_ElementalArt_Charge"
-          ],
-          "NBHCEPEGENL": [
+          "chargeLoopDurations": [
             10.0
           ],
-          "skillID": 11152,
-          "nextLoopTriggerID": "NextLoopTrigger"
+          "chargeLoopStateIDs": [
+            "Dahlia_ElementalArt_Charge"
+          ],
+          "endHoldTrigger": "EndHoldTrigger",
+          "nextLoopTriggerID": "NextLoopTrigger",
+          "skillID": 11152
         },
         {
           "$type": "AttachToStateIDMixin",
-          "LJPPDIGCJMJ": "",
+          "modifierName": "Focus",
           "stateIDs": [
             "Dahlia_ElementalArt_Charge",
             "Dahlia_ElementalArt_Custom"
           ],
-          "modifierName": "Focus"
+          "LJPPDIGCJMJ": ""
         },
         {
           "$type": "AttachToMultiNormalizedTimeMixin",
           "modifierName": "AimingAlertFX",
-          "LJPPDIGCJMJ": "",
           "normalizedStateIDList": [
             {
               "stateID": "Dahlia_ElementalArt_BS"
@@ -1209,25 +1036,198 @@
               "stateID": "Dahlia_ElementalArt_Charge"
             },
             {
-              "stateID": "Dahlia_ElementalArt",
-              "normalizeEnd": 0.85
+              "normalizeEnd": 0.85,
+              "stateID": "Dahlia_ElementalArt"
             },
             {
-              "stateID": "Dahlia_ElementalArt_Custom",
-              "normalizeEnd": 0.85
+              "normalizeEnd": 0.85,
+              "stateID": "Dahlia_ElementalArt_Custom"
             }
-          ]
+          ],
+          "LJPPDIGCJMJ": ""
         },
         {
           "$type": "AttachToStateIDMixin",
-          "LJPPDIGCJMJ": "",
+          "modifierName": "Charge_FX",
           "stateIDs": [
             "Dahlia_ElementalArt_Charge"
           ],
-          "modifierName": "Charge_FX"
+          "LJPPDIGCJMJ": ""
         }
       ],
       "abilityName": "Avatar_Dahlia_ElementalArt_SkillHoldCharge",
+      "modifiers": {
+        "Avatar_Dahlia_ElementalArt_DropBall_Handler": {
+          "elementDurability": 100.0,
+          "modifierName": "",
+          "onHittingOther": [
+            {
+              "$type": "Predicated",
+              "doOffStage": true,
+              "successActions": [
+                {
+                  "$type": "ApplyModifier",
+                  "doOffStage": true,
+                  "modifierName": "Avatar_Dahlia_ElementalArt_DropBall"
+                }
+              ],
+              "target": "Target",
+              "targetPredicates": [
+                {
+                  "$type": "ByAttackTags",
+                  "attackTags": [
+                    "Elemental_Art"
+                  ]
+                },
+                {
+                  "$type": "ByEntityTypes",
+                  "entityTypes": [
+                    "Monster"
+                  ]
+                },
+                {
+                  "$type": "ByTargetGlobalValue",
+                  "compareType": "NoneOrEqual",
+                  "key": "_ANIMAL_ENTITY_TYPE",
+                  "value": 0.0
+                }
+              ]
+            }
+          ],
+          "AIHNJLDFEGJ": 0.0
+        },
+        "Avatar_Dahlia_ElementalArt_DropBall": {
+          "duration": 0.5,
+          "elementDurability": 100.0,
+          "modifierName": "",
+          "onAdded": [
+            {
+              "$type": "GenerateElemBall",
+              "baseEnergy": 9.0,
+              "born": {
+                "$type": "ConfigBornBySelf",
+                "offset": {
+                  "x": 1.0,
+                  "y": 0.3,
+                  "z": 0.0
+                },
+                "useRotation": true
+              },
+              "configID": 2018,
+              "doOffStage": true,
+              "ratio": 1.0
+            }
+          ],
+          "stacking": "Unique",
+          "AIHNJLDFEGJ": 0.0
+        },
+        "Focus": {
+          "elementDurability": 100.0,
+          "modifierMixins": [
+            {
+              "$type": "EffectChangeAlphaMixin",
+              "endDuration": 0.3,
+              "startDuration": 0.2,
+              "syncToRemote": 0.0,
+              "target": "Team",
+              "EPJMODHHJFD": true,
+              "JCBNNDNGDNN": "GV_EffectChangeAlphaMixin_Team"
+            }
+          ],
+          "modifierName": "",
+          "onAdded": [
+            {
+              "$type": "AvatarEnterFocus",
+              "assistance": {
+                "other": {
+                  "useGyro": true
+                },
+                "ps4": {},
+                "ps5": {},
+                "IJDKCJGBBII": {}
+              },
+              "cameraFastFocusMode": true,
+              "cameraFollowLower": {
+                "x": 0.8,
+                "y": 0.2,
+                "z": -2.5
+              },
+              "cameraFollowMaxDegree": 20.0,
+              "cameraFollowMinDegree": -45.0,
+              "cameraFollowUpper": {
+                "x": 0.5,
+                "y": -0.2
+              },
+              "canMove": false,
+              "dragButtonName": "Skill2",
+              "showCrosshair": false,
+              "FDEONAODDDM": "",
+              "GPNAODGIDCF": "",
+              "OINODICCCCO": ""
+            }
+          ],
+          "onRemoved": [
+            {
+              "$type": "AvatarExitFocus",
+              "keepRotation": true
+            }
+          ],
+          "AIHNJLDFEGJ": 0.0
+        },
+        "Charge_FX": {
+          "elementDurability": 100.0,
+          "modifierName": "",
+          "onAdded": [
+            {
+              "$type": "SetGlobalValue",
+              "key": "_FURIOUSMONOLITH_THROW_RANGE",
+              "maxValue": 0.0,
+              "minValue": 0.0,
+              "value": 10.0
+            },
+            {
+              "$type": "AttachEffect",
+              "effectPattern": "Eff_Avatar_Boy_Sword_Dahlia_ElementalArt_Aim_Line",
+              "effectTempleteID": -1.0,
+              "scale": 1.0,
+              "ILLLPEOODKP": ""
+            }
+          ],
+          "AIHNJLDFEGJ": 0.0
+        },
+        "AimingAlertFX": {
+          "elementDurability": 100.0,
+          "modifierName": "",
+          "onAdded": [
+            {
+              "$type": "AttachEffect",
+              "effectPattern": "Eff_Avatar_Boy_Sword_Dahlia_ElementalArt_OnAvatar",
+              "effectTempleteID": -1.0,
+              "scale": 1.0,
+              "ILLLPEOODKP": ""
+            }
+          ],
+          "AIHNJLDFEGJ": 0.0
+        }
+      },
+      "onAbilityStart": [
+        {
+          "$type": "AvatarSkillStart",
+          "cdRatio": 1.0,
+          "costStaminaRatio": 1.0,
+          "skillID": 11152,
+          "GIBAINFKPBO": 1.0
+        },
+        {
+          "$type": "TriggerBullet",
+          "born": {
+            "$type": "ConfigBornByAttachPoint",
+            "attachPointName": "FocusAnchor",
+            "useRotation": true
+          },
+          "bulletID": 42115002
+        }
+      ],
       "onAdded": [
         {
           "$type": "AttachModifier",
@@ -1238,51 +1238,52 @@
   },
   {
     "Default": {
+      "abilityName": "Avatar_Dahlia_ElementalArt",
       "onAbilityStart": [
         {
           "$type": "AvatarSkillStart",
-          "skillID": 11152,
-          "BGNJBEPEJBO": 1.0,
+          "cdRatio": 1.0,
           "costStaminaRatio": 1.0,
-          "cdRatio": 1.0
+          "skillID": 11152,
+          "GIBAINFKPBO": 1.0
         },
         {
           "$type": "Predicated",
-          "successActions": [
-            {
-              "$type": "SetGlobalPos",
-              "setTarget": false,
-              "key": "_ABILITY_Dahlia_Jackbox_Generate_Position",
-              "born": {
-                "$type": "BOJMMDAIGMM",
-                "onGround": true,
-                "onGroundRaycastUpDist": 3.0
-              },
-              "target": "SelfAttackTarget",
-              "doOffStage": true
-            }
-          ],
           "failActions": [
             {
               "$type": "SetGlobalPos",
-              "setTarget": false,
-              "key": "_ABILITY_Dahlia_Jackbox_Generate_Position",
               "born": {
-                "$type": "BOJMMDAIGMM",
-                "onGround": true,
-                "onGroundRaycastUpDist": 3.0,
+                "$type": "ConfigBornByTarget",
                 "offset": {
-                  "x": 0.0,
-                  "z": 5.0,
-                  "y": 0.0
-                }
+                  "x": 5.0,
+                  "y": 0.0,
+                  "z": 0.0
+                },
+                "onGround": true,
+                "onGroundRaycastUpDist": 3.0
               },
-              "doOffStage": true
+              "doOffStage": true,
+              "key": "_ABILITY_Dahlia_Jackbox_Generate_Position",
+              "setTarget": false
+            }
+          ],
+          "successActions": [
+            {
+              "$type": "SetGlobalPos",
+              "born": {
+                "$type": "ConfigBornByTarget",
+                "onGround": true,
+                "onGroundRaycastUpDist": 3.0
+              },
+              "doOffStage": true,
+              "key": "_ABILITY_Dahlia_Jackbox_Generate_Position",
+              "setTarget": false,
+              "target": "SelfAttackTarget"
             }
           ],
           "targetPredicates": [
             {
-              "$type": "IGNCFICKOLO"
+              "$type": "ByHasAttackTarget"
             }
           ]
         },
@@ -1294,26 +1295,26 @@
         },
         {
           "$type": "CreateGadget",
-          "gadgetID": 42115001,
+          "born": {
+            "$type": "ConfigBornByGlobalValue",
+            "directionKey": "",
+            "onGround": true,
+            "onGroundIgnoreWater": true,
+            "onGroundRaycastUpDist": 3.0,
+            "positionKey": "_ABILITY_Dahlia_Jackbox_Generate_Position",
+            "useRotation": true,
+            "DJJOOBHDHEG": 30.0
+          },
           "campID": 1001,
           "campTargetType": "Enemy",
-          "born": {
-            "$type": "LKIBKKFEOLJ",
-            "positionKey": "_ABILITY_Dahlia_Jackbox_Generate_Position",
-            "directionKey": "",
-            "FLFGOALBFIC": true,
-            "onGround": true,
-            "useRotation": true,
-            "onGroundRaycastUpDist": 3.0,
-            "DJJOOBHDHEG": 30.0
-          }
+          "gadgetID": 42115001
         }
-      ],
-      "abilityName": "Avatar_Dahlia_ElementalArt"
+      ]
     }
   },
   {
     "Default": {
+      "abilityName": "Avatar_Dahlia_ElementalArt_Hold",
       "onAbilityStart": [
         {
           "$type": "KillGadget",
@@ -1323,41 +1324,41 @@
         },
         {
           "$type": "CreateGadget",
-          "gadgetID": 42115001,
+          "born": {
+            "$type": "ConfigBornByGlobalValue",
+            "directionKey": "_ABILITY_Dahlia_Jackbox_CustomDir",
+            "onGround": true,
+            "onGroundIgnoreWater": true,
+            "onGroundRaycastUpDist": 3.0,
+            "positionKey": "_ABILITY_Dahlia_Jackbox_CustomPos",
+            "DJJOOBHDHEG": 30.0
+          },
           "campID": 1001,
           "campTargetType": "Enemy",
-          "born": {
-            "$type": "LKIBKKFEOLJ",
-            "positionKey": "_ABILITY_Dahlia_Jackbox_CustomPos",
-            "directionKey": "_ABILITY_Dahlia_Jackbox_CustomDir",
-            "FLFGOALBFIC": true,
-            "onGround": true,
-            "onGroundRaycastUpDist": 3.0,
-            "DJJOOBHDHEG": 30.0
-          }
+          "gadgetID": 42115001
         }
-      ],
-      "abilityName": "Avatar_Dahlia_ElementalArt_Hold"
+      ]
     }
   },
   {
     "Default": {
+      "abilityName": "Bullet_Dahlia_ElementalArt_Hold_Bullet",
       "onAbilityStart": [
         {
           "$type": "SetGlobalPos",
-          "key": "_ABILITY_Dahlia_Jackbox_CustomPos",
           "born": {
-            "$type": "NHPKNMOMIFH"
+            "$type": "ConfigBornByCollisionPoint"
           },
+          "key": "_ABILITY_Dahlia_Jackbox_CustomPos",
           "target": "OriginOwner"
         },
         {
           "$type": "SetGlobalDir",
-          "key": "_ABILITY_Dahlia_Jackbox_CustomDir",
           "born": {
-            "$type": "JFCMOMMEDHL",
+            "$type": "ConfigBornBySelfOwner",
             "useRotation": true
           },
+          "key": "_ABILITY_Dahlia_Jackbox_CustomDir",
           "target": "OriginOwner"
         },
         {
@@ -1365,29 +1366,29 @@
           "abilityName": "Avatar_Dahlia_ElementalArt_Hold",
           "target": "OriginOwner"
         }
-      ],
-      "abilityName": "Bullet_Dahlia_ElementalArt_Hold_Bullet"
+      ]
     }
   },
   {
     "Default": {
+      "abilityName": "Bullet_Dahlia_ElementalArt_Hold_Bullet_LifeOver",
       "onAbilityStart": [
         {
           "$type": "SetGlobalPos",
-          "key": "_ABILITY_Dahlia_Jackbox_CustomPos",
           "born": {
-            "$type": "NABPLNFPHCK",
+            "$type": "ConfigBornBySelf",
             "useRotation": true
           },
+          "key": "_ABILITY_Dahlia_Jackbox_CustomPos",
           "target": "OriginOwner"
         },
         {
           "$type": "SetGlobalDir",
-          "key": "_ABILITY_Dahlia_Jackbox_CustomDir",
           "born": {
-            "$type": "JFCMOMMEDHL",
+            "$type": "ConfigBornBySelfOwner",
             "useRotation": true
           },
+          "key": "_ABILITY_Dahlia_Jackbox_CustomDir",
           "target": "OriginOwner"
         },
         {
@@ -1395,12 +1396,15 @@
           "abilityName": "Avatar_Dahlia_ElementalArt_Hold",
           "target": "OriginOwner"
         }
-      ],
-      "abilityName": "Bullet_Dahlia_ElementalArt_Hold_Bullet_LifeOver"
+      ]
     }
   },
   {
     "Default": {
+      "abilityName": "SkillObj_Dahlia_Jackbox",
+      "abilitySpecials": {
+        "ElementalArt_Damage": 0.0
+      },
       "modifiers": {
         "Blank": {
           "elementDurability": 100.0,
@@ -1408,19 +1412,33 @@
           "AIHNJLDFEGJ": 0.0
         },
         "Jackbox_Generate_FX": {
-          "onAdded": [
-            {
-              "$type": "AttachEffect",
-              "ILLLPEOODKP": "",
-              "scale": 1.0,
-              "effectPattern": "Eff_Avatar_Boy_Sword_Dahlia_ElementalArt_Jackbox",
-              "effectTempleteID": -1.0
-            }
-          ],
           "elementDurability": 100.0,
           "modifierMixins": [
             {
               "$type": "AttachModifierToSelfGlobalValueMixin",
+              "actionQueues": [
+                [
+                  {
+                    "$type": "SendEffectTrigger",
+                    "attachPoint": "",
+                    "effectPattern": "Eff_Avatar_Boy_Sword_Dahlia_ElementalArt_Jackbox",
+                    "parameter": "IsActive",
+                    "type": "Bool"
+                  }
+                ],
+                [
+                  {
+                    "$type": "SendEffectTrigger",
+                    "attachPoint": "",
+                    "effectPattern": "Eff_Avatar_Boy_Sword_Dahlia_ElementalArt_Jackbox",
+                    "parameter": "IsActive",
+                    "type": "Bool",
+                    "value": 1
+                  }
+                ]
+              ],
+              "defaultGlobalValueOnCreate": 0.0,
+              "globalValueKey": "_ABILITY_Dahlia_Jackbox_TriggerTimer",
               "modifierNameSteps": [
                 "Blank",
                 "Blank"
@@ -1429,86 +1447,95 @@
                 -0.5,
                 0.1,
                 1.5
-              ],
-              "globalValueKey": "_ABILITY_Dahlia_Jackbox_TriggerTimer",
-              "actionQueues": [
-                [
-                  {
-                    "$type": "SendEffectTrigger",
-                    "parameter": "IsActive",
-                    "effectPattern": "Eff_Avatar_Boy_Sword_Dahlia_ElementalArt_Jackbox",
-                    "type": "Bool",
-                    "attachPoint": ""
-                  }
-                ],
-                [
-                  {
-                    "$type": "SendEffectTrigger",
-                    "parameter": "IsActive",
-                    "GGKIEIJLCJJ": 1,
-                    "effectPattern": "Eff_Avatar_Boy_Sword_Dahlia_ElementalArt_Jackbox",
-                    "type": "Bool",
-                    "attachPoint": ""
-                  }
-                ]
-              ],
-              "defaultGlobalValueOnCreate": 0.0
+              ]
             }
           ],
           "modifierName": "",
+          "onAdded": [
+            {
+              "$type": "AttachEffect",
+              "effectPattern": "Eff_Avatar_Boy_Sword_Dahlia_ElementalArt_Jackbox",
+              "effectTempleteID": -1.0,
+              "scale": 1.0,
+              "ILLLPEOODKP": ""
+            }
+          ],
           "AIHNJLDFEGJ": 0.0
         },
         "Jackbox_TriggerAbility": {
           "duration": 0.2,
+          "elementDurability": 100.0,
+          "modifierName": "",
           "onAdded": [
             {
               "$type": "TriggerAbility",
               "abilityName": "SkillObj_Dahlia_Jackbox"
             }
           ],
-          "elementDurability": 100.0,
-          "modifierName": "",
           "AIHNJLDFEGJ": 0.0
         },
         "Jackbox_AvatarTrigger_Timer": {
-          "thinkInterval": 0.2,
+          "elementDurability": 100.0,
+          "modifierName": "",
           "onAdded": [
             {
               "$type": "TriggerThinkInterval"
             }
           ],
-          "elementDurability": 100.0,
-          "modifierName": "",
           "onThinkInterval": [
             {
               "$type": "AddGlobalValue",
               "key": "_ABILITY_Dahlia_Jackbox_TriggerTimer",
               "maxValue": 0.0,
               "minValue": 0.0,
-              "CBOMLBFIPJM": 0.2
+              "value": 0.2
             },
             {
               "$type": "ApplyModifier",
               "modifierName": "Jackbox_TriggerAbility",
-              "target": "Caster",
               "predicates": [
                 {
-                  "$type": "EOFDCELPGFO",
-                  "CBOMLBFIPJM": 1.0,
-                  "key": "_ABILITY_Dahlia_Jackbox_TriggerTimer"
+                  "$type": "ByTargetGlobalValue",
+                  "key": "_ABILITY_Dahlia_Jackbox_TriggerTimer",
+                  "value": 1.0
                 },
                 {
                   "$type": "LEJEMKKPPAB",
                   "target": "Team"
                 }
-              ]
+              ],
+              "target": "Caster"
             }
           ],
+          "thinkInterval": 0.2,
           "AIHNJLDFEGJ": 0.0
         },
         "UNIQUE_Jackbox_TriggerJump": {
-          "thinkInterval": 0.2,
           "duration": 1.5,
+          "elementDurability": 100.0,
+          "isUnique": true,
+          "modifierMixins": [
+            {
+              "$type": "RocketJumpMixin",
+              "extention": {
+                "xzMultiplier": 2.3,
+                "yMultiplier": 4.0
+              },
+              "type": "IttoGangPlank",
+              "BOBAPIHOIIG": true
+            },
+            {
+              "$type": "AttachToStateIDMixin",
+              "isCheckOnAttach": true,
+              "modifierName": "Jackbox_JumpBuff_Remover",
+              "stateIDs": [
+                "Jump",
+                "FallingAnthem_AS_1"
+              ],
+              "LJPPDIGCJMJ": ""
+            }
+          ],
+          "modifierName": "",
           "onAdded": [
             {
               "$type": "ForceTriggerJump"
@@ -1516,9 +1543,9 @@
             {
               "$type": "FireEffect",
               "effectPattern": "Eff_Avatar_Boy_Sword_Dahlia_ElementalArt_JumpTail",
+              "effectTempleteID": -1.0,
               "scale": 1.0,
-              "ILLLPEOODKP": "",
-              "effectTempleteID": -1.0
+              "ILLLPEOODKP": ""
             },
             {
               "$type": "AttachModifier",
@@ -1526,71 +1553,48 @@
             },
             {
               "$type": "TriggerAudioV2",
-              "DOHGOIOGLPE": "v5_7_Dahlia_JackBoxTrigger",
+              "muteRemoteAction": true,
               "target": "CasterOriginOwner",
-              "BDPFBBFKKAH": true
+              "DOHGOIOGLPE": "v5_7_Dahlia_JackBoxTrigger"
             }
           ],
-          "stacking": "Unique",
-          "elementDurability": 100.0,
-          "modifierMixins": [
-            {
-              "$type": "RocketJumpMixin",
-              "type": "IttoGangPlank",
-              "BOBAPIHOIIG": true,
-              "DBJGIPKJIPC": {
-                "GPNCELCLCIM": 2.3,
-                "JGONFOJBCMD": 4.0
-              }
-            },
-            {
-              "$type": "AttachToStateIDMixin",
-              "isCheckOnAttach": true,
-              "LJPPDIGCJMJ": "",
-              "stateIDs": [
-                "Jump",
-                "FallingAnthem_AS_1"
-              ],
-              "modifierName": "Jackbox_JumpBuff_Remover"
-            }
-          ],
-          "modifierName": "",
-          "isUnique": true,
           "onThinkInterval": [
             {
               "$type": "RemoveUniqueModifier",
               "modifierName": "UNIQUE_Jackbox_TriggerJump",
               "predicates": [
                 {
-                  "$type": "GKGBIPDLMMG",
+                  "$type": "ByNot",
                   "predicates": [
                     {
                       "$type": "FODKMMKKJFM",
+                      "OMGLGMJLGID": "",
                       "IFKACJEBAKF": [
                         "Jump",
                         "JumpForRun",
                         "JumpForWalk",
                         "JumpForSprint"
-                      ],
-                      "OMGLGMJLGID": ""
+                      ]
                     }
                   ]
                 }
               ]
             }
           ],
+          "stacking": "Unique",
+          "thinkInterval": 0.2,
           "AIHNJLDFEGJ": 0.0
         },
         "Jackbox_JumpBuff_Remover": {
+          "elementDurability": 100.0,
+          "modifierName": "",
           "onRemoved": [
             {
               "$type": "RemoveUniqueModifier",
-              "modifierName": "UNIQUE_Jackbox_TriggerJump",
-              "doOffStage": true
+              "doOffStage": true,
+              "modifierName": "UNIQUE_Jackbox_TriggerJump"
             }
           ],
-          "elementDurability": 100.0,
-          "modifierName": "",
           "AIHNJLDFEGJ": 0.0
         },
         "Jackbox_Rock_Jump_Camera": {
@@ -1604,13 +1608,13 @@
               ],
               "HKNMIFLOKGI": {
                 "$type": "MJMJJHBAPOK",
-                "PCBFMHNEGKM": "EaseOutCubic",
-                "PGJBNAOBKHH": "EaseOutCubic",
-                "HOAHEELCEAB": 7.0,
-                "JCBINFMOIHM": 1.0,
+                "priority": "SkillSpecial",
                 "OIOHDNHEHPE": 0.5,
+                "JCBINFMOIHM": 1.0,
                 "EIFDPLGLJIO": 7.0,
-                "priority": "SkillSpecial"
+                "HOAHEELCEAB": 7.0,
+                "PCBFMHNEGKM": "EaseOutCubic",
+                "PGJBNAOBKHH": "EaseOutCubic"
               }
             },
             {
@@ -1620,20 +1624,20 @@
               ],
               "HKNMIFLOKGI": {
                 "$type": "KOPOJKGHLDH",
-                "PCBFMHNEGKM": "EaseOutCubic",
                 "fov": 50.0,
-                "JCBINFMOIHM": 1.0,
-                "PGJBNAOBKHH": "EaseOutCubic",
+                "priority": "SkillSpecial",
                 "OIOHDNHEHPE": 0.5,
-                "priority": "SkillSpecial"
+                "JCBINFMOIHM": 1.0,
+                "PCBFMHNEGKM": "EaseOutCubic",
+                "PGJBNAOBKHH": "EaseOutCubic"
               }
             },
             {
               "$type": "CameraBlurMixin",
-              "NFBFBAJDMPJ": {
-                "BKICBNIALGL": 0.2,
-                "LCOPJHPGJCO": 0.2,
-                "LFMGJKCOGPI": 0.3
+              "cameraRadialBlur": {
+                "blurTime": 0.2,
+                "fadeTime": 0.2,
+                "power": 0.3
               }
             }
           ],
@@ -1658,94 +1662,61 @@
           "AIHNJLDFEGJ": 0.0
         }
       },
-      "MKDAOFGPAEM": [
-        {
-          "$type": "Predicated",
-          "successActions": [
-            {
-              "$type": "RemoveModifier",
-              "modifierName": "Jackbox_AvatarTrigger_Timer",
-              "target": "Caster"
-            },
-            {
-              "$type": "SetGlobalValue",
-              "key": "_ABILITY_Dahlia_Jackbox_TriggerTimer",
-              "minValue": 0.0,
-              "maxValue": 0.0,
-              "CBOMLBFIPJM": 0.0,
-              "target": "Caster"
-            }
-          ],
-          "targetPredicates": [
-            {
-              "$type": "DEOFBICNFHF",
-              "entityTypes": [
-                "Avatar"
-              ]
-            },
-            {
-              "$type": "FONKGIILJIO",
-              "target": "Caster"
-            }
-          ],
-          "target": "Target"
-        }
-      ],
       "onAbilityStart": [
         {
           "$type": "FireEffect",
-          "effectPattern": "Eff_Avatar_Boy_Sword_Dahlia_ElementalArt_WaterColumn",
-          "scale": 1.0,
           "born": {
-            "$type": "NABPLNFPHCK",
+            "$type": "ConfigBornBySelf",
             "useRotation": true
           },
-          "ILLLPEOODKP": "",
-          "effectTempleteID": -1.0
+          "effectPattern": "Eff_Avatar_Boy_Sword_Dahlia_ElementalArt_WaterColumn",
+          "effectTempleteID": -1.0,
+          "scale": 1.0,
+          "ILLLPEOODKP": ""
         },
         {
           "$type": "TriggerAttackEvent",
-          "targetType": "Enemy",
           "attackEvent": {
             "attackInfo": {
               "attackProperty": {
-                "elementType": "Water",
                 "attackType": "Range",
-                "damagePercentageRatio": 0.0,
-                "strikeType": "Default",
-                "enBreak": 80.0,
                 "damagePercentage": "ElementalArt_Damage",
+                "damagePercentageRatio": 0.0,
                 "elementDurability": 25.0,
-                "arkheGrade": 0.0
+                "elementType": "Water",
+                "enBreak": 80.0,
+                "strikeType": "Default",
+                "IIPHCFEONLK": 0.0
               },
-              "hitPattern": {
-                "FLFCIDDNMNA": "",
-                "retreatType": "ByOriginOwner",
-                "onHitEffectName": "Eff_Avatar_Boy_Sword_Dahlia_ElementalArt_Hit",
-                "hitHaltTimeScale": 0.05,
-                "hitImpulseType": "LV7"
-              },
+              "attackTag": "Elemental_Art",
               "attenuationGroup": "default",
               "attenuationTag": "",
-              "attackTag": "Elemental_Art",
-              "canBeModifiedBy": "OriginOwner"
+              "canBeModifiedBy": "OriginOwner",
+              "hitPattern": {
+                "hitHaltTimeScale": 0.05,
+                "hitImpulseType": "LV7",
+                "onHitEffectName": "Eff_Avatar_Boy_Sword_Dahlia_ElementalArt_Hit",
+                "retreatType": "ByOriginOwner",
+                "FLFCIDDNMNA": ""
+              }
             },
             "attackPattern": {
-              "$type": "DDLDAMKEKJD",
-              "radius": 3.0,
-              "height": 3.5,
-              "triggerType": "TriggerNoRepeat",
+              "$type": "ConfigAttackCircle",
               "born": {
-                "$type": "NABPLNFPHCK",
-                "useRotation": true,
+                "$type": "ConfigBornBySelf",
                 "offset": {
                   "x": 0.0,
-                  "z": 0.0,
-                  "y": -0.5
-                }
-              }
+                  "y": -0.5,
+                  "z": 0.0
+                },
+                "useRotation": true
+              },
+              "height": 3.5,
+              "radius": 3.0,
+              "triggerType": "TriggerNoRepeat"
             }
-          }
+          },
+          "targetType": "Enemy"
         },
         {
           "$type": "Predicated",
@@ -1754,11 +1725,11 @@
               "$type": "ApplyModifier",
               "modifierName": "UNIQUE_Jackbox_TriggerJump",
               "otherTargets": {
-                "$type": "CEBMFAMGHGH"
+                "$type": "SelectTargetsByLCTriggerAll"
               },
               "predicates": [
                 {
-                  "$type": "DEOFBICNFHF",
+                  "$type": "ByEntityTypes",
                   "entityTypes": [
                     "Avatar"
                   ]
@@ -1772,77 +1743,18 @@
           ],
           "targetPredicates": [
             {
-              "$type": "EOFDCELPGFO",
-              "CBOMLBFIPJM": 1.0,
+              "$type": "ByTargetGlobalValue",
               "key": "_ABILITY_Dahlia_Jackbox_TriggerTimer",
-              "target": "Self"
+              "target": "Self",
+              "value": 1.0
             }
           ]
         },
         {
           "$type": "KillSelf",
-          "MBGFJOOIMOK": [
+          "configIdArray": [
             42115001
           ]
-        }
-      ],
-      "onKill": [
-        {
-          "$type": "RemoveModifier",
-          "modifierName": "Jackbox_Generate_FX"
-        },
-        {
-          "$type": "RemoveModifier",
-          "modifierName": "Jackbox_AvatarTrigger_Timer"
-        }
-      ],
-      "abilityName": "SkillObj_Dahlia_Jackbox",
-      "PFJMEMFDGOH": [
-        {
-          "$type": "Predicated",
-          "successActions": [
-            {
-              "$type": "ApplyModifier",
-              "modifierName": "Jackbox_TriggerAbility",
-              "target": "Caster"
-            }
-          ],
-          "targetPredicates": [
-            {
-              "$type": "DEOFBICNFHF",
-              "entityTypes": [
-                "Monster"
-              ]
-            },
-            {
-              "$type": "FONKGIILJIO",
-              "target": "Caster"
-            }
-          ],
-          "target": "Target"
-        },
-        {
-          "$type": "Predicated",
-          "successActions": [
-            {
-              "$type": "AttachModifier",
-              "modifierName": "Jackbox_AvatarTrigger_Timer",
-              "target": "Caster"
-            }
-          ],
-          "targetPredicates": [
-            {
-              "$type": "DEOFBICNFHF",
-              "entityTypes": [
-                "Avatar"
-              ]
-            },
-            {
-              "$type": "FONKGIILJIO",
-              "target": "Caster"
-            }
-          ],
-          "target": "Target"
         }
       ],
       "onAdded": [
@@ -1856,13 +1768,102 @@
           "target": "Team"
         }
       ],
-      "abilitySpecials": {
-        "ElementalArt_Damage": 0.0
-      }
+      "onFieldEnter": [
+        {
+          "$type": "Predicated",
+          "successActions": [
+            {
+              "$type": "ApplyModifier",
+              "modifierName": "Jackbox_TriggerAbility",
+              "target": "Caster"
+            }
+          ],
+          "target": "Target",
+          "targetPredicates": [
+            {
+              "$type": "ByEntityTypes",
+              "entityTypes": [
+                "Monster"
+              ]
+            },
+            {
+              "$type": "ByEntityIsAlive",
+              "target": "Caster"
+            }
+          ]
+        },
+        {
+          "$type": "Predicated",
+          "successActions": [
+            {
+              "$type": "AttachModifier",
+              "modifierName": "Jackbox_AvatarTrigger_Timer",
+              "target": "Caster"
+            }
+          ],
+          "target": "Target",
+          "targetPredicates": [
+            {
+              "$type": "ByEntityTypes",
+              "entityTypes": [
+                "Avatar"
+              ]
+            },
+            {
+              "$type": "ByEntityIsAlive",
+              "target": "Caster"
+            }
+          ]
+        }
+      ],
+      "onFieldExit": [
+        {
+          "$type": "Predicated",
+          "successActions": [
+            {
+              "$type": "RemoveModifier",
+              "modifierName": "Jackbox_AvatarTrigger_Timer",
+              "target": "Caster"
+            },
+            {
+              "$type": "SetGlobalValue",
+              "key": "_ABILITY_Dahlia_Jackbox_TriggerTimer",
+              "maxValue": 0.0,
+              "minValue": 0.0,
+              "target": "Caster",
+              "value": 0.0
+            }
+          ],
+          "target": "Target",
+          "targetPredicates": [
+            {
+              "$type": "ByEntityTypes",
+              "entityTypes": [
+                "Avatar"
+              ]
+            },
+            {
+              "$type": "ByEntityIsAlive",
+              "target": "Caster"
+            }
+          ]
+        }
+      ],
+      "onKill": [
+        {
+          "$type": "RemoveModifier",
+          "modifierName": "Jackbox_Generate_FX"
+        },
+        {
+          "$type": "RemoveModifier",
+          "modifierName": "Jackbox_AvatarTrigger_Timer"
+        }
+      ]
     }
   },
   {
     "Default": {
+      "abilityName": "SkillObj_Dahlia_Jackbox_WindZone",
       "modifiers": {
         "Jackbox_WindZone": {
           "duration": 0.6,
@@ -1870,24 +1871,21 @@
           "modifierMixins": [
             {
               "$type": "WindZoneMixin",
-              "targetType": "All",
-              "modifierName": "",
-              "NGFJGIAMCKD": 0.5,
-              "NCIPCJFOKFG": 8.0,
-              "ICPNECKICCJ": 2.0,
+              "attenuation": 2.0,
               "born": {
-                "$type": "NABPLNFPHCK",
-                "useRotation": true,
+                "$type": "ConfigBornBySelf",
                 "offset": {
                   "x": 0.0,
-                  "z": 0.0,
-                  "y": 3.0
-                }
+                  "y": 3.0,
+                  "z": 0.0
+                },
+                "useRotation": true
               },
-              "shapeName": "CircleR3",
+              "innerRadius": 0.5,
+              "modifierName": "",
               "predicates": [
                 {
-                  "$type": "DEOFBICNFHF",
+                  "$type": "ByEntityTypes",
                   "entityTypes": [
                     "Avatar",
                     "Monster"
@@ -1895,19 +1893,21 @@
                   "reject": true
                 },
                 {
-                  "$type": "NDIHGIDCJFH",
-                  "OLIIPBHKFCN": 150.0,
-                  "logic": "LesserOrEqual"
+                  "$type": "ByTargetWeight",
+                  "logic": "LesserOrEqual",
+                  "weight": 150.0
                 }
               ],
-              "reverse": true
+              "reverse": true,
+              "shapeName": "CircleR3",
+              "strength": 8.0,
+              "targetType": "All"
             }
           ],
           "modifierName": "",
           "AIHNJLDFEGJ": 0.0
         }
       },
-      "abilityName": "SkillObj_Dahlia_Jackbox_WindZone",
       "onAdded": [
         {
           "$type": "AttachModifier",
@@ -1918,41 +1918,14 @@
   },
   {
     "Default": {
-      "modifiers": {
-        "UNIQUE_Dahlia_ElementalArt_Book": {
-          "onRemoved": [
-            {
-              "$type": "FireEffect",
-              "effectPattern": "Eff_Avatar_Boy_Sword_Dahlia_Book_Disappear",
-              "scale": 1.0,
-              "ILLLPEOODKP": "",
-              "effectTempleteID": -1.0
-            }
-          ],
-          "onAdded": [
-            {
-              "$type": "AttachEffect",
-              "ILLLPEOODKP": "",
-              "scale": 1.0,
-              "effectPattern": "Eff_Avatar_Boy_Sword_Dahlia_Book_ElementalArt",
-              "effectTempleteID": -1.0
-            }
-          ],
-          "elementDurability": 100.0,
-          "modifierName": "",
-          "isUnique": true,
-          "AIHNJLDFEGJ": 0.0
-        }
-      },
       "abilityMixins": [
         {
           "$type": "AttachToMultiNormalizedTimeMixin",
           "modifierName": "UNIQUE_Dahlia_ElementalArt_Book",
-          "LJPPDIGCJMJ": "",
           "normalizedStateIDList": [
             {
-              "stateID": "Dahlia_ElementalArt_BS",
-              "normalizeStart": 0.1
+              "normalizeStart": 0.1,
+              "stateID": "Dahlia_ElementalArt_BS"
             },
             {
               "stateID": "Dahlia_ElementalArt_Charge"
@@ -1964,80 +1937,166 @@
               "stateID": "Dahlia_ElementalArt_Custom"
             },
             {
-              "stateID": "Dahlia_ElementalArt_AS",
-              "normalizeEnd": 0.4
+              "normalizeEnd": 0.4,
+              "stateID": "Dahlia_ElementalArt_AS"
             },
             {
-              "stateID": "Dahlia_ElementalArt_Custom_AS",
-              "normalizeEnd": 0.4
+              "normalizeEnd": 0.4,
+              "stateID": "Dahlia_ElementalArt_Custom_AS"
             }
-          ]
+          ],
+          "LJPPDIGCJMJ": ""
         }
       ],
-      "abilityName": "Avatar_Dahlia_ElementalArt_Book"
+      "abilityName": "Avatar_Dahlia_ElementalArt_Book",
+      "modifiers": {
+        "UNIQUE_Dahlia_ElementalArt_Book": {
+          "elementDurability": 100.0,
+          "isUnique": true,
+          "modifierName": "",
+          "onAdded": [
+            {
+              "$type": "AttachEffect",
+              "effectPattern": "Eff_Avatar_Boy_Sword_Dahlia_Book_ElementalArt",
+              "effectTempleteID": -1.0,
+              "scale": 1.0,
+              "ILLLPEOODKP": ""
+            }
+          ],
+          "onRemoved": [
+            {
+              "$type": "FireEffect",
+              "effectPattern": "Eff_Avatar_Boy_Sword_Dahlia_Book_Disappear",
+              "effectTempleteID": -1.0,
+              "scale": 1.0,
+              "ILLLPEOODKP": ""
+            }
+          ],
+          "AIHNJLDFEGJ": 0.0
+        }
+      }
     }
   },
   {
     "Default": {
+      "abilityName": "Avatar_Dahlia_ElementalArt_Book_Open",
       "onAbilityStart": [
         {
           "$type": "SendEffectTrigger",
-          "parameter": "Level",
-          "GGKIEIJLCJJ": 1,
-          "effectPattern": "Eff_Avatar_Boy_Sword_Dahlia_Book_ElementalArt",
-          "type": "Int",
           "attachPoint": "",
-          "doOffStage": true
+          "doOffStage": true,
+          "effectPattern": "Eff_Avatar_Boy_Sword_Dahlia_Book_ElementalArt",
+          "parameter": "Level",
+          "type": "Int",
+          "value": 1
         },
         {
           "$type": "SendEffectTrigger",
-          "parameter": "Open",
+          "attachPoint": "",
           "effectPattern": "Eff_Avatar_Boy_Sword_Dahlia_Book_ElementalArt",
-          "attachPoint": ""
+          "parameter": "Open"
         }
-      ],
-      "abilityName": "Avatar_Dahlia_ElementalArt_Book_Open"
+      ]
     }
   },
   {
     "Default": {
+      "abilityMixins": [
+        {
+          "$type": "AttachToStateIDMixin",
+          "modifierName": "Dahlia_ElementalBurst_Initialize",
+          "stateIDs": [
+            "Dahlia_ElementalBurst"
+          ],
+          "LJPPDIGCJMJ": ""
+        },
+        {
+          "$type": "AttachToNormalizedTimeMixin",
+          "modifierName": "Dahlia_ElementalBurst_TriggerAttack",
+          "normalizeStart": 0.58,
+          "stateID": "Dahlia_ElementalBurst",
+          "LJPPDIGCJMJ": ""
+        },
+        {
+          "$type": "AttachToStateIDMixin",
+          "modifierName": "Dahlia_ElementalBurst_HeadControl",
+          "stateIDs": [
+            "Dahlia_ElementalBurst",
+            "Dahlia_ElementalBurst_AS"
+          ],
+          "LJPPDIGCJMJ": ""
+        },
+        {
+          "$type": "AttachToStateIDMixin",
+          "modifierName": "Dahlia_ElementalBurst_Invincible",
+          "stateIDs": [
+            "Dahlia_ElementalBurst",
+            "Dahlia_ElementalBurst_AS"
+          ],
+          "LJPPDIGCJMJ": ""
+        },
+        {
+          "$type": "AttachToMultiNormalizedTimeMixin",
+          "modifierName": "Dahlia_ElementalBurst_Book",
+          "normalizedStateIDList": [
+            {
+              "stateID": "Dahlia_ElementalBurst"
+            },
+            {
+              "normalizeEnd": 0.216,
+              "stateID": "Dahlia_ElementalBurst_AS"
+            }
+          ],
+          "LJPPDIGCJMJ": ""
+        },
+        {
+          "$type": "AttachToNormalizedTimeMixin",
+          "modifierName": "Dahlia_ElementalBurst_Weather",
+          "normalizeEnd": 0.58,
+          "stateID": "Dahlia_ElementalBurst",
+          "LJPPDIGCJMJ": ""
+        }
+      ],
+      "abilityName": "Avatar_Dahlia_ElementalBurst",
+      "abilitySpecials": {
+        "ElementalBurst_Damage": 0.0,
+        "ElementalBurst_BuffTime": 0.0,
+        "Shield_HpValue": 0.0,
+        "Shield_MaxHpRatio": 0.0,
+        "FreezeAddBuff_Timer": 0.0
+      },
       "modifiers": {
         "Dahlia_ElementalBurst_Initialize": {
+          "elementDurability": 100.0,
+          "modifierName": "",
           "onAdded": [
             {
               "$type": "AvatarSkillStart",
-              "skillID": 11155,
-              "BGNJBEPEJBO": 1.0,
+              "cdRatio": 1.0,
               "costStaminaRatio": 1.0,
-              "cdRatio": 1.0
+              "skillID": 11155,
+              "GIBAINFKPBO": 1.0
             },
             {
               "$type": "FireEffect",
               "effectPattern": "Eff_Avatar_Boy_Sword_Dahlia_ElementalBurst_GatherPower_01",
+              "effectTempleteID": -1.0,
               "scale": 1.0,
-              "ILLLPEOODKP": "",
-              "effectTempleteID": -1.0
+              "ILLLPEOODKP": ""
             },
             {
               "$type": "FireEffect",
               "effectPattern": "Eff_Avatar_Boy_Sword_Dahlia_ElementalBurst_GatherPower_02",
+              "effectTempleteID": -1.0,
               "scale": 1.0,
-              "ILLLPEOODKP": "",
-              "effectTempleteID": -1.0
+              "ILLLPEOODKP": ""
             }
           ],
-          "elementDurability": 100.0,
-          "modifierName": "",
           "AIHNJLDFEGJ": 0.0
         },
         "Dahlia_ElementalBurst_HeadControl": {
-          "onRemoved": [
-            {
-              "$type": "EnableHeadControl",
-              "enable": true,
-              "doOffStage": true
-            }
-          ],
+          "elementDurability": 100.0,
+          "modifierName": "",
           "onAdded": [
             {
               "$type": "EnableHeadControl",
@@ -2047,48 +2106,53 @@
           "onAvatarOut": [
             {
               "$type": "EnableHeadControl",
-              "enable": true,
-              "doOffStage": true
+              "doOffStage": true,
+              "enable": true
             }
           ],
-          "elementDurability": 100.0,
-          "modifierName": "",
+          "onRemoved": [
+            {
+              "$type": "EnableHeadControl",
+              "doOffStage": true,
+              "enable": true
+            }
+          ],
           "AIHNJLDFEGJ": 0.0
         },
         "Dahlia_ElementalBurst_Invincible": {
           "duration": 1.5,
+          "elementDurability": 100.0,
+          "modifierName": "",
           "onAdded": [
             {
               "$type": "AttachAbilityStateResistance",
               "resistanceListID": 11002
             }
           ],
-          "elementDurability": 100.0,
           "state": "Invincible",
-          "modifierName": "",
           "AIHNJLDFEGJ": 0.0
         },
         "Dahlia_ElementalBurst_Book": {
+          "elementDurability": 100.0,
+          "modifierName": "",
+          "onAdded": [
+            {
+              "$type": "AttachEffect",
+              "effectPattern": "Eff_Avatar_Boy_Sword_Dahlia_Book",
+              "effectTempleteID": -1.0,
+              "scale": 1.0,
+              "ILLLPEOODKP": ""
+            }
+          ],
           "onRemoved": [
             {
               "$type": "FireEffect",
               "effectPattern": "Eff_Avatar_Boy_Sword_Dahlia_Book_Disappear",
+              "effectTempleteID": -1.0,
               "scale": 1.0,
-              "ILLLPEOODKP": "",
-              "effectTempleteID": -1.0
+              "ILLLPEOODKP": ""
             }
           ],
-          "onAdded": [
-            {
-              "$type": "AttachEffect",
-              "ILLLPEOODKP": "",
-              "scale": 1.0,
-              "effectPattern": "Eff_Avatar_Boy_Sword_Dahlia_Book",
-              "effectTempleteID": -1.0
-            }
-          ],
-          "elementDurability": 100.0,
-          "modifierName": "",
           "AIHNJLDFEGJ": 0.0
         },
         "Dahlia_ElementalBurst_Weather": {
@@ -2109,13 +2173,13 @@
               ],
               "HKNMIFLOKGI": {
                 "$type": "MJMJJHBAPOK",
-                "PCBFMHNEGKM": "EaseOutCubic",
-                "PGJBNAOBKHH": "EaseOutCubic",
-                "HOAHEELCEAB": 3.0,
+                "priority": "SkillSpecial",
                 "JCBINFMOIHM": 0.3,
                 "OIOHDNHEHPE": 0.5,
                 "EIFDPLGLJIO": 3.0,
-                "priority": "SkillSpecial"
+                "HOAHEELCEAB": 3.0,
+                "PCBFMHNEGKM": "EaseOutCubic",
+                "PGJBNAOBKHH": "EaseOutCubic"
               }
             },
             {
@@ -2126,12 +2190,12 @@
               ],
               "HKNMIFLOKGI": {
                 "$type": "KOPOJKGHLDH",
-                "PCBFMHNEGKM": "EaseOutCubic",
                 "fov": 65.0,
+                "priority": "SkillSpecial",
                 "JCBINFMOIHM": 0.3,
-                "PGJBNAOBKHH": "EaseOutCubic",
                 "OIOHDNHEHPE": 0.5,
-                "priority": "SkillSpecial"
+                "PCBFMHNEGKM": "EaseOutCubic",
+                "PGJBNAOBKHH": "EaseOutCubic"
               }
             },
             {
@@ -2142,12 +2206,12 @@
               ],
               "HKNMIFLOKGI": {
                 "$type": "MKPBOJOKEPD",
-                "CEIAHLAIAIL": "Absolute",
                 "lerpDuration": 0.5,
-                "FKMODLOGKPE": true,
+                "priority": "SkillSpecial",
                 "LAEOEBACLCG": 10.0,
-                "KBBJCGGGOJJ": "EaseOutCubic",
-                "priority": "SkillSpecial"
+                "FKMODLOGKPE": true,
+                "CEIAHLAIAIL": "Absolute",
+                "KBBJCGGGOJJ": "EaseOutCubic"
               }
             }
           ],
@@ -2155,59 +2219,61 @@
           "AIHNJLDFEGJ": 0.0
         },
         "Dahlia_ElementalBurst_TriggerAttack": {
+          "elementDurability": 100.0,
+          "modifierName": "",
           "onAdded": [
             {
               "$type": "FireEffect",
               "effectPattern": "Eff_Avatar_Boy_Sword_Dahlia_ElementalBurst_Attack",
+              "effectTempleteID": -1.0,
               "scale": 1.0,
-              "ILLLPEOODKP": "",
-              "effectTempleteID": -1.0
+              "ILLLPEOODKP": ""
             },
             {
               "$type": "TriggerAudioV2",
-              "DOHGOIOGLPE": "v5_7_Dahlia_ElementalBurst",
-              "BDPFBBFKKAH": true
+              "muteRemoteAction": true,
+              "DOHGOIOGLPE": "v5_7_Dahlia_ElementalBurst"
             },
             {
               "$type": "TriggerAttackEvent",
-              "targetType": "Enemy",
               "attackEvent": {
                 "attackInfo": {
                   "attackProperty": {
-                    "elementType": "Water",
                     "attackType": "Range",
-                    "damagePercentageRatio": 0.0,
-                    "strikeType": "Default",
-                    "enBreak": 100.0,
                     "damagePercentage": "ElementalBurst_Damage",
+                    "damagePercentageRatio": 0.0,
                     "elementDurability": 50.0,
-                    "arkheGrade": 0.0
+                    "elementType": "Water",
+                    "enBreak": 100.0,
+                    "strikeType": "Default",
+                    "IIPHCFEONLK": 0.0
                   },
-                  "hitPattern": {
-                    "FLFCIDDNMNA": "",
-                    "onHitEffectName": "default",
-                    "hitImpulseType": "LV4"
-                  },
+                  "attackTag": "Elemental_Burst",
                   "attenuationGroup": "default",
                   "attenuationTag": "",
-                  "attackTag": "Elemental_Burst"
+                  "hitPattern": {
+                    "hitImpulseType": "LV4",
+                    "onHitEffectName": "default",
+                    "FLFCIDDNMNA": ""
+                  }
                 },
                 "attackPattern": {
-                  "$type": "DDLDAMKEKJD",
-                  "radius": 5.5,
-                  "height": 3.5,
-                  "triggerType": "TriggerNoRepeat",
+                  "$type": "ConfigAttackCircle",
                   "born": {
-                    "$type": "NABPLNFPHCK",
-                    "useRotation": true,
+                    "$type": "ConfigBornBySelf",
                     "offset": {
-                      "x": 0.0,
-                      "z": 0.8,
-                      "y": -1.0
-                    }
-                  }
+                      "x": 0.8,
+                      "y": -1.0,
+                      "z": 0.0
+                    },
+                    "useRotation": true
+                  },
+                  "height": 3.5,
+                  "radius": 5.5,
+                  "triggerType": "TriggerNoRepeat"
                 }
-              }
+              },
+              "targetType": "Enemy"
             },
             {
               "$type": "RemoveModifier",
@@ -2218,83 +2284,52 @@
               "modifierName": "Dahlia_ElementBurst_Protection_State"
             }
           ],
-          "elementDurability": 100.0,
-          "modifierName": "",
           "AIHNJLDFEGJ": 0.0
         },
         "Dahlia_ElementBurst_Protection_State": {
-          "thinkInterval": 0.1,
           "duration": [
             "ElementalBurst_BuffTime",
             "_ABILITY_Dahlia_Constellation_4_ExtraBurstTimer",
             "ADD"
           ],
-          "onRemoved": [
-            {
-              "$type": "SetGlobalValue",
-              "key": "_ABILITY_Avatar_Dahlia_Has_Protection_State",
-              "minValue": 0.0,
-              "maxValue": 0.0,
-              "CBOMLBFIPJM": 0.0,
-              "doOffStage": true
-            },
-            {
-              "$type": "SetGlobalValue",
-              "key": "_ABILITY_Dahlia_Buff_Counter",
-              "minValue": 0.0,
-              "maxValue": 0.0,
-              "CBOMLBFIPJM": 0.0,
-              "doOffStage": true
-            },
-            {
-              "$type": "RemoveUniqueModifier",
-              "modifierName": "UNIQUE_Dahlia_ElementBurst_Shield_Team_A",
-              "target": "Team",
-              "doOffStage": true
-            },
-            {
-              "$type": "RemoveUniqueModifier",
-              "modifierName": "UNIQUE_Dahlia_ElementBurst_Shield_Team_B",
-              "target": "Team",
-              "doOffStage": true
-            }
-          ],
+          "elementDurability": 100.0,
+          "modifierName": "",
           "onAdded": [
             {
               "$type": "AttachEffect",
-              "ILLLPEOODKP": "",
-              "scale": 1.0,
               "effectPattern": "Eff_Avatar_Boy_Sword_Dahlia_ElementalBurst_State",
               "effectTempleteID": -1.0,
-              "target": "Team"
+              "scale": 1.0,
+              "target": "Team",
+              "ILLLPEOODKP": ""
             },
             {
               "$type": "SetGlobalValue",
               "key": "_ABILITY_Avatar_Dahlia_Has_Protection_State",
-              "minValue": 0.0,
               "maxValue": 0.0,
-              "CBOMLBFIPJM": 1.0
+              "minValue": 0.0,
+              "value": 1.0
             },
             {
               "$type": "SetGlobalValue",
               "key": "_ABILITY_Dahlia_Buff_Counter",
-              "minValue": 0.0,
               "maxValue": 0.0,
-              "CBOMLBFIPJM": 0.0
+              "minValue": 0.0,
+              "value": 0.0
             },
             {
               "$type": "SetGlobalValue",
               "key": "_ABILITY_Dahlia_Buff_MaxAdded",
-              "minValue": 0.0,
               "maxValue": 0.0,
-              "CBOMLBFIPJM": 0.0
+              "minValue": 0.0,
+              "value": 0.0
             },
             {
               "$type": "SetGlobalValue",
               "key": "_ABILITY_Dahlia_NormalAttack_Count",
-              "minValue": 0.0,
               "maxValue": 0.0,
-              "CBOMLBFIPJM": 0.0
+              "minValue": 0.0,
+              "value": 0.0
             },
             {
               "$type": "AttachModifierToAbility",
@@ -2310,331 +2345,358 @@
               "modifierName": "Dahlia_Buff_FxManager"
             }
           ],
-          "elementDurability": 100.0,
-          "modifierName": "",
+          "onRemoved": [
+            {
+              "$type": "SetGlobalValue",
+              "doOffStage": true,
+              "key": "_ABILITY_Avatar_Dahlia_Has_Protection_State",
+              "maxValue": 0.0,
+              "minValue": 0.0,
+              "value": 0.0
+            },
+            {
+              "$type": "SetGlobalValue",
+              "doOffStage": true,
+              "key": "_ABILITY_Dahlia_Buff_Counter",
+              "maxValue": 0.0,
+              "minValue": 0.0,
+              "value": 0.0
+            },
+            {
+              "$type": "RemoveUniqueModifier",
+              "doOffStage": true,
+              "modifierName": "UNIQUE_Dahlia_ElementBurst_Shield_Team_A",
+              "target": "Team"
+            },
+            {
+              "$type": "RemoveUniqueModifier",
+              "doOffStage": true,
+              "modifierName": "UNIQUE_Dahlia_ElementBurst_Shield_Team_B",
+              "target": "Team"
+            }
+          ],
           "onThinkInterval": [
             {
               "$type": "ApplyModifier",
-              "modifierName": "Dahlia_ElementBurst_Shield_Broken_Check",
-              "doOffStage": true
+              "doOffStage": true,
+              "modifierName": "Dahlia_ElementBurst_Shield_Broken_Check"
             }
           ],
+          "thinkInterval": 0.1,
           "AIHNJLDFEGJ": 0.0
         },
         "Dahlia_ElementBurst_Shield_Broken_Check": {
           "duration": 0.1,
+          "elementDurability": 100.0,
+          "modifierName": "",
           "onAdded": [
             {
               "$type": "Predicated",
+              "doOffStage": true,
               "successActions": [
                 {
                   "$type": "AddGlobalValue",
-                  "useLimitRange": true,
+                  "doOffStage": true,
                   "key": "_ABILITY_Dahlia_Buff_Counter",
                   "maxValue": 4.0,
                   "minValue": 0.0,
-                  "CBOMLBFIPJM": -1.0,
                   "target": "Caster",
-                  "doOffStage": true
+                  "useLimitRange": true,
+                  "value": -1.0
                 },
                 {
                   "$type": "Predicated",
-                  "successActions": [
-                    {
-                      "$type": "AttachModifierToAbility",
-                      "modifierName": "UNIQUE_Dahlia_ElementBurst_Shield_Team_A",
-                      "target": "Team",
-                      "doOffStage": true
-                    }
-                  ],
+                  "doOffStage": true,
                   "failActions": [
                     {
                       "$type": "AttachModifierToAbility",
-                      "modifierName": "UNIQUE_Dahlia_ElementBurst_Shield_Team_B",
-                      "target": "Team",
                       "doOffStage": true,
+                      "modifierName": "UNIQUE_Dahlia_ElementBurst_Shield_Team_B",
                       "predicates": [
                         {
-                          "$type": "EOFDCELPGFO",
-                          "CBOMLBFIPJM": 1.0,
+                          "$type": "ByTargetGlobalValue",
                           "key": "_ABILITY_Avatar_Dahlia_TeamType",
-                          "target": "Caster"
+                          "target": "Caster",
+                          "value": 1.0
                         }
-                      ]
+                      ],
+                      "target": "Team"
+                    }
+                  ],
+                  "successActions": [
+                    {
+                      "$type": "AttachModifierToAbility",
+                      "doOffStage": true,
+                      "modifierName": "UNIQUE_Dahlia_ElementBurst_Shield_Team_A",
+                      "target": "Team"
                     }
                   ],
                   "targetPredicates": [
                     {
-                      "$type": "EOFDCELPGFO",
-                      "CBOMLBFIPJM": 2.0,
+                      "$type": "ByTargetGlobalValue",
                       "key": "_ABILITY_Avatar_Dahlia_TeamType",
-                      "target": "Caster"
+                      "target": "Caster",
+                      "value": 2.0
                     }
-                  ],
-                  "doOffStage": true
+                  ]
                 },
                 {
                   "$type": "TriggerAbility",
                   "abilityName": "Avatar_Dahlia_Constellation_2",
-                  "target": "Caster",
-                  "doOffStage": true
-                }
-              ],
-              "targetPredicates": [
-                {
-                  "$type": "EOFDCELPGFO",
-                  "CBOMLBFIPJM": 1.0,
-                  "key": "_ABILITY_Avatar_Dahlia_Has_Protection_State"
-                },
-                {
-                  "$type": "EOFDCELPGFO",
-                  "CBOMLBFIPJM": 0.0,
-                  "compareType": "NoneOrEqual",
-                  "key": "_ABILITY_Avatar_Dahlia_Has_Shield"
-                },
-                {
-                  "$type": "EOFDCELPGFO",
-                  "CBOMLBFIPJM": 1.0,
-                  "compareType": "MoreThanAndEqual",
-                  "key": "_ABILITY_Dahlia_Buff_Counter"
-                }
-              ],
-              "target": "Caster",
-              "doOffStage": true
-            }
-          ],
-          "stacking": "Multiple",
-          "elementDurability": 100.0,
-          "modifierName": "",
-          "AIHNJLDFEGJ": 0.0
-        },
-        "UNIQUE_Dahlia_ElementBurst_Shield_Team_A": {
-          "onRemoved": [
-            {
-              "$type": "SetGlobalValue",
-              "key": "_ABILITY_Avatar_Dahlia_Has_Shield",
-              "minValue": 0.0,
-              "maxValue": 0.0,
-              "CBOMLBFIPJM": 0.0,
-              "target": "Caster",
-              "doOffStage": true
-            },
-            {
-              "$type": "FireEffect",
-              "effectPattern": "Eff_Avatar_Boy_Sword_Dahlia_ElementalBurst_Shield_Broke",
-              "scale": 1.0,
-              "ILLLPEOODKP": "",
-              "effectTempleteID": -1.0,
-              "doOffStage": true
-            },
-            {
-              "$type": "ApplyModifier",
-              "modifierName": "Dahlia_ElementBurst_Shield_Broken_Check",
-              "doOffStage": true
-            },
-            {
-              "$type": "Predicated",
-              "successActions": [
-                {
-                  "$type": "ApplyModifier",
-                  "modifierName": "UNIQUE_Dahlia_ELementalBurst_Shield_Endure_OnTeam",
-                  "target": "Team",
-                  "doOffStage": true
-                }
-              ],
-              "targetPredicates": [
-                {
-                  "$type": "EOFDCELPGFO",
-                  "CBOMLBFIPJM": 0.0,
-                  "compareType": "NoneOrEqual",
-                  "key": "_ABILITY_Avatar_Dahlia_Has_Shield"
-                },
-                {
-                  "$type": "EOFDCELPGFO",
-                  "CBOMLBFIPJM": 1.0,
-                  "compareType": "MoreThanAndEqual",
-                  "key": "_ABILITY_Dahlia_Buff_Counter"
-                }
-              ],
-              "target": "Caster",
-              "doOffStage": true
-            }
-          ],
-          "onAdded": [
-            {
-              "$type": "SetGlobalValue",
-              "key": "_ABILITY_Avatar_Dahlia_Has_Shield",
-              "minValue": 0.0,
-              "maxValue": 0.0,
-              "CBOMLBFIPJM": 1.0,
-              "target": "Caster",
-              "doOffStage": true
-            },
-            {
-              "$type": "SetGlobalValue",
-              "key": "_ABILITY_Avatar_Dahlia_TeamType",
-              "minValue": 0.0,
-              "maxValue": 0.0,
-              "CBOMLBFIPJM": 1.0,
-              "target": "Caster",
-              "doOffStage": true
-            },
-            {
-              "$type": "SendEffectTrigger",
-              "parameter": "Born_Short",
-              "effectPattern": "Eff_Avatar_Boy_Sword_Dahlia_ElementalBurst_Shield",
-              "attachPoint": "",
-              "predicates": [
-                {
-                  "$type": "LJBLAFGJKGI",
-                  "modifierName": "Dahlia_ElementalBurst_TriggerAttack",
+                  "doOffStage": true,
                   "target": "Caster"
+                }
+              ],
+              "target": "Caster",
+              "targetPredicates": [
+                {
+                  "$type": "ByTargetGlobalValue",
+                  "key": "_ABILITY_Avatar_Dahlia_Has_Protection_State",
+                  "value": 1.0
+                },
+                {
+                  "$type": "ByTargetGlobalValue",
+                  "compareType": "NoneOrEqual",
+                  "key": "_ABILITY_Avatar_Dahlia_Has_Shield",
+                  "value": 0.0
+                },
+                {
+                  "$type": "ByTargetGlobalValue",
+                  "compareType": "MoreThanAndEqual",
+                  "key": "_ABILITY_Dahlia_Buff_Counter",
+                  "value": 1.0
                 }
               ]
             }
           ],
-          "stacking": "Unique",
+          "stacking": "Multiple",
+          "AIHNJLDFEGJ": 0.0
+        },
+        "UNIQUE_Dahlia_ElementBurst_Shield_Team_A": {
           "elementDurability": 100.0,
+          "isUnique": true,
           "modifierMixins": [
             {
               "$type": "GlobalMainShieldMixin",
               "childShieldModifierName": "UNIQUE_Dahlia_ElementBurst_Shield_Child_A",
-              "shieldHP": "Shield_HpValue",
               "costShieldRatioName": "",
-              "shieldHPRatio": "Shield_MaxHpRatio",
               "effectPattern": "Eff_Avatar_Boy_Sword_Dahlia_ElementalBurst_Shield",
               "onShieldBroken": [
                 {
                   "$type": "RemoveUniqueModifier",
-                  "modifierName": "UNIQUE_Dahlia_ElementBurst_Shield_Team_A",
-                  "doOffStage": true
+                  "doOffStage": true,
+                  "modifierName": "UNIQUE_Dahlia_ElementBurst_Shield_Team_A"
                 }
               ],
-              "shieldType": "Avatar_Water",
               "shieldAngle": 360.0,
+              "shieldHP": "Shield_HpValue",
+              "shieldHPRatio": "Shield_MaxHpRatio",
+              "shieldType": "Avatar_Water",
               "showDamageText": "INFO_ELITE_DEFENCE"
             }
           ],
           "modifierName": "",
-          "isUnique": true,
-          "AIHNJLDFEGJ": 0.0
-        },
-        "UNIQUE_Dahlia_ElementBurst_Shield_Team_B": {
-          "onRemoved": [
-            {
-              "$type": "SetGlobalValue",
-              "key": "_ABILITY_Avatar_Dahlia_Has_Shield",
-              "minValue": 0.0,
-              "maxValue": 0.0,
-              "CBOMLBFIPJM": 0.0,
-              "target": "Caster",
-              "doOffStage": true
-            },
-            {
-              "$type": "FireEffect",
-              "effectPattern": "Eff_Avatar_Boy_Sword_Dahlia_ElementalBurst_Shield_Broke",
-              "scale": 1.0,
-              "ILLLPEOODKP": "",
-              "effectTempleteID": -1.0,
-              "doOffStage": true
-            },
-            {
-              "$type": "ApplyModifier",
-              "modifierName": "Dahlia_ElementBurst_Shield_Broken_Check",
-              "doOffStage": true
-            },
-            {
-              "$type": "Predicated",
-              "successActions": [
-                {
-                  "$type": "ApplyModifier",
-                  "modifierName": "UNIQUE_Dahlia_ELementalBurst_Shield_Endure_OnTeam",
-                  "target": "Team",
-                  "doOffStage": true
-                }
-              ],
-              "targetPredicates": [
-                {
-                  "$type": "EOFDCELPGFO",
-                  "CBOMLBFIPJM": 0.0,
-                  "compareType": "NoneOrEqual",
-                  "key": "_ABILITY_Avatar_Dahlia_Has_Shield"
-                },
-                {
-                  "$type": "EOFDCELPGFO",
-                  "CBOMLBFIPJM": 1.0,
-                  "compareType": "MoreThanAndEqual",
-                  "key": "_ABILITY_Dahlia_Buff_Counter"
-                }
-              ],
-              "target": "Caster",
-              "doOffStage": true
-            }
-          ],
           "onAdded": [
             {
               "$type": "SetGlobalValue",
+              "doOffStage": true,
               "key": "_ABILITY_Avatar_Dahlia_Has_Shield",
-              "minValue": 0.0,
               "maxValue": 0.0,
-              "CBOMLBFIPJM": 1.0,
+              "minValue": 0.0,
               "target": "Caster",
-              "doOffStage": true
+              "value": 1.0
             },
             {
               "$type": "SetGlobalValue",
+              "doOffStage": true,
               "key": "_ABILITY_Avatar_Dahlia_TeamType",
-              "minValue": 0.0,
               "maxValue": 0.0,
-              "CBOMLBFIPJM": 2.0,
+              "minValue": 0.0,
               "target": "Caster",
-              "doOffStage": true
+              "value": 1.0
             },
             {
               "$type": "SendEffectTrigger",
-              "parameter": "Born_Short",
-              "effectPattern": "Eff_Avatar_Boy_Sword_Dahlia_ElementalBurst_Shield",
               "attachPoint": "",
+              "effectPattern": "Eff_Avatar_Boy_Sword_Dahlia_ElementalBurst_Shield",
+              "parameter": "Born_Short",
               "predicates": [
                 {
-                  "$type": "LJBLAFGJKGI",
+                  "$type": "ByHasModifier",
                   "modifierName": "Dahlia_ElementalBurst_TriggerAttack",
                   "target": "Caster"
                 }
               ]
             }
           ],
+          "onRemoved": [
+            {
+              "$type": "SetGlobalValue",
+              "doOffStage": true,
+              "key": "_ABILITY_Avatar_Dahlia_Has_Shield",
+              "maxValue": 0.0,
+              "minValue": 0.0,
+              "target": "Caster",
+              "value": 0.0
+            },
+            {
+              "$type": "FireEffect",
+              "doOffStage": true,
+              "effectPattern": "Eff_Avatar_Boy_Sword_Dahlia_ElementalBurst_Shield_Broke",
+              "effectTempleteID": -1.0,
+              "scale": 1.0,
+              "ILLLPEOODKP": ""
+            },
+            {
+              "$type": "ApplyModifier",
+              "doOffStage": true,
+              "modifierName": "Dahlia_ElementBurst_Shield_Broken_Check"
+            },
+            {
+              "$type": "Predicated",
+              "doOffStage": true,
+              "successActions": [
+                {
+                  "$type": "ApplyModifier",
+                  "doOffStage": true,
+                  "modifierName": "UNIQUE_Dahlia_ELementalBurst_Shield_Endure_OnTeam",
+                  "target": "Team"
+                }
+              ],
+              "target": "Caster",
+              "targetPredicates": [
+                {
+                  "$type": "ByTargetGlobalValue",
+                  "compareType": "NoneOrEqual",
+                  "key": "_ABILITY_Avatar_Dahlia_Has_Shield",
+                  "value": 0.0
+                },
+                {
+                  "$type": "ByTargetGlobalValue",
+                  "compareType": "MoreThanAndEqual",
+                  "key": "_ABILITY_Dahlia_Buff_Counter",
+                  "value": 1.0
+                }
+              ]
+            }
+          ],
           "stacking": "Unique",
+          "AIHNJLDFEGJ": 0.0
+        },
+        "UNIQUE_Dahlia_ElementBurst_Shield_Team_B": {
           "elementDurability": 100.0,
+          "isUnique": true,
           "modifierMixins": [
             {
               "$type": "GlobalMainShieldMixin",
               "childShieldModifierName": "UNIQUE_Dahlia_ElementBurst_Shield_Child_B",
-              "shieldHP": "Shield_HpValue",
               "costShieldRatioName": "",
-              "shieldHPRatio": "Shield_MaxHpRatio",
               "effectPattern": "Eff_Avatar_Boy_Sword_Dahlia_ElementalBurst_Shield",
               "onShieldBroken": [
                 {
                   "$type": "RemoveUniqueModifier",
-                  "modifierName": "UNIQUE_Dahlia_ElementBurst_Shield_Team_B",
-                  "doOffStage": true
+                  "doOffStage": true,
+                  "modifierName": "UNIQUE_Dahlia_ElementBurst_Shield_Team_B"
                 }
               ],
-              "shieldType": "Avatar_Water",
               "shieldAngle": 360.0,
+              "shieldHP": "Shield_HpValue",
+              "shieldHPRatio": "Shield_MaxHpRatio",
+              "shieldType": "Avatar_Water",
               "showDamageText": "INFO_ELITE_DEFENCE"
             }
           ],
           "modifierName": "",
-          "isUnique": true,
+          "onAdded": [
+            {
+              "$type": "SetGlobalValue",
+              "doOffStage": true,
+              "key": "_ABILITY_Avatar_Dahlia_Has_Shield",
+              "maxValue": 0.0,
+              "minValue": 0.0,
+              "target": "Caster",
+              "value": 1.0
+            },
+            {
+              "$type": "SetGlobalValue",
+              "doOffStage": true,
+              "key": "_ABILITY_Avatar_Dahlia_TeamType",
+              "maxValue": 0.0,
+              "minValue": 0.0,
+              "target": "Caster",
+              "value": 2.0
+            },
+            {
+              "$type": "SendEffectTrigger",
+              "attachPoint": "",
+              "effectPattern": "Eff_Avatar_Boy_Sword_Dahlia_ElementalBurst_Shield",
+              "parameter": "Born_Short",
+              "predicates": [
+                {
+                  "$type": "ByHasModifier",
+                  "modifierName": "Dahlia_ElementalBurst_TriggerAttack",
+                  "target": "Caster"
+                }
+              ]
+            }
+          ],
+          "onRemoved": [
+            {
+              "$type": "SetGlobalValue",
+              "doOffStage": true,
+              "key": "_ABILITY_Avatar_Dahlia_Has_Shield",
+              "maxValue": 0.0,
+              "minValue": 0.0,
+              "target": "Caster",
+              "value": 0.0
+            },
+            {
+              "$type": "FireEffect",
+              "doOffStage": true,
+              "effectPattern": "Eff_Avatar_Boy_Sword_Dahlia_ElementalBurst_Shield_Broke",
+              "effectTempleteID": -1.0,
+              "scale": 1.0,
+              "ILLLPEOODKP": ""
+            },
+            {
+              "$type": "ApplyModifier",
+              "doOffStage": true,
+              "modifierName": "Dahlia_ElementBurst_Shield_Broken_Check"
+            },
+            {
+              "$type": "Predicated",
+              "doOffStage": true,
+              "successActions": [
+                {
+                  "$type": "ApplyModifier",
+                  "doOffStage": true,
+                  "modifierName": "UNIQUE_Dahlia_ELementalBurst_Shield_Endure_OnTeam",
+                  "target": "Team"
+                }
+              ],
+              "target": "Caster",
+              "targetPredicates": [
+                {
+                  "$type": "ByTargetGlobalValue",
+                  "compareType": "NoneOrEqual",
+                  "key": "_ABILITY_Avatar_Dahlia_Has_Shield",
+                  "value": 0.0
+                },
+                {
+                  "$type": "ByTargetGlobalValue",
+                  "compareType": "MoreThanAndEqual",
+                  "key": "_ABILITY_Dahlia_Buff_Counter",
+                  "value": 1.0
+                }
+              ]
+            }
+          ],
+          "stacking": "Unique",
           "AIHNJLDFEGJ": 0.0
         },
         "UNIQUE_Dahlia_ElementBurst_Shield_Child_A": {
-          "properties": {
-            "Actor_EndureDelta": 0.0
-          },
           "elementDurability": 100.0,
+          "isUnique": true,
           "modifierMixins": [
             {
               "$type": "GlobalSubShieldMixin",
@@ -2642,8 +2704,6 @@
             }
           ],
           "modifierName": "",
-          "isUnique": true,
-          "AIHNJLDFEGJ": 0.0,
           "onBeingHit": [
             {
               "$type": "Predicated",
@@ -2654,30 +2714,32 @@
                   "target": "Team"
                 }
               ],
+              "target": "Target",
               "targetPredicates": [
                 {
-                  "$type": "GPEMEIHPCCF",
+                  "$type": "ByAny",
                   "predicates": [
                     {
-                      "$type": "AJJPBBPBCMO",
+                      "$type": "ByHitDamage",
                       "damage": 0.0
                     },
                     {
-                      "$type": "FCLGMLGFNHI",
-                      "hitEnBreak": 0.0
+                      "$type": "ByHitEnBreak",
+                      "enBreak": 0.0
                     }
                   ]
                 }
-              ],
-              "target": "Target"
+              ]
             }
-          ]
-        },
-        "UNIQUE_Dahlia_ElementBurst_Shield_Child_B": {
+          ],
           "properties": {
             "Actor_EndureDelta": 0.0
           },
+          "AIHNJLDFEGJ": 0.0
+        },
+        "UNIQUE_Dahlia_ElementBurst_Shield_Child_B": {
           "elementDurability": 100.0,
+          "isUnique": true,
           "modifierMixins": [
             {
               "$type": "GlobalSubShieldMixin",
@@ -2685,8 +2747,6 @@
             }
           ],
           "modifierName": "",
-          "isUnique": true,
-          "AIHNJLDFEGJ": 0.0,
           "onBeingHit": [
             {
               "$type": "Predicated",
@@ -2697,28 +2757,33 @@
                   "target": "Team"
                 }
               ],
+              "target": "Target",
               "targetPredicates": [
                 {
-                  "$type": "GPEMEIHPCCF",
+                  "$type": "ByAny",
                   "predicates": [
                     {
-                      "$type": "AJJPBBPBCMO",
+                      "$type": "ByHitDamage",
                       "damage": 0.0
                     },
                     {
-                      "$type": "FCLGMLGFNHI",
-                      "hitEnBreak": 0.0
+                      "$type": "ByHitEnBreak",
+                      "enBreak": 0.0
                     }
                   ]
                 }
-              ],
-              "target": "Target"
+              ]
             }
-          ]
+          ],
+          "properties": {
+            "Actor_EndureDelta": 0.0
+          },
+          "AIHNJLDFEGJ": 0.0
         },
         "UNIQUE_Dahlia_ELementalBurst_Shield_Endure_OnTeam": {
           "duration": 0.1,
           "elementDurability": 100.0,
+          "isUnique": true,
           "modifierMixins": [
             {
               "$type": "CurLocalAvatarMixinV2",
@@ -2726,43 +2791,36 @@
             }
           ],
           "modifierName": "",
-          "isUnique": true,
           "AIHNJLDFEGJ": 0.0
         },
         "UNIQUE_Dahlia_ELementalBurst_Shield_Endure_OnAvatar": {
+          "elementDurability": 100.0,
           "isLimitedProperties": true,
+          "isUnique": true,
+          "modifierName": "",
           "properties": {
             "Actor_EndureDelta": 0.0
           },
           "stacking": "Unique",
-          "elementDurability": 100.0,
-          "modifierName": "",
-          "isUnique": true,
           "AIHNJLDFEGJ": 0.0
         },
         "UNIQUE_Dahlia_ElementBurst_Shield_Hit_Handler": {
           "duration": 0.5,
+          "elementDurability": 100.0,
+          "isUnique": true,
+          "modifierName": "",
           "onAdded": [
             {
               "$type": "SendEffectTrigger",
-              "parameter": "BeHit",
+              "attachPoint": "",
               "effectPattern": "Eff_Avatar_Boy_Sword_Dahlia_ElementalBurst_Shield",
-              "attachPoint": ""
+              "parameter": "BeHit"
             }
           ],
           "stacking": "Unique",
-          "elementDurability": 100.0,
-          "modifierName": "",
-          "isUnique": true,
           "AIHNJLDFEGJ": 0.0
         },
         "Dahlia_Buff_Detecter_Handler_OnDahlia": {
-          "thinkInterval": 2.0,
-          "onAdded": [
-            {
-              "$type": "TriggerThinkInterval"
-            }
-          ],
           "elementDurability": 100.0,
           "modifierMixins": [
             {
@@ -2770,113 +2828,247 @@
               "actions": [
                 {
                   "$type": "CopyGlobalValue",
-                  "srcKey": "_ABILITY_Dahlia_Buff_Counter",
-                  "dstTarget": "Team",
-                  "srcTarget": "Self",
+                  "doOffStage": true,
                   "dstKey": "_ABILITY_Dahlia_Buff_Counter",
-                  "doOffStage": true
+                  "dstTarget": "Team",
+                  "srcKey": "_ABILITY_Dahlia_Buff_Counter",
+                  "srcTarget": "Self"
                 }
               ],
               "globalValueKey": "_ABILITY_Dahlia_Buff_Counter"
             }
           ],
           "modifierName": "",
+          "onAdded": [
+            {
+              "$type": "TriggerThinkInterval"
+            }
+          ],
           "onThinkInterval": [
             {
               "$type": "AttachModifier",
+              "doOffStage": true,
               "modifierName": "Dahlia_Buff_Detecter_of_Freeze_And_NormalAttack",
-              "target": "CurTeamAvatars",
-              "doOffStage": true
+              "target": "CurTeamAvatars"
             }
           ],
+          "thinkInterval": 2.0,
           "AIHNJLDFEGJ": 0.0
         },
         "Dahlia_Buff_Detecter_of_Freeze_And_NormalAttack": {
           "duration": 3.0,
+          "elementDurability": 100.0,
+          "modifierMixins": [
+            {
+              "$type": "DoActionByElementReactionMixin",
+              "actions": [
+                {
+                  "$type": "Predicated",
+                  "doOffStage": true,
+                  "successActions": [
+                    {
+                      "$type": "Predicated",
+                      "doOffStage": true,
+                      "failActions": [
+                        {
+                          "$type": "AddGlobalValue",
+                          "doOffStage": true,
+                          "key": "_ABILITY_Dahlia_Buff_Counter",
+                          "maxValue": 4.0,
+                          "minValue": 0.0,
+                          "target": "Caster",
+                          "useLimitRange": true,
+                          "value": 1.0
+                        },
+                        {
+                          "$type": "AddGlobalValue",
+                          "doOffStage": true,
+                          "key": "_ABILITY_Dahlia_Buff_MaxAdded",
+                          "maxValue": 4.0,
+                          "minValue": 0.0,
+                          "target": "Caster",
+                          "useLimitRange": true,
+                          "value": 1.0
+                        },
+                        {
+                          "$type": "TriggerAbility",
+                          "abilityName": "Avatar_Dahlia_Constellation_1",
+                          "doOffStage": true,
+                          "target": "Caster"
+                        }
+                      ],
+                      "successActions": [
+                        {
+                          "$type": "AddGlobalValue",
+                          "doOffStage": true,
+                          "key": "_ABILITY_Dahlia_Buff_Counter",
+                          "maxValue": 4.0,
+                          "minValue": 0.0,
+                          "target": "Caster",
+                          "useLimitRange": true,
+                          "value": 2.0
+                        },
+                        {
+                          "$type": "AddGlobalValue",
+                          "doOffStage": true,
+                          "key": "_ABILITY_Dahlia_Buff_MaxAdded",
+                          "maxValue": 4.0,
+                          "minValue": 0.0,
+                          "target": "Caster",
+                          "useLimitRange": true,
+                          "value": 2.0
+                        },
+                        {
+                          "$type": "TriggerAbility",
+                          "abilityName": "Avatar_Dahlia_Constellation_1",
+                          "doOffStage": true,
+                          "target": "Caster"
+                        },
+                        {
+                          "$type": "TriggerAbility",
+                          "abilityName": "Avatar_Dahlia_Constellation_1",
+                          "doOffStage": true,
+                          "target": "Caster"
+                        }
+                      ],
+                      "target": "Caster",
+                      "targetPredicates": [
+                        {
+                          "$type": "ByTargetGlobalValue",
+                          "compareType": "LessAndEqual",
+                          "key": "_ABILITY_Dahlia_Buff_MaxAdded",
+                          "target": "Caster",
+                          "value": 2.0
+                        }
+                      ]
+                    },
+                    {
+                      "$type": "ApplyModifier",
+                      "doOffStage": true,
+                      "modifierName": "Dahia_Buff_Freeze_CD",
+                      "target": "Caster"
+                    }
+                  ],
+                  "targetPredicates": [
+                    {
+                      "$type": "ByUnlockTalentParam",
+                      "talentParam": "Dahlia_PermanentSkill_1",
+                      "target": "Caster"
+                    },
+                    {
+                      "$type": "ByNot",
+                      "predicates": [
+                        {
+                          "$type": "ByHasModifier",
+                          "modifierName": "Dahia_Buff_Freeze_CD",
+                          "target": "Caster"
+                        }
+                      ]
+                    },
+                    {
+                      "$type": "ByTargetGlobalValue",
+                      "compareType": "LessAndEqual",
+                      "key": "_ABILITY_Dahlia_Buff_MaxAdded",
+                      "target": "Caster",
+                      "value": 3.0
+                    }
+                  ]
+                }
+              ],
+              "entityTypes": [
+                "Monster"
+              ],
+              "reactionTypes": [
+                "Freeze"
+              ]
+            }
+          ],
+          "modifierName": "",
           "onAttackLanded": [
             {
               "$type": "Predicated",
               "successActions": [
                 {
                   "$type": "ApplyModifier",
+                  "doOffStage": true,
                   "modifierName": "Dahlia_Buff_Detecter_of_NormalAttack_CD",
-                  "target": "Caster",
-                  "doOffStage": true
+                  "target": "Caster"
                 },
                 {
                   "$type": "AddGlobalValue",
+                  "doOffStage": true,
                   "key": "_ABILITY_Dahlia_NormalAttack_Count",
                   "maxValue": 0.0,
                   "minValue": 0.0,
-                  "CBOMLBFIPJM": 1.0,
                   "target": "Caster",
-                  "doOffStage": true
+                  "value": 1.0
                 },
                 {
                   "$type": "Predicated",
+                  "doOffStage": true,
                   "successActions": [
                     {
                       "$type": "AddGlobalValue",
-                      "useLimitRange": true,
+                      "doOffStage": true,
                       "key": "_ABILITY_Dahlia_Buff_Counter",
                       "maxValue": 4.0,
                       "minValue": 0.0,
-                      "CBOMLBFIPJM": 1.0,
                       "target": "Caster",
-                      "doOffStage": true
+                      "useLimitRange": true,
+                      "value": 1.0
                     },
                     {
                       "$type": "AddGlobalValue",
-                      "useLimitRange": true,
+                      "doOffStage": true,
                       "key": "_ABILITY_Dahlia_Buff_MaxAdded",
                       "maxValue": 4.0,
                       "minValue": 0.0,
-                      "CBOMLBFIPJM": 1.0,
                       "target": "Caster",
-                      "doOffStage": true
+                      "useLimitRange": true,
+                      "value": 1.0
                     },
                     {
                       "$type": "SetGlobalValue",
+                      "doOffStage": true,
                       "key": "_ABILITY_Dahlia_NormalAttack_Count",
-                      "minValue": 0.0,
                       "maxValue": 0.0,
-                      "CBOMLBFIPJM": 0.0,
+                      "minValue": 0.0,
                       "target": "Caster",
-                      "doOffStage": true
+                      "value": 0.0
                     },
                     {
                       "$type": "TriggerAbility",
                       "abilityName": "Avatar_Dahlia_Constellation_1",
-                      "target": "Caster",
-                      "doOffStage": true
+                      "doOffStage": true,
+                      "target": "Caster"
                     }
                   ],
                   "targetPredicates": [
                     {
-                      "$type": "EOFDCELPGFO",
-                      "CBOMLBFIPJM": 4.0,
+                      "$type": "ByTargetGlobalValue",
                       "key": "_ABILITY_Dahlia_NormalAttack_Count",
-                      "target": "Caster"
+                      "target": "Caster",
+                      "value": 4.0
                     }
-                  ],
-                  "doOffStage": true
+                  ]
                 }
               ],
+              "target": "Other",
               "targetPredicates": [
                 {
-                  "$type": "DEOFBICNFHF",
+                  "$type": "ByEntityTypes",
                   "entityTypes": [
                     "Monster"
                   ]
                 },
                 {
-                  "$type": "EOFDCELPGFO",
-                  "CBOMLBFIPJM": 0.0,
+                  "$type": "ByTargetGlobalValue",
                   "compareType": "NoneOrEqual",
-                  "key": "_ANIMAL_ENTITY_TYPE"
+                  "key": "_ANIMAL_ENTITY_TYPE",
+                  "value": 0.0
                 },
                 {
-                  "$type": "CCHPEOBKOBO",
+                  "$type": "ByAttackTags",
                   "attackTags": [
                     "NormalAttack_01",
                     "NormalAttack_02",
@@ -2887,176 +3079,48 @@
                   ]
                 },
                 {
-                  "$type": "GKGBIPDLMMG",
+                  "$type": "ByNot",
                   "predicates": [
                     {
-                      "$type": "LJBLAFGJKGI",
+                      "$type": "ByHasModifier",
                       "modifierName": "Dahlia_Buff_Detecter_of_NormalAttack_CD",
                       "target": "Caster"
                     }
                   ]
                 },
                 {
-                  "$type": "EOFDCELPGFO",
-                  "CBOMLBFIPJM": 3.0,
+                  "$type": "ByTargetGlobalValue",
                   "compareType": "LessAndEqual",
                   "key": "_ABILITY_Dahlia_Buff_MaxAdded",
-                  "target": "Caster"
+                  "target": "Caster",
+                  "value": 3.0
                 }
-              ],
-              "target": "Other"
-            }
-          ],
-          "elementDurability": 100.0,
-          "modifierMixins": [
-            {
-              "$type": "DoActionByElementReactionMixin",
-              "actions": [
-                {
-                  "$type": "Predicated",
-                  "successActions": [
-                    {
-                      "$type": "Predicated",
-                      "successActions": [
-                        {
-                          "$type": "AddGlobalValue",
-                          "useLimitRange": true,
-                          "key": "_ABILITY_Dahlia_Buff_Counter",
-                          "maxValue": 4.0,
-                          "minValue": 0.0,
-                          "CBOMLBFIPJM": 2.0,
-                          "target": "Caster",
-                          "doOffStage": true
-                        },
-                        {
-                          "$type": "AddGlobalValue",
-                          "useLimitRange": true,
-                          "key": "_ABILITY_Dahlia_Buff_MaxAdded",
-                          "maxValue": 4.0,
-                          "minValue": 0.0,
-                          "CBOMLBFIPJM": 2.0,
-                          "target": "Caster",
-                          "doOffStage": true
-                        },
-                        {
-                          "$type": "TriggerAbility",
-                          "abilityName": "Avatar_Dahlia_Constellation_1",
-                          "target": "Caster",
-                          "doOffStage": true
-                        },
-                        {
-                          "$type": "TriggerAbility",
-                          "abilityName": "Avatar_Dahlia_Constellation_1",
-                          "target": "Caster",
-                          "doOffStage": true
-                        }
-                      ],
-                      "failActions": [
-                        {
-                          "$type": "AddGlobalValue",
-                          "useLimitRange": true,
-                          "key": "_ABILITY_Dahlia_Buff_Counter",
-                          "maxValue": 4.0,
-                          "minValue": 0.0,
-                          "CBOMLBFIPJM": 1.0,
-                          "target": "Caster",
-                          "doOffStage": true
-                        },
-                        {
-                          "$type": "AddGlobalValue",
-                          "useLimitRange": true,
-                          "key": "_ABILITY_Dahlia_Buff_MaxAdded",
-                          "maxValue": 4.0,
-                          "minValue": 0.0,
-                          "CBOMLBFIPJM": 1.0,
-                          "target": "Caster",
-                          "doOffStage": true
-                        },
-                        {
-                          "$type": "TriggerAbility",
-                          "abilityName": "Avatar_Dahlia_Constellation_1",
-                          "target": "Caster",
-                          "doOffStage": true
-                        }
-                      ],
-                      "targetPredicates": [
-                        {
-                          "$type": "EOFDCELPGFO",
-                          "CBOMLBFIPJM": 2.0,
-                          "compareType": "LessAndEqual",
-                          "key": "_ABILITY_Dahlia_Buff_MaxAdded",
-                          "target": "Caster"
-                        }
-                      ],
-                      "target": "Caster",
-                      "doOffStage": true
-                    },
-                    {
-                      "$type": "ApplyModifier",
-                      "modifierName": "Dahia_Buff_Freeze_CD",
-                      "target": "Caster",
-                      "doOffStage": true
-                    }
-                  ],
-                  "targetPredicates": [
-                    {
-                      "$type": "LCCNMKNDACG",
-                      "talentParam": "Dahlia_PermanentSkill_1",
-                      "target": "Caster"
-                    },
-                    {
-                      "$type": "GKGBIPDLMMG",
-                      "predicates": [
-                        {
-                          "$type": "LJBLAFGJKGI",
-                          "modifierName": "Dahia_Buff_Freeze_CD",
-                          "target": "Caster"
-                        }
-                      ]
-                    },
-                    {
-                      "$type": "EOFDCELPGFO",
-                      "CBOMLBFIPJM": 3.0,
-                      "compareType": "LessAndEqual",
-                      "key": "_ABILITY_Dahlia_Buff_MaxAdded",
-                      "target": "Caster"
-                    }
-                  ],
-                  "doOffStage": true
-                }
-              ],
-              "entityTypes": [
-                "Monster"
-              ],
-              "IGAMNNAADJB": [
-                "Freeze"
               ]
             }
           ],
-          "modifierName": "",
           "AIHNJLDFEGJ": 0.0
         },
         "Dahia_Buff_Freeze_CD": {
           "duration": "FreezeAddBuff_Timer",
-          "stacking": "Unique",
           "elementDurability": 100.0,
           "modifierName": "",
+          "stacking": "Unique",
           "AIHNJLDFEGJ": 0.0
         },
         "Dahlia_Buff_Detecter_of_NormalAttack_CD": {
-          "thinkInterval": 0.05,
           "duration": 0.3,
-          "stacking": "Unique",
           "elementDurability": 100.0,
           "modifierName": "",
-          "onThinkIntervalIsFixedUpdate": true,
           "onThinkInterval": [
             {
               "$type": "RemoveModifier",
-              "modifierName": "Dahlia_Buff_Detecter_of_NormalAttack_CD",
-              "doOffStage": true
+              "doOffStage": true,
+              "modifierName": "Dahlia_Buff_Detecter_of_NormalAttack_CD"
             }
           ],
+          "onThinkIntervalIsFixedUpdate": true,
+          "stacking": "Unique",
+          "thinkInterval": 0.05,
           "AIHNJLDFEGJ": 0.0
         },
         "Dahlia_Buff_FxManager": {
@@ -3064,15 +3128,15 @@
           "modifierMixins": [
             {
               "$type": "AttachModifierToSelfGlobalValueMixin",
+              "defaultGlobalValueOnCreate": 0.0,
+              "globalValueKey": "_ABILITY_Dahlia_Buff_Counter",
               "modifierNameSteps": [
                 "Dahlia_Buff_Fx"
               ],
               "valueSteps": [
                 0.5,
                 100.0
-              ],
-              "globalValueKey": "_ABILITY_Dahlia_Buff_Counter",
-              "defaultGlobalValueOnCreate": 0.0
+              ]
             }
           ],
           "modifierName": "",
@@ -3083,6 +3147,8 @@
           "modifierMixins": [
             {
               "$type": "AttachModifierToSelfGlobalValueMixin",
+              "defaultGlobalValueOnCreate": 0.0,
+              "globalValueKey": "_ABILITY_Avatar_Dahlia_Has_Protection_State",
               "modifierNameSteps": [
                 "Dahlia_Buff_NoBurstState",
                 "Dahlia_Buff_InBurstState"
@@ -3091,9 +3157,7 @@
                 -0.5,
                 0.5,
                 1.5
-              ],
-              "globalValueKey": "_ABILITY_Avatar_Dahlia_Has_Protection_State",
-              "defaultGlobalValueOnCreate": 0.0
+              ]
             }
           ],
           "modifierName": "",
@@ -3104,28 +3168,28 @@
           "modifierMixins": [
             {
               "$type": "CircularArrayEffectMixin",
-              "AIEBHBEOLLG": 45.0,
+              "angleSpeed": 45.0,
               "effectPattern": "Eff_Avatar_Boy_Sword_Dahlia_ElementalBurst_Buff_OnDahlia",
-              "COBOJPEJEPD": 0.1,
-              "HIIKHKJMBBI": true,
+              "globalValueKey": "_ABILITY_Dahlia_Buff_Counter",
               "radius": 1.0,
-              "globalValueKey": "_ABILITY_Dahlia_Buff_Counter"
+              "COBOJPEJEPD": 0.1,
+              "HIIKHKJMBBI": true
             }
           ],
           "modifierName": "",
           "AIHNJLDFEGJ": 0.0
         },
         "Dahlia_Buff_InBurstState": {
+          "elementDurability": 100.0,
+          "modifierName": "",
           "onAdded": [
             {
               "$type": "AttachModifier",
+              "doOffStage": true,
               "modifierName": "Dahlia_Buff_InBurstState_FxOnTeam",
-              "target": "Team",
-              "doOffStage": true
+              "target": "Team"
             }
           ],
-          "elementDurability": 100.0,
-          "modifierName": "",
           "AIHNJLDFEGJ": 0.0
         },
         "Dahlia_Buff_InBurstState_FxOnTeam": {
@@ -3133,117 +3197,72 @@
           "modifierMixins": [
             {
               "$type": "CircularArrayEffectMixin",
-              "AIEBHBEOLLG": 45.0,
+              "angleSpeed": 45.0,
               "effectPattern": "Eff_Avatar_Boy_Sword_Dahlia_ElementalBurst_Buff_OnTeam",
-              "COBOJPEJEPD": 0.1,
-              "HIIKHKJMBBI": true,
+              "globalValueKey": "_ABILITY_Dahlia_Buff_Counter",
               "radius": 1.0,
-              "globalValueKey": "_ABILITY_Dahlia_Buff_Counter"
+              "COBOJPEJEPD": 0.1,
+              "HIIKHKJMBBI": true
             }
           ],
           "modifierName": "",
           "AIHNJLDFEGJ": 0.0
         }
       },
-      "ANHJPOLNHIG": [
-        "_ABILITY_Dahlia_Constellation_4_ExtraBurstTimer"
-      ],
-      "abilityMixins": [
-        {
-          "$type": "AttachToStateIDMixin",
-          "LJPPDIGCJMJ": "",
-          "stateIDs": [
-            "Dahlia_ElementalBurst"
-          ],
-          "modifierName": "Dahlia_ElementalBurst_Initialize"
-        },
-        {
-          "$type": "AttachToNormalizedTimeMixin",
-          "modifierName": "Dahlia_ElementalBurst_TriggerAttack",
-          "LJPPDIGCJMJ": "",
-          "stateID": "Dahlia_ElementalBurst",
-          "normalizeStart": 0.58
-        },
-        {
-          "$type": "AttachToStateIDMixin",
-          "LJPPDIGCJMJ": "",
-          "stateIDs": [
-            "Dahlia_ElementalBurst",
-            "Dahlia_ElementalBurst_AS"
-          ],
-          "modifierName": "Dahlia_ElementalBurst_HeadControl"
-        },
-        {
-          "$type": "AttachToStateIDMixin",
-          "LJPPDIGCJMJ": "",
-          "stateIDs": [
-            "Dahlia_ElementalBurst",
-            "Dahlia_ElementalBurst_AS"
-          ],
-          "modifierName": "Dahlia_ElementalBurst_Invincible"
-        },
-        {
-          "$type": "AttachToMultiNormalizedTimeMixin",
-          "modifierName": "Dahlia_ElementalBurst_Book",
-          "LJPPDIGCJMJ": "",
-          "normalizedStateIDList": [
-            {
-              "stateID": "Dahlia_ElementalBurst"
-            },
-            {
-              "stateID": "Dahlia_ElementalBurst_AS",
-              "normalizeEnd": 0.216
-            }
-          ]
-        },
-        {
-          "$type": "AttachToNormalizedTimeMixin",
-          "modifierName": "Dahlia_ElementalBurst_Weather",
-          "LJPPDIGCJMJ": "",
-          "normalizeEnd": 0.58,
-          "stateID": "Dahlia_ElementalBurst"
-        }
-      ],
-      "abilityName": "Avatar_Dahlia_ElementalBurst",
       "onAdded": [
         {
           "$type": "SetGlobalValue",
           "key": "_ABILITY_Avatar_Dahlia_Has_Protection_State",
-          "minValue": 0.0,
           "maxValue": 0.0,
-          "CBOMLBFIPJM": 0.0
+          "minValue": 0.0,
+          "value": 0.0
         },
         {
           "$type": "SetGlobalValue",
           "key": "_ABILITY_Avatar_Dahlia_Has_Shield",
-          "minValue": 0.0,
           "maxValue": 0.0,
-          "CBOMLBFIPJM": 0.0
+          "minValue": 0.0,
+          "value": 0.0
         }
       ],
-      "abilitySpecials": {
-        "ElementalBurst_Damage": 0.0,
-        "ElementalBurst_BuffTime": 0.0,
-        "Shield_HpValue": 0.0,
-        "Shield_MaxHpRatio": 0.0,
-        "FreezeAddBuff_Timer": 0.0
-      }
+      "ANHJPOLNHIG": [
+        "_ABILITY_Dahlia_Constellation_4_ExtraBurstTimer"
+      ]
     }
   },
   {
     "Default": {
+      "abilityMixins": [
+        {
+          "$type": "AttachModifierToSelfGlobalValueMixin",
+          "defaultGlobalValueOnCreate": 0.0,
+          "globalValueKey": "_ABILITY_Avatar_Dahlia_Has_Protection_State",
+          "modifierNameSteps": [
+            "Avatar_Dahlia_PermanentSkill_2_Handler_OnDahlia"
+          ],
+          "valueSteps": [
+            0.5,
+            1.5
+          ]
+        }
+      ],
+      "abilityName": "Avatar_Dahlia_PermanentSkill_2",
+      "abilitySpecials": {
+        "HpToSpeed_Ratio": 0.0,
+        "MaxAttackSpeed": 0.0
+      },
       "modifiers": {
         "Avatar_Dahlia_PermanentSkill_2_Handler_OnDahlia": {
+          "elementDurability": 100.0,
+          "modifierName": "",
           "onAdded": [
             {
               "$type": "AttachModifier",
+              "doOffStage": true,
               "modifierName": "Avatar_Dahlia_PermanentSkill_2_Handler_OnTeam",
-              "target": "Team",
-              "doOffStage": true
+              "target": "Team"
             }
           ],
-          "elementDurability": 100.0,
-          "modifierName": "",
           "AIHNJLDFEGJ": 0.0
         },
         "Avatar_Dahlia_PermanentSkill_2_Handler_OnTeam": {
@@ -3258,125 +3277,111 @@
           "AIHNJLDFEGJ": 0.0
         },
         "Avatar_Dahlia_PermanentSkill_2_OnCurAvatar": {
-          "thinkInterval": 0.5,
+          "elementDurability": 100.0,
+          "modifierName": "",
           "onAdded": [
             {
               "$type": "SetGlobalValue",
-              "useLimitRange": true,
+              "doOffStage": true,
               "key": "_ABILITY_Dahlia_AttackSpeedBuff",
-              "minValue": 0.0,
               "maxValue": "MaxAttackSpeed",
-              "CBOMLBFIPJM": [
+              "minValue": 0.0,
+              "target": "CurLocalAvatar",
+              "useLimitRange": true,
+              "value": [
                 "FIGHT_PROP_MAX_HP",
                 "HpToSpeed_Ratio",
                 "MUL"
-              ],
-              "target": "CurLocalAvatar",
-              "doOffStage": true
+              ]
             },
             {
               "$type": "AttachModifier",
-              "modifierName": "Avatar_Dahlia_PermanentSkill_2_Buff",
-              "doOffStage": true
+              "doOffStage": true,
+              "modifierName": "Avatar_Dahlia_PermanentSkill_2_Buff"
             }
           ],
-          "elementDurability": 100.0,
-          "modifierName": "",
           "onThinkInterval": [
             {
               "$type": "SetGlobalValue",
-              "useLimitRange": true,
+              "doOffStage": true,
               "key": "_ABILITY_Dahlia_AttackSpeedBuff",
-              "minValue": 0.0,
               "maxValue": "MaxAttackSpeed",
-              "CBOMLBFIPJM": [
+              "minValue": 0.0,
+              "target": "CurLocalAvatar",
+              "useLimitRange": true,
+              "value": [
                 "FIGHT_PROP_MAX_HP",
                 "HpToSpeed_Ratio",
                 "MUL"
-              ],
-              "target": "CurLocalAvatar",
-              "doOffStage": true
+              ]
             },
             {
               "$type": "RemoveModifier",
-              "modifierName": "Avatar_Dahlia_PermanentSkill_2_Buff",
-              "doOffStage": true
+              "doOffStage": true,
+              "modifierName": "Avatar_Dahlia_PermanentSkill_2_Buff"
             },
             {
               "$type": "AttachModifier",
-              "modifierName": "Avatar_Dahlia_PermanentSkill_2_Buff",
-              "doOffStage": true
+              "doOffStage": true,
+              "modifierName": "Avatar_Dahlia_PermanentSkill_2_Buff"
             }
           ],
+          "thinkInterval": 0.5,
           "AIHNJLDFEGJ": 0.0
         },
         "Avatar_Dahlia_PermanentSkill_2_Buff": {
+          "elementDurability": 100.0,
           "isLimitedProperties": true,
+          "modifierName": "",
           "properties": {
             "Animator_AttackSpeedRatio": "_ABILITY_Dahlia_AttackSpeedBuff"
           },
-          "elementDurability": 100.0,
-          "modifierName": "",
           "AIHNJLDFEGJ": 0.0
         }
       },
       "ANHJPOLNHIG": [
         "_ABILITY_Dahlia_AttackSpeedBuff"
-      ],
-      "abilityMixins": [
-        {
-          "$type": "AttachModifierToSelfGlobalValueMixin",
-          "modifierNameSteps": [
-            "Avatar_Dahlia_PermanentSkill_2_Handler_OnDahlia"
-          ],
-          "valueSteps": [
-            0.5,
-            1.5
-          ],
-          "globalValueKey": "_ABILITY_Avatar_Dahlia_Has_Protection_State",
-          "defaultGlobalValueOnCreate": 0.0
-        }
-      ],
-      "abilityName": "Avatar_Dahlia_PermanentSkill_2",
-      "abilitySpecials": {
-        "HpToSpeed_Ratio": 0.0,
-        "MaxAttackSpeed": 0.0
-      }
+      ]
     }
   },
   {
     "Default": {
+      "abilityName": "Avatar_Dahlia_Constellation_1",
+      "abilitySpecials": {
+        "EnergyValue": 0.0
+      },
       "modifiers": {
         "Avatar_Dahlia_Constellation_1_ReviveEnergy": {
           "duration": 0.5,
+          "elementDurability": 100.0,
+          "modifierName": "",
           "onAdded": [
             {
               "$type": "ReviveElemEnergy",
-              "CBOMLBFIPJM": "EnergyValue",
-              "doOffStage": true
+              "doOffStage": true,
+              "value": "EnergyValue"
             }
           ],
           "stacking": "Multiple",
-          "elementDurability": 100.0,
-          "modifierName": "",
           "AIHNJLDFEGJ": 0.0
         }
       },
       "onAbilityStart": [
         {
           "$type": "ApplyModifier",
-          "modifierName": "Avatar_Dahlia_Constellation_1_ReviveEnergy",
-          "doOffStage": true
+          "doOffStage": true,
+          "modifierName": "Avatar_Dahlia_Constellation_1_ReviveEnergy"
         }
-      ],
-      "abilityName": "Avatar_Dahlia_Constellation_1",
-      "abilitySpecials": {
-        "EnergyValue": 0.0
-      }
+      ]
     }
   },
   {
     "Default": {
+      "abilityName": "Avatar_Dahlia_Constellation_2",
+      "abilitySpecials": {
+        "ShieldMinusRatio": 0.0,
+        "Buff_Timer": 0.0
+      },
       "modifiers": {
         "Avatar_Dahlia_Constellation_2_Handler": {
           "duration": "Buff_Timer",
@@ -3384,31 +3389,31 @@
           "modifierMixins": [
             {
               "$type": "AttachModifierToSelfGlobalValueMixin",
+              "defaultGlobalValueOnCreate": 0.0,
+              "globalValueKey": "_ABILITY_Avatar_Dahlia_Has_Shield",
               "modifierNameSteps": [
                 "Avatar_Dahlia_Constellation_2_ShieldUp_OnDahlia"
               ],
               "valueSteps": [
                 0.5,
                 1.5
-              ],
-              "globalValueKey": "_ABILITY_Avatar_Dahlia_Has_Shield",
-              "defaultGlobalValueOnCreate": 0.0
+              ]
             }
           ],
           "modifierName": "",
           "AIHNJLDFEGJ": 0.0
         },
         "Avatar_Dahlia_Constellation_2_ShieldUp_OnDahlia": {
+          "elementDurability": 100.0,
+          "modifierName": "",
           "onAdded": [
             {
               "$type": "AttachModifier",
+              "doOffStage": true,
               "modifierName": "Avatar_Dahlia_Constellation_2_ShieldUp_OnTeam",
-              "target": "Team",
-              "doOffStage": true
+              "target": "Team"
             }
           ],
-          "elementDurability": 100.0,
-          "modifierName": "",
           "AIHNJLDFEGJ": 0.0
         },
         "Avatar_Dahlia_Constellation_2_ShieldUp_OnTeam": {
@@ -3423,50 +3428,119 @@
           "AIHNJLDFEGJ": 0.0
         },
         "Avatar_Dahlia_Constellation_2_ShieldUp_OnAvatar": {
+          "elementDurability": 100.0,
           "isLimitedProperties": true,
+          "modifierName": "",
           "properties": {
             "Actor_ShieldCostMinusRatio": "ShieldMinusRatio"
           },
-          "elementDurability": 100.0,
-          "modifierName": "",
           "AIHNJLDFEGJ": 0.0
         }
       },
       "onAbilityStart": [
         {
           "$type": "ApplyModifier",
-          "modifierName": "Avatar_Dahlia_Constellation_2_Handler",
-          "doOffStage": true
+          "doOffStage": true,
+          "modifierName": "Avatar_Dahlia_Constellation_2_Handler"
         }
-      ],
-      "abilityName": "Avatar_Dahlia_Constellation_2",
-      "abilitySpecials": {
-        "ShieldMinusRatio": 0.0,
-        "Buff_Timer": 0.0
-      }
+      ]
     }
   },
   {
     "Default": {
       "abilityName": "Avatar_Dahlia_Constellation_4",
+      "abilitySpecials": {
+        "Extra_BurstTimer": 0.0
+      },
       "onAdded": [
         {
           "$type": "SetGlobalValue",
           "key": "_ABILITY_Dahlia_Constellation_4_ExtraBurstTimer",
-          "minValue": 0.0,
           "maxValue": 0.0,
-          "CBOMLBFIPJM": "Extra_BurstTimer"
+          "minValue": 0.0,
+          "value": "Extra_BurstTimer"
         }
-      ],
-      "abilitySpecials": {
-        "Extra_BurstTimer": 0.0
-      }
+      ]
     }
   },
   {
     "Default": {
+      "abilityMixins": [
+        {
+          "$type": "AttachModifierToSelfGlobalValueMixin",
+          "defaultGlobalValueOnCreate": 0.0,
+          "globalValueKey": "_ABILITY_Avatar_Dahlia_Has_Protection_State",
+          "modifierNameSteps": [
+            "Avatar_Dahlia_Constellation_6_Handler"
+          ],
+          "valueSteps": [
+            0.5,
+            1.5
+          ]
+        }
+      ],
+      "abilityName": "Avatar_Dahlia_Constellation_6",
+      "abilitySpecials": {
+        "Extra_AtkSpeedRatio": 0.0
+      },
       "modifiers": {
         "Avatar_Dahlia_Constellation_6_Handler": {
+          "elementDurability": 100.0,
+          "modifierMixins": [
+            {
+              "$type": "DoReviveMixin",
+              "onKillActions": [
+                {
+                  "$type": "Predicated",
+                  "doOffStage": true,
+                  "successActions": [
+                    {
+                      "$type": "DebugLog",
+                      "content": "复活",
+                      "doOffStage": true
+                    },
+                    {
+                      "$type": "ReviveAvatar",
+                      "amountByTargetMaxHPRatio": 1.0,
+                      "doOffStage": true,
+                      "target": "CurLocalAvatar",
+                      "FFNEJGGNAFF": ""
+                    },
+                    {
+                      "$type": "AvatarSkillStart",
+                      "cdRatio": 1.0,
+                      "costStaminaRatio": 1.0,
+                      "doOffStage": true,
+                      "skillID": 11156,
+                      "target": "Caster",
+                      "GIBAINFKPBO": 1.0
+                    }
+                  ],
+                  "target": "Caster",
+                  "targetPredicates": [
+                    {
+                      "$type": "BySkillReady",
+                      "skillID": 11156,
+                      "target": "Caster"
+                    }
+                  ]
+                }
+              ],
+              "onReviveActions": [
+                {
+                  "$type": "FireEffect",
+                  "doOffStage": true,
+                  "effectPattern": "Eff_Avatar_Boy_Sword_Dahlia_ElementalBurst_Revive",
+                  "effectTempleteID": -1.0,
+                  "scale": 1.0,
+                  "target": "CurLocalAvatar",
+                  "ILLLPEOODKP": ""
+                }
+              ],
+              "type": "OffStage"
+            }
+          ],
+          "modifierName": "",
           "onAdded": [
             {
               "$type": "AttachModifier",
@@ -3484,88 +3558,32 @@
                 },
                 {
                   "$type": "ReviveAvatar",
-                  "FPOCDLCHDPE": 1.0,
-                  "FFNEJGGNAFF": "",
+                  "amountByTargetMaxHPRatio": 1.0,
+                  "doOffStage": true,
                   "target": "CurLocalAvatar",
-                  "doOffStage": true
+                  "FFNEJGGNAFF": ""
                 },
                 {
                   "$type": "AvatarSkillStart",
-                  "skillID": 11156,
-                  "BGNJBEPEJBO": 1.0,
-                  "costStaminaRatio": 1.0,
                   "cdRatio": 1.0,
-                  "IMLNCDPODIP": true,
+                  "costStaminaRatio": 1.0,
+                  "doOffStage": true,
+                  "skillID": 11156,
                   "target": "Caster",
-                  "doOffStage": true
+                  "GIBAINFKPBO": 1.0,
+                  "IMLNCDPODIP": true
                 }
               ],
+              "target": "Caster",
               "targetPredicates": [
                 {
-                  "$type": "BAEGOCNMDPJ",
+                  "$type": "BySkillReady",
                   "skillID": 11156,
                   "target": "Caster"
-                }
-              ],
-              "target": "Caster"
-            }
-          ],
-          "elementDurability": 100.0,
-          "modifierMixins": [
-            {
-              "$type": "DoReviveMixin",
-              "HCFAFEALFCI": [
-                {
-                  "$type": "Predicated",
-                  "successActions": [
-                    {
-                      "$type": "DebugLog",
-                      "content": "复活",
-                      "doOffStage": true
-                    },
-                    {
-                      "$type": "ReviveAvatar",
-                      "FPOCDLCHDPE": 1.0,
-                      "FFNEJGGNAFF": "",
-                      "target": "CurLocalAvatar",
-                      "doOffStage": true
-                    },
-                    {
-                      "$type": "AvatarSkillStart",
-                      "skillID": 11156,
-                      "BGNJBEPEJBO": 1.0,
-                      "costStaminaRatio": 1.0,
-                      "cdRatio": 1.0,
-                      "target": "Caster",
-                      "doOffStage": true
-                    }
-                  ],
-                  "targetPredicates": [
-                    {
-                      "$type": "BAEGOCNMDPJ",
-                      "skillID": 11156,
-                      "target": "Caster"
-                    }
-                  ],
-                  "target": "Caster",
-                  "doOffStage": true
-                }
-              ],
-              "type": "OffStage",
-              "MMLFABGAGIK": [
-                {
-                  "$type": "FireEffect",
-                  "effectPattern": "Eff_Avatar_Boy_Sword_Dahlia_ElementalBurst_Revive",
-                  "scale": 1.0,
-                  "ILLLPEOODKP": "",
-                  "effectTempleteID": -1.0,
-                  "target": "CurLocalAvatar",
-                  "doOffStage": true
                 }
               ]
             }
           ],
-          "modifierName": "",
           "AIHNJLDFEGJ": 0.0
         },
         "Avatar_Dahlia_Constellation_6_OnTeam": {
@@ -3580,76 +3598,62 @@
           "AIHNJLDFEGJ": 0.0
         },
         "Avatar_Dahlia_Constellation_6_OnAvatar_AtkSpeedUp": {
+          "elementDurability": 100.0,
           "isLimitedProperties": true,
+          "modifierName": "",
           "properties": {
             "Animator_AttackSpeedRatio": "Extra_AtkSpeedRatio"
           },
-          "elementDurability": 100.0,
-          "modifierName": "",
           "AIHNJLDFEGJ": 0.0
         }
-      },
-      "abilityMixins": [
-        {
-          "$type": "AttachModifierToSelfGlobalValueMixin",
-          "modifierNameSteps": [
-            "Avatar_Dahlia_Constellation_6_Handler"
-          ],
-          "valueSteps": [
-            0.5,
-            1.5
-          ],
-          "globalValueKey": "_ABILITY_Avatar_Dahlia_Has_Protection_State",
-          "defaultGlobalValueOnCreate": 0.0
-        }
-      ],
-      "abilityName": "Avatar_Dahlia_Constellation_6",
-      "abilitySpecials": {
-        "Extra_AtkSpeedRatio": 0.0
       }
     }
   },
   {
     "Default": {
+      "abilityName": "Avatar_Dahlia_PermanentSkill_3",
+      "isDynamicAbility": true,
       "modifiers": {
         "Avatar_Dahlia_Talent_RunningInTheSun_Handler": {
-          "thinkInterval": 5.0,
           "elementDurability": 100.0,
           "modifierName": "",
           "onThinkInterval": [
             {
               "$type": "AttachModifier",
+              "doOffStage": true,
               "modifierName": "UNIQUE_Avatar_Dahlia_Talent_RunningInTheSun_Mixin",
-              "target": "CurTeamAvatars",
-              "doOffStage": true
+              "target": "CurTeamAvatars"
             }
           ],
+          "thinkInterval": 5.0,
           "AIHNJLDFEGJ": 0.0
         },
         "UNIQUE_Avatar_Dahlia_Talent_RunningInTheSun_Mixin": {
           "elementDurability": 100.0,
+          "isUnique": true,
           "modifierMixins": [
             {
               "$type": "AttachToDayNightMixin",
-              "GNPKDOANGDE": true,
-              "modifierName": "UNIQUE_Avatar_Dahlia_Talent_RunningInTheSun_Predicate"
+              "modifierName": "UNIQUE_Avatar_Dahlia_Talent_RunningInTheSun_Predicate",
+              "GNPKDOANGDE": true
             }
           ],
           "modifierName": "",
-          "isUnique": true,
           "AIHNJLDFEGJ": 0.0
         },
         "UNIQUE_Avatar_Dahlia_Talent_RunningInTheSun_Predicate": {
-          "thinkInterval": 5.0,
+          "elementDurability": 100.0,
+          "isUnique": true,
+          "modifierName": "",
           "onAdded": [
             {
               "$type": "AttachModifier",
-              "modifierName": "UNIQUE_Avatar_Dehya_Talent_RunningInTheSun",
               "doOffStage": true,
+              "modifierName": "UNIQUE_Avatar_Dehya_Talent_RunningInTheSun",
               "predicates": [
                 {
-                  "$type": "DHMEDOOKEOC",
-                  "HCJNOJEDAAN": [
+                  "$type": "ByCurrentSceneTypes",
+                  "sceneTypes": [
                     "SCENE_WORLD",
                     "SCENE_ROOM"
                   ]
@@ -3657,18 +3661,15 @@
               ]
             }
           ],
-          "elementDurability": 100.0,
-          "modifierName": "",
-          "isUnique": true,
           "onThinkInterval": [
             {
               "$type": "AttachModifier",
-              "modifierName": "UNIQUE_Avatar_Dehya_Talent_RunningInTheSun",
               "doOffStage": true,
+              "modifierName": "UNIQUE_Avatar_Dehya_Talent_RunningInTheSun",
               "predicates": [
                 {
-                  "$type": "DHMEDOOKEOC",
-                  "HCJNOJEDAAN": [
+                  "$type": "ByCurrentSceneTypes",
+                  "sceneTypes": [
                     "SCENE_WORLD",
                     "SCENE_ROOM"
                   ]
@@ -3676,32 +3677,31 @@
               ]
             }
           ],
+          "thinkInterval": 5.0,
           "AIHNJLDFEGJ": 0.0
         },
         "UNIQUE_Avatar_Dehya_Talent_RunningInTheSun": {
+          "elementDurability": 100.0,
           "isLimitedProperties": true,
+          "isUnique": true,
+          "modifierName": "",
           "properties": {
             "Animator_MoveSpeedRatio": 0.1
           },
-          "elementDurability": 100.0,
-          "modifierName": "",
-          "isUnique": true,
           "AIHNJLDFEGJ": 0.0
         }
       },
-      "abilityName": "Avatar_Dahlia_PermanentSkill_3",
-      "isDynamicAbility": true,
       "onAdded": [
         {
           "$type": "AttachModifier",
+          "doOffStage": true,
           "modifierName": "UNIQUE_Avatar_Dahlia_Talent_RunningInTheSun_Mixin",
-          "target": "CurTeamAvatars",
-          "doOffStage": true
+          "target": "CurTeamAvatars"
         },
         {
           "$type": "AttachModifier",
-          "modifierName": "Avatar_Dahlia_Talent_RunningInTheSun_Handler",
-          "doOffStage": true
+          "doOffStage": true,
+          "modifierName": "Avatar_Dahlia_Talent_RunningInTheSun_Handler"
         }
       ]
     }

@@ -1,16 +1,16 @@
 [
   {
     "Default": {
+      "abilityName": "DynamicAbility_Team_WhiteBox_Daobo_Reconnect",
+      "isDynamicAbility": true,
       "modifiers": {
         "ReconnectHandler": {
+          "elementDurability": 100.0,
+          "modifierName": "",
           "onReconnect": [
             {
               "$type": "ServerLuaCall",
-              "param1": 0.0,
-              "param2": 0.0,
-              "funcName": "SLC_ClearBladeEnergy",
-              "AHCNJKIEMPP": 0.0,
-              "NPNEPKILMEK": [
+              "callParamList": [
                 248105001,
                 248106001,
                 248107001,
@@ -18,21 +18,73 @@
                 248109001,
                 248110001
               ],
+              "doOffStage": true,
+              "funcName": "SLC_ClearBladeEnergy",
               "luaCallType": "SpecificGroup",
-              "doOffStage": true
+              "param1": 0.0,
+              "param2": 0.0,
+              "param3": 0.0
             }
           ],
-          "elementDurability": 100.0,
-          "modifierName": "",
           "AIHNJLDFEGJ": 0.0
         }
-      },
-      "abilityName": "DynamicAbility_Team_WhiteBox_Daobo_Reconnect",
-      "isDynamicAbility": true
+      }
     }
   },
   {
     "Default": {
+      "abilityMixins": [
+        {
+          "$type": "AttachModifierToGlobalValueMixin",
+          "globalValueKey": "GV_EnableBladeSkill",
+          "modifierNameSteps": [
+            "DisableBladeSkill",
+            "EnableBladeSkillIcon"
+          ],
+          "valueSteps": [
+            -0.5,
+            0.5,
+            1.5
+          ],
+          "DEFOFMOIAAI": true
+        },
+        {
+          "$type": "AttachModifierToGlobalValueMixin",
+          "globalValueKey": "GV_PenetrateFeverState",
+          "modifierNameSteps": [
+            "Fever"
+          ],
+          "valueSteps": [
+            0.5,
+            1.5
+          ],
+          "DEFOFMOIAAI": true
+        },
+        {
+          "$type": "DoActionOnGlobalValueChangeMixin",
+          "actions": [
+            {
+              "$type": "SetGlobalValueV2",
+              "key": "GV_PenetrateFeverState",
+              "maxValue": 0.0,
+              "minValue": 0.0,
+              "target": "Team",
+              "value": "SGV_PenetrateFeverState"
+            }
+          ],
+          "globalValueKey": "SGV_PenetrateFeverState"
+        },
+        {
+          "$type": "CurLocalAvatarMixinV2",
+          "modifierName": "KeepBattle"
+        },
+        {
+          "$type": "CurLocalAvatarMixinV2",
+          "modifierName": "ListenElementBurst"
+        }
+      ],
+      "abilityName": "DynamicAbility_Team_WhiteBox_Daobo_Skill",
+      "isDynamicAbility": true,
       "modifiers": {
         "KeepBattle": {
           "elementDurability": 100.0,
@@ -50,7 +102,7 @@
             {
               "$type": "AttachToStateIDMixin",
               "isCheckOnAttach": true,
-              "LJPPDIGCJMJ": "",
+              "modifierName": "EnableBladeSkill",
               "stateIDs": [
                 "Standby",
                 "StandbyVoice",
@@ -114,37 +166,13 @@
                 "Shoot_03",
                 "Shoot_04"
               ],
-              "modifierName": "EnableBladeSkill"
+              "LJPPDIGCJMJ": ""
             }
           ],
           "modifierName": "",
           "AIHNJLDFEGJ": 0.0
         },
         "EnableBladeSkillIcon": {
-          "onAdded": [
-            {
-              "$type": "AttachModifier",
-              "modifierName": "EnableBladeSkill"
-            },
-            {
-              "$type": "ServerLuaCall",
-              "param1": 0.0,
-              "param2": 0.0,
-              "funcName": "SLC_CheckEnergyFullAndEnterBlade",
-              "AHCNJKIEMPP": 0.0,
-              "NPNEPKILMEK": [
-                248105001,
-                248106001,
-                248107001,
-                248108001,
-                248109001,
-                248110001
-              ],
-              "luaCallType": "SpecificGroup",
-              "doOffStage": true
-            }
-          ],
-          "stacking": "Unique",
           "elementDurability": 100.0,
           "modifierMixins": [
             {
@@ -158,111 +186,14 @@
             }
           ],
           "modifierName": "",
-          "AIHNJLDFEGJ": 0.0
-        },
-        "ListenElementBurst": {
-          "elementDurability": 100.0,
-          "modifierMixins": [
-            {
-              "$type": "OnAvatarUseSkillMixin",
-              "HMBEKPDBCEK": [
-                {
-                  "$type": "SetGlobalValueV2",
-                  "minValue": 0.0,
-                  "key": "GV_Daobo_Energy",
-                  "maxValue": 0.0,
-                  "CBOMLBFIPJM": 0.0,
-                  "target": "Team"
-                },
-                {
-                  "$type": "ApplyModifier",
-                  "modifierName": "StickyElementBurstState",
-                  "target": "Team"
-                }
-              ],
-              "clearSkillIdDelay": 0.1
-            }
-          ],
-          "modifierName": "",
-          "AIHNJLDFEGJ": 0.0
-        },
-        "StickyElementBurstState": {
-          "duration": 0.5,
-          "onRemoved": [
-            {
-              "$type": "SetGlobalValueV2",
-              "minValue": 0.0,
-              "key": "_ForceLockT",
-              "maxValue": 0.0,
-              "CBOMLBFIPJM": 0.0,
-              "target": "Team"
-            }
-          ],
           "onAdded": [
             {
-              "$type": "SetGlobalValueV2",
-              "minValue": 0.0,
-              "key": "_ForceLockT",
-              "maxValue": 0.0,
-              "CBOMLBFIPJM": 1.0,
-              "target": "Team"
+              "$type": "AttachModifier",
+              "modifierName": "EnableBladeSkill"
             },
             {
-              "$type": "SetGlobalValueV2",
-              "minValue": 0.0,
-              "key": "GV_Daobo_Energy",
-              "maxValue": 0.0,
-              "CBOMLBFIPJM": 0.0,
-              "target": "Team"
-            }
-          ],
-          "stacking": "Unique",
-          "elementDurability": 100.0,
-          "modifierName": "",
-          "AIHNJLDFEGJ": 0.0
-        },
-        "Fever": {
-          "onReconnect": [
-            {
-              "$type": "CameraScreenEffect",
-              "effectName": "Eff_UI_BubbleDrama_Blade_ScreenEffect",
-              "canBeHandledOnRecover": true,
-              "doOffStage": true,
-              "BDPFBBFKKAH": true
-            }
-          ],
-          "onRemoved": [
-            {
-              "$type": "CameraScreenEffect",
-              "effectName": "Eff_UI_BubbleDrama_Blade_ScreenEffect",
-              "canBeHandledOnRecover": true,
-              "doOffStage": true,
-              "BDPFBBFKKAH": true
-            }
-          ],
-          "onAdded": [
-            {
-              "$type": "CameraScreenEffect",
-              "enable": true,
-              "effectName": "Eff_UI_BubbleDrama_Blade_ScreenEffect",
-              "canBeHandledOnRecover": true,
-              "doOffStage": true,
-              "BDPFBBFKKAH": true
-            }
-          ],
-          "elementDurability": 100.0,
-          "modifierName": "",
-          "AIHNJLDFEGJ": 0.0
-        },
-        "ReconnectHandler": {
-          "onReconnect": [
-            {
               "$type": "ServerLuaCall",
-              "param1": 0.0,
-              "param2": 0.0,
-              "funcName": "SLC_ClearBladeEnergy",
-              "AHCNJKIEMPP": 0.0,
-              "NPNEPKILMEK": [
+              "callParamList": [
                 248105001,
                 248106001,
                 248107001,
@@ -270,38 +201,161 @@
                 248109001,
                 248110001
               ],
+              "doOffStage": true,
+              "funcName": "SLC_CheckEnergyFullAndEnterBlade",
               "luaCallType": "SpecificGroup",
-              "doOffStage": true
+              "param1": 0.0,
+              "param2": 0.0,
+              "param3": 0.0
             }
           ],
+          "stacking": "Unique",
+          "AIHNJLDFEGJ": 0.0
+        },
+        "ListenElementBurst": {
+          "elementDurability": 100.0,
+          "modifierMixins": [
+            {
+              "$type": "OnAvatarUseSkillMixin",
+              "clearSkillIdDelay": 0.1,
+              "onTriggerUltimateSkill": [
+                {
+                  "$type": "SetGlobalValueV2",
+                  "key": "GV_Daobo_Energy",
+                  "maxValue": 0.0,
+                  "minValue": 0.0,
+                  "target": "Team",
+                  "value": 0.0
+                },
+                {
+                  "$type": "ApplyModifier",
+                  "modifierName": "StickyElementBurstState",
+                  "target": "Team"
+                }
+              ]
+            }
+          ],
+          "modifierName": "",
+          "AIHNJLDFEGJ": 0.0
+        },
+        "StickyElementBurstState": {
+          "duration": 0.5,
           "elementDurability": 100.0,
           "modifierName": "",
+          "onAdded": [
+            {
+              "$type": "SetGlobalValueV2",
+              "key": "_ForceLockT",
+              "maxValue": 0.0,
+              "minValue": 0.0,
+              "target": "Team",
+              "value": 1.0
+            },
+            {
+              "$type": "SetGlobalValueV2",
+              "key": "GV_Daobo_Energy",
+              "maxValue": 0.0,
+              "minValue": 0.0,
+              "target": "Team",
+              "value": 0.0
+            }
+          ],
+          "onRemoved": [
+            {
+              "$type": "SetGlobalValueV2",
+              "key": "_ForceLockT",
+              "maxValue": 0.0,
+              "minValue": 0.0,
+              "target": "Team",
+              "value": 0.0
+            }
+          ],
+          "stacking": "Unique",
+          "AIHNJLDFEGJ": 0.0
+        },
+        "Fever": {
+          "elementDurability": 100.0,
+          "modifierName": "",
+          "onAdded": [
+            {
+              "$type": "CameraScreenEffect",
+              "canBeHandledOnRecover": true,
+              "doOffStage": true,
+              "effectName": "Eff_UI_BubbleDrama_Blade_ScreenEffect",
+              "enable": true,
+              "muteRemoteAction": true
+            }
+          ],
+          "onReconnect": [
+            {
+              "$type": "CameraScreenEffect",
+              "canBeHandledOnRecover": true,
+              "doOffStage": true,
+              "effectName": "Eff_UI_BubbleDrama_Blade_ScreenEffect",
+              "muteRemoteAction": true
+            }
+          ],
+          "onRemoved": [
+            {
+              "$type": "CameraScreenEffect",
+              "canBeHandledOnRecover": true,
+              "doOffStage": true,
+              "effectName": "Eff_UI_BubbleDrama_Blade_ScreenEffect",
+              "muteRemoteAction": true
+            }
+          ],
+          "AIHNJLDFEGJ": 0.0
+        },
+        "ReconnectHandler": {
+          "elementDurability": 100.0,
+          "modifierName": "",
+          "onReconnect": [
+            {
+              "$type": "ServerLuaCall",
+              "callParamList": [
+                248105001,
+                248106001,
+                248107001,
+                248108001,
+                248109001,
+                248110001
+              ],
+              "doOffStage": true,
+              "funcName": "SLC_ClearBladeEnergy",
+              "luaCallType": "SpecificGroup",
+              "param1": 0.0,
+              "param2": 0.0,
+              "param3": 0.0
+            }
+          ],
           "AIHNJLDFEGJ": 0.0
         },
         "DisableBladeSkill": {
+          "elementDurability": 100.0,
+          "modifierName": "",
           "onAdded": [
             {
               "$type": "SetGlobalValueV2",
-              "minValue": 0.0,
               "key": "GV_Daobo_Energy",
               "maxValue": 0.0,
-              "CBOMLBFIPJM": 0.0,
-              "target": "Team"
+              "minValue": 0.0,
+              "target": "Team",
+              "value": 0.0
             }
           ],
-          "elementDurability": 100.0,
-          "modifierName": "",
           "AIHNJLDFEGJ": 0.0
         },
         "EnableBladeSkill": {
+          "elementDurability": 100.0,
+          "modifierName": "",
           "onAdded": [
             {
               "$type": "SetGlobalValueV2",
-              "minValue": 0.0,
               "key": "GV_Daobo_Energy",
               "maxValue": 0.0,
-              "CBOMLBFIPJM": 1.0,
-              "target": "Team"
+              "minValue": 0.0,
+              "target": "Team",
+              "value": 1.0
             },
             {
               "$type": "RemoveModifier",
@@ -309,34 +363,10 @@
               "target": "Team"
             }
           ],
-          "elementDurability": 100.0,
-          "modifierName": "",
           "AIHNJLDFEGJ": 0.0
         },
         "TriggeredBladeSkill": {
-          "onReconnect": [
-            {
-              "$type": "RemoveModifier",
-              "modifierName": "TriggeredBladeSkill"
-            }
-          ],
-          "thinkInterval": 0.1,
           "duration": 1.0,
-          "onAdded": [
-            {
-              "$type": "SetGlobalValueV2",
-              "minValue": 0.0,
-              "key": "_TriggeredBladeSkillThinkIntervalAction",
-              "maxValue": 0.0,
-              "CBOMLBFIPJM": 0.0,
-              "target": "Team"
-            }
-          ],
-          "stacking": "MultipleRefresh",
-          "GMGIAGMCGLF": {
-            "PFEHHABPHDB": "",
-            "KAANKELFPLA": 1.0
-          },
           "elementDurability": 100.0,
           "modifierMixins": [
             {
@@ -356,47 +386,59 @@
             }
           ],
           "modifierName": "",
+          "onAdded": [
+            {
+              "$type": "SetGlobalValueV2",
+              "key": "_TriggeredBladeSkillThinkIntervalAction",
+              "maxValue": 0.0,
+              "minValue": 0.0,
+              "target": "Team",
+              "value": 0.0
+            }
+          ],
+          "onReconnect": [
+            {
+              "$type": "RemoveModifier",
+              "modifierName": "TriggeredBladeSkill"
+            }
+          ],
           "onThinkInterval": [
             {
               "$type": "Predicated",
               "successActions": [
                 {
                   "$type": "NotifyUI",
-                  "uiContextName": "BubbleDramaBladeInLevelDialog",
+                  "message": "EnterBladeMode",
                   "stringParam": "",
-                  "message": "EnterBladeMode"
+                  "uiContextName": "BubbleDramaBladeInLevelDialog"
                 },
                 {
                   "$type": "SetGlobalValueV2",
-                  "minValue": 0.0,
                   "key": "GV_EnableBladeSkill",
                   "maxValue": 0.0,
-                  "CBOMLBFIPJM": 0.0
+                  "minValue": 0.0,
+                  "value": 0.0
                 },
                 {
                   "$type": "ServerLuaCall",
-                  "param1": 0.0,
-                  "param2": 0.0,
+                  "callParamList": [
+                    248105001,
+                    248106001,
+                    248107001,
+                    248108001,
+                    248109001,
+                    248110001
+                  ],
+                  "doOffStage": true,
                   "funcName": "SLC_PauseTimer",
-                  "AHCNJKIEMPP": 0.0,
-                  "NPNEPKILMEK": [
-                    248105001,
-                    248106001,
-                    248107001,
-                    248108001,
-                    248109001,
-                    248110001
-                  ],
                   "luaCallType": "SpecificGroup",
-                  "doOffStage": true
+                  "param1": 0.0,
+                  "param2": 0.0,
+                  "param3": 0.0
                 },
                 {
                   "$type": "ServerLuaCall",
-                  "param1": 0.0,
-                  "param2": 0.0,
-                  "funcName": "SLC_ClearMonsters",
-                  "AHCNJKIEMPP": 0.0,
-                  "NPNEPKILMEK": [
+                  "callParamList": [
                     248105001,
                     248106001,
                     248107001,
@@ -404,16 +446,20 @@
                     248109001,
                     248110001
                   ],
+                  "doOffStage": true,
+                  "funcName": "SLC_ClearMonsters",
                   "luaCallType": "SpecificGroup",
-                  "doOffStage": true
+                  "param1": 0.0,
+                  "param2": 0.0,
+                  "param3": 0.0
                 },
                 {
                   "$type": "SetGlobalValueV2",
-                  "minValue": 0.0,
                   "key": "_TriggeredBladeSkillThinkIntervalAction",
                   "maxValue": 0.0,
-                  "CBOMLBFIPJM": 1.0,
-                  "target": "Team"
+                  "minValue": 0.0,
+                  "target": "Team",
+                  "value": 1.0
                 },
                 {
                   "$type": "RemoveModifier",
@@ -422,21 +468,27 @@
               ],
               "targetPredicates": [
                 {
-                  "$type": "EOFDCELPGFO",
-                  "CBOMLBFIPJM": 0.0,
+                  "$type": "ByTargetGlobalValue",
                   "compareType": "NoneOrEqual",
                   "key": "_ForceLockT",
-                  "target": "Team"
+                  "target": "Team",
+                  "value": 0.0
                 },
                 {
-                  "$type": "EOFDCELPGFO",
-                  "CBOMLBFIPJM": 0.0,
+                  "$type": "ByTargetGlobalValue",
                   "key": "_TriggeredBladeSkillThinkIntervalAction",
-                  "target": "Team"
+                  "target": "Team",
+                  "value": 0.0
                 }
               ]
             }
           ],
+          "stacking": "MultipleRefresh",
+          "stackingOption": {
+            "abilitySpecialName": "",
+            "maxModifierNumForMultipleType": 1.0
+          },
+          "thinkInterval": 0.1,
           "AIHNJLDFEGJ": 0.0
         }
       },
@@ -446,63 +498,6 @@
           "modifierName": "TriggeredBladeSkill"
         }
       ],
-      "ANHJPOLNHIG": [
-        "GV_PenetrateFeverState",
-        "SGV_PenetrateFeverState",
-        "GV_BladeHitCount"
-      ],
-      "abilityMixins": [
-        {
-          "$type": "AttachModifierToGlobalValueMixin",
-          "modifierNameSteps": [
-            "DisableBladeSkill",
-            "EnableBladeSkillIcon"
-          ],
-          "globalValueKey": "GV_EnableBladeSkill",
-          "valueSteps": [
-            -0.5,
-            0.5,
-            1.5
-          ],
-          "DEFOFMOIAAI": true
-        },
-        {
-          "$type": "AttachModifierToGlobalValueMixin",
-          "modifierNameSteps": [
-            "Fever"
-          ],
-          "globalValueKey": "GV_PenetrateFeverState",
-          "valueSteps": [
-            0.5,
-            1.5
-          ],
-          "DEFOFMOIAAI": true
-        },
-        {
-          "$type": "DoActionOnGlobalValueChangeMixin",
-          "actions": [
-            {
-              "$type": "SetGlobalValueV2",
-              "minValue": 0.0,
-              "key": "GV_PenetrateFeverState",
-              "maxValue": 0.0,
-              "CBOMLBFIPJM": "SGV_PenetrateFeverState",
-              "target": "Team"
-            }
-          ],
-          "globalValueKey": "SGV_PenetrateFeverState"
-        },
-        {
-          "$type": "CurLocalAvatarMixinV2",
-          "modifierName": "KeepBattle"
-        },
-        {
-          "$type": "CurLocalAvatarMixinV2",
-          "modifierName": "ListenElementBurst"
-        }
-      ],
-      "abilityName": "DynamicAbility_Team_WhiteBox_Daobo_Skill",
-      "isDynamicAbility": true,
       "onAdded": [
         {
           "$type": "AttachModifier",
@@ -510,97 +505,60 @@
         },
         {
           "$type": "SetGlobalValueV2",
-          "minValue": 0.0,
           "key": "GV_PenetrateFeverState",
           "maxValue": 0.0,
-          "CBOMLBFIPJM": 0.0
+          "minValue": 0.0,
+          "value": 0.0
         },
         {
           "$type": "SetGlobalValueV2",
-          "minValue": 0.0,
           "key": "GV_EnableBladeSkill",
           "maxValue": 0.0,
-          "CBOMLBFIPJM": 0.0
+          "minValue": 0.0,
+          "value": 0.0
         },
         {
           "$type": "SetGlobalValueV2",
-          "minValue": 0.0,
           "key": "GV_Daobo_Energy",
           "maxValue": 0.0,
-          "CBOMLBFIPJM": 0.0,
-          "target": "Team"
+          "minValue": 0.0,
+          "target": "Team",
+          "value": 0.0
         },
         {
           "$type": "SetGlobalValueV2",
-          "minValue": 0.0,
           "key": "GV_StoryCameraDuration",
           "maxValue": 0.0,
-          "CBOMLBFIPJM": 2.0,
-          "target": "Team"
+          "minValue": 0.0,
+          "target": "Team",
+          "value": 2.0
         },
         {
           "$type": "SetGlobalValueV2",
-          "minValue": 0.0,
           "key": "GV_CameraBlendTime",
           "maxValue": 0.0,
-          "CBOMLBFIPJM": 2.0,
-          "target": "Team"
+          "minValue": 0.0,
+          "target": "Team",
+          "value": 2.0
         },
         {
           "$type": "SetGlobalValueV2",
-          "minValue": 0.0,
           "key": "GV_Move",
           "maxValue": 0.0,
-          "CBOMLBFIPJM": 1.0,
-          "target": "CurLocalAvatar"
+          "minValue": 0.0,
+          "target": "CurLocalAvatar",
+          "value": 1.0
         }
+      ],
+      "ANHJPOLNHIG": [
+        "GV_PenetrateFeverState",
+        "SGV_PenetrateFeverState",
+        "GV_BladeHitCount"
       ]
     }
   },
   {
     "Default": {
-      "modifiers": {
-        "SingleWindow": {
-          "duration": 0.8,
-          "onRemoved": [
-            {
-              "$type": "ServerLuaCall",
-              "param1": "GV_BladeHitCount",
-              "param2": 0.0,
-              "paramNum": 1,
-              "funcName": "SLC_TriggerCalculate",
-              "AHCNJKIEMPP": 0.0,
-              "NPNEPKILMEK": [
-                248105001,
-                248106001,
-                248107001,
-                248108001,
-                248109001,
-                248110001
-              ],
-              "luaCallType": "SpecificGroup",
-              "doOffStage": true
-            },
-            {
-              "$type": "SetGlobalValueV2",
-              "minValue": 0.0,
-              "key": "GV_BladeHitCount",
-              "maxValue": 0.0,
-              "CBOMLBFIPJM": 0.0,
-              "target": "Team"
-            }
-          ],
-          "elementDurability": 100.0,
-          "modifierName": "",
-          "AIHNJLDFEGJ": 0.0
-        }
-      },
-      "ANHJPOLNHIG": [
-        "GV_ShootTrigger",
-        "GV_BladeKillMonsterCount",
-        "GV_BladeHitCount",
-        "SGV_EnterBladeWave"
-      ],
       "abilityMixins": [
         {
           "$type": "DoActionOnGlobalValueChangeMixin",
@@ -610,9 +568,9 @@
               "successActions": [
                 {
                   "$type": "NotifyUI",
-                  "uiContextName": "BubbleDramaBladeInLevelDialog",
+                  "message": "CurrentHitCount",
                   "stringParam": "GV_BladeHitCount",
-                  "message": "CurrentHitCount"
+                  "uiContextName": "BubbleDramaBladeInLevelDialog"
                 },
                 {
                   "$type": "AttachModifier",
@@ -621,49 +579,94 @@
               ],
               "targetPredicates": [
                 {
-                  "$type": "EOFDCELPGFO",
-                  "CBOMLBFIPJM": 0.0,
+                  "$type": "ByTargetGlobalValue",
                   "compareType": "MoreThan",
-                  "key": "GV_BladeHitCount"
+                  "key": "GV_BladeHitCount",
+                  "value": 0.0
                 }
               ]
             }
           ],
-          "NBOEEIHGCPD": true,
-          "globalValueKey": "GV_BladeHitCount"
+          "globalValueKey": "GV_BladeHitCount",
+          "NBOEEIHGCPD": true
         }
       ],
       "abilityName": "DynamicAbility_Team_WhiteBox_Daobo",
       "isDynamicAbility": true,
+      "modifiers": {
+        "SingleWindow": {
+          "duration": 0.8,
+          "elementDurability": 100.0,
+          "modifierName": "",
+          "onRemoved": [
+            {
+              "$type": "ServerLuaCall",
+              "callParamList": [
+                248105001,
+                248106001,
+                248107001,
+                248108001,
+                248109001,
+                248110001
+              ],
+              "doOffStage": true,
+              "funcName": "SLC_TriggerCalculate",
+              "luaCallType": "SpecificGroup",
+              "param1": "GV_BladeHitCount",
+              "param2": 0.0,
+              "param3": 0.0,
+              "paramNum": 1
+            },
+            {
+              "$type": "SetGlobalValueV2",
+              "key": "GV_BladeHitCount",
+              "maxValue": 0.0,
+              "minValue": 0.0,
+              "target": "Team",
+              "value": 0.0
+            }
+          ],
+          "AIHNJLDFEGJ": 0.0
+        }
+      },
       "onAdded": [
         {
           "$type": "SetGlobalValueV2",
-          "minValue": 0.0,
           "key": "Activity_6_4_TriggerWitchTime",
           "maxValue": 0.0,
-          "CBOMLBFIPJM": 1.0
+          "minValue": 0.0,
+          "value": 1.0
         },
         {
           "$type": "SetGlobalValueV2",
-          "minValue": 0.0,
           "key": "GV_BladeKillMonsterCount",
           "maxValue": 0.0,
-          "CBOMLBFIPJM": 0.0
+          "minValue": 0.0,
+          "value": 0.0
         },
         {
           "$type": "SetGlobalValueV2",
-          "minValue": 0.0,
           "key": "GV_SyncFromGroupHitCount",
           "maxValue": 0.0,
-          "CBOMLBFIPJM": 0.0
+          "minValue": 0.0,
+          "value": 0.0
         }
+      ],
+      "ANHJPOLNHIG": [
+        "GV_ShootTrigger",
+        "GV_BladeKillMonsterCount",
+        "GV_BladeHitCount",
+        "SGV_EnterBladeWave"
       ]
     }
   },
   {
     "Default": {
+      "abilityName": "SceneObj_Level_Nt_Property_CameraFocusTarget_6_4",
       "modifiers": {
         "RegisterEntityID": {
+          "elementDurability": 100.0,
+          "modifierName": "",
           "onAdded": [
             {
               "$type": "SetTargetToTargetKey",
@@ -671,8 +674,6 @@
               "MDDCCEIHMAK": "Team"
             }
           ],
-          "elementDurability": 100.0,
-          "modifierName": "",
           "AIHNJLDFEGJ": 0.0
         },
         "StateMachineHandler": {
@@ -680,11 +681,11 @@
           "modifierMixins": [
             {
               "$type": "AttachModifierToGlobalValueMixin",
+              "globalValueKey": "GV_EnterStoryCameraFlag",
+              "globalValueTarget": "Team",
               "modifierNameSteps": [
                 "AnimationWithEff"
               ],
-              "globalValueTarget": "Team",
-              "globalValueKey": "GV_EnterStoryCameraFlag",
               "valueSteps": [
                 0.5,
                 1.5
@@ -701,10 +702,6 @@
           "AIHNJLDFEGJ": 0.0
         }
       },
-      "ANHJPOLNHIG": [
-        "_cameraLookAtTarget"
-      ],
-      "abilityName": "SceneObj_Level_Nt_Property_CameraFocusTarget_6_4",
       "onAdded": [
         {
           "$type": "AttachModifier",
@@ -714,13 +711,19 @@
           "$type": "AttachModifier",
           "modifierName": "RegisterEntityID"
         }
+      ],
+      "ANHJPOLNHIG": [
+        "_cameraLookAtTarget"
       ]
     }
   },
   {
     "Default": {
+      "abilityName": "SceneObj_Level_Nt_Property_6_4_Knight",
       "modifiers": {
         "RegisterEntityID": {
+          "elementDurability": 100.0,
+          "modifierName": "",
           "onAdded": [
             {
               "$type": "SetTargetToTargetKey",
@@ -728,126 +731,124 @@
               "MDDCCEIHMAK": "Team"
             }
           ],
-          "elementDurability": 100.0,
-          "modifierName": "",
           "AIHNJLDFEGJ": 0.0
         },
         "SpeedController": {
+          "elementDurability": 100.0,
+          "modifierMixins": [
+            {
+              "$type": "AttachModifierToGlobalValueMixin",
+              "globalValueKey": "_EnableCurveMoveControl",
+              "globalValueTarget": "Team",
+              "modifierNameSteps": [
+                "PauseCurveMove",
+                "EnableCurveMove"
+              ],
+              "valueSteps": [
+                -0.5,
+                0.5,
+                1.5
+              ],
+              "DEFOFMOIAAI": true
+            },
+            {
+              "$type": "AttachModifierToGlobalValueMixin",
+              "globalValueKey": "GV_MoveDirectionMode",
+              "globalValueTarget": "Team",
+              "modifierNameSteps": [
+                "Forward",
+                "Back"
+              ],
+              "valueSteps": [
+                -0.5,
+                0.5,
+                1.5
+              ],
+              "DEFOFMOIAAI": true
+            },
+            {
+              "$type": "AttachModifierToGlobalValueMixin",
+              "globalValueKey": "GV_EnterStoryCameraFlag",
+              "globalValueTarget": "Team",
+              "modifierNameSteps": [
+                "AnimationWithEff_EnterStoryCamera"
+              ],
+              "valueSteps": [
+                0.5,
+                1.5
+              ],
+              "DEFOFMOIAAI": true
+            },
+            {
+              "$type": "AttachModifierToGlobalValueMixin",
+              "globalValueKey": "GV_EnterFirstPersonCameraFlag",
+              "globalValueTarget": "Team",
+              "modifierNameSteps": [
+                "AnimationWithEff_EnterFirstPersonCamera"
+              ],
+              "valueSteps": [
+                0.5,
+                1.5
+              ],
+              "DEFOFMOIAAI": true
+            },
+            {
+              "$type": "AttachModifierToGlobalValueMixin",
+              "globalValueKey": "GV_ExitFirstPersonCameraFlag",
+              "globalValueTarget": "Team",
+              "modifierNameSteps": [
+                "ExitFirstPersonCamera"
+              ],
+              "valueSteps": [
+                0.5,
+                1.5
+              ],
+              "DEFOFMOIAAI": true
+            }
+          ],
+          "modifierName": "",
           "onReconnect": [
             {
               "$type": "SetGlobalValueV2",
-              "minValue": 0.0,
               "key": "GV_ExitFirstPersonCameraFlag",
               "maxValue": 0.0,
-              "CBOMLBFIPJM": 1.0,
-              "target": "Team"
+              "minValue": 0.0,
+              "target": "Team",
+              "value": 1.0
             },
             {
               "$type": "ApplyModifier",
               "modifierName": "DelayedCleanupInvisible"
             }
           ],
-          "elementDurability": 100.0,
-          "modifierMixins": [
-            {
-              "$type": "AttachModifierToGlobalValueMixin",
-              "modifierNameSteps": [
-                "PauseCurveMove",
-                "EnableCurveMove"
-              ],
-              "globalValueTarget": "Team",
-              "globalValueKey": "_EnableCurveMoveControl",
-              "valueSteps": [
-                -0.5,
-                0.5,
-                1.5
-              ],
-              "DEFOFMOIAAI": true
-            },
-            {
-              "$type": "AttachModifierToGlobalValueMixin",
-              "modifierNameSteps": [
-                "Forward",
-                "Back"
-              ],
-              "globalValueTarget": "Team",
-              "globalValueKey": "GV_MoveDirectionMode",
-              "valueSteps": [
-                -0.5,
-                0.5,
-                1.5
-              ],
-              "DEFOFMOIAAI": true
-            },
-            {
-              "$type": "AttachModifierToGlobalValueMixin",
-              "modifierNameSteps": [
-                "AnimationWithEff_EnterStoryCamera"
-              ],
-              "globalValueTarget": "Team",
-              "globalValueKey": "GV_EnterStoryCameraFlag",
-              "valueSteps": [
-                0.5,
-                1.5
-              ],
-              "DEFOFMOIAAI": true
-            },
-            {
-              "$type": "AttachModifierToGlobalValueMixin",
-              "modifierNameSteps": [
-                "AnimationWithEff_EnterFirstPersonCamera"
-              ],
-              "globalValueTarget": "Team",
-              "globalValueKey": "GV_EnterFirstPersonCameraFlag",
-              "valueSteps": [
-                0.5,
-                1.5
-              ],
-              "DEFOFMOIAAI": true
-            },
-            {
-              "$type": "AttachModifierToGlobalValueMixin",
-              "modifierNameSteps": [
-                "ExitFirstPersonCamera"
-              ],
-              "globalValueTarget": "Team",
-              "globalValueKey": "GV_ExitFirstPersonCameraFlag",
-              "valueSteps": [
-                0.5,
-                1.5
-              ],
-              "DEFOFMOIAAI": true
-            }
-          ],
-          "modifierName": "",
           "AIHNJLDFEGJ": 0.0
         },
         "DelayedCleanupInvisible": {
           "duration": 1.0,
+          "elementDurability": 100.0,
+          "modifierName": "",
           "onRemoved": [
             {
               "$type": "RemoveModifier",
-              "modifierName": "UNIQUE_InVisibleAvatar",
-              "target": "CurTeamAvatars",
               "doOffStage": true,
+              "modifierName": "UNIQUE_InVisibleAvatar",
               "predicates": [
                 {
-                  "$type": "EOFDCELPGFO",
-                  "CBOMLBFIPJM": 0.0,
+                  "$type": "ByTargetGlobalValue",
                   "key": "_EnableCurveMoveControl",
-                  "target": "Team"
+                  "target": "Team",
+                  "value": 0.0
                 },
                 {
-                  "$type": "EOFDCELPGFO",
-                  "CBOMLBFIPJM": 0.0,
+                  "$type": "ByTargetGlobalValue",
                   "key": "GV_EnterStoryCameraFlag",
-                  "target": "Team"
+                  "target": "Team",
+                  "value": 0.0
                 }
-              ]
+              ],
+              "target": "CurTeamAvatars"
             }
           ],
-          "elementDurability": 100.0,
-          "modifierName": "",
           "AIHNJLDFEGJ": 0.0
         },
         "PauseCurveMove": {
@@ -867,12 +868,12 @@
           "modifierMixins": [
             {
               "$type": "AttachModifierToGlobalValueMixin",
+              "globalValueKey": "GV_MoveSpeedMode",
+              "globalValueTarget": "Team",
               "modifierNameSteps": [
                 "CurveSpeedZero",
                 "CurveSpeedOne"
               ],
-              "globalValueTarget": "Team",
-              "globalValueKey": "GV_MoveSpeedMode",
               "valueSteps": [
                 -0.5,
                 0.5,
@@ -882,11 +883,11 @@
             },
             {
               "$type": "AttachModifierToGlobalValueMixin",
+              "globalValueKey": "GV_ShootTrigger",
+              "globalValueTarget": "Team",
               "modifierNameSteps": [
                 "ShootOnce"
               ],
-              "globalValueTarget": "Team",
-              "globalValueKey": "GV_ShootTrigger",
               "valueSteps": [
                 0.5,
                 1.5
@@ -902,197 +903,188 @@
         },
         "ShootOnce": {
           "duration": 0.3,
-          "onRemoved": [
-            {
-              "$type": "SetGlobalValueV2",
-              "minValue": 0.0,
-              "key": "GV_ShootTrigger",
-              "maxValue": 0.0,
-              "CBOMLBFIPJM": 0.0,
-              "target": "Team"
-            },
-            {
-              "$type": "NotifyUI",
-              "uiContextName": "BubbleDramaBladeInLevelDialog",
-              "stringParam": "",
-              "message": "UpdateAngle"
-            }
-          ],
+          "elementDurability": 100.0,
+          "modifierName": "",
           "onAdded": [
             {
               "$type": "SetGlobalValueV2",
-              "minValue": 0.0,
               "key": "GV_CDReady",
               "maxValue": 0.0,
-              "CBOMLBFIPJM": 0.0
+              "minValue": 0.0,
+              "value": 0.0
             },
             {
               "$type": "CopyGlobalValue",
-              "srcKey": "GV_BladeAngle",
-              "dstTarget": "Self",
-              "srcTarget": "Team",
+              "doOffStage": true,
               "dstKey": "GV_BladeAngle",
-              "doOffStage": true
+              "dstTarget": "Self",
+              "srcKey": "GV_BladeAngle",
+              "srcTarget": "Team"
             },
             {
               "$type": "TriggerBullet",
               "born": {
-                "$type": "BGOLIIIHLMO",
+                "$type": "ConfigBornByAttachPoint",
                 "attachPointName": "Model",
-                "useRotation": true,
-                "offset": {
-                  "x": 0.0,
-                  "z": 0.0,
-                  "y": 1.5
-                },
                 "direction": {
-                  "$type": "CHHJODLLMHA",
-                  "EJCLJNABJAH": {
-                    "x": 0.0,
-                    "z": [
+                  "$type": "ConfigDirectionByCamera",
+                  "angleOffsetCorrect": {
+                    "x": [
                       "GV_BladeAngle",
                       5.0,
                       "SUB"
                     ],
-                    "y": 0.0
+                    "y": 0.0,
+                    "z": 0.0
                   },
                   "useCorrectDir": true
-                }
+                },
+                "offset": {
+                  "x": 0.0,
+                  "y": 1.5,
+                  "z": 0.0
+                },
+                "useRotation": true
               },
               "bulletID": 73121003,
               "predicates": [
                 {
-                  "$type": "EOFDCELPGFO",
-                  "CBOMLBFIPJM": 0.0,
+                  "$type": "ByTargetGlobalValue",
                   "key": "SGV_CurrentBladeType",
-                  "target": "Team"
+                  "target": "Team",
+                  "value": 0.0
                 }
               ]
             },
             {
               "$type": "TriggerBullet",
               "born": {
-                "$type": "BGOLIIIHLMO",
+                "$type": "ConfigBornByAttachPoint",
                 "attachPointName": "Model",
-                "useRotation": true,
-                "offset": {
-                  "x": 0.0,
-                  "z": 0.0,
-                  "y": 1.5
-                },
                 "direction": {
-                  "$type": "CHHJODLLMHA",
-                  "EJCLJNABJAH": {
-                    "x": 0.0,
-                    "z": [
+                  "$type": "ConfigDirectionByCamera",
+                  "angleOffsetCorrect": {
+                    "x": [
                       "GV_BladeAngle",
                       5.0,
                       "SUB"
                     ],
-                    "y": 0.0
+                    "y": 0.0,
+                    "z": 0.0
                   },
                   "useCorrectDir": true
-                }
+                },
+                "offset": {
+                  "x": 0.0,
+                  "y": 1.5,
+                  "z": 0.0
+                },
+                "useRotation": true
               },
               "bulletID": 73121004,
               "predicates": [
                 {
-                  "$type": "EOFDCELPGFO",
-                  "CBOMLBFIPJM": 1.0,
+                  "$type": "ByTargetGlobalValue",
                   "key": "SGV_CurrentBladeType",
-                  "target": "Team"
+                  "target": "Team",
+                  "value": 1.0
                 }
               ]
             },
             {
               "$type": "TriggerBullet",
               "born": {
-                "$type": "BGOLIIIHLMO",
+                "$type": "ConfigBornByAttachPoint",
                 "attachPointName": "Model",
-                "useRotation": true,
-                "offset": {
-                  "x": 0.0,
-                  "z": 0.0,
-                  "y": 1.5
-                },
                 "direction": {
-                  "$type": "CHHJODLLMHA",
-                  "EJCLJNABJAH": {
-                    "x": 0.0,
-                    "z": [
+                  "$type": "ConfigDirectionByCamera",
+                  "angleOffsetCorrect": {
+                    "x": [
                       "GV_BladeAngle",
                       5.0,
                       "SUB"
                     ],
-                    "y": 0.0
+                    "y": 0.0,
+                    "z": 0.0
                   },
                   "useCorrectDir": true
-                }
+                },
+                "offset": {
+                  "x": 0.0,
+                  "y": 1.5,
+                  "z": 0.0
+                },
+                "useRotation": true
               },
               "bulletID": 73121005,
               "predicates": [
                 {
-                  "$type": "EOFDCELPGFO",
-                  "CBOMLBFIPJM": 2.0,
+                  "$type": "ByTargetGlobalValue",
                   "key": "SGV_CurrentBladeType",
-                  "target": "Team"
+                  "target": "Team",
+                  "value": 2.0
                 }
               ]
             },
             {
               "$type": "TriggerBullet",
               "born": {
-                "$type": "BGOLIIIHLMO",
+                "$type": "ConfigBornByAttachPoint",
                 "attachPointName": "Model",
-                "useRotation": true,
-                "offset": {
-                  "x": 0.0,
-                  "z": 0.0,
-                  "y": 1.5
-                },
                 "direction": {
-                  "$type": "CHHJODLLMHA",
-                  "EJCLJNABJAH": {
-                    "x": 0.0,
-                    "z": [
+                  "$type": "ConfigDirectionByCamera",
+                  "angleOffsetCorrect": {
+                    "x": [
                       "GV_BladeAngle",
                       5.0,
                       "SUB"
                     ],
-                    "y": 0.0
+                    "y": 0.0,
+                    "z": 0.0
                   },
                   "useCorrectDir": true
-                }
+                },
+                "offset": {
+                  "x": 0.0,
+                  "y": 1.5,
+                  "z": 0.0
+                },
+                "useRotation": true
               },
               "bulletID": 73121007,
               "predicates": [
                 {
-                  "$type": "EOFDCELPGFO",
-                  "CBOMLBFIPJM": 3.0,
+                  "$type": "ByTargetGlobalValue",
                   "key": "SGV_CurrentBladeType",
-                  "target": "Team"
+                  "target": "Team",
+                  "value": 3.0
                 }
               ]
             }
           ],
-          "stacking": "Unique",
-          "elementDurability": 100.0,
-          "modifierName": "",
-          "AIHNJLDFEGJ": 0.0
-        },
-        "AnimationWithEff_EnterStoryCamera": {
-          "thinkInterval": 0.5,
-          "duration": 1.0,
           "onRemoved": [
             {
               "$type": "SetGlobalValueV2",
-              "minValue": 0.0,
-              "key": "GV_EnterStoryCameraFlag",
+              "key": "GV_ShootTrigger",
               "maxValue": 0.0,
-              "CBOMLBFIPJM": 0.0,
-              "target": "Team"
+              "minValue": 0.0,
+              "target": "Team",
+              "value": 0.0
+            },
+            {
+              "$type": "NotifyUI",
+              "message": "UpdateAngle",
+              "stringParam": "",
+              "uiContextName": "BubbleDramaBladeInLevelDialog"
             }
           ],
+          "stacking": "Unique",
+          "AIHNJLDFEGJ": 0.0
+        },
+        "AnimationWithEff_EnterStoryCamera": {
+          "duration": 1.0,
+          "elementDurability": 100.0,
+          "modifierName": "",
           "onAdded": [
             {
               "$type": "ApplyModifier",
@@ -1101,76 +1093,57 @@
             },
             {
               "$type": "SetGlobalValueV2",
-              "minValue": 0.0,
+              "doOffStage": true,
               "key": "_AnimationWithEff_EnterStoryCamera_Fired",
               "maxValue": 0.0,
-              "CBOMLBFIPJM": 0.0,
-              "doOffStage": true
+              "minValue": 0.0,
+              "value": 0.0
             }
           ],
-          "elementDurability": 100.0,
-          "modifierName": "",
+          "onRemoved": [
+            {
+              "$type": "SetGlobalValueV2",
+              "key": "GV_EnterStoryCameraFlag",
+              "maxValue": 0.0,
+              "minValue": 0.0,
+              "target": "Team",
+              "value": 0.0
+            }
+          ],
           "onThinkInterval": [
             {
               "$type": "SetAnimatorInt",
               "intID": "GadgetState",
-              "CBOMLBFIPJM": 201.0,
               "predicates": [
                 {
-                  "$type": "EOFDCELPGFO",
-                  "CBOMLBFIPJM": 0.0,
-                  "key": "_AnimationWithEff_EnterStoryCamera_Fired"
+                  "$type": "ByTargetGlobalValue",
+                  "key": "_AnimationWithEff_EnterStoryCamera_Fired",
+                  "value": 0.0
                 }
-              ]
+              ],
+              "value": 201.0
             },
             {
               "$type": "SetGlobalValueV2",
-              "minValue": 0.0,
+              "doOffStage": true,
               "key": "_AnimationWithEff_EnterStoryCamera_Fired",
               "maxValue": 0.0,
-              "CBOMLBFIPJM": 1.0,
-              "doOffStage": true
+              "minValue": 0.0,
+              "value": 1.0
             },
             {
               "$type": "TriggerAudioV2",
-              "DOHGOIOGLPE": "v6_4_DaggerWave_ScifiQin",
-              "BDPFBBFKKAH": true
+              "muteRemoteAction": true,
+              "DOHGOIOGLPE": "v6_4_DaggerWave_ScifiQin"
             }
           ],
+          "thinkInterval": 0.5,
           "AIHNJLDFEGJ": 0.0
         },
         "AnimationWithEff_EnterFirstPersonCamera": {
           "duration": 1.0,
-          "onRemoved": [
-            {
-              "$type": "SetGlobalValueV2",
-              "minValue": 0.0,
-              "key": "GV_EnterFirstPersonCameraFlag",
-              "maxValue": 0.0,
-              "CBOMLBFIPJM": 0.0,
-              "target": "Team"
-            },
-            {
-              "$type": "SetGlobalValueV2",
-              "minValue": 0.0,
-              "key": "_EnableCurveMoveControl",
-              "maxValue": 0.0,
-              "CBOMLBFIPJM": 1.0,
-              "target": "Team"
-            },
-            {
-              "$type": "ReviveElemEnergy",
-              "CBOMLBFIPJM": 8000.0,
-              "target": "CurTeamAvatars",
-              "doOffStage": true
-            },
-            {
-              "$type": "ReviveSpecialEnergy",
-              "CBOMLBFIPJM": 999.0,
-              "target": "CurTeamAvatars",
-              "doOffStage": true
-            }
-          ],
+          "elementDurability": 100.0,
+          "modifierName": "",
           "onAdded": [
             {
               "$type": "ApplyModifier",
@@ -1182,10 +1155,10 @@
             },
             {
               "$type": "SetGlobalValueV2",
-              "minValue": 0.0,
               "key": "GV_IsInFirstPersonView",
               "maxValue": 0.0,
-              "CBOMLBFIPJM": 1.0
+              "minValue": 0.0,
+              "value": 1.0
             },
             {
               "$type": "ApplyModifier",
@@ -1193,48 +1166,68 @@
             },
             {
               "$type": "ServerLuaCall",
+              "doOffStage": true,
+              "funcName": "SLC_TriggerEnterFirstPersonCamera",
+              "luaCallType": "FromGroup",
               "param1": 0.0,
               "param2": 0.0,
-              "funcName": "SLC_TriggerEnterFirstPersonCamera",
-              "AHCNJKIEMPP": 0.0,
-              "luaCallType": "FromGroup",
-              "doOffStage": true
+              "param3": 0.0
             },
             {
               "$type": "ClearLocalGadgets"
             }
           ],
-          "elementDurability": 100.0,
-          "modifierName": "",
+          "onRemoved": [
+            {
+              "$type": "SetGlobalValueV2",
+              "key": "GV_EnterFirstPersonCameraFlag",
+              "maxValue": 0.0,
+              "minValue": 0.0,
+              "target": "Team",
+              "value": 0.0
+            },
+            {
+              "$type": "SetGlobalValueV2",
+              "key": "_EnableCurveMoveControl",
+              "maxValue": 0.0,
+              "minValue": 0.0,
+              "target": "Team",
+              "value": 1.0
+            },
+            {
+              "$type": "ReviveElemEnergy",
+              "doOffStage": true,
+              "target": "CurTeamAvatars",
+              "value": 8000.0
+            },
+            {
+              "$type": "ReviveSpecialEnergy",
+              "doOffStage": true,
+              "target": "CurTeamAvatars",
+              "value": 999.0
+            }
+          ],
           "AIHNJLDFEGJ": 0.0
         },
         "ExitFirstPersonCamera": {
           "duration": 1.0,
-          "onRemoved": [
-            {
-              "$type": "SetGlobalValueV2",
-              "minValue": 0.0,
-              "key": "GV_ExitFirstPersonCameraFlag",
-              "maxValue": 0.0,
-              "CBOMLBFIPJM": 0.0,
-              "target": "Team"
-            }
-          ],
+          "elementDurability": 100.0,
+          "modifierName": "",
           "onAdded": [
             {
               "$type": "SetGlobalValueV2",
-              "minValue": 0.0,
               "key": "_EnableCurveMoveControl",
               "maxValue": 0.0,
-              "CBOMLBFIPJM": 0.0,
-              "target": "Team"
+              "minValue": 0.0,
+              "target": "Team",
+              "value": 0.0
             },
             {
               "$type": "SetGlobalValueV2",
-              "minValue": 0.0,
               "key": "GV_IsInFirstPersonView",
               "maxValue": 0.0,
-              "CBOMLBFIPJM": 0.0
+              "minValue": 0.0,
+              "value": 0.0
             },
             {
               "$type": "RemoveModifier",
@@ -1242,12 +1235,12 @@
             },
             {
               "$type": "ServerLuaCall",
+              "doOffStage": true,
+              "funcName": "SLC_TriggerEndCameraState",
+              "luaCallType": "FromGroup",
               "param1": 0.0,
               "param2": 0.0,
-              "funcName": "SLC_TriggerEndCameraState",
-              "AHCNJKIEMPP": 0.0,
-              "luaCallType": "FromGroup",
-              "doOffStage": true
+              "param3": 0.0
             },
             {
               "$type": "RemoveModifier",
@@ -1260,41 +1253,42 @@
             },
             {
               "$type": "ModifyAvatarSkillCD",
-              "skillSlot": [
-                2
-              ],
-              "BGNJBEPEJBO": -1.0,
-              "target": "CurTeamAvatars",
+              "cdRatio": -1.0,
               "doOffStage": true,
               "predicates": [
                 {
-                  "$type": "AJPLICCNACO",
-                  "BFLILDJLGHP": [
+                  "$type": "ByHasFeatureTag",
+                  "featureTagIDs": [
                     10033
                   ]
                 }
-              ]
+              ],
+              "skillSlot": [
+                2
+              ],
+              "target": "CurTeamAvatars"
             }
           ],
-          "elementDurability": 100.0,
-          "modifierName": "",
+          "onRemoved": [
+            {
+              "$type": "SetGlobalValueV2",
+              "key": "GV_ExitFirstPersonCameraFlag",
+              "maxValue": 0.0,
+              "minValue": 0.0,
+              "target": "Team",
+              "value": 0.0
+            }
+          ],
           "AIHNJLDFEGJ": 0.0
         },
         "UNIQUE_InVisibleAvatar": {
-          "onReconnect": [
-            {
-              "$type": "RemoveModifier",
-              "modifierName": "UNIQUE_InVisibleAvatar",
-              "target": "CurTeamAvatars",
-              "doOffStage": true
-            }
-          ],
           "elementDurability": 100.0,
+          "isUnique": true,
           "modifierMixins": [
             {
               "$type": "EntityInVisibleMixin",
-              "AAHPKGHIPPG": true,
-              "reason": "Gallary"
+              "reason": "Gallary",
+              "AAHPKGHIPPG": true
             },
             {
               "$type": "CameraCollisionMixin"
@@ -1303,45 +1297,32 @@
               "$type": "DisableMotionBlurMixin"
             }
           ],
-          "state": "IsGhostToAllied",
           "modifierName": "",
-          "isUnique": true,
+          "onReconnect": [
+            {
+              "$type": "RemoveModifier",
+              "doOffStage": true,
+              "modifierName": "UNIQUE_InVisibleAvatar",
+              "target": "CurTeamAvatars"
+            }
+          ],
+          "state": "IsGhostToAllied",
           "AIHNJLDFEGJ": 0.0
         },
         "UNIQUE_DitherKnight": {
           "elementDurability": 100.0,
+          "isUnique": true,
           "modifierMixins": [
             {
               "$type": "EntityInVisibleMixin",
-              "AAHPKGHIPPG": true,
-              "reason": "Gallary"
+              "reason": "Gallary",
+              "AAHPKGHIPPG": true
             }
           ],
           "modifierName": "",
-          "isUnique": true,
           "AIHNJLDFEGJ": 0.0
         },
         "CurveSpeedZero": {
-          "onAdded": [
-            {
-              "$type": "SetTargetToTargetKey",
-              "targetKey": "_CurrentTarget",
-              "otherTargets": {
-                "$type": "BILHLNFHEDG"
-              }
-            },
-            {
-              "$type": "SetPartControlTarget",
-              "EAGOHJHLJEH": [
-                "PartControl"
-              ],
-              "attachPoint": "",
-              "otherTargets": {
-                "$type": "GENFIIMMOOJ",
-                "targetKey": "_CurrentTarget"
-              }
-            }
-          ],
           "elementDurability": 100.0,
           "modifierMixins": [
             {
@@ -1351,36 +1332,29 @@
             }
           ],
           "modifierName": "",
-          "AIHNJLDFEGJ": 0.0
-        },
-        "CurveSpeedOne": {
           "onAdded": [
             {
               "$type": "SetTargetToTargetKey",
-              "targetKey": "_CurrentTarget",
               "otherTargets": {
-                "$type": "BILHLNFHEDG"
-              }
+                "$type": "SelectTargetsBySelfGroup"
+              },
+              "targetKey": "_CurrentTarget"
             },
             {
               "$type": "SetPartControlTarget",
-              "EAGOHJHLJEH": [
-                "PartControl"
-              ],
               "attachPoint": "",
               "otherTargets": {
                 "$type": "GENFIIMMOOJ",
                 "targetKey": "_CurrentTarget"
-              }
-            },
-            {
-              "$type": "EnablePartControl",
-              "enable": true,
-              "EAGOHJHLJEH": [
+              },
+              "partRootNames": [
                 "PartControl"
               ]
             }
           ],
+          "AIHNJLDFEGJ": 0.0
+        },
+        "CurveSpeedOne": {
           "elementDurability": 100.0,
           "modifierMixins": [
             {
@@ -1390,26 +1364,47 @@
             }
           ],
           "modifierName": "",
+          "onAdded": [
+            {
+              "$type": "SetTargetToTargetKey",
+              "otherTargets": {
+                "$type": "SelectTargetsBySelfGroup"
+              },
+              "targetKey": "_CurrentTarget"
+            },
+            {
+              "$type": "SetPartControlTarget",
+              "attachPoint": "",
+              "otherTargets": {
+                "$type": "GENFIIMMOOJ",
+                "targetKey": "_CurrentTarget"
+              },
+              "partRootNames": [
+                "PartControl"
+              ]
+            },
+            {
+              "$type": "EnablePartControl",
+              "enable": true,
+              "partRootNames": [
+                "PartControl"
+              ]
+            }
+          ],
           "AIHNJLDFEGJ": 0.0
         },
         "Forward": {
+          "elementDurability": 100.0,
+          "modifierName": "",
           "onAdded": [
             {
               "$type": "DebugLog",
               "content": "Forward"
             }
           ],
-          "elementDurability": 100.0,
-          "modifierName": "",
           "AIHNJLDFEGJ": 0.0
         },
         "Back": {
-          "onAdded": [
-            {
-              "$type": "DebugLog",
-              "content": "Back"
-            }
-          ],
           "elementDurability": 100.0,
           "modifierMixins": [
             {
@@ -1417,37 +1412,43 @@
             }
           ],
           "modifierName": "",
+          "onAdded": [
+            {
+              "$type": "DebugLog",
+              "content": "Back"
+            }
+          ],
           "AIHNJLDFEGJ": 0.0
         },
         "ElementalBurst_Gadget_TauntModifier": {
-          "thinkInterval": 0.25,
           "elementDurability": 100.0,
           "modifierName": "",
           "onThinkInterval": [
             {
               "$type": "TriggerTaunt",
               "otherTargets": {
-                "$type": "INIACGFCEDH",
-                "sizeRatio": 1.0,
+                "$type": "SelectTargetsByShape",
                 "campTargetType": "Enemy",
-                "shapeName": "CircleR100"
+                "shapeName": "CircleR100",
+                "sizeRatio": 1.0
               },
               "predicates": [
                 {
-                  "$type": "DEOFBICNFHF",
+                  "$type": "ByEntityTypes",
                   "entityTypes": [
                     "Monster"
                   ]
                 },
                 {
-                  "$type": "EOFDCELPGFO",
-                  "CBOMLBFIPJM": 0.0,
+                  "$type": "ByTargetGlobalValue",
                   "compareType": "NoneOrEqual",
-                  "key": "_ANIMAL_ENTITY_TYPE"
+                  "key": "_ANIMAL_ENTITY_TYPE",
+                  "value": 0.0
                 }
               ]
             }
           ],
+          "thinkInterval": 0.25,
           "AIHNJLDFEGJ": 0.0
         },
         "AdjustCameraPosition": {
@@ -1455,23 +1456,97 @@
           "modifierMixins": [
             {
               "$type": "PartMoveMixin",
-              "MKOHICFPOEL": 1,
               "duration": 0.5,
-              "LEEAMBMKLGJ": "Model",
+              "useCurve": true,
               "COKNAOFANGF": 0.0,
+              "MKOHICFPOEL": 1,
+              "PMBHOJMHDKI": true,
+              "LEEAMBMKLGJ": "Model",
               "OGMKHCPGACC": {
                 "x": 0.0,
-                "z": 0.0,
-                "y": "SGV_BladeKnightHeight"
-              },
-              "PMBHOJMHDKI": true,
-              "useCurve": true
+                "y": "SGV_BladeKnightHeight",
+                "z": 0.0
+              }
             }
           ],
           "modifierName": "",
           "AIHNJLDFEGJ": 0.0
         }
       },
+      "onAdded": [
+        {
+          "$type": "SetGlobalValueV2",
+          "key": "GV_BladeAngle",
+          "maxValue": 0.0,
+          "minValue": 0.0,
+          "target": "Team",
+          "value": 0.0
+        },
+        {
+          "$type": "SetGlobalValueV2",
+          "key": "_EnableCurveMoveControl",
+          "maxValue": 0.0,
+          "minValue": 0.0,
+          "target": "Team",
+          "value": 0.0
+        },
+        {
+          "$type": "SetGlobalValueV2",
+          "key": "GV_MoveSpeedMode",
+          "maxValue": 0.0,
+          "minValue": 0.0,
+          "target": "Team",
+          "value": 0.0
+        },
+        {
+          "$type": "SetGlobalValueV2",
+          "key": "GV_MoveDirectionMode",
+          "maxValue": 0.0,
+          "minValue": 0.0,
+          "target": "Team",
+          "value": 0.0
+        },
+        {
+          "$type": "SetGlobalValueV2",
+          "key": "GV_ShootTrigger",
+          "maxValue": 0.0,
+          "minValue": 0.0,
+          "target": "Team",
+          "value": 0.0
+        },
+        {
+          "$type": "SetGlobalValueV2",
+          "key": "GV_EnterStoryCameraFlag",
+          "maxValue": 0.0,
+          "minValue": 0.0,
+          "target": "Team",
+          "value": 0.0
+        },
+        {
+          "$type": "SetGlobalValueV2",
+          "key": "GV_EnterFirstPersonCameraFlag",
+          "maxValue": 0.0,
+          "minValue": 0.0,
+          "target": "Team",
+          "value": 0.0
+        },
+        {
+          "$type": "SetGlobalValueV2",
+          "key": "GV_ExitFirstPersonCameraFlag",
+          "maxValue": 0.0,
+          "minValue": 0.0,
+          "target": "Team",
+          "value": 0.0
+        },
+        {
+          "$type": "AttachModifier",
+          "modifierName": "RegisterEntityID"
+        },
+        {
+          "$type": "AttachModifier",
+          "modifierName": "SpeedController"
+        }
+      ],
       "ANHJPOLNHIG": [
         "GV_MoveSpeedMode",
         "_CurrentTarget",
@@ -1483,118 +1558,44 @@
         "GV_IsInFirstPersonView",
         "_EnableCurveMoveControl",
         "SGV_BladeKnightHeight"
-      ],
-      "abilityName": "SceneObj_Level_Nt_Property_6_4_Knight",
-      "onAdded": [
-        {
-          "$type": "SetGlobalValueV2",
-          "minValue": 0.0,
-          "key": "GV_BladeAngle",
-          "maxValue": 0.0,
-          "CBOMLBFIPJM": 0.0,
-          "target": "Team"
-        },
-        {
-          "$type": "SetGlobalValueV2",
-          "minValue": 0.0,
-          "key": "_EnableCurveMoveControl",
-          "maxValue": 0.0,
-          "CBOMLBFIPJM": 0.0,
-          "target": "Team"
-        },
-        {
-          "$type": "SetGlobalValueV2",
-          "minValue": 0.0,
-          "key": "GV_MoveSpeedMode",
-          "maxValue": 0.0,
-          "CBOMLBFIPJM": 0.0,
-          "target": "Team"
-        },
-        {
-          "$type": "SetGlobalValueV2",
-          "minValue": 0.0,
-          "key": "GV_MoveDirectionMode",
-          "maxValue": 0.0,
-          "CBOMLBFIPJM": 0.0,
-          "target": "Team"
-        },
-        {
-          "$type": "SetGlobalValueV2",
-          "minValue": 0.0,
-          "key": "GV_ShootTrigger",
-          "maxValue": 0.0,
-          "CBOMLBFIPJM": 0.0,
-          "target": "Team"
-        },
-        {
-          "$type": "SetGlobalValueV2",
-          "minValue": 0.0,
-          "key": "GV_EnterStoryCameraFlag",
-          "maxValue": 0.0,
-          "CBOMLBFIPJM": 0.0,
-          "target": "Team"
-        },
-        {
-          "$type": "SetGlobalValueV2",
-          "minValue": 0.0,
-          "key": "GV_EnterFirstPersonCameraFlag",
-          "maxValue": 0.0,
-          "CBOMLBFIPJM": 0.0,
-          "target": "Team"
-        },
-        {
-          "$type": "SetGlobalValueV2",
-          "minValue": 0.0,
-          "key": "GV_ExitFirstPersonCameraFlag",
-          "maxValue": 0.0,
-          "CBOMLBFIPJM": 0.0,
-          "target": "Team"
-        },
-        {
-          "$type": "AttachModifier",
-          "modifierName": "RegisterEntityID"
-        },
-        {
-          "$type": "AttachModifier",
-          "modifierName": "SpeedController"
-        }
       ]
     }
   },
   {
     "Default": {
+      "abilityName": "SceneObj_Area_Common_Property_6_4_Daobo_Bullet_Normal",
       "modifiers": {
         "Taril_Fx": {
+          "elementDurability": 100.0,
+          "modifierName": "",
           "onAdded": [
             {
               "$type": "AttachEffect",
-              "ILLLPEOODKP": "",
-              "scale": 1.0,
               "effectPattern": "Eff_SceneObj_BubbleDramaBlade_01",
-              "effectTempleteID": -1.0
+              "effectTempleteID": -1.0,
+              "scale": 1.0,
+              "ILLLPEOODKP": ""
             },
             {
               "$type": "SetEffectFollowPath",
-              "DPNPNCGKIMP": "Eff",
-              "attachPoint": ""
+              "attachPoint": "",
+              "followPath": "Eff"
             }
           ],
-          "elementDurability": 100.0,
-          "modifierName": "",
           "AIHNJLDFEGJ": 0.0
         },
         "DelayToKillSelf": {
-          "thinkInterval": 0.01,
           "elementDurability": 100.0,
           "modifierName": "",
           "onThinkInterval": [
             {
               "$type": "KillSelf",
-              "MBGFJOOIMOK": [
+              "configIdArray": [
                 73121003
               ]
             }
           ],
+          "thinkInterval": 0.01,
           "AIHNJLDFEGJ": 0.0
         }
       },
@@ -1604,49 +1605,49 @@
           "attackInfo": {
             "attackProperty": {
               "attackType": "Melee",
-              "damagePercentageRatio": 0.0,
-              "strikeType": "Slash",
-              "BOELJJKKDHP": 0.0,
-              "enBreak": 39.6,
+              "bonusCritical": 0.0,
+              "bonusCriticalHurt": 0.0,
               "damageExtra": 0.0,
+              "damagePercentageRatio": 0.0,
               "elementDurability": 25.0,
-              "EJDDDMMFFLG": 0.0,
-              "arkheGrade": 0.0
+              "enBreak": 39.6,
+              "strikeType": "Slash",
+              "IIPHCFEONLK": 0.0
             },
-            "hitPattern": {
-              "FLFCIDDNMNA": "",
-              "onHitEffectName": "default",
-              "hitHaltTimeScale": 0.01,
-              "hitHaltTime": 0.03,
-              "canBeDefenceHalt": true,
-              "muteHitText": true,
-              "hitImpulseType": "LV3"
-            },
+            "attackTag": "_BladeAttack",
             "attenuationGroup": "default",
             "attenuationTag": "",
-            "attackTag": "_BladeAttack"
+            "hitPattern": {
+              "canBeDefenceHalt": true,
+              "hitHaltTime": 0.03,
+              "hitHaltTimeScale": 0.01,
+              "hitImpulseType": "LV3",
+              "muteHitText": true,
+              "onHitEffectName": "default",
+              "FLFCIDDNMNA": ""
+            }
           },
-          "KHPFIMDODDP": true,
-          "target": "Other",
           "doOffStage": true,
           "predicates": [
             {
-              "$type": "DEOFBICNFHF",
+              "$type": "ByEntityTypes",
               "entityTypes": [
                 "Monster"
               ]
             }
-          ]
+          ],
+          "target": "Other",
+          "KHPFIMDODDP": true
         },
         {
           "$type": "FireEffect",
-          "effectPattern": "Eff_SceneObj_Penguin_03_RockHit_02",
-          "scale": 1.5,
           "born": {
-            "$type": "MBOEKFDLCGB"
+            "$type": "ConfigBornByHitPoint"
           },
-          "ILLLPEOODKP": "",
-          "effectTempleteID": -1.0
+          "effectPattern": "Eff_SceneObj_Penguin_03_RockHit_02",
+          "effectTempleteID": -1.0,
+          "scale": 1.5,
+          "ILLLPEOODKP": ""
         },
         {
           "$type": "Predicated",
@@ -1656,18 +1657,17 @@
               "modifierName": "DelayToKillSelf"
             }
           ],
+          "target": "Other",
           "targetPredicates": [
             {
-              "$type": "DEOFBICNFHF",
+              "$type": "ByEntityTypes",
               "entityTypes": [
                 "Monster"
               ]
             }
-          ],
-          "target": "Other"
+          ]
         }
       ],
-      "abilityName": "SceneObj_Area_Common_Property_6_4_Daobo_Bullet_Normal",
       "onAdded": [
         {
           "$type": "AttachModifier",
@@ -1678,24 +1678,25 @@
   },
   {
     "Default": {
+      "abilityName": "SceneObj_Area_Common_Property_6_4_Daobo_Bullet_Penetrate",
       "modifiers": {
         "Taril_Fx": {
+          "elementDurability": 100.0,
+          "modifierName": "",
           "onAdded": [
             {
               "$type": "AttachEffect",
-              "ILLLPEOODKP": "",
-              "scale": 1.0,
               "effectPattern": "Eff_SceneObj_BubbleDramaBlade_02",
-              "effectTempleteID": -1.0
+              "effectTempleteID": -1.0,
+              "scale": 1.0,
+              "ILLLPEOODKP": ""
             },
             {
               "$type": "SetEffectFollowPath",
-              "DPNPNCGKIMP": "Eff",
-              "attachPoint": ""
+              "attachPoint": "",
+              "followPath": "Eff"
             }
           ],
-          "elementDurability": 100.0,
-          "modifierName": "",
           "AIHNJLDFEGJ": 0.0
         }
       },
@@ -1705,52 +1706,51 @@
           "attackInfo": {
             "attackProperty": {
               "attackType": "Melee",
-              "damagePercentageRatio": 0.0,
-              "strikeType": "Slash",
-              "BOELJJKKDHP": 0.0,
-              "enBreak": 39.6,
+              "bonusCritical": 0.0,
+              "bonusCriticalHurt": 0.0,
               "damageExtra": 0.0,
+              "damagePercentageRatio": 0.0,
               "elementDurability": 25.0,
-              "EJDDDMMFFLG": 0.0,
-              "arkheGrade": 0.0
+              "enBreak": 39.6,
+              "strikeType": "Slash",
+              "IIPHCFEONLK": 0.0
             },
-            "hitPattern": {
-              "FLFCIDDNMNA": "",
-              "onHitEffectName": "default",
-              "hitHaltTimeScale": 0.01,
-              "hitHaltTime": 0.03,
-              "canBeDefenceHalt": true,
-              "muteHitText": true,
-              "hitImpulseType": "LV3"
-            },
+            "attackTag": "_BladeAttack",
             "attenuationGroup": "default",
             "attenuationTag": "",
-            "attackTag": "_BladeAttack"
+            "hitPattern": {
+              "canBeDefenceHalt": true,
+              "hitHaltTime": 0.03,
+              "hitHaltTimeScale": 0.01,
+              "hitImpulseType": "LV3",
+              "muteHitText": true,
+              "onHitEffectName": "default",
+              "FLFCIDDNMNA": ""
+            }
           },
-          "KHPFIMDODDP": true,
-          "target": "Other",
           "doOffStage": true,
           "predicates": [
             {
-              "$type": "DEOFBICNFHF",
+              "$type": "ByEntityTypes",
               "entityTypes": [
                 "Monster"
               ]
             }
-          ]
+          ],
+          "target": "Other",
+          "KHPFIMDODDP": true
         },
         {
           "$type": "FireEffect",
-          "effectPattern": "Eff_SceneObj_Penguin_03_RockHit_02",
-          "scale": 1.5,
           "born": {
-            "$type": "MBOEKFDLCGB"
+            "$type": "ConfigBornByHitPoint"
           },
-          "ILLLPEOODKP": "",
-          "effectTempleteID": -1.0
+          "effectPattern": "Eff_SceneObj_Penguin_03_RockHit_02",
+          "effectTempleteID": -1.0,
+          "scale": 1.5,
+          "ILLLPEOODKP": ""
         }
       ],
-      "abilityName": "SceneObj_Area_Common_Property_6_4_Daobo_Bullet_Penetrate",
       "onAdded": [
         {
           "$type": "AttachModifier",
@@ -1761,115 +1761,116 @@
   },
   {
     "Default": {
+      "abilityName": "SceneObj_Area_Common_Property_6_4_Daobo_Bullet_Gather",
       "modifiers": {
         "Taril_Fx": {
+          "elementDurability": 100.0,
+          "modifierName": "",
           "onAdded": [
             {
               "$type": "AttachEffect",
-              "ILLLPEOODKP": "",
-              "scale": 2.0,
               "effectPattern": "Eff_SceneObj_BubbleDramaBlade_03",
-              "effectTempleteID": -1.0
+              "effectTempleteID": -1.0,
+              "scale": 2.0,
+              "ILLLPEOODKP": ""
             },
             {
               "$type": "SetEffectFollowPath",
-              "DPNPNCGKIMP": "Eff",
-              "attachPoint": ""
+              "attachPoint": "",
+              "followPath": "Eff"
             }
           ],
-          "elementDurability": 100.0,
-          "modifierName": "",
           "AIHNJLDFEGJ": 0.0
         },
         "DelayToKillSelf": {
           "duration": 0.5,
+          "elementDurability": 100.0,
+          "modifierName": "",
           "onRemoved": [
             {
               "$type": "KillSelf",
-              "MBGFJOOIMOK": [
+              "configIdArray": [
                 73121004
               ]
             }
           ],
-          "elementDurability": 100.0,
-          "modifierName": "",
           "AIHNJLDFEGJ": 0.0
         }
       },
       "onAbilityStart": [
         {
           "$type": "CreateGadget",
-          "gadgetID": 73121008,
           "born": {
-            "$type": "NABPLNFPHCK",
+            "$type": "ConfigBornBySelf",
             "useRotation": true
           },
+          "gadgetID": 73121008,
           "predicates": [
             {
-              "$type": "EOFDCELPGFO",
-              "CBOMLBFIPJM": 0.0,
+              "$type": "ByTargetGlobalValue",
               "compareType": "NoneOrEqual",
-              "key": "_CreatedWindZone"
+              "key": "_CreatedWindZone",
+              "value": 0.0
             }
           ]
         },
         {
           "$type": "SetGlobalValueV2",
-          "minValue": 0.0,
           "key": "_CreatedWindZone",
           "maxValue": 0.0,
-          "CBOMLBFIPJM": 1.0
+          "minValue": 0.0,
+          "value": 1.0
         },
         {
           "$type": "TriggerAttackEvent",
-          "targetType": "AllExceptSelf",
           "attackEvent": {
             "attackInfo": {
               "attackProperty": {
                 "attackType": "Melee",
-                "damagePercentageRatio": 0.0,
-                "strikeType": "Slash",
-                "BOELJJKKDHP": 0.0,
-                "enBreak": 39.6,
+                "bonusCritical": 0.0,
+                "bonusCriticalHurt": 0.0,
                 "damageExtra": 0.0,
+                "damagePercentageRatio": 0.0,
                 "elementDurability": 25.0,
-                "EJDDDMMFFLG": 0.0,
-                "arkheGrade": 0.0
+                "enBreak": 39.6,
+                "strikeType": "Slash",
+                "IIPHCFEONLK": 0.0
               },
-              "hitPattern": {
-                "FLFCIDDNMNA": "",
-                "onHitEffectName": "default",
-                "hitHaltTimeScale": 0.01,
-                "hitHaltTime": 0.03,
-                "canBeDefenceHalt": true,
-                "muteHitText": true,
-                "hitImpulseType": "LV3"
-              },
+              "attackTag": "_BladeAttack",
               "attenuationGroup": "default",
               "attenuationTag": "",
-              "attackTag": "_BladeAttack"
+              "hitPattern": {
+                "canBeDefenceHalt": true,
+                "hitHaltTime": 0.03,
+                "hitHaltTimeScale": 0.01,
+                "hitImpulseType": "LV3",
+                "muteHitText": true,
+                "onHitEffectName": "default",
+                "FLFCIDDNMNA": ""
+              }
             },
             "attackPattern": {
-              "$type": "HCAGHMDHEGG",
-              "radius": 2.0,
-              "triggerType": "TriggerNoRepeat",
+              "$type": "ConfigAttackSphere",
               "born": {
-                "$type": "MBOEKFDLCGB",
+                "$type": "ConfigBornByHitPoint",
                 "useRotation": true
-              }
+              },
+              "radius": 2.0,
+              "triggerType": "TriggerNoRepeat"
             }
           },
-          "doOffStage": true
+          "doOffStage": true,
+          "targetType": "AllExceptSelf"
         },
         {
           "$type": "FireEffect",
-          "effectPattern": "Eff_SceneObj_Penguin_03_RockHit_02",
-          "scale": 1.5,
           "born": {
-            "$type": "MBOEKFDLCGB"
+            "$type": "ConfigBornByHitPoint"
           },
-          "ILLLPEOODKP": "",
-          "effectTempleteID": -1.0
+          "effectPattern": "Eff_SceneObj_Penguin_03_RockHit_02",
+          "effectTempleteID": -1.0,
+          "scale": 1.5,
+          "ILLLPEOODKP": ""
         },
         {
           "$type": "Predicated",
@@ -1879,18 +1880,17 @@
               "modifierName": "DelayToKillSelf"
             }
           ],
+          "target": "Other",
           "targetPredicates": [
             {
-              "$type": "DEOFBICNFHF",
+              "$type": "ByEntityTypes",
               "entityTypes": [
                 "Monster"
               ]
             }
-          ],
-          "target": "Other"
+          ]
         }
       ],
-      "abilityName": "SceneObj_Area_Common_Property_6_4_Daobo_Bullet_Gather",
       "onAdded": [
         {
           "$type": "AttachModifier",
@@ -1898,51 +1898,52 @@
         },
         {
           "$type": "SetPartScaleByTransform",
+          "canBeHandledOnRecover": true,
           "NFHGCPEPCOK": "BulletTrigger",
           "BMIODAODPLA": {
-            "x": 7.0,
-            "z": 1.0,
-            "y": 1.5
-          },
-          "canBeHandledOnRecover": true
+            "x": 1.0,
+            "y": 1.5,
+            "z": 7.0
+          }
         }
       ]
     }
   },
   {
     "Default": {
+      "abilityName": "SceneObj_Area_Common_Property_6_4_Daobo_Bullet_Explode",
       "modifiers": {
         "Taril_Fx": {
+          "elementDurability": 100.0,
+          "modifierName": "",
           "onAdded": [
             {
               "$type": "AttachEffect",
-              "ILLLPEOODKP": "",
-              "scale": 1.0,
               "effectPattern": "Eff_SceneObj_BubbleDramaBlade_04",
-              "effectTempleteID": -1.0
+              "effectTempleteID": -1.0,
+              "scale": 1.0,
+              "ILLLPEOODKP": ""
             },
             {
               "$type": "SetEffectFollowPath",
-              "DPNPNCGKIMP": "Eff",
-              "attachPoint": ""
+              "attachPoint": "",
+              "followPath": "Eff"
             }
           ],
-          "elementDurability": 100.0,
-          "modifierName": "",
           "AIHNJLDFEGJ": 0.0
         },
         "DelayToKillSelf": {
           "duration": 0.001,
+          "elementDurability": 100.0,
+          "modifierName": "",
           "onRemoved": [
             {
               "$type": "KillSelf",
-              "MBGFJOOIMOK": [
+              "configIdArray": [
                 73121005
               ]
             }
           ],
-          "elementDurability": 100.0,
-          "modifierName": "",
           "AIHNJLDFEGJ": 0.0
         }
       },
@@ -1952,70 +1953,70 @@
           "attackInfo": {
             "attackProperty": {
               "attackType": "Melee",
-              "damagePercentageRatio": 0.0,
-              "strikeType": "Slash",
-              "BOELJJKKDHP": 0.0,
-              "enBreak": 39.6,
+              "bonusCritical": 0.0,
+              "bonusCriticalHurt": 0.0,
               "damageExtra": 0.0,
+              "damagePercentageRatio": 0.0,
               "elementDurability": 25.0,
-              "EJDDDMMFFLG": 0.0,
-              "arkheGrade": 0.0
+              "enBreak": 39.6,
+              "strikeType": "Slash",
+              "IIPHCFEONLK": 0.0
             },
-            "hitPattern": {
-              "FLFCIDDNMNA": "",
-              "onHitEffectName": "default",
-              "hitHaltTimeScale": 0.01,
-              "hitHaltTime": 0.03,
-              "canBeDefenceHalt": true,
-              "muteHitText": true,
-              "hitImpulseType": "LV3"
-            },
+            "attackTag": "_BladeAttack",
             "attenuationGroup": "default",
             "attenuationTag": "",
-            "attackTag": "_BladeAttack"
+            "hitPattern": {
+              "canBeDefenceHalt": true,
+              "hitHaltTime": 0.03,
+              "hitHaltTimeScale": 0.01,
+              "hitImpulseType": "LV3",
+              "muteHitText": true,
+              "onHitEffectName": "default",
+              "FLFCIDDNMNA": ""
+            }
           },
-          "KHPFIMDODDP": true,
-          "target": "Other",
           "predicates": [
             {
-              "$type": "DEOFBICNFHF",
+              "$type": "ByEntityTypes",
               "entityTypes": [
                 "Monster"
               ]
             }
-          ]
+          ],
+          "target": "Other",
+          "KHPFIMDODDP": true
         },
         {
           "$type": "FireEffect",
-          "effectPattern": "Eff_SceneObj_Penguin_03_RockHit_02",
-          "scale": 1.5,
           "born": {
-            "$type": "MBOEKFDLCGB"
+            "$type": "ConfigBornByHitPoint"
           },
-          "ILLLPEOODKP": "",
-          "effectTempleteID": -1.0
+          "effectPattern": "Eff_SceneObj_Penguin_03_RockHit_02",
+          "effectTempleteID": -1.0,
+          "scale": 1.5,
+          "ILLLPEOODKP": ""
         },
         {
           "$type": "Predicated",
           "successActions": [
             {
               "$type": "CreateGadget",
-              "gadgetID": 73121006,
               "born": {
-                "$type": "NABPLNFPHCK",
+                "$type": "ConfigBornBySelf",
                 "useRotation": true
-              }
+              },
+              "gadgetID": 73121006
             }
           ],
+          "target": "Other",
           "targetPredicates": [
             {
-              "$type": "DEOFBICNFHF",
+              "$type": "ByEntityTypes",
               "entityTypes": [
                 "Monster"
               ]
             }
-          ],
-          "target": "Other"
+          ]
         },
         {
           "$type": "Predicated",
@@ -2025,18 +2026,17 @@
               "modifierName": "DelayToKillSelf"
             }
           ],
+          "target": "Other",
           "targetPredicates": [
             {
-              "$type": "DEOFBICNFHF",
+              "$type": "ByEntityTypes",
               "entityTypes": [
                 "Monster"
               ]
             }
-          ],
-          "target": "Other"
+          ]
         }
       ],
-      "abilityName": "SceneObj_Area_Common_Property_6_4_Daobo_Bullet_Explode",
       "onAdded": [
         {
           "$type": "AttachModifier",
@@ -2047,168 +2047,168 @@
   },
   {
     "Default": {
+      "abilityName": "SceneObj_Area_Common_Property_6_4_Daobo_WindZone",
+      "abilitySpecials": {
+        "Duration": 4.0
+      },
       "modifiers": {
         "WindZoneKiller": {
+          "elementDurability": 100.0,
+          "modifierName": "",
           "onAdded": [
             {
               "$type": "KillSelf",
-              "MBGFJOOIMOK": [
+              "configIdArray": [
                 73121008
               ]
             }
           ],
           "stacking": "Unique",
-          "elementDurability": 100.0,
-          "modifierName": "",
           "AIHNJLDFEGJ": 0.0
         },
         "Life_Timer": {
           "duration": 1.5,
+          "elementDurability": 100.0,
+          "modifierName": "",
           "onRemoved": [
             {
               "$type": "KillSelf",
-              "MBGFJOOIMOK": [
+              "configIdArray": [
                 73121008
               ]
             }
           ],
-          "elementDurability": 100.0,
-          "modifierName": "",
           "AIHNJLDFEGJ": 0.0
         },
         "WindFiled_Challenge_WindZone": {
-          "onAdded": [
-            {
-              "$type": "AttachEffect",
-              "ILLLPEOODKP": "",
-              "scale": 1.0,
-              "effectPattern": "Eff_SceneObj_Roguelike_Gadget_Wind_Absorbe",
-              "effectTempleteID": -1.0
-            },
-            {
-              "$type": "SetGlobalValueV2",
-              "minValue": 0.0,
-              "key": "GV_InitCompleted",
-              "maxValue": 0.0,
-              "CBOMLBFIPJM": 1.0
-            }
-          ],
           "elementDurability": 100.0,
           "modifierMixins": [
             {
               "$type": "WindZoneMixin",
-              "targetType": "All",
-              "modifierName": "",
-              "NGFJGIAMCKD": 1.0,
-              "LCAGIANIEON": true,
-              "NCIPCJFOKFG": 500.0,
-              "ICPNECKICCJ": 0.0,
+              "attenuation": 0.0,
               "born": {
-                "$type": "NABPLNFPHCK",
-                "useRotation": true,
+                "$type": "ConfigBornBySelf",
                 "offset": {
                   "x": 0.0,
-                  "z": 0.0,
-                  "y": 0.5
-                }
+                  "y": 0.5,
+                  "z": 0.0
+                },
+                "useRotation": true
               },
-              "shapeName": "CircleR12",
+              "innerRadius": 1.0,
+              "modifierName": "",
               "predicates": [
                 {
-                  "$type": "DEOFBICNFHF",
+                  "$type": "ByEntityTypes",
                   "entityTypes": [
                     "Monster"
                   ]
                 }
-              ]
+              ],
+              "shapeName": "CircleR12",
+              "strength": 500.0,
+              "targetType": "All",
+              "LCAGIANIEON": true
             }
           ],
           "modifierName": "",
+          "onAdded": [
+            {
+              "$type": "AttachEffect",
+              "effectPattern": "Eff_SceneObj_Roguelike_Gadget_Wind_Absorbe",
+              "effectTempleteID": -1.0,
+              "scale": 1.0,
+              "ILLLPEOODKP": ""
+            },
+            {
+              "$type": "SetGlobalValueV2",
+              "key": "GV_InitCompleted",
+              "maxValue": 0.0,
+              "minValue": 0.0,
+              "value": 1.0
+            }
+          ],
           "AIHNJLDFEGJ": 0.0
         },
         "WindFiled_Challenge_WindZone_Pro": {
-          "onAdded": [
-            {
-              "$type": "AttachEffect",
-              "ILLLPEOODKP": "",
-              "scale": 1.0,
-              "effectPattern": "Eff_SceneObj_Roguelike_Gadget_Wind_Absorbe",
-              "effectTempleteID": -1.0
-            },
-            {
-              "$type": "SetGlobalValueV2",
-              "minValue": 0.0,
-              "key": "GV_InitCompleted",
-              "maxValue": 0.0,
-              "CBOMLBFIPJM": 1.0
-            }
-          ],
           "elementDurability": 100.0,
           "modifierMixins": [
             {
               "$type": "WindZoneMixin",
-              "targetType": "All",
-              "modifierName": "",
-              "NGFJGIAMCKD": 1.0,
-              "LCAGIANIEON": true,
-              "NCIPCJFOKFG": 500.0,
-              "ICPNECKICCJ": 0.0,
+              "attenuation": 0.0,
               "born": {
-                "$type": "NABPLNFPHCK",
-                "useRotation": true,
+                "$type": "ConfigBornBySelf",
                 "offset": {
                   "x": 0.0,
-                  "z": 0.0,
-                  "y": 0.5
-                }
+                  "y": 0.5,
+                  "z": 0.0
+                },
+                "useRotation": true
               },
-              "shapeName": "CircleR20",
+              "innerRadius": 1.0,
+              "modifierName": "",
               "predicates": [
                 {
-                  "$type": "DEOFBICNFHF",
+                  "$type": "ByEntityTypes",
                   "entityTypes": [
                     "Monster"
                   ]
                 }
-              ]
+              ],
+              "shapeName": "CircleR20",
+              "strength": 500.0,
+              "targetType": "All",
+              "LCAGIANIEON": true
             }
           ],
           "modifierName": "",
+          "onAdded": [
+            {
+              "$type": "AttachEffect",
+              "effectPattern": "Eff_SceneObj_Roguelike_Gadget_Wind_Absorbe",
+              "effectTempleteID": -1.0,
+              "scale": 1.0,
+              "ILLLPEOODKP": ""
+            },
+            {
+              "$type": "SetGlobalValueV2",
+              "key": "GV_InitCompleted",
+              "maxValue": 0.0,
+              "minValue": 0.0,
+              "value": 1.0
+            }
+          ],
           "AIHNJLDFEGJ": 0.0
         }
       },
-      "ANHJPOLNHIG": [
-        "GV_InitCompleted"
-      ],
-      "abilityName": "SceneObj_Area_Common_Property_6_4_Daobo_WindZone",
       "onAdded": [
         {
           "$type": "DoActionBySelectTargetsInShape",
-          "CJFKFJLHMAK": "",
-          "NLNIBNNOOCK": {
-            "$type": "NABPLNFPHCK",
-            "useRotation": true
-          },
-          "shapeName": "CircleR100",
           "configID": 73121008,
-          "JCPGJJLJCMI": true,
-          "topLimit": 10,
+          "doOffStage": true,
+          "shapeName": "CircleR100",
           "sizeRatio": 1.0,
+          "topLimit": 10,
+          "JCPGJJLJCMI": true,
+          "CJFKFJLHMAK": "",
           "DPENJPGJLEI": [
             {
               "$type": "ApplyModifier",
               "modifierName": "WindZoneKiller",
-              "target": "Target",
               "predicates": [
                 {
-                  "$type": "EOFDCELPGFO",
-                  "CBOMLBFIPJM": 1.0,
-                  "key": "GV_InitCompleted"
+                  "$type": "ByTargetGlobalValue",
+                  "key": "GV_InitCompleted",
+                  "value": 1.0
                 }
-              ]
+              ],
+              "target": "Target"
             }
           ],
-          "doOffStage": true
+          "NLNIBNNOOCK": {
+            "$type": "ConfigBornBySelf",
+            "useRotation": true
+          }
         },
         {
           "$type": "AttachModifier",
@@ -2219,11 +2219,11 @@
           "modifierName": "WindFiled_Challenge_WindZone",
           "predicates": [
             {
-              "$type": "EOFDCELPGFO",
-              "CBOMLBFIPJM": 0.0,
+              "$type": "ByTargetGlobalValue",
               "compareType": "NoneOrEqual",
               "key": "SGV_ContextData",
-              "target": "Team"
+              "target": "Team",
+              "value": 0.0
             }
           ]
         },
@@ -2232,109 +2232,109 @@
           "modifierName": "WindFiled_Challenge_WindZone_Pro",
           "predicates": [
             {
-              "$type": "EOFDCELPGFO",
-              "CBOMLBFIPJM": 1.0,
+              "$type": "ByTargetGlobalValue",
               "key": "SGV_ContextData",
-              "target": "Team"
+              "target": "Team",
+              "value": 1.0
             }
           ]
         }
       ],
-      "abilitySpecials": {
-        "Duration": 4.0
-      }
+      "ANHJPOLNHIG": [
+        "GV_InitCompleted"
+      ]
     }
   },
   {
     "Default": {
+      "abilityName": "SceneObj_Area_Common_Property_6_4_Daobo_SelfExplodeZone",
       "modifiers": {
         "ExplodeModifier": {
-          "thinkInterval": 0.1,
           "duration": 2.0,
+          "elementDurability": 100.0,
+          "modifierName": "",
+          "onAdded": [
+            {
+              "$type": "SetGlobalValueV2",
+              "key": "_ExplodeModifierTriggered",
+              "maxValue": 0.0,
+              "minValue": 0.0,
+              "value": 0.0
+            }
+          ],
           "onRemoved": [
             {
               "$type": "KillSelf",
-              "MBGFJOOIMOK": [
+              "configIdArray": [
                 73121006
               ]
             }
           ],
-          "onAdded": [
-            {
-              "$type": "SetGlobalValueV2",
-              "minValue": 0.0,
-              "key": "_ExplodeModifierTriggered",
-              "maxValue": 0.0,
-              "CBOMLBFIPJM": 0.0
-            }
-          ],
-          "elementDurability": 100.0,
-          "modifierName": "",
           "onThinkInterval": [
             {
               "$type": "TriggerAttackEvent",
-              "ONBKHMOBGLD": 1001,
-              "targetType": "Enemy",
               "attackEvent": {
                 "attackInfo": {
                   "attackProperty": {
                     "attackType": "Melee",
-                    "damagePercentageRatio": 0.0,
-                    "BOELJJKKDHP": 0.0,
-                    "enBreak": 39.6,
+                    "bonusCritical": 0.0,
+                    "bonusCriticalHurt": 0.0,
                     "damageExtra": 0.0,
+                    "damagePercentageRatio": 0.0,
                     "elementDurability": 25.0,
-                    "EJDDDMMFFLG": 0.0,
-                    "arkheGrade": 0.0
+                    "enBreak": 39.6,
+                    "IIPHCFEONLK": 0.0
                   },
-                  "hitPattern": {
-                    "FLFCIDDNMNA": "",
-                    "onHitEffectName": "default",
-                    "hitHaltTimeScale": 0.01,
-                    "hitHaltTime": 0.03,
-                    "canBeDefenceHalt": true,
-                    "muteHitText": true,
-                    "hitImpulseType": "LV3"
-                  },
+                  "attackTag": "_BladeAttack",
                   "attenuationGroup": "default",
                   "attenuationTag": "",
-                  "attackTag": "_BladeAttack"
+                  "hitPattern": {
+                    "canBeDefenceHalt": true,
+                    "hitHaltTime": 0.03,
+                    "hitHaltTimeScale": 0.01,
+                    "hitImpulseType": "LV3",
+                    "muteHitText": true,
+                    "onHitEffectName": "default",
+                    "FLFCIDDNMNA": ""
+                  }
                 },
                 "attackPattern": {
-                  "$type": "HCAGHMDHEGG",
+                  "$type": "ConfigAttackSphere",
+                  "ignoreMassive": true,
                   "radius": 11.0,
-                  "triggerType": "TriggerAlways",
-                  "ignoreMassive": true
+                  "triggerType": "TriggerAlways"
                 }
               },
+              "campBasedOnID": 1001,
               "doOffStage": true,
               "predicates": [
                 {
-                  "$type": "EOFDCELPGFO",
-                  "CBOMLBFIPJM": 0.0,
-                  "key": "_ExplodeModifierTriggered"
+                  "$type": "ByTargetGlobalValue",
+                  "key": "_ExplodeModifierTriggered",
+                  "value": 0.0
                 }
-              ]
+              ],
+              "targetType": "Enemy"
             },
             {
               "$type": "SetGlobalValueV2",
-              "minValue": 0.0,
               "key": "_ExplodeModifierTriggered",
               "maxValue": 0.0,
-              "CBOMLBFIPJM": 1.0
+              "minValue": 0.0,
+              "value": 1.0
             }
           ],
+          "thinkInterval": 0.1,
           "AIHNJLDFEGJ": 0.0
         }
       },
-      "abilityName": "SceneObj_Area_Common_Property_6_4_Daobo_SelfExplodeZone",
       "onAdded": [
         {
           "$type": "FireEffect",
           "effectPattern": "Eff_SceneObj_BalloonEnemy_Exp_Big_02",
+          "effectTempleteID": -1.0,
           "scale": 2.0,
-          "ILLLPEOODKP": "",
-          "effectTempleteID": -1.0
+          "ILLLPEOODKP": ""
         },
         {
           "$type": "AttachModifier",

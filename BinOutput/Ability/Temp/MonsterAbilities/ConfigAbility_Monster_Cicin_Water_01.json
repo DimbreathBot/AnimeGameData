@@ -1,29 +1,30 @@
 [
   {
     "Default": {
+      "abilityName": "Monster_Cicin_Water_NormalAtk",
       "onAbilityStart": [
         {
           "$type": "TriggerBullet",
           "born": {
-            "$type": "NABPLNFPHCK",
-            "offset": {
-              "x": 0.0,
-              "z": 1.2,
-              "y": 0.2
-            },
+            "$type": "ConfigBornBySelf",
             "direction": {
-              "$type": "EJFDCELDDNF",
-              "MJDDIMNCNAL": ""
+              "$type": "ConfigDirectionByAttackTarget",
+              "startPoint": ""
+            },
+            "offset": {
+              "x": 1.2,
+              "y": 0.2,
+              "z": 0.0
             }
           },
           "bulletID": 42606004
         }
-      ],
-      "abilityName": "Monster_Cicin_Water_NormalAtk"
+      ]
     }
   },
   {
     "Default": {
+      "abilityName": "Monster_Cicin_WaterBall_Hit",
       "onAbilityStart": [
         {
           "$type": "RemoveUniqueModifier",
@@ -32,76 +33,75 @@
         {
           "$type": "FireEffect",
           "effectPattern": "Eff_Monster_Cicin_Water_WaterBallAS",
+          "effectTempleteID": -1.0,
           "scale": 1.0,
-          "ILLLPEOODKP": "",
-          "effectTempleteID": -1.0
+          "ILLLPEOODKP": ""
         },
         {
           "$type": "TriggerAttackEvent",
-          "targetType": "Enemy",
           "attackEvent": {
             "attackInfo": {
               "attackProperty": {
-                "elementType": "Water",
-                "damagePercentageRatio": 0.0,
-                "strikeType": "Default",
-                "enBreak": 20.0,
                 "damagePercentage": 1.0,
+                "damagePercentageRatio": 0.0,
                 "elementDurability": 50.0,
-                "arkheGrade": 0.0
+                "elementType": "Water",
+                "enBreak": 20.0,
+                "strikeType": "Default",
+                "IIPHCFEONLK": 0.0
               },
-              "hitPattern": {
-                "FLFCIDDNMNA": "",
-                "onHitEffectName": "",
-                "hitHaltTimeScale": 0.05,
-                "hitImpulseType": "LV2"
-              },
+              "attackTag": "",
               "attenuationGroup": "default",
               "attenuationTag": "",
-              "attackTag": "",
-              "canBeModifiedBy": "OriginOwner"
+              "canBeModifiedBy": "OriginOwner",
+              "hitPattern": {
+                "hitHaltTimeScale": 0.05,
+                "hitImpulseType": "LV2",
+                "onHitEffectName": "",
+                "FLFCIDDNMNA": ""
+              }
             },
             "attackPattern": {
-              "$type": "HCAGHMDHEGG",
-              "radius": 0.5,
-              "triggerType": "TriggerNoRepeat",
+              "$type": "ConfigAttackSphere",
               "born": {
-                "$type": "NHPKNMOMIFH"
-              }
+                "$type": "ConfigBornByCollisionPoint"
+              },
+              "radius": 0.5,
+              "triggerType": "TriggerNoRepeat"
             }
           },
-          "doOffStage": true
+          "doOffStage": true,
+          "targetType": "Enemy"
         }
-      ],
-      "abilityName": "Monster_Cicin_WaterBall_Hit"
+      ]
     }
   },
   {
     "Default": {
+      "abilityName": "Monster_Cicin_WaterBall_Effect",
       "modifiers": {
         "UNIQUE_Cicin_WaterBall_Loop": {
+          "elementDurability": 25.0,
+          "elementType": "Water",
+          "isUnique": true,
+          "modifierName": "",
+          "onAdded": [
+            {
+              "$type": "AttachEffect",
+              "effectPattern": "Eff_Monster_Cicin_Water_WaterBall",
+              "effectTempleteID": -1.0,
+              "scale": 1.0,
+              "ILLLPEOODKP": ""
+            }
+          ],
           "onRemoved": [
             {
               "$type": "KillSelf"
             }
           ],
-          "onAdded": [
-            {
-              "$type": "AttachEffect",
-              "ILLLPEOODKP": "",
-              "scale": 1.0,
-              "effectPattern": "Eff_Monster_Cicin_Water_WaterBall",
-              "effectTempleteID": -1.0
-            }
-          ],
-          "elementDurability": 25.0,
-          "elementType": "Water",
-          "modifierName": "",
-          "isUnique": true,
           "AIHNJLDFEGJ": 0.0
         }
       },
-      "abilityName": "Monster_Cicin_WaterBall_Effect",
       "onAdded": [
         {
           "$type": "ApplyModifier",
@@ -112,12 +112,48 @@
   },
   {
     "Default": {
+      "abilityMixins": [
+        {
+          "$type": "AttachToAbilityStateMixin",
+          "abilityStates": [
+            "ElementFrozen"
+          ],
+          "modifierName": "FrozenDetect"
+        }
+      ],
+      "abilityName": "Monster_Cicin_Water_CommonEffect",
       "modifiers": {
         "FrozenDetect": {
+          "elementDurability": 100.0,
+          "modifierName": "",
+          "onAdded": [
+            {
+              "$type": "TriggerSetRenderersEnable",
+              "renderNames": [
+                "Wing"
+              ]
+            },
+            {
+              "$type": "RemoveModifier",
+              "modifierName": "CommonEffect"
+            },
+            {
+              "$type": "SetPoseBool",
+              "boolID": "Frozen",
+              "value": true
+            },
+            {
+              "$type": "EnablePushColliderName",
+              "pushColliderNames": [
+                "PushCollider_Frozen"
+              ],
+              "setEnable": true
+            }
+          ],
           "onRemoved": [
             {
               "$type": "TriggerSetRenderersEnable",
-              "HLLMGLJLFKK": [
+              "renderNames": [
                 "Wing"
               ],
               "setEnable": true
@@ -132,64 +168,28 @@
             },
             {
               "$type": "EnablePushColliderName",
-              "EFOJFJDLLMK": [
+              "pushColliderNames": [
                 "PushCollider_Frozen"
               ]
             }
           ],
-          "onAdded": [
-            {
-              "$type": "TriggerSetRenderersEnable",
-              "HLLMGLJLFKK": [
-                "Wing"
-              ]
-            },
-            {
-              "$type": "RemoveModifier",
-              "modifierName": "CommonEffect"
-            },
-            {
-              "$type": "SetPoseBool",
-              "CBOMLBFIPJM": true,
-              "boolID": "Frozen"
-            },
-            {
-              "$type": "EnablePushColliderName",
-              "setEnable": true,
-              "EFOJFJDLLMK": [
-                "PushCollider_Frozen"
-              ]
-            }
-          ],
-          "elementDurability": 100.0,
-          "modifierName": "",
           "AIHNJLDFEGJ": 0.0
         },
         "CommonEffect": {
+          "elementDurability": 100.0,
+          "modifierName": "",
           "onAdded": [
             {
               "$type": "AttachEffect",
-              "ILLLPEOODKP": "",
-              "scale": 1.0,
               "effectPattern": "Eff_Monster_Cicin_Water_BodyElement",
-              "effectTempleteID": -1.0
+              "effectTempleteID": -1.0,
+              "scale": 1.0,
+              "ILLLPEOODKP": ""
             }
           ],
-          "elementDurability": 100.0,
-          "modifierName": "",
           "AIHNJLDFEGJ": 0.0
         }
       },
-      "abilityMixins": [
-        {
-          "$type": "AttachToAbilityStateMixin",
-          "modifierName": "FrozenDetect",
-          "abilityStates": [
-            "ElementFrozen"
-          ]
-        }
-      ],
-      "abilityName": "Monster_Cicin_Water_CommonEffect",
       "onAdded": [
         {
           "$type": "ApplyModifier",
