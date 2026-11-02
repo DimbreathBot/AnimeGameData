@@ -1,0 +1,1276 @@
+[
+  {
+    "Default": {
+      "abilityName": "ActivityAbility_DispatchBattle_TSkill_Manager_1",
+      "abilitySpecials": {
+        "EnergyMax": 6000.0,
+        "EnergyTimeCD": 1.0,
+        "EnergyTimeDelta": 140.0,
+        "EnergyTriggerCD": 6.0,
+        "EnergyTriggerDelta": 1500.0
+      },
+      "isDynamicAbility": true,
+      "modifiers": {
+        "DispatchBattle_TSkill_Manager_1_Team": {
+          "elementDurability": 100.0,
+          "modifierMixins": [
+            {
+              "$type": "LocalAvatarsMixin",
+              "modifierName": "DispatchBattle_TSkill_Manager_1_LocalAvatars"
+            },
+            {
+              "$type": "ServerUpdateGlobalValueMixin",
+              "key": "GV_DispatchBattle_TSkillEnergy",
+              "maxValue": 0.0,
+              "minValue": 0.0
+            },
+            {
+              "$type": "ServerUpdateGlobalValueMixin",
+              "key": "GV_DispatchBattle_BattleScore",
+              "maxValue": 0.0,
+              "minValue": 0.0
+            },
+            {
+              "$type": "AttachModifierToGlobalValueMixin",
+              "globalValueKey": "SGV_Team_Buff_TSkill",
+              "globalValueTarget": "Team",
+              "modifierNameSteps": [
+                "UNIQUE_DispatchBattle_TSkill_Type_1_Appear"
+              ],
+              "valueSteps": [
+                0.5,
+                1.5
+              ],
+              "EECIIMBIDGB": true
+            },
+            {
+              "$type": "AttachModifierToGlobalValueMixin",
+              "globalValueKey": "GV_DispatchBattle_TSkillEnergy",
+              "globalValueTarget": "Team",
+              "modifierNameSteps": [
+                "TSkillReady"
+              ],
+              "valueSteps": [
+                [
+                  "EnergyMax",
+                  0.5,
+                  "SUB"
+                ],
+                9999.0
+              ],
+              "EECIIMBIDGB": true
+            }
+          ],
+          "modifierName": "",
+          "onAdded": [
+            {
+              "$type": "SetGlobalValueV2",
+              "doOffStage": true,
+              "key": "GV_DispatchBattle_TSkillEnergy",
+              "maxValue": 0.0,
+              "minValue": 0.0,
+              "target": "Team",
+              "value": 0.0
+            },
+            {
+              "$type": "SetGlobalValueV2",
+              "doOffStage": true,
+              "key": "GV_DispatchBattle_BattleScore",
+              "maxValue": 0.0,
+              "minValue": 0.0,
+              "target": "Team",
+              "value": 0.0
+            }
+          ],
+          "IAKNCBDLFKJ": 0.0
+        },
+        "DispatchBattle_TSkill_Manager_1_LocalAvatars": {
+          "elementDurability": 100.0,
+          "modifierMixins": [
+            {
+              "$type": "AttachModifierToGlobalValueMixin",
+              "globalValueKey": "SGV_V7_2_TeyvatDispatch_LV1_Buff_isUnlocked",
+              "globalValueTarget": "Team",
+              "modifierNameSteps": [
+                "DispatchBattle_TSkill_Type_1_Trigger"
+              ],
+              "valueSteps": [
+                0.5,
+                1.5
+              ],
+              "EECIIMBIDGB": true
+            }
+          ],
+          "modifierName": "",
+          "IAKNCBDLFKJ": 0.0
+        },
+        "UNIQUE_DispatchBattle_TSkill_Type_1_Appear": {
+          "elementDurability": 100.0,
+          "isUnique": true,
+          "modifierMixins": [
+            {
+              "$type": "ActivitySkillMixin",
+              "priority": "Auto",
+              "LDKCCEHPOME": 20227
+            },
+            {
+              "$type": "AttachModifierToGlobalValueMixin",
+              "globalValueKey": "GV_DispatchBattle_TSkillEnergy",
+              "globalValueTarget": "Team",
+              "modifierNameSteps": [
+                "HideAction_T"
+              ],
+              "valueSteps": [
+                -0.5,
+                [
+                  "EnergyMax",
+                  0.5,
+                  "SUB"
+                ]
+              ],
+              "EECIIMBIDGB": true
+            }
+          ],
+          "modifierName": "",
+          "onThinkInterval": [
+            {
+              "$type": "ApplyModifier",
+              "doOffStage": true,
+              "modifierName": "TSkillEnergyWatcher_ByTime",
+              "predicates": [
+                {
+                  "$type": "ByTargetGlobalValue",
+                  "compareType": "LessAndEqual",
+                  "key": "GV_DispatchBattle_TSkillEnergy",
+                  "target": "Team",
+                  "value": "EnergyMax"
+                }
+              ],
+              "target": "Team"
+            }
+          ],
+          "stacking": "Unique",
+          "thinkInterval": "EnergyTimeCD",
+          "IAKNCBDLFKJ": 0.0
+        },
+        "DispatchBattle_TSkill_Type_1_Trigger": {
+          "elementDurability": 100.0,
+          "modifierMixins": [
+            {
+              "$type": "DoActionByElementReactionMixin",
+              "actions": [
+                {
+                  "$type": "Predicated",
+                  "doOffStage": true,
+                  "successActions": [
+                    {
+                      "$type": "ApplyModifier",
+                      "doOffStage": true,
+                      "modifierName": "TSkillEnergyWatcher_ByTrigger",
+                      "target": "Team"
+                    },
+                    {
+                      "$type": "ApplyModifier",
+                      "doOffStage": true,
+                      "modifierName": "TSkillEnergy_TriggerCD",
+                      "target": "Team"
+                    }
+                  ],
+                  "targetPredicates": [
+                    {
+                      "$type": "LILEOFHCOJG"
+                    },
+                    {
+                      "$type": "ByNot",
+                      "predicates": [
+                        {
+                          "$type": "ByHasModifier",
+                          "modifierName": "TSkillEnergy_TriggerCD",
+                          "target": "Team"
+                        }
+                      ]
+                    },
+                    {
+                      "$type": "ByNot",
+                      "predicates": [
+                        {
+                          "$type": "ByTargetGlobalValue",
+                          "compareType": "MoreThanAndEqual",
+                          "key": "GV_DispatchBattle_TSkillEnergy",
+                          "target": "Team",
+                          "value": "EnergyMax"
+                        }
+                      ]
+                    }
+                  ]
+                }
+              ],
+              "entityTypes": [
+                "Monster"
+              ],
+              "range": 40.0,
+              "reactionTypes": [
+                "Overdose",
+                "OverdoseElectric",
+                "OverdoseGrass",
+                "Overgrow",
+                "Burning",
+                "MoonOvergrow",
+                "Explode",
+                "Shock",
+                "MoonShock",
+                "Superconductor",
+                "SwirlFire",
+                "SwirlWater",
+                "SwirlElectric",
+                "SwirlIce",
+                "Stream",
+                "Melt",
+                "Freeze",
+                "FrozenBroken",
+                "CrystallizeFire",
+                "CrystallizeWater",
+                "CrystallizeElectric",
+                "CrystallizeIce",
+                "MoonCrystallizeWater",
+                "StarSuperconductor",
+                "StarSwirlIce"
+              ]
+            }
+          ],
+          "modifierName": "",
+          "IAKNCBDLFKJ": 0.0
+        },
+        "HideAction_T": {
+          "elementDurability": 100.0,
+          "modifierMixins": [
+            {
+              "$type": "HideActionSlotMixin",
+              "slotType": "SlotCharge"
+            }
+          ],
+          "modifierName": "",
+          "IAKNCBDLFKJ": 0.0
+        },
+        "TSkillReady": {
+          "elementDurability": 100.0,
+          "modifierName": "",
+          "onAdded": [
+            {
+              "$type": "ServerLuaCall",
+              "funcName": "SLC_TSkillReady",
+              "luaCallType": "CurGalleryControlGroup",
+              "param1": 0.0,
+              "param2": 0.0,
+              "param3": 0.0,
+              "target": "Team"
+            }
+          ],
+          "IAKNCBDLFKJ": 0.0
+        },
+        "TSkillEnergy_TriggerCD": {
+          "duration": "EnergyTriggerCD",
+          "elementDurability": 100.0,
+          "modifierName": "",
+          "stacking": "Unique",
+          "IAKNCBDLFKJ": 0.0
+        },
+        "TSkillEnergyWatcher_ByTime": {
+          "duration": 0.1,
+          "elementDurability": 100.0,
+          "modifierName": "",
+          "onAdded": [
+            {
+              "$type": "ServerLuaCall",
+              "doOffStage": true,
+              "funcName": "SLC_TriggerEnergyWatcher",
+              "luaCallType": "CurGalleryControlGroup",
+              "param1": "EnergyTimeDelta",
+              "param2": 0.0,
+              "param3": 0.0,
+              "paramNum": 2
+            }
+          ],
+          "stacking": "Unique",
+          "IAKNCBDLFKJ": 0.0
+        },
+        "TSkillEnergyWatcher_ByTrigger": {
+          "duration": 0.1,
+          "elementDurability": 100.0,
+          "modifierName": "",
+          "onAdded": [
+            {
+              "$type": "ServerLuaCall",
+              "doOffStage": true,
+              "funcName": "SLC_TriggerEnergyWatcher",
+              "luaCallType": "CurGalleryControlGroup",
+              "param1": "EnergyTriggerDelta",
+              "param2": 1.0,
+              "param3": 0.0,
+              "paramNum": 2
+            }
+          ],
+          "stacking": "Unique",
+          "IAKNCBDLFKJ": 0.0
+        }
+      },
+      "onAdded": [
+        {
+          "$type": "AttachModifier",
+          "modifierName": "DispatchBattle_TSkill_Manager_1_Team",
+          "target": "Team"
+        }
+      ]
+    }
+  },
+  {
+    "Default": {
+      "abilityName": "ActivityAbility_DispatchBattle_TSkill_Manager_2",
+      "abilitySpecials": {
+        "EnergyMax": 6000.0,
+        "EnergyTimeCD": 1.0,
+        "EnergyTimeDelta": 140.0,
+        "EnergyTriggerCD": 6.0,
+        "EnergyTriggerDelta": 1500.0
+      },
+      "isDynamicAbility": true,
+      "modifiers": {
+        "DispatchBattle_TSkill_Manager_2_Team": {
+          "elementDurability": 100.0,
+          "modifierMixins": [
+            {
+              "$type": "LocalAvatarsMixin",
+              "modifierName": "DispatchBattle_TSkill_Manager_2_LocalAvatars"
+            },
+            {
+              "$type": "ServerUpdateGlobalValueMixin",
+              "key": "GV_DispatchBattle_TSkillEnergy",
+              "maxValue": 0.0,
+              "minValue": 0.0
+            },
+            {
+              "$type": "ServerUpdateGlobalValueMixin",
+              "key": "GV_DispatchBattle_BattleScore",
+              "maxValue": 0.0,
+              "minValue": 0.0
+            },
+            {
+              "$type": "AttachModifierToGlobalValueMixin",
+              "globalValueKey": "SGV_Team_Buff_TSkill",
+              "globalValueTarget": "Team",
+              "modifierNameSteps": [
+                "UNIQUE_DispatchBattle_TSkill_Type_2_Appear"
+              ],
+              "valueSteps": [
+                0.5,
+                1.5
+              ],
+              "EECIIMBIDGB": true
+            },
+            {
+              "$type": "AttachModifierToGlobalValueMixin",
+              "globalValueKey": "GV_DispatchBattle_TSkillEnergy",
+              "globalValueTarget": "Team",
+              "modifierNameSteps": [
+                "TSkillReady"
+              ],
+              "valueSteps": [
+                [
+                  "EnergyMax",
+                  0.5,
+                  "SUB"
+                ],
+                9999.0
+              ],
+              "EECIIMBIDGB": true
+            }
+          ],
+          "modifierName": "",
+          "onAdded": [
+            {
+              "$type": "SetGlobalValueV2",
+              "doOffStage": true,
+              "key": "GV_DispatchBattle_TSkillEnergy",
+              "maxValue": 0.0,
+              "minValue": 0.0,
+              "target": "Team",
+              "value": 0.0
+            },
+            {
+              "$type": "SetGlobalValueV2",
+              "doOffStage": true,
+              "key": "GV_DispatchBattle_BattleScore",
+              "maxValue": 0.0,
+              "minValue": 0.0,
+              "target": "Team",
+              "value": 0.0
+            }
+          ],
+          "IAKNCBDLFKJ": 0.0
+        },
+        "DispatchBattle_TSkill_Manager_2_LocalAvatars": {
+          "elementDurability": 100.0,
+          "modifierMixins": [
+            {
+              "$type": "AttachModifierToGlobalValueMixin",
+              "globalValueKey": "SGV_V7_2_TeyvatDispatch_LV1_Buff_isUnlocked",
+              "globalValueTarget": "Team",
+              "modifierNameSteps": [
+                "DispatchBattle_TSkill_Type_2_Trigger"
+              ],
+              "valueSteps": [
+                0.5,
+                1.5
+              ],
+              "EECIIMBIDGB": true
+            }
+          ],
+          "modifierName": "",
+          "IAKNCBDLFKJ": 0.0
+        },
+        "UNIQUE_DispatchBattle_TSkill_Type_2_Appear": {
+          "elementDurability": 100.0,
+          "isUnique": true,
+          "modifierMixins": [
+            {
+              "$type": "ActivitySkillMixin",
+              "priority": "Auto",
+              "LDKCCEHPOME": 20228
+            },
+            {
+              "$type": "AttachModifierToGlobalValueMixin",
+              "globalValueKey": "GV_DispatchBattle_TSkillEnergy",
+              "globalValueTarget": "Team",
+              "modifierNameSteps": [
+                "HideAction_T"
+              ],
+              "valueSteps": [
+                -0.5,
+                [
+                  "EnergyMax",
+                  0.5,
+                  "SUB"
+                ]
+              ],
+              "EECIIMBIDGB": true
+            }
+          ],
+          "modifierName": "",
+          "onThinkInterval": [
+            {
+              "$type": "ApplyModifier",
+              "doOffStage": true,
+              "modifierName": "TSkillEnergyWatcher_ByTime",
+              "predicates": [
+                {
+                  "$type": "ByTargetGlobalValue",
+                  "compareType": "LessAndEqual",
+                  "key": "GV_DispatchBattle_TSkillEnergy",
+                  "target": "Team",
+                  "value": "EnergyMax"
+                }
+              ],
+              "target": "Team"
+            }
+          ],
+          "stacking": "Unique",
+          "thinkInterval": "EnergyTimeCD",
+          "IAKNCBDLFKJ": 0.0
+        },
+        "DispatchBattle_TSkill_Type_2_Trigger": {
+          "elementDurability": 100.0,
+          "modifierMixins": [
+            {
+              "$type": "DoActionByElementReactionMixin",
+              "actions": [
+                {
+                  "$type": "Predicated",
+                  "doOffStage": true,
+                  "successActions": [
+                    {
+                      "$type": "ApplyModifier",
+                      "doOffStage": true,
+                      "modifierName": "TSkillEnergyWatcher_ByTrigger",
+                      "target": "Team"
+                    },
+                    {
+                      "$type": "ApplyModifier",
+                      "doOffStage": true,
+                      "modifierName": "TSkillEnergy_TriggerCD",
+                      "target": "Team"
+                    }
+                  ],
+                  "targetPredicates": [
+                    {
+                      "$type": "ByNot",
+                      "predicates": [
+                        {
+                          "$type": "ByHasModifier",
+                          "modifierName": "TSkillEnergy_TriggerCD",
+                          "target": "Team"
+                        }
+                      ]
+                    },
+                    {
+                      "$type": "ByNot",
+                      "predicates": [
+                        {
+                          "$type": "ByTargetGlobalValue",
+                          "compareType": "MoreThanAndEqual",
+                          "key": "GV_DispatchBattle_TSkillEnergy",
+                          "target": "Team",
+                          "value": "EnergyMax"
+                        }
+                      ]
+                    }
+                  ]
+                }
+              ],
+              "entityTypes": [
+                "Monster"
+              ],
+              "range": 40.0,
+              "reactionTypes": [
+                "CrystallizeFire",
+                "CrystallizeWater",
+                "CrystallizeElectric",
+                "CrystallizeIce",
+                "MoonCrystallizeWater"
+              ]
+            }
+          ],
+          "modifierName": "",
+          "IAKNCBDLFKJ": 0.0
+        },
+        "HideAction_T": {
+          "elementDurability": 100.0,
+          "modifierMixins": [
+            {
+              "$type": "HideActionSlotMixin",
+              "slotType": "SlotCharge"
+            }
+          ],
+          "modifierName": "",
+          "IAKNCBDLFKJ": 0.0
+        },
+        "TSkillReady": {
+          "elementDurability": 100.0,
+          "modifierName": "",
+          "onAdded": [
+            {
+              "$type": "ServerLuaCall",
+              "funcName": "SLC_TSkillReady",
+              "luaCallType": "CurGalleryControlGroup",
+              "param1": 0.0,
+              "param2": 0.0,
+              "param3": 0.0,
+              "target": "Team"
+            }
+          ],
+          "IAKNCBDLFKJ": 0.0
+        },
+        "TSkillEnergy_TriggerCD": {
+          "duration": "EnergyTriggerCD",
+          "elementDurability": 100.0,
+          "modifierName": "",
+          "stacking": "Unique",
+          "IAKNCBDLFKJ": 0.0
+        },
+        "TSkillEnergyWatcher_ByTime": {
+          "duration": 0.1,
+          "elementDurability": 100.0,
+          "modifierName": "",
+          "onAdded": [
+            {
+              "$type": "ServerLuaCall",
+              "doOffStage": true,
+              "funcName": "SLC_TriggerEnergyWatcher",
+              "luaCallType": "CurGalleryControlGroup",
+              "param1": "EnergyTimeDelta",
+              "param2": 0.0,
+              "param3": 0.0,
+              "paramNum": 2
+            }
+          ],
+          "stacking": "Unique",
+          "IAKNCBDLFKJ": 0.0
+        },
+        "TSkillEnergyWatcher_ByTrigger": {
+          "duration": 0.1,
+          "elementDurability": 100.0,
+          "modifierName": "",
+          "onAdded": [
+            {
+              "$type": "ServerLuaCall",
+              "doOffStage": true,
+              "funcName": "SLC_TriggerEnergyWatcher",
+              "luaCallType": "CurGalleryControlGroup",
+              "param1": "EnergyTriggerDelta",
+              "param2": 2.0,
+              "param3": 0.0,
+              "paramNum": 2
+            }
+          ],
+          "stacking": "Unique",
+          "IAKNCBDLFKJ": 0.0
+        }
+      },
+      "onAdded": [
+        {
+          "$type": "AttachModifier",
+          "modifierName": "DispatchBattle_TSkill_Manager_2_Team",
+          "target": "Team"
+        }
+      ]
+    }
+  },
+  {
+    "Default": {
+      "abilityName": "ActivityAbility_DispatchBattle_TSkill_Manager_3",
+      "abilitySpecials": {
+        "EnergyMax": 6000.0,
+        "EnergyTimeCD": 1.0,
+        "EnergyTimeDelta": 140.0,
+        "EnergyTriggerCD": 6.0,
+        "EnergyTriggerDelta": 1500.0
+      },
+      "isDynamicAbility": true,
+      "modifiers": {
+        "DispatchBattle_TSkill_Manager_3_Team": {
+          "elementDurability": 100.0,
+          "modifierMixins": [
+            {
+              "$type": "LocalAvatarsMixin",
+              "modifierName": "DispatchBattle_TSkill_Manager_3_LocalAvatars"
+            },
+            {
+              "$type": "ServerUpdateGlobalValueMixin",
+              "key": "GV_DispatchBattle_TSkillEnergy",
+              "maxValue": 0.0,
+              "minValue": 0.0
+            },
+            {
+              "$type": "ServerUpdateGlobalValueMixin",
+              "key": "GV_DispatchBattle_BattleScore",
+              "maxValue": 0.0,
+              "minValue": 0.0
+            },
+            {
+              "$type": "AttachModifierToGlobalValueMixin",
+              "globalValueKey": "SGV_Team_Buff_TSkill",
+              "globalValueTarget": "Team",
+              "modifierNameSteps": [
+                "UNIQUE_DispatchBattle_TSkill_Type_3_Appear"
+              ],
+              "valueSteps": [
+                0.5,
+                1.5
+              ],
+              "EECIIMBIDGB": true
+            },
+            {
+              "$type": "AttachModifierToGlobalValueMixin",
+              "globalValueKey": "GV_DispatchBattle_TSkillEnergy",
+              "globalValueTarget": "Team",
+              "modifierNameSteps": [
+                "TSkillReady"
+              ],
+              "valueSteps": [
+                [
+                  "EnergyMax",
+                  0.5,
+                  "SUB"
+                ],
+                9999.0
+              ],
+              "EECIIMBIDGB": true
+            }
+          ],
+          "modifierName": "",
+          "onAdded": [
+            {
+              "$type": "SetGlobalValueV2",
+              "doOffStage": true,
+              "key": "GV_DispatchBattle_TSkillEnergy",
+              "maxValue": 0.0,
+              "minValue": 0.0,
+              "target": "Team",
+              "value": 0.0
+            },
+            {
+              "$type": "SetGlobalValueV2",
+              "doOffStage": true,
+              "key": "GV_DispatchBattle_BattleScore",
+              "maxValue": 0.0,
+              "minValue": 0.0,
+              "target": "Team",
+              "value": 0.0
+            }
+          ],
+          "IAKNCBDLFKJ": 0.0
+        },
+        "DispatchBattle_TSkill_Manager_3_LocalAvatars": {
+          "elementDurability": 100.0,
+          "modifierMixins": [
+            {
+              "$type": "AttachModifierToGlobalValueMixin",
+              "globalValueKey": "SGV_V7_2_TeyvatDispatch_LV1_Buff_isUnlocked",
+              "globalValueTarget": "Team",
+              "modifierNameSteps": [
+                "DispatchBattle_TSkill_Type_3_Trigger"
+              ],
+              "valueSteps": [
+                0.5,
+                1.5
+              ],
+              "EECIIMBIDGB": true
+            }
+          ],
+          "modifierName": "",
+          "IAKNCBDLFKJ": 0.0
+        },
+        "UNIQUE_DispatchBattle_TSkill_Type_3_Appear": {
+          "elementDurability": 100.0,
+          "isUnique": true,
+          "modifierMixins": [
+            {
+              "$type": "ActivitySkillMixin",
+              "priority": "Auto",
+              "LDKCCEHPOME": 20229
+            },
+            {
+              "$type": "AttachModifierToGlobalValueMixin",
+              "globalValueKey": "GV_DispatchBattle_TSkillEnergy",
+              "globalValueTarget": "Team",
+              "modifierNameSteps": [
+                "HideAction_T"
+              ],
+              "valueSteps": [
+                -0.5,
+                [
+                  "EnergyMax",
+                  0.5,
+                  "SUB"
+                ]
+              ],
+              "EECIIMBIDGB": true
+            }
+          ],
+          "modifierName": "",
+          "onThinkInterval": [
+            {
+              "$type": "ApplyModifier",
+              "doOffStage": true,
+              "modifierName": "TSkillEnergyWatcher_ByTime",
+              "predicates": [
+                {
+                  "$type": "ByTargetGlobalValue",
+                  "compareType": "LessAndEqual",
+                  "key": "GV_DispatchBattle_TSkillEnergy",
+                  "target": "Team",
+                  "value": "EnergyMax"
+                }
+              ],
+              "target": "Team"
+            }
+          ],
+          "stacking": "Unique",
+          "thinkInterval": "EnergyTimeCD",
+          "IAKNCBDLFKJ": 0.0
+        },
+        "DispatchBattle_TSkill_Type_3_Trigger": {
+          "elementDurability": 100.0,
+          "modifierMixins": [
+            {
+              "$type": "DoActionByElementReactionMixin",
+              "actions": [
+                {
+                  "$type": "Predicated",
+                  "doOffStage": true,
+                  "successActions": [
+                    {
+                      "$type": "ApplyModifier",
+                      "doOffStage": true,
+                      "modifierName": "TSkillEnergyWatcher_ByTrigger",
+                      "target": "Team"
+                    },
+                    {
+                      "$type": "ApplyModifier",
+                      "doOffStage": true,
+                      "modifierName": "TSkillEnergy_TriggerCD",
+                      "target": "Team"
+                    }
+                  ],
+                  "targetPredicates": [
+                    {
+                      "$type": "ByNot",
+                      "predicates": [
+                        {
+                          "$type": "ByHasModifier",
+                          "modifierName": "TSkillEnergy_TriggerCD",
+                          "target": "Team"
+                        }
+                      ]
+                    },
+                    {
+                      "$type": "ByNot",
+                      "predicates": [
+                        {
+                          "$type": "ByTargetGlobalValue",
+                          "compareType": "MoreThanAndEqual",
+                          "key": "GV_DispatchBattle_TSkillEnergy",
+                          "target": "Team",
+                          "value": "EnergyMax"
+                        }
+                      ]
+                    }
+                  ]
+                }
+              ],
+              "entityTypes": [
+                "Monster"
+              ],
+              "range": 40.0,
+              "reactionTypes": [
+                "Overgrow",
+                "MoonOvergrow",
+                "Overdose",
+                "OverdoseElectric",
+                "OverdoseGrass"
+              ]
+            }
+          ],
+          "modifierName": "",
+          "IAKNCBDLFKJ": 0.0
+        },
+        "HideAction_T": {
+          "elementDurability": 100.0,
+          "modifierMixins": [
+            {
+              "$type": "HideActionSlotMixin",
+              "slotType": "SlotCharge"
+            }
+          ],
+          "modifierName": "",
+          "IAKNCBDLFKJ": 0.0
+        },
+        "TSkillReady": {
+          "elementDurability": 100.0,
+          "modifierName": "",
+          "onAdded": [
+            {
+              "$type": "ServerLuaCall",
+              "funcName": "SLC_TSkillReady",
+              "luaCallType": "CurGalleryControlGroup",
+              "param1": 0.0,
+              "param2": 0.0,
+              "param3": 0.0,
+              "target": "Team"
+            }
+          ],
+          "IAKNCBDLFKJ": 0.0
+        },
+        "TSkillEnergy_TriggerCD": {
+          "duration": "EnergyTriggerCD",
+          "elementDurability": 100.0,
+          "modifierName": "",
+          "stacking": "Unique",
+          "IAKNCBDLFKJ": 0.0
+        },
+        "TSkillEnergyWatcher_ByTime": {
+          "duration": 0.1,
+          "elementDurability": 100.0,
+          "modifierName": "",
+          "onAdded": [
+            {
+              "$type": "ServerLuaCall",
+              "doOffStage": true,
+              "funcName": "SLC_TriggerEnergyWatcher",
+              "luaCallType": "CurGalleryControlGroup",
+              "param1": "EnergyTimeDelta",
+              "param2": 0.0,
+              "param3": 0.0,
+              "paramNum": 2
+            }
+          ],
+          "stacking": "Unique",
+          "IAKNCBDLFKJ": 0.0
+        },
+        "TSkillEnergyWatcher_ByTrigger": {
+          "duration": 0.1,
+          "elementDurability": 100.0,
+          "modifierName": "",
+          "onAdded": [
+            {
+              "$type": "ServerLuaCall",
+              "doOffStage": true,
+              "funcName": "SLC_TriggerEnergyWatcher",
+              "luaCallType": "CurGalleryControlGroup",
+              "param1": "EnergyTriggerDelta",
+              "param2": 3.0,
+              "param3": 0.0,
+              "paramNum": 2
+            }
+          ],
+          "stacking": "Unique",
+          "IAKNCBDLFKJ": 0.0
+        }
+      },
+      "onAdded": [
+        {
+          "$type": "AttachModifier",
+          "modifierName": "DispatchBattle_TSkill_Manager_3_Team",
+          "target": "Team"
+        }
+      ]
+    }
+  },
+  {
+    "Default": {
+      "abilityName": "ActivityAbility_DispatchBattle_TSkill_Manager_4",
+      "abilitySpecials": {
+        "EnergyMax": 6000.0,
+        "EnergyTimeCD": 1.0,
+        "EnergyTimeDelta": 140.0,
+        "EnergyTriggerCD": 6.0,
+        "EnergyTriggerDelta": 1500.0
+      },
+      "isDynamicAbility": true,
+      "modifiers": {
+        "DispatchBattle_TSkill_Manager_4_Team": {
+          "elementDurability": 100.0,
+          "modifierMixins": [
+            {
+              "$type": "CurLocalAvatarMixinV2",
+              "modifierName": "DispatchBattle_TSkill_Manager_4_Avatar"
+            },
+            {
+              "$type": "ServerUpdateGlobalValueMixin",
+              "key": "GV_DispatchBattle_TSkillEnergy",
+              "maxValue": 0.0,
+              "minValue": 0.0
+            },
+            {
+              "$type": "ServerUpdateGlobalValueMixin",
+              "key": "GV_DispatchBattle_BattleScore",
+              "maxValue": 0.0,
+              "minValue": 0.0
+            },
+            {
+              "$type": "AttachModifierToGlobalValueMixin",
+              "globalValueKey": "SGV_Team_Buff_TSkill",
+              "globalValueTarget": "Team",
+              "modifierNameSteps": [
+                "UNIQUE_DispatchBattle_TSkill_Type_4_Appear"
+              ],
+              "valueSteps": [
+                0.5,
+                1.5
+              ],
+              "EECIIMBIDGB": true
+            },
+            {
+              "$type": "AttachModifierToGlobalValueMixin",
+              "globalValueKey": "GV_DispatchBattle_TSkillEnergy",
+              "globalValueTarget": "Team",
+              "modifierNameSteps": [
+                "TSkillReady"
+              ],
+              "valueSteps": [
+                [
+                  "EnergyMax",
+                  0.5,
+                  "SUB"
+                ],
+                9999.0
+              ],
+              "EECIIMBIDGB": true
+            }
+          ],
+          "modifierName": "",
+          "onAdded": [
+            {
+              "$type": "SetGlobalValueV2",
+              "doOffStage": true,
+              "key": "GV_DispatchBattle_TSkillEnergy",
+              "maxValue": 0.0,
+              "minValue": 0.0,
+              "target": "Team",
+              "value": 0.0
+            },
+            {
+              "$type": "SetGlobalValueV2",
+              "doOffStage": true,
+              "key": "GV_DispatchBattle_BattleScore",
+              "maxValue": 0.0,
+              "minValue": 0.0,
+              "target": "Team",
+              "value": 0.0
+            }
+          ],
+          "IAKNCBDLFKJ": 0.0
+        },
+        "DispatchBattle_TSkill_Manager_4_Avatar": {
+          "elementDurability": 100.0,
+          "modifierMixins": [
+            {
+              "$type": "AttachModifierToGlobalValueMixin",
+              "globalValueKey": "SGV_V7_2_TeyvatDispatch_LV1_Buff_isUnlocked",
+              "globalValueTarget": "Team",
+              "modifierNameSteps": [
+                "DispatchBattle_TSkill_Type_4_Trigger"
+              ],
+              "valueSteps": [
+                0.5,
+                1.5
+              ],
+              "EECIIMBIDGB": true
+            }
+          ],
+          "modifierName": "",
+          "onAdded": [
+            {
+              "$type": "SetGlobalValue",
+              "doOffStage": true,
+              "key": "GV_TSkillEnergy_NyxCostAccum",
+              "maxValue": 0.0,
+              "minValue": 0.0,
+              "value": 0.0
+            }
+          ],
+          "IAKNCBDLFKJ": 0.0
+        },
+        "UNIQUE_DispatchBattle_TSkill_Type_4_Appear": {
+          "elementDurability": 100.0,
+          "isUnique": true,
+          "modifierMixins": [
+            {
+              "$type": "ActivitySkillMixin",
+              "priority": "Auto",
+              "LDKCCEHPOME": 20230
+            },
+            {
+              "$type": "AttachModifierToGlobalValueMixin",
+              "globalValueKey": "GV_DispatchBattle_TSkillEnergy",
+              "globalValueTarget": "Team",
+              "modifierNameSteps": [
+                "HideAction_T"
+              ],
+              "valueSteps": [
+                -0.5,
+                [
+                  "EnergyMax",
+                  0.5,
+                  "SUB"
+                ]
+              ],
+              "EECIIMBIDGB": true
+            }
+          ],
+          "modifierName": "",
+          "onThinkInterval": [
+            {
+              "$type": "ApplyModifier",
+              "doOffStage": true,
+              "modifierName": "TSkillEnergyWatcher_ByTime",
+              "predicates": [
+                {
+                  "$type": "ByTargetGlobalValue",
+                  "compareType": "LessAndEqual",
+                  "key": "GV_DispatchBattle_TSkillEnergy",
+                  "target": "Team",
+                  "value": "EnergyMax"
+                }
+              ],
+              "target": "Team"
+            }
+          ],
+          "stacking": "Unique",
+          "thinkInterval": "EnergyTimeCD",
+          "IAKNCBDLFKJ": 0.0
+        },
+        "DispatchBattle_TSkill_Type_4_Trigger": {
+          "elementDurability": 100.0,
+          "modifierMixins": [
+            {
+              "$type": "NyxValueMonitorMixin",
+              "maxValue": 999.0,
+              "minValue": 0.0,
+              "ratio": 1.0,
+              "target": "CurLocalAvatar",
+              "type": "Reduce",
+              "FJHNGIJHGJN": 1.0,
+              "MDEFEIJKFEI": true,
+              "HKPMICLINHA": "GV_TSkillEnergy_NyxCostAccum"
+            },
+            {
+              "$type": "AttachModifierToSelfGlobalValueMixin",
+              "defaultGlobalValueOnCreate": 0.0,
+              "globalValueKey": "GV_TSkillEnergy_NyxCostAccum",
+              "modifierNameSteps": [
+                "TSkillEnergyWatcher_ByNyxCost_Handler"
+              ],
+              "valueSteps": [
+                0.9,
+                1000.0
+              ],
+              "EECIIMBIDGB": true
+            }
+          ],
+          "modifierName": "",
+          "IAKNCBDLFKJ": 0.0
+        },
+        "TSkillEnergyWatcher_ByNyxCost_Handler": {
+          "elementDurability": 100.0,
+          "modifierName": "",
+          "onAdded": [
+            {
+              "$type": "Predicated",
+              "doOffStage": true,
+              "successActions": [
+                {
+                  "$type": "ApplyModifier",
+                  "doOffStage": true,
+                  "modifierName": "TSkillEnergyWatcher_ByTrigger",
+                  "target": "Team"
+                },
+                {
+                  "$type": "ApplyModifier",
+                  "doOffStage": true,
+                  "modifierName": "TSkillEnergy_TriggerCD",
+                  "target": "Team"
+                }
+              ],
+              "targetPredicates": [
+                {
+                  "$type": "ByNot",
+                  "predicates": [
+                    {
+                      "$type": "ByHasModifier",
+                      "modifierName": "TSkillEnergy_TriggerCD",
+                      "target": "Team"
+                    }
+                  ]
+                },
+                {
+                  "$type": "ByNot",
+                  "predicates": [
+                    {
+                      "$type": "ByTargetGlobalValue",
+                      "compareType": "MoreThanAndEqual",
+                      "key": "GV_DispatchBattle_TSkillEnergy",
+                      "target": "Team",
+                      "value": "EnergyMax"
+                    }
+                  ]
+                }
+              ]
+            }
+          ],
+          "IAKNCBDLFKJ": 0.0
+        },
+        "HideAction_T": {
+          "elementDurability": 100.0,
+          "modifierMixins": [
+            {
+              "$type": "HideActionSlotMixin",
+              "slotType": "SlotCharge"
+            }
+          ],
+          "modifierName": "",
+          "onAdded": [
+            {
+              "$type": "SetGlobalValue",
+              "doOffStage": true,
+              "key": "GV_TSkillEnergy_NyxCostAccum",
+              "maxValue": 0.0,
+              "minValue": 0.0,
+              "target": "CurTeamAvatars",
+              "value": 0.0
+            }
+          ],
+          "IAKNCBDLFKJ": 0.0
+        },
+        "TSkillReady": {
+          "elementDurability": 100.0,
+          "modifierName": "",
+          "onAdded": [
+            {
+              "$type": "ServerLuaCall",
+              "funcName": "SLC_TSkillReady",
+              "luaCallType": "CurGalleryControlGroup",
+              "param1": 0.0,
+              "param2": 0.0,
+              "param3": 0.0,
+              "target": "Team"
+            }
+          ],
+          "IAKNCBDLFKJ": 0.0
+        },
+        "TSkillEnergy_TriggerCD": {
+          "duration": "EnergyTriggerCD",
+          "elementDurability": 100.0,
+          "modifierName": "",
+          "onRemoved": [
+            {
+              "$type": "SetGlobalValue",
+              "doOffStage": true,
+              "key": "GV_TSkillEnergy_NyxCostAccum",
+              "maxValue": 0.0,
+              "minValue": 0.0,
+              "target": "CurLocalAvatar",
+              "value": 0.0
+            }
+          ],
+          "stacking": "Unique",
+          "IAKNCBDLFKJ": 0.0
+        },
+        "TSkillEnergyWatcher_ByTime": {
+          "duration": 0.1,
+          "elementDurability": 100.0,
+          "modifierName": "",
+          "onAdded": [
+            {
+              "$type": "ServerLuaCall",
+              "doOffStage": true,
+              "funcName": "SLC_TriggerEnergyWatcher",
+              "luaCallType": "CurGalleryControlGroup",
+              "param1": "EnergyTimeDelta",
+              "param2": 0.0,
+              "param3": 0.0,
+              "paramNum": 2
+            }
+          ],
+          "stacking": "Unique",
+          "IAKNCBDLFKJ": 0.0
+        },
+        "TSkillEnergyWatcher_ByTrigger": {
+          "duration": 0.1,
+          "elementDurability": 100.0,
+          "modifierName": "",
+          "onAdded": [
+            {
+              "$type": "ServerLuaCall",
+              "doOffStage": true,
+              "funcName": "SLC_TriggerEnergyWatcher",
+              "luaCallType": "CurGalleryControlGroup",
+              "param1": "EnergyTriggerDelta",
+              "param2": 4.0,
+              "param3": 0.0,
+              "paramNum": 2
+            }
+          ],
+          "stacking": "Unique",
+          "IAKNCBDLFKJ": 0.0
+        }
+      },
+      "onAdded": [
+        {
+          "$type": "AttachModifier",
+          "modifierName": "DispatchBattle_TSkill_Manager_4_Team",
+          "target": "Team"
+        }
+      ]
+    }
+  }
+]

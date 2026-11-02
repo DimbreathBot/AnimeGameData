@@ -1,0 +1,750 @@
+[
+  {
+    "Default": {
+      "abilityMixins": [
+        {
+          "$type": "AttachModifierToGlobalValueMixin",
+          "globalValueKey": "SGV_Thunderbird_BossBattle_Phase",
+          "globalValueTarget": "Team",
+          "modifierNameSteps": [
+            "Phase0_Handler",
+            "Phase1_Handler",
+            "Phase2_Handler",
+            "Phase3_Handler"
+          ],
+          "valueSteps": [
+            -0.5,
+            0.5,
+            1.5,
+            2.5,
+            3.5
+          ],
+          "EECIIMBIDGB": true
+        },
+        {
+          "$type": "AttachModifierToGlobalValueMixin",
+          "globalValueKey": "GV_IS_TSkill_Hidden",
+          "globalValueTarget": "Team",
+          "modifierNameSteps": [
+            "T_Hidden_Handler"
+          ],
+          "valueSteps": [
+            0.5,
+            1.5
+          ],
+          "EECIIMBIDGB": true
+        }
+      ],
+      "abilityName": "V7_2_DynamicAbility_Thunderbird_BossBattle_T",
+      "abilitySpecials": {
+        "BuffTime": 4.0,
+        "ElecImmuneHitCD": 5.0,
+        "FinalSkillDuration": 20.0
+      },
+      "isDynamicAbility": true,
+      "modifiers": {
+        "Init_Handler": {
+          "elementDurability": 100.0,
+          "modifierName": "",
+          "onAdded": [
+            {
+              "$type": "SetGlobalValueV2",
+              "doOffStage": true,
+              "key": "GV_ElectricDamage_Invalid",
+              "maxValue": 0.0,
+              "minValue": 0.0,
+              "target": "CurLocalAvatar",
+              "value": 0.0
+            },
+            {
+              "$type": "SetGlobalValueV2",
+              "doOffStage": true,
+              "key": "GV_IS_IN_Summon_Skill",
+              "maxValue": 0.0,
+              "minValue": 0.0,
+              "target": "CurLocalAvatar",
+              "value": 0.0
+            },
+            {
+              "$type": "SetGlobalValueV2",
+              "doOffStage": true,
+              "key": "GV_IS_FinalSkill_Ready",
+              "maxValue": 0.0,
+              "minValue": 0.0,
+              "target": "CurLocalAvatar",
+              "value": 0.0
+            },
+            {
+              "$type": "SetGlobalValueV2",
+              "doOffStage": true,
+              "key": "GV_IS_TSkill_Hidden",
+              "maxValue": 0.0,
+              "minValue": 0.0,
+              "target": "Team",
+              "value": 0.0
+            },
+            {
+              "$type": "SetGlobalValueV2",
+              "doOffStage": true,
+              "key": "GV_ElecImmune_Hit_CD",
+              "maxValue": 0.0,
+              "minValue": 0.0,
+              "target": "CurLocalAvatar",
+              "value": 0.0
+            },
+            {
+              "$type": "ShowExtraAbility",
+              "skillID": 20240
+            },
+            {
+              "$type": "SetExtraAbilityEnable",
+              "enable": true
+            },
+            {
+              "$type": "AttachModifier",
+              "modifierName": "T_SkillIcon_Shield"
+            }
+          ],
+          "IAKNCBDLFKJ": 0.0
+        },
+        "UNIQUE_Thunderbird_BossBattle_LockHp": {
+          "elementDurability": 100.0,
+          "isUnique": true,
+          "modifierMixins": [
+            {
+              "$type": "LocalAvatarsMixin",
+              "modifierName": "UNIQUE_Thunderbird_BossBattle_LockHp_Avatar"
+            }
+          ],
+          "modifierName": "",
+          "stacking": "Unique",
+          "IAKNCBDLFKJ": 0.0
+        },
+        "UNIQUE_Thunderbird_BossBattle_LockHp_Avatar": {
+          "elementDurability": 100.0,
+          "isUnique": true,
+          "modifierName": "",
+          "stacking": "Unique",
+          "state": "Limbo",
+          "IAKNCBDLFKJ": 0.0
+        },
+        "T_SkillIcon_Shield": {
+          "elementDurability": 100.0,
+          "modifierMixins": [
+            {
+              "$type": "ActionPanelControllerMixin",
+              "FENDDPPKIPH": {
+                "skillId": 20240,
+                "CMDJLOFJFKH": false,
+                "GGFCONGEGMI": false,
+                "KMDHCICKDIJ": false
+              }
+            }
+          ],
+          "modifierName": "",
+          "stacking": "Unique",
+          "IAKNCBDLFKJ": 0.0
+        },
+        "Defend_ElecImmune_Handler": {
+          "duration": "BuffTime",
+          "elementDurability": 100.0,
+          "modifierMixins": [
+            {
+              "$type": "CurLocalAvatarMixinV2",
+              "modifierName": "Defend_ElecImmune_Hit_Handler"
+            },
+            {
+              "$type": "CurLocalAvatarMixinV2",
+              "modifierName": "Defend_ElecImmune_Loop_Effect"
+            }
+          ],
+          "modifierName": "",
+          "IAKNCBDLFKJ": 0.0
+        },
+        "Defend_ElecImmune_Hit_Handler": {
+          "elementDurability": 100.0,
+          "modifierName": "",
+          "onBeingHit": [
+            {
+              "$type": "Predicated",
+              "successActions": [
+                {
+                  "$type": "AttachModifier",
+                  "modifierName": "Defend_ElecImmune_Hit_Once"
+                }
+              ],
+              "targetPredicates": [
+                {
+                  "$type": "ByHitElement",
+                  "element": "Electric"
+                },
+                {
+                  "$type": "ByTargetGlobalValue",
+                  "compareType": "NoneOrEqual",
+                  "key": "GV_ElecImmune_Hit_CD",
+                  "target": "CurLocalAvatar",
+                  "value": 0.0
+                }
+              ]
+            }
+          ],
+          "properties": {
+            "Actor_PhysicalMuteHurtDelta": 1.0,
+            "Actor_FireMuteHurtDelta": 1.0,
+            "Actor_ElecMuteHurtDelta": 1.0,
+            "Actor_WaterMuteHurtDelta": 1.0,
+            "Actor_GrassMuteHurtDelta": 1.0,
+            "Actor_WindMuteHurtDelta": 1.0,
+            "Actor_IceMuteHurtDelta": 1.0,
+            "Actor_RockMuteHurtDelta": 1.0
+          },
+          "stacking": "Unique",
+          "IAKNCBDLFKJ": 0.0
+        },
+        "Defend_ElecImmune_Hit_Once": {
+          "duration": "ElecImmuneHitCD",
+          "elementDurability": 100.0,
+          "modifierName": "",
+          "onAdded": [
+            {
+              "$type": "SetGlobalValueV2",
+              "doOffStage": true,
+              "key": "GV_ElecImmune_Hit_CD",
+              "maxValue": 0.0,
+              "minValue": 0.0,
+              "target": "CurLocalAvatar",
+              "value": 1.0
+            },
+            {
+              "$type": "ServerLuaCall",
+              "callParamList": [
+                220374020
+              ],
+              "funcName": "SLC_RecordElecImmuneHit",
+              "luaCallType": "SpecificGroup",
+              "param1": 0.0,
+              "param2": 0.0,
+              "param3": 0.0
+            },
+            {
+              "$type": "FireEffect",
+              "effectPattern": "Eff_SceneObj_Balloon_01_Disappear",
+              "effectTempleteID": -1.0,
+              "scale": 1.0,
+              "JHAGIJGAKMK": ""
+            }
+          ],
+          "onRemoved": [
+            {
+              "$type": "SetGlobalValueV2",
+              "doOffStage": true,
+              "key": "GV_ElecImmune_Hit_CD",
+              "maxValue": 0.0,
+              "minValue": 0.0,
+              "target": "CurLocalAvatar",
+              "value": 0.0
+            }
+          ],
+          "stacking": "Unique",
+          "IAKNCBDLFKJ": 0.0
+        },
+        "Defend_ElecImmune_Loop_Effect": {
+          "elementDurability": 100.0,
+          "modifierName": "",
+          "onAdded": [
+            {
+              "$type": "SetGlobalValueV2",
+              "doOffStage": true,
+              "key": "GV_ElectricDamage_Invalid",
+              "maxValue": 0.0,
+              "minValue": 0.0,
+              "target": "CurLocalAvatar",
+              "value": 1.0
+            }
+          ],
+          "onRemoved": [
+            {
+              "$type": "SetGlobalValueV2",
+              "doOffStage": true,
+              "key": "GV_ElectricDamage_Invalid",
+              "maxValue": 0.0,
+              "minValue": 0.0,
+              "target": "CurLocalAvatar",
+              "value": 0.0
+            }
+          ],
+          "IAKNCBDLFKJ": 0.0
+        },
+        "Thunderbird_BossBattle_BarProgress": {
+          "elementDurability": 100.0,
+          "modifierMixins": [
+            {
+              "$type": "CustomBarMixin",
+              "IAIFGGNOBPF": "InLevelSGSkillBar",
+              "NINMHJEFKKN": "SGV_Thunderbird_BossBattle_CustomBarProgress",
+              "MOKLEIMMPHO": [
+                {
+                  "gvName": "SGV_Thunderbird_BossBattle_CustomBarProgress",
+                  "paramName": "IsFull",
+                  "NLEIMMOLBNP": 1.0,
+                  "PMNCKENJDMK": "Bool",
+                  "CHOAEDCKMGM": "GreaterOrEqual"
+                },
+                {
+                  "gvName": "SGV_Thunderbird_BossBattle_CustomBarCount",
+                  "paramName": "Ultimate",
+                  "NLEIMMOLBNP": 0.0,
+                  "PMNCKENJDMK": "Bool",
+                  "CHOAEDCKMGM": "GreaterOrEqual"
+                },
+                {
+                  "gvName": "SGV_Thunderbird_BossBattle_CustomBarProgress",
+                  "paramName": "Add",
+                  "HELHKPBIGLE": 0.02,
+                  "CGEIJECELGC": "DeltaGreaterThan",
+                  "PMNCKENJDMK": "Trigger"
+                },
+                {
+                  "gvName": "SGV_Thunderbird_BossBattle_CustomBarProgress",
+                  "paramName": "Reduce",
+                  "HELHKPBIGLE": -1.0,
+                  "CGEIJECELGC": "DeltaLessThan",
+                  "PMNCKENJDMK": "Trigger"
+                }
+              ]
+            }
+          ],
+          "modifierName": "",
+          "IAKNCBDLFKJ": 0.0
+        },
+        "Phase0_Handler": {
+          "elementDurability": 100.0,
+          "modifierName": "",
+          "stacking": "Unique",
+          "IAKNCBDLFKJ": 0.0
+        },
+        "Phase1_Handler": {
+          "elementDurability": 100.0,
+          "modifierName": "",
+          "stacking": "Unique",
+          "IAKNCBDLFKJ": 0.0
+        },
+        "Phase2_Handler": {
+          "elementDurability": 100.0,
+          "modifierName": "",
+          "stacking": "Unique",
+          "IAKNCBDLFKJ": 0.0
+        },
+        "Phase3_Handler": {
+          "elementDurability": 100.0,
+          "modifierName": "",
+          "onAdded": [
+            {
+              "$type": "AttachModifier",
+              "modifierName": "Thunderbird_BossBattle_BarProgress"
+            },
+            {
+              "$type": "AttachModifier",
+              "modifierName": "Thunderbird_BossBattle_Phase3_SkillReady"
+            }
+          ],
+          "onRemoved": [
+            {
+              "$type": "RemoveModifier",
+              "modifierName": "Thunderbird_BossBattle_BarProgress"
+            }
+          ],
+          "stacking": "Unique",
+          "IAKNCBDLFKJ": 0.0
+        },
+        "Thunderbird_BossBattle_Phase3_SkillReady": {
+          "elementDurability": 100.0,
+          "modifierMixins": [
+            {
+              "$type": "AttachModifierToGlobalValueMixin",
+              "globalValueKey": "SGV_Thunderbird_BossBattle_CustomBarProgress",
+              "globalValueTarget": "Team",
+              "modifierNameSteps": [
+                "Phase3_CustomBarFirstFull"
+              ],
+              "valueSteps": [
+                0.99,
+                1.01
+              ],
+              "EECIIMBIDGB": true
+            }
+          ],
+          "modifierName": "",
+          "onAdded": [
+            {
+              "$type": "ShowExtraAbility",
+              "skillID": 20225
+            },
+            {
+              "$type": "RemoveModifier",
+              "modifierName": "T_SkillIcon_Shield"
+            },
+            {
+              "$type": "AttachModifier",
+              "modifierName": "T_SkillIcon_Thunder"
+            }
+          ],
+          "stacking": "Unique",
+          "IAKNCBDLFKJ": 0.0
+        },
+        "T_SkillIcon_Thunder": {
+          "elementDurability": 100.0,
+          "modifierMixins": [
+            {
+              "$type": "ActionPanelControllerMixin",
+              "FENDDPPKIPH": {
+                "skillId": 20225
+              }
+            }
+          ],
+          "modifierName": "",
+          "stacking": "Unique",
+          "IAKNCBDLFKJ": 0.0
+        },
+        "Phase3_CustomBarFirstFull": {
+          "elementDurability": 100.0,
+          "modifierName": "",
+          "onAdded": [
+            {
+              "$type": "Predicated",
+              "successActions": [
+                {
+                  "$type": "SetGlobalValueV2",
+                  "doOffStage": true,
+                  "key": "GV_IS_FinalSkill_Ready",
+                  "maxValue": 0.0,
+                  "minValue": 0.0,
+                  "target": "CurLocalAvatar",
+                  "value": 1.0
+                },
+                {
+                  "$type": "SetGlobalValue",
+                  "key": "GV_Quest_7_2_Shougun_Super_ElementalBurst_Energy",
+                  "maxValue": 100.0,
+                  "minValue": 0.0,
+                  "target": "Team",
+                  "useLimitRange": true,
+                  "value": 100.0
+                },
+                {
+                  "$type": "AttachModifier",
+                  "modifierName": "Phase3_FinalSkill_Duration_Handler"
+                }
+              ],
+              "targetPredicates": [
+                {
+                  "$type": "ByTargetGlobalValue",
+                  "key": "SGV_Thunderbird_BossBattle_CustomBarCount",
+                  "target": "Team",
+                  "value": 0.0
+                }
+              ]
+            }
+          ],
+          "stacking": "Unique",
+          "IAKNCBDLFKJ": 0.0
+        },
+        "T_Hidden_Handler": {
+          "elementDurability": 100.0,
+          "modifierName": "",
+          "onAdded": [
+            {
+              "$type": "ShowExtraAbility"
+            },
+            {
+              "$type": "SetExtraAbilityEnable"
+            }
+          ],
+          "stacking": "Unique",
+          "IAKNCBDLFKJ": 0.0
+        },
+        "Phase3_FinalSkill_Duration_Handler": {
+          "duration": "FinalSkillDuration",
+          "elementDurability": 100.0,
+          "modifierName": "",
+          "onRemoved": [
+            {
+              "$type": "SetGlobalValueV2",
+              "doOffStage": true,
+              "key": "GV_IS_TSkill_Hidden",
+              "maxValue": 0.0,
+              "minValue": 0.0,
+              "target": "Team",
+              "value": 1.0
+            },
+            {
+              "$type": "ApplyModifier",
+              "modifierName": "Phase3_FinalSkill_Delay_Handler"
+            },
+            {
+              "$type": "Predicated",
+              "failActions": [
+                {
+                  "$type": "ServerLuaCall",
+                  "callParamList": [
+                    220374020
+                  ],
+                  "funcName": "SLC_ClearPoolAndStopSpawn",
+                  "luaCallType": "SpecificGroup",
+                  "param1": 0.0,
+                  "param2": 0.0,
+                  "param3": 0.0
+                },
+                {
+                  "$type": "RemoveModifier",
+                  "modifierName": "Phase3_FinalSkill_Delay_Handler"
+                }
+              ],
+              "successActions": [
+                {
+                  "$type": "ApplyModifier",
+                  "modifierName": "Phase3_FinalSkill_Tick_Handler"
+                }
+              ],
+              "targetPredicates": [
+                {
+                  "$type": "ByTargetGlobalValue",
+                  "key": "GV_IS_IN_Summon_Skill",
+                  "target": "CurLocalAvatar",
+                  "value": 1.0
+                }
+              ]
+            }
+          ],
+          "stacking": "Unique",
+          "IAKNCBDLFKJ": 0.0
+        },
+        "Phase3_FinalSkill_Tick_Handler": {
+          "elementDurability": 100.0,
+          "modifierName": "",
+          "onThinkInterval": [
+            {
+              "$type": "Predicated",
+              "successActions": [
+                {
+                  "$type": "ServerLuaCall",
+                  "callParamList": [
+                    220374020
+                  ],
+                  "funcName": "SLC_ClearPoolAndStopSpawn",
+                  "luaCallType": "SpecificGroup",
+                  "param1": 0.0,
+                  "param2": 0.0,
+                  "param3": 0.0
+                },
+                {
+                  "$type": "RemoveModifier",
+                  "modifierName": "Phase3_FinalSkill_Delay_Handler"
+                },
+                {
+                  "$type": "RemoveModifier",
+                  "modifierName": "Phase3_FinalSkill_Tick_Handler"
+                }
+              ],
+              "targetPredicates": [
+                {
+                  "$type": "ByTargetGlobalValue",
+                  "compareType": "NoneOrEqual",
+                  "key": "GV_IS_IN_Summon_Skill",
+                  "target": "CurLocalAvatar",
+                  "value": 0.0
+                }
+              ]
+            }
+          ],
+          "stacking": "Unique",
+          "thinkInterval": 0.5,
+          "IAKNCBDLFKJ": 0.0
+        },
+        "Phase3_FinalSkill_Delay_Handler": {
+          "duration": 10.0,
+          "elementDurability": 100.0,
+          "modifierName": "",
+          "onRemoved": [
+            {
+              "$type": "ServerLuaCall",
+              "callParamList": [
+                220374020
+              ],
+              "funcName": "SLC_ClearPoolAndStopSpawn",
+              "luaCallType": "SpecificGroup",
+              "param1": 0.0,
+              "param2": 0.0,
+              "param3": 0.0
+            },
+            {
+              "$type": "RemoveModifier",
+              "modifierName": "Phase3_FinalSkill_Tick_Handler"
+            }
+          ],
+          "stacking": "Unique",
+          "IAKNCBDLFKJ": 0.0
+        }
+      },
+      "onAbilityStart": [
+        {
+          "$type": "Predicated",
+          "failActions": [
+            {
+              "$type": "SetExtraAbilityState"
+            },
+            {
+              "$type": "AttachModifier",
+              "modifierName": "Defend_ElecImmune_Handler"
+            }
+          ],
+          "successActions": [
+            {
+              "$type": "TriggerAbility",
+              "abilityName": "Quest_V7_2_Boss_Shougun_T_Summon_Skill_Hit",
+              "target": "CurLocalAvatar"
+            },
+            {
+              "$type": "ServerLuaCall",
+              "callParamList": [
+                220374020
+              ],
+              "funcName": "SLC_SetStoryboardState_TSkill",
+              "luaCallType": "SpecificGroup",
+              "param1": 0.0,
+              "param2": 0.0,
+              "param3": 0.0
+            }
+          ],
+          "targetPredicates": [
+            {
+              "$type": "ByTargetGlobalValue",
+              "compareType": "MoreThanAndEqual",
+              "key": "SGV_Thunderbird_BossBattle_Phase",
+              "target": "Team",
+              "value": 3.0
+            }
+          ]
+        }
+      ],
+      "onAdded": [
+        {
+          "$type": "AttachModifier",
+          "modifierName": "Init_Handler"
+        },
+        {
+          "$type": "AttachModifier",
+          "modifierName": "UNIQUE_Thunderbird_BossBattle_LockHp"
+        }
+      ],
+      "onRemoved": [
+        {
+          "$type": "ShowExtraAbility"
+        },
+        {
+          "$type": "SetGlobalValueV2",
+          "doOffStage": true,
+          "key": "GV_IS_IN_Summon_Skill",
+          "maxValue": 0.0,
+          "minValue": 0.0,
+          "target": "CurLocalAvatar",
+          "value": 0.0
+        },
+        {
+          "$type": "ServerLuaCall",
+          "callParamList": [
+            220374020
+          ],
+          "funcName": "SLC_LeaveSummonSkill",
+          "luaCallType": "SpecificGroup",
+          "param1": 0.0,
+          "param2": 0.0,
+          "param3": 0.0
+        }
+      ],
+      "CELKHCPEMFI": [
+        "GV_ElectricDamage_Invalid",
+        "GV_IS_IN_Summon_Skill",
+        "GV_IS_FinalSkill_Ready",
+        "GV_IS_TSkill_Hidden",
+        "GV_ElecImmune_Hit_CD",
+        "SGV_Thunderbird_BossBattle_Phase",
+        "SGV_Thunderbird_BossBattle_Immune_Duration",
+        "SGV_Thunderbird_BossBattle_FinalSkill_Duration",
+        "SGV_Thunderbird_BossBattle_CustomBarProgress",
+        "SGV_Thunderbird_BossBattle_CustomBarCount"
+      ]
+    }
+  },
+  {
+    "Default": {
+      "abilityName": "SceneObj_Area_Zd_Property_Ani_Prop_ThunderbirdFeather_02",
+      "abilitySpecials": {
+        "LifeTime": 1.5
+      },
+      "modifiers": {
+        "LifeTime_Handler": {
+          "duration": "LifeTime",
+          "elementDurability": 100.0,
+          "modifierName": "",
+          "onRemoved": [
+            {
+              "$type": "FireEffect",
+              "born": {
+                "$type": "ConfigBornByAttachPoint",
+                "attachPointName": "RootNode",
+                "attachPointTargetType": "Self",
+                "useRotation": true
+              },
+              "effectPattern": "Eff_SceneObj_ThunderbirdFeather_02_End_01",
+              "effectTempleteID": -1.0,
+              "scale": 1.5,
+              "JHAGIJGAKMK": ""
+            },
+            {
+              "$type": "KillSelf",
+              "target": "Caster"
+            }
+          ],
+          "IAKNCBDLFKJ": 0.0
+        },
+        "Effect_Handler": {
+          "elementDurability": 100.0,
+          "modifierName": "",
+          "onAdded": [
+            {
+              "$type": "AttachEffect",
+              "born": {
+                "$type": "ConfigBornByAttachPoint",
+                "attachPointName": "EffectNode",
+                "attachPointTargetType": "Self",
+                "useRotation": true
+              },
+              "effectPattern": "Eff_SceneObj_ThunderbirdFeather_02_Appear_01",
+              "effectTempleteID": -1.0,
+              "scale": 1.0,
+              "JHAGIJGAKMK": ""
+            },
+            {
+              "$type": "SetEffectFollowPath",
+              "attachPoint": "EffectNode",
+              "effectPattern": "Eff_SceneObj_ThunderbirdFeather_02_Appear_01",
+              "followPath": "EffectNode"
+            }
+          ],
+          "IAKNCBDLFKJ": 0.0
+        }
+      },
+      "onAdded": [
+        {
+          "$type": "AttachModifier",
+          "modifierName": "LifeTime_Handler"
+        },
+        {
+          "$type": "AttachModifier",
+          "modifierName": "Effect_Handler"
+        }
+      ]
+    }
+  }
+]

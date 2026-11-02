@@ -1,0 +1,4798 @@
+[
+  {
+    "Default": {
+      "abilityName": "SceneObj_Activity_Ani_Prop_DigV2_Generic",
+      "modifiers": {
+        "HitController": {
+          "elementDurability": 100.0,
+          "modifierMixins": [
+            {
+              "$type": "AttachModifierToGlobalValueMixin",
+              "globalValueKey": "GV_ActivityDigV2_Durability",
+              "globalValueTarget": "Caster",
+              "modifierNameSteps": [
+                "Suicide"
+              ],
+              "valueSteps": [
+                -999.0,
+                0.1
+              ],
+              "EECIIMBIDGB": true
+            }
+          ],
+          "modifierName": "",
+          "IAKNCBDLFKJ": 0.0
+        },
+        "Suicide": {
+          "elementDurability": 100.0,
+          "modifierName": "",
+          "onAdded": [
+            {
+              "$type": "KillSelf",
+              "configIdArray": [
+                73209001,
+                73209002,
+                73209004,
+                73209005,
+                73209013
+              ]
+            }
+          ],
+          "IAKNCBDLFKJ": 0.0
+        }
+      },
+      "onAdded": [
+        {
+          "$type": "AttachModifier",
+          "modifierName": "HitController"
+        }
+      ]
+    }
+  },
+  {
+    "Default": {
+      "abilityName": "SceneObj_Activity_Ani_Prop_DigV2_Ore",
+      "onKill": [
+        {
+          "$type": "CopyGlobalValue",
+          "dstKey": "GV_Team_MaxFuel",
+          "dstTarget": "Caster",
+          "srcKey": "GV_ActivityDigV2_Player_MaxFuel",
+          "srcTarget": "Team"
+        },
+        {
+          "$type": "Predicated",
+          "predicates": [
+            {
+              "$type": "ByTargetGlobalValue",
+              "compareType": "MoreThanAndEqual",
+              "key": "GV_ActivityDigV2_Player_Fuel",
+              "target": "Team",
+              "value": 0.5
+            }
+          ],
+          "successActions": [
+            {
+              "$type": "AddGlobalValueV2",
+              "key": "GV_ActivityDigV2_Player_Fuel",
+              "maxValue": "GV_Team_MaxFuel",
+              "minValue": -1.0,
+              "target": "Team",
+              "useLimitRange": true,
+              "value": "GV_ActivityDigV2_FuelReward"
+            },
+            {
+              "$type": "AddGlobalValueV2",
+              "key": "GV_ActivityDigV2_Player_Exp",
+              "maxValue": 0.0,
+              "minValue": 0.0,
+              "target": "Team",
+              "value": "GV_ActivityDigV2_ExpReward"
+            },
+            {
+              "$type": "AddGlobalValueV2",
+              "key": "GV_ActivityDigV2_Player_Score",
+              "maxValue": 0.0,
+              "minValue": 0.0,
+              "target": "Team",
+              "value": "GV_ActivityDigV2_ScoreReward"
+            },
+            {
+              "$type": "Predicated",
+              "failActions": [
+                {
+                  "$type": "CopyGlobalValue",
+                  "dstKey": "GV_ActivityDigV2_FontSize_Big",
+                  "dstTarget": "Caster",
+                  "srcKey": "GV_ActivityDigV2_FontSize_Big",
+                  "srcTarget": "Team"
+                },
+                {
+                  "$type": "ActivityDigV2ShowScoreJumpWord",
+                  "target": "Caster",
+                  "GAOPADOKKMM": "GV_ActivityDigV2_FontSize_Big",
+                  "ADBLCPOFBOD": "GV_ActivityDigV2_ScoreReward"
+                }
+              ],
+              "successActions": [
+                {
+                  "$type": "CopyGlobalValue",
+                  "dstKey": "GV_ActivityDigV2_FontSize_Normal",
+                  "dstTarget": "Caster",
+                  "srcKey": "GV_ActivityDigV2_FontSize_Normal",
+                  "srcTarget": "Team"
+                },
+                {
+                  "$type": "ActivityDigV2ShowScoreJumpWord",
+                  "target": "Caster",
+                  "GAOPADOKKMM": "GV_ActivityDigV2_FontSize_Normal",
+                  "ADBLCPOFBOD": "GV_ActivityDigV2_ScoreReward"
+                }
+              ],
+              "target": "Team",
+              "targetPredicates": [
+                {
+                  "$type": "ByTargetGlobalValue",
+                  "compareType": "MoreThan",
+                  "key": "GV_ActivityDigV2_Ore_HighQualityThreshold",
+                  "value": "GV_ActivityDigV2_ScoreReward"
+                }
+              ]
+            }
+          ],
+          "target": "Caster",
+          "targetPredicates": [
+            {
+              "$type": "ByAny",
+              "predicates": [
+                {
+                  "$type": "ByTargetGlobalValue",
+                  "compareType": "NoneOrEqual",
+                  "key": "GV_ActivityDigV2_Thief_State",
+                  "target": "Caster",
+                  "value": 0.0
+                },
+                {
+                  "$type": "ByTargetGlobalValue",
+                  "compareType": "NoneOrEqual",
+                  "key": "GV_ActivityDigV2_Thief_State",
+                  "target": "Caster",
+                  "value": 1.0
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "$type": "ActivityDigV2GridDropEntity"
+        }
+      ],
+      "CELKHCPEMFI": [
+        "GV_ActivityDigV2_FuelReward",
+        "GV_ActivityDigV2_ExpReward",
+        "GV_ActivityDigV2_ScoreReward",
+        "GV_ActivityDigV2_FontSize_Big",
+        "GV_ActivityDigV2_FontSize_Normal",
+        "GV_Team_MaxFuel"
+      ]
+    }
+  },
+  {
+    "Default": {
+      "abilityName": "SceneObj_Activity_Ani_Prop_DigV2_Ore_RespondToPlayerLevelUp",
+      "modifiers": {
+        "ListenGV_ActivityDigV2_DrillLevel": {
+          "elementDurability": 100.0,
+          "modifierMixins": [
+            {
+              "$type": "AttachModifierToSelfGlobalValueNoInitMixin",
+              "globalValueKey": "GV_ActivityDigV2_DrillLevel",
+              "modifierNameSteps": [
+                "RespondToPlayerLevelUpController"
+              ],
+              "valueSteps": [
+                -100.0,
+                100.0
+              ],
+              "EECIIMBIDGB": true
+            }
+          ],
+          "modifierName": "",
+          "IAKNCBDLFKJ": 0.0
+        },
+        "RespondToPlayerLevelUpController": {
+          "elementDurability": 100.0,
+          "modifierMixins": [
+            {
+              "$type": "AttachModifierToGlobalValueMixin",
+              "globalValueKey": "GV_ActivityDigV2_Player_DrillLevel",
+              "globalValueTarget": "Team",
+              "modifierNameSteps": [
+                "RespondToPlayerLevelUp"
+              ],
+              "valueSteps": [
+                [
+                  "GV_ActivityDigV2_DrillLevel",
+                  0.5,
+                  "SUB"
+                ],
+                100.0
+              ],
+              "EECIIMBIDGB": true
+            }
+          ],
+          "modifierName": "",
+          "IAKNCBDLFKJ": 0.0
+        },
+        "RespondToPlayerLevelUp": {
+          "elementDurability": 100.0,
+          "modifierName": "",
+          "onAdded": [
+            {
+              "$type": "AttachEffect",
+              "effectPattern": "Eff_SceneObj_Dig_MineCube_04",
+              "effectTempleteID": -1.0,
+              "predicates": [
+                {
+                  "$type": "GICMKEIGKGN",
+                  "target": "Caster"
+                },
+                {
+                  "$type": "ByTargetGlobalValue",
+                  "compareType": "MoreThan",
+                  "key": "GV_ActivityDigV2_DrillLevel",
+                  "target": "Caster",
+                  "value": 1.0
+                }
+              ],
+              "scale": 1.0,
+              "JHAGIJGAKMK": ""
+            }
+          ],
+          "IAKNCBDLFKJ": 0.0
+        }
+      },
+      "onAdded": [
+        {
+          "$type": "AttachModifier",
+          "modifierName": "ListenGV_ActivityDigV2_DrillLevel"
+        }
+      ],
+      "CELKHCPEMFI": [
+        "GV_ActivityDigV2_DrillLevel"
+      ]
+    }
+  },
+  {
+    "Default": {
+      "abilityName": "SceneObj_Activity_Ani_Prop_DigV2_Ore_CanHideGold",
+      "modifiers": {
+        "HPBarManager": {
+          "elementDurability": 100.0,
+          "modifierMixins": [
+            {
+              "$type": "DoActionOnGlobalValueListChangeMixin",
+              "actions": [
+                {
+                  "$type": "SetGlobalValueV2",
+                  "key": "GV_ActivityDigV2_HPBar_Ratio",
+                  "maxValue": 0.0,
+                  "minValue": 0.0,
+                  "predicates": [
+                    {
+                      "$type": "ByTargetGlobalValue",
+                      "compareType": "MoreThan",
+                      "key": "GV_ActivityDigV2_MaxDurability",
+                      "target": "Caster",
+                      "value": 0.0
+                    }
+                  ],
+                  "target": "Caster",
+                  "value": [
+                    "GV_ActivityDigV2_Durability",
+                    "GV_ActivityDigV2_MaxDurability",
+                    "DIV"
+                  ]
+                }
+              ],
+              "DHKOKKHJMHC": true,
+              "KNGKIHIGCAC": [
+                "GV_ActivityDigV2_MaxDurability",
+                "GV_ActivityDigV2_Durability"
+              ]
+            },
+            {
+              "$type": "DoActionOnGlobalValueChangeMixin",
+              "actions": [
+                {
+                  "$type": "FireEffect",
+                  "effectPattern": "Eff_SceneObj_Dig_MineCube_02_Appear",
+                  "effectTempleteID": -1.0,
+                  "predicates": [
+                    {
+                      "$type": "ByTargetGlobalValue",
+                      "compareType": "MoreThan",
+                      "key": "GV_ActivityDigV2_Durability",
+                      "target": "Caster",
+                      "value": 0.0
+                    }
+                  ],
+                  "scale": 1.0,
+                  "JHAGIJGAKMK": ""
+                }
+              ],
+              "globalValueKey": "GV_ActivityDigV2_Durability",
+              "DHKOKKHJMHC": true
+            },
+            {
+              "$type": "AttachModifierToGlobalValueMixin",
+              "globalValueKey": "GV_ActivityDigV2_HPBar_Ratio",
+              "globalValueTarget": "Caster",
+              "modifierNameSteps": [
+                "Break"
+              ],
+              "valueSteps": [
+                0.0,
+                0.5
+              ],
+              "EECIIMBIDGB": true
+            },
+            {
+              "$type": "AttachModifierToGlobalValueMixin",
+              "globalValueKey": "GV_ActivityDigV2_HPBar_Ratio",
+              "globalValueTarget": "Caster",
+              "modifierNameSteps": [
+                "Shrink02",
+                "Shrink01",
+                "NoShrink"
+              ],
+              "valueSteps": [
+                0.0,
+                0.4,
+                0.8,
+                1.1
+              ],
+              "EECIIMBIDGB": true
+            }
+          ],
+          "modifierName": "",
+          "onAdded": [
+            {
+              "$type": "EnableColliderByName",
+              "transformNames": [
+                "Mesh"
+              ]
+            }
+          ],
+          "IAKNCBDLFKJ": 0.0
+        },
+        "NoShrink": {
+          "elementDurability": 100.0,
+          "modifierName": "",
+          "onAdded": [
+            {
+              "$type": "SetPartScaleByTransform",
+              "canBeHandledOnRecover": true,
+              "HCBKCFOEPHM": "Collider",
+              "HMOIGGILEKO": {
+                "x": 3.0,
+                "y": 3.0,
+                "z": 3.0
+              }
+            }
+          ],
+          "IAKNCBDLFKJ": 0.0
+        },
+        "Shrink01": {
+          "elementDurability": 100.0,
+          "modifierName": "",
+          "onAdded": [
+            {
+              "$type": "SetPartScaleByTransform",
+              "canBeHandledOnRecover": true,
+              "HCBKCFOEPHM": "Collider",
+              "HMOIGGILEKO": {
+                "x": 2.0,
+                "y": 2.0,
+                "z": 2.0
+              }
+            }
+          ],
+          "IAKNCBDLFKJ": 0.0
+        },
+        "Shrink02": {
+          "elementDurability": 100.0,
+          "modifierName": "",
+          "onAdded": [
+            {
+              "$type": "SetPartScaleByTransform",
+              "canBeHandledOnRecover": true,
+              "HCBKCFOEPHM": "Collider",
+              "HMOIGGILEKO": {
+                "x": 1.0,
+                "y": 1.0,
+                "z": 1.0
+              }
+            }
+          ],
+          "IAKNCBDLFKJ": 0.0
+        },
+        "Break": {
+          "elementDurability": 100.0,
+          "modifierName": "",
+          "onAdded": [
+            {
+              "$type": "AttachEffect",
+              "effectPattern": "Eff_SceneObj_Dig_MineCube_03",
+              "effectTempleteID": -1.0,
+              "scale": 1.0,
+              "JHAGIJGAKMK": ""
+            }
+          ],
+          "IAKNCBDLFKJ": 0.0
+        },
+        "HideGoldController": {
+          "elementDurability": 100.0,
+          "modifierMixins": [
+            {
+              "$type": "AttachModifierToGlobalValueMixin",
+              "globalValueKey": "GV_ActivityDigV2_Ore_OreType",
+              "globalValueTarget": "Caster",
+              "modifierNameSteps": [
+                "Normal",
+                "Gold",
+                "HideGold"
+              ],
+              "valueSteps": [
+                -0.5,
+                0.5,
+                1.5,
+                2.5
+              ],
+              "EECIIMBIDGB": true
+            }
+          ],
+          "modifierName": "",
+          "IAKNCBDLFKJ": 0.0
+        },
+        "Normal": {
+          "elementDurability": 100.0,
+          "modifierName": "",
+          "onAdded": [
+            {
+              "$type": "FireEffect",
+              "effectPattern": "Eff_SceneObj_Dig_MineCube_02_Appear",
+              "effectTempleteID": -1.0,
+              "scale": 1.0,
+              "JHAGIJGAKMK": ""
+            }
+          ],
+          "IAKNCBDLFKJ": 0.0
+        },
+        "Gold": {
+          "elementDurability": 100.0,
+          "modifierName": "",
+          "onAdded": [
+            {
+              "$type": "AttachEffect",
+              "effectPattern": "Eff_SceneObj_Dig_MineCube_01",
+              "effectTempleteID": -1.0,
+              "scale": 1.0,
+              "JHAGIJGAKMK": ""
+            }
+          ],
+          "onRemoved": [
+            {
+              "$type": "FireEffect",
+              "effectPattern": "Eff_SceneObj_Dig_MineCube_01_Disappear_02",
+              "effectTempleteID": -1.0,
+              "scale": 1.0,
+              "JHAGIJGAKMK": ""
+            }
+          ],
+          "IAKNCBDLFKJ": 0.0
+        },
+        "HideGold": {
+          "elementDurability": 100.0,
+          "modifierName": "",
+          "onAdded": [
+            {
+              "$type": "AttachEffect",
+              "effectPattern": "Eff_SceneObj_Dig_MineCube_02",
+              "effectTempleteID": -1.0,
+              "scale": 1.0,
+              "JHAGIJGAKMK": ""
+            }
+          ],
+          "IAKNCBDLFKJ": 0.0
+        }
+      },
+      "onAdded": [
+        {
+          "$type": "SetGlobalValueV2",
+          "key": "GV_ActivityDigV2_AudioBuffLevel",
+          "maxValue": 0.0,
+          "minValue": 0.0,
+          "target": "Caster",
+          "value": 0.0
+        },
+        {
+          "$type": "AttachModifier",
+          "modifierName": "HideGoldController"
+        },
+        {
+          "$type": "AttachModifier",
+          "modifierName": "HPBarManager"
+        }
+      ],
+      "onKill": [
+        {
+          "$type": "Predicated",
+          "failActions": [
+            {
+              "$type": "TriggerAudioV2",
+              "muteRemoteAction": true,
+              "IMPNDGBPHFF": "v7_2_Activity_Dig_MineBroken_LevelFull"
+            },
+            {
+              "$type": "SetGlobalValueV2",
+              "key": "GV_ActivityDigV2_AudioBuffTrigger",
+              "maxValue": 0.0,
+              "minValue": 0.0,
+              "target": "Team",
+              "value": 1.0
+            }
+          ],
+          "successActions": [
+            {
+              "$type": "TriggerAudioV2",
+              "muteRemoteAction": true,
+              "predicates": [
+                {
+                  "$type": "ByTargetGlobalValue",
+                  "key": "GV_ActivityDigV2_DrillLevel",
+                  "target": "Caster",
+                  "value": 1.0
+                }
+              ],
+              "IMPNDGBPHFF": "v7_2_Activity_Dig_MineBroken_Level1"
+            },
+            {
+              "$type": "TriggerAudioV2",
+              "muteRemoteAction": true,
+              "predicates": [
+                {
+                  "$type": "ByTargetGlobalValue",
+                  "key": "GV_ActivityDigV2_DrillLevel",
+                  "target": "Caster",
+                  "value": 2.0
+                }
+              ],
+              "IMPNDGBPHFF": "v7_2_Activity_Dig_MineBroken_Level2"
+            },
+            {
+              "$type": "TriggerAudioV2",
+              "muteRemoteAction": true,
+              "predicates": [
+                {
+                  "$type": "ByTargetGlobalValue",
+                  "key": "GV_ActivityDigV2_DrillLevel",
+                  "target": "Caster",
+                  "value": 3.0
+                }
+              ],
+              "IMPNDGBPHFF": "v7_2_Activity_Dig_MineBroken_Level3"
+            }
+          ],
+          "target": "Caster",
+          "targetPredicates": [
+            {
+              "$type": "ByAny",
+              "predicates": [
+                {
+                  "$type": "ByTargetGlobalValue",
+                  "key": "GV_ActivityDigV2_Ore_OreType",
+                  "target": "Caster",
+                  "value": 0.0
+                },
+                {
+                  "$type": "ByTargetGlobalValue",
+                  "key": "GV_ActivityDigV2_Ore_OreType",
+                  "target": "Caster",
+                  "value": 2.0
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "$type": "Predicated",
+          "failActions": [
+            {
+              "$type": "FireEffect",
+              "effectPattern": "Eff_SceneObj_Dig_MineCube_02_Disappear",
+              "effectTempleteID": -1.0,
+              "scale": 1.0,
+              "JHAGIJGAKMK": ""
+            },
+            {
+              "$type": "FireEffect",
+              "born": {
+                "$type": "ConfigBornBySelf",
+                "offset": {
+                  "x": 0.0,
+                  "y": 3.0,
+                  "z": 0.0
+                },
+                "useRotation": true
+              },
+              "effectPattern": "Eff_SceneObj_Dig_MineCube_01_Seed",
+              "effectTempleteID": -1.0,
+              "ownedByLevel": true,
+              "scale": 1.0,
+              "JHAGIJGAKMK": ""
+            }
+          ],
+          "successActions": [
+            {
+              "$type": "FireEffect",
+              "effectPattern": "Eff_SceneObj_Dig_MineCube_01_Disappear_02",
+              "effectTempleteID": -1.0,
+              "scale": 1.0,
+              "JHAGIJGAKMK": ""
+            },
+            {
+              "$type": "FireEffect",
+              "born": {
+                "$type": "ConfigBornBySelf",
+                "offset": {
+                  "x": 0.0,
+                  "y": 3.0,
+                  "z": 0.0
+                },
+                "useRotation": true
+              },
+              "effectPattern": "Eff_SceneObj_Dig_MineCube_01_Seed03",
+              "effectTempleteID": -1.0,
+              "ownedByLevel": true,
+              "predicates": [
+                {
+                  "$type": "ByTargetGlobalValue",
+                  "key": "GV_ActivityDigV2_Ore_OreType",
+                  "target": "Caster",
+                  "value": 1.0
+                }
+              ],
+              "scale": 1.0,
+              "JHAGIJGAKMK": ""
+            },
+            {
+              "$type": "FireEffect",
+              "born": {
+                "$type": "ConfigBornBySelf",
+                "offset": {
+                  "x": 0.0,
+                  "y": 3.0,
+                  "z": 0.0
+                },
+                "useRotation": true
+              },
+              "effectPattern": "Eff_SceneObj_Dig_MineCube_01_Seed02",
+              "effectTempleteID": -1.0,
+              "ownedByLevel": true,
+              "predicates": [
+                {
+                  "$type": "ByTargetGlobalValue",
+                  "key": "GV_ActivityDigV2_Ore_OreType",
+                  "target": "Caster",
+                  "value": 2.0
+                }
+              ],
+              "scale": 1.0,
+              "JHAGIJGAKMK": ""
+            }
+          ],
+          "target": "Caster",
+          "targetPredicates": [
+            {
+              "$type": "ByAny",
+              "predicates": [
+                {
+                  "$type": "ByTargetGlobalValue",
+                  "key": "GV_ActivityDigV2_Ore_OreType",
+                  "target": "Caster",
+                  "value": 1.0
+                },
+                {
+                  "$type": "ByTargetGlobalValue",
+                  "key": "GV_ActivityDigV2_Ore_OreType",
+                  "target": "Caster",
+                  "value": 2.0
+                }
+              ]
+            }
+          ]
+        }
+      ],
+      "CELKHCPEMFI": [
+        "GV_ActivityDigV2_MaxDurability",
+        "GV_ActivityDigV2_Durability"
+      ]
+    }
+  },
+  {
+    "Default": {
+      "abilityName": "SceneObj_Activity_Ani_Prop_DigV2_Ore_ContainItem",
+      "modifiers": {
+        "ContainItemController": {
+          "elementDurability": 100.0,
+          "modifierMixins": [
+            {
+              "$type": "AttachModifierToGlobalValueMixin",
+              "globalValueKey": "GV_ActivityDigV2_Ore_DropType",
+              "globalValueTarget": "Caster",
+              "modifierNameSteps": [
+                "ContainItem"
+              ],
+              "valueSteps": [
+                0.5,
+                100.0
+              ],
+              "EECIIMBIDGB": true
+            }
+          ],
+          "modifierName": "",
+          "IAKNCBDLFKJ": 0.0
+        },
+        "ContainItem": {
+          "elementDurability": 100.0,
+          "modifierName": "",
+          "onAdded": [
+            {
+              "$type": "AttachEffect",
+              "effectPattern": "Eff_SceneObj_Dig_MineCube_05",
+              "effectTempleteID": -1.0,
+              "scale": 1.0,
+              "JHAGIJGAKMK": ""
+            }
+          ],
+          "IAKNCBDLFKJ": 0.0
+        }
+      },
+      "onAdded": [
+        {
+          "$type": "AttachModifier",
+          "modifierName": "ContainItemController"
+        }
+      ]
+    }
+  },
+  {
+    "Default": {
+      "abilityName": "SceneObj_Activity_Ani_Prop_DigV2_Golden",
+      "onKill": [
+        {
+          "$type": "Predicated",
+          "successActions": [
+            {
+              "$type": "ActivityDigV2GridReplaceEntity",
+              "JACDGJNCEDM": 1,
+              "FCAAKFGDEHA": 5,
+              "HONEAFEBCAM": 1006
+            },
+            {
+              "$type": "FireEffect",
+              "effectPattern": "Eff_SceneObj_Dig_MiningCar_Buff_01",
+              "effectTempleteID": -1.0,
+              "scale": 1.0,
+              "JHAGIJGAKMK": ""
+            }
+          ],
+          "target": "Caster",
+          "targetPredicates": [
+            {
+              "$type": "ByTargetGlobalValue",
+              "key": "GV_ActivityDigV2_Ore_DropType",
+              "target": "Caster",
+              "value": 1.0
+            }
+          ]
+        }
+      ]
+    }
+  },
+  {
+    "Default": {
+      "abilityName": "SceneObj_Activity_Ani_Prop_DigV2_Invincible",
+      "modifiers": {
+        "Invincible": {
+          "duration": 1.0,
+          "elementDurability": 100.0,
+          "modifierName": "",
+          "onAdded": [
+            {
+              "$type": "SetGlobalValueV2",
+              "key": "GV_ActivityDigV2_Player_Invincible_StartTrigger",
+              "maxValue": 0.0,
+              "minValue": 0.0,
+              "target": "Team",
+              "value": 1.0
+            }
+          ],
+          "IAKNCBDLFKJ": 0.0
+        }
+      },
+      "onKill": [
+        {
+          "$type": "Predicated",
+          "successActions": [
+            {
+              "$type": "FireEffect",
+              "effectPattern": "Eff_SceneObj_Dig_MiningCar_Buff_02",
+              "effectTempleteID": -1.0,
+              "scale": 1.0,
+              "JHAGIJGAKMK": ""
+            },
+            {
+              "$type": "ApplyModifier",
+              "modifierName": "Invincible",
+              "target": "Team"
+            }
+          ],
+          "target": "Caster",
+          "targetPredicates": [
+            {
+              "$type": "ByTargetGlobalValue",
+              "key": "GV_ActivityDigV2_Ore_DropType",
+              "target": "Caster",
+              "value": 2.0
+            }
+          ]
+        }
+      ]
+    }
+  },
+  {
+    "Default": {
+      "abilityName": "SceneObj_Activity_Ani_Prop_DigV2_Bomb",
+      "modifiers": {
+        "BombController": {
+          "elementDurability": 100.0,
+          "modifierMixins": [
+            {
+              "$type": "ActivityDigV2BombSequenceMixin",
+              "BHMOILMGJDP": 3.0,
+              "OIILJGAICCO": 4,
+              "BPBHPINNEFE": "Eff_SceneObj_Dig_AreaBoom_Explosion",
+              "BJPCGHGHIGP": "Eff_SceneObj_Dig_AreaBoom_Warning",
+              "FNBCFJMAEEJ": [
+                {
+                  "$type": "KillSelf",
+                  "configIdArray": [
+                    73209001
+                  ]
+                }
+              ],
+              "CCKBGKFMHNL": [
+                {
+                  "$type": "Predicated",
+                  "successActions": [
+                    {
+                      "$type": "AddGlobalValueV2",
+                      "key": "GV_ActivityDigV2_Player_Fuel",
+                      "maxValue": 0.0,
+                      "minValue": 0.0,
+                      "target": "Team",
+                      "value": [
+                        0.0,
+                        "GV_ActivityDigV2_FuelReward",
+                        "SUB"
+                      ]
+                    },
+                    {
+                      "$type": "CopyGlobalValue",
+                      "dstKey": "GV_ActivityDigV2_FontSize_Damage",
+                      "dstTarget": "Caster",
+                      "srcKey": "GV_ActivityDigV2_FontSize_Damage",
+                      "srcTarget": "Team"
+                    },
+                    {
+                      "$type": "ActivityDigV2ShowScoreJumpWord",
+                      "target": "Team",
+                      "OKGOBOBDPIA": true,
+                      "GAOPADOKKMM": "GV_ActivityDigV2_FontSize_Damage",
+                      "ADBLCPOFBOD": [
+                        0.0,
+                        "GV_ActivityDigV2_FuelReward",
+                        "SUB"
+                      ]
+                    },
+                    {
+                      "$type": "SetGlobalValueV2",
+                      "key": "GV_ActivityDigV2_Player_HurtTrigger",
+                      "maxValue": 0.0,
+                      "minValue": 0.0,
+                      "target": "Team",
+                      "value": 1.0
+                    }
+                  ],
+                  "targetPredicates": [
+                    {
+                      "$type": "ByTargetGlobalValue",
+                      "compareType": "NoneOrEqual",
+                      "key": "GV_ActivityDigV2_Player_HurtTrigger",
+                      "target": "Team",
+                      "value": 0.0
+                    },
+                    {
+                      "$type": "ByTargetGlobalValue",
+                      "compareType": "NoneOrEqual",
+                      "key": "GV_ActivityDigV2_Player_FeverState",
+                      "target": "Team",
+                      "value": 0.0
+                    }
+                  ]
+                }
+              ]
+            }
+          ],
+          "modifierName": "",
+          "onAdded": [
+            {
+              "$type": "SetAnimatorInt",
+              "intID": "GadgetState",
+              "value": 201.0
+            }
+          ],
+          "IAKNCBDLFKJ": 0.0
+        }
+      },
+      "onAdded": [
+        {
+          "$type": "AttachModifier",
+          "modifierName": "BombController"
+        }
+      ],
+      "CELKHCPEMFI": [
+        "GV_ActivityDigV2_FuelReward",
+        "GV_ActivityDigV2_FontSize_Damage"
+      ]
+    }
+  },
+  {
+    "Default": {
+      "abilityName": "SceneObj_Activity_Ani_Prop_DigV2_StaticBomb",
+      "onKill": [
+        {
+          "$type": "ActivityDigV2GridDropEntity"
+        }
+      ]
+    }
+  },
+  {
+    "Default": {
+      "abilityName": "SceneObj_Activity_Ani_Prop_DigV2_Mode",
+      "modifiers": {
+        "ModeVFX": {
+          "elementDurability": 100.0,
+          "modifierName": "",
+          "onAdded": [
+            {
+              "$type": "AttachEffect",
+              "born": {
+                "$type": "ConfigBornBySelf",
+                "offset": {
+                  "x": 0.0,
+                  "y": 1.5,
+                  "z": 0.0
+                },
+                "useRotation": true
+              },
+              "effectPattern": "Eff_SceneObj_Dig_SkillBall_01",
+              "effectTempleteID": -1.0,
+              "scale": 1.0,
+              "JHAGIJGAKMK": ""
+            }
+          ],
+          "IAKNCBDLFKJ": 0.0
+        }
+      },
+      "onAdded": [
+        {
+          "$type": "AttachModifier",
+          "modifierName": "ModeVFX"
+        }
+      ],
+      "onFieldEnter": [
+        {
+          "$type": "FireEffect",
+          "born": {
+            "$type": "ConfigBornBySelf",
+            "offset": {
+              "x": 0.0,
+              "y": 1.5,
+              "z": 0.0
+            },
+            "useRotation": true
+          },
+          "effectPattern": "Eff_SceneObj_Dig_SkillBall_01_Disappear",
+          "effectTempleteID": -1.0,
+          "scale": 1.0,
+          "JHAGIJGAKMK": ""
+        },
+        {
+          "$type": "KillSelf",
+          "configIdArray": [
+            73209005
+          ]
+        }
+      ],
+      "onKill": [
+        {
+          "$type": "AddGlobalValueV2",
+          "key": "GV_Team_AttackRangeMode",
+          "maxValue": 0.0,
+          "minValue": 0.0,
+          "predicates": [
+            {
+              "$type": "ByTargetGlobalValue",
+              "key": "GV_ActivityDigV2_Buff_Type",
+              "target": "Caster",
+              "value": 0.0
+            }
+          ],
+          "target": "Team",
+          "value": 1.0
+        },
+        {
+          "$type": "AddGlobalValueV2",
+          "key": "GV_Team_AttackCDMode",
+          "maxValue": 2.0,
+          "minValue": 0.0,
+          "predicates": [
+            {
+              "$type": "ByTargetGlobalValue",
+              "key": "GV_ActivityDigV2_Buff_Type",
+              "target": "Caster",
+              "value": 1.0
+            }
+          ],
+          "target": "Team",
+          "useLimitRange": true,
+          "value": 1.0
+        },
+        {
+          "$type": "AddGlobalValueV2",
+          "key": "GV_Team_SkillDurationMode",
+          "maxValue": 1.0,
+          "minValue": 0.0,
+          "predicates": [
+            {
+              "$type": "ByTargetGlobalValue",
+              "key": "GV_ActivityDigV2_Buff_Type",
+              "target": "Caster",
+              "value": 2.0
+            }
+          ],
+          "target": "Team",
+          "useLimitRange": true,
+          "value": 1.0
+        },
+        {
+          "$type": "AddGlobalValueV2",
+          "key": "GV_Team_SkillCDMode",
+          "maxValue": 1.0,
+          "minValue": 0.0,
+          "predicates": [
+            {
+              "$type": "ByTargetGlobalValue",
+              "key": "GV_ActivityDigV2_Buff_Type",
+              "target": "Caster",
+              "value": 3.0
+            }
+          ],
+          "target": "Team",
+          "useLimitRange": true,
+          "value": 1.0
+        },
+        {
+          "$type": "AddGlobalValueV2",
+          "key": "GV_Team_RushCDMode",
+          "maxValue": 1.0,
+          "minValue": 0.0,
+          "predicates": [
+            {
+              "$type": "ByTargetGlobalValue",
+              "key": "GV_ActivityDigV2_Buff_Type",
+              "target": "Caster",
+              "value": 4.0
+            }
+          ],
+          "target": "Team",
+          "useLimitRange": true,
+          "value": 1.0
+        },
+        {
+          "$type": "AddGlobalValueV2",
+          "key": "GV_Team_RushRangeMode",
+          "maxValue": 1.0,
+          "minValue": 0.0,
+          "predicates": [
+            {
+              "$type": "ByTargetGlobalValue",
+              "key": "GV_ActivityDigV2_Buff_Type",
+              "target": "Caster",
+              "value": 5.0
+            }
+          ],
+          "target": "Team",
+          "useLimitRange": true,
+          "value": 1.0
+        }
+      ],
+      "CELKHCPEMFI": [
+        "GV_ActivityDigV2_Buff_Type"
+      ]
+    }
+  },
+  {
+    "Default": {
+      "abilityMixins": [
+        {
+          "$type": "ActivityDigV2RegionListenMixin",
+          "KKJHEKNCOFJ": [
+            {
+              "$type": "SetGlobalValueV2",
+              "key": "GV_ActivityDigV2_Thief_State",
+              "maxValue": 0.0,
+              "minValue": 0.0,
+              "target": "Caster",
+              "value": 1.0
+            }
+          ]
+        }
+      ],
+      "abilityName": "SceneObj_Activity_Ani_Prop_DigV2_Thief",
+      "modifiers": {
+        "AttachStateManager": {
+          "elementDurability": 100.0,
+          "modifierMixins": [
+            {
+              "$type": "AttachModifierToGlobalValueMixin",
+              "globalValueKey": "GV_ActivityDigV2_Thief_StealDuration",
+              "globalValueTarget": "Team",
+              "modifierNameSteps": [
+                "StateManager"
+              ],
+              "valueSteps": [
+                1.0,
+                10000000.0
+              ],
+              "EECIIMBIDGB": true
+            }
+          ],
+          "modifierName": "",
+          "IAKNCBDLFKJ": 0.0
+        },
+        "StateManager": {
+          "elementDurability": 100.0,
+          "modifierMixins": [
+            {
+              "$type": "AttachModifierToGlobalValueMixin",
+              "globalValueKey": "GV_ActivityDigV2_Thief_State",
+              "globalValueTarget": "Caster",
+              "modifierNameSteps": [
+                "State_Idle",
+                "State_Steal",
+                "State_Leave"
+              ],
+              "valueSteps": [
+                -0.5,
+                0.5,
+                1.5,
+                2.5
+              ],
+              "EECIIMBIDGB": true
+            },
+            {
+              "$type": "AttachModifierToGlobalValueMixin",
+              "globalValueKey": "GV_ActivityDigV2_Thief_State",
+              "globalValueTarget": "Caster",
+              "modifierNameSteps": [
+                "GoldEffectOnHand"
+              ],
+              "valueSteps": [
+                0.5,
+                2.5
+              ],
+              "EECIIMBIDGB": true
+            }
+          ],
+          "modifierName": "",
+          "onAdded": [
+            {
+              "$type": "CopyGlobalValue",
+              "dstKey": "GV_ActivityDigV2_StealDuration",
+              "dstTarget": "Caster",
+              "srcKey": "GV_ActivityDigV2_Thief_StealDuration",
+              "srcTarget": "Team"
+            },
+            {
+              "$type": "SetGlobalValueV2",
+              "key": "GV_ActivityDigV2_StealProgressPerSec",
+              "maxValue": 0.0,
+              "minValue": 0.0,
+              "target": "Caster",
+              "value": [
+                10.0,
+                "GV_ActivityDigV2_StealDuration",
+                "DIV"
+              ]
+            },
+            {
+              "$type": "SetGlobalValueV2",
+              "key": "GV_ActivityDigV2_Thief_State",
+              "maxValue": 0.0,
+              "minValue": 0.0,
+              "target": "Caster",
+              "value": 0.0
+            }
+          ],
+          "IAKNCBDLFKJ": 0.0
+        },
+        "GoldEffectOnHand": {
+          "elementDurability": 100.0,
+          "modifierName": "",
+          "onAdded": [
+            {
+              "$type": "AttachEffect",
+              "born": {
+                "$type": "ConfigBornByAttachPoint",
+                "attachPointName": "GoldPivot",
+                "useRotation": true
+              },
+              "effectPattern": "Eff_SceneObj_Dig_MineCube_06",
+              "effectTempleteID": -1.0,
+              "scale": 1.0,
+              "JHAGIJGAKMK": ""
+            },
+            {
+              "$type": "SetEffectFollowPath",
+              "attachPoint": "GoldPivot",
+              "effectPattern": "Eff_SceneObj_Dig_MineCube_06",
+              "followPath": "GoldPivot"
+            }
+          ],
+          "IAKNCBDLFKJ": 0.0
+        },
+        "State_Idle": {
+          "elementDurability": 100.0,
+          "modifierName": "",
+          "onAdded": [
+            {
+              "$type": "SetGlobalValueV2",
+              "key": "GV_ActivityDigV2_Thief_Progress",
+              "maxValue": 0.0,
+              "minValue": 0.0,
+              "target": "Caster",
+              "value": 0.0
+            },
+            {
+              "$type": "SetAnimatorInt",
+              "intID": "GadgetState",
+              "target": "Caster",
+              "value": 0.0
+            },
+            {
+              "$type": "AttachEffect",
+              "effectPattern": "Eff_SceneObj_Dig_MineCube_01",
+              "effectTempleteID": -1.0,
+              "scale": 1.0,
+              "JHAGIJGAKMK": ""
+            }
+          ],
+          "IAKNCBDLFKJ": 0.0
+        },
+        "State_Steal": {
+          "elementDurability": 100.0,
+          "modifierMixins": [
+            {
+              "$type": "BillboardV2Mixin",
+              "OPDKMMMNGLO": {
+                "GIDEOEGBLDL": {
+                  "attachPointName": "BillboardAttach",
+                  "showDistance": 10000.0,
+                  "OGCOMBHFBJA": true,
+                  "PINNILLAOIL": true
+                },
+                "PFCAENLPIHF": {
+                  "customKeyList": [
+                    "GV_ActivityDigV2_Thief_Progress"
+                  ],
+                  "maxValue": 100.0,
+                  "prefabPluginName": "DigV2InLevelDialog_ProgessBoard",
+                  "textMapId": "",
+                  "KEEINOMPOAO": 10000.0
+                }
+              }
+            },
+            {
+              "$type": "DoActionOnGlobalValueChangeMixin",
+              "actions": [
+                {
+                  "$type": "SetGlobalValueV2",
+                  "key": "GV_ActivityDigV2_Thief_State",
+                  "maxValue": 0.0,
+                  "minValue": 0.0,
+                  "predicates": [
+                    {
+                      "$type": "ByTargetGlobalValue",
+                      "compareType": "MoreThanAndEqual",
+                      "key": "GV_ActivityDigV2_Thief_Progress",
+                      "target": "Caster",
+                      "value": 100.0
+                    }
+                  ],
+                  "target": "Caster",
+                  "value": 2.0
+                }
+              ],
+              "globalValueKey": "GV_ActivityDigV2_Thief_Progress",
+              "DHKOKKHJMHC": true
+            }
+          ],
+          "modifierName": "",
+          "onAdded": [
+            {
+              "$type": "FireEffect",
+              "effectPattern": "Eff_SceneObj_Dig_MineCube_01_Disappear_02",
+              "effectTempleteID": -1.0,
+              "scale": 1.0,
+              "JHAGIJGAKMK": ""
+            },
+            {
+              "$type": "SetAnimatorInt",
+              "intID": "GadgetState",
+              "target": "Caster",
+              "value": 201.0
+            },
+            {
+              "$type": "SetAnimatorTrigger",
+              "target": "Caster",
+              "triggerID": "WagLoop"
+            }
+          ],
+          "onThinkInterval": [
+            {
+              "$type": "AddGlobalValueV2",
+              "key": "GV_ActivityDigV2_Thief_Progress",
+              "maxValue": 0.0,
+              "minValue": 0.0,
+              "target": "Caster",
+              "value": "GV_ActivityDigV2_StealProgressPerSec"
+            }
+          ],
+          "thinkInterval": 0.1,
+          "IAKNCBDLFKJ": 0.0
+        },
+        "State_Leave": {
+          "duration": 0.5,
+          "elementDurability": 100.0,
+          "modifierName": "",
+          "onAdded": [
+            {
+              "$type": "SetAnimatorInt",
+              "intID": "GadgetState",
+              "target": "Caster",
+              "value": 0.0
+            }
+          ],
+          "onRemoved": [
+            {
+              "$type": "KillSelf",
+              "configIdArray": [
+                73209004
+              ]
+            }
+          ],
+          "IAKNCBDLFKJ": 0.0
+        }
+      },
+      "onAdded": [
+        {
+          "$type": "AttachModifier",
+          "modifierName": "AttachStateManager",
+          "target": "Caster"
+        }
+      ],
+      "onKill": [
+        {
+          "$type": "FireEffect",
+          "effectPattern": "Eff_SceneObj_Dig_MineCube_01_Disappear_02",
+          "effectTempleteID": -1.0,
+          "scale": 1.0,
+          "JHAGIJGAKMK": ""
+        },
+        {
+          "$type": "FireEffect",
+          "born": {
+            "$type": "ConfigBornBySelf",
+            "offset": {
+              "x": 0.0,
+              "y": 3.0,
+              "z": 0.0
+            },
+            "useRotation": true
+          },
+          "effectPattern": "Eff_SceneObj_Dig_MineCube_01_Seed03",
+          "effectTempleteID": -1.0,
+          "ownedByLevel": true,
+          "predicates": [
+            {
+              "$type": "ByTargetGlobalValue",
+              "compareType": "LessAndEqual",
+              "key": "GV_ActivityDigV2_Thief_State",
+              "target": "Caster",
+              "value": 1.0
+            }
+          ],
+          "scale": 1.0,
+          "JHAGIJGAKMK": ""
+        }
+      ],
+      "CELKHCPEMFI": [
+        "GV_ActivityDigV2_StealDuration",
+        "GV_ActivityDigV2_StealProgressPerSec"
+      ]
+    }
+  },
+  {
+    "Default": {
+      "abilityMixins": [
+        {
+          "$type": "ActivityDigV2RegionListenMixin",
+          "FBHHIAHBGPI": [
+            {
+              "$type": "SetGlobalValueV2",
+              "key": "GV_ActivityDigV2_Team_InBossSight",
+              "maxValue": 0.0,
+              "minValue": 0.0,
+              "target": "Team",
+              "value": 0.0
+            }
+          ],
+          "KKJHEKNCOFJ": [
+            {
+              "$type": "SetGlobalValueV2",
+              "key": "GV_ActivityDigV2_Team_InBossSight",
+              "maxValue": 0.0,
+              "minValue": 0.0,
+              "target": "Team",
+              "value": 1.0
+            }
+          ]
+        }
+      ],
+      "abilityName": "SceneObj_Activity_Ani_Prop_DigV2_PlayerWatcherForBoss"
+    }
+  },
+  {
+    "Default": {
+      "abilityMixins": [
+        {
+          "$type": "CurLocalAvatarMixinV2",
+          "modifierName": "PositionToShader"
+        },
+        {
+          "$type": "AttachModifierToGVListMixin",
+          "globalValueTarget": "Team",
+          "modifierNameSteps": [
+            {
+              "conditionType": "OR",
+              "JJOPIJBEFNL": "FeverState",
+              "GDEDANJMPPN": [
+                [
+                  0.5,
+                  1.5
+                ],
+                [
+                  0.5,
+                  1.5
+                ]
+              ]
+            }
+          ],
+          "KNGKIHIGCAC": [
+            "GV_ActivityDigV2_Player_FeverState_ByAddFuel",
+            "GV_ActivityDigV2_Player_Invincible_Trigger"
+          ]
+        },
+        {
+          "$type": "DoActionOnGlobalValueChangeMixin",
+          "actions": [
+            {
+              "$type": "ServerLuaCall",
+              "doOffStage": true,
+              "funcName": "SLC_UpdateScore",
+              "luaCallType": "CurGalleryControlGroup",
+              "param1": 0.0,
+              "param2": 0.0,
+              "param3": 0.0
+            }
+          ],
+          "globalValueKey": "GV_ActivityDigV2_Player_Score",
+          "DHKOKKHJMHC": true
+        }
+      ],
+      "abilityName": "TeamAbility_DigV2_V7_2_LevelManager",
+      "isDynamicAbility": true,
+      "modifiers": {
+        "AttachAudioBuffLevelManager": {
+          "elementDurability": 100.0,
+          "modifierMixins": [
+            {
+              "$type": "DoActionOnGlobalValueChangeMixin",
+              "actions": [
+                {
+                  "$type": "ApplyModifier",
+                  "modifierName": "AudioBuffLevelManager",
+                  "predicates": [
+                    {
+                      "$type": "ByTargetGlobalValue",
+                      "compareType": "MoreThan",
+                      "key": "GV_ActivityDigV2_AudioBuffLevel",
+                      "target": "Team",
+                      "value": 0.0
+                    }
+                  ]
+                }
+              ],
+              "globalValueKey": "GV_ActivityDigV2_AudioBuffLevel",
+              "DHKOKKHJMHC": true
+            },
+            {
+              "$type": "DoActionOnGlobalValueChangeMixin",
+              "actions": [
+                {
+                  "$type": "ApplyModifier",
+                  "modifierName": "AudioBuffLevelAdder",
+                  "predicates": [
+                    {
+                      "$type": "ByTargetGlobalValue",
+                      "key": "GV_ActivityDigV2_AudioBuffTrigger",
+                      "target": "Team",
+                      "value": 1.0
+                    }
+                  ]
+                },
+                {
+                  "$type": "SetGlobalValueV2",
+                  "key": "GV_ActivityDigV2_AudioBuffTrigger",
+                  "maxValue": 0.0,
+                  "minValue": 0.0,
+                  "target": "Team",
+                  "value": 0.0
+                }
+              ],
+              "globalValueKey": "GV_ActivityDigV2_AudioBuffTrigger",
+              "DHKOKKHJMHC": true
+            },
+            {
+              "$type": "SyncGVToAudioMixin",
+              "globalValueKey": "GV_ActivityDigV2_AudioBuffLevel",
+              "LOMFNBIHLDO": true,
+              "PGEEDCLEDIE": "Team",
+              "HICFCABJGIA": "__DefaultSync__",
+              "CJCBHMLEGLI": {
+                "text": "Param_7_2_Activity_Dig_CrystalMine_Count"
+              }
+            }
+          ],
+          "modifierName": "",
+          "IAKNCBDLFKJ": 0.0
+        },
+        "AudioBuffLevelAdder": {
+          "duration": 0.1,
+          "elementDurability": 100.0,
+          "modifierName": "",
+          "onAdded": [
+            {
+              "$type": "AddGlobalValueV2",
+              "key": "GV_ActivityDigV2_AudioBuffLevel",
+              "maxValue": 0.0,
+              "minValue": 0.0,
+              "target": "Team",
+              "value": 1.0
+            }
+          ],
+          "stacking": "Unique",
+          "IAKNCBDLFKJ": 0.0
+        },
+        "AudioBuffLevelManager": {
+          "duration": 3.0,
+          "elementDurability": 100.0,
+          "modifierName": "",
+          "onRemoved": [
+            {
+              "$type": "SetGlobalValueV2",
+              "key": "GV_ActivityDigV2_AudioBuffLevel",
+              "maxValue": 0.0,
+              "minValue": 0.0,
+              "target": "Team",
+              "value": 0.0
+            }
+          ],
+          "stacking": "Unique",
+          "IAKNCBDLFKJ": 0.0
+        },
+        "PositionToShader": {
+          "elementDurability": 100.0,
+          "modifierMixins": [
+            {
+              "$type": "SetPositionToShaderMixin",
+              "CPAFGHLEOPP": "RootNode",
+              "KGFBNFIMCDK": "_GPUParticleGlobals_Sim_GlobalTargetPoints"
+            }
+          ],
+          "modifierName": "",
+          "IAKNCBDLFKJ": 0.0
+        },
+        "ReconnectExitManager": {
+          "elementDurability": 100.0,
+          "modifierName": "",
+          "onReconnect": [
+            {
+              "$type": "ServerLuaCall",
+              "doOffStage": true,
+              "funcName": "SLC_ReconnectEvent",
+              "luaCallType": "CurGalleryControlGroup",
+              "param1": 0.0,
+              "param2": 0.0,
+              "param3": 0.0
+            }
+          ],
+          "IAKNCBDLFKJ": 0.0
+        },
+        "ModeManager": {
+          "elementDurability": 100.0,
+          "modifierMixins": [
+            {
+              "$type": "DoActionOnGlobalValueListChangeMixin",
+              "actions": [
+                {
+                  "$type": "FireEffect",
+                  "effectPattern": "Eff_SceneObj_MagnificationBuff_Hit",
+                  "effectTempleteID": -1.0,
+                  "scale": 1.0,
+                  "JHAGIJGAKMK": ""
+                }
+              ],
+              "DHKOKKHJMHC": true,
+              "KNGKIHIGCAC": [
+                "GV_Team_AttackRangeMode",
+                "GV_Team_AttackCDMode",
+                "GV_Team_SkillDurationMode",
+                "GV_Team_SkillCDMode",
+                "GV_Team_RushCDMode",
+                "GV_Team_RushRangeMode"
+              ]
+            }
+          ],
+          "modifierName": "",
+          "IAKNCBDLFKJ": 0.0
+        },
+        "AttachFuelManager": {
+          "elementDurability": 100.0,
+          "modifierMixins": [
+            {
+              "$type": "AttachModifierToGlobalValueMixin",
+              "globalValueKey": "GV_ActivityDigV2_Player_MaxFuel",
+              "globalValueTarget": "Caster",
+              "modifierNameSteps": [
+                "FuelManager"
+              ],
+              "valueSteps": [
+                0.5,
+                1000000.0
+              ],
+              "EECIIMBIDGB": true
+            }
+          ],
+          "modifierName": "",
+          "IAKNCBDLFKJ": 0.0
+        },
+        "FuelManager": {
+          "elementDurability": 100.0,
+          "modifierName": "",
+          "onAdded": [
+            {
+              "$type": "SetGlobalValueV2",
+              "key": "GV_ActivityDigV2_Player_Fuel",
+              "maxValue": 0.0,
+              "minValue": 0.0,
+              "target": "Team",
+              "value": [
+                0.5,
+                "GV_ActivityDigV2_Player_MaxFuel",
+                "MUL"
+              ]
+            },
+            {
+              "$type": "AttachModifier",
+              "modifierName": "AttachGalleryStartManager"
+            }
+          ],
+          "IAKNCBDLFKJ": 0.0
+        },
+        "AttachGalleryStartManager": {
+          "elementDurability": 100.0,
+          "modifierMixins": [
+            {
+              "$type": "AttachModifierToGlobalValueMixin",
+              "globalValueKey": "SGV_ActivityDigV2_GalleryStart",
+              "globalValueTarget": "Team",
+              "modifierNameSteps": [
+                "AttachFuelConsumptionManager"
+              ],
+              "valueSteps": [
+                0.5,
+                1.5
+              ],
+              "EECIIMBIDGB": true
+            }
+          ],
+          "modifierName": "",
+          "IAKNCBDLFKJ": 0.0
+        },
+        "AttachFuelConsumptionManager": {
+          "elementDurability": 100.0,
+          "modifierMixins": [
+            {
+              "$type": "AttachModifierToGVListMixin",
+              "globalValueTarget": "Caster",
+              "modifierNameSteps": [
+                {
+                  "JJOPIJBEFNL": "FuelConsumptionManager",
+                  "GDEDANJMPPN": [
+                    [
+                      0.0,
+                      1000000.0
+                    ],
+                    [
+                      0.0,
+                      1000000.0
+                    ]
+                  ]
+                }
+              ],
+              "KNGKIHIGCAC": [
+                "GV_ActivityDigV2_Player_FuelConsumptionRate",
+                "GV_ActivityDigV2_Player_FeverState_Duration"
+              ]
+            }
+          ],
+          "modifierName": "",
+          "IAKNCBDLFKJ": 0.0
+        },
+        "FuelConsumptionManager": {
+          "elementDurability": 100.0,
+          "modifierMixins": [
+            {
+              "$type": "AttachModifierToGlobalValueMixin",
+              "globalValueKey": "GV_ActivityDigV2_Player_Fuel",
+              "globalValueTarget": "Caster",
+              "modifierNameSteps": [
+                "DeadState",
+                "ConsumeFuel",
+                "FeverStateByAddFuel"
+              ],
+              "valueSteps": [
+                -100000.0,
+                0.5,
+                "GV_ActivityDigV2_Player_MaxFuel",
+                1000000.0
+              ],
+              "EECIIMBIDGB": true
+            }
+          ],
+          "modifierName": "",
+          "IAKNCBDLFKJ": 0.0
+        },
+        "DeadState": {
+          "elementDurability": 100.0,
+          "modifierName": "",
+          "onAdded": [
+            {
+              "$type": "SetGlobalValueV2",
+              "key": "GV_ActivityDigV2_Player_Fuel",
+              "maxValue": 0.0,
+              "minValue": 0.0,
+              "target": "Team",
+              "value": 0.0
+            },
+            {
+              "$type": "ServerLuaCall",
+              "doOffStage": true,
+              "funcName": "SLC_PlayerFuelEmpty",
+              "luaCallType": "CurGalleryControlGroup",
+              "param1": 0.0,
+              "param2": 0.0,
+              "param3": 0.0,
+              "predicates": [
+                {
+                  "$type": "ByTargetGlobalValue",
+                  "compareType": "NoneOrEqual",
+                  "key": "GV_ActivityDigV2_Player_DeadState",
+                  "target": "Team",
+                  "value": 0.0
+                },
+                {
+                  "$type": "ByTargetGlobalValue",
+                  "compareType": "NoneOrEqual",
+                  "key": "SGV_Score_If_Invincible",
+                  "target": "Team",
+                  "value": 0.0
+                }
+              ]
+            },
+            {
+              "$type": "SetGlobalValueV2",
+              "key": "GV_ActivityDigV2_Player_DeadState",
+              "maxValue": 0.0,
+              "minValue": 0.0,
+              "target": "Team",
+              "value": 1.0
+            }
+          ],
+          "IAKNCBDLFKJ": 0.0
+        },
+        "FeverStateByAddFuel": {
+          "duration": "GV_ActivityDigV2_Player_FeverState_Duration",
+          "elementDurability": 100.0,
+          "modifierName": "",
+          "onAdded": [
+            {
+              "$type": "SetGlobalValueV2",
+              "key": "GV_ActivityDigV2_Player_FeverState_ByAddFuel",
+              "maxValue": 0.0,
+              "minValue": 0.0,
+              "predicates": [
+                {
+                  "$type": "ByTargetGlobalValue",
+                  "compareType": "NoneOrEqual",
+                  "key": "GV_ActivityDigV2_Player_Invincible_Trigger",
+                  "target": "Team",
+                  "value": 0.0
+                }
+              ],
+              "target": "Team",
+              "value": 1.0
+            }
+          ],
+          "onRemoved": [
+            {
+              "$type": "SetGlobalValueV2",
+              "key": "GV_ActivityDigV2_Player_FeverState_ByAddFuel",
+              "maxValue": 0.0,
+              "minValue": 0.0,
+              "target": "Team",
+              "value": 0.0
+            }
+          ],
+          "IAKNCBDLFKJ": 0.0
+        },
+        "FeverState": {
+          "elementDurability": 100.0,
+          "modifierName": "",
+          "onAdded": [
+            {
+              "$type": "SetGlobalValueV2",
+              "key": "GV_ActivityDigV2_Player_FeverState",
+              "maxValue": 0.0,
+              "minValue": 0.0,
+              "target": "Team",
+              "value": 1.0
+            },
+            {
+              "$type": "CameraScreenEffect",
+              "canBeHandledOnRecover": true,
+              "effectName": "Eff_UI_DigV2_ScreenEffect",
+              "enable": true,
+              "muteRemoteAction": true
+            }
+          ],
+          "onRemoved": [
+            {
+              "$type": "SetGlobalValueV2",
+              "key": "GV_ActivityDigV2_Player_FeverState",
+              "maxValue": 0.0,
+              "minValue": 0.0,
+              "target": "Team",
+              "value": 0.0
+            },
+            {
+              "$type": "CameraScreenEffect",
+              "canBeHandledOnRecover": true,
+              "effectName": "Eff_UI_DigV2_ScreenEffect",
+              "muteRemoteAction": true,
+              "ENELPIPIKAE": true
+            },
+            {
+              "$type": "SetGlobalValueV2",
+              "key": "GV_ActivityDigV2_Player_Fuel",
+              "maxValue": 0.0,
+              "minValue": 0.0,
+              "target": "Team",
+              "value": [
+                0.5,
+                "GV_ActivityDigV2_Player_MaxFuel",
+                "MUL"
+              ]
+            }
+          ],
+          "IAKNCBDLFKJ": 0.0
+        },
+        "ConsumeFuel": {
+          "elementDurability": 100.0,
+          "modifierName": "",
+          "onThinkInterval": [
+            {
+              "$type": "AddGlobalValueV2",
+              "key": "GV_ActivityDigV2_Player_Fuel",
+              "maxValue": 0.0,
+              "minValue": 0.0,
+              "target": "Team",
+              "value": [
+                0.0,
+                0.1,
+                "GV_ActivityDigV2_Player_FuelConsumptionRate",
+                "MUL",
+                "SUB"
+              ]
+            }
+          ],
+          "thinkInterval": 0.1,
+          "IAKNCBDLFKJ": 0.0
+        },
+        "AttachPlayerLevelManager": {
+          "elementDurability": 100.0,
+          "modifierMixins": [
+            {
+              "$type": "AttachModifierToGVListMixin",
+              "globalValueTarget": "Caster",
+              "modifierNameSteps": [
+                {
+                  "JJOPIJBEFNL": "PlayerLevelManager",
+                  "GDEDANJMPPN": [
+                    [
+                      0.5,
+                      9999999.0
+                    ],
+                    [
+                      0.5,
+                      9999999.0
+                    ]
+                  ]
+                }
+              ],
+              "KNGKIHIGCAC": [
+                "GV_ActivityDigV2_Player_ExpBar_Lv01_Lv02",
+                "GV_ActivityDigV2_Player_ExpBar_Lv02_Lv03"
+              ]
+            }
+          ],
+          "modifierName": "",
+          "IAKNCBDLFKJ": 0.0
+        },
+        "AttachLevelManager": {
+          "elementDurability": 100.0,
+          "modifierMixins": [
+            {
+              "$type": "AttachModifierToGlobalValueMixin",
+              "globalValueKey": "GV_ActivityDigV2_warningQuakeDelay",
+              "globalValueTarget": "Caster",
+              "modifierNameSteps": [
+                "LevelManager"
+              ],
+              "valueSteps": [
+                -0.5,
+                100.0
+              ],
+              "EECIIMBIDGB": true
+            }
+          ],
+          "modifierName": "",
+          "IAKNCBDLFKJ": 0.0
+        },
+        "AttachHurtTriggerEffectManager": {
+          "elementDurability": 100.0,
+          "modifierMixins": [
+            {
+              "$type": "AttachModifierToGlobalValueMixin",
+              "globalValueKey": "GV_ActivityDigV2_Player_HurtCD",
+              "globalValueTarget": "Caster",
+              "modifierNameSteps": [
+                "HurtTriggerEffectManager"
+              ],
+              "valueSteps": [
+                0.0,
+                100.0
+              ],
+              "EECIIMBIDGB": true
+            }
+          ],
+          "modifierName": "",
+          "IAKNCBDLFKJ": 0.0
+        },
+        "HurtTriggerEffectManager": {
+          "elementDurability": 100.0,
+          "modifierMixins": [
+            {
+              "$type": "AttachModifierToGlobalValueMixin",
+              "globalValueKey": "GV_ActivityDigV2_Player_HurtTrigger",
+              "globalValueTarget": "Caster",
+              "modifierNameSteps": [
+                "HurtTriggerEffect"
+              ],
+              "valueSteps": [
+                0.5,
+                1.5
+              ],
+              "EECIIMBIDGB": true
+            }
+          ],
+          "modifierName": "",
+          "IAKNCBDLFKJ": 0.0
+        },
+        "HurtTriggerEffect": {
+          "duration": "GV_ActivityDigV2_Player_HurtCD",
+          "elementDurability": 100.0,
+          "modifierName": "",
+          "onRemoved": [
+            {
+              "$type": "SetGlobalValueV2",
+              "key": "GV_ActivityDigV2_Player_HurtTrigger",
+              "maxValue": 0.0,
+              "minValue": 0.0,
+              "target": "Team",
+              "value": 0.0
+            }
+          ],
+          "IAKNCBDLFKJ": 0.0
+        },
+        "QuakeBlind": {
+          "duration": "GV_ActivityDigV2_QuakeScreenEffectDuration",
+          "elementDurability": 100.0,
+          "modifierName": "",
+          "onAdded": [
+            {
+              "$type": "CameraScreenEffect",
+              "canBeHandledOnRecover": true,
+              "effectName": "Eff_UI_DigV2_Rock_ScreenEffect",
+              "enable": true
+            }
+          ],
+          "onRemoved": [
+            {
+              "$type": "CameraScreenEffect",
+              "canBeHandledOnRecover": true,
+              "effectName": "Eff_UI_DigV2_Rock_ScreenEffect",
+              "muteRemoteAction": true,
+              "ENELPIPIKAE": true
+            }
+          ],
+          "IAKNCBDLFKJ": 0.0
+        },
+        "LevelManager": {
+          "elementDurability": 100.0,
+          "modifierMixins": [
+            {
+              "$type": "ActivityDigV2LevelManagerMixin",
+              "HIOOICEMDGD": "Eff_SceneObj_Dig_MineCube_01_Stone_01",
+              "JJKLLILCFKI": "Eff_SceneObj_Dig_MineCube_01_Stone_02",
+              "BCBBBEMEELJ": "GV_ActivityDigV2_warningQuakeDelay",
+              "CAIDEIDHHOP": [
+                {
+                  "$type": "ApplyModifier",
+                  "modifierName": "QuakeBlind"
+                }
+              ],
+              "LLINJFFGMKH": [
+                {
+                  "$type": "Predicated",
+                  "successActions": [
+                    {
+                      "$type": "AddGlobalValueV2",
+                      "key": "GV_ActivityDigV2_Player_Fuel",
+                      "maxValue": 0.0,
+                      "minValue": 0.0,
+                      "target": "Team",
+                      "value": [
+                        0.0,
+                        "GV_ActivityDigV2_quakeDamage",
+                        "SUB"
+                      ]
+                    },
+                    {
+                      "$type": "CopyGlobalValue",
+                      "dstKey": "GV_ActivityDigV2_FontSize_Damage",
+                      "dstTarget": "Caster",
+                      "srcKey": "GV_ActivityDigV2_FontSize_Damage",
+                      "srcTarget": "Team"
+                    },
+                    {
+                      "$type": "ActivityDigV2ShowScoreJumpWord",
+                      "target": "Team",
+                      "OKGOBOBDPIA": true,
+                      "GAOPADOKKMM": "GV_ActivityDigV2_FontSize_Damage",
+                      "ADBLCPOFBOD": [
+                        0.0,
+                        "GV_ActivityDigV2_quakeDamage",
+                        "SUB"
+                      ]
+                    },
+                    {
+                      "$type": "SetGlobalValueV2",
+                      "key": "GV_ActivityDigV2_Player_HurtTrigger",
+                      "maxValue": 0.0,
+                      "minValue": 0.0,
+                      "target": "Team",
+                      "value": 1.0
+                    }
+                  ],
+                  "target": "Team",
+                  "targetPredicates": [
+                    {
+                      "$type": "ByTargetGlobalValue",
+                      "compareType": "NoneOrEqual",
+                      "key": "GV_ActivityDigV2_Player_FeverState",
+                      "target": "Team",
+                      "value": 0.0
+                    }
+                  ]
+                }
+              ]
+            }
+          ],
+          "modifierName": "",
+          "IAKNCBDLFKJ": 0.0
+        },
+        "InvincibleManager": {
+          "elementDurability": 100.0,
+          "modifierMixins": [
+            {
+              "$type": "DoActionOnGlobalValueChangeMixin",
+              "actions": [
+                {
+                  "$type": "Predicated",
+                  "successActions": [
+                    {
+                      "$type": "ApplyModifier",
+                      "modifierName": "InvincibleStart",
+                      "target": "Team"
+                    },
+                    {
+                      "$type": "SetGlobalValueV2",
+                      "key": "GV_ActivityDigV2_Player_Invincible_StartTrigger",
+                      "maxValue": 0.0,
+                      "minValue": 0.0,
+                      "target": "Team",
+                      "value": 0.0
+                    }
+                  ],
+                  "target": "Team",
+                  "targetPredicates": [
+                    {
+                      "$type": "ByTargetGlobalValue",
+                      "key": "GV_ActivityDigV2_Player_Invincible_StartTrigger",
+                      "target": "Team",
+                      "value": 1.0
+                    }
+                  ]
+                }
+              ],
+              "globalValueKey": "GV_ActivityDigV2_Player_Invincible_StartTrigger",
+              "DHKOKKHJMHC": true
+            }
+          ],
+          "modifierName": "",
+          "IAKNCBDLFKJ": 0.0
+        },
+        "InvincibleStart": {
+          "duration": "GV_ActivityDigV2_Player_Invincible_Duration",
+          "elementDurability": 100.0,
+          "modifierMixins": [
+            {
+              "$type": "ActivityDigV2GridReplaceMixin",
+              "JACDGJNCEDM": 1,
+              "FCAAKFGDEHA": 3,
+              "HONEAFEBCAM": 1006
+            }
+          ],
+          "modifierName": "",
+          "onAdded": [
+            {
+              "$type": "SetGlobalValueV2",
+              "key": "GV_ActivityDigV2_Player_Invincible_Trigger",
+              "maxValue": 0.0,
+              "minValue": 0.0,
+              "target": "Team",
+              "value": 1.0
+            }
+          ],
+          "onRemoved": [
+            {
+              "$type": "SetGlobalValueV2",
+              "key": "GV_ActivityDigV2_Player_Invincible_Trigger",
+              "maxValue": 0.0,
+              "minValue": 0.0,
+              "target": "Team",
+              "value": 0.0
+            }
+          ],
+          "IAKNCBDLFKJ": 0.0
+        },
+        "PlayerLevelManager": {
+          "elementDurability": 100.0,
+          "modifierMixins": [
+            {
+              "$type": "AttachModifierToGlobalValueMixin",
+              "globalValueKey": "GV_ActivityDigV2_Player_Exp",
+              "globalValueTarget": "Caster",
+              "modifierNameSteps": [
+                "PlayerLevel_01",
+                "PlayerLevel_02",
+                "PlayerLevel_03"
+              ],
+              "valueSteps": [
+                -0.5,
+                "GV_ActivityDigV2_Player_ExpBar_Lv01_Lv02",
+                "GV_ActivityDigV2_Player_ExpBar_Lv02_Lv03",
+                1000000.0
+              ],
+              "EECIIMBIDGB": true
+            }
+          ],
+          "modifierName": "",
+          "IAKNCBDLFKJ": 0.0
+        },
+        "PlayerLevel_01": {
+          "elementDurability": 100.0,
+          "modifierName": "",
+          "onAdded": [
+            {
+              "$type": "SetGlobalValueV2",
+              "key": "GV_ActivityDigV2_Player_DrillLevel",
+              "maxValue": 0.0,
+              "minValue": 0.0,
+              "target": "Team",
+              "value": 1.0
+            },
+            {
+              "$type": "CopyGlobalValue",
+              "dstKey": "GV_ActivityDigV2_Player_Damage",
+              "dstTarget": "Team",
+              "srcKey": "GV_ActivityDigV2_Player_Damage_Lv01",
+              "srcTarget": "Team"
+            }
+          ],
+          "IAKNCBDLFKJ": 0.0
+        },
+        "PlayerLevel_02": {
+          "elementDurability": 100.0,
+          "modifierName": "",
+          "onAdded": [
+            {
+              "$type": "FireEffect",
+              "effectPattern": "Eff_SceneObj_Dig_MiningCar_LevelUp_01",
+              "effectTempleteID": -1.0,
+              "scale": 2.0,
+              "JHAGIJGAKMK": ""
+            },
+            {
+              "$type": "SetGlobalValueV2",
+              "key": "GV_ActivityDigV2_Player_DrillLevel",
+              "maxValue": 0.0,
+              "minValue": 0.0,
+              "target": "Team",
+              "value": 2.0
+            },
+            {
+              "$type": "CopyGlobalValue",
+              "dstKey": "GV_ActivityDigV2_Player_Damage",
+              "dstTarget": "Team",
+              "srcKey": "GV_ActivityDigV2_Player_Damage_Lv02",
+              "srcTarget": "Team"
+            }
+          ],
+          "IAKNCBDLFKJ": 0.0
+        },
+        "PlayerLevel_03": {
+          "elementDurability": 100.0,
+          "modifierName": "",
+          "onAdded": [
+            {
+              "$type": "FireEffect",
+              "effectPattern": "Eff_SceneObj_Dig_MiningCar_LevelUp_01",
+              "effectTempleteID": -1.0,
+              "scale": 2.0,
+              "JHAGIJGAKMK": ""
+            },
+            {
+              "$type": "SetGlobalValueV2",
+              "key": "GV_ActivityDigV2_Player_DrillLevel",
+              "maxValue": 0.0,
+              "minValue": 0.0,
+              "target": "Team",
+              "value": 3.0
+            },
+            {
+              "$type": "CopyGlobalValue",
+              "dstKey": "GV_ActivityDigV2_Player_Damage",
+              "dstTarget": "Team",
+              "srcKey": "GV_ActivityDigV2_Player_Damage_Lv03",
+              "srcTarget": "Team"
+            }
+          ],
+          "IAKNCBDLFKJ": 0.0
+        }
+      },
+      "onAdded": [
+        {
+          "$type": "SetGlobalValue",
+          "key": "GV_ActivityDigV2_Team_InBossSight",
+          "maxValue": 0.0,
+          "minValue": 0.0,
+          "value": 0.0
+        },
+        {
+          "$type": "SetGlobalValueV2",
+          "key": "GV_ActivityDigV2_AudioBuffLevel",
+          "maxValue": 0.0,
+          "minValue": 0.0,
+          "value": 0.0
+        },
+        {
+          "$type": "SetGlobalValueV2",
+          "key": "GV_ActivityDigV2_AudioBuffTrigger",
+          "maxValue": 0.0,
+          "minValue": 0.0,
+          "value": 0.0
+        },
+        {
+          "$type": "SetGlobalValueV2",
+          "key": "GV_ActivityDigV2_Player_DrillLevel",
+          "maxValue": 0.0,
+          "minValue": 0.0,
+          "value": 1.0
+        },
+        {
+          "$type": "SetGlobalValueV2",
+          "key": "GV_ActivityDigV2_Player_Exp",
+          "maxValue": 0.0,
+          "minValue": 0.0,
+          "value": 0.0
+        },
+        {
+          "$type": "SetGlobalValueV2",
+          "key": "GV_ActivityDigV2_Player_Score",
+          "maxValue": 0.0,
+          "minValue": 0.0,
+          "value": 0.0
+        },
+        {
+          "$type": "SetGlobalValueV2",
+          "key": "GV_ActivityDigV2_Player_Invincible_StartTrigger",
+          "maxValue": 0.0,
+          "minValue": 0.0,
+          "target": "Team",
+          "value": 0.0
+        },
+        {
+          "$type": "SetGlobalValueV2",
+          "key": "GV_ActivityDigV2_Player_Invincible_Trigger",
+          "maxValue": 0.0,
+          "minValue": 0.0,
+          "value": 0.0
+        },
+        {
+          "$type": "SetGlobalValueV2",
+          "key": "GV_ActivityDigV2_Player_Damage",
+          "maxValue": 0.0,
+          "minValue": 0.0,
+          "value": 0.0
+        },
+        {
+          "$type": "SetGlobalValueV2",
+          "key": "GV_Team_AttackRangeMode",
+          "maxValue": 0.0,
+          "minValue": 0.0,
+          "value": 0.0
+        },
+        {
+          "$type": "SetGlobalValueV2",
+          "key": "GV_Team_AttackCDMode",
+          "maxValue": 0.0,
+          "minValue": 0.0,
+          "value": 0.0
+        },
+        {
+          "$type": "SetGlobalValueV2",
+          "key": "GV_Team_SkillDurationMode",
+          "maxValue": 0.0,
+          "minValue": 0.0,
+          "value": 0.0
+        },
+        {
+          "$type": "SetGlobalValueV2",
+          "key": "GV_Team_SkillCDMode",
+          "maxValue": 0.0,
+          "minValue": 0.0,
+          "value": 0.0
+        },
+        {
+          "$type": "SetGlobalValueV2",
+          "key": "GV_Team_RushCDMode",
+          "maxValue": 0.0,
+          "minValue": 0.0,
+          "value": 0.0
+        },
+        {
+          "$type": "SetGlobalValueV2",
+          "key": "GV_Team_RushRangeMode",
+          "maxValue": 0.0,
+          "minValue": 0.0,
+          "value": 0.0
+        },
+        {
+          "$type": "SetGlobalValueV2",
+          "key": "GV_ActivityDigV2_Player_FeverState",
+          "maxValue": 0.0,
+          "minValue": 0.0,
+          "value": 0.0
+        },
+        {
+          "$type": "SetGlobalValueV2",
+          "key": "GV_ActivityDigV2_Player_HurtTrigger",
+          "maxValue": 0.0,
+          "minValue": 0.0,
+          "value": 0.0
+        },
+        {
+          "$type": "AttachModifier",
+          "modifierName": "InvincibleManager"
+        },
+        {
+          "$type": "AttachModifier",
+          "modifierName": "AttachPlayerLevelManager"
+        },
+        {
+          "$type": "AttachModifier",
+          "modifierName": "AttachLevelManager"
+        },
+        {
+          "$type": "AttachModifier",
+          "modifierName": "AttachFuelManager"
+        },
+        {
+          "$type": "AttachModifier",
+          "modifierName": "ModeManager"
+        },
+        {
+          "$type": "AttachModifier",
+          "modifierName": "ReconnectExitManager"
+        },
+        {
+          "$type": "AttachModifier",
+          "modifierName": "AttachHurtTriggerEffectManager"
+        },
+        {
+          "$type": "AttachModifier",
+          "modifierName": "AttachAudioBuffLevelManager"
+        }
+      ],
+      "onRemoved": [
+        {
+          "$type": "SetGlobalValue",
+          "key": "GV_ActivityDigV2_Team_InBossSight",
+          "maxValue": 0.0,
+          "minValue": 0.0,
+          "value": 0.0
+        }
+      ],
+      "CELKHCPEMFI": [
+        "GV_ActivityDigV2_Player_Invincible_Duration",
+        "GV_ActivityDigV2_Player_ExpBar_Lv01_Lv02",
+        "GV_ActivityDigV2_Player_ExpBar_Lv02_Lv03",
+        "GV_ActivityDigV2_warningQuakeDelay",
+        "GV_ActivityDigV2_quakeDamage",
+        "GV_ActivityDigV2_Player_MaxFuel",
+        "GV_ActivityDigV2_Player_Damage",
+        "GV_ActivityDigV2_Player_FuelConsumptionRate",
+        "GV_ActivityDigV2_Player_FeverState_Duration",
+        "GV_ActivityDigV2_Player_HurtCD",
+        "GV_ActivityDigV2_FontSize_Damage",
+        "GV_ActivityDigV2_QuakeScreenEffectDuration"
+      ]
+    }
+  },
+  {
+    "Default": {
+      "abilityMixins": [
+        {
+          "$type": "AttachModifierToGlobalValueMixin",
+          "globalValueKey": "GV_ActivityDigV2_Boss_AttackFreq",
+          "globalValueTarget": "Caster",
+          "modifierNameSteps": [
+            "AttackFreqManager"
+          ],
+          "valueSteps": [
+            0.001,
+            9999.0
+          ],
+          "EECIIMBIDGB": true
+        },
+        {
+          "$type": "ThinkIntervalMixin",
+          "onThinkInterval": [
+            {
+              "$type": "Predicated",
+              "failActions": [
+                {
+                  "$type": "EnablePartControl",
+                  "doOnUnEabled": "Stay",
+                  "partRootNames": [
+                    "RotateNode"
+                  ],
+                  "target": "Caster"
+                }
+              ],
+              "otherTargets": {
+                "$type": "SelectTargetsByTag",
+                "sortType": "Nearest",
+                "tag": "DigV2AvatarDelayedPivot",
+                "topLimit": 1
+              },
+              "successActions": [
+                {
+                  "$type": "SetPartControlTarget",
+                  "attachPoint": "",
+                  "partRootNames": [
+                    "RotateNode"
+                  ],
+                  "target": "Target"
+                },
+                {
+                  "$type": "EnablePartControl",
+                  "enable": true,
+                  "partRootNames": [
+                    "RotateNode"
+                  ],
+                  "target": "Caster"
+                }
+              ],
+              "targetPredicates": [
+                {
+                  "$type": "ByTargetPositionToSelfPosition",
+                  "value": 1.0,
+                  "FPDDDGMBDKP": "",
+                  "GCDNHEEGIPE": ""
+                }
+              ]
+            }
+          ],
+          "thinkInterval": 0.5
+        },
+        {
+          "$type": "AttachModifierToGlobalValueMixin",
+          "globalValueKey": "GV_ActivityDigV2_Team_InBossSight",
+          "globalValueTarget": "Team",
+          "modifierNameSteps": [
+            "CancelPendingAttack"
+          ],
+          "valueSteps": [
+            -0.5,
+            0.5
+          ],
+          "EECIIMBIDGB": true,
+          "MDKGPCMDPCF": true
+        }
+      ],
+      "abilityName": "SceneObj_Activity_Ani_Prop_DigV2_Boss",
+      "modifiers": {
+        "State_PrePatrol": {
+          "elementDurability": 100.0,
+          "modifierMixins": [
+            {
+              "$type": "AttachModifierToGlobalValueMixin",
+              "globalValueKey": "GV_ActivityDigV2_Team_InBossSight",
+              "globalValueTarget": "Team",
+              "modifierNameSteps": [
+                "OutSightPatrol",
+                "InSightPatrol"
+              ],
+              "valueSteps": [
+                -0.5,
+                0.5,
+                1.5
+              ],
+              "DHKOKKHJMHC": true,
+              "EECIIMBIDGB": true,
+              "MDKGPCMDPCF": true
+            }
+          ],
+          "modifierName": "",
+          "IAKNCBDLFKJ": 0.0
+        },
+        "InSightPatrol": {
+          "elementDurability": 100.0,
+          "modifierName": "",
+          "onAdded": [
+            {
+              "$type": "AttachModifier",
+              "modifierName": "State_DoPatrol",
+              "target": "Caster"
+            }
+          ],
+          "onThinkInterval": [
+            {
+              "$type": "SetGlobalValue",
+              "key": "GV_ActivityDigV2_Boss_TrySwitchState",
+              "maxValue": 0.0,
+              "minValue": 0.0,
+              "predicates": [
+                {
+                  "$type": "ByTargetGlobalValue",
+                  "key": "GV_ActivityDigV2_Team_InBossSight",
+                  "target": "Team",
+                  "value": 1.0
+                }
+              ],
+              "target": "Caster",
+              "value": 1.0
+            }
+          ],
+          "stacking": "Unique",
+          "thinkInterval": "GV_ActivityDigV2_Boss_PatrolDuration",
+          "IAKNCBDLFKJ": 0.0
+        },
+        "OutSightPatrol": {
+          "elementDurability": 100.0,
+          "modifierName": "",
+          "onAdded": [
+            {
+              "$type": "AttachModifier",
+              "modifierName": "State_DoPatrol",
+              "target": "Caster"
+            }
+          ],
+          "stacking": "Unique",
+          "IAKNCBDLFKJ": 0.0
+        },
+        "CancelPendingAttack": {
+          "elementDurability": 100.0,
+          "modifierName": "",
+          "onAdded": [
+            {
+              "$type": "Predicated",
+              "successActions": [
+                {
+                  "$type": "SetGlobalValue",
+                  "key": "GV_ActivityDigV2_Boss_PendingShot",
+                  "maxValue": 0.0,
+                  "minValue": 0.0,
+                  "target": "Team",
+                  "value": 0.0
+                },
+                {
+                  "$type": "RemoveModifier",
+                  "modifierName": "CreateIndicator",
+                  "target": "Caster"
+                },
+                {
+                  "$type": "Predicated",
+                  "successActions": [
+                    {
+                      "$type": "FireEffect",
+                      "born": {
+                        "$type": "ConfigBornByAttachPoint",
+                        "attachPointName": "FireNode",
+                        "attachPointTargetType": "Self",
+                        "useRotation": true,
+                        "OOKMGOGHLOL": true
+                      },
+                      "effectPattern": "Eff_SceneObj_NTBossAdd01_Appear",
+                      "effectTempleteID": -1.0,
+                      "scale": 1.0,
+                      "target": "Caster",
+                      "JHAGIJGAKMK": ""
+                    },
+                    {
+                      "$type": "KillGadgetV2",
+                      "gadgetInfo": {
+                        "configID": 73209007
+                      },
+                      "target": "Caster"
+                    }
+                  ],
+                  "target": "Caster",
+                  "targetPredicates": [
+                    {
+                      "$type": "ByHasChildGadget",
+                      "compareType": "MoreThan",
+                      "configIdArray": [
+                        73209007
+                      ],
+                      "includeUnreadyEntity": true,
+                      "target": "Caster",
+                      "DNDANJNKOKD": true
+                    }
+                  ]
+                },
+                {
+                  "$type": "Predicated",
+                  "successActions": [
+                    {
+                      "$type": "FireEffect",
+                      "born": {
+                        "$type": "ConfigBornByAttachPoint",
+                        "attachPointName": "FireNodeAlt",
+                        "attachPointTargetType": "Self",
+                        "useRotation": true,
+                        "OOKMGOGHLOL": true
+                      },
+                      "effectPattern": "Eff_SceneObj_NTBossAdd01_Appear",
+                      "effectTempleteID": -1.0,
+                      "scale": 1.0,
+                      "target": "Caster",
+                      "JHAGIJGAKMK": ""
+                    },
+                    {
+                      "$type": "KillGadgetV2",
+                      "gadgetInfo": {
+                        "configID": 73209022
+                      },
+                      "target": "Caster"
+                    }
+                  ],
+                  "target": "Caster",
+                  "targetPredicates": [
+                    {
+                      "$type": "ByHasChildGadget",
+                      "compareType": "MoreThan",
+                      "configIdArray": [
+                        73209022
+                      ],
+                      "includeUnreadyEntity": true,
+                      "target": "Caster",
+                      "DNDANJNKOKD": true
+                    }
+                  ]
+                },
+                {
+                  "$type": "SetGlobalValue",
+                  "key": "GV_ActivityDigV2_Boss_State",
+                  "maxValue": 0.0,
+                  "minValue": 0.0,
+                  "target": "Caster",
+                  "value": 1.0
+                }
+              ],
+              "target": "Caster",
+              "targetPredicates": [
+                {
+                  "$type": "ByTargetGlobalValue",
+                  "key": "GV_ActivityDigV2_Boss_PendingShot",
+                  "target": "Team",
+                  "value": 1.0
+                }
+              ]
+            }
+          ],
+          "stacking": "Unique",
+          "IAKNCBDLFKJ": 0.0
+        },
+        "State_Patrol": {
+          "elementDurability": 100.0,
+          "modifierMixins": [
+            {
+              "$type": "AttachModifierToGlobalValueMixin",
+              "globalValueKey": "GV_ActivityDigV2_Boss_ResetAttackDuration",
+              "globalValueTarget": "Caster",
+              "modifierNameSteps": [
+                "State_PrePatrol",
+                "ResetAttackDuration"
+              ],
+              "valueSteps": [
+                -0.5,
+                0.5,
+                1.5
+              ],
+              "EECIIMBIDGB": true
+            }
+          ],
+          "modifierName": "",
+          "IAKNCBDLFKJ": 0.0
+        },
+        "ResetAttackDuration": {
+          "duration": 0.5,
+          "elementDurability": 100.0,
+          "modifierName": "",
+          "onRemoved": [
+            {
+              "$type": "SetGlobalValue",
+              "key": "GV_ActivityDigV2_Boss_ResetAttackDuration",
+              "maxValue": 0.0,
+              "minValue": 0.0,
+              "target": "Caster",
+              "value": 0.0
+            }
+          ],
+          "IAKNCBDLFKJ": 0.0
+        },
+        "State_DoPatrol": {
+          "elementDurability": 100.0,
+          "modifierMixins": [
+            {
+              "$type": "FollowMoveParamOverrideMixin",
+              "accSpeed": 3.0,
+              "attachPoint": "",
+              "maxSpeed": 4.0,
+              "speed": 0.0,
+              "ICEOBJFBIJI": 0.0,
+              "PBGMJOMLDEH": 3.0,
+              "ABFMAFGKEHE": 4.0,
+              "DNJILHJCMKM": [
+                "smoothedDampSpeed",
+                "smoothedDampAccSpeed",
+                "smoothedDampMaxSpeed",
+                "speed",
+                "accSpeed",
+                "maxSpeed"
+              ]
+            },
+            {
+              "$type": "ThinkIntervalMixin",
+              "onThinkInterval": [
+                {
+                  "$type": "Predicated",
+                  "failActions": [
+                    {
+                      "$type": "SetTargetToTargetKey",
+                      "otherTargets": {
+                        "$type": "SelectTargetsByTag",
+                        "sortType": "Nearest",
+                        "tag": "DigV2BossPivot",
+                        "topLimit": 1
+                      },
+                      "targetKey": "GV_ActivityDigV2_Boss_NearestPivotKey"
+                    }
+                  ],
+                  "successActions": [
+                    {
+                      "$type": "SetTargetToTargetKey",
+                      "otherTargets": {
+                        "$type": "SelectTargetsByTag",
+                        "sortType": "Nearest",
+                        "tag": "DigV2BossAttackPivot",
+                        "topLimit": 1
+                      },
+                      "targetKey": "GV_ActivityDigV2_Boss_NearestPivotKey"
+                    }
+                  ],
+                  "targetPredicates": [
+                    {
+                      "$type": "ByTargetGlobalValue",
+                      "key": "GV_ActivityDigV2_Boss_TrySwitchState",
+                      "target": "Caster",
+                      "value": 1.0
+                    }
+                  ]
+                },
+                {
+                  "$type": "Predicated",
+                  "failActions": [
+                    {
+                      "$type": "SetTargetToTargetKey",
+                      "otherTargets": {
+                        "$type": "IJIALHOBAAE",
+                        "targetKey": "GV_ActivityDigV2_Boss_NearestPivotKey"
+                      },
+                      "targetKey": "GV_ActivityDigV2_Boss_FollowTargetKey"
+                    }
+                  ],
+                  "otherTargets": {
+                    "$type": "IJIALHOBAAE",
+                    "targetKey": "GV_ActivityDigV2_Boss_NearestPivotKey"
+                  },
+                  "successActions": [
+                    {
+                      "$type": "SetGlobalValue",
+                      "key": "GV_ActivityDigV2_Boss_FollowTargetKey_0",
+                      "maxValue": 0.0,
+                      "minValue": 0.0,
+                      "target": "Caster",
+                      "value": 0.0
+                    },
+                    {
+                      "$type": "SetGlobalValue",
+                      "key": "GV_ActivityDigV2_Boss_FollowTargetKey_1",
+                      "maxValue": 0.0,
+                      "minValue": 0.0,
+                      "target": "Caster",
+                      "value": 0.0
+                    }
+                  ],
+                  "targetPredicates": [
+                    {
+                      "$type": "ByTargetPositionToSelfPosition",
+                      "logic": "LesserOrEqual",
+                      "value": "GV_ActivityDigV2_Boss_ArriveDistance",
+                      "FPDDDGMBDKP": "",
+                      "GCDNHEEGIPE": ""
+                    },
+                    {
+                      "$type": "ByTargetPositionToSelfPosition",
+                      "compareType": "Y",
+                      "logic": "LesserOrEqual",
+                      "value": 0.1,
+                      "FPDDDGMBDKP": "",
+                      "GCDNHEEGIPE": ""
+                    }
+                  ]
+                },
+                {
+                  "$type": "Predicated",
+                  "otherTargets": {
+                    "$type": "IJIALHOBAAE",
+                    "targetKey": "GV_ActivityDigV2_Boss_NearestPivotKey"
+                  },
+                  "successActions": [
+                    {
+                      "$type": "SetGlobalValue",
+                      "key": "GV_ActivityDigV2_Boss_State",
+                      "maxValue": 0.0,
+                      "minValue": 0.0,
+                      "target": "Caster",
+                      "value": 2.0
+                    }
+                  ],
+                  "targetPredicates": [
+                    {
+                      "$type": "ByTargetPositionToSelfPosition",
+                      "logic": "LesserOrEqual",
+                      "value": 6.0,
+                      "FPDDDGMBDKP": "",
+                      "GCDNHEEGIPE": ""
+                    },
+                    {
+                      "$type": "ByTargetPositionToSelfPosition",
+                      "compareType": "Y",
+                      "logic": "LesserOrEqual",
+                      "value": 0.1,
+                      "FPDDDGMBDKP": "",
+                      "GCDNHEEGIPE": ""
+                    },
+                    {
+                      "$type": "ByTargetGlobalValue",
+                      "key": "GV_ActivityDigV2_Boss_TrySwitchState",
+                      "target": "Caster",
+                      "value": 1.0
+                    },
+                    {
+                      "$type": "ByTargetGlobalValue",
+                      "key": "GV_ActivityDigV2_Team_InBossSight",
+                      "target": "Team",
+                      "value": 1.0
+                    }
+                  ]
+                }
+              ],
+              "thinkInterval": 0.5
+            }
+          ],
+          "modifierName": "",
+          "onAdded": [
+            {
+              "$type": "SetGlobalValue",
+              "key": "GV_ActivityDigV2_Boss_PivotCmd",
+              "maxValue": 0.0,
+              "minValue": 0.0,
+              "target": "Team",
+              "value": 0.0
+            },
+            {
+              "$type": "SetGlobalValue",
+              "key": "GV_ActivityDigV2_Boss_TrySwitchState",
+              "maxValue": 0.0,
+              "minValue": 0.0,
+              "target": "Caster",
+              "value": 0.0
+            }
+          ],
+          "IAKNCBDLFKJ": 0.0
+        },
+        "CreateIndicator": {
+          "duration": 1.0,
+          "elementDurability": 100.0,
+          "modifierName": "",
+          "onRemoved": [
+            {
+              "$type": "Predicated",
+              "successActions": [
+                {
+                  "$type": "Predicated",
+                  "failActions": [
+                    {
+                      "$type": "SetGlobalValueV2",
+                      "key": "GV_ActivityDigV2_Boss_LaunchType",
+                      "maxValue": 0.0,
+                      "minValue": 0.0,
+                      "target": "Team",
+                      "value": 0.0
+                    },
+                    {
+                      "$type": "CreateGadget",
+                      "born": {
+                        "$type": "ConfigBornByAttachPoint",
+                        "attachPointName": "FireNodeAlt",
+                        "attachPointTargetType": "Self",
+                        "useRotation": true,
+                        "OOKMGOGHLOL": true
+                      },
+                      "campID": 5001,
+                      "gadgetID": 73209022
+                    },
+                    {
+                      "$type": "FireEffect",
+                      "born": {
+                        "$type": "ConfigBornByAttachPoint",
+                        "attachPointName": "FireNodeAlt",
+                        "attachPointTargetType": "Self",
+                        "useRotation": true,
+                        "OOKMGOGHLOL": true
+                      },
+                      "effectPattern": "Eff_SceneObj_NTBossAdd01_Appear",
+                      "effectTempleteID": -1.0,
+                      "scale": 1.0,
+                      "JHAGIJGAKMK": ""
+                    }
+                  ],
+                  "successActions": [
+                    {
+                      "$type": "SetGlobalValueV2",
+                      "key": "GV_ActivityDigV2_Boss_LaunchType",
+                      "maxValue": 0.0,
+                      "minValue": 0.0,
+                      "target": "Team",
+                      "value": 1.0
+                    },
+                    {
+                      "$type": "CreateGadget",
+                      "born": {
+                        "$type": "ConfigBornByAttachPoint",
+                        "attachPointName": "FireNode",
+                        "attachPointTargetType": "Self",
+                        "useRotation": true,
+                        "OOKMGOGHLOL": true
+                      },
+                      "campID": 5001,
+                      "gadgetID": 73209007
+                    },
+                    {
+                      "$type": "FireEffect",
+                      "born": {
+                        "$type": "ConfigBornByAttachPoint",
+                        "attachPointName": "FireNode",
+                        "attachPointTargetType": "Self",
+                        "useRotation": true,
+                        "OOKMGOGHLOL": true
+                      },
+                      "effectPattern": "Eff_SceneObj_NTBossAdd01_Appear",
+                      "effectTempleteID": -1.0,
+                      "scale": 1.0,
+                      "JHAGIJGAKMK": ""
+                    }
+                  ],
+                  "target": "Team",
+                  "targetPredicates": [
+                    {
+                      "$type": "ByTargetGlobalValue",
+                      "key": "GV_ActivityDigV2_Boss_LaunchType",
+                      "target": "Team",
+                      "value": 0.0
+                    }
+                  ]
+                }
+              ],
+              "target": "Team",
+              "targetPredicates": [
+                {
+                  "$type": "ByTargetGlobalValue",
+                  "key": "GV_ActivityDigV2_Team_InBossSight",
+                  "target": "Team",
+                  "value": 1.0
+                },
+                {
+                  "$type": "ByTargetGlobalValue",
+                  "key": "GV_ActivityDigV2_Boss_PendingShot",
+                  "target": "Team",
+                  "value": 1.0
+                }
+              ]
+            }
+          ],
+          "IAKNCBDLFKJ": 0.0
+        },
+        "State_AttackReady": {
+          "elementDurability": 100.0,
+          "modifierMixins": [
+            {
+              "$type": "FollowMoveParamOverrideMixin",
+              "accSpeed": 5.0,
+              "attachPoint": "",
+              "maxSpeed": 10.0,
+              "speed": 0.0,
+              "ICEOBJFBIJI": 0.0,
+              "PBGMJOMLDEH": 10.0,
+              "ABFMAFGKEHE": 15.0,
+              "DNJILHJCMKM": [
+                "smoothedDampSpeed",
+                "smoothedDampAccSpeed",
+                "smoothedDampMaxSpeed",
+                "speed",
+                "accSpeed",
+                "maxSpeed"
+              ]
+            },
+            {
+              "$type": "ThinkIntervalMixin",
+              "onThinkInterval": [
+                {
+                  "$type": "SetTargetToTargetKey",
+                  "otherTargets": {
+                    "$type": "SelectTargetsByTag",
+                    "sortType": "Nearest",
+                    "tag": "DigV2BossAttackPivot",
+                    "topLimit": 1
+                  },
+                  "targetKey": "GV_ActivityDigV2_Boss_FollowTargetKey"
+                }
+              ],
+              "thinkInterval": 0.5
+            }
+          ],
+          "modifierName": "",
+          "onAdded": [
+            {
+              "$type": "SetGlobalValue",
+              "key": "GV_ActivityDigV2_Boss_PendingShot",
+              "maxValue": 0.0,
+              "minValue": 0.0,
+              "target": "Team",
+              "value": 1.0
+            },
+            {
+              "$type": "SetGlobalValue",
+              "key": "GV_ActivityDigV2_Boss_PivotCmd",
+              "maxValue": 0.0,
+              "minValue": 0.0,
+              "target": "Team",
+              "value": 1.0
+            },
+            {
+              "$type": "SetGlobalValue",
+              "key": "GV_ActivityDigV2_Boss_BulletPhase",
+              "maxValue": 0.0,
+              "minValue": 0.0,
+              "target": "Team",
+              "value": 0.0
+            },
+            {
+              "$type": "SetAnimatorInt",
+              "intID": "GadgetState",
+              "target": "Caster",
+              "value": 203.0
+            },
+            {
+              "$type": "SetAnimatorTrigger",
+              "target": "Caster",
+              "triggerID": "DoSkill"
+            },
+            {
+              "$type": "ApplyModifier",
+              "modifierName": "CreateIndicator",
+              "target": "Caster"
+            },
+            {
+              "$type": "SetTargetToTargetKey",
+              "otherTargets": {
+                "$type": "SelectTargetsByTag",
+                "sortType": "Nearest",
+                "tag": "DigV2BossAttackPivot",
+                "topLimit": 1
+              },
+              "targetKey": "GV_ActivityDigV2_Boss_FollowTargetKey"
+            }
+          ],
+          "onThinkInterval": [
+            {
+              "$type": "SetGlobalValue",
+              "key": "GV_ActivityDigV2_Boss_State",
+              "maxValue": 0.0,
+              "minValue": 0.0,
+              "target": "Caster",
+              "value": 3.0
+            }
+          ],
+          "thinkInterval": "GV_ActivityDigV2_Boss_RealWarningDuration",
+          "IAKNCBDLFKJ": 0.0
+        },
+        "State_Attack": {
+          "elementDurability": 100.0,
+          "modifierMixins": [
+            {
+              "$type": "FollowMoveParamOverrideMixin",
+              "accSpeed": 100.0,
+              "attachPoint": "",
+              "maxSpeed": 50.0,
+              "speed": 30.0,
+              "ICEOBJFBIJI": 30.0,
+              "ABFMAFGKEHE": 50.0,
+              "PBGMJOMLDEH": 100.0,
+              "DNJILHJCMKM": [
+                "smoothedDampSpeed",
+                "smoothedDampAccSpeed",
+                "smoothedDampMaxSpeed",
+                "speed",
+                "accSpeed",
+                "maxSpeed"
+              ]
+            },
+            {
+              "$type": "ThinkIntervalMixin",
+              "onThinkInterval": [
+                {
+                  "$type": "SetTargetToTargetKey",
+                  "otherTargets": {
+                    "$type": "SelectTargetsByTag",
+                    "sortType": "Nearest",
+                    "tag": "DigV2BossAttackPivot",
+                    "topLimit": 1
+                  },
+                  "targetKey": "GV_ActivityDigV2_Boss_FollowTargetKey"
+                }
+              ],
+              "thinkInterval": 0.5
+            },
+            {
+              "$type": "ThinkIntervalMixin",
+              "onThinkInterval": [
+                {
+                  "$type": "SetGlobalValue",
+                  "key": "GV_ActivityDigV2_Boss_State",
+                  "maxValue": 0.0,
+                  "minValue": 0.0,
+                  "target": "Caster",
+                  "value": 1.0
+                }
+              ],
+              "thinkInterval": "GV_ActivityDigV2_Boss_BombDuration"
+            }
+          ],
+          "modifierName": "",
+          "onAdded": [
+            {
+              "$type": "SetGlobalValue",
+              "key": "GV_ActivityDigV2_Boss_PivotCmd",
+              "maxValue": 0.0,
+              "minValue": 0.0,
+              "target": "Team",
+              "value": 2.0
+            },
+            {
+              "$type": "SetGlobalValue",
+              "key": "GV_ActivityDigV2_Boss_BulletPhase",
+              "maxValue": 0.0,
+              "minValue": 0.0,
+              "target": "Team",
+              "value": 1.0
+            },
+            {
+              "$type": "SetAnimatorInt",
+              "intID": "GadgetState",
+              "target": "Caster",
+              "value": 202.0
+            },
+            {
+              "$type": "SetAnimatorTrigger",
+              "target": "Caster",
+              "triggerID": "DoSkill"
+            }
+          ],
+          "IAKNCBDLFKJ": 0.0
+        },
+        "AttackFreqManager": {
+          "elementDurability": 100.0,
+          "modifierName": "",
+          "onAdded": [
+            {
+              "$type": "AttachModifier",
+              "modifierName": "AttackFreqUpdate",
+              "target": "Caster"
+            },
+            {
+              "$type": "AttachModifier",
+              "modifierName": "StateManager",
+              "target": "Caster"
+            }
+          ],
+          "IAKNCBDLFKJ": 0.0
+        },
+        "AttackFreqUpdate": {
+          "elementDurability": 100.0,
+          "modifierMixins": [
+            {
+              "$type": "DoActionOnGlobalValueChangeMixin",
+              "actions": [
+                {
+                  "$type": "SetGlobalValueV2",
+                  "key": "GV_ActivityDigV2_Boss_AttackDuration",
+                  "maxValue": 0.0,
+                  "minValue": 0.0,
+                  "target": "Caster",
+                  "value": [
+                    1.0,
+                    "GV_ActivityDigV2_Boss_AttackFreq",
+                    "DIV"
+                  ]
+                },
+                {
+                  "$type": "SetGlobalValueV2",
+                  "key": "GV_Temp_PatrolDuration",
+                  "maxValue": 0.0,
+                  "minValue": 0.0,
+                  "target": "Caster",
+                  "value": [
+                    "GV_ActivityDigV2_Boss_AttackDuration",
+                    "GV_ActivityDigV2_Boss_WarningDuration",
+                    "SUB",
+                    "GV_ActivityDigV2_Boss_BombDuration",
+                    "SUB"
+                  ]
+                },
+                {
+                  "$type": "Predicated",
+                  "failActions": [
+                    {
+                      "$type": "SetGlobalValueV2",
+                      "key": "GV_Temp_WarningDuration",
+                      "maxValue": 0.0,
+                      "minValue": 0.0,
+                      "target": "Caster",
+                      "value": "GV_ActivityDigV2_Boss_WarningDuration"
+                    }
+                  ],
+                  "successActions": [
+                    {
+                      "$type": "SetGlobalValueV2",
+                      "key": "GV_Temp_WarningDuration",
+                      "maxValue": 0.0,
+                      "minValue": 0.0,
+                      "target": "Caster",
+                      "value": [
+                        "GV_ActivityDigV2_Boss_AttackDuration",
+                        "GV_ActivityDigV2_Boss_BombDuration",
+                        "SUB"
+                      ]
+                    }
+                  ],
+                  "targetPredicates": [
+                    {
+                      "$type": "ByTargetGlobalValue",
+                      "compareType": "MoreThan",
+                      "key": "GV_ActivityDigV2_Boss_WarningDuration",
+                      "value": [
+                        "GV_ActivityDigV2_Boss_AttackDuration",
+                        "GV_ActivityDigV2_Boss_BombDuration",
+                        "SUB"
+                      ]
+                    }
+                  ]
+                },
+                {
+                  "$type": "Predicated",
+                  "failActions": [
+                    {
+                      "$type": "SetGlobalValueV2",
+                      "key": "GV_ActivityDigV2_Boss_RealWarningDuration",
+                      "maxValue": 0.0,
+                      "minValue": 0.0,
+                      "target": "Caster",
+                      "value": 0.1
+                    }
+                  ],
+                  "successActions": [
+                    {
+                      "$type": "SetGlobalValueV2",
+                      "key": "GV_ActivityDigV2_Boss_RealWarningDuration",
+                      "maxValue": 0.0,
+                      "minValue": 0.0,
+                      "target": "Caster",
+                      "value": "GV_Temp_WarningDuration"
+                    }
+                  ],
+                  "targetPredicates": [
+                    {
+                      "$type": "ByTargetGlobalValue",
+                      "compareType": "MoreThan",
+                      "key": "GV_Temp_WarningDuration",
+                      "value": 0.0
+                    }
+                  ]
+                },
+                {
+                  "$type": "Predicated",
+                  "failActions": [
+                    {
+                      "$type": "SetGlobalValueV2",
+                      "key": "GV_ActivityDigV2_Boss_PatrolDuration",
+                      "maxValue": 0.0,
+                      "minValue": 0.0,
+                      "target": "Caster",
+                      "value": 0.1
+                    }
+                  ],
+                  "successActions": [
+                    {
+                      "$type": "SetGlobalValueV2",
+                      "key": "GV_ActivityDigV2_Boss_PatrolDuration",
+                      "maxValue": 0.0,
+                      "minValue": 0.0,
+                      "target": "Caster",
+                      "value": "GV_Temp_PatrolDuration"
+                    }
+                  ],
+                  "targetPredicates": [
+                    {
+                      "$type": "ByTargetGlobalValue",
+                      "compareType": "MoreThan",
+                      "key": "GV_Temp_PatrolDuration",
+                      "value": 0.0
+                    }
+                  ]
+                },
+                {
+                  "$type": "Predicated",
+                  "successActions": [
+                    {
+                      "$type": "SetGlobalValueV2",
+                      "key": "GV_ActivityDigV2_Boss_ResetAttackDuration",
+                      "maxValue": 0.0,
+                      "minValue": 0.0,
+                      "target": "Caster",
+                      "value": 1.0
+                    }
+                  ],
+                  "targetPredicates": [
+                    {
+                      "$type": "ByTargetGlobalValue",
+                      "key": "GV_ActivityDigV2_Boss_State",
+                      "value": 1.0
+                    }
+                  ]
+                }
+              ],
+              "globalValueKey": "GV_ActivityDigV2_Boss_AttackFreq",
+              "DHKOKKHJMHC": true
+            }
+          ],
+          "modifierName": "",
+          "onAdded": [
+            {
+              "$type": "SetGlobalValueV2",
+              "key": "GV_ActivityDigV2_Boss_AttackDuration",
+              "maxValue": 0.0,
+              "minValue": 0.0,
+              "target": "Caster",
+              "value": [
+                1.0,
+                "GV_ActivityDigV2_Boss_AttackFreq",
+                "DIV"
+              ]
+            },
+            {
+              "$type": "SetGlobalValueV2",
+              "key": "GV_Temp_PatrolDuration",
+              "maxValue": 0.0,
+              "minValue": 0.0,
+              "target": "Caster",
+              "value": [
+                "GV_ActivityDigV2_Boss_AttackDuration",
+                "GV_ActivityDigV2_Boss_WarningDuration",
+                "SUB",
+                "GV_ActivityDigV2_Boss_BombDuration",
+                "SUB"
+              ]
+            },
+            {
+              "$type": "Predicated",
+              "failActions": [
+                {
+                  "$type": "SetGlobalValueV2",
+                  "key": "GV_Temp_WarningDuration",
+                  "maxValue": 0.0,
+                  "minValue": 0.0,
+                  "target": "Caster",
+                  "value": "GV_ActivityDigV2_Boss_WarningDuration"
+                }
+              ],
+              "successActions": [
+                {
+                  "$type": "SetGlobalValueV2",
+                  "key": "GV_Temp_WarningDuration",
+                  "maxValue": 0.0,
+                  "minValue": 0.0,
+                  "target": "Caster",
+                  "value": [
+                    "GV_ActivityDigV2_Boss_AttackDuration",
+                    "GV_ActivityDigV2_Boss_BombDuration",
+                    "SUB"
+                  ]
+                }
+              ],
+              "targetPredicates": [
+                {
+                  "$type": "ByTargetGlobalValue",
+                  "compareType": "MoreThan",
+                  "key": "GV_ActivityDigV2_Boss_WarningDuration",
+                  "value": [
+                    "GV_ActivityDigV2_Boss_AttackDuration",
+                    "GV_ActivityDigV2_Boss_BombDuration",
+                    "SUB"
+                  ]
+                }
+              ]
+            },
+            {
+              "$type": "Predicated",
+              "failActions": [
+                {
+                  "$type": "SetGlobalValueV2",
+                  "key": "GV_ActivityDigV2_Boss_RealWarningDuration",
+                  "maxValue": 0.0,
+                  "minValue": 0.0,
+                  "target": "Caster",
+                  "value": 0.1
+                }
+              ],
+              "successActions": [
+                {
+                  "$type": "SetGlobalValueV2",
+                  "key": "GV_ActivityDigV2_Boss_RealWarningDuration",
+                  "maxValue": 0.0,
+                  "minValue": 0.0,
+                  "target": "Caster",
+                  "value": "GV_Temp_WarningDuration"
+                }
+              ],
+              "targetPredicates": [
+                {
+                  "$type": "ByTargetGlobalValue",
+                  "compareType": "MoreThan",
+                  "key": "GV_Temp_WarningDuration",
+                  "value": 0.0
+                }
+              ]
+            },
+            {
+              "$type": "Predicated",
+              "failActions": [
+                {
+                  "$type": "SetGlobalValueV2",
+                  "key": "GV_ActivityDigV2_Boss_PatrolDuration",
+                  "maxValue": 0.0,
+                  "minValue": 0.0,
+                  "target": "Caster",
+                  "value": 0.1
+                }
+              ],
+              "successActions": [
+                {
+                  "$type": "SetGlobalValueV2",
+                  "key": "GV_ActivityDigV2_Boss_PatrolDuration",
+                  "maxValue": 0.0,
+                  "minValue": 0.0,
+                  "target": "Caster",
+                  "value": "GV_Temp_PatrolDuration"
+                }
+              ],
+              "targetPredicates": [
+                {
+                  "$type": "ByTargetGlobalValue",
+                  "compareType": "MoreThan",
+                  "key": "GV_Temp_PatrolDuration",
+                  "value": 0.0
+                }
+              ]
+            }
+          ],
+          "IAKNCBDLFKJ": 0.0
+        },
+        "StateManager": {
+          "elementDurability": 100.0,
+          "modifierMixins": [
+            {
+              "$type": "AttachModifierToGlobalValueMixin",
+              "globalValueKey": "GV_ActivityDigV2_Boss_State",
+              "globalValueTarget": "Caster",
+              "modifierNameSteps": [
+                "State_Patrol",
+                "State_AttackReady",
+                "State_Attack"
+              ],
+              "valueSteps": [
+                0.5,
+                1.5,
+                2.5,
+                3.5
+              ],
+              "EECIIMBIDGB": true
+            }
+          ],
+          "modifierName": "",
+          "IAKNCBDLFKJ": 0.0
+        }
+      },
+      "onAdded": [
+        {
+          "$type": "ChangeTag",
+          "isAdd": true,
+          "tag": "DigV2Boss"
+        },
+        {
+          "$type": "SetGlobalValue",
+          "key": "GV_ActivityDigV2_Boss_State",
+          "maxValue": 0.0,
+          "minValue": 0.0,
+          "target": "Caster",
+          "value": 1.0
+        },
+        {
+          "$type": "SetGlobalValue",
+          "key": "GV_ActivityDigV2_Boss_ResetAttackDuration",
+          "maxValue": 0.0,
+          "minValue": 0.0,
+          "target": "Caster",
+          "value": 0.0
+        },
+        {
+          "$type": "SetGlobalValue",
+          "key": "GV_ActivityDigV2_Boss_PivotCmd",
+          "maxValue": 0.0,
+          "minValue": 0.0,
+          "target": "Team",
+          "value": 0.0
+        },
+        {
+          "$type": "SetGlobalValue",
+          "key": "GV_ActivityDigV2_Boss_PendingShot",
+          "maxValue": 0.0,
+          "minValue": 0.0,
+          "target": "Team",
+          "value": 0.0
+        },
+        {
+          "$type": "SetGlobalValue",
+          "key": "GV_ActivityDigV2_Boss_LaunchType",
+          "maxValue": 0.0,
+          "minValue": 0.0,
+          "target": "Team",
+          "value": 0.0
+        },
+        {
+          "$type": "CopyGlobalValue",
+          "dstKey": "GV_ActivityDigV2_Boss_BombDuration",
+          "dstTarget": "Caster",
+          "srcKey": "GV_ActivityDigV2_Boss_BombDuration",
+          "srcTarget": "Team"
+        },
+        {
+          "$type": "CopyGlobalValue",
+          "dstKey": "GV_ActivityDigV2_Boss_WarningDuration",
+          "dstTarget": "Caster",
+          "srcKey": "GV_ActivityDigV2_Boss_WarningDuration",
+          "srcTarget": "Team"
+        },
+        {
+          "$type": "CopyGlobalValue",
+          "dstKey": "GV_ActivityDigV2_Boss_RealWarningDuration",
+          "dstTarget": "Caster",
+          "srcKey": "GV_ActivityDigV2_Boss_WarningDuration",
+          "srcTarget": "Team"
+        },
+        {
+          "$type": "CopyGlobalValue",
+          "dstKey": "GV_ActivityDigV2_Boss_AttackFreq",
+          "dstTarget": "Caster",
+          "predicates": [
+            {
+              "$type": "ByTargetGlobalValue",
+              "compareType": "NoneOrEqual",
+              "key": "GV_ActivityDigV2_Boss_AttackFreq",
+              "target": "Caster",
+              "value": 0.0
+            },
+            {
+              "$type": "ByTargetGlobalValue",
+              "compareType": "MoreThan",
+              "key": "GV_ActivityDigV2_Boss_InitialAttackFreq",
+              "target": "Team",
+              "value": 0.0
+            }
+          ],
+          "srcKey": "GV_ActivityDigV2_Boss_InitialAttackFreq",
+          "srcTarget": "Team"
+        },
+        {
+          "$type": "SetGlobalValue",
+          "key": "GV_ActivityDigV2_Boss_ArriveDistance",
+          "maxValue": 0.0,
+          "minValue": 0.0,
+          "value": 3.0
+        },
+        {
+          "$type": "CreateGadget",
+          "born": {
+            "$type": "ConfigBornBySelf",
+            "offset": {
+              "x": 0.0,
+              "y": 0.0,
+              "z": 0.0
+            },
+            "useRotation": true
+          },
+          "campID": 5001,
+          "gadgetID": 73209008
+        },
+        {
+          "$type": "CreateGadget",
+          "born": {
+            "$type": "ConfigBornBySelf",
+            "offset": {
+              "x": 0.0,
+              "y": 0.0,
+              "z": 0.0
+            },
+            "useRotation": true
+          },
+          "campID": 5001,
+          "gadgetID": 73209019
+        },
+        {
+          "$type": "CreateGadget",
+          "born": {
+            "$type": "ConfigBornBySelf",
+            "offset": {
+              "x": 0.0,
+              "y": 0.0,
+              "z": 0.0
+            },
+            "useRotation": true
+          },
+          "campID": 5001,
+          "gadgetID": 73209020
+        }
+      ],
+      "CELKHCPEMFI": [
+        "GV_ActivityDigV2_Boss_AttackFreq",
+        "GV_ActivityDigV2_Boss_WarningDuration",
+        "GV_ActivityDigV2_Boss_BombDuration",
+        "GV_ActivityDigV2_Boss_ArriveDistance",
+        "GV_ActivityDigV2_Boss_AttackDuration",
+        "GV_ActivityDigV2_Boss_PatrolDuration",
+        "GV_ActivityDigV2_Boss_RealWarningDuration",
+        "GV_Temp_WarningDuration",
+        "GV_Temp_PatrolDuration"
+      ]
+    }
+  },
+  {
+    "Default": {
+      "abilityMixins": [
+        {
+          "$type": "AttachModifierToGlobalValueMixin",
+          "globalValueKey": "GV_ActivityDigV2_Boss_PivotCmd",
+          "globalValueTarget": "Team",
+          "modifierNameSteps": [
+            "PivotState_Follow",
+            "PivotState_Warning",
+            "PivotState_Bomb"
+          ],
+          "valueSteps": [
+            -0.5,
+            0.5,
+            1.5,
+            2.5
+          ],
+          "DHKOKKHJMHC": true,
+          "EECIIMBIDGB": true,
+          "MDKGPCMDPCF": true
+        }
+      ],
+      "abilityName": "SceneObj_Activity_Ani_Prop_DigV2_Boss_AvatarFollowPivot",
+      "modifiers": {
+        "PivotState_Follow": {
+          "elementDurability": 100.0,
+          "modifierMixins": [
+            {
+              "$type": "FollowMoveParamOverrideMixin",
+              "accSpeed": 3.0,
+              "attachPoint": "",
+              "maxSpeed": 4.0,
+              "speed": 0.0,
+              "ICEOBJFBIJI": 0.0,
+              "PBGMJOMLDEH": 3.0,
+              "ABFMAFGKEHE": 4.0,
+              "DNJILHJCMKM": [
+                "smoothedDampSpeed",
+                "smoothedDampAccSpeed",
+                "smoothedDampMaxSpeed",
+                "arriveDistance"
+              ]
+            },
+            {
+              "$type": "ThinkIntervalMixin",
+              "onThinkInterval": [
+                {
+                  "$type": "SetTargetToTargetKey",
+                  "otherTargets": {
+                    "$type": "SelectTargetsByTag",
+                    "sortType": "Nearest",
+                    "tag": "DigV2AvatarDelayedPivot",
+                    "topLimit": 1
+                  },
+                  "targetKey": "GV_ActivityDigV2_Pivot_FollowTargetKey"
+                }
+              ],
+              "thinkInterval": 0.1
+            }
+          ],
+          "modifierName": "",
+          "IAKNCBDLFKJ": 0.0
+        },
+        "PivotState_Warning": {
+          "elementDurability": 100.0,
+          "modifierMixins": [
+            {
+              "$type": "FollowMoveParamOverrideMixin",
+              "accSpeed": 5.0,
+              "attachPoint": "",
+              "maxSpeed": 6.0,
+              "speed": 0.0,
+              "ICEOBJFBIJI": 0.0,
+              "PBGMJOMLDEH": 5.0,
+              "ABFMAFGKEHE": 6.0,
+              "DNJILHJCMKM": [
+                "smoothedDampSpeed",
+                "smoothedDampAccSpeed",
+                "smoothedDampMaxSpeed",
+                "arriveDistance"
+              ]
+            },
+            {
+              "$type": "ThinkIntervalMixin",
+              "onThinkInterval": [
+                {
+                  "$type": "SetTargetToTargetKey",
+                  "otherTargets": {
+                    "$type": "SelectTargetsByTag",
+                    "sortType": "Nearest",
+                    "tag": "DigV2AvatarDelayedPivot",
+                    "topLimit": 1
+                  },
+                  "targetKey": "GV_ActivityDigV2_Pivot_FollowTargetKey"
+                }
+              ],
+              "thinkInterval": 0.1
+            }
+          ],
+          "modifierName": "",
+          "IAKNCBDLFKJ": 0.0
+        },
+        "PivotState_Bomb": {
+          "elementDurability": 100.0,
+          "modifierMixins": [
+            {
+              "$type": "FollowMoveParamOverrideMixin",
+              "accSpeed": 15.0,
+              "attachPoint": "",
+              "maxSpeed": 6.0,
+              "speed": 0.0,
+              "ICEOBJFBIJI": 0.0,
+              "ABFMAFGKEHE": 6.0,
+              "PBGMJOMLDEH": 15.0,
+              "DNJILHJCMKM": [
+                "smoothedDampSpeed",
+                "smoothedDampAccSpeed",
+                "smoothedDampMaxSpeed",
+                "arriveDistance"
+              ]
+            },
+            {
+              "$type": "ThinkIntervalMixin",
+              "onThinkInterval": [
+                {
+                  "$type": "SetTargetToTargetKey",
+                  "otherTargets": {
+                    "$type": "SelectTargetsByTag",
+                    "sortType": "Nearest",
+                    "tag": "DigV2AvatarInstantPivot",
+                    "topLimit": 1
+                  },
+                  "targetKey": "GV_ActivityDigV2_Pivot_FollowTargetKey"
+                }
+              ],
+              "thinkInterval": 0.1
+            }
+          ],
+          "modifierName": "",
+          "IAKNCBDLFKJ": 0.0
+        }
+      },
+      "onAdded": [
+        {
+          "$type": "ChangeTag",
+          "isAdd": true,
+          "tag": "DigV2BossAvatarPivot"
+        },
+        {
+          "$type": "CreateGadget",
+          "born": {
+            "$type": "ConfigBornByAttachPoint",
+            "attachPointName": "Pivot01",
+            "attachPointTargetType": "Self",
+            "useRotation": true,
+            "OOKMGOGHLOL": true
+          },
+          "campID": 5001,
+          "gadgetID": 73209009
+        },
+        {
+          "$type": "CreateGadget",
+          "born": {
+            "$type": "ConfigBornByAttachPoint",
+            "attachPointName": "Pivot03",
+            "attachPointTargetType": "Self",
+            "useRotation": true,
+            "OOKMGOGHLOL": true
+          },
+          "campID": 5001,
+          "gadgetID": 73209011
+        },
+        {
+          "$type": "CreateGadget",
+          "born": {
+            "$type": "ConfigBornByAttachPoint",
+            "attachPointName": "Pivot02",
+            "attachPointTargetType": "Self",
+            "useRotation": true,
+            "OOKMGOGHLOL": true
+          },
+          "campID": 5001,
+          "gadgetID": 73209010
+        }
+      ],
+      "CELKHCPEMFI": [
+        "GV_ActivityDigV2_FuelDamage",
+        "GV_ActivityDigV2_Pivot_FollowTargetKey"
+      ]
+    }
+  },
+  {
+    "Default": {
+      "abilityMixins": [
+        {
+          "$type": "ThinkIntervalMixin",
+          "onThinkInterval": [
+            {
+              "$type": "SetTargetToTargetKey",
+              "target": "CurLocalAvatar",
+              "targetKey": "GV_ActivityDigV2_Pivot_FollowTargetKey"
+            }
+          ],
+          "thinkInterval": 0.1
+        },
+        {
+          "$type": "AttachModifierToGlobalValueMixin",
+          "globalValueKey": "GV_ActivityDigV2_Team_InBossSight",
+          "globalValueTarget": "Team",
+          "modifierNameSteps": [
+            "BossSightPaused",
+            "AvatarDelayedFollowPivotController"
+          ],
+          "valueSteps": [
+            -0.5,
+            0.5,
+            1.5
+          ],
+          "DHKOKKHJMHC": true,
+          "EECIIMBIDGB": true,
+          "MDKGPCMDPCF": true
+        }
+      ],
+      "abilityName": "SceneObj_Activity_Ani_Prop_DigV2_Boss_AvatarDelayedFollowPivot",
+      "modifiers": {
+        "AvatarDelayedFollowPivotController": {
+          "elementDurability": 100.0,
+          "modifierMixins": [
+            {
+              "$type": "AttachModifierToGlobalValueMixin",
+              "globalValueKey": "GV_ActivityDigV2_Pivot_DelayedState",
+              "globalValueTarget": "Caster",
+              "modifierNameSteps": [
+                "AvatarDelayedFollowPivotController_Follow",
+                "AvatarDelayedFollowPivotController_Stop"
+              ],
+              "valueSteps": [
+                -0.5,
+                0.5,
+                1.5
+              ],
+              "DHKOKKHJMHC": true,
+              "EECIIMBIDGB": true,
+              "MDKGPCMDPCF": true
+            }
+          ],
+          "modifierName": "",
+          "IAKNCBDLFKJ": 0.0
+        },
+        "AvatarDelayedFollowPivotController_Follow": {
+          "elementDurability": 100.0,
+          "modifierMixins": [
+            {
+              "$type": "FollowMoveParamOverrideMixin",
+              "accSpeed": 100.0,
+              "attachPoint": "",
+              "maxSpeed": 100.0,
+              "speed": 100.0,
+              "ABFMAFGKEHE": 100.0,
+              "ICEOBJFBIJI": 100.0,
+              "PBGMJOMLDEH": 100.0,
+              "DNJILHJCMKM": [
+                "smoothedDampSpeed",
+                "smoothedDampAccSpeed",
+                "smoothedDampMaxSpeed",
+                "arriveDistance"
+              ]
+            }
+          ],
+          "modifierName": "",
+          "onThinkInterval": [
+            {
+              "$type": "SetGlobalValue",
+              "key": "GV_ActivityDigV2_Pivot_DelayedState",
+              "maxValue": 0.0,
+              "minValue": 0.0,
+              "target": "Caster",
+              "value": 1.0
+            }
+          ],
+          "thinkInterval": 0.3,
+          "IAKNCBDLFKJ": 0.0
+        },
+        "AvatarDelayedFollowPivotController_Stop": {
+          "elementDurability": 100.0,
+          "modifierMixins": [
+            {
+              "$type": "FollowMoveParamOverrideMixin",
+              "accSpeed": 0.0,
+              "attachPoint": "",
+              "maxSpeed": 0.0,
+              "speed": 0.0,
+              "ABFMAFGKEHE": 0.0,
+              "ICEOBJFBIJI": 0.0,
+              "PBGMJOMLDEH": 0.0,
+              "DNJILHJCMKM": [
+                "smoothedDampSpeed",
+                "smoothedDampAccSpeed",
+                "smoothedDampMaxSpeed",
+                "arriveDistance"
+              ]
+            }
+          ],
+          "modifierName": "",
+          "onThinkInterval": [
+            {
+              "$type": "SetGlobalValue",
+              "key": "GV_ActivityDigV2_Pivot_DelayedState",
+              "maxValue": 0.0,
+              "minValue": 0.0,
+              "target": "Caster",
+              "value": 0.0
+            }
+          ],
+          "thinkInterval": 0.5,
+          "IAKNCBDLFKJ": 0.0
+        },
+        "BossSightPaused": {
+          "elementDurability": 100.0,
+          "modifierMixins": [
+            {
+              "$type": "FollowMoveParamOverrideMixin",
+              "attachPoint": "",
+              "ABFMAFGKEHE": 0.0,
+              "ICEOBJFBIJI": 0.0,
+              "PBGMJOMLDEH": 0.0,
+              "DNJILHJCMKM": [
+                "smoothedDampSpeed",
+                "smoothedDampAccSpeed",
+                "smoothedDampMaxSpeed"
+              ]
+            }
+          ],
+          "modifierName": "",
+          "stacking": "Unique",
+          "IAKNCBDLFKJ": 0.0
+        }
+      },
+      "onAdded": [
+        {
+          "$type": "ChangeTag",
+          "isAdd": true,
+          "tag": "DigV2AvatarDelayedPivot"
+        },
+        {
+          "$type": "SetGlobalValue",
+          "key": "GV_ActivityDigV2_Pivot_DelayedState",
+          "maxValue": 0.0,
+          "minValue": 0.0,
+          "target": "Caster",
+          "value": 0.0
+        },
+        {
+          "$type": "AttachModifier",
+          "modifierName": "BossSightPaused",
+          "predicates": [
+            {
+              "$type": "ByTargetGlobalValue",
+              "compareType": "NoneOrEqual",
+              "key": "GV_ActivityDigV2_Team_InBossSight",
+              "target": "Team",
+              "value": 0.0
+            }
+          ]
+        }
+      ]
+    }
+  },
+  {
+    "Default": {
+      "abilityMixins": [
+        {
+          "$type": "ThinkIntervalMixin",
+          "onThinkInterval": [
+            {
+              "$type": "SetTargetToTargetKey",
+              "target": "CurLocalAvatar",
+              "targetKey": "GV_ActivityDigV2_Pivot_FollowTargetKey"
+            }
+          ],
+          "thinkInterval": 0.1
+        },
+        {
+          "$type": "AttachModifierToGlobalValueMixin",
+          "globalValueKey": "GV_ActivityDigV2_Team_InBossSight",
+          "globalValueTarget": "Team",
+          "modifierNameSteps": [
+            "BossSightPaused",
+            "AvatarInstantFollowMovementController"
+          ],
+          "valueSteps": [
+            -0.5,
+            0.5,
+            1.5
+          ],
+          "DHKOKKHJMHC": true,
+          "EECIIMBIDGB": true,
+          "MDKGPCMDPCF": true
+        }
+      ],
+      "abilityName": "SceneObj_Activity_Ani_Prop_DigV2_Boss_AvatarInstantFollowPivot",
+      "modifiers": {
+        "AvatarInstantFollowCommandListener": {
+          "elementDurability": 100.0,
+          "modifierMixins": [
+            {
+              "$type": "AttachModifierToGlobalValueMixin",
+              "globalValueKey": "GV_ActivityDigV2_Boss_PivotCmd",
+              "globalValueTarget": "Team",
+              "modifierNameSteps": [
+                "AvatarInstantFollowPivotController_Stop"
+              ],
+              "valueSteps": [
+                1.5,
+                2.5
+              ],
+              "DHKOKKHJMHC": true,
+              "EECIIMBIDGB": true,
+              "MDKGPCMDPCF": true
+            },
+            {
+              "$type": "AttachModifierToGlobalValueMixin",
+              "globalValueKey": "GV_ActivityDigV2_Boss_PivotCmd",
+              "globalValueTarget": "Team",
+              "modifierNameSteps": [
+                "LockInEffect"
+              ],
+              "valueSteps": [
+                0.5,
+                2.5
+              ],
+              "DHKOKKHJMHC": true,
+              "EECIIMBIDGB": true,
+              "MDKGPCMDPCF": true
+            }
+          ],
+          "modifierName": "",
+          "IAKNCBDLFKJ": 0.0
+        },
+        "LockInEffect": {
+          "elementDurability": 100.0,
+          "modifierName": "",
+          "onAdded": [
+            {
+              "$type": "AttachEffect",
+              "effectPattern": "Eff_SceneObj_Dig_ThrowBomb_Aiming_01",
+              "effectTempleteID": -1.0,
+              "scale": 1.0,
+              "target": "Caster",
+              "JHAGIJGAKMK": ""
+            }
+          ],
+          "IAKNCBDLFKJ": 0.0
+        },
+        "AvatarInstantFollowPivotController_Follow": {
+          "elementDurability": 100.0,
+          "modifierMixins": [
+            {
+              "$type": "FollowMoveParamOverrideMixin",
+              "accSpeed": 100.0,
+              "attachPoint": "",
+              "maxSpeed": 100.0,
+              "speed": 100.0,
+              "ABFMAFGKEHE": 100.0,
+              "ICEOBJFBIJI": 100.0,
+              "PBGMJOMLDEH": 100.0,
+              "DNJILHJCMKM": [
+                "smoothedDampSpeed",
+                "smoothedDampAccSpeed",
+                "smoothedDampMaxSpeed",
+                "arriveDistance"
+              ]
+            }
+          ],
+          "modifierName": "",
+          "IAKNCBDLFKJ": 0.0
+        },
+        "AvatarInstantFollowPivotController_Stop": {
+          "elementDurability": 100.0,
+          "modifierName": "",
+          "onAdded": [
+            {
+              "$type": "SendEffectTrigger",
+              "attachPoint": "",
+              "effectPattern": "Eff_SceneObj_Dig_ThrowBomb_Aiming_01",
+              "parameter": "Attack"
+            }
+          ],
+          "onRemoved": [
+            {
+              "$type": "Predicated",
+              "successActions": [
+                {
+                  "$type": "SetGlobalValue",
+                  "key": "GV_ActivityDigV2_Boss_PendingShot",
+                  "maxValue": 0.0,
+                  "minValue": 0.0,
+                  "target": "Team",
+                  "value": 0.0
+                },
+                {
+                  "$type": "CreateGadget",
+                  "born": {
+                    "$type": "EOCHDENDHJC",
+                    "useRotation": true
+                  },
+                  "campID": 5001,
+                  "gadgetID": 73209021
+                }
+              ],
+              "targetPredicates": [
+                {
+                  "$type": "ByTargetGlobalValue",
+                  "key": "GV_ActivityDigV2_Boss_PendingShot",
+                  "target": "Team",
+                  "value": 1.0
+                },
+                {
+                  "$type": "ByTargetGlobalValue",
+                  "key": "GV_ActivityDigV2_Team_InBossSight",
+                  "target": "Team",
+                  "value": 1.0
+                }
+              ]
+            }
+          ],
+          "IAKNCBDLFKJ": 0.0
+        },
+        "AvatarInstantFollowMovementController": {
+          "elementDurability": 100.0,
+          "modifierMixins": [
+            {
+              "$type": "AttachModifierToGlobalValueMixin",
+              "globalValueKey": "GV_ActivityDigV2_Boss_PivotCmd",
+              "globalValueTarget": "Team",
+              "modifierNameSteps": [
+                "AvatarInstantFollowPivotController_Follow",
+                "AvatarInstantFollowPivotController_StopMove"
+              ],
+              "valueSteps": [
+                0.5,
+                1.5,
+                2.5
+              ],
+              "DHKOKKHJMHC": true,
+              "EECIIMBIDGB": true,
+              "MDKGPCMDPCF": true
+            }
+          ],
+          "modifierName": "",
+          "IAKNCBDLFKJ": 0.0
+        },
+        "AvatarInstantFollowPivotController_StopMove": {
+          "elementDurability": 100.0,
+          "modifierMixins": [
+            {
+              "$type": "FollowMoveParamOverrideMixin",
+              "accSpeed": 100.0,
+              "attachPoint": "",
+              "maxSpeed": 100.0,
+              "speed": 100.0,
+              "ABFMAFGKEHE": 100.0,
+              "ICEOBJFBIJI": 100.0,
+              "PBGMJOMLDEH": 100.0,
+              "DNJILHJCMKM": [
+                "smoothedDampSpeed",
+                "smoothedDampAccSpeed",
+                "smoothedDampMaxSpeed",
+                "arriveDistance"
+              ]
+            }
+          ],
+          "modifierName": "",
+          "IAKNCBDLFKJ": 0.0
+        },
+        "BossSightPaused": {
+          "elementDurability": 100.0,
+          "modifierMixins": [
+            {
+              "$type": "FollowMoveParamOverrideMixin",
+              "attachPoint": "",
+              "ABFMAFGKEHE": 0.0,
+              "ICEOBJFBIJI": 0.0,
+              "PBGMJOMLDEH": 0.0,
+              "DNJILHJCMKM": [
+                "smoothedDampSpeed",
+                "smoothedDampAccSpeed",
+                "smoothedDampMaxSpeed"
+              ]
+            }
+          ],
+          "modifierName": "",
+          "stacking": "Unique",
+          "IAKNCBDLFKJ": 0.0
+        }
+      },
+      "onAdded": [
+        {
+          "$type": "ChangeTag",
+          "isAdd": true,
+          "tag": "DigV2AvatarInstantPivot"
+        },
+        {
+          "$type": "SetGlobalValue",
+          "key": "GV_ActivityDigV2_Pivot_InstantState",
+          "maxValue": 0.0,
+          "minValue": 0.0,
+          "target": "Caster",
+          "value": 0.0
+        },
+        {
+          "$type": "AttachModifier",
+          "modifierName": "AvatarInstantFollowCommandListener"
+        },
+        {
+          "$type": "AttachModifier",
+          "modifierName": "BossSightPaused",
+          "predicates": [
+            {
+              "$type": "ByTargetGlobalValue",
+              "compareType": "NoneOrEqual",
+              "key": "GV_ActivityDigV2_Team_InBossSight",
+              "target": "Team",
+              "value": 0.0
+            }
+          ]
+        }
+      ]
+    }
+  },
+  {
+    "Default": {
+      "abilityName": "SceneObj_Activity_Ani_Prop_DigV2_Boss_FollowTarget",
+      "onAdded": [
+        {
+          "$type": "ChangeTag",
+          "isAdd": true,
+          "tag": "DigV2BossPivot"
+        }
+      ]
+    }
+  },
+  {
+    "Default": {
+      "abilityName": "SceneObj_Activity_Ani_Prop_DigV2_Boss_FollowTargetR",
+      "onAdded": [
+        {
+          "$type": "ChangeTag",
+          "isAdd": true,
+          "tag": "DigV2BossPivot"
+        }
+      ]
+    }
+  },
+  {
+    "Default": {
+      "abilityName": "SceneObj_Activity_Ani_Prop_DigV2_Boss_FollowTargetCenter",
+      "onAdded": [
+        {
+          "$type": "ChangeTag",
+          "isAdd": true,
+          "tag": "DigV2BossAttackPivot"
+        },
+        {
+          "$type": "ChangeTag",
+          "isAdd": true,
+          "tag": "DigV2BossPivot"
+        }
+      ]
+    }
+  },
+  {
+    "Default": {
+      "abilityName": "SceneObj_Activity_Ani_Prop_DigV2_Boss_Bullet",
+      "modifiers": {
+        "IndicatorLifeTimer": {
+          "duration": 15.0,
+          "elementDurability": 100.0,
+          "modifierName": "",
+          "onRemoved": [
+            {
+              "$type": "KillSelf",
+              "configIdArray": [
+                73209007,
+                73209022
+              ]
+            }
+          ],
+          "IAKNCBDLFKJ": 0.0
+        }
+      },
+      "onAdded": [
+        {
+          "$type": "AttachModifier",
+          "modifierName": "IndicatorLifeTimer"
+        }
+      ]
+    }
+  },
+  {
+    "Default": {
+      "abilityName": "SceneObj_Activity_Ani_Prop_DigV2_Boss_TrackBullet",
+      "modifiers": {
+        "BulletBehave": {
+          "duration": 2.9,
+          "elementDurability": 100.0,
+          "modifierName": "",
+          "onRemoved": [
+            {
+              "$type": "SetAnimatorInt",
+              "intID": "GadgetState",
+              "value": 202.0
+            }
+          ],
+          "onThinkInterval": [
+            {
+              "$type": "SetAnimatorInt",
+              "intID": "GadgetState",
+              "value": 201.0
+            }
+          ],
+          "thinkInterval": 1.0,
+          "IAKNCBDLFKJ": 0.0
+        },
+        "BulletLifeTimer": {
+          "duration": 3.0,
+          "elementDurability": 100.0,
+          "modifierName": "",
+          "onRemoved": [
+            {
+              "$type": "KillSelf",
+              "configIdArray": [
+                73209012
+              ]
+            }
+          ],
+          "IAKNCBDLFKJ": 0.0
+        }
+      },
+      "onAdded": [
+        {
+          "$type": "AttachModifier",
+          "modifierName": "BulletBehave"
+        },
+        {
+          "$type": "AttachModifier",
+          "modifierName": "BulletLifeTimer"
+        }
+      ]
+    }
+  },
+  {
+    "Default": {
+      "abilityName": "SceneObj_Activity_Ani_Prop_DigV2_BombAnchor",
+      "modifiers": {
+        "BossDo": {
+          "elementDurability": 100.0,
+          "modifierName": "",
+          "onAdded": [
+            {
+              "$type": "Predicated",
+              "failActions": [
+                {
+                  "$type": "KillGadgetV2",
+                  "gadgetInfo": {
+                    "configID": 73209007
+                  }
+                },
+                {
+                  "$type": "TriggerBullet",
+                  "born": {
+                    "$type": "ConfigBornByAttachPoint",
+                    "attachPointName": "FireNode",
+                    "attachPointTargetType": "Self",
+                    "useRotation": true,
+                    "OOKMGOGHLOL": true
+                  },
+                  "bulletID": 73209012,
+                  "lifeByOwnerV2": true,
+                  "ownerIs": "Caster",
+                  "trackTarget": "Caster"
+                }
+              ],
+              "successActions": [
+                {
+                  "$type": "KillGadgetV2",
+                  "gadgetInfo": {
+                    "configID": 73209022
+                  }
+                },
+                {
+                  "$type": "TriggerBullet",
+                  "born": {
+                    "$type": "ConfigBornByAttachPoint",
+                    "attachPointName": "FireNodeAlt",
+                    "attachPointTargetType": "Self",
+                    "useRotation": true,
+                    "OOKMGOGHLOL": true
+                  },
+                  "bulletID": 73209012,
+                  "lifeByOwnerV2": true,
+                  "ownerIs": "Caster",
+                  "trackTarget": "Caster"
+                }
+              ],
+              "target": "Team",
+              "targetPredicates": [
+                {
+                  "$type": "ByTargetGlobalValue",
+                  "key": "GV_ActivityDigV2_Boss_LaunchType",
+                  "target": "Team",
+                  "value": 0.0
+                }
+              ]
+            }
+          ],
+          "IAKNCBDLFKJ": 0.0
+        },
+        "Bomb": {
+          "elementDurability": 100.0,
+          "modifierMixins": [
+            {
+              "$type": "ActivityDigV2BombSequenceMixin",
+              "BHMOILMGJDP": 3.0,
+              "NPGAHIEMPCN": 4,
+              "OIILJGAICCO": 4,
+              "JAIEGOEJBMP": true,
+              "BPBHPINNEFE": "Eff_SceneObj_Dig_AreaBoom_Explosion",
+              "BJPCGHGHIGP": "Eff_SceneObj_Dig_AreaBoom_Warning",
+              "FNBCFJMAEEJ": [
+                {
+                  "$type": "KillSelf",
+                  "configIdArray": [
+                    73209021
+                  ]
+                }
+              ],
+              "CCKBGKFMHNL": [
+                {
+                  "$type": "Predicated",
+                  "successActions": [
+                    {
+                      "$type": "CopyGlobalValue",
+                      "dstKey": "GV_ActivityDigV2_FuelDamage",
+                      "dstTarget": "Caster",
+                      "srcKey": "GV_ActivityDigV2_BossBomb_FuelDamage",
+                      "srcTarget": "Team"
+                    },
+                    {
+                      "$type": "AddGlobalValueV2",
+                      "key": "GV_ActivityDigV2_Player_Fuel",
+                      "maxValue": 0.0,
+                      "minValue": 0.0,
+                      "target": "Team",
+                      "value": [
+                        0.0,
+                        "GV_ActivityDigV2_FuelDamage",
+                        "SUB"
+                      ]
+                    },
+                    {
+                      "$type": "CopyGlobalValue",
+                      "dstKey": "GV_ActivityDigV2_FontSize_Damage",
+                      "dstTarget": "Caster",
+                      "srcKey": "GV_ActivityDigV2_FontSize_Damage",
+                      "srcTarget": "Team"
+                    },
+                    {
+                      "$type": "ActivityDigV2ShowScoreJumpWord",
+                      "target": "Team",
+                      "OKGOBOBDPIA": true,
+                      "GAOPADOKKMM": "GV_ActivityDigV2_FontSize_Damage",
+                      "ADBLCPOFBOD": [
+                        0.0,
+                        "GV_ActivityDigV2_FuelDamage",
+                        "SUB"
+                      ]
+                    },
+                    {
+                      "$type": "SetGlobalValueV2",
+                      "key": "GV_ActivityDigV2_Player_HurtTrigger",
+                      "maxValue": 0.0,
+                      "minValue": 0.0,
+                      "target": "Team",
+                      "value": 1.0
+                    }
+                  ],
+                  "targetPredicates": [
+                    {
+                      "$type": "ByTargetGlobalValue",
+                      "compareType": "NoneOrEqual",
+                      "key": "GV_ActivityDigV2_Player_HurtTrigger",
+                      "target": "Team",
+                      "value": 0.0
+                    },
+                    {
+                      "$type": "ByTargetGlobalValue",
+                      "compareType": "NoneOrEqual",
+                      "key": "GV_ActivityDigV2_Player_FeverState",
+                      "target": "Team",
+                      "value": 0.0
+                    }
+                  ]
+                }
+              ]
+            }
+          ],
+          "modifierName": "",
+          "onAdded": [
+            {
+              "$type": "AttachModifier",
+              "modifierName": "BossDo",
+              "target": "OriginOwner"
+            }
+          ],
+          "IAKNCBDLFKJ": 0.0
+        }
+      },
+      "onAdded": [
+        {
+          "$type": "ChangeTag",
+          "isAdd": true,
+          "tag": "DigV2BombAnchor"
+        },
+        {
+          "$type": "AttachModifier",
+          "modifierName": "Bomb"
+        }
+      ],
+      "CELKHCPEMFI": [
+        "GV_ActivityDigV2_FuelDamage",
+        "GV_ActivityDigV2_FontSize_Damage"
+      ]
+    }
+  },
+  {
+    "Default": {
+      "abilityName": "SceneObj_Activity_Ani_Prop_DigV2_EmptyGadget"
+    }
+  },
+  {
+    "Default": {
+      "abilityName": "SceneObj_Area_Common_Property_Ani_Prop_DigV2_Quest_Robo_01",
+      "modifiers": {
+        "StateManager": {
+          "elementDurability": 100.0,
+          "modifierMixins": [
+            {
+              "$type": "AttachToGadgetStateMixin",
+              "modifierName": "State_0"
+            },
+            {
+              "$type": "AttachToGadgetStateMixin",
+              "gadgetState": 201,
+              "modifierName": "State_201"
+            }
+          ],
+          "modifierName": "",
+          "onAdded": [
+            {
+              "$type": "SetAnimatorInt",
+              "intID": "GadgetState",
+              "value": 301.0
+            }
+          ],
+          "IAKNCBDLFKJ": 0.0
+        },
+        "State_0": {
+          "elementDurability": 100.0,
+          "modifierName": "",
+          "IAKNCBDLFKJ": 0.0
+        },
+        "State_201": {
+          "elementDurability": 100.0,
+          "modifierMixins": [
+            {
+              "$type": "BillboardV2Mixin",
+              "OPDKMMMNGLO": {
+                "DBDLAOMCDOA": {
+                  "iconPath": "ART/UI/Atlas/InteeIcon/UI_NPCTopIcon_Activity_DigV2",
+                  "prefabName": ""
+                }
+              }
+            }
+          ],
+          "modifierName": "",
+          "IAKNCBDLFKJ": 0.0
+        }
+      },
+      "onAdded": [
+        {
+          "$type": "ApplyModifier",
+          "modifierName": "StateManager"
+        }
+      ]
+    }
+  }
+]
